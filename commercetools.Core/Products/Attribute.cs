@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -17,7 +17,7 @@ namespace commercetools.Products
         public string Name { get; private set; }
 
         [JsonProperty(PropertyName = "value")]
-        public JObject Value { get; private set; }
+        public object Value { get; private set; }
 
         #endregion
 
@@ -35,7 +35,7 @@ namespace commercetools.Products
             }
 
             this.Name = data.name;
-            this.Value = new JObject(data.value);
+            this.Value = data.value;
         }
 
         #endregion
