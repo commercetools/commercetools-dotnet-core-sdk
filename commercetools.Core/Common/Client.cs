@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Specialized;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -220,6 +220,7 @@ namespace commercetools.Common
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
                 HttpResponseMessage response = await client.PostAsync(this.Configuration.OAuthUrl, content);
                 int statusCode = (int)response.StatusCode;
@@ -261,6 +262,7 @@ namespace commercetools.Common
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
                 HttpResponseMessage response = await client.PostAsync(this.Configuration.OAuthUrl, content);
                 int statusCode = (int)response.StatusCode;
