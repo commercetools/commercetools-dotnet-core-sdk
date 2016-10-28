@@ -1,0 +1,33 @@
+# Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+.vs/
+*.psess
+*.vsp
+*.vspx
+*.sap
+*.[Cc]ache
+!*.[Cc]ache/
+
+# NUNIT
+*.VisualState.xml
+TestResult.xml
+
+# NuGet
+*.nuspec
+*.nupkg
+*.nuget.props
+*.nuget.targets
+packages/
