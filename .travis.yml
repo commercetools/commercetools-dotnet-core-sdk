@@ -1,0 +1,10 @@
+language: csharp
+solution: commercetools.NET-Net45.sln.sln
+matrix:
+  include:
+    - dotnet: 1.0.0-preview2-003131 # latest available on travis (Microsoft .NET Core 1.0.1 - SDK 1.0.0 Preview 2)
+      mono: none
+      env: DOTNETCORE=1
+    - mono: 
+      - 4.2.1 # this is the default on Ubuntu 16.04 LTS
+      - 3.2.8 # this is the default on Ubuntu 14.04 LTS
