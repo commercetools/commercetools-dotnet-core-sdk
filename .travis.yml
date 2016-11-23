@@ -8,4 +8,8 @@ matrix:
       mono: none
       env: DOTNETCORE=1
     - mono: 4.2.1 # this is the default on Ubuntu 16.04 LTS
-    - mono: 3.2.8 # this is the default on Ubuntu 14.04 LTS
+    # - mono: 3.2.8 # this is the default on Ubuntu 14.04 LTS, but travis config seems to be broken for it. 
+script:
+  # TODO working dotnet core compatible build script command. 
+  # - dotnet build /p:Configuration=Release commercetools.NET-Net45.sln
+  
