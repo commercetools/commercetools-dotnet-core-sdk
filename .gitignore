@@ -31,3 +31,4 @@ TestResult.xml
 *.nuget.props
 *.nuget.targets
 packages/
+.vscode
