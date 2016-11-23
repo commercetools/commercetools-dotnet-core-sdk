@@ -1,18 +1,20 @@
 # commercetools-dotnet-sdk
 
-The commercetools.NET SDK allows developers to work with the commercetools platform in their .NET applications by providing access to the commercetools HTTP API.
+The commercetools.NET SDK allows developers to work effectively with the commercetools platform in their .NET applications by providing typesafe access to the commercetools HTTP API.
 
+For more documentation please see [the wiki](//github.com/commercetools/commercetools-dotnet-sdk/wiki/commercetools-.NET-SDK-documentation)
 
 ## Supported Platforms
 
 * .NET Framework 4.5 and 4.6
 
-
 ## Using the SDK
 
-You will need a commercetools project to use the SDK. If you don't already have one, you can [create a free test project](http://admin.sphere.io/) on the commercetools platform and configure the API credentials.
+You will need a commercetools project to use the SDK.
+If you don't already have one, you can [create a free trial project](http://dev.commercetools.com/getting-started.html) on the commercetools platform and configure the API credentials.
 
-The namespaces in the SDK mirror the sections of the commercetools HTTP API. Access to these namespaces is provided by a fluent interface on the Client class.
+The namespaces in the SDK mirror the sections of the [commercetools HTTP API](http://dev.commercetools.com/http-api.html).
+Access to these namespaces is provided by a fluent interface on the Client class.
 
 ```cs
 
@@ -67,3 +69,19 @@ foreach (dynamic product in response.results)
 }
 
 ```
+
+## License, Contributing
+
+This software is licenses under the MIT License, which allows commercial use and modification as well as open source collaboration.
+
+We are warmly welcoming contributors and are happy to help out.
+To contribute changes or improvements, please fork the repository into your account on GitHub and create a pull request.  
+
+## Developing
+
+### Mac Users
+
+The Visual Studio IDE [is available for Mac OS]https://www.visualstudio.com/vs/visual-studio-mac/) (preview version as of 2016)
+
+A more lightweight Coding Environment that also manages the .NET setup automatically for you is [Microsoft Visual Studio Code](https://code.visualstudio.com/) (free). 
+
