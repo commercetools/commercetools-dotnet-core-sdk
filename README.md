@@ -83,7 +83,7 @@ To contribute changes or improvements, please fork the repository into your acco
 
 ### Mac Users
 
-The Visual Studio IDE [is available for Mac OS]https://www.visualstudio.com/vs/visual-studio-mac/) (preview version as of 2016)
+The Visual Studio IDE [is available for Mac OS](https://www.visualstudio.com/vs/visual-studio-mac/) (preview version as of 2016)
 
 A more lightweight Coding Environment that also manages the .NET setup automatically for you is [Microsoft Visual Studio Code](https://code.visualstudio.com/) (free). 
 
