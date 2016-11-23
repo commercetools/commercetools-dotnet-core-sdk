@@ -1,5 +1,5 @@
 language: csharp
-solution: commercetools.NET-Net45.sln.sln
+solution: commercetools.NET-Net45.sln
 matrix:
   include:
     - dotnet: 1.0.0-preview2-003131 # latest available on travis (Microsoft .NET Core 1.0.1 - SDK 1.0.0 Preview 2)
