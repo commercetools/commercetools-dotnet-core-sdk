@@ -1,0 +1,9 @@
+version: 0.0.{build}
+pull_requests:
+  do_not_increment_build_number: true
+before_build:
+- cmd: nuget restore
+build:
+  project: commercetools.NET-Net45.sln
+  verbosity: minimal
+  

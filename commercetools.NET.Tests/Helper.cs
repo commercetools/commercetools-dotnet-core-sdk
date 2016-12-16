@@ -39,11 +39,11 @@ namespace commercetools.Tests
         public static Configuration GetConfiguration()
         {
             return new Configuration(
-                ConfigurationManager.AppSettings["commercetools.OAuthUrl"],
-                ConfigurationManager.AppSettings["commercetools.ApiUrl"],
-                ConfigurationManager.AppSettings["commercetools.ProjectKey"],
-                ConfigurationManager.AppSettings["commercetools.ClientID"],
-                ConfigurationManager.AppSettings["commercetools.ClientSecret"],
+                Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.OAuthUrl"]),
+                Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ApiUrl"]),
+                Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ProjectKey"]),
+                Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientID"]),
+                Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientSecret"]),
                 ProjectScope.ManageProject);
         }
 
