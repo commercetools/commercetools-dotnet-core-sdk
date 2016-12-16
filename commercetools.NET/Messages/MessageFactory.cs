@@ -1,5 +1,8 @@
 ﻿namespace commercetools.Messages
 {
+    /// <summary>
+    /// MessageFactory
+    /// </summary>
     public class MessageFactory
     {
         /// <summary>

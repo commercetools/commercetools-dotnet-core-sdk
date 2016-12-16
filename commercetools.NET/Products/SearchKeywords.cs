@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using commercetools.Common;
 
@@ -34,7 +33,7 @@ namespace commercetools.Products
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public SearchKeywords(dynamic data = null)
+        public SearchKeywords(dynamic data)
         {
             this.Values = new Dictionary<string, List<SearchKeyword>>();
 

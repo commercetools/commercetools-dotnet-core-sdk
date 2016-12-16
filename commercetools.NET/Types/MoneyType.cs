@@ -9,10 +9,18 @@
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public MoneyType()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Returns a JSON representation of this instance.
         /// </summary>
         /// <returns>JObject</returns>
-        public MoneyType(dynamic data = null)
+        public MoneyType(dynamic data)
             : base((object)data)
         {
         }

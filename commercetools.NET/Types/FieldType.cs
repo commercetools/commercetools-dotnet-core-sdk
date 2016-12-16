@@ -18,10 +18,17 @@ namespace commercetools.Types
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public FieldType()
+        {
+        }
+
+        /// <summary>
         /// Returns a JSON representation of this instance.
         /// </summary>
         /// <returns>JObject</returns>
-        protected FieldType(dynamic data = null)
+        protected FieldType(dynamic data)
         {
             if (data == null)
             {

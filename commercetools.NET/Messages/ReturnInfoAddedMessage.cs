@@ -12,6 +12,9 @@ namespace commercetools.Messages
     {
         #region Properties
 
+        /// <summary>
+        /// ReturnInfo
+        /// </summary>
         [JsonProperty(PropertyName = "returnInfo")]
         public ReturnInfo ReturnInfo { get; private set; }
 
@@ -23,7 +26,7 @@ namespace commercetools.Messages
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public ReturnInfoAddedMessage(dynamic data = null)
+        public ReturnInfoAddedMessage(dynamic data)
             : base((object)data)
         {
             if (data == null)

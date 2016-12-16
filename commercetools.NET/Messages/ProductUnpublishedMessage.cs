@@ -12,7 +12,7 @@
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public ProductUnpublishedMessage(dynamic data = null)
+        public ProductUnpublishedMessage(dynamic data)
             : base((object)data)
         {
         }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace commercetools.ProductTypes
+﻿namespace commercetools.ProductTypes
 {
     /// <summary>
     /// MoneyType
@@ -11,9 +9,17 @@ namespace commercetools.ProductTypes
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public MoneyType()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
-        public MoneyType(dynamic data = null)
+        public MoneyType(dynamic data)
             : base((object)data)
         {
         }

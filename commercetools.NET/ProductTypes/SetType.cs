@@ -1,6 +1,4 @@
-﻿using System;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace commercetools.ProductTypes
 {
@@ -13,17 +11,25 @@ namespace commercetools.ProductTypes
         #region Properties
 
         [JsonProperty(PropertyName = "elementType")]
-        public AttributeType ElementType { get; private set; }
+        public AttributeType ElementType { get; set; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public SetType()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Returns a JSON representation of this instance.
         /// </summary>
         /// <returns>JObject</returns>
-        public SetType(dynamic data = null)
+        public SetType(dynamic data)
             : base((object)data)
         {
             if (data == null)

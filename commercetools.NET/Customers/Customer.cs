@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using commercetools.Common;
-using commercetools.CustomFields;
 
 using Newtonsoft.Json;
 
@@ -90,7 +89,7 @@ namespace commercetools.Customers
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public Customer(dynamic data = null)
+        public Customer(dynamic data)
         {
             if (data == null)
             {

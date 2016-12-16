@@ -49,7 +49,7 @@ namespace commercetools.Payments
         /// <param name="paymentId">Payment ID</param>
         /// <returns>Payment</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-payments.html#get-payment-by-id"/>
-        public async Task<Payment> GetPaymentByIdAsync(string paymentId)
+        public async Task<Response<Payment>> GetPaymentByIdAsync(string paymentId)
         {
             if (string.IsNullOrWhiteSpace(paymentId))
             {
@@ -57,9 +57,7 @@ namespace commercetools.Payments
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", paymentId);
-            dynamic response = await _client.GetAsync(endpoint);
-
-            return new Payment(response);
+            return await _client.GetAsync<Payment>(endpoint);
         }
 
         /// <summary>
@@ -71,7 +69,7 @@ namespace commercetools.Payments
         /// <param name="offset">Offset</param>
         /// <returns>PaymentQueryResult</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-payments.html#query-payments"/>
-        public async Task<PaymentQueryResult> QueryPaymentsAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
+        public async Task<Response<PaymentQueryResult>> QueryPaymentsAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
         {
             NameValueCollection values = new NameValueCollection();
 
@@ -95,9 +93,7 @@ namespace commercetools.Payments
                 values.Add("offset", offset.ToString());
             }
 
-            dynamic response = await _client.GetAsync(ENDPOINT_PREFIX, values);
-
-            return new PaymentQueryResult(response); 
+            return await _client.GetAsync<PaymentQueryResult>(ENDPOINT_PREFIX, values);
         }
 
         /// <summary>
@@ -107,7 +103,7 @@ namespace commercetools.Payments
         /// <param name="draft">PaymentDraft</param>
         /// <returns>Payment</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-payments.html#create-a-payment"/>
-        public async Task<Payment> CreatePaymentAsync(PaymentDraft draft)
+        public async Task<Response<Payment>> CreatePaymentAsync(PaymentDraft draft)
         {
             if (draft == null)
             {
@@ -117,9 +113,7 @@ namespace commercetools.Payments
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.NullValueHandling = NullValueHandling.Ignore;
             string payload = JsonConvert.SerializeObject(draft, settings);
-            dynamic response = await _client.PostAsync(ENDPOINT_PREFIX, payload);
-
-            return new Payment(response);
+            return await _client.PostAsync<Payment>(ENDPOINT_PREFIX, payload);
         }
 
         /// <summary>
@@ -129,7 +123,7 @@ namespace commercetools.Payments
         /// <param name="actions">The list of update actions to be performed on the payment.</param>
         /// <returns>Payment</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-payments.html#update-payment"/>
-        public async Task<Payment> UpdatePaymentAsync(Payment payment, List<JObject> actions)
+        public async Task<Response<Payment>> UpdatePaymentAsync(Payment payment, List<UpdateAction> actions)
         {
             return await UpdatePaymentAsync(payment.Id, payment.Version, actions);
         }
@@ -142,7 +136,7 @@ namespace commercetools.Payments
         /// <param name="actions">The list of update actions to be performed on the payment.</param>
         /// <returns>Payment</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-payments.html#update-payment"/>
-        public async Task<Payment> UpdatePaymentAsync(string paymentId, int version, List<JObject> actions)
+        public async Task<Response<Payment>> UpdatePaymentAsync(string paymentId, int version, List<UpdateAction> actions)
         {
             if (string.IsNullOrWhiteSpace(paymentId))
             {
@@ -162,13 +156,11 @@ namespace commercetools.Payments
             JObject data = JObject.FromObject(new
             {
                 version = version,
-                actions = new JArray(actions.ToArray())
+                actions = actions
             });
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", paymentId);
-            dynamic response = await _client.PostAsync(endpoint, data.ToString());
-
-            return new Payment(response);
+            return await _client.PostAsync<Payment>(endpoint, data.ToString());
         }
 
         /// <summary>
@@ -176,9 +168,9 @@ namespace commercetools.Payments
         /// </summary>
         /// <param name="payment">Payment</param>
         /// <see href="http://dev.commercetools.com/http-api-projects-payments.html#delete-payment"/>
-        public async Task DeletePaymentAsync(Payment payment)
+        public async Task<Response<JObject>> DeletePaymentAsync(Payment payment)
         {
-            await DeletePaymentAsync(payment.Id, payment.Version);
+            return await DeletePaymentAsync(payment.Id, payment.Version);
         }
 
         /// <summary>
@@ -187,7 +179,7 @@ namespace commercetools.Payments
         /// <param name="paymentId">Payment ID</param>
         /// <param name="version">Payment version</param>
         /// <see href="http://dev.commercetools.com/http-api-projects-payments.html#delete-payment"/>
-        public async Task DeletePaymentAsync(string paymentId, int version)
+        public async Task<Response<JObject>> DeletePaymentAsync(string paymentId, int version)
         {
             if (string.IsNullOrWhiteSpace(paymentId))
             {
@@ -205,7 +197,7 @@ namespace commercetools.Payments
             };
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", paymentId);
-            await _client.DeleteAsync(endpoint, values);
+            return await _client.DeleteAsync<JObject>(endpoint, values);
         }
 
         #endregion

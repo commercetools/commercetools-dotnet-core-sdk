@@ -27,6 +27,13 @@ namespace commercetools.Common
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public ArraySource() 
+        {
+        }
+
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>

@@ -1,7 +1,4 @@
-﻿using System;
-
-using commercetools.Common;
-using commercetools.Orders;
+﻿using commercetools.Orders;
 
 using Newtonsoft.Json;
 
@@ -26,7 +23,7 @@ namespace commercetools.Messages
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public DeliveryAddedMessage(dynamic data = null) 
+        public DeliveryAddedMessage(dynamic data) 
             : base((object)data)
         {
             if (data == null)

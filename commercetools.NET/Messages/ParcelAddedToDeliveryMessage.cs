@@ -12,9 +12,15 @@ namespace commercetools.Messages
     {
         #region Properties
 
+        /// <summary>
+        /// Delivery
+        /// </summary>
         [JsonProperty(PropertyName = "delivery")]
         public Delivery Delivery { get; private set; }
 
+        /// <summary>
+        /// Parcel
+        /// </summary>
         [JsonProperty(PropertyName = "parcel")]
         public Parcel Parcel { get; private set; }
 

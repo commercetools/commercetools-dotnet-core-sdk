@@ -49,7 +49,7 @@ namespace commercetools.Categories
         /// <param name="categoryId">Category ID</param>
         /// <returns>Category</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-categories.html#get-category-by-id"/>
-        public async Task<Category> GetCategoryByIdAsync(string categoryId)
+        public async Task<Response<Category>> GetCategoryByIdAsync(string categoryId)
         {
             if (string.IsNullOrWhiteSpace(categoryId))
             {
@@ -57,9 +57,7 @@ namespace commercetools.Categories
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", categoryId);
-            dynamic response = await _client.GetAsync(endpoint);
-
-            return new Category(response);
+            return await _client.GetAsync<Category>(endpoint);
         }
 
         /// <summary>
@@ -72,7 +70,7 @@ namespace commercetools.Categories
         /// <param name="offset">Offset</param>
         /// <returns>CategoryQueryResult</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-categories.html#query-categories"/>
-        public async Task<CategoryQueryResult> QueryCategoriesAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
+        public async Task<Response<CategoryQueryResult>> QueryCategoriesAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
         {
             NameValueCollection values = new NameValueCollection();
 
@@ -96,9 +94,7 @@ namespace commercetools.Categories
                 values.Add("offset", offset.ToString());
             }
 
-            dynamic response = await _client.GetAsync(ENDPOINT_PREFIX, values);
-
-            return new CategoryQueryResult(response);
+            return await _client.GetAsync <CategoryQueryResult>(ENDPOINT_PREFIX, values);
         }
 
         /// <summary>
@@ -107,7 +103,7 @@ namespace commercetools.Categories
         /// <param name="categoryDraft">CategoryDraft object</param>
         /// <returns>Category</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-categories.html#create-a-category"/>
-        public async Task<Category> CreateCategoryAsync(CategoryDraft categoryDraft)
+        public async Task<Response<Category>> CreateCategoryAsync(CategoryDraft categoryDraft)
         {
             if (categoryDraft == null)
             {
@@ -127,9 +123,7 @@ namespace commercetools.Categories
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.NullValueHandling = NullValueHandling.Ignore;
             string payload = JsonConvert.SerializeObject(categoryDraft, settings);
-            dynamic response = await _client.PostAsync(ENDPOINT_PREFIX, payload);
-
-            return new Category(response);
+            return await _client.PostAsync<Category>(ENDPOINT_PREFIX, payload);
         }
 
         /// <summary>
@@ -141,7 +135,7 @@ namespace commercetools.Categories
         /// the category.</param>
         /// <returns>Category</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-categories.html#update-category"/>
-        public async Task<Category> UpdateCategoryAsync(Category category, List<JObject> actions)
+        public async Task<Response<Category>> UpdateCategoryAsync(Category category, List<JObject> actions)
         {
             return await UpdateCategoryAsync(category.Id, category.Version, actions);
         }
@@ -156,7 +150,7 @@ namespace commercetools.Categories
         /// the category.</param>
         /// <returns>Category</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-categories.html#update-category"/>
-        public async Task<Category> UpdateCategoryAsync(string categoryId, int version, List<JObject> actions)
+        public async Task<Response<Category>> UpdateCategoryAsync(string categoryId, int version, List<JObject> actions)
         {
             if (string.IsNullOrWhiteSpace(categoryId))
             {
@@ -180,9 +174,7 @@ namespace commercetools.Categories
             });
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", categoryId);
-            dynamic response = await _client.PostAsync(endpoint, data.ToString());
-
-            return new Category(response);
+            return await _client.PostAsync<Category>(endpoint, data.ToString());
         }
 
         /// <summary>
@@ -191,7 +183,7 @@ namespace commercetools.Categories
         /// <param name="category">Category</param>
         /// <returns>Category</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-categories.html#delete-category"/>
-        public async Task<Category> DeleteCategoryAsync(Category category)
+        public async Task<Response<Category>> DeleteCategoryAsync(Category category)
         {
             return await DeleteCategoryAsync(category.Id, category.Version);
         }
@@ -203,7 +195,7 @@ namespace commercetools.Categories
         /// <param name="version">Caregory version</param>
         /// <returns>Category</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-categories.html#delete-category"/>
-        public async Task<Category> DeleteCategoryAsync(string categoryId, int version)
+        public async Task<Response<Category>> DeleteCategoryAsync(string categoryId, int version)
         {
             if (string.IsNullOrWhiteSpace(categoryId))
             {
@@ -221,9 +213,7 @@ namespace commercetools.Categories
             };
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", categoryId);
-            dynamic response = await _client.DeleteAsync(endpoint, values);
-
-            return new Category(response);
+            return await _client.DeleteAsync<Category>(endpoint, values);
         }
 
         #endregion

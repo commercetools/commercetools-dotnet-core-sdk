@@ -26,12 +26,19 @@ namespace commercetools.Carts
         [JsonProperty(PropertyName = "customerEmail")]
         public string CustomerEmail { get; set; }
 
+        [JsonProperty(PropertyName = "anonymousId")]
+        public string AnonymousId { get; set; }
+
         [JsonProperty(PropertyName = "country")]
         public string Country { get; set; }
 
         [JsonProperty(PropertyName = "inventoryMode")]
         [JsonConverter(typeof(StringEnumConverter))]
         public InventoryMode? InventoryMode { get; set; }
+
+        [JsonProperty(PropertyName = "taxMode")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public TaxMode? TaxMode { get; set; }
 
         [JsonProperty(PropertyName = "lineItems")]
         public List<LineItemDraft> LineItems { get; set; }
@@ -48,8 +55,14 @@ namespace commercetools.Carts
         [JsonProperty(PropertyName = "shippingMethod")]
         public Reference ShippingMethod { get; set; }
 
+        [JsonProperty(PropertyName = "externalTaxRateForShippingMethod")]
+        public ExternalTaxRateDraft ExternalTaxRateForShippingMethod { get; set; }
+
         [JsonProperty(PropertyName = "custom")]
         public CustomFieldsDraft Custom { get; set; }
+
+        [JsonProperty(PropertyName = "locale")]
+        public string Locale { get; set; }
 
         #endregion
 
@@ -58,6 +71,7 @@ namespace commercetools.Carts
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="currency">Currency</param>
         public CartDraft(string currency)
         {
             this.Currency = currency;

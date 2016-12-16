@@ -2,6 +2,9 @@
 
 namespace commercetools.Orders
 {
+    /// <summary>
+    /// Extensions
+    /// </summary>
     public static class Extensions
     {
         /// <summary>

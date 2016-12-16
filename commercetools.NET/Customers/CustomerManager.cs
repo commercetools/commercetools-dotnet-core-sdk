@@ -50,7 +50,7 @@ namespace commercetools.Customers
         /// <param name="customerId">Customer ID</param>
         /// <see href="http://dev.commercetools.com/http-api-projects-customers.html#get-customer-by-id"/>
         /// <returns>Customer</returns>
-        public async Task<Customer> GetCustomerByIdAsync(string customerId)
+        public async Task<Response<Customer>> GetCustomerByIdAsync(string customerId)
         {
             if (string.IsNullOrWhiteSpace(customerId))
             {
@@ -58,9 +58,7 @@ namespace commercetools.Customers
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", customerId);
-            dynamic response = await _client.GetAsync(endpoint);
-
-            return new Customer(response);
+            return await _client.GetAsync<Customer>(endpoint);
         }
 
         /// <summary>
@@ -71,7 +69,7 @@ namespace commercetools.Customers
         /// <param name="limit">Limit</param>
         /// <param name="offset">Offset</param>
         /// <returns>CustomerQueryResult</returns>
-        public async Task<CustomerQueryResult> QueryCustomersAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
+        public async Task<Response<CustomerQueryResult>> QueryCustomersAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
         {
             NameValueCollection values = new NameValueCollection();
 
@@ -95,9 +93,7 @@ namespace commercetools.Customers
                 values.Add("offset", offset.ToString());
             }
 
-            dynamic response = await _client.GetAsync(ENDPOINT_PREFIX, values);
-
-            return new CustomerQueryResult(response);
+            return await _client.GetAsync<CustomerQueryResult>(ENDPOINT_PREFIX, values);
         }
 
         /// <summary>
@@ -106,7 +102,7 @@ namespace commercetools.Customers
         /// <param name="customerDraft">CustomerDraft</param>
         /// <returns>CustomerCreatedMessage</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-customers.html#create-customer-sign-up"/>
-        public async Task<CustomerCreatedMessage> CreateCustomerAsync(CustomerDraft customerDraft)
+        public async Task<Response<CustomerCreatedMessage>> CreateCustomerAsync(CustomerDraft customerDraft)
         {
             if (string.IsNullOrWhiteSpace(customerDraft.Email))
             {
@@ -121,9 +117,7 @@ namespace commercetools.Customers
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.NullValueHandling = NullValueHandling.Ignore;
             string payload = JsonConvert.SerializeObject(customerDraft, settings);
-            dynamic response = await _client.PostAsync(ENDPOINT_PREFIX, payload);
-
-            return new CustomerCreatedMessage(response);
+            return await _client.PostAsync<CustomerCreatedMessage>(ENDPOINT_PREFIX, payload);
         }
 
         /// <summary>
@@ -133,7 +127,7 @@ namespace commercetools.Customers
         /// <param name="actions">The list of update actions to be performed on the Customer.</param>
         /// <returns>Customer</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-customers.html#update-customer"/>
-        public async Task<Customer> UpdateCustomerAsync(Customer customer, List<JObject> actions)
+        public async Task<Response<Customer>> UpdateCustomerAsync(Customer customer, List<JObject> actions)
         {
             return await UpdateCustomerAsync(customer.Id, customer.Version, actions);
         }
@@ -146,7 +140,7 @@ namespace commercetools.Customers
         /// <param name="actions">The list of update actions to be performed on the Customer.</param>
         /// <returns>Customer</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-customers.html#update-customer"/>
-        public async Task<Customer> UpdateCustomerAsync(string customerId, int version, List<JObject> actions)
+        public async Task<Response<Customer>> UpdateCustomerAsync(string customerId, int version, List<JObject> actions)
         {
             if (string.IsNullOrWhiteSpace(customerId))
             {
@@ -170,9 +164,100 @@ namespace commercetools.Customers
             });
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", customerId);
-            dynamic response = await _client.PostAsync(endpoint, data.ToString());
+            return await _client.PostAsync<Customer>(endpoint, data.ToString());
 
-            return new Customer(response);
+        }
+
+        /// <summary>
+        /// ChangeCustomersPassword
+        /// </summary>
+        /// <param name="customer">Customer</param>
+        /// <param name="currentPassword">Current password</param>
+        /// <param name="newPassword">New password</param>
+        /// <returns>Customer</returns>
+        /// <see href="http://dev.commercetools.com/http-api-projects-customers.html#change-customers-password"/>
+        public async Task<Response<Customer>> ChangeCustomersPassword(Customer customer, string currentPassword, string newPassword)
+        {
+            return await ChangeCustomersPassword(customer.Id, customer.Version, currentPassword, newPassword);
+        }
+
+        /// <summary>
+        /// ChangeCustomersPassword
+        /// </summary>
+        /// <param name="id">Customer ID</param>
+        /// <param name="version">Customer version</param>
+        /// <param name="currentPassword">Current password</param>
+        /// <param name="newPassword">New password</param>
+        /// <returns>Customer</returns>
+        /// <see href="http://dev.commercetools.com/http-api-projects-customers.html#change-customers-password"/>
+        public async Task<Response<Customer>> ChangeCustomersPassword(string id, int version, string currentPassword, string newPassword)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                throw new ArgumentException("id is required");
+            }
+
+            if (version < 1)
+            {
+                throw new ArgumentException("Version is required");
+            }
+
+            if (string.IsNullOrWhiteSpace(currentPassword))
+            {
+                throw new ArgumentException("currentPassword is required");
+            }
+
+            if (string.IsNullOrWhiteSpace(newPassword))
+            {
+                throw new ArgumentException("newPassword is required");
+            }
+
+            JObject data = JObject.FromObject(new
+            {
+                id = id,
+                version = version,
+                currentPassword = currentPassword,
+                newPassword = newPassword
+            });
+
+            string endpoint = string.Concat(ENDPOINT_PREFIX, "/password/");
+            return await _client.PostAsync<Customer>(endpoint, data.ToString());
+        }
+
+        /// <summary>
+        /// Retrieves the authenticated customer (a customer that matches the given email/password pair).
+        /// </summary>
+        /// <param name="email">Email</param>
+        /// <param name="password">Password</param>
+        /// <param name="anonymousCartId">Anonymous cart ID</param>
+        /// <param name="anonymousCartSignInMode">AnonymousCartSignInMode</param>
+        /// <param name="anonymousId">AnonymousId</param>
+        /// <returns>CustomerSignInResult</returns>
+        /// <see href="https://dev.commercetools.com/http-api-projects-customers.html#authenticate-customer-sign-in"/>
+        public async Task<Response<CustomerSignInResult>> AuthenticateCustomerAsync(string email, string password, string anonymousCartId = null, AnonymousCartSignInMode? anonymousCartSignInMode = null, string anonymousId = null)
+        {
+            JObject data = JObject.FromObject(new
+            {
+                email = email,
+                password = password
+            });
+
+            if (!string.IsNullOrWhiteSpace(anonymousCartId))
+            {
+                data.Add(new JProperty("anonymousCartId", anonymousCartId));
+            }
+
+            if (anonymousCartSignInMode.HasValue)
+            {
+                data.Add(new JProperty("anonymousCartSignInMode", anonymousCartSignInMode.Value.ToString()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(anonymousId))
+            {
+                data.Add(new JProperty("anonymousId", anonymousId));
+            }
+
+            return await _client.PostAsync<CustomerSignInResult>("/login", data.ToString());
         }
 
         /// <summary>
@@ -181,7 +266,7 @@ namespace commercetools.Customers
         /// <param name="customer">Customer</param>
         /// <returns>Customer</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-customers.html#delete-customer"/>
-        public async Task<Customer> DeleteCustomerAsync(Customer customer)
+        public async Task<Response<Customer>> DeleteCustomerAsync(Customer customer)
         {
             return await DeleteCustomerAsync(customer.Id, customer.Version);
         }
@@ -193,7 +278,7 @@ namespace commercetools.Customers
         /// <param name="version">Customer version</param>
         /// <returns>Customer</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-customers.html#delete-customer"/>
-        public async Task<Customer> DeleteCustomerAsync(string customerId, int version)
+        public async Task<Response<Customer>> DeleteCustomerAsync(string customerId, int version)
         {
             if (string.IsNullOrWhiteSpace(customerId))
             {
@@ -211,9 +296,7 @@ namespace commercetools.Customers
             };
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", customerId);
-            dynamic response = await _client.DeleteAsync(endpoint, values);
-
-            return new Customer(response);
+            return await _client.DeleteAsync<Customer>(endpoint, values);
         }
 
         #endregion

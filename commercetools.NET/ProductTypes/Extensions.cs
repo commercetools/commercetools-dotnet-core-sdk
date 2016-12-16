@@ -2,6 +2,9 @@
 
 namespace commercetools.ProductTypes
 {
+    /// <summary>
+    /// Extensions
+    /// </summary>
     public static class Extensions
     {
         /// <summary>

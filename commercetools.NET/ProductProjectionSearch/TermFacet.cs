@@ -40,7 +40,7 @@ namespace commercetools.ProductProjectionSearch
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public TermFacet(dynamic data = null)
+        public TermFacet(dynamic data)
             : base((object)data)
         {
             if (data == null)

@@ -1,10 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 
-using commercetools.Common;
-
-using Newtonsoft.Json;
-
-namespace commercetools.Carts
+namespace commercetools.TaxCategories
 {
     /// <summary>
     /// TaxRate
@@ -40,7 +36,7 @@ namespace commercetools.Carts
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public TaxRate(dynamic data = null)
+        public TaxRate(dynamic data)
         {
             if (data == null)
             {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 
@@ -46,7 +45,7 @@ namespace commercetools.ProductProjections
         /// <param name="productId">Product ID</param>
         /// <returns>ProductProjection</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-productProjections.html#get-productprojection-by-id"/>
-        public async Task<ProductProjection> GetProductProjectionByIdAsync(string productId)
+        public async Task<Response<ProductProjection>> GetProductProjectionByIdAsync(string productId)
         {
             if (string.IsNullOrWhiteSpace(productId))
             {
@@ -54,9 +53,7 @@ namespace commercetools.ProductProjections
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", productId);
-            dynamic response = await _client.GetAsync(endpoint);
-
-            return new ProductProjection(response);
+            return await _client.GetAsync<ProductProjection>(endpoint);
         }
 
         /// <summary>
@@ -65,7 +62,7 @@ namespace commercetools.ProductProjections
         /// <param name="key">Product key</param>
         /// <returns>ProductProjection</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-productProjections.html#get-productprojection-by-key"/>
-        public async Task<ProductProjection> GetProductProjectionByKeyAsync(string key)
+        public async Task<Response<ProductProjection>> GetProductProjectionByKeyAsync(string key)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -73,9 +70,7 @@ namespace commercetools.ProductProjections
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/key=", key);
-            dynamic response = await _client.GetAsync(endpoint);
-
-            return new ProductProjection(response);
+            return await _client.GetAsync<ProductProjection>(endpoint);
         }
 
         /// <summary>
@@ -91,7 +86,7 @@ namespace commercetools.ProductProjections
         /// <param name="staged">Whether to query for current or staged projections</param>
         /// <returns>ProductProjectionQueryResult</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-productProjections.html#query-productprojections"/>
-        public async Task<ProductProjectionQueryResult> QueryProductProjectionsAsync(string where = null, string sort = null, int limit = -1, int offset = -1, bool staged = false)
+        public async Task<Response<ProductProjectionQueryResult>> QueryProductProjectionsAsync(string where = null, string sort = null, int limit = -1, int offset = -1, bool staged = false)
         {
             NameValueCollection values = new NameValueCollection
             {
@@ -118,9 +113,7 @@ namespace commercetools.ProductProjections
                 values.Add("offset", offset.ToString());
             }
 
-            dynamic response = await _client.GetAsync(ENDPOINT_PREFIX, values);
-
-            return new ProductProjectionQueryResult(response);
+            return await _client.GetAsync<ProductProjectionQueryResult>(ENDPOINT_PREFIX, values);
         }
 
         #endregion

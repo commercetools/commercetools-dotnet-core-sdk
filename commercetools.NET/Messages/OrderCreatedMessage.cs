@@ -12,6 +12,9 @@ namespace commercetools.Messages
     {
         #region Properties
 
+        /// <summary>
+        /// Order
+        /// </summary>
         [JsonProperty(PropertyName = "order")]
         public Order Order { get; private set; }
 
@@ -23,7 +26,7 @@ namespace commercetools.Messages
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public OrderCreatedMessage(dynamic data = null)
+        public OrderCreatedMessage(dynamic data)
             : base((object)data)
         {
             if (data == null)

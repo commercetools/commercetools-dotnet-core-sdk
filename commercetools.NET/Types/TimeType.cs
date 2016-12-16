@@ -9,10 +9,18 @@
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public TimeType()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Returns a JSON representation of this instance.
         /// </summary>
         /// <returns>JObject</returns>
-        public TimeType(dynamic data = null)
+        public TimeType(dynamic data)
             : base((object)data)
         {
         }

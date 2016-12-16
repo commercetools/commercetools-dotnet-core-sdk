@@ -45,7 +45,7 @@ namespace commercetools.TaxCategories
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public TaxCategory(dynamic data = null)
+        public TaxCategory(dynamic data)
         {
             if (data == null)
             {

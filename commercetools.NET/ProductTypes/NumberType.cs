@@ -11,10 +11,18 @@ namespace commercetools.ProductTypes
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public NumberType()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Returns a JSON representation of this instance.
         /// </summary>
         /// <returns>JObject</returns>
-        public NumberType(dynamic data = null)
+        public NumberType(dynamic data)
             : base((object)data)
         {
         }

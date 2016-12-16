@@ -12,21 +12,39 @@ namespace commercetools.Messages
     {
         #region Properties
 
+        /// <summary>
+        /// Old State
+        /// </summary>
         [JsonProperty(PropertyName = "oldState")]
         public Reference OldState { get; private set; }
 
+        /// <summary>
+        /// New State
+        /// </summary>
         [JsonProperty(PropertyName = "newState")]
         public Reference NewState { get; private set; }
 
+        /// <summary>
+        /// Indicates if this review was taken into account in the ratings statistics of the target before the state transition.
+        /// </summary>
         [JsonProperty(PropertyName = "oldIncludedInStatistics")]
         public bool? OldIncludedInStatistics { get; private set; }
 
+        /// <summary>
+        /// Indicates if this review is taken into account in the ratings statistics of the target after the state transition.
+        /// </summary>
         [JsonProperty(PropertyName = "newIncludedInStatistics")]
         public bool? NewIncludedInStatistics { get; private set; }
 
+        /// <summary>
+        /// Target
+        /// </summary>
         [JsonProperty(PropertyName = "target")]
         public Reference Target { get; private set; }
 
+        /// <summary>
+        /// Force
+        /// </summary>
         [JsonProperty(PropertyName = "force")]
         public bool? Force { get; private set; }
 
@@ -38,7 +56,7 @@ namespace commercetools.Messages
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public ReviewStateTransitionMessage(dynamic data = null)
+        public ReviewStateTransitionMessage(dynamic data)
             : base((object)data)
         {
             if (data == null)

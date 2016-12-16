@@ -32,7 +32,7 @@ namespace commercetools.Orders
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public ReturnInfo(dynamic data = null)
+        public ReturnInfo(dynamic data)
         {
             if (data == null)
             {

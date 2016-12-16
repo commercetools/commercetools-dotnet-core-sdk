@@ -2,6 +2,9 @@
 
 namespace commercetools.Products
 {
+    /// <summary>
+    /// SuggestTokenizerFactory
+    /// </summary>
     public static class SuggestTokenizerFactory
     {
         /// <summary>

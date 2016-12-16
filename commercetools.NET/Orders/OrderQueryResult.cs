@@ -14,6 +14,9 @@ namespace commercetools.Orders
     {
         #region Properties
 
+        /// <summary>
+        /// Results
+        /// </summary>
         [JsonProperty(PropertyName = "results")]
         public List<Order> Results { get; set; }
 

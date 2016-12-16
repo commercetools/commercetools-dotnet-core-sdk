@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using commercetools.Common;
 
@@ -16,16 +15,24 @@ namespace commercetools.ProductTypes
         #region Properties
 
         [JsonProperty(PropertyName = "values")]
-        public List<PlainEnumValue> Values { get; private set; }
+        public List<PlainEnumValue> Values { get; set; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public EnumType()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
-        public EnumType(dynamic data = null)
+        public EnumType(dynamic data)
             : base((object)data)
         {
             if (data == null)

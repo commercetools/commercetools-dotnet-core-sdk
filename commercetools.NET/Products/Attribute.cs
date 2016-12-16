@@ -1,7 +1,4 @@
-using System;
-
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace commercetools.Products
 {
@@ -27,7 +24,7 @@ namespace commercetools.Products
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public Attribute(dynamic data = null)
+        public Attribute(dynamic data)
         {
             if (data == null)
             {

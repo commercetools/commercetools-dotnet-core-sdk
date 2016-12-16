@@ -44,7 +44,7 @@ namespace commercetools.Zones
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public Zone(dynamic data = null)
+        public Zone(dynamic data)
         {
             if (data == null)
             {

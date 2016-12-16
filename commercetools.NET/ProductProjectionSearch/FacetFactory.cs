@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace commercetools.ProductProjectionSearch
+﻿namespace commercetools.ProductProjectionSearch
 {
+    /// <summary>
+    /// FacetFactory
+    /// </summary>
     public class FacetFactory
     {
         /// <summary>

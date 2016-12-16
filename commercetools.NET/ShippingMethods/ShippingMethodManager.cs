@@ -49,7 +49,7 @@ namespace commercetools.ShippingMethods
         /// <param name="shippingMethodId">ShippingMethod ID</param>
         /// <returns>ShippingMethod</returns>
         /// <see href="https://dev.commercetools.com/http-api-projects-shippingMethods.html#get-shippingmethod-by-id"/>
-        public async Task<ShippingMethod> GetShippingMethodByIdAsync(string shippingMethodId)
+        public async Task<Response<ShippingMethod>> GetShippingMethodByIdAsync(string shippingMethodId)
         {
             if (string.IsNullOrWhiteSpace(shippingMethodId))
             {
@@ -57,9 +57,7 @@ namespace commercetools.ShippingMethods
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", shippingMethodId);
-            dynamic response = await _client.GetAsync(endpoint);
-
-            return new ShippingMethod(response);
+            return await _client.GetAsync<ShippingMethod>(endpoint);
         }
 
         /// <summary>
@@ -71,7 +69,7 @@ namespace commercetools.ShippingMethods
         /// <param name="offset">Offset</param>
         /// <returns>ShippingMethodQueryResult</returns>
         /// <see href="https://dev.commercetools.com/http-api-projects-shippingMethods.html#query-shippingmethods"/>
-        public async Task<ShippingMethodQueryResult> QueryShippingMethodsAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
+        public async Task<Response<ShippingMethodQueryResult>> QueryShippingMethodsAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
         {
             NameValueCollection values = new NameValueCollection();
 
@@ -95,9 +93,7 @@ namespace commercetools.ShippingMethods
                 values.Add("offset", offset.ToString());
             }
 
-            dynamic response = await _client.GetAsync(ENDPOINT_PREFIX, values);
-
-            return new ShippingMethodQueryResult(response);
+            return await _client.GetAsync<ShippingMethodQueryResult>(ENDPOINT_PREFIX, values);
         }
 
         /// <summary>
@@ -106,7 +102,7 @@ namespace commercetools.ShippingMethods
         /// <param name="shippingMethodDraft">ShippingMethodDraft</param>
         /// <returns>ShippingMethod</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-shippingMethods.html#create-shippingmethod"/>
-        public async Task<ShippingMethod> CreateShippingMethodAsync(ShippingMethodDraft shippingMethodDraft)
+        public async Task<Response<ShippingMethod>> CreateShippingMethodAsync(ShippingMethodDraft shippingMethodDraft)
         {
             if (string.IsNullOrWhiteSpace(shippingMethodDraft.Name))
             {
@@ -116,9 +112,7 @@ namespace commercetools.ShippingMethods
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.NullValueHandling = NullValueHandling.Ignore;
             string payload = JsonConvert.SerializeObject(shippingMethodDraft, settings);
-            dynamic response = await _client.PostAsync(ENDPOINT_PREFIX, payload);
-
-            return new ShippingMethod(response);
+            return await _client.PostAsync<ShippingMethod>(ENDPOINT_PREFIX, payload);
         }
 
         /// <summary>
@@ -128,7 +122,7 @@ namespace commercetools.ShippingMethods
         /// <param name="actions">The list of update actions to apply to the product.</param>
         /// <returns>Product</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-shippingMethods.html#update-shippingmethod"/>
-        public async Task<ShippingMethod> UpdateShippingMethodAsync(ShippingMethod shippingMethod, List<JObject> actions)
+        public async Task<Response<ShippingMethod>> UpdateShippingMethodAsync(ShippingMethod shippingMethod, List<UpdateAction> actions)
         {
             return await UpdateShippingMethodAsync(shippingMethod.Id, shippingMethod.Version, actions);
         }
@@ -141,7 +135,7 @@ namespace commercetools.ShippingMethods
         /// <param name="actions">The list of update actions to apply to the product.</param>
         /// <returns>Product</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-shippingMethods.html#update-shippingmethod"/>
-        public async Task<ShippingMethod> UpdateShippingMethodAsync(string shippingMethodId, int version, List<JObject> actions)
+        public async Task<Response<ShippingMethod>> UpdateShippingMethodAsync(string shippingMethodId, int version, List<UpdateAction> actions)
         {
             if (string.IsNullOrWhiteSpace(shippingMethodId))
             {
@@ -165,9 +159,7 @@ namespace commercetools.ShippingMethods
             });
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", shippingMethodId);
-            dynamic response = await _client.PostAsync(endpoint, data.ToString());
-
-            return new ShippingMethod(response);
+            return await _client.PostAsync<ShippingMethod>(endpoint, data.ToString());
         }
 
         /// <summary>
@@ -176,7 +168,7 @@ namespace commercetools.ShippingMethods
         /// <param name="shippingMethod">Shipping method</param>
         /// <returns>ShippingMethod</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-shippingMethods.html#delete-shippingmethod"/>
-        public async Task<ShippingMethod> DeleteShippingMethodAsync(ShippingMethod shippingMethod)
+        public async Task<Response<ShippingMethod>> DeleteShippingMethodAsync(ShippingMethod shippingMethod)
         {
             return await DeleteShippingMethodAsync(shippingMethod.Id, shippingMethod.Version);
         }
@@ -188,7 +180,7 @@ namespace commercetools.ShippingMethods
         /// <param name="version">Shipping method version</param>
         /// <returns>ShippingMethod</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-shippingMethods.html#delete-shippingmethod"/>
-        public async Task<ShippingMethod> DeleteShippingMethodAsync(string shippingMethodId, int version)
+        public async Task<Response<ShippingMethod>> DeleteShippingMethodAsync(string shippingMethodId, int version)
         {
             if (string.IsNullOrWhiteSpace(shippingMethodId))
             {
@@ -206,9 +198,7 @@ namespace commercetools.ShippingMethods
             };
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", shippingMethodId);
-            dynamic response = await _client.DeleteAsync(endpoint, values);
-
-            return new ShippingMethod(response);
+            return await _client.DeleteAsync<ShippingMethod>(endpoint, values);
         }
 
         #endregion

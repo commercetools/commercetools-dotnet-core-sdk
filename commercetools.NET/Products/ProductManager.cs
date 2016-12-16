@@ -53,7 +53,7 @@ namespace commercetools.Products
         /// <param name="priceChannel">Enables price selection. Can only be used in conjunction with the priceCurrency parameter.</param>
         /// <returns>Product</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-products.html#get-product-by-id"/>
-        public async Task<Product> GetProductByIdAsync(string productId, string priceCurrency = null, string priceCountry = null, Guid priceCustomerGroup = new Guid(), Guid priceChannel = new Guid())
+        public async Task<Response<Product>> GetProductByIdAsync(string productId, string priceCurrency = null, string priceCountry = null, Guid priceCustomerGroup = new Guid(), Guid priceChannel = new Guid())
         {
             if (string.IsNullOrWhiteSpace(productId))
             {
@@ -61,9 +61,7 @@ namespace commercetools.Products
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", productId);
-            Product product = await GetProduct(endpoint, priceCurrency, priceCountry, priceCustomerGroup, priceChannel);
-
-            return product;
+            return await GetProductAsync(endpoint, priceCurrency, priceCountry, priceCustomerGroup, priceChannel);
         }
 
         /// <summary>
@@ -76,7 +74,7 @@ namespace commercetools.Products
         /// <param name="priceChannel">Enables price selection. Can only be used in conjunction with the priceCurrency parameter.</param>
         /// <returns>Product</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-products.html#get-product-by-key"/>
-        public async Task<Product> GetProductByKeyAsync(string key, string priceCurrency = null, string priceCountry = null, Guid priceCustomerGroup = new Guid(), Guid priceChannel = new Guid())
+        public async Task<Response<Product>> GetProductByKeyAsync(string key, string priceCurrency = null, string priceCountry = null, Guid priceCustomerGroup = new Guid(), Guid priceChannel = new Guid())
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -84,9 +82,7 @@ namespace commercetools.Products
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/key=", key);
-            Product product = await GetProduct(endpoint, priceCurrency, priceCountry, priceCustomerGroup, priceChannel);
-
-            return product;
+            return await GetProductAsync(endpoint, priceCurrency, priceCountry, priceCustomerGroup, priceChannel);
         }
 
         /// <summary>
@@ -99,7 +95,7 @@ namespace commercetools.Products
         /// <param name="priceChannel">Enables price selection. Can only be used in conjunction with the priceCurrency parameter.</param>
         /// <returns>Product</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-products.html#get-product"/>
-        private async Task<Product> GetProduct(string endpoint, string priceCurrency = null, string priceCountry = null, Guid priceCustomerGroup = new Guid(), Guid priceChannel = new Guid())
+        private async Task<Response<Product>> GetProductAsync(string endpoint, string priceCurrency = null, string priceCountry = null, Guid priceCustomerGroup = new Guid(), Guid priceChannel = new Guid())
         {
             NameValueCollection values = new NameValueCollection();
 
@@ -123,9 +119,7 @@ namespace commercetools.Products
                 }
             }
 
-            dynamic response = await _client.GetAsync(endpoint, values);
-
-            return new Product(response);
+            return await _client.GetAsync<Product>(endpoint, values);
         }
 
         /// <summary>
@@ -135,9 +129,21 @@ namespace commercetools.Products
         /// <param name="sort">Sort</param>
         /// <param name="limit">Limit</param>
         /// <param name="offset">Offset</param>
+        /// <param name="priceCurrency">Enables price selection</param>
+        /// <param name="priceCountry">Enables price selection. Can only be used in conjunction with the priceCurrency parameter</param>
+        /// <param name="priceCustomerGroup">Enables price selection. Can only be used in conjunction with the priceCurrency parameter</param>
+        /// <param name="priceChannel">Enables price selection. Can only be used in conjunction with the priceCurrency parameter</param>
         /// <returns>ProductQueryResult</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-products.html#products-by-query"/>
-        public async Task<ProductQueryResult> QueryProductsAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
+        public async Task<Response<ProductQueryResult>> QueryProductsAsync(
+            string where = null, 
+            string sort = null, 
+            int limit = -1, 
+            int offset = -1,
+            string priceCurrency = null,
+            string priceCountry = null,
+            string priceCustomerGroup = null,
+            string priceChannel = null)
         {
             NameValueCollection values = new NameValueCollection();
 
@@ -161,9 +167,27 @@ namespace commercetools.Products
                 values.Add("offset", offset.ToString());
             }
 
-            dynamic response = await _client.GetAsync(ENDPOINT_PREFIX, values);
+            if (!string.IsNullOrWhiteSpace(priceCurrency))
+            {
+                values.Add("priceCurrency", priceCurrency);
 
-            return new ProductQueryResult(response);
+                if (!string.IsNullOrWhiteSpace(priceCountry))
+                {
+                    values.Add("priceCountry", priceCountry);
+                }
+
+                if (!string.IsNullOrWhiteSpace(priceCustomerGroup))
+                {
+                    values.Add("priceCustomerGroup", priceCustomerGroup);
+                }
+
+                if (!string.IsNullOrWhiteSpace(priceChannel))
+                {
+                    values.Add("priceChannel", priceChannel);
+                }
+            }
+
+            return await _client.GetAsync<ProductQueryResult>(ENDPOINT_PREFIX, values);
         }
 
         /// <summary>
@@ -172,7 +196,7 @@ namespace commercetools.Products
         /// <param name="productDraft">ProductDraft</param>
         /// <returns>Product</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-products.html#create-product"/>
-        public async Task<Product> CreateProductAsync(ProductDraft productDraft)
+        public async Task<Response<Product>> CreateProductAsync(ProductDraft productDraft)
         {
             if (productDraft.Name == null || productDraft.Name.IsEmpty())
             {
@@ -192,9 +216,7 @@ namespace commercetools.Products
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.NullValueHandling = NullValueHandling.Ignore;
             string payload = JsonConvert.SerializeObject(productDraft, settings);
-            dynamic response = await _client.PostAsync(ENDPOINT_PREFIX, payload);
-
-            return new Product(response);
+            return await _client.PostAsync<Product>(ENDPOINT_PREFIX, payload);
         }
 
         /// <summary>
@@ -208,7 +230,7 @@ namespace commercetools.Products
         /// <param name="priceChannel">Enables price selection. Can only be used in conjunction with the priceCurrency parameter.</param>
         /// <returns>Product</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-products.html#update-product"/>
-        public async Task<Product> UpdateProductAsync(Product product, List<JObject> actions, string priceCurrency = null, string priceCountry = null, Guid priceCustomerGroup = new Guid(), Guid priceChannel = new Guid())
+        public async Task<Response<Product>> UpdateProductAsync(Product product, List<UpdateAction> actions, string priceCurrency = null, string priceCountry = null, Guid priceCustomerGroup = new Guid(), Guid priceChannel = new Guid())
         {
             return await UpdateProductByIdAsync(product.Id, product.Version, actions, priceCurrency, priceCountry, priceCustomerGroup, priceChannel);
         }
@@ -225,7 +247,7 @@ namespace commercetools.Products
         /// <param name="priceChannel">Enables price selection. Can only be used in conjunction with the priceCurrency parameter.</param>
         /// <returns>Product</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-products.html#update-product"/>
-        public async Task<Product> UpdateProductByIdAsync(string productId, int version, List<JObject> actions, string priceCurrency = null, string priceCountry = null, Guid priceCustomerGroup = new Guid(), Guid priceChannel = new Guid())
+        public async Task<Response<Product>> UpdateProductByIdAsync(string productId, int version, List<UpdateAction> actions, string priceCurrency = null, string priceCountry = null, Guid priceCustomerGroup = new Guid(), Guid priceChannel = new Guid())
         {
             if (string.IsNullOrWhiteSpace(productId))
             {
@@ -248,7 +270,7 @@ namespace commercetools.Products
         /// <param name="priceChannel">Enables price selection. Can only be used in conjunction with the priceCurrency parameter.</param>
         /// <returns>Product</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-products.html#update-product"/>
-        public async Task<Product> UpdateProductByKeyAsync(string key, int version, List<JObject> actions, string priceCurrency = null, string priceCountry = null, Guid priceCustomerGroup = new Guid(), Guid priceChannel = new Guid())
+        public async Task<Response<Product>> UpdateProductByKeyAsync(string key, int version, List<UpdateAction> actions, string priceCurrency = null, string priceCountry = null, Guid priceCustomerGroup = new Guid(), Guid priceChannel = new Guid())
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -271,7 +293,7 @@ namespace commercetools.Products
         /// <param name="priceChannel">Enables price selection. Can only be used in conjunction with the priceCurrency parameter.</param>
         /// <returns>Product</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-products.html#update-product"/>
-        private async Task<Product> UpdateProductAsync(string endpoint, int version, List<JObject> actions, string priceCurrency = null, string priceCountry = null, Guid priceCustomerGroup = new Guid(), Guid priceChannel = new Guid())
+        private async Task<Response<Product>> UpdateProductAsync(string endpoint, int version, List<UpdateAction> actions, string priceCurrency = null, string priceCountry = null, Guid priceCustomerGroup = new Guid(), Guid priceChannel = new Guid())
         {
             if (version < 1)
             {
@@ -309,9 +331,7 @@ namespace commercetools.Products
                 }
             }
 
-            dynamic response = await _client.PostAsync(endpoint, data.ToString());
-
-            return new Product(response);
+            return await _client.PostAsync<Product>(endpoint, data.ToString());
         }
 
         /// <summary>
@@ -320,7 +340,7 @@ namespace commercetools.Products
         /// <param name="product">Product</param>
         /// <returns>Product</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-products.html#delete-product"/>
-        public async Task<Product> DeleteProductAsync(Product product)
+        public async Task<Response<Product>> DeleteProductAsync(Product product)
         {
             return await DeleteProductAsync(product.Id, product.Version);
         }
@@ -332,7 +352,7 @@ namespace commercetools.Products
         /// <param name="version">Product version</param>
         /// <returns>Product</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-products.html#delete-product"/>
-        public async Task<Product> DeleteProductAsync(string productId, int version)
+        public async Task<Response<Product>> DeleteProductAsync(string productId, int version)
         {
             if (string.IsNullOrWhiteSpace(productId))
             {
@@ -350,9 +370,7 @@ namespace commercetools.Products
             };
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", productId);
-            dynamic response = await _client.DeleteAsync(endpoint, values);
-
-            return new Product(response);
+            return await _client.DeleteAsync<Product>(endpoint, values);
         }
 
         #endregion

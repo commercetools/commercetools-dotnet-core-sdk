@@ -13,20 +13,27 @@ namespace commercetools.Common
         #region Properties
 
         [JsonProperty(PropertyName = "key")]
-        public string Key { get; private set; }
+        public string Key { get; set; }
 
         [JsonProperty(PropertyName = "label")]
-        public string Label { get; private set; }
+        public string Label { get; set; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public PlainEnumValue()
+        {
+        }
+
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public PlainEnumValue(dynamic data = null)
+        public PlainEnumValue(dynamic data)
         {
             if (data == null)
             {

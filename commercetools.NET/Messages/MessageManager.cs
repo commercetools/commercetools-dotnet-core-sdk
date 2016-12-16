@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 
@@ -45,7 +44,7 @@ namespace commercetools.Messages
         /// <param name="messageId">Message ID</param>
         /// <see href="http://dev.commercetools.com/http-api-projects-messages.html#get-message-by-id"/>
         /// <returns>Message</returns>
-        public async Task<Message> GetMessageByIdAsync(string messageId)
+        public async Task<Response<Message>> GetMessageByIdAsync(string messageId)
         {
             if (string.IsNullOrWhiteSpace(messageId))
             {
@@ -53,9 +52,7 @@ namespace commercetools.Messages
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", messageId);
-            dynamic response = await _client.GetAsync(endpoint);
-
-            return MessageFactory.Create(response);
+            return await _client.GetAsync<Message>(endpoint);
         }
 
         /// <summary>
@@ -66,7 +63,7 @@ namespace commercetools.Messages
         /// <param name="limit">Limit</param>
         /// <param name="offset">Offset</param>
         /// <returns>MessageQueryResult</returns>
-        public async Task<MessageQueryResult> QueryMessagesAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
+        public async Task<Response<MessageQueryResult>> QueryMessagesAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
         {
             NameValueCollection values = new NameValueCollection();
 
@@ -90,9 +87,7 @@ namespace commercetools.Messages
                 values.Add("offset", offset.ToString());
             }
 
-            dynamic response = await _client.GetAsync(ENDPOINT_PREFIX, values);
-
-            return new MessageQueryResult(response);
+            return await _client.GetAsync<MessageQueryResult>(ENDPOINT_PREFIX, values);
         }
 
         #endregion

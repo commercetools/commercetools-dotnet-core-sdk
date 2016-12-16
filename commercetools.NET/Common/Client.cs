@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace commercetools.Common
 {
@@ -60,9 +61,9 @@ namespace commercetools.Common
         /// <param name="endpoint">API endpoint, excluding the project key</param>
         /// <param name="values">Values</param>
         /// <returns>JSON object</returns>
-        public async Task<object> GetAsync(string endpoint, NameValueCollection values = null)
+        public async Task<Response<T>> GetAsync<T>(string endpoint, NameValueCollection values = null)
         {
-            dynamic data = null;
+            Response<T> response = new Response<T>();
 
             await EnsureToken();
 
@@ -80,17 +81,12 @@ namespace commercetools.Common
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
-                HttpResponseMessage response = await client.GetAsync(url);
-                int statusCode = (int)response.StatusCode;
-                data = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
+                HttpResponseMessage httpResponseMessage = await client.GetAsync(url);
 
-                if (statusCode >= 400)
-                {
-                    throw new WebServiceHttpException(data);
-                }
+                response = await GetResponse<T>(httpResponseMessage);
             }
 
-            return data;
+            return response;
         }
 
         /// <summary>
@@ -99,9 +95,9 @@ namespace commercetools.Common
         /// <param name="endpoint"></param>
         /// <param name="payload">Body of the request</param>
         /// <returns>JSON object</returns>
-        public async Task<object> PostAsync(string endpoint, string payload)
+        public async Task<Response<T>> PostAsync<T>(string endpoint, string payload)
         {
-            dynamic data = null;
+            Response<T> response = new Response<T>();
 
             await EnsureToken();
 
@@ -120,17 +116,12 @@ namespace commercetools.Common
                 client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
                 StringContent content = new StringContent(payload, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync(url, content);
-                int statusCode = (int)response.StatusCode;
-                data = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
+                HttpResponseMessage httpResponseMessage = await client.PostAsync(url, content);
 
-                if (statusCode >= 400)
-                {
-                    throw new WebServiceHttpException(data);
-                }
+                response = await GetResponse<T>(httpResponseMessage);
             }
 
-            return data;
+            return response;
         }
 
         /// <summary>
@@ -139,9 +130,9 @@ namespace commercetools.Common
         /// <param name="endpoint">API endpoint, excluding the project key</param>
         /// <param name="values">Values</param>
         /// <returns>JSON object</returns>
-        public async Task<object> DeleteAsync(string endpoint, NameValueCollection values = null)
+        public async Task<Response<T>> DeleteAsync<T>(string endpoint, NameValueCollection values = null)
         {
-            dynamic data = null;
+            Response<T> response = new Response<T>();
 
             await EnsureToken();
 
@@ -159,17 +150,12 @@ namespace commercetools.Common
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
-                HttpResponseMessage response = await client.DeleteAsync(url);
-                int statusCode = (int)response.StatusCode;
-                data = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
+                HttpResponseMessage httpResponseMessage = await client.DeleteAsync(url);
 
-                if (statusCode >= 400)
-                {
-                    throw new WebServiceHttpException(data);
-                }
+                response = await GetResponse<T>(httpResponseMessage);
             }
 
-            return data;
+            return response;
         }
 
         #endregion
@@ -183,7 +169,12 @@ namespace commercetools.Common
         {
             if (this.Token == null)
             {
-                this.Token = await GetTokenAsync();
+                Response<Token> response = await GetTokenAsync();
+
+                if (response.Success)
+                {
+                    this.Token = response.Result;
+                }
             }
             /*
              * The refresh token flow is currently only available for the password flow, which is currently not supported by the SDK.
@@ -201,9 +192,9 @@ namespace commercetools.Common
         /// </summary>
         /// <returns>Token</returns>
         /// <see href="http://dev.commercetools.com/http-api-authorization.html#authorization-flows"/>
-        public async Task<Token> GetTokenAsync()
+        public async Task<Response<Token>> GetTokenAsync()
         {
-            Token token = null;
+            Response<Token> response = new Response<Token>();
 
             var pairs = new List<KeyValuePair<string, string>>
             {
@@ -222,19 +213,11 @@ namespace commercetools.Common
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
-                HttpResponseMessage response = await client.PostAsync(this.Configuration.OAuthUrl, content);
-                int statusCode = (int)response.StatusCode;
-                dynamic data = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
-
-                if (statusCode >= 400)
-                {
-                    throw new WebServiceHttpException(data);
-                }
-
-                token = new Token(data);
+                HttpResponseMessage httpResponseMessage = await client.PostAsync(this.Configuration.OAuthUrl, content);
+                response = await GetResponse<Token>(httpResponseMessage);
             }
 
-            return token;
+            return response;
         }
 
         /// <summary>
@@ -243,9 +226,9 @@ namespace commercetools.Common
         /// <param name="refreshToken">Refresh token value from the current token</param>
         /// <returns>Token</returns>
         /// <see href="http://dev.commercetools.com/http-api-authorization.html#authorization-flows"/>
-        public async Task<Token> RefreshTokenAsync(string refreshToken)
+        public async Task<Response<Token>> RefreshTokenAsync(string refreshToken)
         {
-            Token token = null;
+            Response<Token> response = new Response<Token>();
 
             var pairs = new List<KeyValuePair<string, string>>
             {
@@ -264,19 +247,68 @@ namespace commercetools.Common
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
-                HttpResponseMessage response = await client.PostAsync(this.Configuration.OAuthUrl, content);
-                int statusCode = (int)response.StatusCode;
-                dynamic data = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
-
-                if (statusCode >= 400)
-                {
-                    throw new WebServiceHttpException(data);
-                }
-
-                token = new Token(data);
+                HttpResponseMessage httpResponseMessage = await client.PostAsync(this.Configuration.OAuthUrl, content);
+                response = await GetResponse<Token>(httpResponseMessage);
             }
 
-            return token;
+            return response;
+        }
+
+        #endregion
+
+        #region Utitlity
+
+        /// <summary>
+        /// Gets a response object from the API response.
+        /// </summary>
+        /// <typeparam name="T">Type of result</typeparam>
+        /// <param name="httpResponseMessage">HttpResponseMessage</param>
+        /// <returns>Response</returns>
+        private async Task<Response<T>> GetResponse<T>(HttpResponseMessage httpResponseMessage)
+        {
+            Response<T> response = new Response<T>();
+            Type resultType = typeof(T);
+
+            response.StatusCode = (int)httpResponseMessage.StatusCode;
+
+            if (response.StatusCode == 200)
+            {
+                response.Success = true;
+
+                if (resultType == typeof(JObject))
+                {
+                    response.Result = JsonConvert.DeserializeObject<T>(await httpResponseMessage.Content.ReadAsStringAsync());
+                }
+                else
+                {
+                    dynamic data = JsonConvert.DeserializeObject(await httpResponseMessage.Content.ReadAsStringAsync());
+                    ConstructorInfo constructor = Helper.GetConstructorWithDataParameter(resultType);
+
+                    if (constructor != null)
+                    {
+                        Helper.ObjectActivator<T> activator = Helper.GetActivator<T>(constructor);
+                        response.Result = activator(data);
+                    }
+                }
+            }
+            else
+            {
+                JObject data = JsonConvert.DeserializeObject<JObject>(await httpResponseMessage.Content.ReadAsStringAsync());
+
+                response.Success = false;
+                response.Errors = new List<ErrorMessage>();
+                //response.Result = data as
+
+                if (data != null && (data["errors"] != null))
+                {
+                    foreach (dynamic error in data["errors"])
+                    {
+                        response.Errors.Add(new ErrorMessage(error.code, error.message));
+                    }
+                }
+            }
+
+            return response;
         }
 
         #endregion

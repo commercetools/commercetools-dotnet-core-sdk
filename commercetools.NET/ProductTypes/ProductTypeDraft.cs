@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
 
-using commercetools.Common;
-using commercetools.Types;
-
 using Newtonsoft.Json;
 
 namespace commercetools.ProductTypes

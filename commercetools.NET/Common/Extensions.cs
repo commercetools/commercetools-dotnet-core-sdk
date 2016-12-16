@@ -7,6 +7,9 @@ using Newtonsoft.Json;
 
 namespace commercetools.Common
 {
+    /// <summary>
+    /// Extensions
+    /// </summary>
     public static class Extensions
     {
         /// <summary>

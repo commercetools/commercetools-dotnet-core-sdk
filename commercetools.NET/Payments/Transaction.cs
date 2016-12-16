@@ -43,6 +43,13 @@ namespace commercetools.Payments
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public Transaction()
+        {
+        }
+
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>

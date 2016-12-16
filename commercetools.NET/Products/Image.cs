@@ -48,7 +48,7 @@ namespace commercetools.Products
         /// Fills the object with data from an API response.
         /// </summary>
         /// <param name="data">API response</param>
-        public Image(dynamic data = null)
+        public Image(dynamic data)
         {
             if (data == null)
             {

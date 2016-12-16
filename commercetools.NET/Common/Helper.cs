@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -56,6 +55,12 @@ namespace commercetools.Common
 
         #region Object creation
 
+        /// <summary>
+        /// Object activaator delegate
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public delegate T ObjectActivator<T>(params object[] args);
 
         /// <summary>
@@ -87,6 +92,30 @@ namespace commercetools.Common
         }
 
         /// <summary>
+        /// Gets the constructor for a type where there is a parameter called 'data' of type 'object'.
+        /// </summary>
+        /// <param name="type">Type</param>
+        /// <returns>ConstructorInfo object, or null if not found</returns>
+        public static ConstructorInfo GetConstructorWithDataParameter(Type type)
+        {
+            ConstructorInfo constructor = null;
+            ConstructorInfo[] constructors = type.GetConstructors();
+
+            foreach (ConstructorInfo thisConstructor in constructors)
+            {
+                ParameterInfo[] parameters = thisConstructor.GetParameters();
+
+                if (parameters.Length == 1 && parameters[0].Name.Equals("data") && parameters[0].ParameterType == typeof(object))
+                {
+                    constructor = thisConstructor;
+                    break;
+                }
+            }
+
+            return constructor;
+        }
+
+        /// <summary>
         /// Gets a list from an array of JSON objects.
         /// </summary>
         /// <remarks>
@@ -105,23 +134,11 @@ namespace commercetools.Common
             List<T> list = new List<T>();
 
             Type type = typeof(T);
-            ConstructorInfo myConstructorInfo = null;
-            ConstructorInfo[] constructorInfoList = type.GetConstructors();
+            ConstructorInfo constructor = Helper.GetConstructorWithDataParameter(type);
 
-            foreach (ConstructorInfo constructorInfo in constructorInfoList)
+            if (constructor != null)
             {
-                ParameterInfo[] parameters = constructorInfo.GetParameters();
-
-                if (parameters.Length == 1 && parameters[0].Name.Equals("data") && parameters[0].ParameterType == typeof(object))
-                {
-                    myConstructorInfo = constructorInfo;
-                    break;
-                }
-            }
-
-            if (myConstructorInfo != null)
-            {
-                Helper.ObjectActivator<T> activator = Helper.GetActivator<T>(myConstructorInfo);
+                Helper.ObjectActivator<T> activator = Helper.GetActivator<T>(constructor);
 
                 foreach (dynamic data in jArray)
                 {

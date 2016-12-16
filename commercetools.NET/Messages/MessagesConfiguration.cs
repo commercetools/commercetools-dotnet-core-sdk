@@ -9,7 +9,10 @@ namespace commercetools.Messages
     public class MessagesConfiguration
     {
         #region Properties
-
+        
+        /// <summary>
+        /// Enabled
+        /// </summary>
         [JsonProperty(PropertyName = "enabled")]
         public bool Enabled { get; private set; }
 

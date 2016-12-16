@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace commercetools.ProductTypes
+﻿namespace commercetools.ProductTypes
 {
     /// <summary>
     /// TextType
@@ -11,10 +9,18 @@ namespace commercetools.ProductTypes
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public TextType()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Returns a JSON representation of this instance.
         /// </summary>
         /// <returns>JObject</returns>
-        public TextType(dynamic data = null)
+        public TextType(dynamic data)
             : base((object)data)
         {
         }

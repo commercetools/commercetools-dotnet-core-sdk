@@ -1,8 +1,4 @@
-﻿using System;
-
-using Newtonsoft.Json;
-
-namespace commercetools.Products
+﻿namespace commercetools.Products
 {
     /// <summary>
     /// WhitespaceTokenizer
@@ -13,9 +9,17 @@ namespace commercetools.Products
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public WhitespaceTokenizer()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
-        public WhitespaceTokenizer(dynamic data = null)
+        public WhitespaceTokenizer(dynamic data)
             : base((object)data)
         {
         }

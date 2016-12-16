@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 
+using Newtonsoft.Json;
+
 namespace commercetools.Common
 {
     /// <summary>
@@ -11,10 +13,19 @@ namespace commercetools.Common
     {
         #region Properties
 
+        [JsonProperty(PropertyName = "access_token")]
         public string AccessToken { get; private set; }
+
+        [JsonProperty(PropertyName = "expires_in")]
         public DateTime? ExpiryDate { get; private set; }
+
+        [JsonProperty(PropertyName = "scope")]
         public ProjectScope? ProjectScope { get; private set; }
+
+        [JsonProperty(PropertyName = "refresh_token")]
         public string RefreshToken { get; private set; }
+
+        [JsonProperty(PropertyName = "token_type")]
         public string TokenType { get; private set; }
         
         #endregion
@@ -25,7 +36,7 @@ namespace commercetools.Common
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public Token(dynamic data = null)
+        public Token(dynamic data)
         {
             if (data == null)
             {

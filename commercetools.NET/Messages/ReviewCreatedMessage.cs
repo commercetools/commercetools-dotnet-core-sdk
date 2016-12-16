@@ -12,6 +12,9 @@ namespace commercetools.Messages
     {
         #region Properties
 
+        /// <summary>
+        /// Review
+        /// </summary>
         [JsonProperty(PropertyName = "review")]
         public Review Review { get; private set; }
 
@@ -23,7 +26,7 @@ namespace commercetools.Messages
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public ReviewCreatedMessage(dynamic data = null)
+        public ReviewCreatedMessage(dynamic data)
             : base((object)data)
         {
             if (data == null)

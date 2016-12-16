@@ -9,11 +9,14 @@ namespace commercetools.Customers
     /// <summary>
     /// An implementation of PagedQueryResult that provides access to the results as a List of Customer objects.
     /// </summary>
-    /// <see href="http://dev.commercetools.com/http-api.html#pagedqueryresult"/>
+    /// <see href="https://dev.commercetools.com/http-api.html#pagedqueryresult"/>
     public class CustomerQueryResult : PagedQueryResult
     {
         #region Properties
 
+        /// <summary>
+        /// Results
+        /// </summary>
         [JsonProperty(PropertyName = "results")]
         public List<Customer> Results { get; set; }
 

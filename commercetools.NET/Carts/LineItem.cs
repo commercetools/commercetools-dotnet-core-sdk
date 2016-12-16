@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 
 using commercetools.Common;
-using commercetools.CustomFields;
 using commercetools.Orders;
 using commercetools.Products;
+using commercetools.TaxCategories;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;

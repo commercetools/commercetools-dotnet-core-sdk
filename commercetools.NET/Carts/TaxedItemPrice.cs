@@ -26,7 +26,7 @@ namespace commercetools.Carts
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public TaxedItemPrice(dynamic data = null)
+        public TaxedItemPrice(dynamic data)
         {
             if (data == null)
             {

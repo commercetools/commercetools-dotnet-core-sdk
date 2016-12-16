@@ -13,20 +13,27 @@ namespace commercetools.Products
         #region Properties
 
         [JsonProperty(PropertyName = "text")]
-        public string Text { get; private set; }
+        public string Text { get; set; }
 
         [JsonProperty(PropertyName = "suggestTokenizer")]
-        public SuggestTokenizer SuggestTokenizer { get; private set; }
+        public SuggestTokenizer SuggestTokenizer { get; set; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public SearchKeyword()
+        {
+        }
+
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public SearchKeyword(dynamic data = null)
+        public SearchKeyword(dynamic data)
         {
             if (data == null)
             {

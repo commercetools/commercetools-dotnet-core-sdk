@@ -1,6 +1,4 @@
-﻿using System;
-
-using commercetools.Common;
+﻿using commercetools.Common;
 
 using Newtonsoft.Json;
 
@@ -15,17 +13,25 @@ namespace commercetools.ProductTypes
         #region Properties
 
         [JsonProperty(PropertyName = "typeReference")]
-        public Reference TypeReference { get; private set; }
+        public Reference TypeReference { get; set; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public NestedType()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Returns a JSON representation of this instance.
         /// </summary>
         /// <returns>JObject</returns>
-        public NestedType(dynamic data = null)
+        public NestedType(dynamic data)
             : base((object)data)
         {
             if (data == null)

@@ -15,7 +15,7 @@ namespace commercetools.TaxCategories
         #region Properties
 
         [JsonProperty(PropertyName = "results")]
-        public List<TaxCategory> Results { get; set; }
+        public List<TaxCategory> Results { get; private set; }
 
         #endregion
 
@@ -25,7 +25,7 @@ namespace commercetools.TaxCategories
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public TaxCategoryQueryResult(dynamic data = null)
+        public TaxCategoryQueryResult(dynamic data)
             : base((object)data)
         {
             if (data == null)

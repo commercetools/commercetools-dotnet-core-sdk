@@ -1,6 +1,4 @@
-﻿using System;
-
-using commercetools.Common;
+﻿using commercetools.Common;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -29,7 +27,7 @@ namespace commercetools.CustomFields
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public CustomFields(dynamic data = null)
+        public CustomFields(dynamic data)
         {
             if (data == null)
             {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using commercetools.Common;
 
@@ -16,16 +15,24 @@ namespace commercetools.ProductTypes
         #region Properties
 
         [JsonProperty(PropertyName = "values")]
-        public List<LocalizedEnumValue> Values { get; private set; }
+        public List<LocalizedEnumValue> Values { get; set; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public LocalizableEnumType()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
-        public LocalizableEnumType(dynamic data = null)
+        public LocalizableEnumType(dynamic data)
             : base((object)data)
         {
             if (data == null)
@@ -39,3 +46,4 @@ namespace commercetools.ProductTypes
         #endregion
     }
 }
+

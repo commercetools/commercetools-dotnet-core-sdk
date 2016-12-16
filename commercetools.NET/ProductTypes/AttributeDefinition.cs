@@ -49,7 +49,7 @@ namespace commercetools.ProductTypes
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public AttributeDefinition(dynamic data = null)
+        public AttributeDefinition(dynamic data)
         {
             if (data == null)
             {

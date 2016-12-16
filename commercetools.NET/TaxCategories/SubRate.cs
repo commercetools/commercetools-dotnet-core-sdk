@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using commercetools.Carts;
-using commercetools.Common;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace commercetools.TaxCategories
 {
@@ -17,20 +11,27 @@ namespace commercetools.TaxCategories
         #region Properties
 
         [JsonProperty(PropertyName = "name")]
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         [JsonProperty(PropertyName = "amount")]
-        public decimal? Amount { get; private set; }
+        public decimal? Amount { get; set; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public SubRate()
+        {
+        }
+
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public SubRate(dynamic data = null)
+        public SubRate(dynamic data)
         {
             if (data == null)
             {

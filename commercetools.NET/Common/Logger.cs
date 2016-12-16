@@ -12,6 +12,9 @@ namespace commercetools.Common
         private static bool _configurationAttempted = false;
         private static ILog _log;
 
+        /// <summary>
+        /// ILog
+        /// </summary>
         private static ILog Log
         {
             get
