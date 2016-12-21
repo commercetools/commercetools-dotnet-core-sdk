@@ -119,10 +119,22 @@ namespace commercetools.TaxCategories
         /// Updates a tax category.
         /// </summary>
         /// <param name="taxCategory">Tax category</param>
+        /// <param name="action">The update action to be performed on the tax category.</param>
+        /// <returns>TaxCategory</returns>
+        /// <see href="https://dev.commercetools.com/http-api-projects-taxCategories.html#update-taxcategory"/>
+        public async Task<Response<TaxCategory>> UpdateTaxCategoryAsync(TaxCategory taxCategory, UpdateAction action)
+        {
+            return await UpdateTaxCategoryAsync(taxCategory.Id, taxCategory.Version, new List<UpdateAction> { action });
+        }
+
+        /// <summary>
+        /// Updates a tax category.
+        /// </summary>
+        /// <param name="taxCategory">Tax category</param>
         /// <param name="actions">The list of update actions to be performed on the tax category.</param>
         /// <returns>TaxCategory</returns>
         /// <see href="https://dev.commercetools.com/http-api-projects-taxCategories.html#update-taxcategory"/>
-        public async Task<Response<TaxCategory>> UpdateTaxCategoryAsync(TaxCategory taxCategory, List<JObject> actions)
+        public async Task<Response<TaxCategory>> UpdateTaxCategoryAsync(TaxCategory taxCategory, List<UpdateAction> actions)
         {
             return await UpdateTaxCategoryAsync(taxCategory.Id, taxCategory.Version, actions);
         }
@@ -130,12 +142,12 @@ namespace commercetools.TaxCategories
         /// <summary>
         /// Updates a tax category.
         /// </summary>
-        /// <param name="cartId">ID of the tax category</param>
+        /// <param name="taxCategoryId">ID of the tax category</param>
         /// <param name="version">The expected version of the tax category on which the changes should be applied.</param>
         /// <param name="actions">The list of update actions to be performed on the tax category.</param>
         /// <returns>TaxCategory</returns>
         /// <see href="https://dev.commercetools.com/http-api-projects-taxCategories.html#update-taxcategory"/>
-        public async Task<Response<TaxCategory>> UpdateTaxCategoryAsync(string taxCategoryId, int version, List<JObject> actions)
+        public async Task<Response<TaxCategory>> UpdateTaxCategoryAsync(string taxCategoryId, int version, List<UpdateAction> actions)
         {
             if (string.IsNullOrWhiteSpace(taxCategoryId))
             {

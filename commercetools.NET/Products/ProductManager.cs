@@ -223,6 +223,22 @@ namespace commercetools.Products
         /// (Partial) updates are made to an existing product by sending a list of actions to be applied. The actions are applied in the given order. If price selection query parameters are provided, the selected prices will be added to the response.
         /// </summary>
         /// <param name="product">Product</param>
+        /// <param name="action">The update action to apply to the product.</param>
+        /// <param name="priceCurrency">The currency code compliant to ISO 4217. Enables price selection.</param>
+        /// <param name="priceCountry">A two-digit country code as per ISO 3166-1 alpha-2. Enables price selection. Can only be used in conjunction with the priceCurrency parameter.</param>
+        /// <param name="priceCustomerGroup">Enables price selection. Can only be used in conjunction with the priceCurrency parameter.</param>
+        /// <param name="priceChannel">Enables price selection. Can only be used in conjunction with the priceCurrency parameter.</param>
+        /// <returns>Product</returns>
+        /// <see href="http://dev.commercetools.com/http-api-projects-products.html#update-product"/>
+        public async Task<Response<Product>> UpdateProductAsync(Product product, UpdateAction action, string priceCurrency = null, string priceCountry = null, Guid priceCustomerGroup = new Guid(), Guid priceChannel = new Guid())
+        {
+            return await UpdateProductByIdAsync(product.Id, product.Version, new List<UpdateAction> { action }, priceCurrency, priceCountry, priceCustomerGroup, priceChannel);
+        }
+
+        /// <summary>
+        /// (Partial) updates are made to an existing product by sending a list of actions to be applied. The actions are applied in the given order. If price selection query parameters are provided, the selected prices will be added to the response.
+        /// </summary>
+        /// <param name="product">Product</param>
         /// <param name="actions">The list of update actions to apply to the product.</param>
         /// <param name="priceCurrency">The currency code compliant to ISO 4217. Enables price selection.</param>
         /// <param name="priceCountry">A two-digit country code as per ISO 3166-1 alpha-2. Enables price selection. Can only be used in conjunction with the priceCurrency parameter.</param>

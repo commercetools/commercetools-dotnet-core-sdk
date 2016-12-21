@@ -39,13 +39,11 @@ namespace commercetools.Products.UpdateActions
         /// </summary>
         /// <param name="priceId">Price ID</param>
         /// <param name="price">Price</param>
-        /// <param name="staged">Staged</param>
-        public ChangePriceAction(string priceId, PriceDraft price, bool staged = true)
+        public ChangePriceAction(string priceId, PriceDraft price)
         {
             this.Action = "changePrice";
             this.PriceId = priceId;
             this.Price = price;
-            this.Staged = staged;
         }
 
         #endregion

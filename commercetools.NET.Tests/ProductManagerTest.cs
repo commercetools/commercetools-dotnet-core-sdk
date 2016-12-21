@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using commercetools.Common;
+using commercetools.Common.UpdateActions;
 using commercetools.Products;
+using commercetools.Products.UpdateActions;
 using commercetools.ProductTypes;
 using commercetools.Project;
 using commercetools.TaxCategories;
-
-using Newtonsoft.Json.Linq;
 
 using NUnit.Framework;
 
@@ -34,22 +34,25 @@ namespace commercetools.Tests
         {
             _client = new Client(Helper.GetConfiguration());
 
-            Task<Project.Project> projectTask = _client.Project().GetProjectAsync();
+            Task<Response<Project.Project>> projectTask = _client.Project().GetProjectAsync();
             projectTask.Wait();
-            _project = projectTask.Result;
+            Assert.IsTrue(projectTask.Result.Success);
+            _project = projectTask.Result.Result;
 
             ProductTypeDraft productTypeDraft = Helper.GetTestProductTypeDraft();
-            Task<ProductType> testProductTypeTask = _client.ProductTypes().CreateProductTypeAsync(productTypeDraft);
-            testProductTypeTask.Wait();
-            _testProductType = testProductTypeTask.Result;
+            Task<Response<ProductType>> productTypeTask = _client.ProductTypes().CreateProductTypeAsync(productTypeDraft);
+            productTypeTask.Wait();
+            Assert.IsTrue(productTypeTask.Result.Success);
 
+            _testProductType = productTypeTask.Result.Result;
             Assert.NotNull(_testProductType.Id);
 
             TaxCategoryDraft taxCategoryDraft = Helper.GetTestTaxCategoryDraft(_project);
-            Task<TaxCategory> taxCategoryTask = _client.TaxCategories().CreateTaxCategoryAsync(taxCategoryDraft);
+            Task<Response<TaxCategory>> taxCategoryTask = _client.TaxCategories().CreateTaxCategoryAsync(taxCategoryDraft);
             taxCategoryTask.Wait();
-            _testTaxCategory = taxCategoryTask.Result;
+            Assert.IsTrue(taxCategoryTask.Result.Success);
 
+            _testTaxCategory = taxCategoryTask.Result.Result;
             Assert.NotNull(_testTaxCategory.Id);
 
             _testProducts = new List<Product>();
@@ -57,10 +60,11 @@ namespace commercetools.Tests
             for (int i = 0; i < 5; i++)
             {
                 ProductDraft productDraft = Helper.GetTestProductDraft(_project, _testProductType.Id, _testTaxCategory.Id);
-                Task<Product> productTask = _client.Products().CreateProductAsync(productDraft);
+                Task<Response<Product>> productTask = _client.Products().CreateProductAsync(productDraft);
                 productTask.Wait();
-                Product product = productTask.Result;
+                Assert.IsTrue(productTask.Result.Success);
 
+                Product product = productTask.Result.Result;
                 Assert.NotNull(product.Id);
 
                 _testProducts.Add(product);
@@ -73,13 +77,15 @@ namespace commercetools.Tests
         [OneTimeTearDown]
         public void Dispose()
         {
+            Task task;
+
             foreach (Product product in _testProducts)
             {
-                Task<Product> productTask = _client.Products().DeleteProductAsync(product);
-                productTask.Wait();
+                task = _client.Products().DeleteProductAsync(product);
+                task.Wait();
             }
 
-            Task task = _client.ProductTypes().DeleteProductTypeAsync(_testProductType);
+            task = _client.ProductTypes().DeleteProductTypeAsync(_testProductType);
             task.Wait();
 
             task = _client.TaxCategories().DeleteTaxCategoryAsync(_testTaxCategory);
@@ -93,8 +99,10 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldGetProductByIdAsync()
         {
-            Product product = await _client.Products().GetProductByIdAsync(_testProducts[0].Id);
+            Response<Product> response = await _client.Products().GetProductByIdAsync(_testProducts[0].Id);
+            Assert.IsTrue(response.Success);
 
+            Product product = response.Result; 
             Assert.NotNull(product.Id);
             Assert.AreEqual(product.Id, _testProducts[0].Id);
         }
@@ -106,8 +114,10 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldGetProductByKeyAsync()
         {
-            Product product = await _client.Products().GetProductByKeyAsync(_testProducts[1].Key);
+            Response<Product> response = await _client.Products().GetProductByKeyAsync(_testProducts[1].Key);
+            Assert.IsTrue(response.Success);
 
+            Product product = response.Result; 
             Assert.NotNull(product.Id);
             Assert.AreEqual(product.Key, _testProducts[1].Key);
         }
@@ -119,16 +129,20 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldQueryProductsAsync()
         {
-            ProductQueryResult result = await _client.Products().QueryProductsAsync();
+            Response<ProductQueryResult> response = await _client.Products().QueryProductsAsync();
+            Assert.IsTrue(response.Success);
 
-            Assert.NotNull(result.Results);
-            Assert.GreaterOrEqual(result.Results.Count, 1);
+            ProductQueryResult productQueryResult = response.Result;
+            Assert.NotNull(productQueryResult.Results);
+            Assert.GreaterOrEqual(productQueryResult.Results.Count, 1);
 
             int limit = 2;
-            result = await _client.Products().QueryProductsAsync(limit: limit);
+            response = await _client.Products().QueryProductsAsync(limit: limit);
+            Assert.IsTrue(response.Success);
 
-            Assert.NotNull(result.Results);
-            Assert.LessOrEqual(result.Results.Count, limit);
+            productQueryResult = response.Result;
+            Assert.NotNull(productQueryResult.Results);
+            Assert.LessOrEqual(productQueryResult.Results.Count, limit);
         }
 
         /// <summary>
@@ -153,20 +167,19 @@ namespace commercetools.Tests
             productDraft.Name = name;
             productDraft.Slug = slug;
 
-            Product product = await _client.Products().CreateProductAsync(productDraft);
+            Response<Product> response = await _client.Products().CreateProductAsync(productDraft);
+            Assert.IsTrue(response.Success);
 
+            Product product = response.Result;
             Assert.NotNull(product.Id);
 
             string deletedProductId = product.Id;
 
-            product = await _client.Products().DeleteProductAsync(product.Id, product.Version);
+            response = await _client.Products().DeleteProductAsync(product.Id, product.Version);
+            Assert.IsTrue(response.Success);
 
-            AggregateException ex = Assert.Throws<AggregateException>(
-                delegate
-                {
-                    Task task = _client.Products().GetProductByIdAsync(deletedProductId);
-                    task.Wait();
-                });
+            response = await _client.Products().GetProductByIdAsync(deletedProductId);
+            Assert.IsFalse(response.Success);
         }
 
         /// <summary>
@@ -176,8 +189,6 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldUpdateProductAsync()
         {
-            List<JObject> actions = new List<JObject>();
-
             string newKey = Helper.GetRandomString(15);
             LocalizedString newSlug = new LocalizedString();
 
@@ -186,27 +197,22 @@ namespace commercetools.Tests
                 newSlug.SetValue(language, string.Concat("updated-product-", language, "-", Helper.GetRandomString(10)));
             }
 
-            actions.Add(
-                JObject.FromObject(new
-                {
-                    action = "setKey",
-                    key = newKey
-                })
-            );
+            SetKeyAction setKeyAction = new SetKeyAction();
+            setKeyAction.Key = newKey;
 
-            actions.Add(
-                JObject.FromObject(new
-                {
-                    action = "changeSlug",
-                    slug = newSlug,
-                    staged = true
-                })
-            );
+            GenericAction changeSlugAction = new GenericAction("changeSlug");
+            changeSlugAction.SetProperty("slug", newSlug);
+            changeSlugAction.SetProperty("staged", true);
 
-            _testProducts[2] = await _client.Products().UpdateProductAsync(_testProducts[2], actions);
+            List<UpdateAction> actions = new List<UpdateAction>();
+            actions.Add(setKeyAction);
+            actions.Add(changeSlugAction);
 
+            Response<Product> response = await _client.Products().UpdateProductAsync(_testProducts[2], actions);
+            Assert.IsTrue(response.Success);
+
+            _testProducts[2] = response.Result;
             Assert.NotNull(_testProducts[2].Id);
-
             Assert.AreEqual(_testProducts[2].Key, newKey);
 
             foreach (string language in _project.Languages)
@@ -222,8 +228,6 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldUpdateProductByKeyAsync()
         {
-            List<JObject> actions = new List<JObject>();
-
             LocalizedString newName = new LocalizedString();
             LocalizedString newSlug = new LocalizedString();
 
@@ -233,26 +237,20 @@ namespace commercetools.Tests
                 newSlug.SetValue(language, string.Concat("updated-product-", language, "-", Helper.GetRandomString(10)));
             }
 
-            actions.Add(
-                JObject.FromObject(new
-                {
-                    action = "changeName",
-                    name = newName,
-                    staged = true
-                })
-            );
+            ChangeNameAction changeNameAction = new ChangeNameAction(newName);
 
-            actions.Add(
-                JObject.FromObject(new
-                {
-                    action = "changeSlug",
-                    slug = newSlug,
-                    staged = true
-                })
-            );
+            GenericAction changeSlugAction = new GenericAction("changeSlug");
+            changeSlugAction.SetProperty("slug", newSlug);
+            changeSlugAction.SetProperty("staged", true);
 
-            _testProducts[1] = await _client.Products().UpdateProductByKeyAsync(_testProducts[1].Key, _testProducts[1].Version, actions);
+            List<UpdateAction> actions = new List<UpdateAction>();
+            actions.Add(changeNameAction);
+            actions.Add(changeSlugAction);
 
+            Response<Product> response = await _client.Products().UpdateProductByKeyAsync(_testProducts[1].Key, _testProducts[1].Version, actions);
+            Assert.IsTrue(response.Success);
+
+            _testProducts[1] = response.Result;
             Assert.NotNull(_testProducts[1].Id);
 
             foreach (string language in _project.Languages)

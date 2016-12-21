@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using commercetools.Common;
+using commercetools.Common.UpdateActions;
 using commercetools.Project;
 using commercetools.Zones;
 
@@ -30,19 +31,21 @@ namespace commercetools.Tests
         {
             _client = new Client(Helper.GetConfiguration());
 
-            Task<Project.Project> projectTask = _client.Project().GetProjectAsync();
+            Task<Response<Project.Project>> projectTask = _client.Project().GetProjectAsync();
             projectTask.Wait();
-            _project = projectTask.Result;
+            Assert.IsTrue(projectTask.Result.Success);
+            _project = projectTask.Result.Result;
 
             _testZones = new List<Zone>();
 
             for (int i = 0; i < 5; i++)
             {
                 ZoneDraft zoneDraft = Helper.GetTestZoneDraft(_project);
-                Task<Zone> zoneTask = _client.Zones().CreateZoneAsync(zoneDraft);
+                Task<Response<Zone>> zoneTask = _client.Zones().CreateZoneAsync(zoneDraft);
                 zoneTask.Wait();
-                Zone zone = zoneTask.Result;
+                Assert.IsTrue(zoneTask.Result.Success);
 
+                Zone zone = zoneTask.Result.Result;
                 Assert.NotNull(zone.Id);
 
                 _testZones.Add(zone);
@@ -69,8 +72,10 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldGetZoneByIdAsync()
         {
-            Zone zone = await _client.Zones().GetZoneByIdAsync(_testZones[0].Id);
+            Response<Zone> response = await _client.Zones().GetZoneByIdAsync(_testZones[0].Id);
+            Assert.IsTrue(response.Success);
 
+            Zone zone = response.Result;
             Assert.NotNull(zone);
             Assert.AreEqual(zone.Id, _testZones[0].Id);
         }
@@ -82,16 +87,20 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldQueryZonesAsync()
         {
-            ZoneQueryResult result = await _client.Zones().QueryZonesAsync();
+            Response<ZoneQueryResult> response = await _client.Zones().QueryZonesAsync();
+            Assert.IsTrue(response.Success);
 
-            Assert.NotNull(result.Results);
-            Assert.GreaterOrEqual(result.Results.Count, 1);
+            ZoneQueryResult zoneQueryResult = response.Result;
+            Assert.NotNull(zoneQueryResult.Results);
+            Assert.GreaterOrEqual(zoneQueryResult.Results.Count, 1);
 
             int limit = 2;
-            result = await _client.Zones().QueryZonesAsync(limit: limit);
+            response = await _client.Zones().QueryZonesAsync(limit: limit);
+            Assert.IsTrue(response.Success);
 
-            Assert.NotNull(result.Results);
-            Assert.LessOrEqual(result.Results.Count, limit);
+            zoneQueryResult = response.Result;
+            Assert.NotNull(zoneQueryResult.Results);
+            Assert.LessOrEqual(zoneQueryResult.Results.Count, limit);
         }
 
         /// <summary>
@@ -103,52 +112,45 @@ namespace commercetools.Tests
         public async Task ShouldCreateAndDeleteZoneAsync()
         {
             ZoneDraft zoneDraft = Helper.GetTestZoneDraft(_project);
-            Zone zone = await _client.Zones().CreateZoneAsync(zoneDraft);
+            Response<Zone> response = await _client.Zones().CreateZoneAsync(zoneDraft);
+            Assert.IsTrue(response.Success);
 
+            Zone zone = response.Result;
             Assert.NotNull(zone.Id);
 
             string deletedZoneId = zone.Id;
 
-            await _client.Zones().DeleteZoneAsync(zone);
+            Response<JObject> deleteResponse = await _client.Zones().DeleteZoneAsync(zone);
+            Assert.IsTrue(deleteResponse.Success);
 
-            AggregateException ex = Assert.Throws<AggregateException>(
-                delegate
-                {
-                    Task task = _client.Zones().GetZoneByIdAsync(deletedZoneId);
-                    task.Wait();
-                });
+            response = await _client.Zones().GetZoneByIdAsync(deletedZoneId);
+            Assert.IsFalse(response.Success);
         }
 
         /// <summary>
         /// Tests the ZoneManager.UpdateZoneAsync method.
         /// </summary>
-        /// <see cref="ZoneManager.UpdateZoneAsync(commercetools.Zones.Zone, System.Collections.Generic.List{Newtonsoft.Json.Linq.JObject})"/>
+        /// <see cref="ZoneManager.UpdateZoneAsync(commercetools.Zones.Zone, System.Collections.Generic.List{commercetools.Common.UpdateAction})"/>
         [Test]
         public async Task ShouldUpdateZoneAsync()
         {
-            List<JObject> actions = new List<JObject>();
-
             string newName = string.Concat("Test Zone ", Helper.GetRandomString(10));
             string newDescription = string.Concat("Test Description ", Helper.GetRandomString(10));
-            
-            actions.Add(
-                JObject.FromObject(new
-                {
-                    action = "changeName",
-                    name = newName
-                })
-            );
 
-            actions.Add(
-                JObject.FromObject(new
-                {
-                    action = "setDescription",
-                    description = newDescription
-                })
-            );
+            GenericAction changeNameAction = new GenericAction("changeName");
+            changeNameAction.SetProperty("name", newName);
 
-            _testZones[1] = await _client.Zones().UpdateZoneAsync(_testZones[1], actions);
+            GenericAction setDescriptionAction = new GenericAction("setDescription");
+            changeNameAction.SetProperty("description", newDescription);
 
+            List<UpdateAction> actions = new List<UpdateAction>();
+            actions.Add(changeNameAction);
+            actions.Add(setDescriptionAction);
+
+            Response<Zone> response = await _client.Zones().UpdateZoneAsync(_testZones[1], actions);
+            Assert.IsTrue(response.Success);
+
+            _testZones[1] = response.Result;
             Assert.NotNull(_testZones[1].Id);
 
             foreach (string language in _project.Languages)

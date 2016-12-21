@@ -52,6 +52,7 @@ namespace commercetools.Categories
         /// Constructor.
         /// </summary>
         /// <param name="name">Name</param>
+        /// <param name="slug">Slug</param>
         public CategoryDraft(LocalizedString name, LocalizedString slug)
         {
             this.Name = name;

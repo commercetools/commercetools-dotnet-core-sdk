@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using commercetools.Common;
@@ -34,24 +33,27 @@ namespace commercetools.Tests
         {
             _client = new Client(Helper.GetConfiguration());
 
-            Task<Project.Project> projectTask = _client.Project().GetProjectAsync();
+            Task<Response<Project.Project>> projectTask = _client.Project().GetProjectAsync();
             projectTask.Wait();
-            _project = projectTask.Result;
+            Assert.IsTrue(projectTask.Result.Success);
+            _project = projectTask.Result.Result;
 
             Assert.NotNull(_project);
 
             ProductTypeDraft productTypeDraft = Helper.GetTestProductTypeDraft();
-            Task<ProductType> testProductTypeTask = _client.ProductTypes().CreateProductTypeAsync(productTypeDraft);
-            testProductTypeTask.Wait();
-            _testProductType = testProductTypeTask.Result;
+            Task<Response<ProductType>> productTypeTask = _client.ProductTypes().CreateProductTypeAsync(productTypeDraft);
+            productTypeTask.Wait();
+            Assert.IsTrue(productTypeTask.Result.Success);
 
+            _testProductType = productTypeTask.Result.Result;
             Assert.NotNull(_testProductType.Id);
 
             TaxCategoryDraft taxCategoryDraft = Helper.GetTestTaxCategoryDraft(_project);
-            Task<TaxCategory> taxCategoryTask = _client.TaxCategories().CreateTaxCategoryAsync(taxCategoryDraft);
+            Task<Response<TaxCategory>> taxCategoryTask = _client.TaxCategories().CreateTaxCategoryAsync(taxCategoryDraft);
             taxCategoryTask.Wait();
-            _testTaxCategory = taxCategoryTask.Result;
+            Assert.IsTrue(taxCategoryTask.Result.Success);
 
+            _testTaxCategory = taxCategoryTask.Result.Result;
             Assert.NotNull(_testTaxCategory.Id);
 
             _testProducts = new List<Product>();
@@ -68,10 +70,11 @@ namespace commercetools.Tests
 
                 productDraft.Name = name;
 
-                Task<Product> productTask = _client.Products().CreateProductAsync(productDraft);
+                Task<Response<Product>> productTask = _client.Products().CreateProductAsync(productDraft);
                 productTask.Wait();
-                Product product = productTask.Result;
+                Assert.IsTrue(productTask.Result.Success);
 
+                Product product = productTask.Result.Result;
                 Assert.NotNull(product.Id);
 
                 _testProducts.Add(product);
@@ -84,13 +87,15 @@ namespace commercetools.Tests
         [OneTimeTearDown]
         public void Dispose()
         {
+            Task task;
+
             foreach (Product product in _testProducts)
             {
-                Task<Product> productTask = _client.Products().DeleteProductAsync(product);
-                productTask.Wait();
+                task = _client.Products().DeleteProductAsync(product);
+                task.Wait();
             }
 
-            Task task = _client.ProductTypes().DeleteProductTypeAsync(_testProductType);
+            task = _client.ProductTypes().DeleteProductTypeAsync(_testProductType);
             task.Wait();
 
             task = _client.TaxCategories().DeleteTaxCategoryAsync(_testTaxCategory);
@@ -104,10 +109,13 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldGetSearchResultsAsync()
         {
-            ProductProjectionQueryResult result = await _client.ProductProjectionSearch().SearchProductProjectionsAsync("Test Product 1");
+            Response<ProductProjectionQueryResult> response 
+                = await _client.ProductProjectionSearch().SearchProductProjectionsAsync("Test Product 1");
+            Assert.IsTrue(response.Success);
 
-            Assert.NotNull(result.Results);
-            Assert.GreaterOrEqual(result.Results.Count, 1);
+            ProductProjectionQueryResult productProjectionQueryResult = response.Result;
+            Assert.NotNull(productProjectionQueryResult.Results);
+            Assert.GreaterOrEqual(productProjectionQueryResult.Results.Count, 1);
         }
 
         /// <summary>
@@ -121,11 +129,14 @@ namespace commercetools.Tests
                 "variants.price.centAmount:range(* to 50),(50 to 100),(100 to *)"
             };
 
-            ProductProjectionQueryResult result = await _client.ProductProjectionSearch().SearchProductProjectionsAsync("Test Product 1", facet: facet);
+            Response<ProductProjectionQueryResult> response 
+                = await _client.ProductProjectionSearch().SearchProductProjectionsAsync("Test Product 1", facet: facet);
+            Assert.IsTrue(response.Success);
 
-            Assert.NotNull(result.Results);
-            Assert.GreaterOrEqual(result.Results.Count, 1);
-            Assert.GreaterOrEqual(result.Facets.Count, 1);
+            ProductProjectionQueryResult productProjectionQueryResult = response.Result;
+            Assert.NotNull(productProjectionQueryResult.Results);
+            Assert.GreaterOrEqual(productProjectionQueryResult.Results.Count, 1);
+            Assert.GreaterOrEqual(productProjectionQueryResult.Facets.Count, 1);
         }
     }
 }

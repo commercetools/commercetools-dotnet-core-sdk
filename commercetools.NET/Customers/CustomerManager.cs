@@ -124,10 +124,22 @@ namespace commercetools.Customers
         /// Updates a Customer.
         /// </summary>
         /// <param name="customer">Customer</param>
+        /// <param name="action">The  update action to be performed on the Customer.</param>
+        /// <returns>Customer</returns>
+        /// <see href="http://dev.commercetools.com/http-api-projects-customers.html#update-customer"/>
+        public async Task<Response<Customer>> UpdateCustomerAsync(Customer customer, UpdateAction action)
+        {
+            return await UpdateCustomerAsync(customer.Id, customer.Version, new List<UpdateAction> { action });
+        }
+
+        /// <summary>
+        /// Updates a Customer.
+        /// </summary>
+        /// <param name="customer">Customer</param>
         /// <param name="actions">The list of update actions to be performed on the Customer.</param>
         /// <returns>Customer</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-customers.html#update-customer"/>
-        public async Task<Response<Customer>> UpdateCustomerAsync(Customer customer, List<JObject> actions)
+        public async Task<Response<Customer>> UpdateCustomerAsync(Customer customer, List<UpdateAction> actions)
         {
             return await UpdateCustomerAsync(customer.Id, customer.Version, actions);
         }
@@ -140,7 +152,7 @@ namespace commercetools.Customers
         /// <param name="actions">The list of update actions to be performed on the Customer.</param>
         /// <returns>Customer</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-customers.html#update-customer"/>
-        public async Task<Response<Customer>> UpdateCustomerAsync(string customerId, int version, List<JObject> actions)
+        public async Task<Response<Customer>> UpdateCustomerAsync(string customerId, int version, List<UpdateAction> actions)
         {
             if (string.IsNullOrWhiteSpace(customerId))
             {

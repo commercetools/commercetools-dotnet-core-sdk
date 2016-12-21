@@ -29,16 +29,18 @@ namespace commercetools.Tests
         {
             _client = new Client(Helper.GetConfiguration());
 
-            Task<Project.Project> projectTask = _client.Project().GetProjectAsync();
+            Task<Response<Project.Project>> projectTask = _client.Project().GetProjectAsync();
             projectTask.Wait();
-            _project = projectTask.Result;
+            Assert.IsTrue(projectTask.Result.Success);
+            _project = projectTask.Result.Result;
 
             _products = new List<Product>();
 
-            Task<ProductQueryResult> productQueryTask = _client.Products().QueryProductsAsync();
+            Task<Response<ProductQueryResult>> productQueryTask = _client.Products().QueryProductsAsync();
             productQueryTask.Wait();
-            ProductQueryResult productQueryResult = productQueryTask.Result;
+            Assert.IsTrue(productQueryTask.Result.Success);
 
+            ProductQueryResult productQueryResult = productQueryTask.Result.Result;
             Assert.NotNull(productQueryResult.Results);
             Assert.GreaterOrEqual(productQueryResult.Results.Count, 1);
 
@@ -60,8 +62,10 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldGetProductProjectionByIdAsync()
         {
-            ProductProjection productProjection = await _client.ProductProjections().GetProductProjectionByIdAsync(_products[0].Id);
+            Response<ProductProjection> response = await _client.ProductProjections().GetProductProjectionByIdAsync(_products[0].Id);
+            Assert.IsTrue(response.Success);
 
+            ProductProjection productProjection = response.Result;
             Assert.NotNull(productProjection.Id);
             Assert.AreEqual(productProjection.Id, _products[0].Id);
         }
@@ -74,11 +78,12 @@ namespace commercetools.Tests
         public async Task ShouldGetProductProjectionByKeyAsync()
         {
             List<Product> productsWithKey = _products.Where(p => !string.IsNullOrWhiteSpace(p.Key)).ToList();
-
             Assert.GreaterOrEqual(productsWithKey.Count, 1);
 
-            ProductProjection productProjection = await _client.ProductProjections().GetProductProjectionByKeyAsync(_products[1].Key);
+            Response<ProductProjection> response = await _client.ProductProjections().GetProductProjectionByKeyAsync(_products[1].Key);
+            Assert.IsTrue(response.Success);
 
+            ProductProjection productProjection = response.Result;
             Assert.NotNull(productProjection.Id);
             Assert.AreEqual(productProjection.Id, _products[1].Id);
         }
@@ -90,17 +95,19 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldQueryProductProjectionsAsync()
         {
-            ProductProjectionQueryResult result = await _client.ProductProjections().QueryProductProjectionsAsync();
+            Response<ProductProjectionQueryResult> response = await _client.ProductProjections().QueryProductProjectionsAsync();
+            Assert.IsTrue(response.Success);
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Results);
+            ProductProjectionQueryResult productProjectionQueryResult = response.Result;
+            Assert.NotNull(productProjectionQueryResult.Results);
 
             int limit = 2;
-            result = await _client.ProductProjections().QueryProductProjectionsAsync(limit: limit);
+            response = await _client.ProductProjections().QueryProductProjectionsAsync(limit: limit);
+            Assert.IsTrue(response.Success);
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Results);
-            Assert.LessOrEqual(result.Results.Count, limit);
+            productProjectionQueryResult = response.Result;
+            Assert.NotNull(productProjectionQueryResult.Results);
+            Assert.LessOrEqual(productProjectionQueryResult.Results.Count, limit);
         }
     }
 }

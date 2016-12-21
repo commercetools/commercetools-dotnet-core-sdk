@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 
 using commercetools.Common;
 using commercetools.Customers;
-using commercetools.CustomFields;
-using commercetools.Products;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -36,7 +34,7 @@ namespace commercetools.Carts
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="configuration"></param>
+        /// <param name="client">Client</param>
         public CartManager(Client client)
         {
             _client = client;
@@ -144,6 +142,18 @@ namespace commercetools.Carts
             settings.NullValueHandling = NullValueHandling.Ignore;
             string payload = JsonConvert.SerializeObject(cartDraft, settings);
             return await _client.PostAsync<Cart>(ENDPOINT_PREFIX, payload);
+        }
+
+        /// <summary>
+        /// Updates a cart.
+        /// </summary>
+        /// <param name="cart">Cart</param>
+        /// <param name="action">The update action to be performed on the cart.</param>
+        /// <returns>Cart</returns>
+        /// <see href="http://dev.commercetools.com/http-api-projects-carts.html#update-cart"/>
+        public async Task<Response<Cart>> UpdateCartAsync(Cart cart, UpdateAction action)
+        {
+            return await UpdateCartAsync(cart.Id, cart.Version, new List<UpdateAction> { action });
         }
 
         /// <summary>

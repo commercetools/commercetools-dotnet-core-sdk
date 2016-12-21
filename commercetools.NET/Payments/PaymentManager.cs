@@ -120,6 +120,18 @@ namespace commercetools.Payments
         /// Updates a Payment.
         /// </summary>
         /// <param name="payment">Payment</param>
+        /// <param name="action">The update action to be performed on the payment.</param>
+        /// <returns>Payment</returns>
+        /// <see href="http://dev.commercetools.com/http-api-projects-payments.html#update-payment"/>
+        public async Task<Response<Payment>> UpdatePaymentAsync(Payment payment, UpdateAction action)
+        {
+            return await UpdatePaymentAsync(payment.Id, payment.Version, new List<UpdateAction> { action });
+        }
+
+        /// <summary>
+        /// Updates a Payment.
+        /// </summary>
+        /// <param name="payment">Payment</param>
         /// <param name="actions">The list of update actions to be performed on the payment.</param>
         /// <returns>Payment</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-payments.html#update-payment"/>

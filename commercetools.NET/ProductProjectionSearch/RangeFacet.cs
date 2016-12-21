@@ -17,9 +17,6 @@ namespace commercetools.ProductProjectionSearch
     {
         #region Properties
 
-        [JsonProperty(PropertyName = "dataType")]
-        public string DataType { get; private set; }
-
         [JsonProperty(PropertyName = "ranges")]
         public List<Range> Ranges { get; private set; }
 
@@ -39,7 +36,6 @@ namespace commercetools.ProductProjectionSearch
                 return;
             }
 
-            this.DataType = data.dataType;
             this.Ranges = Helper.GetListFromJsonArray<Range>(data.ranges);
         }
 

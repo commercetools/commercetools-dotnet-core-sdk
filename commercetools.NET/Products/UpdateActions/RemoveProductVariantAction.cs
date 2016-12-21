@@ -44,8 +44,7 @@ namespace commercetools.Products.UpdateActions
         /// </remarks>
         /// <param name="id">Product variant ID</param>
         /// <param name="sku">Product variant SKU</param>
-        /// <param name="staged">Staged</param>
-        public RemoveProductVariantAction(int? id = null, string sku = null, bool staged = true)
+        public RemoveProductVariantAction(int? id = null, string sku = null)
         {
             if (!id.HasValue && string.IsNullOrWhiteSpace(sku))
             {
@@ -55,7 +54,6 @@ namespace commercetools.Products.UpdateActions
             this.Action = "removeVariant";
             this.Id = id;
             this.Sku = sku;
-            this.Staged = staged;
         }
 
         #endregion

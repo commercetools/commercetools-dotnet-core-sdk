@@ -52,10 +52,9 @@ namespace commercetools.Products.UpdateActions
         /// Either variantId or sku must be specified.
         /// </remarks>
         /// <param name="price">Price</param>
-        /// <param name="id">Product variant ID</param>
+        /// <param name="variantId">Product variant ID</param>
         /// <param name="sku">Product variant SKU</param>
-        /// <param name="staged">Staged</param>
-        public AddPriceAction(PriceDraft price, int? variantId = null, string sku = null, bool staged = true)
+        public AddPriceAction(PriceDraft price, int? variantId = null, string sku = null)
         {
             if (!variantId.HasValue && string.IsNullOrWhiteSpace(sku))
             {
@@ -66,7 +65,6 @@ namespace commercetools.Products.UpdateActions
             this.VariantId = variantId;
             this.Sku = sku;
             this.Price = price;
-            this.Staged = staged;
         }
 
         #endregion

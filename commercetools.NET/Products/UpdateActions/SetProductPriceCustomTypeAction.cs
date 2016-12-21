@@ -28,6 +28,9 @@ namespace commercetools.Products.UpdateActions
         /// <summary>
         /// Staged
         /// </summary>
+        /// <remarks>
+        /// Defaults to true
+        /// </remarks>
         [JsonProperty(PropertyName = "staged")]
         public bool Staged { get; set; }
 
@@ -45,12 +48,10 @@ namespace commercetools.Products.UpdateActions
         /// Constructor.
         /// </summary>
         /// <param name="priceId">Price ID</param>
-        /// <param name="staged">Staged</param>
-        public SetProductPriceCustomTypeAction(string priceId, bool staged = true)
+        public SetProductPriceCustomTypeAction(string priceId)
         {
             this.Action = "setProductPriceCustomType";
             this.PriceId = priceId;
-            this.Staged = staged;
         }
 
         #endregion

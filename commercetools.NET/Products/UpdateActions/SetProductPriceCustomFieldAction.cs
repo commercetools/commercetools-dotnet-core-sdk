@@ -46,13 +46,11 @@ namespace commercetools.Products.UpdateActions
         /// </summary>
         /// <param name="priceId">Price ID</param>
         /// <param name="name">Field name</param>
-        /// <param name="staged">Staged</param>
-        public SetProductPriceCustomFieldAction(string priceId, string name, bool staged = true)
+        public SetProductPriceCustomFieldAction(string priceId, string name)
         {
             this.Action = "setProductPriceCustomField";
             this.PriceId = priceId;
             this.Name = name;
-            this.Staged = staged;
         }
 
         #endregion

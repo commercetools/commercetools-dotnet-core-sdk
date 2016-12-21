@@ -32,12 +32,10 @@ namespace commercetools.Products.UpdateActions
         /// Constructor.
         /// </summary>
         /// <param name="description">Description</param>
-        /// <param name="staged">Staged</param>
-        public SetDescriptionAction(LocalizedString description, bool staged = true)
+        public SetDescriptionAction(LocalizedString description)
         {
             this.Action = "setDescription";
             this.Description = description;
-            this.Staged = staged;
         }
 
         #endregion

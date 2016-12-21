@@ -30,6 +30,7 @@ namespace commercetools.Products
             this.Values = new Dictionary<string, List<SearchKeyword>>();
         }
 
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>

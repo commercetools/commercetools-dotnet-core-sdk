@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using commercetools.Common;
+using commercetools.Common.UpdateActions;
 using commercetools.Project;
 using commercetools.ShippingMethods;
 using commercetools.TaxCategories;
 using commercetools.Zones;
 
 using NUnit.Framework;
-
-using Newtonsoft.Json.Linq;
 
 namespace commercetools.Tests
 {
@@ -34,15 +33,17 @@ namespace commercetools.Tests
         {
             _client = new Client(Helper.GetConfiguration());
 
-            Task<Project.Project> projectTask = _client.Project().GetProjectAsync();
+            Task<Response<Project.Project>> projectTask = _client.Project().GetProjectAsync();
             projectTask.Wait();
-            _project = projectTask.Result;
+            Assert.IsTrue(projectTask.Result.Success);
+            _project = projectTask.Result.Result;
 
             TaxCategoryDraft taxCategoryDraft = Helper.GetTestTaxCategoryDraft(_project);
-            Task<TaxCategory> taxCategory = _client.TaxCategories().CreateTaxCategoryAsync(taxCategoryDraft);
-            taxCategory.Wait();
-            _testTaxCategory = taxCategory.Result;
+            Task<Response<TaxCategory>> taxCategoryTask = _client.TaxCategories().CreateTaxCategoryAsync(taxCategoryDraft);
+            taxCategoryTask.Wait();
+            Assert.IsTrue(taxCategoryTask.Result.Success);
 
+            _testTaxCategory = taxCategoryTask.Result.Result;
             Assert.NotNull(_testTaxCategory.Id);
 
             _testZones = new List<Zone>();
@@ -51,19 +52,21 @@ namespace commercetools.Tests
             for (int i = 0; i < 5; i++)
             {
                 ZoneDraft zoneDraft = Helper.GetTestZoneDraft(_project);
-                Task<Zone> zoneTask = _client.Zones().CreateZoneAsync(zoneDraft);
+                Task<Response<Zone>> zoneTask = _client.Zones().CreateZoneAsync(zoneDraft);
                 zoneTask.Wait();
-                Zone zone = zoneTask.Result;
+                Assert.IsTrue(zoneTask.Result.Success);
 
+                Zone zone = zoneTask.Result.Result;
                 Assert.NotNull(zone.Id);
 
                 _testZones.Add(zone);
 
                 ShippingMethodDraft shippingMethodDraft = Helper.GetTestShippingMethodDraft(_project, _testTaxCategory, zone);
-                Task<ShippingMethod> shippingMethodTask = _client.ShippingMethods().CreateShippingMethodAsync(shippingMethodDraft);
+                Task<Response<ShippingMethod>> shippingMethodTask = _client.ShippingMethods().CreateShippingMethodAsync(shippingMethodDraft);
                 shippingMethodTask.Wait();
-                ShippingMethod shippingMethod = shippingMethodTask.Result;
+                Assert.IsTrue(shippingMethodTask.Result.Success);
 
+                ShippingMethod shippingMethod = shippingMethodTask.Result.Result;
                 Assert.NotNull(shippingMethod.Id);
 
                 _testShippingMethods.Add(shippingMethod);
@@ -101,8 +104,10 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldGetShippingMethodByIdAsync()
         {
-            ShippingMethod shippingMethod = await _client.ShippingMethods().GetShippingMethodByIdAsync(_testShippingMethods[0].Id);
+            Response<ShippingMethod> response = await _client.ShippingMethods().GetShippingMethodByIdAsync(_testShippingMethods[0].Id);
+            Assert.IsTrue(response.Success);
 
+            ShippingMethod shippingMethod = response.Result;
             Assert.NotNull(shippingMethod.Id);
             Assert.AreEqual(shippingMethod.Id, _testShippingMethods[0].Id);
         }
@@ -114,16 +119,20 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldQueryShippingMethodsAsync()
         {
-            ShippingMethodQueryResult result = await _client.ShippingMethods().QueryShippingMethodsAsync();
+            Response<ShippingMethodQueryResult> response = await _client.ShippingMethods().QueryShippingMethodsAsync();
+            Assert.IsTrue(response.Success);
 
-            Assert.NotNull(result.Results);
-            Assert.GreaterOrEqual(result.Results.Count, 1);
+            ShippingMethodQueryResult shippingMethodQueryResult = response.Result;
+            Assert.NotNull(shippingMethodQueryResult.Results);
+            Assert.GreaterOrEqual(shippingMethodQueryResult.Results.Count, 1);
 
             int limit = 2;
-            result = await _client.ShippingMethods().QueryShippingMethodsAsync(limit: limit);
+            response = await _client.ShippingMethods().QueryShippingMethodsAsync(limit: limit);
+            Assert.IsTrue(response.Success);
 
-            Assert.NotNull(result.Results);
-            Assert.LessOrEqual(result.Results.Count, limit);
+            shippingMethodQueryResult = response.Result;
+            Assert.NotNull(shippingMethodQueryResult.Results);
+            Assert.LessOrEqual(shippingMethodQueryResult.Results.Count, limit);
         }
 
         /// <summary>
@@ -135,52 +144,45 @@ namespace commercetools.Tests
         public async Task ShouldCreateAndDeleteShippingMethodAsync()
         {
             ShippingMethodDraft shippingMethodDraft = Helper.GetTestShippingMethodDraft(_project, _testTaxCategory, _testZones[0]);
-            ShippingMethod shippingMethod = await _client.ShippingMethods().CreateShippingMethodAsync(shippingMethodDraft);
+            Response<ShippingMethod> response = await _client.ShippingMethods().CreateShippingMethodAsync(shippingMethodDraft);
+            Assert.IsTrue(response.Success);
 
+            ShippingMethod shippingMethod = response.Result;
             Assert.NotNull(shippingMethod.Id);
 
             string deletedShippingMethodId = shippingMethod.Id;
 
-            await _client.ShippingMethods().DeleteShippingMethodAsync(shippingMethod);
+            response = await _client.ShippingMethods().DeleteShippingMethodAsync(shippingMethod);
+            Assert.IsTrue(response.Success);
 
-            AggregateException ex = Assert.Throws<AggregateException>(
-                delegate
-                {
-                    Task task = _client.ShippingMethods().GetShippingMethodByIdAsync(deletedShippingMethodId);
-                    task.Wait();
-                });
+            response = await _client.ShippingMethods().GetShippingMethodByIdAsync(deletedShippingMethodId);
+            Assert.IsFalse(response.Success);
         }
 
         /// <summary>
         /// Tests the ShippingMethodManager.UpdateShippingMethodAsync method.
         /// </summary>
-        /// <see cref="ShippingMethodManager.UpdateShippingMethodAsync(commercetools.ShippingMethods.ShippingMethod, System.Collections.Generic.List{Newtonsoft.Json.Linq.JObject})"/>
+        /// <see cref="ShippingMethodManager.UpdateShippingMethodAsync(commercetools.ShippingMethods.ShippingMethod, System.Collections.Generic.List{commercetools.Common.UpdateAction})"/>
         [Test]
         public async Task ShouldUpdateShippingMethodAsync()
         {
-            List<JObject> actions = new List<JObject>();
-
             string newName = string.Concat("Test Shipping Method ", Helper.GetRandomString(10));
             string newDescription = string.Concat("Test Description ", Helper.GetRandomString(10));
 
-            actions.Add(
-                JObject.FromObject(new
-                {
-                    action = "changeName",
-                    name = newName
-                })
-            );
+            GenericAction changeNameAction = new GenericAction("changeName");
+            changeNameAction.SetProperty("name", newName);
 
-            actions.Add(
-                JObject.FromObject(new
-                {
-                    action = "setDescription",
-                    description = newDescription
-                })
-            );
+            GenericAction setDescriptionAction = new GenericAction("setDescription");
+            setDescriptionAction.SetProperty("description", newDescription);
 
-            _testShippingMethods[0] = await _client.ShippingMethods().UpdateShippingMethodAsync(_testShippingMethods[0], actions);
+            List<UpdateAction> actions = new List<UpdateAction>();
+            actions.Add(changeNameAction);
+            actions.Add(setDescriptionAction);
 
+            Response<ShippingMethod> response = await _client.ShippingMethods().UpdateShippingMethodAsync(_testShippingMethods[0], actions);
+            Assert.IsTrue(response.Success);
+
+            _testShippingMethods[0] = response.Result;
             Assert.NotNull(_testShippingMethods[0].Id);
 
             foreach (string language in _project.Languages)

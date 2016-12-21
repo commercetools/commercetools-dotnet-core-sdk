@@ -25,8 +25,10 @@ namespace commercetools.Common
         /// </summary>
         public LocalizedString()
         {
+            this.Values = new Dictionary<string, object>();
         }
 
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>

@@ -7,7 +7,6 @@ namespace commercetools.Carts.UpdateActions
     /// <summary>
     /// Sets the locale. Must be one of the languages supported for this Project.
     /// </summary>
-    /// <remarks>
     /// <see href="https://dev.commercetools.com/http-api-projects-carts.html#set-locale"/>
     public class SetLocaleAction : UpdateAction
     {

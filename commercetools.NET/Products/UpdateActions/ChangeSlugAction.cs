@@ -32,12 +32,10 @@ namespace commercetools.Products.UpdateActions
         /// Constructor.
         /// </summary>
         /// <param name="slug">Slug</param>
-        /// <param name="staged">Staged</param>
-        public ChangeSlugAction(LocalizedString slug, bool staged = true)
+        public ChangeSlugAction(LocalizedString slug)
         {
             this.Action = "changeSlug";
             this.Slug = slug;
-            this.Staged = staged;
         }
 
         #endregion

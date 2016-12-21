@@ -32,12 +32,10 @@ namespace commercetools.Products.UpdateActions
         /// Constructor.
         /// </summary>
         /// <param name="priceId">Price ID</param>
-        /// <param name="staged">Staged</param>
-        public RemovePriceAction(string priceId, bool staged = true)
+        public RemovePriceAction(string priceId)
         {
             this.Action = "removePrice";
             this.PriceId = priceId;
-            this.Staged = staged;
         }
 
         #endregion

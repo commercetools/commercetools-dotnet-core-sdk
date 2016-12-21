@@ -119,6 +119,18 @@ namespace commercetools.Orders
         /// Updates an order.
         /// </summary>
         /// <param name="order">Order</param>
+        /// <param name="action">The update action to be performed on the order.</param>
+        /// <returns>Order</returns>
+        /// <see href="http://dev.commercetools.com/http-api-projects-orders.html#update-order"/>
+        public async Task<Response<Order>> UpdateOrderAsync(Order order, UpdateAction action)
+        {
+            return await UpdateOrderAsync(order.Id, order.Version, new List<UpdateAction> { action });
+        }
+
+        /// <summary>
+        /// Updates an order.
+        /// </summary>
+        /// <param name="order">Order</param>
         /// <param name="actions">The list of update actions to be performed on the order.</param>
         /// <returns>Order</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-orders.html#update-order"/>

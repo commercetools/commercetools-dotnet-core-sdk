@@ -65,7 +65,6 @@ namespace commercetools.Zones
         /// </summary>
         /// <param name="where">Where</param>
         /// <param name="sort">Sort</param>
-        /// <param name="expand">Reference expansion</param>
         /// <param name="limit">Limit</param>
         /// <param name="offset">Offset</param>
         /// <returns>ZoneQueryResult</returns>
@@ -120,10 +119,22 @@ namespace commercetools.Zones
         /// Updates a zone.
         /// </summary>
         /// <param name="zone">Zone</param>
+        /// <param name="action">The update action to be performed on the zone.</param>
+        /// <returns>Zone</returns>
+        /// <see href="http://dev.commercetools.com/http-api-projects-zones.html#update-zone"/>
+        public async Task<Response<Zone>> UpdateZoneAsync(Zone zone, UpdateAction action)
+        {
+            return await UpdateZoneAsync(zone.Id, zone.Version, new List<UpdateAction> { action });
+        }
+
+        /// <summary>
+        /// Updates a zone.
+        /// </summary>
+        /// <param name="zone">Zone</param>
         /// <param name="actions">The list of update actions to be performed on the zone.</param>
         /// <returns>Zone</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-zones.html#update-zone"/>
-        public async Task<Response<Zone>> UpdateZoneAsync(Zone zone, List<JObject> actions)
+        public async Task<Response<Zone>> UpdateZoneAsync(Zone zone, List<UpdateAction> actions)
         {
             return await UpdateZoneAsync(zone.Id, zone.Version, actions);
         }
@@ -136,7 +147,7 @@ namespace commercetools.Zones
         /// <param name="actions">The list of update actions to be performed on the zone.</param>
         /// <returns>Zone</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-zones.html#update-zone"/>
-        public async Task<Response<Zone>> UpdateZoneAsync(string zoneId, int version, List<JObject> actions)
+        public async Task<Response<Zone>> UpdateZoneAsync(string zoneId, int version, List<UpdateAction> actions)
         {
             if (string.IsNullOrWhiteSpace(zoneId))
             {

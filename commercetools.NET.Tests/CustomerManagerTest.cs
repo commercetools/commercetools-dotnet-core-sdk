@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using commercetools.Common;
+using commercetools.Common.UpdateActions;
 using commercetools.Carts;
 using commercetools.Customers;
+using commercetools.Customers.UpdateActions;
 using commercetools.Messages;
 using commercetools.Project;
-
-using Newtonsoft.Json.Linq;
 
 using NUnit.Framework;
 
@@ -33,26 +33,28 @@ namespace commercetools.Tests
         {
             _client = new Client(Helper.GetConfiguration());
 
-            Task<Project.Project> project = _client.Project().GetProjectAsync();
-            project.Wait();
-            _project = project.Result;
+            Task<Response<Project.Project>> projectTask = _client.Project().GetProjectAsync();
+            projectTask.Wait();
+            Assert.IsTrue(projectTask.Result.Success);
+            _project = projectTask.Result.Result;
 
             CustomerDraft customerDraft = Helper.GetTestCustomerDraft();
-            Task<CustomerCreatedMessage> task = _client.Customers().CreateCustomerAsync(customerDraft);
-            task.Wait();
+            Task<Response<CustomerCreatedMessage>> customerTask = _client.Customers().CreateCustomerAsync(customerDraft);
+            customerTask.Wait();
+            Assert.IsTrue(customerTask.Result.Success);
 
-            CustomerCreatedMessage customerCreatedMessage = task.Result;
-
+            CustomerCreatedMessage customerCreatedMessage = customerTask.Result.Result;
             Assert.NotNull(customerCreatedMessage.Customer);
             Assert.NotNull(customerCreatedMessage.Customer.Id);
 
             _testCustomer = customerCreatedMessage.Customer;
 
             CartDraft cartDraft = Helper.GetTestCartDraft(_project, _testCustomer.Id);
-            Task<Cart> testCart = _client.Carts().CreateCartAsync(cartDraft);
-            testCart.Wait();
-            _testCart = testCart.Result;
+            Task<Response<Cart>> cartTask = _client.Carts().CreateCartAsync(cartDraft);
+            cartTask.Wait();
+            Assert.IsTrue(cartTask.Result.Success);
 
+            _testCart = cartTask.Result.Result;
             Assert.NotNull(_testCart.Id);
             Assert.AreEqual(_testCart.CustomerId, _testCustomer.Id);
         }
@@ -63,10 +65,10 @@ namespace commercetools.Tests
         [OneTimeTearDown]
         public void Dispose()
         {
-            Task<Cart> cartTask = _client.Carts().DeleteCartAsync(_testCart.Id, _testCart.Version);
+            Task<Response<Cart>> cartTask = _client.Carts().DeleteCartAsync(_testCart);
             cartTask.Wait();
 
-            Task<Customer> customerTask = _client.Customers().DeleteCustomerAsync(_testCustomer.Id, _testCustomer.Version);
+            Task<Response<Customer>> customerTask = _client.Customers().DeleteCustomerAsync(_testCustomer);
             customerTask.Wait();
         }
 
@@ -77,8 +79,10 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldGetCustomerByIdAsync()
         {
-            Customer customer = await _client.Customers().GetCustomerByIdAsync(_testCustomer.Id);
+            Response<Customer> response = await _client.Customers().GetCustomerByIdAsync(_testCustomer.Id);
+            Assert.IsTrue(response.Success);
 
+            Customer customer = response.Result;
             Assert.NotNull(customer.Id);
             Assert.AreEqual(customer.Id, _testCustomer.Id);
         }
@@ -90,10 +94,12 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldQueryCustomersAsync()
         {
-            CustomerQueryResult result = await _client.Customers().QueryCustomersAsync();
+            Response<CustomerQueryResult> response = await _client.Customers().QueryCustomersAsync();
+            Assert.IsTrue(response.Success);
 
-            Assert.NotNull(result.Results);
-            Assert.GreaterOrEqual(result.Results.Count, 1);
+            CustomerQueryResult customerQueryResult = response.Result;
+            Assert.NotNull(customerQueryResult.Results);
+            Assert.GreaterOrEqual(customerQueryResult.Results.Count, 1);
         }
 
         /// <summary>
@@ -105,8 +111,10 @@ namespace commercetools.Tests
         public async Task ShouldCreateAndDeleteCustomerAsync()
         {
             CustomerDraft customerDraft = Helper.GetTestCustomerDraft();
-            CustomerCreatedMessage customerCreatedMessage = await _client.Customers().CreateCustomerAsync(customerDraft);
+            Response<CustomerCreatedMessage> customerCreatedResponse = await _client.Customers().CreateCustomerAsync(customerDraft);
+            Assert.IsTrue(customerCreatedResponse.Success);
 
+            CustomerCreatedMessage customerCreatedMessage = customerCreatedResponse.Result;
             Assert.NotNull(customerCreatedMessage.Customer);
             Assert.NotNull(customerCreatedMessage.Customer.Id);
 
@@ -114,49 +122,73 @@ namespace commercetools.Tests
 
             string deletedCustomerId = customer.Id;
 
-            customer = await _client.Customers().DeleteCustomerAsync(customer);
+            Response<Customer> customerResponse = await _client.Customers().DeleteCustomerAsync(customer);
+            Assert.IsTrue(customerResponse.Success);
 
-            AggregateException ex = Assert.Throws<AggregateException>(
-                delegate
-                {
-                    Task<Customer> task = _client.Customers().GetCustomerByIdAsync(deletedCustomerId);
-                    task.Wait();
-                });
+            customerResponse = await _client.Customers().GetCustomerByIdAsync(deletedCustomerId);
+            Assert.IsFalse(customerResponse.Success);
         }
 
         /// <summary>
         /// Tests the CustomerManager.UpdateCustomerAsync method.
         /// </summary>
-        /// <see cref="CustomerManager.UpdateCustomerAsync(commercetools.Customers.Customer, System.Collections.Generic.List{Newtonsoft.Json.Linq.JObject})"/>
+        /// <see cref="CustomerManager.UpdateCustomerAsync(commercetools.Customers.Customer, System.Collections.Generic.List{commercetools.Common.UpdateAction})"/>
         [Test]
         public async Task ShouldUpdateCustomerAsync()
         {
-            List<JObject> actions = new List<JObject>();
-
             string newEmail = string.Concat(Helper.GetRandomString(10), "@example.com");
             string newExternalId = Helper.GetRandomNumber(10000, 99999).ToString();
 
-            actions.Add(
-                JObject.FromObject(new
-                {
-                    action = "changeEmail",
-                    email = newEmail
-                })
-            );
+            SetExternalIdAction setExternalIdAction = new SetExternalIdAction();
+            setExternalIdAction.ExternalId = newExternalId;
 
-            actions.Add(
-                JObject.FromObject(new
-                {
-                    action = "setExternalId",
-                    externalId = newExternalId
-                })
-            );
+            GenericAction changeEmailAction = new GenericAction("changeEmail");
+            changeEmailAction.SetProperty("email", newEmail);
 
-            _testCustomer = await _client.Customers().UpdateCustomerAsync(_testCustomer, actions);
+            List<UpdateAction> actions = new List<UpdateAction>();
+            actions.Add(setExternalIdAction);
+            actions.Add(changeEmailAction);
+            
+            Response<Customer> response = await _client.Customers().UpdateCustomerAsync(_testCustomer, actions);
+            Assert.IsTrue(response.Success);
 
+            _testCustomer = response.Result;
             Assert.NotNull(_testCustomer.Id);
             Assert.AreEqual(_testCustomer.Email, newEmail);
             Assert.AreEqual(_testCustomer.ExternalId, newExternalId);
+        }
+
+        /// <summary>
+        /// Tests the CustomerManager.AuthenticateCustomerAsync method.
+        /// </summary>
+        /// <see cref="CustomerManager.AuthenticateCustomerAsync"/>
+        [Test]
+        public async Task ShouldAuthenticateCustomer()
+        {
+            string email = "authtest@example.com";
+            string password = "AuthTest123!";
+
+            CustomerDraft customerDraft = Helper.GetTestCustomerDraft();
+            customerDraft.Email = email;
+            customerDraft.Password = password;
+
+            Response<CustomerCreatedMessage> customerCreatedResponse = await _client.Customers().CreateCustomerAsync(customerDraft);
+            Assert.IsTrue(customerCreatedResponse.Success);
+
+            CustomerCreatedMessage customerCreatedMessage = customerCreatedResponse.Result;
+            Assert.NotNull(customerCreatedMessage.Customer);
+            Assert.AreEqual(customerCreatedMessage.Customer.Email, email);
+
+            Customer customer = customerCreatedMessage.Customer;
+
+            Response<CustomerSignInResult> customerSignInResponse = await _client.Customers().AuthenticateCustomerAsync(email, password);
+            Assert.IsTrue(customerSignInResponse.Success);
+
+            CustomerSignInResult customerSignInResult = customerSignInResponse.Result;
+            Assert.NotNull(customerSignInResult.Customer);
+            Assert.AreEqual(customerSignInResult.Customer.Email, email);
+
+            Response<Customer> customerResponse = await _client.Customers().DeleteCustomerAsync(customer);
         }
     }
 }

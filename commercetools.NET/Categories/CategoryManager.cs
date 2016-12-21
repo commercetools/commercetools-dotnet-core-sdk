@@ -33,7 +33,7 @@ namespace commercetools.Categories
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="configuration"></param>
+        /// <param name="client">Client</param>
         public CategoryManager(Client client)
         {
             _client = client;
@@ -65,7 +65,6 @@ namespace commercetools.Categories
         /// </summary>
         /// <param name="where">Where</param>
         /// <param name="sort">Sort</param>
-        /// <param name="expansion">Expansion (not yet implemented)</param>
         /// <param name="limit">Limit</param>
         /// <param name="offset">Offset</param>
         /// <returns>CategoryQueryResult</returns>
@@ -130,12 +129,22 @@ namespace commercetools.Categories
         /// Updates a category.
         /// </summary>
         /// <param name="category">Category</param>
-        /// the changes should be applied.</param>
-        /// <param name="actions">The list of update actions to be performed on
-        /// the category.</param>
+        /// <param name="action">The update action to be performed on the category.</param>
         /// <returns>Category</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-categories.html#update-category"/>
-        public async Task<Response<Category>> UpdateCategoryAsync(Category category, List<JObject> actions)
+        public async Task<Response<Category>> UpdateCategoryAsync(Category category, UpdateAction action)
+        {
+            return await UpdateCategoryAsync(category.Id, category.Version, new List<UpdateAction> { action } );
+        }
+
+        /// <summary>
+        /// Updates a category.
+        /// </summary>
+        /// <param name="category">Category</param>
+        /// <param name="actions">The list of update actions to be performed on the category.</param>
+        /// <returns>Category</returns>
+        /// <see href="http://dev.commercetools.com/http-api-projects-categories.html#update-category"/>
+        public async Task<Response<Category>> UpdateCategoryAsync(Category category, List<UpdateAction> actions)
         {
             return await UpdateCategoryAsync(category.Id, category.Version, actions);
         }
@@ -144,13 +153,12 @@ namespace commercetools.Categories
         /// Updates a category.
         /// </summary>
         /// <param name="categoryId">ID of the category</param>
-        /// <param name="version">The expected version of the category on which
-        /// the changes should be applied.</param>
+        /// <param name="version">The expected version of the category on which the changes should be applied.</param>
         /// <param name="actions">The list of update actions to be performed on
         /// the category.</param>
         /// <returns>Category</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-categories.html#update-category"/>
-        public async Task<Response<Category>> UpdateCategoryAsync(string categoryId, int version, List<JObject> actions)
+        public async Task<Response<Category>> UpdateCategoryAsync(string categoryId, int version, List<UpdateAction> actions)
         {
             if (string.IsNullOrWhiteSpace(categoryId))
             {

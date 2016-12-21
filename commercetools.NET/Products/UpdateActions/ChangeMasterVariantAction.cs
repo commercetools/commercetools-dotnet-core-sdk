@@ -44,8 +44,7 @@ namespace commercetools.Products.UpdateActions
         /// </remarks>
         /// <param name="variantId">Product variant ID</param>
         /// <param name="sku">Product variant SKU</param>
-        /// <param name="staged">Staged</param>
-        public ChangeMasterVariantAction(int? variantId = null, string sku = null, bool staged = true)
+        public ChangeMasterVariantAction(int? variantId = null, string sku = null)
         {
             if (!variantId.HasValue && string.IsNullOrWhiteSpace(sku))
             {
@@ -55,7 +54,6 @@ namespace commercetools.Products.UpdateActions
             this.Action = "changeMasterVariant";
             this.VariantId = variantId;
             this.Sku = sku;
-            this.Staged = staged;
         }
 
         #endregion

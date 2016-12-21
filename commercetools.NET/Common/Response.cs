@@ -42,6 +42,7 @@ namespace commercetools.Common
         /// </summary>
         public Response()
         {
+            this.Errors = new List<ErrorMessage>();
         }
 
         #endregion

@@ -58,11 +58,9 @@ namespace commercetools.Products.UpdateActions
         /// Constructor.
         /// </summary>
         /// <param name="name">Name</param>
-        /// <param name="staged">Staged</param>
-        public AddProductVariantAction(string name, bool staged = true)
+        public AddProductVariantAction(string name)
         {
             this.Action = "addVariant";
-            this.Staged = staged;
         }
 
         #endregion

@@ -67,6 +67,13 @@ namespace commercetools.Common
 
             await EnsureToken();
 
+            if (this.Token == null)
+            {
+                response.Success = false;
+                response.Errors.Add(new ErrorMessage("no_token", "Could not retrieve token"));
+                return response;
+            }
+
             if (!string.IsNullOrWhiteSpace(endpoint) && !endpoint.StartsWith("/"))
             {
                 endpoint = string.Concat("/", endpoint);
@@ -100,6 +107,13 @@ namespace commercetools.Common
             Response<T> response = new Response<T>();
 
             await EnsureToken();
+
+            if (this.Token == null)
+            {
+                response.Success = false;
+                response.Errors.Add(new ErrorMessage("no_token", "Could not retrieve token"));
+                return response;
+            }
 
             if (!string.IsNullOrWhiteSpace(endpoint) && !endpoint.StartsWith("/"))
             {
@@ -135,6 +149,13 @@ namespace commercetools.Common
             Response<T> response = new Response<T>();
 
             await EnsureToken();
+
+            if (this.Token == null)
+            {
+                response.Success = false;
+                response.Errors.Add(new ErrorMessage("no_token", "Could not retrieve token"));
+                return response;
+            }
 
             if (!string.IsNullOrWhiteSpace(endpoint) && !endpoint.StartsWith("/"))
             {
@@ -271,7 +292,7 @@ namespace commercetools.Common
 
             response.StatusCode = (int)httpResponseMessage.StatusCode;
 
-            if (response.StatusCode == 200)
+            if (response.StatusCode >= 200 && response.StatusCode < 300)
             {
                 response.Success = true;
 
@@ -297,13 +318,17 @@ namespace commercetools.Common
 
                 response.Success = false;
                 response.Errors = new List<ErrorMessage>();
-                //response.Result = data as
 
                 if (data != null && (data["errors"] != null))
                 {
-                    foreach (dynamic error in data["errors"])
+                    foreach (JObject error in data["errors"])
                     {
-                        response.Errors.Add(new ErrorMessage(error.code, error.message));
+                        if (error.HasValues)
+                        {
+                            string code = error.Value<string>("code");
+                            string message = error.Value<string>("message");
+                            response.Errors.Add(new ErrorMessage(code, message));
+                        }
                     }
                 }
             }

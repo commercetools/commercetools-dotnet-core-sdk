@@ -39,8 +39,10 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldGetProjectAsync()
         {
-            Project.Project project = await _client.Project().GetProjectAsync();
+            Response<Project.Project> response = await _client.Project().GetProjectAsync();
+            Assert.IsTrue(response.Success);
 
+            Project.Project project = response.Result;
             Assert.NotNull(project.Key);
             Assert.NotNull(project.Name);
             Assert.NotNull(project.CreatedAt);

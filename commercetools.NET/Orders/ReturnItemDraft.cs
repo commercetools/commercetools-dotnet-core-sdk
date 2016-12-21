@@ -31,7 +31,7 @@ namespace commercetools.Orders
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="quantity"Quantity</param>
+        /// <param name="quantity">Quantity</param>
         /// <param name="lineItemId">Line item ID</param>
         /// <param name="shipmentState">ReturnShipmentState</param>
         public ReturnItemDraft(int quantity, string lineItemId, ReturnShipmentState shipmentState)

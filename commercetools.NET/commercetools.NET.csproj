@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\commercetools.NET.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -115,10 +116,12 @@
     <Compile Include="Common\AssetSource.cs" />
     <Compile Include="Common\ClientLoggingHandler.cs" />
     <Compile Include="Common\Configuration.cs" />
+    <Compile Include="Common\UpdateActions\GenericAction.cs" />
     <Compile Include="Common\PagedQueryResult.cs" />
     <Compile Include="Common\Response.cs" />
     <Compile Include="Common\ErrorMessage.cs" />
     <Compile Include="Common\UpdateAction.cs" />
+    <Compile Include="Common\UpdateActions\GenericActionConverter.cs" />
     <Compile Include="Customers\Customer.cs" />
     <Compile Include="Customers\CustomerDraft.cs" />
     <Compile Include="Customers\CustomerManager.cs" />
@@ -223,6 +226,14 @@
     <Compile Include="Payments\PaymentStatus.cs" />
     <Compile Include="Payments\Transaction.cs" />
     <Compile Include="Payments\TransactionDraft.cs" />
+    <Compile Include="Payments\UpdateActions\ChangeAmountPlannedAction.cs" />
+    <Compile Include="Payments\UpdateActions\SetAmountPaidAction.cs" />
+    <Compile Include="Payments\UpdateActions\SetAmountRefundedAction.cs" />
+    <Compile Include="Payments\UpdateActions\SetAuthorizationAction.cs" />
+    <Compile Include="Payments\UpdateActions\SetCustomerAction.cs" />
+    <Compile Include="Payments\UpdateActions\SetExternalIdAction.cs" />
+    <Compile Include="Payments\UpdateActions\SetInterfaceIdAction.cs" />
+    <Compile Include="Payments\UpdateActions\SetMethodInfoInterfaceAction.cs" />
     <Compile Include="ProductProjectionSearch\Enums.cs" />
     <Compile Include="ProductProjectionSearch\Extensions.cs" />
     <Compile Include="ProductProjectionSearch\Facet.cs" />
@@ -248,19 +259,48 @@
     <Compile Include="Products\SearchKeywords.cs" />
     <Compile Include="Products\SuggestTokenizer.cs" />
     <Compile Include="Products\SuggestTokenizerFactory.cs" />
+    <Compile Include="Products\UpdateActions\AddAssetAction.cs" />
+    <Compile Include="Products\UpdateActions\AddExternalImageAction.cs" />
     <Compile Include="Products\UpdateActions\AddPriceAction.cs" />
     <Compile Include="Products\UpdateActions\AddProductVariantAction.cs" />
+    <Compile Include="Products\UpdateActions\AddToCategoryAction.cs" />
+    <Compile Include="Products\UpdateActions\ChangeAssetNameAction.cs" />
+    <Compile Include="Products\UpdateActions\ChangeAssetOrderAction.cs" />
     <Compile Include="Products\UpdateActions\ChangeMasterVariantAction.cs" />
     <Compile Include="Products\UpdateActions\ChangeNameAction.cs" />
     <Compile Include="Products\UpdateActions\ChangePriceAction.cs" />
     <Compile Include="Products\UpdateActions\ChangeSlugAction.cs" />
+    <Compile Include="Products\UpdateActions\MoveImageToPositionAction.cs" />
+    <Compile Include="Products\UpdateActions\PublishAction.cs" />
+    <Compile Include="Products\UpdateActions\RemoveAssetAction.cs" />
+    <Compile Include="Products\UpdateActions\RemoveFromCategoryAction.cs" />
+    <Compile Include="Products\UpdateActions\RemoveImageAction.cs" />
     <Compile Include="Products\UpdateActions\RemovePriceAction.cs" />
     <Compile Include="Products\UpdateActions\RemoveProductVariantAction.cs" />
+    <Compile Include="Products\UpdateActions\RevertStagedChangesAction.cs" />
+    <Compile Include="Products\UpdateActions\SetAssetCustomFieldAction.cs" />
+    <Compile Include="Products\UpdateActions\SetAssetCustomTypeAction.cs" />
+    <Compile Include="Products\UpdateActions\SetAssetDescriptionAction.cs" />
+    <Compile Include="Products\UpdateActions\SetAssetSourcesAction.cs" />
+    <Compile Include="Products\UpdateActions\SetAssetTagsAction.cs" />
+    <Compile Include="Products\UpdateActions\SetAttributeInAllVariantsAction.cs" />
+    <Compile Include="Products\UpdateActions\SetCategoryOrderHintAction.cs" />
     <Compile Include="Products\UpdateActions\SetDescriptionAction.cs" />
+    <Compile Include="Products\UpdateActions\SetDiscountedPriceAction.cs" />
     <Compile Include="Products\UpdateActions\SetKeyAction.cs" />
+    <Compile Include="Products\UpdateActions\SetMetaDescriptionAction.cs" />
+    <Compile Include="Products\UpdateActions\SetMetaKeywordsAction.cs" />
+    <Compile Include="Products\UpdateActions\SetMetaTitleAction.cs" />
     <Compile Include="Products\UpdateActions\SetPricesAction.cs" />
     <Compile Include="Products\UpdateActions\SetProductPriceCustomFieldAction.cs" />
     <Compile Include="Products\UpdateActions\SetProductPriceCustomTypeAction.cs" />
+    <Compile Include="Products\UpdateActions\SetAttributeAction.cs" />
+    <Compile Include="Products\UpdateActions\SetProductVariantKeyAction.cs" />
+    <Compile Include="Products\UpdateActions\SetSearchKeywordsAction.cs" />
+    <Compile Include="Products\UpdateActions\SetSkuAction.cs" />
+    <Compile Include="Products\UpdateActions\SetTaxCategoryAction.cs" />
+    <Compile Include="Products\UpdateActions\TransitionStateAction.cs" />
+    <Compile Include="Products\UpdateActions\UnpublishAction.cs" />
     <Compile Include="Products\WhitespaceTokenizer.cs" />
     <Compile Include="ProductTypes\AttributeDefinition.cs" />
     <Compile Include="ProductTypes\AttributeDefinitionDraft.cs" />
@@ -378,9 +418,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Payments\UpdateActions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

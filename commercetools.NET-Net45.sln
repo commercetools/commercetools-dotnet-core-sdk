@@ -5,29 +5,6 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.NET", "commercetools.NET\commercetools.NET.csproj", "{C5C84D2E-76CC-4751-AD3C-880865AE8A53}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Sunrise", "http://localhost:50496", "{04892D6E-F5BD-4EFD-AF7D-609E8415EFF2}"
-	ProjectSection(WebsiteProperties) = preProject
-		UseIISExpress = "true"
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
-		ProjectReferences = "{c5c84d2e-76cc-4751-ad3c-880865ae8a53}|commercetools.Core.dll;"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_50496"
-		Debug.AspNetCompiler.PhysicalPath = "Sunrise\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_50496\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_50496"
-		Release.AspNetCompiler.PhysicalPath = "Sunrise\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_50496\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		SlnRelativePath = "Sunrise\"
-		DefaultWebSiteLanguage = "Visual C#"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.NET.Tests", "commercetools.NET.Tests\commercetools.NET.Tests.csproj", "{A586CC4B-F497-42D9-85C8-AFD1344FD42A}"
 EndProject
 Global

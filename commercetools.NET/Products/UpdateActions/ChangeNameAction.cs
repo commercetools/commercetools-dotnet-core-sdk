@@ -16,7 +16,7 @@ namespace commercetools.Products.UpdateActions
         /// Name
         /// </summary>
         [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
+        public LocalizedString Name { get; set; }
 
         /// <summary>
         /// Staged
@@ -32,12 +32,10 @@ namespace commercetools.Products.UpdateActions
         /// Constructor.
         /// </summary>
         /// <param name="name">Name</param>
-        /// <param name="staged">Staged</param>
-        public ChangeNameAction(string name, bool staged = true)
+        public ChangeNameAction(LocalizedString name)
         {
             this.Action = "changeName";
             this.Name = name;
-            this.Staged = staged;
         }
 
         #endregion

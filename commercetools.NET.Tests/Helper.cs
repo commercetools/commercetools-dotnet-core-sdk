@@ -8,15 +8,12 @@ using commercetools.Carts;
 using commercetools.Categories;
 using commercetools.Customers;
 using commercetools.Common;
-using commercetools.Messages;
 using commercetools.Orders;
 using commercetools.Payments;
 using commercetools.Products;
 using commercetools.ProductTypes;
-using commercetools.Project;
 using commercetools.ShippingMethods;
 using commercetools.TaxCategories;
-using commercetools.Types;
 using commercetools.Zones;
 
 using Configuration = commercetools.Common.Configuration;
@@ -39,11 +36,11 @@ namespace commercetools.Tests
         public static Configuration GetConfiguration()
         {
             return new Configuration(
-                Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.OAuthUrl"]),
-                Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ApiUrl"]),
-                Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ProjectKey"]),
-                Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientID"]),
-                Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientSecret"]),
+                ConfigurationManager.AppSettings["commercetools.OAuthUrl"],
+                ConfigurationManager.AppSettings["commercetools.ApiUrl"],
+                ConfigurationManager.AppSettings["commercetools.ProjectKey"],
+                ConfigurationManager.AppSettings["commercetools.ClientID"],
+                ConfigurationManager.AppSettings["commercetools.ClientSecret"],
                 ProjectScope.ManageProject);
         }
 
@@ -59,8 +56,8 @@ namespace commercetools.Tests
         /// <returns>CartDraft</returns>
         public static CartDraft GetTestCartDraft(Project.Project project, string customerId = null)
         {
-            Address shippingAddress = Helper.GetTestAddress();
-            Address billingAddress = Helper.GetTestAddress();
+            Address shippingAddress = Helper.GetTestAddress(project);
+            Address billingAddress = Helper.GetTestAddress(project);
 
             string currency = project.Currencies[0];
             string country = project.Countries[0];
@@ -124,7 +121,7 @@ namespace commercetools.Tests
         /// Gets a test address.
         /// </summary>
         /// <returns>Address</returns>
-        public static Address GetTestAddress()
+        public static Address GetTestAddress(Project.Project project)
         {
             Address address = new Address();
 
@@ -137,7 +134,7 @@ namespace commercetools.Tests
             address.AdditionalStreetInfo = "Additional street info";
             address.PostalCode = "90210";
             address.City = "Los Angeles";
-            address.Country = "US";
+            address.Country = project.Countries.Count > 0 ? project.Countries[0] : "US";
             address.Department = "Dept.";
             address.Building = "Bldg.";
             address.Apartment = "Apt.";
@@ -373,25 +370,25 @@ namespace commercetools.Tests
         /// <returns>Shipping method that has a zone for the specified country, or null if one was not found</returns>
         public static async Task<ShippingMethod> GetShippingMethodForCountry(Client client, string country)
         {
-            var result = await client.ShippingMethods().QueryShippingMethodsAsync();
+            Response<ShippingMethodQueryResult> shippingMethodQueryResponse = await client.ShippingMethods().QueryShippingMethodsAsync();
 
-            if (result == null || result.Results == null || result.Results.Count < 1)
+            if (!shippingMethodQueryResponse.Success || shippingMethodQueryResponse.Result.Count < 1)
             {
                 return null;
             }
 
             ShippingMethod shippingMethod = null;
-            var shippingMethods = result.Results.Where(s => s.ZoneRates != null && s.ZoneRates.Count > 0);
+            var shippingMethods = shippingMethodQueryResponse.Result.Results.Where(s => s.ZoneRates != null && s.ZoneRates.Count > 0);
 
             foreach (ShippingMethod s in shippingMethods)
             {
                 foreach (ZoneRate zoneRate in s.ZoneRates)
                 {
-                    Zone zone = await client.Zones().GetZoneByIdAsync(zoneRate.Zone.Id);
+                    Response<Zone> zoneResponse = await client.Zones().GetZoneByIdAsync(zoneRate.Zone.Id);
 
-                    if (zone != null || zone.Locations != null)
+                    if (zoneResponse.Success && zoneResponse.Result.Locations != null)
                     {
-                        foreach (Location location in zone.Locations)
+                        foreach (Location location in zoneResponse.Result.Locations)
                         {
                             if (location.Country.Equals(country, StringComparison.OrdinalIgnoreCase))
                             {
@@ -452,12 +449,23 @@ namespace commercetools.Tests
             string name = string.Concat("Test Zone ", Helper.GetRandomString(10));
 
             ZoneDraft zoneDraft = new ZoneDraft(name);
-
+            
             if (locations != null)
             {
                 zoneDraft.Locations = locations;
             }
+            else
+            {
+                zoneDraft.Locations = new List<Location>();
 
+                foreach (string country in project.Countries)
+                {
+                    Location location = new Location();
+                    location.Country = country;
+                    zoneDraft.Locations.Add(location);
+                }
+            }
+           
             return zoneDraft;
         }
 
