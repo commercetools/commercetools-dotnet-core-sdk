@@ -1,6 +1,4 @@
-﻿using System;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace commercetools.Common
 {
@@ -13,20 +11,27 @@ namespace commercetools.Common
         #region Properties
 
         [JsonProperty(PropertyName = "key")]
-        public string Key { get; private set; }
+        public string Key { get; set; }
 
         [JsonProperty(PropertyName = "label")]
-        public LocalizedString Label { get; private set; }
+        public LocalizedString Label { get; set; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public LocalizedEnumValue()
+        {
+        }
+
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public LocalizedEnumValue(dynamic data = null)
+        public LocalizedEnumValue(dynamic data)
         {
             if (data == null)
             {

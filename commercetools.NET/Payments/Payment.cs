@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using commercetools.Common;
-using commercetools.CustomFields;
 
 using Newtonsoft.Json;
 

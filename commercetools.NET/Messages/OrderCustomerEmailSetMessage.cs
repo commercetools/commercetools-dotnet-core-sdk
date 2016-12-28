@@ -12,6 +12,9 @@ namespace commercetools.Messages
     {
         #region Properties
 
+        /// <summary>
+        /// Email
+        /// </summary>
         [JsonProperty(PropertyName = "email")]
         public string Email { get; private set; }
 

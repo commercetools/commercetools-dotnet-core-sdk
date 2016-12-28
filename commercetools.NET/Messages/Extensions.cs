@@ -2,6 +2,9 @@
 
 namespace commercetools.Messages
 {
+    /// <summary>
+    /// Extensions
+    /// </summary>
     public static class Extensions
     {
         /// <summary>

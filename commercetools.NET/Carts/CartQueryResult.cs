@@ -9,11 +9,14 @@ namespace commercetools.Carts
     /// <summary>
     /// An implementation of PagedQueryResult that provides access to the results as a List of Cart objects.
     /// </summary>
-    /// <see href="http://dev.commercetools.com/http-api.html#pagedqueryresult"/>
+    /// <see href="https://dev.commercetools.com/http-api.html#pagedqueryresult"/>
     public class CartQueryResult : PagedQueryResult
     {
         #region Properties
 
+        /// <summary>
+        /// Results
+        /// </summary>
         [JsonProperty(PropertyName = "results")]
         public List<Cart> Results { get; set; }
 

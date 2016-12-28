@@ -14,8 +14,11 @@ namespace commercetools.Payments
     {
         #region Properties
 
+        /// <summary>
+        /// Results
+        /// </summary>
         [JsonProperty(PropertyName = "results")]
-        public List<Payment> Results { get; set; }
+        public List<Payment> Results { get; private set; }
 
         #endregion
 

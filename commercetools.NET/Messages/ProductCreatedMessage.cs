@@ -12,6 +12,9 @@ namespace commercetools.Messages
     {
         #region Properties
 
+        /// <summary>
+        /// Product Projection
+        /// </summary>
         [JsonProperty(PropertyName = "productProjection")]
         public ProductProjection ProductProjection { get; private set; }
 
@@ -23,7 +26,7 @@ namespace commercetools.Messages
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public ProductCreatedMessage(dynamic data = null)
+        public ProductCreatedMessage(dynamic data)
             : base((object)data)
         {
             if (data == null)

@@ -25,10 +25,17 @@ namespace commercetools.ShippingMethods
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public ZoneRate()
+        {
+        }
+
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public ZoneRate(dynamic data = null)
+        public ZoneRate(dynamic data)
         {
             if (data == null)
             {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
 
 using commercetools.Common;
@@ -67,7 +64,7 @@ namespace commercetools.ProductProjectionSearch
         /// <param name="priceChannel">Enables price selection. Can only be used in conjunction with the priceCurrency parameter</param>
         /// <returns>ProductProjectionQueryResult object</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-products-search.html#search-productprojections"/>
-        public async Task<ProductProjectionQueryResult> SearchProductProjectionsAsync(
+        public Task<Response<ProductProjectionQueryResult>> SearchProductProjectionsAsync(
             string text = null, 
             string language = null, 
             bool fuzzy = false,
@@ -179,9 +176,7 @@ namespace commercetools.ProductProjectionSearch
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, qs.ToString());
-            dynamic response = await _client.GetAsync(endpoint);
-
-            return new ProductProjectionQueryResult(response);
+            return _client.GetAsync<ProductProjectionQueryResult>(endpoint);
         }
 
         #endregion

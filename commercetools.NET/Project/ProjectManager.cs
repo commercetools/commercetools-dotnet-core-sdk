@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using commercetools.Common;
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace commercetools.Project
 {
@@ -25,9 +19,9 @@ namespace commercetools.Project
         #region Constructors
 
         /// <summary>
-        /// Constructor
+        /// Constructor.
         /// </summary>
-        /// <param name="configuration"></param>
+        /// <param name="client">Client</param>
         public ProjectManager(Client client)
         {
             _client = client;
@@ -42,10 +36,9 @@ namespace commercetools.Project
         /// </summary>
         /// <see href="http://dev.commercetools.com/http-api-projects-project.html#get-project"/>
         /// <returns>Project</returns>
-        public async Task<Project> GetProjectAsync()
+        public Task<Response<Project>> GetProjectAsync()
         {
-            dynamic response = await _client.GetAsync(string.Empty);
-            return new Project(response);
+            return _client.GetAsync<Project>(string.Empty);
         }
 
         #endregion

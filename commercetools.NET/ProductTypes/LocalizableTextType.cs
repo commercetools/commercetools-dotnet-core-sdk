@@ -11,10 +11,18 @@ namespace commercetools.ProductTypes
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public LocalizableTextType()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Returns a JSON representation of this instance.
         /// </summary>
         /// <returns>JObject</returns>
-        public LocalizableTextType(dynamic data = null)
+        public LocalizableTextType(dynamic data)
             : base((object)data)
         {
         }

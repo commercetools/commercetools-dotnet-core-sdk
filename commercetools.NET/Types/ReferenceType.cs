@@ -11,17 +11,25 @@ namespace commercetools.Types
         #region Properties
 
         [JsonProperty(PropertyName = "referenceTypeId")]
-        public string ReferenceTypeId { get; private set; }
+        public string ReferenceTypeId { get; set; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public ReferenceType()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Returns a JSON representation of this instance.
         /// </summary>
         /// <returns>JObject</returns>
-        public ReferenceType(dynamic data = null)
+        public ReferenceType(dynamic data)
             : base((object)data)
         {
             if (data == null)

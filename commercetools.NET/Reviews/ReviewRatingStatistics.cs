@@ -33,10 +33,17 @@ namespace commercetools.Reviews
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public ReviewRatingStatistics()
+        {
+        }
+
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public ReviewRatingStatistics(dynamic data = null)
+        public ReviewRatingStatistics(dynamic data)
         {
             if (data == null)
             {

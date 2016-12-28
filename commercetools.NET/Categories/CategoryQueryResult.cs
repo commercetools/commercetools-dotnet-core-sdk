@@ -7,14 +7,16 @@ using Newtonsoft.Json;
 namespace commercetools.Categories
 {
     /// <summary>
-    /// An implementation of PagedQueryResult that provides access to the 
-    /// results as a List of Category objects.
+    /// An implementation of PagedQueryResult that provides access to the results as a List of Category objects.
     /// </summary>
-    /// <see href="http://dev.commercetools.com/http-api.html#paged-query-result"/>
+    /// <see href="https://dev.commercetools.com/http-api.html#pagedqueryresult"/>
     public class CategoryQueryResult : PagedQueryResult
     {
         #region Properties
 
+        /// <summary>
+        /// Results
+        /// </summary>
         [JsonProperty(PropertyName = "results")]
         public List<Category> Results { get; private set; }
 

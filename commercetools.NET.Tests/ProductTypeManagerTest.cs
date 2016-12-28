@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using commercetools.Common;
+using commercetools.Common.UpdateActions;
 using commercetools.ProductTypes;
 
-using NUnit.Framework;
 using Newtonsoft.Json.Linq;
+
+using NUnit.Framework;
 
 namespace commercetools.Tests
 {
@@ -33,11 +33,11 @@ namespace commercetools.Tests
             for (int i = 0; i < 5; i++)
             {
                 ProductTypeDraft productTypeDraft = Helper.GetTestProductTypeDraft();
-                Task<ProductType> task = _client.ProductTypes().CreateProductTypeAsync(productTypeDraft);
+                Task<Response<ProductType>> task = _client.ProductTypes().CreateProductTypeAsync(productTypeDraft);
                 task.Wait();
+                Assert.IsTrue(task.Result.Success);
 
-                ProductType productType = task.Result;
-
+                ProductType productType = task.Result.Result;
                 Assert.NotNull(productType.Id);
 
                 _testProductTypes.Add(productType);
@@ -64,8 +64,10 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldGetProductTypeByIdAsync()
         {
-            ProductType productType = await _client.ProductTypes().GetProductTypeByIdAsync(_testProductTypes[0].Id);
+            Response<ProductType> response = await _client.ProductTypes().GetProductTypeByIdAsync(_testProductTypes[0].Id);
+            Assert.IsTrue(response.Success);
 
+            ProductType productType = response.Result;
             Assert.NotNull(productType.Id);
             Assert.AreEqual(productType.Id, _testProductTypes[0].Id);
         }
@@ -77,8 +79,10 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldGetProductTypeByKeyAsync()
         {
-            ProductType productType = await _client.ProductTypes().GetProductTypeByKeyAsync(_testProductTypes[0].Key);
+            Response<ProductType> response = await _client.ProductTypes().GetProductTypeByKeyAsync(_testProductTypes[0].Key);
+            Assert.IsTrue(response.Success);
 
+            ProductType productType = response.Result;
             Assert.NotNull(productType.Id);
             Assert.AreEqual(productType.Id, _testProductTypes[0].Id);
         }
@@ -90,16 +94,20 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldQueryProductTypesAsync()
         {
-            ProductTypeQueryResult result = await _client.ProductTypes().QueryProductTypesAsync();
+            Response<ProductTypeQueryResult> response = await _client.ProductTypes().QueryProductTypesAsync();
+            Assert.IsTrue(response.Success);
 
-            Assert.NotNull(result.Results);
-            Assert.GreaterOrEqual(result.Results.Count, 1);
+            ProductTypeQueryResult productTypeQueryResult = response.Result;
+            Assert.NotNull(productTypeQueryResult.Results);
+            Assert.GreaterOrEqual(productTypeQueryResult.Results.Count, 1);
 
             int limit = 2;
-            result = await _client.ProductTypes().QueryProductTypesAsync(limit: limit);
+            response = await _client.ProductTypes().QueryProductTypesAsync(limit: limit);
+            Assert.IsTrue(response.Success);
 
-            Assert.NotNull(result.Results);
-            Assert.LessOrEqual(result.Results.Count, limit);
+            productTypeQueryResult = response.Result;
+            Assert.NotNull(productTypeQueryResult.Results);
+            Assert.LessOrEqual(productTypeQueryResult.Results.Count, limit);
         }
 
         /// <summary>
@@ -111,20 +119,19 @@ namespace commercetools.Tests
         public async Task ShouldCreateAndDeleteProductTypeAsync()
         {
             ProductTypeDraft productTypeDraft = Helper.GetTestProductTypeDraft();
-            ProductType productType = await _client.ProductTypes().CreateProductTypeAsync(productTypeDraft);
+            Response<ProductType> response = await _client.ProductTypes().CreateProductTypeAsync(productTypeDraft);
+            Assert.IsTrue(response.Success);
 
+            ProductType productType = response.Result;
             Assert.NotNull(productType.Id);
 
             string deletedProductTypeId = productType.Id;
 
-            await _client.ProductTypes().DeleteProductTypeAsync(productType);
+            Response<JObject> deleteResponse = await _client.ProductTypes().DeleteProductTypeAsync(productType);
+            Assert.IsTrue(deleteResponse.Success);
 
-            AggregateException ex = Assert.Throws<AggregateException>(
-                delegate
-                {
-                    Task task = _client.ProductTypes().GetProductTypeByIdAsync(deletedProductTypeId);
-                    task.Wait();
-                });
+            response = await _client.ProductTypes().GetProductTypeByIdAsync(deletedProductTypeId);
+            Assert.IsFalse(response.Success);
         }
 
         /// <summary>
@@ -134,29 +141,23 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldUpdateProductTypeAsync()
         {
-            List<JObject> actions = new List<JObject>();
-
             string newKey = Helper.GetRandomString(15);
             string newName = string.Concat("Test Product Type", Helper.GetRandomString(10));
 
-            actions.Add(
-                JObject.FromObject(new
-                {
-                    action = "setKey",
-                    key = newKey
-                })
-            );
+            GenericAction setKeyAction = new GenericAction("setKey");
+            setKeyAction.SetProperty("key", newKey);
 
-            actions.Add(
-                JObject.FromObject(new
-                {
-                    action = "changeName",
-                    name = newName
-                })
-            );
+            GenericAction changeNameAction = new GenericAction("changeName");
+            changeNameAction.SetProperty("name", newName);
 
-            _testProductTypes[0] = await _client.ProductTypes().UpdateProductTypeAsync(_testProductTypes[0], actions);
+            List<UpdateAction> actions = new List<UpdateAction>();
+            actions.Add(setKeyAction);
+            actions.Add(changeNameAction);
 
+            Response<ProductType> response = await _client.ProductTypes().UpdateProductTypeAsync(_testProductTypes[0], actions);
+            Assert.IsTrue(response.Success);
+
+            _testProductTypes[0] = response.Result;
             Assert.NotNull(_testProductTypes[0].Id);
             Assert.AreEqual(_testProductTypes[0].Key, newKey);
             Assert.AreEqual(_testProductTypes[0].Name, newName);

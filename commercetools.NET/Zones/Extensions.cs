@@ -2,6 +2,9 @@
 
 namespace commercetools.Zones
 {
+    /// <summary>
+    /// Extensions
+    /// </summary>
     public static class Extensions
     {
         /// <summary>

@@ -5,6 +5,7 @@ using commercetools;
 using commercetools.Common;
 using commercetools.Orders;
 using commercetools.ShippingMethods;
+using commercetools.TaxCategories;
 
 using Newtonsoft.Json;
 
@@ -50,7 +51,7 @@ namespace commercetools.Carts
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public ShippingInfo(dynamic data = null)
+        public ShippingInfo(dynamic data)
         {
             if (data == null)
             {

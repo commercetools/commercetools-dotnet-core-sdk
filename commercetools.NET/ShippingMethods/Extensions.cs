@@ -2,6 +2,9 @@
 
 namespace commercetools.ShippingMethods
 {
+    /// <summary>
+    /// Extensions
+    /// </summary>
     public static class Extensions
     {
         /// <summary>

@@ -13,9 +13,15 @@ namespace commercetools.Messages
     {
         #region Properties
 
+        /// <summary>
+        /// Transaction ID
+        /// </summary>
         [JsonProperty(PropertyName = "transactionId")]
         public string TransactionId { get; private set; }
 
+        /// <summary>
+        /// State
+        /// </summary>
         [JsonProperty(PropertyName = "state")]
         public TransactionState? State { get; private set; }
 
@@ -27,7 +33,7 @@ namespace commercetools.Messages
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public PaymentTransactionStateChangedMessage(dynamic data = null)
+        public PaymentTransactionStateChangedMessage(dynamic data)
             : base((object)data)
         {
             if (data == null)

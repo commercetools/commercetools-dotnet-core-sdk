@@ -2,6 +2,9 @@
 
 namespace commercetools.TaxCategories
 {
+    /// <summary>
+    /// Extensions
+    /// </summary>
     public static class Extensions
     {
         /// <summary>

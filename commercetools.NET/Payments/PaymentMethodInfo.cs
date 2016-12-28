@@ -28,10 +28,17 @@ namespace commercetools.Payments
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public PaymentMethodInfo()
+        {
+        }
+
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public PaymentMethodInfo(dynamic data = null)
+        public PaymentMethodInfo(dynamic data)
         {
             if (data == null)
             {

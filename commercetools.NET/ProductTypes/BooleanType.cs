@@ -9,11 +9,20 @@ namespace commercetools.ProductTypes
     public class BooleanType : AttributeType
     {
         #region Constructors
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public BooleanType()
+            : base()
+        {
+        }
+
         /// <summary>
         /// Returns a JSON representation of this instance.
         /// </summary>
         /// <returns>JObject</returns>
-        public BooleanType(dynamic data = null)
+        public BooleanType(dynamic data)
             : base((object)data)
         {
         }

@@ -2,6 +2,9 @@
 
 namespace commercetools.ProductProjections
 {
+    /// <summary>
+    /// Extensions
+    /// </summary>
     public static class Extensions
     {
         /// <summary>

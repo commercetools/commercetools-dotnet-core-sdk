@@ -12,15 +12,27 @@ namespace commercetools.Messages
     {
         #region Properties
 
+        /// <summary>
+        /// Old Rating
+        /// </summary>
         [JsonProperty(PropertyName = "oldRating")]
         public int? OldRating { get; private set; }
 
+        /// <summary>
+        /// New Rating
+        /// </summary>
         [JsonProperty(PropertyName = "newRating")]
         public int? NewRating { get; private set; }
 
+        /// <summary>
+        /// Included In Statistics
+        /// </summary>
         [JsonProperty(PropertyName = "includedInStatistics")]
         public bool? IncludedInStatistics { get; private set; }
 
+        /// <summary>
+        /// Target
+        /// </summary>
         [JsonProperty(PropertyName = "target")]
         public Reference Target { get; private set; }
 
@@ -32,7 +44,7 @@ namespace commercetools.Messages
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public ReviewRatingSetMessage(dynamic data = null)
+        public ReviewRatingSetMessage(dynamic data)
             : base((object)data)
         {
             if (data == null)

@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace commercetools.ProductProjectionSearch
 {
@@ -20,6 +18,26 @@ namespace commercetools.ProductProjectionSearch
         Range,
         [EnumMember(Value = "filter")]
         Filter
+    }
+
+    /// <summary>
+    /// List of facet data types.
+    /// </summary>
+    [DataContract]
+    public enum FacetDataType
+    {
+        [EnumMember(Value = "text")]
+        Text,
+        [EnumMember(Value = "date")]
+        Date,
+        [EnumMember(Value = "time")]
+        Time,
+        [EnumMember(Value = "datetime")]
+        DateTime,
+        [EnumMember(Value = "boolean")]
+        Boolean,
+        [EnumMember(Value = "number")]
+        Number
     }
 
     /// <summary>

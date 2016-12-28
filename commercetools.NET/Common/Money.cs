@@ -21,10 +21,17 @@ namespace commercetools.Common
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public Money()
+        {
+        }
+
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public Money(dynamic data = null)
+        public Money(dynamic data)
         {
             if (data == null)
             {

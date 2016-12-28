@@ -2,6 +2,9 @@
 
 namespace commercetools.Payments
 {
+    /// <summary>
+    /// Extensions
+    /// </summary>
     public static class Extensions
     {
         /// <summary>

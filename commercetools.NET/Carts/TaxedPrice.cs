@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using commercetools.Common;
 
@@ -32,7 +31,7 @@ namespace commercetools.Carts
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public TaxedPrice(dynamic data = null)
+        public TaxedPrice(dynamic data)
         {
             if (data == null)
             {

@@ -21,10 +21,17 @@ namespace commercetools.Zones
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public Location()
+        {
+        }
+
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public Location(dynamic data = null)
+        public Location(dynamic data)
         {
             if (data == null)
             {

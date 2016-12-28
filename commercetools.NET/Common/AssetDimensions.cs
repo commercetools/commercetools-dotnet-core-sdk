@@ -21,10 +21,17 @@ namespace commercetools.Common
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public AssetDimensions() 
+        {
+        }
+
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public AssetDimensions(dynamic data = null)
+        public AssetDimensions(dynamic data)
         {
             if (data == null)
             {

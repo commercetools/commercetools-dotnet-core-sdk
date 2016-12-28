@@ -11,6 +11,14 @@ namespace commercetools.ProductTypes
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public DateType()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public DateType(dynamic data = null) 

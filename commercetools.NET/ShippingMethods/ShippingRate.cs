@@ -1,6 +1,4 @@
-﻿using System;
-
-using commercetools.Common;
+﻿using commercetools.Common;
 
 using Newtonsoft.Json;
 
@@ -25,10 +23,17 @@ namespace commercetools.ShippingMethods
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public ShippingRate()
+        {
+        }
+
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public ShippingRate(dynamic data = null)
+        public ShippingRate(dynamic data)
         {
             if (data == null)
             {

@@ -14,6 +14,9 @@ namespace commercetools.ProductTypes
     {
         #region Properties
 
+        /// <summary>
+        /// Results
+        /// </summary>
         [JsonProperty(PropertyName = "results")]
         public List<ProductType> Results { get; private set; }
 

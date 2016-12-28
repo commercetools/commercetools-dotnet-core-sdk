@@ -5,8 +5,6 @@ using commercetools.Common;
 using commercetools.Messages;
 
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 
 namespace commercetools.Project
 {
@@ -50,7 +48,7 @@ namespace commercetools.Project
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public Project(dynamic data = null)
+        public Project(dynamic data)
         {
             if (data == null)
             {

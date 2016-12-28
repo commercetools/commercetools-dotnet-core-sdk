@@ -9,6 +9,14 @@
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public DateTimeType()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Returns a JSON representation of this instance.
         /// </summary>
         /// <returns>JObject</returns>

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using commercetools.Common;
 
@@ -16,16 +15,24 @@ namespace commercetools.Products
         #region Properties
 
         [JsonProperty(PropertyName = "inputs")]
-        public List<string> Inputs { get; private set; }
+        public List<string> Inputs { get; set; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public CustomTokenizer()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
-        public CustomTokenizer(dynamic data = null)
+        public CustomTokenizer(dynamic data)
             : base((object)data)
         {
             if (data == null)

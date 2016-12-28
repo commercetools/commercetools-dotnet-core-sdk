@@ -2,6 +2,9 @@
 
 namespace commercetools.Types
 {
+    /// <summary>
+    /// FieldTypeFactory
+    /// </summary>
     public static class FieldTypeFactory
     {
         /// <summary>

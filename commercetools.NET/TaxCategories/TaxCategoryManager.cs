@@ -49,7 +49,7 @@ namespace commercetools.TaxCategories
         /// <param name="taxCategoryId">TaxCategory ID</param>
         /// <returns>TaxCategory</returns>
         /// <see href="https://dev.commercetools.com/http-api-projects-taxCategories.html#get-taxcategory-by-id"/>
-        public async Task<TaxCategory> GetTaxCategoryByIdAsync(string taxCategoryId)
+        public Task<Response<TaxCategory>> GetTaxCategoryByIdAsync(string taxCategoryId)
         {
             if (string.IsNullOrWhiteSpace(taxCategoryId))
             {
@@ -57,9 +57,7 @@ namespace commercetools.TaxCategories
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", taxCategoryId);
-            dynamic response = await _client.GetAsync(endpoint);
-
-            return new TaxCategory(response);
+            return _client.GetAsync<TaxCategory>(endpoint);
         }
 
         /// <summary>
@@ -71,7 +69,7 @@ namespace commercetools.TaxCategories
         /// <param name="offset">Offset</param>
         /// <returns>TaxCategoryQueryResult</returns>
         /// <see href="https://dev.commercetools.com/http-api-projects-taxCategories.html#query-taxcategories"/>
-        public async Task<TaxCategoryQueryResult> QueryTaxCategoriesAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
+        public Task<Response<TaxCategoryQueryResult>> QueryTaxCategoriesAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
         {
             NameValueCollection values = new NameValueCollection();
 
@@ -95,9 +93,7 @@ namespace commercetools.TaxCategories
                 values.Add("offset", offset.ToString());
             }
 
-            dynamic response = await _client.GetAsync(ENDPOINT_PREFIX, values);
-
-            return new TaxCategoryQueryResult(response);
+            return _client.GetAsync<TaxCategoryQueryResult>(ENDPOINT_PREFIX, values);
         }
 
         /// <summary>
@@ -106,19 +102,27 @@ namespace commercetools.TaxCategories
         /// <param name="taxCategoryDraft">TaxCategoryDraft</param>
         /// <returns>TaxCategory</returns>
         /// <see href="https://dev.commercetools.com/http-api-projects-taxCategories.html#create-taxcategory"/>
-        public async Task<TaxCategory> CreateTaxCategoryAsync(TaxCategoryDraft taxCategoryDraft)
+        public Task<Response<TaxCategory>> CreateTaxCategoryAsync(TaxCategoryDraft taxCategoryDraft)
         {
             if (string.IsNullOrWhiteSpace(taxCategoryDraft.Name))
             {
                 throw new ArgumentException("Name is required");
             }
 
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.NullValueHandling = NullValueHandling.Ignore;
-            string payload = JsonConvert.SerializeObject(taxCategoryDraft, settings);
-            dynamic response = await _client.PostAsync(ENDPOINT_PREFIX, payload);
+            string payload = JsonConvert.SerializeObject(taxCategoryDraft, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            return _client.PostAsync<TaxCategory>(ENDPOINT_PREFIX, payload);
+        }
 
-            return new TaxCategory(response);
+        /// <summary>
+        /// Updates a tax category.
+        /// </summary>
+        /// <param name="taxCategory">Tax category</param>
+        /// <param name="action">The update action to be performed on the tax category.</param>
+        /// <returns>TaxCategory</returns>
+        /// <see href="https://dev.commercetools.com/http-api-projects-taxCategories.html#update-taxcategory"/>
+        public Task<Response<TaxCategory>> UpdateTaxCategoryAsync(TaxCategory taxCategory, UpdateAction action)
+        {
+            return UpdateTaxCategoryAsync(taxCategory.Id, taxCategory.Version, new List<UpdateAction> { action });
         }
 
         /// <summary>
@@ -128,20 +132,20 @@ namespace commercetools.TaxCategories
         /// <param name="actions">The list of update actions to be performed on the tax category.</param>
         /// <returns>TaxCategory</returns>
         /// <see href="https://dev.commercetools.com/http-api-projects-taxCategories.html#update-taxcategory"/>
-        public async Task<TaxCategory> UpdateTaxCategoryAsync(TaxCategory taxCategory, List<JObject> actions)
+        public Task<Response<TaxCategory>> UpdateTaxCategoryAsync(TaxCategory taxCategory, List<UpdateAction> actions)
         {
-            return await UpdateTaxCategoryAsync(taxCategory.Id, taxCategory.Version, actions);
+            return UpdateTaxCategoryAsync(taxCategory.Id, taxCategory.Version, actions);
         }
 
         /// <summary>
         /// Updates a tax category.
         /// </summary>
-        /// <param name="cartId">ID of the tax category</param>
+        /// <param name="taxCategoryId">ID of the tax category</param>
         /// <param name="version">The expected version of the tax category on which the changes should be applied.</param>
         /// <param name="actions">The list of update actions to be performed on the tax category.</param>
         /// <returns>TaxCategory</returns>
         /// <see href="https://dev.commercetools.com/http-api-projects-taxCategories.html#update-taxcategory"/>
-        public async Task<TaxCategory> UpdateTaxCategoryAsync(string taxCategoryId, int version, List<JObject> actions)
+        public Task<Response<TaxCategory>> UpdateTaxCategoryAsync(string taxCategoryId, int version, List<UpdateAction> actions)
         {
             if (string.IsNullOrWhiteSpace(taxCategoryId))
             {
@@ -161,13 +165,11 @@ namespace commercetools.TaxCategories
             JObject data = JObject.FromObject(new
             {
                 version = version,
-                actions = new JArray(actions.ToArray())
+                actions = JArray.FromObject(actions, new JsonSerializer { NullValueHandling = NullValueHandling.Ignore })
             });
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", taxCategoryId);
-            dynamic response = await _client.PostAsync(endpoint, data.ToString());
-
-            return new TaxCategory(response);
+            return _client.PostAsync<TaxCategory>(endpoint, data.ToString());
         }
 
         /// <summary>
@@ -175,9 +177,9 @@ namespace commercetools.TaxCategories
         /// </summary>
         /// <param name="taxCategory">Tax category</param>
         /// <see href="https://dev.commercetools.com/http-api-projects-taxCategories.html#delete-taxcategory"/>
-        public async Task DeleteTaxCategoryAsync(TaxCategory taxCategory)
+        public Task<Response<JObject>> DeleteTaxCategoryAsync(TaxCategory taxCategory)
         {
-            await DeleteTaxCategoryAsync(taxCategory.Id, taxCategory.Version);
+            return DeleteTaxCategoryAsync(taxCategory.Id, taxCategory.Version);
         }
 
         /// <summary>
@@ -186,7 +188,7 @@ namespace commercetools.TaxCategories
         /// <param name="taxCategoryId">Tax category ID</param>
         /// <param name="version">Tax category version</param>
         /// <see href="https://dev.commercetools.com/http-api-projects-taxCategories.html#delete-taxcategory"/>
-        public async Task DeleteTaxCategoryAsync(string taxCategoryId, int version)
+        public Task<Response<JObject>> DeleteTaxCategoryAsync(string taxCategoryId, int version)
         {
             if (string.IsNullOrWhiteSpace(taxCategoryId))
             {
@@ -204,7 +206,7 @@ namespace commercetools.TaxCategories
             };
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", taxCategoryId);
-            await _client.DeleteAsync(endpoint, values);
+            return _client.DeleteAsync<JObject>(endpoint, values);
         }
 
         #endregion

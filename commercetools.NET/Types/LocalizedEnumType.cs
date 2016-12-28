@@ -15,17 +15,25 @@ namespace commercetools.Types
         #region Properties
 
         [JsonProperty(PropertyName = "values")]
-        public List<LocalizedEnumValue> Values { get; private set; }
+        public List<LocalizedEnumValue> Values { get; set; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public LocalizedEnumType()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Returns a JSON representation of this instance.
         /// </summary>
         /// <returns>JObject</returns>
-        public LocalizedEnumType(dynamic data = null)
+        public LocalizedEnumType(dynamic data)
             : base((object)data)
         {
             if (data == null)

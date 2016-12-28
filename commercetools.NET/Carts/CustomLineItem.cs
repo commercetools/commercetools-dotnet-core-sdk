@@ -5,6 +5,7 @@ using commercetools.Common;
 using commercetools.CustomFields;
 using commercetools.Orders;
 using commercetools.Products;
+using commercetools.TaxCategories;
 
 using Newtonsoft.Json;
 
@@ -54,13 +55,6 @@ namespace commercetools.Carts
         #endregion
 
         #region Constructors
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public CustomLineItem()
-        {
-        }
 
         /// <summary>
         /// Initializes this instance with JSON data from an API response.

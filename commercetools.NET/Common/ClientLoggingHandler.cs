@@ -46,7 +46,9 @@ namespace commercetools.Common
 
             if (response.Content != null)
             {
-                sb.AppendLine(await response.Content.ReadAsStringAsync());
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                sb.AppendLine(responseContent);
             }
 
             sb.AppendLine();

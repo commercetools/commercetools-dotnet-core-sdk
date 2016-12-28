@@ -72,7 +72,7 @@ namespace commercetools.Reviews
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public Review(dynamic data = null)
+        public Review(dynamic data)
         {
             if (data == null)
             {

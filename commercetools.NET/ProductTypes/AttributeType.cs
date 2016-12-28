@@ -20,10 +20,17 @@ namespace commercetools.ProductTypes
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public AttributeType()
+        {
+        }
+
+        /// <summary>
         /// Returns a JSON representation of this instance.
         /// </summary>
         /// <returns>JObject</returns>
-        protected AttributeType(dynamic data = null)
+        protected AttributeType(dynamic data)
         {
             if (data == null)
             {

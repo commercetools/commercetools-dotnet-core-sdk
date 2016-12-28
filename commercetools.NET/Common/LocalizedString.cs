@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -21,10 +20,19 @@ namespace commercetools.Common
 
         #region Constructors
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public LocalizedString()
+        {
+            this.Values = new Dictionary<string, object>();
+        }
+
+        /// <summary>
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public LocalizedString(dynamic data = null)
+        public LocalizedString(dynamic data)
         {
             this.Values = new Dictionary<string, object>();
 

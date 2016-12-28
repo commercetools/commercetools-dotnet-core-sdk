@@ -29,6 +29,10 @@ Global
 		{D6850CFD-FD5D-40B6-B15C-AB8AE59AE7CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6850CFD-FD5D-40B6-B15C-AB8AE59AE7CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6850CFD-FD5D-40B6-B15C-AB8AE59AE7CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17975023-A412-48E6-BB10-462A7F06C87E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17975023-A412-48E6-BB10-462A7F06C87E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17975023-A412-48E6-BB10-462A7F06C87E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17975023-A412-48E6-BB10-462A7F06C87E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

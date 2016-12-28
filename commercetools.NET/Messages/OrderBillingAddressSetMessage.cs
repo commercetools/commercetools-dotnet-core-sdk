@@ -12,6 +12,9 @@ namespace commercetools.Messages
     {
         #region Properties
 
+        /// <summary>
+        /// Address
+        /// </summary>
         [JsonProperty(PropertyName = "address")]
         public Address Address { get; private set; }
 
@@ -23,7 +26,7 @@ namespace commercetools.Messages
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public OrderBillingAddressSetMessage(dynamic data = null)
+        public OrderBillingAddressSetMessage(dynamic data)
             : base((object)data)
         {
             if (data == null)
@@ -37,3 +40,4 @@ namespace commercetools.Messages
         #endregion
     }
 }
+

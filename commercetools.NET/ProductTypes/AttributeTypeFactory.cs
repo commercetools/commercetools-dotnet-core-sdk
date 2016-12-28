@@ -2,6 +2,9 @@
 
 namespace commercetools.ProductTypes
 {
+    /// <summary>
+    /// AttributeTypeFactory
+    /// </summary>
     public static class AttributeTypeFactory
     {
         /// <summary>

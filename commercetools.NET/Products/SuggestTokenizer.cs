@@ -1,6 +1,4 @@
-﻿using System;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace commercetools.Products
 {
@@ -20,9 +18,16 @@ namespace commercetools.Products
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public SuggestTokenizer()
+        {
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
-        protected SuggestTokenizer(dynamic data = null)
+        protected SuggestTokenizer(dynamic data)
         {
             if (data == null)
             {

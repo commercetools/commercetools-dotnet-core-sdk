@@ -1,6 +1,4 @@
-﻿using System;
-
-using commercetools.Common;
+﻿using commercetools.Common;
 
 using Newtonsoft.Json;
 

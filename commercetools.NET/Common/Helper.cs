@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -56,6 +55,12 @@ namespace commercetools.Common
 
         #region Object creation
 
+        /// <summary>
+        /// Object activaator delegate
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public delegate T ObjectActivator<T>(params object[] args);
 
         /// <summary>
@@ -87,10 +92,34 @@ namespace commercetools.Common
         }
 
         /// <summary>
+        /// Gets the constructor for a type where there is a parameter called 'data' of type 'object'.
+        /// </summary>
+        /// <param name="type">Type</param>
+        /// <returns>ConstructorInfo object, or null if not found</returns>
+        public static ConstructorInfo GetConstructorWithDataParameter(Type type)
+        {
+            ConstructorInfo constructor = null;
+            ConstructorInfo[] constructors = type.GetConstructors();
+
+            foreach (ConstructorInfo thisConstructor in constructors)
+            {
+                ParameterInfo[] parameters = thisConstructor.GetParameters();
+
+                if (parameters.Length == 1 && parameters[0].Name.Equals("data") && parameters[0].ParameterType == typeof(object))
+                {
+                    constructor = thisConstructor;
+                    break;
+                }
+            }
+
+            return constructor;
+        }
+
+        /// <summary>
         /// Gets a list from an array of JSON objects.
         /// </summary>
         /// <remarks>
-        /// For instances of T to be created, T must have a constructor that accepts one parameter: "data" of type System.Object
+        /// For instances of T to be created where T is not a primitive type (or a DateTime, or a decimal, or a string), T must have a constructor that accepts only one parameter: "data" of type System.Object
         /// </remarks>
         /// <typeparam name="T">Type</typeparam>
         /// <param name="jArray">Array of JSON objects</param>
@@ -103,30 +132,29 @@ namespace commercetools.Common
             }
 
             List<T> list = new List<T>();
-
             Type type = typeof(T);
-            ConstructorInfo myConstructorInfo = null;
-            ConstructorInfo[] constructorInfoList = type.GetConstructors();
 
-            foreach (ConstructorInfo constructorInfo in constructorInfoList)
+            if (type.IsPrimitive || type == typeof(DateTime) || type == typeof(decimal) || type == typeof(string))
             {
-                ParameterInfo[] parameters = constructorInfo.GetParameters();
-
-                if (parameters.Length == 1 && parameters[0].Name.Equals("data") && parameters[0].ParameterType == typeof(object))
-                {
-                    myConstructorInfo = constructorInfo;
-                    break;
-                }
-            }
-
-            if (myConstructorInfo != null)
-            {
-                Helper.ObjectActivator<T> activator = Helper.GetActivator<T>(myConstructorInfo);
-
                 foreach (dynamic data in jArray)
                 {
-                    T listItem = activator(data);
+                    T listItem = (T)data;
                     list.Add(listItem);
+                }
+            }
+            else
+            {
+                ConstructorInfo constructor = Helper.GetConstructorWithDataParameter(type);
+
+                if (constructor != null)
+                {
+                    Helper.ObjectActivator<T> activator = Helper.GetActivator<T>(constructor);
+
+                    foreach (dynamic data in jArray)
+                    {
+                        T listItem = activator(data);
+                        list.Add(listItem);
+                    }
                 }
             }
 

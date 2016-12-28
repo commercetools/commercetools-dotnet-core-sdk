@@ -18,66 +18,76 @@ namespace commercetools.Carts
         #region Properties
 
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         [JsonProperty(PropertyName = "version")]
-        public int Version { get; set; }
+        public int Version { get; private set; }
 
         [JsonProperty(PropertyName = "createdAt")]
-        public DateTime? CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; private set; }
 
         [JsonProperty(PropertyName = "lastModifiedAt")]
-        public DateTime? LastModifiedAt { get; set; }
+        public DateTime? LastModifiedAt { get; private set; }
 
         [JsonProperty(PropertyName = "customerId")]
-        public string CustomerId { get; set; }
+        public string CustomerId { get; private set; }
 
         [JsonProperty(PropertyName = "customerEmail")]
-        public string CustomerEmail { get; set; }
+        public string CustomerEmail { get; private set; }
+
+        [JsonProperty(PropertyName = "anonymousId")]
+        public string AnonymousId { get; private set; }
 
         [JsonProperty(PropertyName = "lineItems")]
-        public List<LineItem> LineItems { get; set; }
+        public List<LineItem> LineItems { get; private set; }
 
         [JsonProperty(PropertyName = "customLineItems")]
-        public List<CustomLineItem> CustomLineItems { get; set; }
+        public List<CustomLineItem> CustomLineItems { get; private set; }
 
         [JsonProperty(PropertyName = "totalPrice")]
-        public Money TotalPrice { get; set; }
+        public Money TotalPrice { get; private set; }
 
         [JsonProperty(PropertyName = "taxedPrice")]
-        public TaxedPrice TaxedPrice { get; set; }
+        public TaxedPrice TaxedPrice { get; private set; }
 
         [JsonProperty(PropertyName = "cartState")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public CartState? CartState { get; set; }
+        public CartState? CartState { get; private set; }
 
         [JsonProperty(PropertyName = "shippingAddress")]
-        public Address ShippingAddress { get; set; }
+        public Address ShippingAddress { get; private set; }
 
         [JsonProperty(PropertyName = "billingAddress")]
-        public Address BillingAddress { get; set; }
+        public Address BillingAddress { get; private set; }
 
         [JsonProperty(PropertyName = "inventoryMode")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public InventoryMode? InventoryMode { get; set; }
+        public InventoryMode? InventoryMode { get; private set; }
+
+        [JsonProperty(PropertyName = "taxMode")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public TaxMode? TaxMode { get; private set; }
 
         [JsonProperty(PropertyName = "customerGroup")]
-        public Reference CustomerGroup { get; set; }
+        public Reference CustomerGroup { get; private set; }
 
         [JsonProperty(PropertyName = "country")]
-        public string Country { get; set; }
+        public string Country { get; private set; }
 
         [JsonProperty(PropertyName = "shippingInfo")]
-        public ShippingInfo ShippingInfo { get; set; }
+        public ShippingInfo ShippingInfo { get; private set; }
 
         [JsonProperty(PropertyName = "discountCodes")]
-        public List<DiscountCodeInfo> DiscountCodes { get; set; }
+        public List<DiscountCodeInfo> DiscountCodes { get; private set; }
 
         [JsonProperty(PropertyName = "custom")]
-        public CustomFields.CustomFields Custom { get; set; }
+        public CustomFields.CustomFields Custom { get; private set; }
 
         [JsonProperty(PropertyName = "paymentInfo")]
-        public PaymentInfo PaymentInfo { get; set; }
+        public PaymentInfo PaymentInfo { get; private set; }
+
+        [JsonProperty(PropertyName = "locale")]
+        public string Locale { get; private set; }
 
         #endregion
 
@@ -96,9 +106,11 @@ namespace commercetools.Carts
 
             CartState cartState;
             InventoryMode inventoryMode;
+            TaxMode taxMode;
 
             string cartStateStr = (data.cartState != null ? data.cartState.ToString() : string.Empty);
             string inventoryModeStr = (data.inventoryMode != null ? data.inventoryMode.ToString() : string.Empty);
+            string taxModeStr = (data.taxMode != null ? data.taxMode.ToString() : string.Empty);
 
             this.Id = data.id;
             this.Version = data.version;
@@ -106,6 +118,7 @@ namespace commercetools.Carts
             this.LastModifiedAt = data.lastModifiedAt;
             this.CustomerId = data.customerId;
             this.CustomerEmail = data.customerEmail;
+            this.AnonymousId = data.anonymousId;
             this.LineItems = Helper.GetListFromJsonArray<LineItem>(data.lineItems);
             this.CustomLineItems = Helper.GetListFromJsonArray<CustomLineItem>(data.customLineItems);
             this.TotalPrice = new Money(data.totalPrice);
@@ -114,12 +127,14 @@ namespace commercetools.Carts
             this.ShippingAddress = new Address(data.shippingAddress);
             this.BillingAddress = new Address(data.billingAddress);
             this.InventoryMode = Enum.TryParse(inventoryModeStr, out inventoryMode) ? (InventoryMode?)inventoryMode : null;
+            this.TaxMode = Enum.TryParse(taxModeStr, out taxMode) ? (TaxMode?)taxMode : null;
             this.CustomerGroup = new Reference(data.customerGroup);
             this.Country = data.country;
             this.ShippingInfo = new ShippingInfo(data.shippingInfo);
             this.DiscountCodes = Helper.GetListFromJsonArray<DiscountCodeInfo>(data.discountCodes);
             this.Custom = new CustomFields.CustomFields(data.custom);
             this.PaymentInfo = new PaymentInfo(data.paymentInfo);
+            this.Locale = data.locale;
         }
 
         #endregion

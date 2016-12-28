@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using commercetools.Common;
 using commercetools.CustomFields;
 
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace commercetools.Carts
 {

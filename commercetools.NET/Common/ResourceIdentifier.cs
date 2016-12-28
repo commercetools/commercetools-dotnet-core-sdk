@@ -1,8 +1,4 @@
-﻿using System;
-
-using commercetools.Types;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace commercetools.Common
@@ -31,10 +27,17 @@ namespace commercetools.Common
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public ResourceIdentifier()
+        {
+        }
+
+        /// <summary>
         /// Creates an FieldType using JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public ResourceIdentifier(dynamic data = null)
+        public ResourceIdentifier(dynamic data)
         {
             if (data == null)
             {

@@ -2,6 +2,9 @@
 
 namespace commercetools.Categories
 {
+    /// <summary>
+    /// Extensions
+    /// </summary>
     public static class Extensions
     {
         /// <summary>

@@ -25,7 +25,7 @@ namespace commercetools.Messages
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public MessageQueryResult(dynamic data = null)
+        public MessageQueryResult(dynamic data)
             : base((object)data)
         {
             if (data == null)

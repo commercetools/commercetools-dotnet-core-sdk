@@ -9,10 +9,18 @@
         #region Constructors
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public LocalizedStringType()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Returns a JSON representation of this instance.
         /// </summary>
         /// <returns>JObject</returns>
-        public LocalizedStringType(dynamic data = null)
+        public LocalizedStringType(dynamic data)
             : base((object)data)
         {
         }

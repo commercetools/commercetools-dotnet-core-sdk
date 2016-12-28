@@ -1,7 +1,5 @@
 ﻿using System;
 
-using commercetools.Common;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 

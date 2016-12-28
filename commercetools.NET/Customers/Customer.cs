@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using commercetools.Common;
-using commercetools.CustomFields;
 
 using Newtonsoft.Json;
 
@@ -64,8 +63,14 @@ namespace commercetools.Customers
         [JsonProperty(PropertyName = "defaultShippingAddressId")]
         public string DefaultShippingAddressId { get; private set; }
 
+        [JsonProperty(PropertyName = "shippingAddressIds")]
+        public List<string> ShippingAddressIds { get; private set; }
+
         [JsonProperty(PropertyName = "defaultBillingAddressId")]
         public string DefaultBillingAddressId { get; private set; }
+
+        [JsonProperty(PropertyName = "billingAddressIds")]
+        public List<string> BillingAddressIds { get; private set; }
 
         [JsonProperty(PropertyName = "isEmailVerified")]
         public bool IsEmailVerified { get; private set; }
@@ -90,7 +95,7 @@ namespace commercetools.Customers
         /// Initializes this instance with JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        public Customer(dynamic data = null)
+        public Customer(dynamic data)
         {
             if (data == null)
             {
@@ -113,7 +118,9 @@ namespace commercetools.Customers
             this.VatId = data.vatId;
             this.Addresses = Helper.GetListFromJsonArray<Address>(data.addresses);
             this.DefaultShippingAddressId = data.defaultShippingAddressId;
+            this.ShippingAddressIds = Helper.GetListFromJsonArray<string>(data.shippingAddressIds);
             this.DefaultBillingAddressId = data.defaultBillingAddressId;
+            this.BillingAddressIds = Helper.GetListFromJsonArray<string>(data.billingAddressIds);
             this.IsEmailVerified = data.isEmailVerified;
             this.ExternalId = data.externalId;
             this.CustomerGroup = new Reference(data.customerGroup);
