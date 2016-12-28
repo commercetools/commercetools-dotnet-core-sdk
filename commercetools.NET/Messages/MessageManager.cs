@@ -44,7 +44,7 @@ namespace commercetools.Messages
         /// <param name="messageId">Message ID</param>
         /// <see href="http://dev.commercetools.com/http-api-projects-messages.html#get-message-by-id"/>
         /// <returns>Message</returns>
-        public async Task<Response<Message>> GetMessageByIdAsync(string messageId)
+        public Task<Response<Message>> GetMessageByIdAsync(string messageId)
         {
             if (string.IsNullOrWhiteSpace(messageId))
             {
@@ -52,7 +52,7 @@ namespace commercetools.Messages
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", messageId);
-            return await _client.GetAsync<Message>(endpoint);
+            return _client.GetAsync<Message>(endpoint);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace commercetools.Messages
         /// <param name="limit">Limit</param>
         /// <param name="offset">Offset</param>
         /// <returns>MessageQueryResult</returns>
-        public async Task<Response<MessageQueryResult>> QueryMessagesAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
+        public Task<Response<MessageQueryResult>> QueryMessagesAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
         {
             NameValueCollection values = new NameValueCollection();
 
@@ -87,7 +87,7 @@ namespace commercetools.Messages
                 values.Add("offset", offset.ToString());
             }
 
-            return await _client.GetAsync<MessageQueryResult>(ENDPOINT_PREFIX, values);
+            return _client.GetAsync<MessageQueryResult>(ENDPOINT_PREFIX, values);
         }
 
         #endregion

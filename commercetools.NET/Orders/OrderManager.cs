@@ -49,7 +49,7 @@ namespace commercetools.Orders
         /// <param name="orderId">Order ID</param>
         /// <returns>Order</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-orders.html#get-order-by-id"/>
-        public async Task<Response<Order>> GetOrderByIdAsync(string orderId)
+        public Task<Response<Order>> GetOrderByIdAsync(string orderId)
         {
             if (string.IsNullOrWhiteSpace(orderId))
             {
@@ -57,7 +57,7 @@ namespace commercetools.Orders
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", orderId);
-            return await _client.GetAsync<Order>(endpoint);
+            return _client.GetAsync<Order>(endpoint);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace commercetools.Orders
         /// <param name="offset">Offset</param>
         /// <returns>OrderQueryResult</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-orders.html#query-orders"/>
-        public async Task<Response<OrderQueryResult>> QueryOrdersAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
+        public Task<Response<OrderQueryResult>> QueryOrdersAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
         {
             NameValueCollection values = new NameValueCollection();
 
@@ -93,7 +93,7 @@ namespace commercetools.Orders
                 values.Add("offset", offset.ToString());
             }
 
-            return await _client.GetAsync<OrderQueryResult>(ENDPOINT_PREFIX, values);
+            return _client.GetAsync<OrderQueryResult>(ENDPOINT_PREFIX, values);
         }
 
         /// <summary>
@@ -102,17 +102,15 @@ namespace commercetools.Orders
         /// <param name="draft">OrderFromCartDraft</param>
         /// <returns>Order</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-orders.html#create-order-from-cart"/>
-        public async Task<Response<Order>> CreateOrderFromCartAsync(OrderFromCartDraft draft)
+        public Task<Response<Order>> CreateOrderFromCartAsync(OrderFromCartDraft draft)
         {
             if (draft == null)
             {
                 throw new ArgumentException("draft is required");
             }
 
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.NullValueHandling = NullValueHandling.Ignore;
-            string payload = JsonConvert.SerializeObject(draft, settings);
-            return await _client.PostAsync<Order>(ENDPOINT_PREFIX, payload);
+            string payload = JsonConvert.SerializeObject(draft, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            return _client.PostAsync<Order>(ENDPOINT_PREFIX, payload);
         }
 
         /// <summary>
@@ -122,9 +120,9 @@ namespace commercetools.Orders
         /// <param name="action">The update action to be performed on the order.</param>
         /// <returns>Order</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-orders.html#update-order"/>
-        public async Task<Response<Order>> UpdateOrderAsync(Order order, UpdateAction action)
+        public Task<Response<Order>> UpdateOrderAsync(Order order, UpdateAction action)
         {
-            return await UpdateOrderAsync(order.Id, order.Version, new List<UpdateAction> { action });
+            return UpdateOrderAsync(order.Id, order.Version, new List<UpdateAction> { action });
         }
 
         /// <summary>
@@ -134,9 +132,9 @@ namespace commercetools.Orders
         /// <param name="actions">The list of update actions to be performed on the order.</param>
         /// <returns>Order</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-orders.html#update-order"/>
-        public async Task<Response<Order>> UpdateOrderAsync(Order order, List<UpdateAction> actions)
+        public Task<Response<Order>> UpdateOrderAsync(Order order, List<UpdateAction> actions)
         {
-            return await UpdateOrderAsync(order.Id, order.Version, actions);
+            return UpdateOrderAsync(order.Id, order.Version, actions);
         }
 
         /// <summary>
@@ -147,7 +145,7 @@ namespace commercetools.Orders
         /// <param name="actions">The list of update actions to be performed on the order.</param>
         /// <returns>Order</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-orders.html#update-order"/>
-        public async Task<Response<Order>> UpdateOrderAsync(string orderId, int version, List<UpdateAction> actions)
+        public Task<Response<Order>> UpdateOrderAsync(string orderId, int version, List<UpdateAction> actions)
         {
             if (string.IsNullOrWhiteSpace(orderId))
             {
@@ -167,11 +165,11 @@ namespace commercetools.Orders
             JObject data = JObject.FromObject(new
             {
                 version = version,
-                actions = actions
+                actions = JArray.FromObject(actions, new JsonSerializer { NullValueHandling = NullValueHandling.Ignore })
             });
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", orderId);
-            return await _client.PostAsync<Order>(endpoint, data.ToString());
+            return _client.PostAsync<Order>(endpoint, data.ToString());
         }
 
         /// <summary>
@@ -179,9 +177,9 @@ namespace commercetools.Orders
         /// </summary>
         /// <param name="order">Order</param>
         /// <see href="http://dev.commercetools.com/http-api-projects-orders.html#delete-order"/>
-        public async Task<Response<JObject>> DeleteOrderAsync(Order order)
+        public Task<Response<JObject>> DeleteOrderAsync(Order order)
         {
-            return await DeleteOrderAsync(order.Id, order.Version);
+            return DeleteOrderAsync(order.Id, order.Version);
         }
 
         /// <summary>
@@ -190,7 +188,7 @@ namespace commercetools.Orders
         /// <param name="orderId">Order ID</param>
         /// <param name="version">Order version</param>
         /// <see href="http://dev.commercetools.com/http-api-projects-orders.html#delete-order"/>
-        public async Task<Response<JObject>> DeleteOrderAsync(string orderId, int version)
+        public Task<Response<JObject>> DeleteOrderAsync(string orderId, int version)
         {
             if (string.IsNullOrWhiteSpace(orderId))
             {
@@ -208,7 +206,7 @@ namespace commercetools.Orders
             };
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", orderId);
-            return await _client.DeleteAsync<JObject>(endpoint, values);
+            return _client.DeleteAsync<JObject>(endpoint, values);
         }
 
         #endregion

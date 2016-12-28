@@ -185,7 +185,7 @@ namespace commercetools.Tests
         /// <summary>
         /// Tests the ProductManager.UpdateProductAsync method.
         /// </summary>
-        /// <see cref="ProductManager.UpdateProductAsync"/>
+        /// <see cref="ProductManager.UpdateProductAsync(commercetools.Products.Product, System.Collections.Generic.List{commercetools.Common.UpdateAction}, string, string, Guid, Guid)"/>
         [Test]
         public async Task ShouldUpdateProductAsync()
         {

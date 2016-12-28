@@ -64,7 +64,7 @@ namespace commercetools.ProductProjectionSearch
         /// <param name="priceChannel">Enables price selection. Can only be used in conjunction with the priceCurrency parameter</param>
         /// <returns>ProductProjectionQueryResult object</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-products-search.html#search-productprojections"/>
-        public async Task<Response<ProductProjectionQueryResult>> SearchProductProjectionsAsync(
+        public Task<Response<ProductProjectionQueryResult>> SearchProductProjectionsAsync(
             string text = null, 
             string language = null, 
             bool fuzzy = false,
@@ -176,7 +176,7 @@ namespace commercetools.ProductProjectionSearch
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, qs.ToString());
-            return await _client.GetAsync<ProductProjectionQueryResult>(endpoint);
+            return _client.GetAsync<ProductProjectionQueryResult>(endpoint);
         }
 
         #endregion

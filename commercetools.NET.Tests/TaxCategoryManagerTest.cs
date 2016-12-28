@@ -146,7 +146,7 @@ namespace commercetools.Tests
             changeNameAction.SetProperty("name", newName);
 
             GenericAction setDescriptionAction = new GenericAction("setDescription");
-            changeNameAction.SetProperty("description", newDescription);
+            setDescriptionAction.SetProperty("description", newDescription);
 
             List<UpdateAction> actions = new List<UpdateAction>();
             actions.Add(changeNameAction);

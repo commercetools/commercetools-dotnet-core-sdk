@@ -1,6 +1,7 @@
 ﻿using commercetools.Common;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace commercetools.Orders.UpdateActions
 {
@@ -22,6 +23,7 @@ namespace commercetools.Orders.UpdateActions
         /// Shipment state
         /// </summary>
         [JsonProperty(PropertyName = "shipmentState")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public ReturnShipmentState ShipmentState { get; set; }
 
         #endregion

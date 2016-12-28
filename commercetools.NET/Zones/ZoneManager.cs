@@ -49,7 +49,7 @@ namespace commercetools.Zones
         /// <param name="zoneId">Zone ID</param>
         /// <returns>Zone</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-zones.html#get-zone-by-id"/>
-        public async Task<Response<Zone>> GetZoneByIdAsync(string zoneId)
+        public Task<Response<Zone>> GetZoneByIdAsync(string zoneId)
         {
             if (string.IsNullOrWhiteSpace(zoneId))
             {
@@ -57,7 +57,7 @@ namespace commercetools.Zones
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", zoneId);
-            return await _client.GetAsync<Zone>(endpoint);
+            return _client.GetAsync<Zone>(endpoint);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace commercetools.Zones
         /// <param name="offset">Offset</param>
         /// <returns>ZoneQueryResult</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-zones.html#query-zones"/>
-        public async Task<Response<ZoneQueryResult>> QueryZonesAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
+        public Task<Response<ZoneQueryResult>> QueryZonesAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
         {
             NameValueCollection values = new NameValueCollection();
 
@@ -93,7 +93,7 @@ namespace commercetools.Zones
                 values.Add("offset", offset.ToString());
             }
 
-            return await _client.GetAsync<ZoneQueryResult>(ENDPOINT_PREFIX, values);
+            return _client.GetAsync<ZoneQueryResult>(ENDPOINT_PREFIX, values);
         }
 
         /// <summary>
@@ -102,17 +102,15 @@ namespace commercetools.Zones
         /// <param name="zoneDraft">Zone Draft</param>
         /// <returns>Zone</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-zones.html#create-zone"/>
-        public async Task<Response<Zone>> CreateZoneAsync(ZoneDraft zoneDraft)
+        public Task<Response<Zone>> CreateZoneAsync(ZoneDraft zoneDraft)
         {
             if (string.IsNullOrWhiteSpace(zoneDraft.Name))
             {
                 throw new ArgumentException("Name is required");
             }
 
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.NullValueHandling = NullValueHandling.Ignore;
-            string payload = JsonConvert.SerializeObject(zoneDraft, settings);
-            return await _client.PostAsync<Zone>(ENDPOINT_PREFIX, payload);
+            string payload = JsonConvert.SerializeObject(zoneDraft, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            return _client.PostAsync<Zone>(ENDPOINT_PREFIX, payload);
         }
 
         /// <summary>
@@ -122,9 +120,9 @@ namespace commercetools.Zones
         /// <param name="action">The update action to be performed on the zone.</param>
         /// <returns>Zone</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-zones.html#update-zone"/>
-        public async Task<Response<Zone>> UpdateZoneAsync(Zone zone, UpdateAction action)
+        public Task<Response<Zone>> UpdateZoneAsync(Zone zone, UpdateAction action)
         {
-            return await UpdateZoneAsync(zone.Id, zone.Version, new List<UpdateAction> { action });
+            return UpdateZoneAsync(zone.Id, zone.Version, new List<UpdateAction> { action });
         }
 
         /// <summary>
@@ -134,9 +132,9 @@ namespace commercetools.Zones
         /// <param name="actions">The list of update actions to be performed on the zone.</param>
         /// <returns>Zone</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-zones.html#update-zone"/>
-        public async Task<Response<Zone>> UpdateZoneAsync(Zone zone, List<UpdateAction> actions)
+        public Task<Response<Zone>> UpdateZoneAsync(Zone zone, List<UpdateAction> actions)
         {
-            return await UpdateZoneAsync(zone.Id, zone.Version, actions);
+            return UpdateZoneAsync(zone.Id, zone.Version, actions);
         }
 
         /// <summary>
@@ -147,7 +145,7 @@ namespace commercetools.Zones
         /// <param name="actions">The list of update actions to be performed on the zone.</param>
         /// <returns>Zone</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-zones.html#update-zone"/>
-        public async Task<Response<Zone>> UpdateZoneAsync(string zoneId, int version, List<UpdateAction> actions)
+        public Task<Response<Zone>> UpdateZoneAsync(string zoneId, int version, List<UpdateAction> actions)
         {
             if (string.IsNullOrWhiteSpace(zoneId))
             {
@@ -167,11 +165,11 @@ namespace commercetools.Zones
             JObject data = JObject.FromObject(new
             {
                 version = version,
-                actions = new JArray(actions.ToArray())
+                actions = JArray.FromObject(actions, new JsonSerializer { NullValueHandling = NullValueHandling.Ignore })
             });
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", zoneId);
-            return await _client.PostAsync<Zone>(endpoint, data.ToString());
+            return _client.PostAsync<Zone>(endpoint, data.ToString());
         }
 
         /// <summary>
@@ -179,9 +177,9 @@ namespace commercetools.Zones
         /// </summary>
         /// <param name="zone">Zone</param>
         /// <see href="http://dev.commercetools.com/http-api-projects-zones.html#delete-zone"/>
-        public async Task<Response<JObject>> DeleteZoneAsync(Zone zone)
+        public Task<Response<JObject>> DeleteZoneAsync(Zone zone)
         {
-            return await DeleteZoneAsync(zone.Id, zone.Version);
+            return DeleteZoneAsync(zone.Id, zone.Version);
         }
 
         /// <summary>
@@ -190,7 +188,7 @@ namespace commercetools.Zones
         /// <param name="zoneId">Zone ID</param>
         /// <param name="version">Zone version</param>
         /// <see href="http://dev.commercetools.com/http-api-projects-zones.html#delete-zone"/>
-        public async Task<Response<JObject>> DeleteZoneAsync(string zoneId, int version)
+        public Task<Response<JObject>> DeleteZoneAsync(string zoneId, int version)
         {
             if (string.IsNullOrWhiteSpace(zoneId))
             {
@@ -208,7 +206,7 @@ namespace commercetools.Zones
             };
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", zoneId);
-            return await _client.DeleteAsync<JObject>(endpoint, values);
+            return _client.DeleteAsync<JObject>(endpoint, values);
         }
 
         #endregion

@@ -444,7 +444,7 @@ namespace commercetools.Tests
         /// Creates a test shipping method draft.
         /// </summary>
         /// <returns>ShippingMethodDraft</returns>
-        public static ZoneDraft GetTestZoneDraft(Project.Project project, List<Location> locations = null)
+        public static ZoneDraft GetTestZoneDraft(List<Location> locations = null)
         {
             string name = string.Concat("Test Zone ", Helper.GetRandomString(10));
 
@@ -453,17 +453,6 @@ namespace commercetools.Tests
             if (locations != null)
             {
                 zoneDraft.Locations = locations;
-            }
-            else
-            {
-                zoneDraft.Locations = new List<Location>();
-
-                foreach (string country in project.Countries)
-                {
-                    Location location = new Location();
-                    location.Country = country;
-                    zoneDraft.Locations.Add(location);
-                }
             }
            
             return zoneDraft;

@@ -40,7 +40,7 @@ namespace commercetools.Tests
 
             for (int i = 0; i < 5; i++)
             {
-                ZoneDraft zoneDraft = Helper.GetTestZoneDraft(_project);
+                ZoneDraft zoneDraft = Helper.GetTestZoneDraft();
                 Task<Response<Zone>> zoneTask = _client.Zones().CreateZoneAsync(zoneDraft);
                 zoneTask.Wait();
                 Assert.IsTrue(zoneTask.Result.Success);
@@ -111,7 +111,7 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldCreateAndDeleteZoneAsync()
         {
-            ZoneDraft zoneDraft = Helper.GetTestZoneDraft(_project);
+            ZoneDraft zoneDraft = Helper.GetTestZoneDraft();
             Response<Zone> response = await _client.Zones().CreateZoneAsync(zoneDraft);
             Assert.IsTrue(response.Success);
 
@@ -141,7 +141,7 @@ namespace commercetools.Tests
             changeNameAction.SetProperty("name", newName);
 
             GenericAction setDescriptionAction = new GenericAction("setDescription");
-            changeNameAction.SetProperty("description", newDescription);
+            setDescriptionAction.SetProperty("description", newDescription);
 
             List<UpdateAction> actions = new List<UpdateAction>();
             actions.Add(changeNameAction);

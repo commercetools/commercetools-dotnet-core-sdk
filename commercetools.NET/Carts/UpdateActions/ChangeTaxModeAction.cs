@@ -2,6 +2,7 @@
 using commercetools.CustomFields;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace commercetools.Carts.UpdateActions
 {
@@ -20,6 +21,7 @@ namespace commercetools.Carts.UpdateActions
         /// TaxMode
         /// </summary>
         [JsonProperty(PropertyName = "taxMode")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public TaxMode TaxMode { get; set; }
 
         #endregion

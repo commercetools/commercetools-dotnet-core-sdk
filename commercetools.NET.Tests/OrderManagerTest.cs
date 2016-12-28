@@ -39,6 +39,7 @@ namespace commercetools.Tests
         private ShippingMethod _testShippingMethod;
         private TaxCategory _testTaxCategory;
         private Zone _testZone;
+        private bool _createdTestZone = false;
 
         /// <summary>
         /// Test setup
@@ -101,12 +102,25 @@ namespace commercetools.Tests
             _testTaxCategory = taxCategoryTask.Result.Result;
             Assert.NotNull(_testTaxCategory.Id);
 
-            ZoneDraft zoneDraft  = Helper.GetTestZoneDraft(_project);
-            Task<Response<Zone>> zoneTask = _client.Zones().CreateZoneAsync(zoneDraft);
-            zoneTask.Wait();
-            Assert.IsTrue(zoneTask.Result.Success);
+            Task<Response<ZoneQueryResult>> zoneQueryResultTask = _client.Zones().QueryZonesAsync();
+            zoneQueryResultTask.Wait();
 
-            _testZone = zoneTask.Result.Result;
+            if (zoneQueryResultTask.Result.Success && zoneQueryResultTask.Result.Result.Results.Count > 0)
+            {
+                _testZone = zoneQueryResultTask.Result.Result.Results[0];
+                _createdTestZone = false;
+            }
+            else
+            {
+                ZoneDraft zoneDraft = Helper.GetTestZoneDraft();
+                Task<Response<Zone>> zoneTask = _client.Zones().CreateZoneAsync(zoneDraft);
+                zoneTask.Wait();
+                Assert.IsTrue(zoneTask.Result.Success);
+
+                _testZone = zoneTask.Result.Result;
+                _createdTestZone = true;
+            }
+
             Assert.NotNull(_testZone.Id);
 
             ShippingMethodDraft shippingMethodDraft = Helper.GetTestShippingMethodDraft(_project, _testTaxCategory, _testZone);
@@ -188,8 +202,11 @@ namespace commercetools.Tests
             task = _client.TaxCategories().DeleteTaxCategoryAsync(_testTaxCategory);
             task.Wait();
 
-            task = _client.Zones().DeleteZoneAsync(_testZone);
-            task.Wait();
+            if (_createdTestZone)
+            {
+                task = _client.Zones().DeleteZoneAsync(_testZone);
+                task.Wait();
+            }
         }
 
         /// <summary>

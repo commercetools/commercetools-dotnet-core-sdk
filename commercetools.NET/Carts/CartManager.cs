@@ -50,7 +50,7 @@ namespace commercetools.Carts
         /// <param name="cartId">Cart ID</param>
         /// <see href="http://dev.commercetools.com/http-api-projects-carts.html#get-cart-by-id"/>
         /// <returns>Cart</returns>
-        public async Task<Response<Cart>> GetCartByIdAsync(string cartId)
+        public Task<Response<Cart>> GetCartByIdAsync(string cartId)
         {
             if (string.IsNullOrWhiteSpace(cartId))
             {
@@ -58,7 +58,7 @@ namespace commercetools.Carts
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", cartId);
-            return await _client.GetAsync<Cart>(endpoint);
+            return _client.GetAsync<Cart>(endpoint);
         }
 
         /// <summary>
@@ -67,9 +67,9 @@ namespace commercetools.Carts
         /// <param name="customer">Customer</param>
         /// <returns>Cart</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-carts.html#get-cart-by-customer-id"/>
-        public async Task<Response<Cart>> GetCartByCustomerAsync(Customer customer)
+        public Task<Response<Cart>> GetCartByCustomerAsync(Customer customer)
         {
-            return await GetCartByCustomerIdAsync(customer.Id);
+            return GetCartByCustomerIdAsync(customer.Id);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace commercetools.Carts
         /// <param name="customerId">Customer ID</param>
         /// <returns>Cart</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-carts.html#get-cart-by-customer-id"/>
-        public async Task<Response<Cart>> GetCartByCustomerIdAsync(string customerId)
+        public Task<Response<Cart>> GetCartByCustomerIdAsync(string customerId)
         {
             if (string.IsNullOrWhiteSpace(customerId))
             {
@@ -86,7 +86,7 @@ namespace commercetools.Carts
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/?customerId=", customerId);
-            return await _client.GetAsync<Cart>(endpoint);
+            return _client.GetAsync<Cart>(endpoint);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace commercetools.Carts
         /// <param name="offset">Offset</param>
         /// <returns>CartQueryResult</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-carts.html#query-carts"/>
-        public async Task<Response<CartQueryResult>> QueryCartsAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
+        public Task<Response<CartQueryResult>> QueryCartsAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
         {
             NameValueCollection values = new NameValueCollection();
 
@@ -122,7 +122,7 @@ namespace commercetools.Carts
                 values.Add("offset", offset.ToString());
             }
 
-            return await _client.GetAsync<CartQueryResult>(ENDPOINT_PREFIX, values);
+            return _client.GetAsync<CartQueryResult>(ENDPOINT_PREFIX, values);
         }
 
         /// <summary>
@@ -131,17 +131,15 @@ namespace commercetools.Carts
         /// <param name="cartDraft">CartDraft</param>
         /// <returns>Cart</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-carts.html#create-cart"/>
-        public async Task<Response<Cart>> CreateCartAsync(CartDraft cartDraft)
+        public Task<Response<Cart>> CreateCartAsync(CartDraft cartDraft)
         {
             if (string.IsNullOrWhiteSpace(cartDraft.Currency))
             {
                 throw new ArgumentException("currency is required");
             }
 
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.NullValueHandling = NullValueHandling.Ignore;
-            string payload = JsonConvert.SerializeObject(cartDraft, settings);
-            return await _client.PostAsync<Cart>(ENDPOINT_PREFIX, payload);
+            string payload = JsonConvert.SerializeObject(cartDraft, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            return _client.PostAsync<Cart>(ENDPOINT_PREFIX, payload);
         }
 
         /// <summary>
@@ -151,9 +149,9 @@ namespace commercetools.Carts
         /// <param name="action">The update action to be performed on the cart.</param>
         /// <returns>Cart</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-carts.html#update-cart"/>
-        public async Task<Response<Cart>> UpdateCartAsync(Cart cart, UpdateAction action)
+        public Task<Response<Cart>> UpdateCartAsync(Cart cart, UpdateAction action)
         {
-            return await UpdateCartAsync(cart.Id, cart.Version, new List<UpdateAction> { action });
+            return UpdateCartAsync(cart.Id, cart.Version, new List<UpdateAction> { action });
         }
 
         /// <summary>
@@ -163,9 +161,9 @@ namespace commercetools.Carts
         /// <param name="actions">The list of update actions to be performed on the cart.</param>
         /// <returns>Cart</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-carts.html#update-cart"/>
-        public async Task<Response<Cart>> UpdateCartAsync(Cart cart, List<UpdateAction> actions)
+        public Task<Response<Cart>> UpdateCartAsync(Cart cart, List<UpdateAction> actions)
         {
-            return await UpdateCartAsync(cart.Id, cart.Version, actions);
+            return UpdateCartAsync(cart.Id, cart.Version, actions);
         }
 
         /// <summary>
@@ -176,7 +174,7 @@ namespace commercetools.Carts
         /// <param name="actions">The list of update actions to be performed on the cart.</param>
         /// <returns>Cart</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-carts.html#update-cart"/>
-        public async Task<Response<Cart>> UpdateCartAsync(string cartId, int version, List<UpdateAction> actions)
+        public Task<Response<Cart>> UpdateCartAsync(string cartId, int version, List<UpdateAction> actions)
         {
             if (string.IsNullOrWhiteSpace(cartId))
             {
@@ -196,11 +194,11 @@ namespace commercetools.Carts
             JObject data = JObject.FromObject(new
             {
                 version = version,
-                actions = actions
+                actions = JArray.FromObject(actions, new JsonSerializer { NullValueHandling = NullValueHandling.Ignore })
             });
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", cartId);
-            return await _client.PostAsync<Cart>(endpoint, data.ToString());
+            return _client.PostAsync<Cart>(endpoint, data.ToString());
         }
 
         /// <summary>
@@ -209,9 +207,9 @@ namespace commercetools.Carts
         /// <param name="cart">Cart</param>
         /// <returns>Cart</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-carts.html#delete-cart"/>
-        public async Task<Response<Cart>> DeleteCartAsync(Cart cart)
+        public Task<Response<Cart>> DeleteCartAsync(Cart cart)
         {
-            return await DeleteCartAsync(cart.Id, cart.Version);
+            return DeleteCartAsync(cart.Id, cart.Version);
         }
 
         /// <summary>
@@ -221,7 +219,7 @@ namespace commercetools.Carts
         /// <param name="version">Cart version</param>
         /// <returns>Cart</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-carts.html#delete-cart"/>
-        public async Task<Response<Cart>> DeleteCartAsync(string cartId, int version)
+        public Task<Response<Cart>> DeleteCartAsync(string cartId, int version)
         {
             if (string.IsNullOrWhiteSpace(cartId))
             {
@@ -239,7 +237,7 @@ namespace commercetools.Carts
             };
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", cartId);
-            return await _client.DeleteAsync<Cart>(endpoint, values);
+            return _client.DeleteAsync<Cart>(endpoint, values);
         }
 
         #endregion

@@ -36,9 +36,9 @@ namespace commercetools.Project
         /// </summary>
         /// <see href="http://dev.commercetools.com/http-api-projects-project.html#get-project"/>
         /// <returns>Project</returns>
-        public async Task<Response<Project>> GetProjectAsync()
+        public Task<Response<Project>> GetProjectAsync()
         {
-            return await _client.GetAsync<Project>(string.Empty);
+            return _client.GetAsync<Project>(string.Empty);
         }
 
         #endregion

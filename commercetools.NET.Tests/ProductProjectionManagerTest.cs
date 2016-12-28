@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using commercetools.Common;
-using commercetools.Project;
-using commercetools.ProductProjections;
 using commercetools.Products;
+using commercetools.ProductProjections;
+using commercetools.ProductTypes;
+using commercetools.Project;
+using commercetools.TaxCategories;
 
 using NUnit.Framework;
 
@@ -19,7 +20,9 @@ namespace commercetools.Tests
     {
         private Client _client;
         private Project.Project _project;
-        private List<Product> _products;
+        private List<Product> _testProducts;
+        private ProductType _testProductType;
+        private TaxCategory _testTaxCategory;
 
         /// <summary>
         /// Test setup
@@ -34,17 +37,36 @@ namespace commercetools.Tests
             Assert.IsTrue(projectTask.Result.Success);
             _project = projectTask.Result.Result;
 
-            _products = new List<Product>();
+            ProductTypeDraft productTypeDraft = Helper.GetTestProductTypeDraft();
+            Task<Response<ProductType>> productTypeTask = _client.ProductTypes().CreateProductTypeAsync(productTypeDraft);
+            productTypeTask.Wait();
+            Assert.IsTrue(productTypeTask.Result.Success);
 
-            Task<Response<ProductQueryResult>> productQueryTask = _client.Products().QueryProductsAsync();
-            productQueryTask.Wait();
-            Assert.IsTrue(productQueryTask.Result.Success);
+            _testProductType = productTypeTask.Result.Result;
+            Assert.NotNull(_testProductType.Id);
 
-            ProductQueryResult productQueryResult = productQueryTask.Result.Result;
-            Assert.NotNull(productQueryResult.Results);
-            Assert.GreaterOrEqual(productQueryResult.Results.Count, 1);
+            TaxCategoryDraft taxCategoryDraft = Helper.GetTestTaxCategoryDraft(_project);
+            Task<Response<TaxCategory>> taxCategoryTask = _client.TaxCategories().CreateTaxCategoryAsync(taxCategoryDraft);
+            taxCategoryTask.Wait();
+            Assert.IsTrue(taxCategoryTask.Result.Success);
 
-            _products.AddRange(productQueryResult.Results);
+            _testTaxCategory = taxCategoryTask.Result.Result;
+            Assert.NotNull(_testTaxCategory.Id);
+
+            _testProducts = new List<Product>();
+
+            for (int i = 0; i < 5; i++)
+            {
+                ProductDraft productDraft = Helper.GetTestProductDraft(_project, _testProductType.Id, _testTaxCategory.Id);
+                Task<Response<Product>> productTask = _client.Products().CreateProductAsync(productDraft);
+                productTask.Wait();
+                Assert.IsTrue(productTask.Result.Success);
+
+                Product product = productTask.Result.Result;
+                Assert.NotNull(product.Id);
+
+                _testProducts.Add(product);
+            }
         }
 
         /// <summary>
@@ -53,6 +75,19 @@ namespace commercetools.Tests
         [OneTimeTearDown]
         public void Dispose()
         {
+            Task task;
+
+            foreach (Product product in _testProducts)
+            {
+                task = _client.Products().DeleteProductAsync(product);
+                task.Wait();
+            }
+
+            task = _client.ProductTypes().DeleteProductTypeAsync(_testProductType);
+            task.Wait();
+
+            task = _client.TaxCategories().DeleteTaxCategoryAsync(_testTaxCategory);
+            task.Wait();
         }
 
         /// <summary>
@@ -62,12 +97,12 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldGetProductProjectionByIdAsync()
         {
-            Response<ProductProjection> response = await _client.ProductProjections().GetProductProjectionByIdAsync(_products[0].Id);
+            Response<ProductProjection> response = await _client.ProductProjections().GetProductProjectionByIdAsync(_testProducts[0].Id, true);
             Assert.IsTrue(response.Success);
 
             ProductProjection productProjection = response.Result;
             Assert.NotNull(productProjection.Id);
-            Assert.AreEqual(productProjection.Id, _products[0].Id);
+            Assert.AreEqual(productProjection.Id, _testProducts[0].Id);
         }
 
         /// <summary>
@@ -77,15 +112,12 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldGetProductProjectionByKeyAsync()
         {
-            List<Product> productsWithKey = _products.Where(p => !string.IsNullOrWhiteSpace(p.Key)).ToList();
-            Assert.GreaterOrEqual(productsWithKey.Count, 1);
-
-            Response<ProductProjection> response = await _client.ProductProjections().GetProductProjectionByKeyAsync(_products[1].Key);
+            Response<ProductProjection> response = await _client.ProductProjections().GetProductProjectionByKeyAsync(_testProducts[1].Key, true);
             Assert.IsTrue(response.Success);
 
             ProductProjection productProjection = response.Result;
             Assert.NotNull(productProjection.Id);
-            Assert.AreEqual(productProjection.Id, _products[1].Id);
+            Assert.AreEqual(productProjection.Id, _testProducts[1].Id);
         }
 
         /// <summary>

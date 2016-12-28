@@ -51,7 +51,7 @@ namespace commercetools.Tests
 
             for (int i = 0; i < 5; i++)
             {
-                ZoneDraft zoneDraft = Helper.GetTestZoneDraft(_project);
+                ZoneDraft zoneDraft = Helper.GetTestZoneDraft();
                 Task<Response<Zone>> zoneTask = _client.Zones().CreateZoneAsync(zoneDraft);
                 zoneTask.Wait();
                 Assert.IsTrue(zoneTask.Result.Success);

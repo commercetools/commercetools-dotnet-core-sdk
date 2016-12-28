@@ -49,7 +49,7 @@ namespace commercetools.ProductTypes
         /// <param name="productTypeId">Product type ID</param>
         /// <see href="http://dev.commercetools.com/http-api-projects-productTypes.html#get-a-producttype-by-id"/>
         /// <returns>ProductType</returns>
-        public async Task<Response<ProductType>> GetProductTypeByIdAsync(string productTypeId)
+        public Task<Response<ProductType>> GetProductTypeByIdAsync(string productTypeId)
         {
             if (string.IsNullOrWhiteSpace(productTypeId))
             {
@@ -57,7 +57,7 @@ namespace commercetools.ProductTypes
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", productTypeId);
-            return await _client.GetAsync<ProductType>(endpoint);
+            return _client.GetAsync<ProductType>(endpoint);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace commercetools.ProductTypes
         /// <param name="key">Key</param>
         /// <see href="http://dev.commercetools.com/http-api-projects-productTypes.html#get-a-producttype-by-key"/>
         /// <returns>ProductType</returns>
-        public async Task<Response<ProductType>> GetProductTypeByKeyAsync(string key)
+        public Task<Response<ProductType>> GetProductTypeByKeyAsync(string key)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -74,7 +74,7 @@ namespace commercetools.ProductTypes
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/key=", Helper.UrlEncode(key));
-            return await _client.GetAsync<ProductType>(endpoint);
+            return _client.GetAsync<ProductType>(endpoint);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace commercetools.ProductTypes
         /// <param name="offset">Offset</param>
         /// <returns>ProductTypeQueryResult</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-productTypes.html#query-producttypes"/>
-        public async Task<Response<ProductTypeQueryResult>> QueryProductTypesAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
+        public Task<Response<ProductTypeQueryResult>> QueryProductTypesAsync(string where = null, string sort = null, int limit = -1, int offset = -1)
         {
             NameValueCollection values = new NameValueCollection();
 
@@ -110,7 +110,7 @@ namespace commercetools.ProductTypes
                 values.Add("offset", offset.ToString());
             }
 
-            return await _client.GetAsync<ProductTypeQueryResult>(ENDPOINT_PREFIX, values);
+            return _client.GetAsync<ProductTypeQueryResult>(ENDPOINT_PREFIX, values);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace commercetools.ProductTypes
         /// <param name="productTypeDraft">ProductTypeDraft</param>
         /// <returns>ProductType</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-productTypes.html#create-a-producttype"/>
-        public async Task<Response<ProductType>> CreateProductTypeAsync(ProductTypeDraft productTypeDraft)
+        public Task<Response<ProductType>> CreateProductTypeAsync(ProductTypeDraft productTypeDraft)
         {
             if (string.IsNullOrWhiteSpace(productTypeDraft.Name))
             {
@@ -131,10 +131,8 @@ namespace commercetools.ProductTypes
                 throw new ArgumentException("description is required");
             }
 
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.NullValueHandling = NullValueHandling.Ignore;
-            string payload = JsonConvert.SerializeObject(productTypeDraft, settings);
-            return await _client.PostAsync<ProductType>(ENDPOINT_PREFIX, payload);
+            string payload = JsonConvert.SerializeObject(productTypeDraft, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            return _client.PostAsync<ProductType>(ENDPOINT_PREFIX, payload);
         }
 
         /// <summary>
@@ -143,9 +141,9 @@ namespace commercetools.ProductTypes
         /// <param name="productType">Product type</param>
         /// <param name="actions">The list of update actions to apply to the product type.</param>
         /// <returns>ProductType</returns>
-        public async Task<Response<ProductType>> UpdateProductTypeAsync(ProductType productType, List<UpdateAction> actions)
+        public Task<Response<ProductType>> UpdateProductTypeAsync(ProductType productType, List<UpdateAction> actions)
         {
-            return await UpdateProductTypeByIdAsync(productType.Id, productType.Version, actions);
+            return UpdateProductTypeByIdAsync(productType.Id, productType.Version, actions);
         }
 
         /// <summary>
@@ -156,7 +154,7 @@ namespace commercetools.ProductTypes
         /// <param name="actions">The list of update actions to apply to the product type.</param>
         /// <returns>ProductType</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-productTypes.html#update-producttype-by-id"/>
-        public async Task<Response<ProductType>> UpdateProductTypeByIdAsync(string productTypeId, int version, List<UpdateAction> actions)
+        public Task<Response<ProductType>> UpdateProductTypeByIdAsync(string productTypeId, int version, List<UpdateAction> actions)
         {
             if (string.IsNullOrWhiteSpace(productTypeId))
             {
@@ -164,7 +162,7 @@ namespace commercetools.ProductTypes
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", productTypeId);
-            return await UpdateProductTypeAsync(endpoint, version, actions);
+            return UpdateProductTypeAsync(endpoint, version, actions);
         }
 
         /// <summary>
@@ -175,7 +173,7 @@ namespace commercetools.ProductTypes
         /// <param name="actions">The list of update actions to apply to the product type.</param>
         /// <returns>ProductType</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-productTypes.html#update-producttype-by-key"/>
-        public async Task<Response<ProductType>> UpdateProductTypeByKeyAsync(string key, int version, List<UpdateAction> actions)
+        public Task<Response<ProductType>> UpdateProductTypeByKeyAsync(string key, int version, List<UpdateAction> actions)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -183,7 +181,7 @@ namespace commercetools.ProductTypes
             }
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/key=", key);
-            return await UpdateProductTypeAsync(endpoint, version, actions);
+            return UpdateProductTypeAsync(endpoint, version, actions);
         }
 
         /// <summary>
@@ -194,7 +192,7 @@ namespace commercetools.ProductTypes
         /// <param name="actions">The list of update actions to apply to the product type.</param>
         /// <returns>Product</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-productTypes.html#update-producttype"/>
-        private async Task<Response<ProductType>> UpdateProductTypeAsync(string endpoint, int version, List<UpdateAction> actions)
+        private Task<Response<ProductType>> UpdateProductTypeAsync(string endpoint, int version, List<UpdateAction> actions)
         {
             if (version < 1)
             {
@@ -209,19 +207,19 @@ namespace commercetools.ProductTypes
             JObject data = JObject.FromObject(new
             {
                 version = version,
-                actions = new JArray(actions.ToArray())
+                actions = JArray.FromObject(actions, new JsonSerializer { NullValueHandling = NullValueHandling.Ignore })
             });
 
-            return await _client.PostAsync<ProductType>(endpoint, data.ToString());
+            return _client.PostAsync<ProductType>(endpoint, data.ToString());
         }
 
         /// <summary>
         /// Deletes a ProductType.
         /// </summary>
         /// <param name="productType">ProductType</param>
-        public async Task<Response<JObject>> DeleteProductTypeAsync(ProductType productType)
+        public Task<Response<JObject>> DeleteProductTypeAsync(ProductType productType)
         {
-            return await DeleteProductTypeByIdAsync(productType.Id, productType.Version);
+            return DeleteProductTypeByIdAsync(productType.Id, productType.Version);
         }
 
         /// <summary>
@@ -230,7 +228,7 @@ namespace commercetools.ProductTypes
         /// <param name="productTypeId">ProductType ID</param>
         /// <param name="version">ProductType version</param>
         /// <see href="http://dev.commercetools.com/http-api-projects-productTypes.html#delete-producttype"/>
-        public async Task<Response<JObject>> DeleteProductTypeByIdAsync(string productTypeId, int version)
+        public Task<Response<JObject>> DeleteProductTypeByIdAsync(string productTypeId, int version)
         {
             if (string.IsNullOrWhiteSpace(productTypeId))
             {
@@ -248,7 +246,7 @@ namespace commercetools.ProductTypes
             };
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", productTypeId);
-            return await _client.DeleteAsync<JObject>(endpoint, values);
+            return _client.DeleteAsync<JObject>(endpoint, values);
         }
 
         /// <summary>
@@ -257,7 +255,7 @@ namespace commercetools.ProductTypes
         /// <param name="key">Key</param>
         /// <param name="version">ProductType version</param>
         /// <see href="http://dev.commercetools.com/http-api-projects-productTypes.html#delete-producttype-by-key"/>
-        public async Task<Response<JObject>> DeleteProductTypeByKeyAsync(string key, int version)
+        public Task<Response<JObject>> DeleteProductTypeByKeyAsync(string key, int version)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -275,7 +273,7 @@ namespace commercetools.ProductTypes
             };
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/key=", Helper.UrlEncode(key));
-            return await _client.DeleteAsync<JObject>(endpoint, values);
+            return _client.DeleteAsync<JObject>(endpoint, values);
         }
 
         #endregion

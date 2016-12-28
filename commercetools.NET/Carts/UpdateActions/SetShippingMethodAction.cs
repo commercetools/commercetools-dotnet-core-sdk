@@ -40,7 +40,7 @@ namespace commercetools.Carts.UpdateActions
         /// </summary>
         public SetShippingMethodAction()
         {
-            this.Action = "addLineItem";
+            this.Action = "setShippingMethod";
         }
 
         #endregion

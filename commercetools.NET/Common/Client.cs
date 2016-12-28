@@ -65,7 +65,7 @@ namespace commercetools.Common
         {
             Response<T> response = new Response<T>();
 
-            await EnsureToken();
+            EnsureToken();
 
             if (this.Token == null)
             {
@@ -106,7 +106,7 @@ namespace commercetools.Common
         {
             Response<T> response = new Response<T>();
 
-            await EnsureToken();
+            EnsureToken();
 
             if (this.Token == null)
             {
@@ -148,7 +148,7 @@ namespace commercetools.Common
         {
             Response<T> response = new Response<T>();
 
-            await EnsureToken();
+            EnsureToken();
 
             if (this.Token == null)
             {
@@ -186,11 +186,13 @@ namespace commercetools.Common
         /// <summary>
         /// Ensures that the token for this instance has been retrieved and that it has not expired.
         /// </summary>
-        private async Task EnsureToken()
+        private void EnsureToken()
         {
             if (this.Token == null)
             {
-                Response<Token> response = await GetTokenAsync();
+                Task<Response<Token>> task = GetTokenAsync();
+                task.Wait();
+                Response<Token> response = task.Result;
 
                 if (response.Success)
                 {
@@ -203,7 +205,7 @@ namespace commercetools.Common
              * 
             else if (this.Token.IsExpired())
             {
-                this.Token = await RefreshTokenAsync(this.Token.RefreshToken);
+                this.Token = RefreshTokenAsync(this.Token.RefreshToken);
             }
              */
         }

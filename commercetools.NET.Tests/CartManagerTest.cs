@@ -101,7 +101,7 @@ namespace commercetools.Tests
             }
             else
             {
-                ZoneDraft zoneDraft = Helper.GetTestZoneDraft(_project);
+                ZoneDraft zoneDraft = Helper.GetTestZoneDraft();
                 Task<Response<Zone>> zoneTask = _client.Zones().CreateZoneAsync(zoneDraft);
                 zoneTask.Wait();
                 Assert.IsTrue(zoneTask.Result.Success);
@@ -463,7 +463,7 @@ namespace commercetools.Tests
             Assert.AreEqual(_testCarts[4].PaymentInfo.Payments[0].Id, _testPayment.Id);
 
             RemovePaymentAction removePaymentAction = new RemovePaymentAction(paymentReference);
-            response = await _client.Carts().UpdateCartAsync(_testCarts[4], addPaymentAction);
+            response = await _client.Carts().UpdateCartAsync(_testCarts[4], removePaymentAction);
             Assert.IsTrue(response.Success);
 
             _testCarts[4] = response.Result;

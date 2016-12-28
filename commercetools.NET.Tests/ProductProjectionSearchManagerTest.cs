@@ -110,7 +110,7 @@ namespace commercetools.Tests
         public async Task ShouldGetSearchResultsAsync()
         {
             Response<ProductProjectionQueryResult> response 
-                = await _client.ProductProjectionSearch().SearchProductProjectionsAsync("Test Product 1");
+                = await _client.ProductProjectionSearch().SearchProductProjectionsAsync("Test Product 1", staged: true);
             Assert.IsTrue(response.Success);
 
             ProductProjectionQueryResult productProjectionQueryResult = response.Result;
@@ -130,7 +130,7 @@ namespace commercetools.Tests
             };
 
             Response<ProductProjectionQueryResult> response 
-                = await _client.ProductProjectionSearch().SearchProductProjectionsAsync("Test Product 1", facet: facet);
+                = await _client.ProductProjectionSearch().SearchProductProjectionsAsync("Test Product 1", staged: true, facet: facet);
             Assert.IsTrue(response.Success);
 
             ProductProjectionQueryResult productProjectionQueryResult = response.Result;
