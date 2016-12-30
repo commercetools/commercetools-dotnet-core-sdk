@@ -121,7 +121,8 @@
     <Compile Include="Common\Response.cs" />
     <Compile Include="Common\ErrorMessage.cs" />
     <Compile Include="Common\UpdateAction.cs" />
-    <Compile Include="Common\UpdateActions\GenericActionConverter.cs" />
+    <Compile Include="Common\Converters\GenericActionConverter.cs" />
+    <Compile Include="Common\Converters\LocalizedStringConverter.cs" />
     <Compile Include="Customers\Customer.cs" />
     <Compile Include="Customers\CustomerDraft.cs" />
     <Compile Include="Customers\CustomerManager.cs" />
