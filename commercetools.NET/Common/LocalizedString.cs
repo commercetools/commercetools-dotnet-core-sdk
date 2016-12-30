@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using commercetools.Common.Converters;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -9,6 +11,7 @@ namespace commercetools.Common
     /// A localized string is a JSON object where the keys are of IETF language tag, and the values the corresponding strings used for that language.
     /// </summary>
     /// <see href="http://dev.commercetools.com/http-api-types.html#localizedstring"/>
+    [JsonConverter(typeof(LocalizedStringConverter))]
     public class LocalizedString
     {
         #region Properties
