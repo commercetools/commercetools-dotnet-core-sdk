@@ -165,7 +165,7 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldAuthenticateCustomer()
         {
-            string email = "authtest@example.com";
+            string email = string.Concat("authtest", Helper.GetRandomString(20), "@example.com");
             string password = "AuthTest123!";
 
             CustomerDraft customerDraft = Helper.GetTestCustomerDraft();

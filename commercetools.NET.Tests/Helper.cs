@@ -27,6 +27,7 @@ namespace commercetools.Tests
     {
         private static Random _random = new Random();
 
+		private static Configuration configuration = null;
         #region Configuration
 
         /// <summary>
@@ -35,13 +36,16 @@ namespace commercetools.Tests
         /// <returns>Configuration</returns>
         public static Configuration GetConfiguration()
         {
-            return new Configuration(
-                Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.OAuthUrl"]),
-                Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ApiUrl"]),
-                Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ProjectKey"]),
-                Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientID"]),
-                Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientSecret"]),
+			if (configuration == null) {
+				configuration = new Configuration(
+                	Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.OAuthUrl"]),
+                	Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ApiUrl"]),
+                	Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ProjectKey"]),
+                	Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientID"]),
+                	Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientSecret"]),
                 ProjectScope.ManageProject);
+			}
+			return configuration;
         }
 
         #endregion
