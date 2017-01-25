@@ -21,7 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\commercetools.NET.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -121,7 +122,8 @@
     <Compile Include="Common\Response.cs" />
     <Compile Include="Common\ErrorMessage.cs" />
     <Compile Include="Common\UpdateAction.cs" />
-    <Compile Include="Common\UpdateActions\GenericActionConverter.cs" />
+    <Compile Include="Common\Converters\GenericActionConverter.cs" />
+    <Compile Include="Common\Converters\LocalizedStringConverter.cs" />
     <Compile Include="Customers\Customer.cs" />
     <Compile Include="Customers\CustomerDraft.cs" />
     <Compile Include="Customers\CustomerManager.cs" />
@@ -410,6 +412,10 @@
     <Compile Include="Types\TimeType.cs" />
     <Compile Include="Zones\Extensions.cs" />
     <Compile Include="Zones\Location.cs" />
+    <Compile Include="Zones\UpdateActions\AddLocationAction.cs" />
+    <Compile Include="Zones\UpdateActions\ChangeNameAction.cs" />
+    <Compile Include="Zones\UpdateActions\RemoveLocationAction.cs" />
+    <Compile Include="Zones\UpdateActions\SetDescriptionAction.cs" />
     <Compile Include="Zones\Zone.cs" />
     <Compile Include="Zones\ZoneDraft.cs" />
     <Compile Include="Zones\ZoneManager.cs" />

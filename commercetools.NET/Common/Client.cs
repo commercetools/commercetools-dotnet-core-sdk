@@ -65,7 +65,7 @@ namespace commercetools.Common
         {
             Response<T> response = new Response<T>();
 
-            EnsureToken();
+            await EnsureToken();
 
             if (this.Token == null)
             {
@@ -106,7 +106,7 @@ namespace commercetools.Common
         {
             Response<T> response = new Response<T>();
 
-            EnsureToken();
+            await EnsureToken();
 
             if (this.Token == null)
             {
@@ -148,7 +148,7 @@ namespace commercetools.Common
         {
             Response<T> response = new Response<T>();
 
-            EnsureToken();
+            await EnsureToken();
 
             if (this.Token == null)
             {
@@ -186,17 +186,15 @@ namespace commercetools.Common
         /// <summary>
         /// Ensures that the token for this instance has been retrieved and that it has not expired.
         /// </summary>
-        private void EnsureToken()
+        private async Task EnsureToken()
         {
             if (this.Token == null)
             {
-                Task<Response<Token>> task = GetTokenAsync();
-                task.Wait();
-                Response<Token> response = task.Result;
+                Response<Token> tokenResponse = await GetTokenAsync();
 
-                if (response.Success)
+                if (tokenResponse.Success)
                 {
-                    this.Token = response.Result;
+                    this.Token = tokenResponse.Result;
                 }
             }
             /*
@@ -279,7 +277,7 @@ namespace commercetools.Common
 
         #endregion
 
-        #region Utitlity
+        #region Utility
 
         /// <summary>
         /// Gets a response object from the API response.
@@ -298,7 +296,7 @@ namespace commercetools.Common
             {
                 response.Success = true;
 
-                if (resultType == typeof(JObject))
+                if (resultType == typeof(JObject) || resultType == typeof(JArray) || resultType.IsArray || (resultType.IsGenericType && resultType.Name.Equals(typeof(List<>).Name)))
                 {
                     response.Result = JsonConvert.DeserializeObject<T>(await httpResponseMessage.Content.ReadAsStringAsync());
                 }

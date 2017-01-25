@@ -3,36 +3,25 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace commercetools.Common.UpdateActions
+namespace commercetools.Common.Converters
 {
     /// <summary>
-    /// Custom converter for the GenericAction class.
+    /// Custom converter for the LocalizedString class.
     /// </summary>
-    public class GenericActionConverter : JsonConverter
+    public class LocalizedStringConverter : JsonConverter
     {
-        /// <summary>
-        /// CanRead
-        /// </summary>
-        public override bool CanRead
-        {
-            get 
-            { 
-                return false; 
-            }
-        }
-
         /// <summary>
         /// CanConvert
         /// </summary>
         /// <param name="objectType">Object type</param>
-        /// <returns>True if the type is GenericAction, false otherwise</returns>
+        /// <returns>True if the type is LocalizedString, false otherwise</returns>
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(GenericAction));
+            return (objectType == typeof(LocalizedString));
         }
 
         /// <summary>
-        /// ReadJson (not implemented)
+        /// ReadJson
         /// </summary>
         /// <param name="reader">JsonReader</param>
         /// <param name="objectType">Object type</param>
@@ -41,7 +30,17 @@ namespace commercetools.Common.UpdateActions
         /// <returns></returns>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            JObject jObject = JObject.Load(reader);
+            LocalizedString localizedString = new LocalizedString();
+
+            foreach (var kvp in jObject)
+            {
+                string key = kvp.Key;
+                string value = kvp.Value.ToString();
+                localizedString.SetValue(key, value);
+            }
+
+            return localizedString;
         }
 
         /// <summary>
@@ -52,16 +51,14 @@ namespace commercetools.Common.UpdateActions
         /// <param name="serializer">JsonSerializer</param>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (value is GenericAction)
+            if (value is LocalizedString)
             {
-                GenericAction genericAction = (GenericAction)value;
-
+                LocalizedString localizedString = (LocalizedString)value;
                 JObject jObject = new JObject();
-                jObject.Add("action", genericAction.Action);
 
-                foreach (string key in genericAction.Properties.Keys)
+                foreach (string key in localizedString.Values.Keys)
                 {
-                    jObject.Add(key, genericAction.Properties[key]);
+                    jObject.Add(new JProperty(key, localizedString.Values[key]));
                 }
 
                 jObject.WriteTo(writer);

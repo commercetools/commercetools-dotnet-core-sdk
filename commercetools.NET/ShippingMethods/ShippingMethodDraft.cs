@@ -44,8 +44,8 @@ namespace commercetools.ShippingMethods
         {
             this.Name = name;
             this.TaxCategory = taxCategory;
-            this.ZoneRates = ZoneRates;
-            this.IsDefault = IsDefault;
+            this.ZoneRates = zoneRates;
+            this.IsDefault = isDefault;
         }
 
         #endregion

@@ -15,7 +15,7 @@ namespace commercetools.Products
         #region Properties
 
         [JsonProperty(PropertyName = "id")]
-        public int Id { get; private set; }
+        public string Id { get; private set; }
 
         [JsonProperty(PropertyName = "value")]
         public Money Value { get; private set; }

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using commercetools.Common.Converters;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

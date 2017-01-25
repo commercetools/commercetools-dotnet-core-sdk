@@ -97,6 +97,63 @@ namespace commercetools.ShippingMethods
         }
 
         /// <summary>
+        /// Retrieves all the shipping methods that can ship to the shipping address of the given cart.
+        /// </summary>
+        /// <param name="cartId">The ID of the cart with a shipping address set.</param>
+        /// <returns>List of ShippingMethod objects</returns>
+        /// <see href="https://dev.commercetools.com/http-api-projects-shippingMethods.html#get-shippingmethods-for-a-cart"/>
+        public Task<Response<List<ShippingMethod>>> GetShippingMethodsForCart(string cartId)
+        {
+            if (string.IsNullOrWhiteSpace(cartId))
+            {
+                throw new ArgumentException("cartId is required");
+            }
+
+            NameValueCollection values = new NameValueCollection
+            {
+                { "cartId", cartId }
+            };
+
+            return _client.GetAsync<List<ShippingMethod>>(ENDPOINT_PREFIX, values);
+        }
+
+        /// <summary>
+        /// Retrieves all the shipping methods that can ship to the given Location.
+        /// </summary>
+        /// <remarks>
+        /// If the currency parameter is given, then the shipping methods must also have a rate defined in the specified currency.
+        /// </remarks>
+        /// <param name="country">A two-digit country code as per ISO 3166-1 alpha-2.</param>
+        /// <param name="state">State</param>
+        /// <param name="currency">The currency code compliant to ISO 4217.</param>
+        /// <returns>List of ShippingMethod objects</returns>
+        /// <see href="https://dev.commercetools.com/http-api-projects-shippingMethods.html#get-shippingmethods-for-a-location"/>
+        public Task<Response<List<ShippingMethod>>> GetShippingMethodsForLocation(string country, string state = null, string currency = null)
+        {
+            if (string.IsNullOrWhiteSpace(country))
+            {
+                throw new ArgumentException("country is required");
+            }
+
+            NameValueCollection values = new NameValueCollection
+            {
+                { "country", country }
+            };
+
+            if (!string.IsNullOrWhiteSpace(state))
+            {
+                values.Add("state", state);
+            }
+
+            if (!string.IsNullOrWhiteSpace(currency))
+            {
+                values.Add("currency", currency);
+            }
+
+            return _client.GetAsync<List<ShippingMethod>>(ENDPOINT_PREFIX, values);
+        }
+
+        /// <summary>
         /// Creates a new Shipping Method.
         /// </summary>
         /// <param name="shippingMethodDraft">ShippingMethodDraft</param>

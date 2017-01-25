@@ -29,7 +29,7 @@ namespace commercetools.Carts.UpdateActions
         /// Number
         /// </summary>
         [JsonProperty(PropertyName = "quantity")]
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
 
         #endregion
 
@@ -39,12 +39,10 @@ namespace commercetools.Carts.UpdateActions
         /// Constructor.
         /// </summary>
         /// <param name="lineItemId">Id of an existing LineItem in the cart</param>
-        /// <param name="quantity">Number</param>
-        public RemoveLineItemAction(string lineItemId, int quantity = 0)
+        public RemoveLineItemAction(string lineItemId)
         {
             this.Action = "removeLineItem";
             this.LineItemId = lineItemId;
-            this.Quantity = quantity;
         }
 
         #endregion

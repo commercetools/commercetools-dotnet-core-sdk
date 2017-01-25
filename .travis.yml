@@ -1,16 +1,21 @@
 language: csharp
 solution: commercetools.NET-Net45.sln
 dist: trusty # dotnet core is released only for Ubuntu trusty
-sudo: required
+# sudo: required
 matrix:
   include:
     - dotnet: 1.0.0-preview2-003131 # latest available on travis (Microsoft .NET Core 1.0.1 - SDK 1.0.0 Preview 2)
       mono: none
       env: DOTNETCORE=1
     - mono: 4.2.1 # this is the default on Ubuntu 16.04 LTS. And it's a 4.x release so it's dotnet profile 4.5
+      env: DOTNETCORE=0
   allow_failures:
     - dotnet: 1.0.0-preview2-003131 # 
+install:
+  - if [ $DOTNETCORE == "1" ] ; then dotnet restore ; fi
+  - if [ $DOTNETCORE != "1" ] ; then nuget restore $TRAVIS_SOLUTION ; fi
+  - nuget install NUnit.ConsoleRunner -Version 3.6.0 -OutputDirectory testrunner
 script:
-  # TODO working dotnet core compatible build script command. 
-  # - dotnet build /p:Configuration=Release commercetools.NET-Net45.sln
-  
+  - xbuild /p:Configuration=Release $TRAVIS_SOLUTION
+  - if [ $DOTNETCORE == "1" ] ; then dotnet ./testrunner/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./commercetools.NET.Tests/bin/Release/commercetools.NET.Tests.dll; fi
+  - if [ $DOTNETCORE != "1" ] ; then mono ./testrunner/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./commercetools.NET.Tests/bin/Release/commercetools.NET.Tests.dll; fi  
