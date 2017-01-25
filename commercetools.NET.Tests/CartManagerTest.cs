@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using commercetools.Common;
@@ -15,6 +16,7 @@ using commercetools.Project;
 using commercetools.ShippingMethods;
 using commercetools.TaxCategories;
 using commercetools.Zones;
+using commercetools.Zones.UpdateActions;
 
 using NUnit.Framework;
 
@@ -36,6 +38,7 @@ namespace commercetools.Tests
         private ShippingMethod _testShippingMethod;
         private TaxCategory _testTaxCategory;
         private Zone _testZone;
+        private bool _createdTestZone;
 
         /// <summary>
         /// Test setup
@@ -90,14 +93,14 @@ namespace commercetools.Tests
             _testTaxCategory = taxCategoryTask.Result.Result;
             Assert.NotNull(_testTaxCategory.Id);
 
-            Task<Response<ShippingMethodQueryResult>> shippingMethodQueryResultTask =
-                _client.ShippingMethods().QueryShippingMethodsAsync();
-            shippingMethodQueryResultTask.Wait();
-            Assert.IsTrue(shippingMethodQueryResultTask.Result.Success);
+            Task<Response<ZoneQueryResult>> zoneQueryResultTask =_client.Zones().QueryZonesAsync();
+            zoneQueryResultTask.Wait();
+            Assert.IsTrue(zoneQueryResultTask.Result.Success);
 
-            if (shippingMethodQueryResultTask.Result.Result.Results.Count > 0)
+            if (zoneQueryResultTask.Result.Result.Results.Count > 0)
             {
-                _testShippingMethod = shippingMethodQueryResultTask.Result.Result.Results[0];
+                _testZone = zoneQueryResultTask.Result.Result.Results[0];
+                _createdTestZone = false;
             }
             else
             {
@@ -106,15 +109,38 @@ namespace commercetools.Tests
                 zoneTask.Wait();
                 Assert.IsTrue(zoneTask.Result.Success);
                 _testZone = zoneTask.Result.Result;
-
-                Assert.NotNull(_testZone.Id);
-
-                ShippingMethodDraft shippingMethodDraft = Helper.GetTestShippingMethodDraft(_project, _testTaxCategory, _testZone);
-                Task<Response<ShippingMethod>> shippingMethodTask = _client.ShippingMethods().CreateShippingMethodAsync(shippingMethodDraft);
-                shippingMethodTask.Wait();
-                Assert.IsTrue(shippingMethodTask.Result.Success);
-                _testShippingMethod = shippingMethodTask.Result.Result;
+                _createdTestZone = true;
             }
+
+            Assert.NotNull(_testZone.Id);
+
+            foreach (string country in _project.Countries)
+            {
+                Location location =
+                    _testZone.Locations
+                        .Where(l => l.Country.Equals(country, StringComparison.OrdinalIgnoreCase))
+                        .FirstOrDefault();
+
+                if (location == null)
+                {
+                    location = new Location();
+                    location.Country = country;
+
+                    AddLocationAction addLocationAction = new AddLocationAction(location);
+                    Task<Response<Zone>> updateZoneTask = _client.Zones().UpdateZoneAsync(_testZone, addLocationAction);
+                    updateZoneTask.Wait();
+                    Assert.IsTrue(updateZoneTask.Result.Success);
+                    _testZone = updateZoneTask.Result.Result;
+                }
+            }
+
+            Assert.NotNull(_testZone.Locations.Count > 0);
+
+            ShippingMethodDraft shippingMethodDraft = Helper.GetTestShippingMethodDraft(_project, _testTaxCategory, _testZone);
+            Task<Response<ShippingMethod>> shippingMethodTask = _client.ShippingMethods().CreateShippingMethodAsync(shippingMethodDraft);
+            shippingMethodTask.Wait();
+            Assert.IsTrue(shippingMethodTask.Result.Success);
+            _testShippingMethod = shippingMethodTask.Result.Result;
 
             Assert.NotNull(_testShippingMethod.Id);
 
@@ -164,17 +190,17 @@ namespace commercetools.Tests
             task = _client.ProductTypes().DeleteProductTypeAsync(_testProductType);
             task.Wait();
 
+            task = _client.ShippingMethods().DeleteShippingMethodAsync(_testShippingMethod);
+            task.Wait();
+
             task = _client.TaxCategories().DeleteTaxCategoryAsync(_testTaxCategory);
             task.Wait();
 
-            if (_testZone != null)
+            if (_createdTestZone)
             {
                 task = _client.Zones().DeleteZoneAsync(_testZone);
                 task.Wait();
             }
-
-            task = _client.ShippingMethods().DeleteShippingMethodAsync(_testShippingMethod);
-            task.Wait();
         }
 
         /// <summary>
