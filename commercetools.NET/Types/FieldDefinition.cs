@@ -37,7 +37,6 @@ namespace commercetools.Types
         /// Constructor.
         /// </summary>
         public FieldDefinition()
-            : base()
         {
         }
 

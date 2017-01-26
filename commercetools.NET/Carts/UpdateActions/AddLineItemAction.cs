@@ -66,14 +66,12 @@ namespace commercetools.Carts.UpdateActions
         /// Constructor.
         /// </summary>
         /// <param name="productId">Id of an existing Product.</param>
-        /// <param name="variantId">Id of an existing ProductVariant in the product.</param>
         /// <param name="quantity">Number</param>
-        public AddLineItemAction(string productId, int variantId, int quantity = 1)
+        public AddLineItemAction(string productId, int variantId)
         {
             this.Action = "addLineItem";
             this.ProductId = productId;
             this.VariantId = variantId;
-            this.Quantity = quantity;
         }
 
         #endregion

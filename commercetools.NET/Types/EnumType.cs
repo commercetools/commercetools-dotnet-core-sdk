@@ -27,6 +27,7 @@ namespace commercetools.Types
         public EnumType()
             : base()
         {
+            this.Name = "Enum";
         }
 
         /// <summary>

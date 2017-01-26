@@ -22,7 +22,7 @@ namespace commercetools.Orders.UpdateActions
         public Reference State { get; set; }
 
         /// <summary>
-        /// Id of an existing ProductVariant in the product.
+        /// Force - Defaults to false
         /// </summary>
         [JsonProperty(PropertyName = "force")]
         public bool Force { get; set; }
@@ -35,12 +35,10 @@ namespace commercetools.Orders.UpdateActions
         /// Constructor.
         /// </summary>
         /// <param name="state">Reference to a State</param>
-        /// <param name="force">Force</param>
-        public TransitionStateAction(Reference state, bool force = false)
+        public TransitionStateAction(Reference state)
         {
             this.Action = "transitionState";
             this.State = state;
-            this.Force = force;
         }
 
         #endregion

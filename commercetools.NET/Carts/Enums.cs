@@ -47,6 +47,17 @@ namespace commercetools.Carts
     }
 
     /// <summary>
+    /// A rounding mode specifies how the platform should round monetary values.
+    /// </summary>
+    /// <see href="https://dev.commercetools.com/http-api-projects-carts.html#roundingmode"/>
+    public enum RoundingMode
+    {
+        HalfEven,
+        HalfUp,
+        HalfDown
+    }
+
+    /// <summary>
     /// TaxMode enumeration.
     /// </summary>
     /// <see href="http://dev.commercetools.com/http-api-projects-carts.html#taxmode"/>

@@ -23,6 +23,7 @@ namespace commercetools.Types
         public SetType()
             : base()
         {
+            this.Name = "Set";        
         }
 
         /// <summary>

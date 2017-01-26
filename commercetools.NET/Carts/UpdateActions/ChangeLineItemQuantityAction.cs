@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using commercetools.Common;
-using commercetools.CustomFields;
+﻿using commercetools.Common;
 
 using Newtonsoft.Json;
 
@@ -23,7 +19,7 @@ namespace commercetools.Carts.UpdateActions
         /// Id of an existing LineItem in the cart.
         /// </summary>
         [JsonProperty(PropertyName = "lineItemId")]
-        public string LineItemId  { get; set; }
+        public string LineItemId { get; set; }
 
         /// <summary>
         /// Number

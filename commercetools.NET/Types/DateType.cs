@@ -14,6 +14,7 @@
         public DateType()
             : base()
         {
+            this.Name = "Date";
         }
 
         /// <summary>

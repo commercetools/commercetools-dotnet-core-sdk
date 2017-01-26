@@ -3,7 +3,6 @@
 using commercetools.Common;
 
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace commercetools.Products.UpdateActions
 {
@@ -49,16 +48,13 @@ namespace commercetools.Products.UpdateActions
         public string Name { get; set; }
 
         /// <summary>
-        /// ResourceIdentifier to a Type
+        /// Field value
         /// </summary>
-        [JsonProperty(PropertyName = "type")]
-        public ResourceIdentifier Type { get; set; }
-
-        /// <summary>
-        /// A valid JSON object, based on the FieldDefinitions of the Type 
-        /// </summary>
-        [JsonProperty(PropertyName = "fields")]
-        public JObject Fields { get; set; }
+        /// <remarks>
+        /// If absent or null, this field is removed if it exists.
+        /// </remarks>
+        [JsonProperty(PropertyName = "value")]
+        public object Value { get; set; }
 
         #endregion
 

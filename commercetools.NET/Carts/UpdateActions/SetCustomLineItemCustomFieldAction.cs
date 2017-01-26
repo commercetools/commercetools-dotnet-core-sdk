@@ -2,15 +2,21 @@
 
 using Newtonsoft.Json;
 
-namespace commercetools.Customers.UpdateActions
+namespace commercetools.Carts.UpdateActions
 {
     /// <summary>
-    /// SetCustomFieldAction
+    /// This action sets, overwrites or removes any existing custom field for an existing CustomLineItem.
     /// </summary>
-    /// <see href="http://dev.commercetools.com/http-api-projects-customers.html#set-customfield"/>
-    public class SetCustomFieldAction : UpdateAction
+    /// <see href="https://dev.commercetools.com/http-api-projects-carts.html#set-customlineitem-customfield"/>
+    public class SetCustomLineItemCustomFieldAction : UpdateAction
     {
         #region Properties
+
+        /// <summary>
+        /// Custom line item ID
+        /// </summary>
+        [JsonProperty(PropertyName = "customLineItemId")]
+        public string CustomLineItemId { get; set; }
 
         /// <summary>
         /// Field name
@@ -34,10 +40,12 @@ namespace commercetools.Customers.UpdateActions
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="customLineItemId">Custom line item ID</param>
         /// <param name="name">Field name</param>
-        public SetCustomFieldAction(string name)
+        public SetCustomLineItemCustomFieldAction(string customLineItemId, string name)
         {
-            this.Action = "setCustomField";
+            this.Action = "setCustomLineItemCustomField";
+            this.CustomLineItemId = customLineItemId;
             this.Name = name;
         }
 
