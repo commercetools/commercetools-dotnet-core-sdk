@@ -29,6 +29,11 @@ namespace commercetools.Common
         public int StatusCode { get; set; }
 
         /// <summary>
+        /// Reason Phrase
+        /// </summary>
+        public string ReasonPhrase { get; set; }
+
+        /// <summary>
         /// A list of error messages that were returned. Only set if the request was not successful.
         /// </summary>
         public List<ErrorMessage> Errors { get; set; }

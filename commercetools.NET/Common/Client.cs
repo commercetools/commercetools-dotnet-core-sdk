@@ -291,6 +291,7 @@ namespace commercetools.Common
             Type resultType = typeof(T);
 
             response.StatusCode = (int)httpResponseMessage.StatusCode;
+            response.ReasonPhrase = httpResponseMessage.ReasonPhrase;
 
             if (response.StatusCode >= 200 && response.StatusCode < 300)
             {
