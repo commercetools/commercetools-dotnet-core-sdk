@@ -23,6 +23,7 @@ namespace commercetools.Types
         public ReferenceType()
             : base()
         {
+            this.Name = "ReferenceType";
         }
 
         /// <summary>

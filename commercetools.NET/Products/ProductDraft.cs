@@ -70,12 +70,14 @@ namespace commercetools.Products
         /// <summary>
         /// Constructor.
         /// </summary>
-        public ProductDraft(LocalizedString name, ResourceIdentifier productType, LocalizedString slug, bool publish = false)
+        /// <param name="name">Name</param>
+        /// <param name="productType">Product type</param>
+        /// <param name="slug">Slug</param>
+        public ProductDraft(LocalizedString name, ResourceIdentifier productType, LocalizedString slug)
         {
             this.Name = name;
             this.ProductType = productType;
             this.Slug = slug;
-            this.Publish = publish;
         }
 
         #endregion

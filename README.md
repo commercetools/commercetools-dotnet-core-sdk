@@ -19,6 +19,8 @@ If you don't already have one, you can [create a free trial project](http://dev.
 The namespaces in the SDK mirror the sections of the [commercetools HTTP API](http://dev.commercetools.com/http-api.html).
 Access to these namespaces is provided by a fluent interface on the Client class.
 
+Responses from the client are wrapped in a Reponse object so you can determine if the request was successful and view the error(s) returned from the API if it was not.
+
 ```cs
 
 using System;
@@ -49,26 +51,56 @@ class Program
 
         Client client = new Client(config);
         
-        ProductQueryResult result = await client.Products().QueryProductsAsync();
+        Response<ProductQueryResult> response = await client.Products().QueryProductsAsync();
 
-        foreach (Product product in result.Results)
+        if (response.Success)
         {
-            Console.WriteLine(product.Id);
+            ProductQueryResult productQueryResult = response.Result;
+
+            foreach (Product product in productQueryResult.Results)
+            {
+                Console.WriteLine(product.Id);
+            }
+        }
+        else
+        {
+            Console.WriteLine("{0}: {1}", response.StatusCode, response.ReasonPhrase);
+
+            foreach (ErrorMessage errorMessage in response.Errors)
+            {
+                Console.WriteLine("{0}: {1}", errorMessage.Code, errorMessage.Message);
+            }
         }
     }
 }
 
 ```
 
-Not all API sections and representations have been implemented in the SDK. If you need to work with areas of the API that have not yet been covered, you can use the Client to make JSON requests directly. 
+Not all API sections and representations have been implemented in the SDK. If you need to work with areas of the API that have not yet been covered, you can use the Client to make JSON requests directly. Ask the client for a JObject and you will get the entire JSON response that is returned from the API.  
+
+This code snippet will have the same output as the code snippet above:
 
 ```cs
 
-dynamic response = await client.GetAsync("/products");
+Response<JObject> response = await client.GetAsync<JObject>("/products");
 
-foreach (dynamic product in response.results)
+if (response.Success)
 {
-    Console.WriteLine(product.id);
+    dynamic responseObj = response.Result;
+
+    foreach (dynamic product in responseObj.results)
+    {
+        Console.WriteLine(product.id);
+    }
+}
+else
+{
+    Console.WriteLine("{0}: {1}", response.StatusCode, response.ReasonPhrase);
+
+    foreach (ErrorMessage errorMessage in response.Errors)
+    {
+        Console.WriteLine("{0}: {1}", errorMessage.Code, errorMessage.Message);
+    }
 }
 
 ```

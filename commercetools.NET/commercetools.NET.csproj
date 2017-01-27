@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carts\ExternalLineItemTotalPrice.cs" />
+    <Compile Include="Carts\UpdateActions\AddCustomLineItemAction.cs" />
     <Compile Include="Carts\UpdateActions\AddDiscountCodeAction.cs" />
     <Compile Include="Carts\UpdateActions\AddLineItemAction.cs" />
     <Compile Include="Carts\Cart.cs" />
@@ -79,17 +80,27 @@
     <Compile Include="Carts\TaxPortion.cs" />
     <Compile Include="Carts\TaxedPrice.cs" />
     <Compile Include="Carts\UpdateActions\AddPaymentAction.cs" />
+    <Compile Include="Carts\UpdateActions\ChangeCustomLineItemMoneyAction.cs" />
+    <Compile Include="Carts\UpdateActions\ChangeCustomLineItemQuantityAction.cs" />
     <Compile Include="Carts\UpdateActions\ChangeLineItemQuantityAction.cs" />
     <Compile Include="Carts\UpdateActions\ChangeTaxModeAction.cs" />
+    <Compile Include="Carts\UpdateActions\ChangeTaxRoundingModeAction.cs" />
     <Compile Include="Carts\UpdateActions\RecalculateAction.cs" />
+    <Compile Include="Carts\UpdateActions\RemoveCustomLineItemAction.cs" />
     <Compile Include="Carts\UpdateActions\RemoveDiscountCodeAction.cs" />
     <Compile Include="Carts\UpdateActions\RemoveLineItemAction.cs" />
     <Compile Include="Carts\UpdateActions\RemovePaymentAction.cs" />
     <Compile Include="Carts\UpdateActions\SetBillingAddressAction.cs" />
+    <Compile Include="Carts\UpdateActions\SetCountryAction.cs" />
     <Compile Include="Carts\UpdateActions\SetCustomerEmailAction.cs" />
     <Compile Include="Carts\UpdateActions\SetCustomerIdAction.cs" />
+    <Compile Include="Carts\UpdateActions\SetCustomLineItemCustomFieldAction.cs" />
+    <Compile Include="Carts\UpdateActions\SetCustomLineItemCustomTypeAction.cs" />
     <Compile Include="Carts\UpdateActions\SetCustomLineItemTaxRateAction.cs" />
     <Compile Include="Carts\UpdateActions\SetCustomShippingMethodAction.cs" />
+    <Compile Include="Carts\UpdateActions\SetCustomTypeAction.cs" />
+    <Compile Include="Carts\UpdateActions\SetLineItemCustomFieldAction.cs" />
+    <Compile Include="Carts\UpdateActions\SetLineItemCustomTypeAction.cs" />
     <Compile Include="Carts\UpdateActions\SetLineItemTaxRateAction.cs" />
     <Compile Include="Carts\UpdateActions\SetLineItemTotalPriceAction.cs" />
     <Compile Include="Carts\UpdateActions\SetLocaleAction.cs" />
@@ -287,6 +298,7 @@
     <Compile Include="Products\UpdateActions\SetAssetTagsAction.cs" />
     <Compile Include="Products\UpdateActions\SetAttributeInAllVariantsAction.cs" />
     <Compile Include="Products\UpdateActions\SetCategoryOrderHintAction.cs" />
+    <Compile Include="Carts\UpdateActions\SetCustomFieldAction.cs" />
     <Compile Include="Products\UpdateActions\SetDescriptionAction.cs" />
     <Compile Include="Products\UpdateActions\SetDiscountedPriceAction.cs" />
     <Compile Include="Products\UpdateActions\SetKeyAction.cs" />
@@ -392,6 +404,9 @@
     <Compile Include="Common\Reference.cs" />
     <Compile Include="TaxCategories\TaxRateDraft.cs" />
     <Compile Include="Types\BooleanType.cs" />
+    <Compile Include="Types\Extensions.cs" />
+    <Compile Include="Types\TypeManager.cs" />
+    <Compile Include="Types\TypeQueryResult.cs" />
     <Compile Include="Types\DateTimeType.cs" />
     <Compile Include="Types\DateType.cs" />
     <Compile Include="Types\Enums.cs" />
@@ -410,6 +425,8 @@
     <Compile Include="Types\SetType.cs" />
     <Compile Include="Types\StringType.cs" />
     <Compile Include="Types\TimeType.cs" />
+    <Compile Include="Types\Type.cs" />
+    <Compile Include="Types\TypeDraft.cs" />
     <Compile Include="Zones\Extensions.cs" />
     <Compile Include="Zones\Location.cs" />
     <Compile Include="Zones\UpdateActions\AddLocationAction.cs" />

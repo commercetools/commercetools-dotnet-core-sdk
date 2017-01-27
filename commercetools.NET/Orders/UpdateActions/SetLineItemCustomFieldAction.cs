@@ -1,5 +1,4 @@
 ﻿using commercetools.Common;
-using commercetools.Types;
 
 using Newtonsoft.Json;
 
@@ -28,8 +27,11 @@ namespace commercetools.Orders.UpdateActions
         /// <summary>
         /// Field value
         /// </summary>
+        /// <remarks>
+        /// If absent or null, this field is removed if it exists.
+        /// </remarks>
         [JsonProperty(PropertyName = "value")]
-        public FieldType Value { get; set; }
+        public object Value { get; set; }
 
         #endregion
 

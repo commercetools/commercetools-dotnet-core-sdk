@@ -1,20 +1,23 @@
-﻿using commercetools.Common;
+﻿using System.Collections.Generic;
+
+using commercetools.Common;
+using commercetools.Types;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace commercetools.Orders.UpdateActions
+namespace commercetools.Carts.UpdateActions
 {
     /// <summary>
-    /// This action sets, overwrites or removes the existing custom type and fields for an existing order LineItem.
+    /// This action sets, overwrites or removes the custom type and fields for an existing LineItem.
     /// </summary>
-    /// <see href="http://dev.commercetools.com/http-api-projects-orders.html#set-lineitem-custom-type"/>
+    /// <see href="https://dev.commercetools.com/http-api-projects-carts.html#set-lineitem-custom-type"/>
     public class SetLineItemCustomTypeAction : UpdateAction
     {
         #region Properties
 
         /// <summary>
-        /// Type
+        /// ResourceIdentifier to a Type
         /// </summary>
         [JsonProperty(PropertyName = "type")]
         public ResourceIdentifier Type { get; set; }

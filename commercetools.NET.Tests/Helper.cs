@@ -14,6 +14,7 @@ using commercetools.Products;
 using commercetools.ProductTypes;
 using commercetools.ShippingMethods;
 using commercetools.TaxCategories;
+using commercetools.Types;
 using commercetools.Zones;
 
 using Configuration = commercetools.Common.Configuration;
@@ -26,8 +27,8 @@ namespace commercetools.Tests
     public class Helper
     {
         private static Random _random = new Random();
+		private static Configuration _configuration = null;
 
-		private static Configuration configuration = null;
         #region Configuration
 
         /// <summary>
@@ -36,16 +37,18 @@ namespace commercetools.Tests
         /// <returns>Configuration</returns>
         public static Configuration GetConfiguration()
         {
-			if (configuration == null) {
-				configuration = new Configuration(
+            if (_configuration == null)
+            {
+                _configuration = new Configuration(
                 	Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.OAuthUrl"]),
                 	Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ApiUrl"]),
                 	Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ProjectKey"]),
                 	Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientID"]),
                 	Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientSecret"]),
-                ProjectScope.ManageProject);
+                    ProjectScope.ManageProject);
 			}
-			return configuration;
+
+            return _configuration;
         }
 
         #endregion
@@ -438,6 +441,57 @@ namespace commercetools.Tests
             taxCategoryDraft.Description = "Created by commercetools.NET";
 
             return taxCategoryDraft;
+        }
+
+        #endregion
+
+        #region Types
+
+        /// <summary>
+        /// Gets a test type draft.
+        /// </summary>
+        /// <param name="project">Project</param>
+        /// <returns>TypeDraft</returns>
+        public static TypeDraft GetTypeDraft(Project.Project project)
+        {
+            LocalizedString typeName = new LocalizedString();
+            typeName.SetValue(project.Languages[0], string.Concat("Test Type", Helper.GetRandomString(10)));
+
+            List<string> resourceTypeIds = new List<string> { "order" };
+
+            TypeDraft typeDraft = 
+                new TypeDraft(string.Concat("test-type-", Helper.GetRandomString(10)), typeName, resourceTypeIds);
+
+            typeDraft.FieldDefinitions = new List<FieldDefinition> { 
+                Helper.GetFieldDefinition(project, "field1", "Field 1", new commercetools.Types.StringType()),
+                Helper.GetFieldDefinition(project, "field2", "Field 2", new commercetools.Types.StringType()),
+                Helper.GetFieldDefinition(project, "field3", "Field 3", new commercetools.Types.StringType())
+            };
+
+            return typeDraft;
+        }
+
+        /// <summary>
+        /// Gets a FieldDefinition.
+        /// </summary>
+        /// <param name="project">Project</param>
+        /// <param name="name">Field name</param>
+        /// <param name="label">Field label</param>
+        /// <param name="type">Field type</param>
+        /// <returns>FieldDefinition</returns>
+        public static FieldDefinition GetFieldDefinition(Project.Project project, string name, string label, FieldType type)
+        {
+            FieldDefinition fieldDefinition = new FieldDefinition
+            {
+                Type = type,
+                Name = name,
+                Required = false
+            };
+
+            fieldDefinition.Label = new LocalizedString();
+            fieldDefinition.Label.SetValue(project.Languages[0], label);
+
+            return fieldDefinition;
         }
 
         #endregion

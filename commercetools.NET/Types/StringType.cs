@@ -14,6 +14,7 @@
         public StringType()
             : base()
         {
+            this.Name = "String";
         }
 
         /// <summary>

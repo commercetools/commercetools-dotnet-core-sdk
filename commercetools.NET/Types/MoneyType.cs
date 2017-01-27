@@ -14,6 +14,7 @@
         public MoneyType()
             : base()
         {
+            this.Name = "Money";
         }
 
         /// <summary>

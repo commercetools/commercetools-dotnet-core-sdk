@@ -34,7 +34,7 @@ namespace commercetools.CustomFields
                 return;
             }
 
-            this.Type = data.type;
+            this.Type = new Reference(data.type);
             this.Fields = data.fields;
         }
 

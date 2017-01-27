@@ -14,6 +14,7 @@
         public NumberType()
             : base()
         {
+            this.Name = "Number";
         }
 
         /// <summary>

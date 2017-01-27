@@ -14,6 +14,7 @@
         public TimeType()
             : base()
         {
+            this.Name = "Time";
         }
 
         /// <summary>

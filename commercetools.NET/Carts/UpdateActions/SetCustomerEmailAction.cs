@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using commercetools.Common;
-using commercetools.CustomFields;
+﻿using commercetools.Common;
 
 using Newtonsoft.Json;
 

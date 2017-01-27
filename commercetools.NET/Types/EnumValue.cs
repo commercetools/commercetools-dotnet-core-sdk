@@ -26,7 +26,6 @@ namespace commercetools.Types
         /// Constructor.
         /// </summary>
         public EnumValue()
-            : base()
         {
         }
 

@@ -27,6 +27,7 @@ namespace commercetools.Types
         public LocalizedEnumType()
             : base()
         {
+            this.Name = "LocalizedEnum";
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using commercetools.Common;
-using commercetools.Types;
 
 using Newtonsoft.Json;
 
@@ -23,7 +22,7 @@ namespace commercetools.Categories.UpdateActions
         /// Value
         /// </summary>
         [JsonProperty(PropertyName = "value")]
-        public FieldType Value { get; set; }
+        public object Value { get; set; }
 
         #endregion
 

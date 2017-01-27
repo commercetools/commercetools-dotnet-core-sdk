@@ -14,6 +14,7 @@
         public LocalizedStringType()
             : base()
         {
+            this.Name = "LocalizedString";
         }
 
         /// <summary>

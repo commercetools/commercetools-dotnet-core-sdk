@@ -15,10 +15,15 @@ using commercetools.ProductTypes;
 using commercetools.Project;
 using commercetools.ShippingMethods;
 using commercetools.TaxCategories;
+using commercetools.Types;
 using commercetools.Zones;
 using commercetools.Zones.UpdateActions;
 
 using NUnit.Framework;
+
+using Newtonsoft.Json.Linq;
+
+using Type = commercetools.Types.Type;
 
 namespace commercetools.Tests
 {
@@ -38,6 +43,7 @@ namespace commercetools.Tests
         private ShippingMethod _testShippingMethod;
         private TaxCategory _testTaxCategory;
         private Zone _testZone;
+        private Type _testType;
         private bool _createdTestZone;
 
         /// <summary>
@@ -52,6 +58,9 @@ namespace commercetools.Tests
             projectTask.Wait();
             Assert.IsTrue(projectTask.Result.Success);
             _project = projectTask.Result.Result;
+
+            Assert.IsTrue(_project.Languages.Count > 0);
+            Assert.IsTrue(_project.Currencies.Count > 0);
 
             _testCustomers = new List<Customer>();
             _testCarts = new List<Cart>();
@@ -159,6 +168,12 @@ namespace commercetools.Tests
             _testPayment = paymentTask.Result.Result;
 
             Assert.NotNull(_testPayment.Id);
+
+            TypeDraft typeDraft = Helper.GetTypeDraft(_project);
+            Task<Response<Type>> typeTask = _client.Types().CreateTypeAsync(typeDraft);
+            typeTask.Wait();
+            Assert.IsTrue(typeTask.Result.Success);
+            _testType = typeTask.Result.Result;
         }
 
         /// <summary>
@@ -201,6 +216,9 @@ namespace commercetools.Tests
                 task = _client.Zones().DeleteZoneAsync(_testZone);
                 task.Wait();
             }
+
+            task = _client.Types().DeleteTypeAsync(_testType);
+            task.Wait();
         }
 
         /// <summary>
@@ -297,7 +315,8 @@ namespace commercetools.Tests
             int newQuantity = 3;
 
             AddLineItemAction addLineItemAction =
-                new AddLineItemAction(_testProduct.Id, _testProduct.MasterData.Current.MasterVariant.Id, quantity);
+                new AddLineItemAction(_testProduct.Id, _testProduct.MasterData.Current.MasterVariant.Id);
+            addLineItemAction.Quantity = quantity;
             Response<Cart> response = await _client.Carts().UpdateCartAsync(_testCarts[0], addLineItemAction);
             Assert.IsTrue(response.Success);
 
@@ -465,6 +484,38 @@ namespace commercetools.Tests
 
             _testCarts[0] = response.Result;
             Assert.NotNull(_testCarts[0].Id);
+        }
+
+        /// <summary>
+        /// Tests the SetCustomTypeAction update action.
+        /// </summary>
+        /// <see cref="CartManager.UpdateCartAsync(commercetools.Carts.Cart, commercetools.Common.UpdateAction)"/>
+        [Test]
+        public async Task ShouldSetCustomTypeAsync()
+        {
+            ResourceIdentifier typeResourceIdentifier = new ResourceIdentifier 
+            { 
+                Id = _testType.Id, 
+                TypeId = commercetools.Common.ReferenceType.Type 
+            };
+
+            string fieldName = _testType.FieldDefinitions[0].Name;
+
+            JObject fields = new JObject();
+            fields.Add(fieldName, "Here is the value of my field.");
+
+            SetCustomTypeAction setCustomTypeAction = new SetCustomTypeAction 
+            { 
+                Type = typeResourceIdentifier, 
+                Fields = fields 
+            };
+
+            Response<Cart> cartResponse = await _client.Carts().UpdateCartAsync(_testCarts[1], setCustomTypeAction);
+            Assert.IsTrue(cartResponse.Success);
+            _testCarts[1] = cartResponse.Result;
+
+            Assert.NotNull(_testCarts[1].Custom.Fields);
+            Assert.AreEqual(fields[fieldName], _testCarts[1].Custom.Fields[fieldName]);
         }
 
         /// <summary>

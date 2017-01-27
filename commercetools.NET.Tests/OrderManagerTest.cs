@@ -140,7 +140,8 @@ namespace commercetools.Tests
             Assert.NotNull(_testProduct.Id);
 
             int quantity = 1;
-            AddLineItemAction addLineItemAction = new AddLineItemAction(_testProduct.Id, _testProduct.MasterData.Current.MasterVariant.Id, quantity);
+            AddLineItemAction addLineItemAction = new AddLineItemAction(_testProduct.Id, _testProduct.MasterData.Current.MasterVariant.Id);
+            addLineItemAction.Quantity = quantity;
             cartTask = _client.Carts().UpdateCartAsync(_testCarts[0], addLineItemAction);
             cartTask.Wait();
             Assert.IsTrue(cartTask.Result.Success);
@@ -263,7 +264,8 @@ namespace commercetools.Tests
             Assert.NotNull(cart.Id);
 
             int quantity = 3;
-            AddLineItemAction addLineItemAction = new AddLineItemAction(_testProduct.Id, _testProduct.MasterData.Current.MasterVariant.Id, quantity);
+            AddLineItemAction addLineItemAction = new AddLineItemAction(_testProduct.Id, _testProduct.MasterData.Current.MasterVariant.Id);
+            addLineItemAction.Quantity = quantity;
             cartResponse = await _client.Carts().UpdateCartAsync(cart, addLineItemAction);
             Assert.IsTrue(cartResponse.Success);
 

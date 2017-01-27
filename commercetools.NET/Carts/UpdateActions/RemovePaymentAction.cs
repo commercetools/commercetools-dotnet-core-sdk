@@ -1,5 +1,4 @@
 ﻿using commercetools.Common;
-using commercetools.CustomFields;
 
 using Newtonsoft.Json;
 

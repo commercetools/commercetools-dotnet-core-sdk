@@ -2,12 +2,12 @@
 
 using Newtonsoft.Json;
 
-namespace commercetools.Customers.UpdateActions
+namespace commercetools.Carts.UpdateActions
 {
     /// <summary>
-    /// SetCustomFieldAction
+    /// This action sets, overwrites or removes any existing custom field for an existing cart.
     /// </summary>
-    /// <see href="http://dev.commercetools.com/http-api-projects-customers.html#set-customfield"/>
+    /// <see href="https://dev.commercetools.com/http-api-projects-carts.html#set-customfield"/>
     public class SetCustomFieldAction : UpdateAction
     {
         #region Properties

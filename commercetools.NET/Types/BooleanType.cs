@@ -14,6 +14,7 @@
         public BooleanType()
             : base()
         {
+            this.Name = "Boolean";
         }
 
         /// <summary>
