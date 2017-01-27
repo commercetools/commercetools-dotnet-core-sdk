@@ -17,75 +17,160 @@ namespace commercetools.Carts
     {
         #region Properties
 
+        /// <summary>
+        /// The unique ID of the cart.
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; private set; }
 
+        /// <summary>
+        /// The current version of the cart.
+        /// </summary>
         [JsonProperty(PropertyName = "version")]
         public int Version { get; private set; }
 
+        /// <summary>
+        /// Created At
+        /// </summary>
         [JsonProperty(PropertyName = "createdAt")]
         public DateTime? CreatedAt { get; private set; }
 
+        /// <summary>
+        /// Last Modified At
+        /// </summary>
         [JsonProperty(PropertyName = "lastModifiedAt")]
         public DateTime? LastModifiedAt { get; private set; }
 
+        /// <summary>
+        /// Customer Id
+        /// </summary>
         [JsonProperty(PropertyName = "customerId")]
         public string CustomerId { get; private set; }
 
+        /// <summary>
+        /// Customer Email
+        /// </summary>
         [JsonProperty(PropertyName = "customerEmail")]
         public string CustomerEmail { get; private set; }
 
+        /// <summary>
+        /// Identifies carts and orders belonging to an anonymous session (the customer has not signed up/in yet).
+        /// </summary>
         [JsonProperty(PropertyName = "anonymousId")]
         public string AnonymousId { get; private set; }
 
+        /// <summary>
+        /// List of LineItems
+        /// </summary>
         [JsonProperty(PropertyName = "lineItems")]
         public List<LineItem> LineItems { get; private set; }
 
+        /// <summary>
+        /// List of CustomLineItems
+        /// </summary>
         [JsonProperty(PropertyName = "customLineItems")]
         public List<CustomLineItem> CustomLineItems { get; private set; }
 
+        /// <summary>
+        /// The sum of all totalPrice fields of the lineItems and customLineItems, as well as the price field of shippingInfo (if it exists).
+        /// </summary>
+        /// <remarks>
+        /// totalPrice may or may not include the taxes: it depends on the taxRate.includedInPrice property of each price.
+        /// </remarks>
         [JsonProperty(PropertyName = "totalPrice")]
         public Money TotalPrice { get; private set; }
 
+        /// <summary>
+        /// Not set until the shipping address is set. Will be set automatically in the Platform TaxMode.
+        /// </summary>
+        /// <remarks>
+        /// For the External tax mode it will be set as soon as the external tax rates for all line items, custom line items, and shipping in the cart are set.
+        /// </remarks>
         [JsonProperty(PropertyName = "taxedPrice")]
         public TaxedPrice TaxedPrice { get; private set; }
 
+        /// <summary>
+        /// Cart State
+        /// </summary>
         [JsonProperty(PropertyName = "cartState")]
         [JsonConverter(typeof(StringEnumConverter))]
         public CartState? CartState { get; private set; }
 
+        /// <summary>
+        /// The shipping address is also used to determine tax rate of the line items.
+        /// </summary>
         [JsonProperty(PropertyName = "shippingAddress")]
         public Address ShippingAddress { get; private set; }
 
+        /// <summary>
+        /// Billing Address
+        /// </summary>
         [JsonProperty(PropertyName = "billingAddress")]
         public Address BillingAddress { get; private set; }
 
+        /// <summary>
+        /// Inventory Mode
+        /// </summary>
         [JsonProperty(PropertyName = "inventoryMode")]
         [JsonConverter(typeof(StringEnumConverter))]
         public InventoryMode? InventoryMode { get; private set; }
 
+        /// <summary>
+        /// Tax Mode
+        /// </summary>
         [JsonProperty(PropertyName = "taxMode")]
         [JsonConverter(typeof(StringEnumConverter))]
         public TaxMode? TaxMode { get; private set; }
 
+        /// <summary>
+        /// When calculating taxes for taxedPrice, the selected mode is used for rounding.
+        /// </summary>
+        [JsonProperty(PropertyName = "taxRoundingMode")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public RoundingMode? TaxRoundingMode { get; private set; }
+
+        /// <summary>
+        /// Reference to a CustomerGroup
+        /// </summary>
+        /// <remarks>
+        /// Set automatically when the customer is set and the customer is a member of a customer group. Used for product variant price selection.
+        /// </remarks>
         [JsonProperty(PropertyName = "customerGroup")]
         public Reference CustomerGroup { get; private set; }
 
+        /// <summary>
+        /// A two-digit country code as per ISO 3166-1 alpha-2. Used for product variant price selection.
+        /// </summary>
         [JsonProperty(PropertyName = "country")]
         public string Country { get; private set; }
 
+        /// <summary>
+        /// Set automatically once the ShippingMethod is set.
+        /// </summary>
         [JsonProperty(PropertyName = "shippingInfo")]
         public ShippingInfo ShippingInfo { get; private set; }
 
+        /// <summary>
+        /// List of DiscountCodeInfo
+        /// </summary>
         [JsonProperty(PropertyName = "discountCodes")]
         public List<DiscountCodeInfo> DiscountCodes { get; private set; }
 
+        /// <summary>
+        /// The custom fields.
+        /// </summary>
         [JsonProperty(PropertyName = "custom")]
         public CustomFields.CustomFields Custom { get; private set; }
 
+        /// <summary>
+        /// Payment Info
+        /// </summary>
         [JsonProperty(PropertyName = "paymentInfo")]
         public PaymentInfo PaymentInfo { get; private set; }
 
+        /// <summary>
+        /// String conforming to IETF language tag.
+        /// </summary>
         [JsonProperty(PropertyName = "locale")]
         public string Locale { get; private set; }
 
@@ -107,10 +192,12 @@ namespace commercetools.Carts
             CartState cartState;
             InventoryMode inventoryMode;
             TaxMode taxMode;
+            RoundingMode taxRoundingMode;
 
             string cartStateStr = (data.cartState != null ? data.cartState.ToString() : string.Empty);
             string inventoryModeStr = (data.inventoryMode != null ? data.inventoryMode.ToString() : string.Empty);
             string taxModeStr = (data.taxMode != null ? data.taxMode.ToString() : string.Empty);
+            string taxRoundingModeStr = (data.taxRoundingMode != null ? data.taxRoundingMode.ToString() : string.Empty);
 
             this.Id = data.id;
             this.Version = data.version;
@@ -128,6 +215,7 @@ namespace commercetools.Carts
             this.BillingAddress = new Address(data.billingAddress);
             this.InventoryMode = Enum.TryParse(inventoryModeStr, out inventoryMode) ? (InventoryMode?)inventoryMode : null;
             this.TaxMode = Enum.TryParse(taxModeStr, out taxMode) ? (TaxMode?)taxMode : null;
+            this.TaxRoundingMode = Enum.TryParse(taxRoundingModeStr, out taxRoundingMode) ? (RoundingMode?)taxRoundingMode : null;
             this.CustomerGroup = new Reference(data.customerGroup);
             this.Country = data.country;
             this.ShippingInfo = new ShippingInfo(data.shippingInfo);

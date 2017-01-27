@@ -14,36 +14,87 @@ namespace commercetools.Products
     {
         #region Properties
 
+        /// <summary>
+        /// The sequential ID of the variant within the product.
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public int Id { get; private set; }
 
+        /// <summary>
+        /// The SKU of the variant.
+        /// </summary>
         [JsonProperty(PropertyName = "sku")]
         public string Sku { get; private set; }
 
+        /// <summary>
+        /// User-specific unique identifier for the variant.
+        /// </summary>
+        /// <remarks>
+        /// Product variant keys are different from product keys.
+        /// </remarks>
         [JsonProperty(PropertyName = "key")]
         public string Key { get; private set; }
 
+        /// <summary>
+        /// The prices of the variant. 
+        /// </summary>
+        /// <remarks>
+        /// The prices does not contain two prices for the same price scope (same currency, country, customer group and channel).
+        /// </remarks>
         [JsonProperty(PropertyName = "prices")]
         public List<Price> Prices { get; private set; }
 
+        /// <summary>
+        /// List of Attributes
+        /// </summary>
         [JsonProperty(PropertyName = "attributes")]
         public List<Attribute> Attributes { get; private set; }
 
+        /// <summary>
+        /// Only appears when price selection is used. 
+        /// </summary>
+        /// <remarks>
+        /// This field cannot be used in a query predicate.
+        /// </remarks>
         [JsonProperty(PropertyName = "price")]
         public Price Price { get; private set; }
 
+        /// <summary>
+        /// List of Images
+        /// </summary>
         [JsonProperty(PropertyName = "images")]
         public List<Image> Images { get; private set; }
 
+        /// <summary>
+        /// List of Assets
+        /// </summary>
+        [JsonProperty(PropertyName = "assets")]
+        public List<Asset> Assets { get; private set; }
+
+        /// <summary>
+        /// The availability is set if the variant is tracked by the inventory.
+        /// </summary>
+        /// <remarks>
+        /// The field might not contain the latest inventory state (it is eventually consistent) and can be used as an optimization to reduce calls to the inventory service.
+        /// </remarks>
         [JsonProperty(PropertyName = "availability")]
         public ProductVariantAvailability Availability { get; private set; }
 
+        /// <summary>
+        /// Only appears in response to a Product Projection Search request to mark this variant as one that matches the search query.
+        /// </summary>
         [JsonProperty(PropertyName = "isMatchingVariant")]
         public bool? IsMatchingVariant { get; private set; }
 
+        /// <summary>
+        /// Only appears when price selection is used.
+        /// </summary>
         [JsonProperty(PropertyName = "scopedPrice")]
         public ScopedPrice ScopedPrice { get; private set; }
 
+        /// <summary>
+        /// Only appears in response to a Product Projection Search request when price selection is used.
+        /// </summary>
         [JsonProperty(PropertyName = "scopedPriceDiscounted")]
         public bool? ScopedPriceDiscounted { get; private set; }
 
@@ -69,6 +120,7 @@ namespace commercetools.Products
             this.Attributes = Helper.GetListFromJsonArray<Attribute>(data.attributes);
             this.Price = new Price(data.price);
             this.Images = Helper.GetListFromJsonArray<Image>(data.images);
+            this.Assets = Helper.GetListFromJsonArray<Asset>(data.assets);
             this.Availability = new ProductVariantAvailability(data.availability);
             this.IsMatchingVariant = data.isMatchingVariant;
             this.ScopedPrice = new ScopedPrice(data.scopedPrice);

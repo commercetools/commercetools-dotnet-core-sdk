@@ -39,13 +39,11 @@ namespace commercetools.ShippingMethods
         /// <param name="name">Name</param>
         /// <param name="taxCategory">Tax category</param>
         /// <param name="zoneRates">Zone rates</param>
-        /// <param name="isDefault">If true the shipping method will be the default one in a project.</param>
-        public ShippingMethodDraft(string name, Reference taxCategory, List<ZoneRate> zoneRates, bool isDefault = false)
+        public ShippingMethodDraft(string name, Reference taxCategory, List<ZoneRate> zoneRates)
         {
             this.Name = name;
             this.TaxCategory = taxCategory;
             this.ZoneRates = zoneRates;
-            this.IsDefault = isDefault;
         }
 
         #endregion
