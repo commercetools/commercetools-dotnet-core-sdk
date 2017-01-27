@@ -38,7 +38,8 @@ namespace commercetools.Tests
             Assert.IsTrue(projectTask.Result.Success);
             _project = projectTask.Result.Result;
 
-            Assert.NotNull(_project);
+            Assert.IsTrue(_project.Languages.Count > 0);
+            Assert.IsTrue(_project.Currencies.Count > 0);
 
             ProductTypeDraft productTypeDraft = Helper.GetTestProductTypeDraft();
             Task<Response<ProductType>> productTypeTask = _client.ProductTypes().CreateProductTypeAsync(productTypeDraft);
@@ -61,6 +62,8 @@ namespace commercetools.Tests
             for (int i = 0; i < 5; i++)
             {
                 ProductDraft productDraft = Helper.GetTestProductDraft(_project, _testProductType.Id, _testTaxCategory.Id);
+                productDraft.Publish = true;
+
                 LocalizedString name = new LocalizedString();
 
                 foreach (string language in _project.Languages)
