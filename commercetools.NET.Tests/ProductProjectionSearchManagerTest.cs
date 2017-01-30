@@ -7,6 +7,7 @@ using commercetools.ProductTypes;
 using commercetools.ProductProjections;
 using commercetools.ProductProjectionSearch;
 using commercetools.Products;
+using commercetools.Products.UpdateActions;
 using commercetools.TaxCategories;
 
 using NUnit.Framework;
@@ -94,8 +95,23 @@ namespace commercetools.Tests
 
             foreach (Product product in _testProducts)
             {
-                task = _client.Products().DeleteProductAsync(product);
-                task.Wait();
+                if (product.MasterData.Published.HasValue && product.MasterData.Published == true)
+                {
+                    Task<Response<Product>> productTask = _client.Products().UpdateProductAsync(product, new UnpublishAction());
+                    productTask.Wait();
+
+                    if (productTask.Result.Success)
+                    {
+                        Product updatedProduct = productTask.Result.Result;
+                        task = _client.Products().DeleteProductAsync(updatedProduct);
+                        task.Wait();
+                    }
+                }
+                else
+                {
+                    task = _client.Products().DeleteProductAsync(product);
+                    task.Wait();
+                }
             }
 
             task = _client.ProductTypes().DeleteProductTypeAsync(_testProductType);
@@ -113,7 +129,7 @@ namespace commercetools.Tests
         public async Task ShouldGetSearchResultsAsync()
         {
             Response<ProductProjectionQueryResult> response 
-                = await _client.ProductProjectionSearch().SearchProductProjectionsAsync("Test Product 1", staged: true);
+                = await _client.ProductProjectionSearch().SearchProductProjectionsAsync("Test Product 1");
             Assert.IsTrue(response.Success);
 
             ProductProjectionQueryResult productProjectionQueryResult = response.Result;
@@ -133,7 +149,7 @@ namespace commercetools.Tests
             };
 
             Response<ProductProjectionQueryResult> response 
-                = await _client.ProductProjectionSearch().SearchProductProjectionsAsync("Test Product 1", staged: true, facet: facet);
+                = await _client.ProductProjectionSearch().SearchProductProjectionsAsync("Test Product 1", facet: facet);
             Assert.IsTrue(response.Success);
 
             ProductProjectionQueryResult productProjectionQueryResult = response.Result;
