@@ -1,9 +1,13 @@
-version: 0.0.{build}
-pull_requests:
-  do_not_increment_build_number: true
-before_build:
-- cmd: nuget restore
-build:
-  project: commercetools.NET-Net45.sln
-  verbosity: minimal
-  
+build_script: 
+  - ps: .\build.ps1 -Target "Appveyor"
+
+# disable built-in tests.
+test: off
+
+deploy:
+- provider: NuGet
+  api_key:
+    secure: D3Y47X7NR+ftXrvBnZtkOaDmSM8rr1UusqaIdJIO/9w2YVdnE/cDKdc+O99jbmpk
+  skip_symbols: true
+  on:
+    branch: master

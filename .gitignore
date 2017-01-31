@@ -26,7 +26,6 @@ bld/
 TestResult.xml
 
 # NuGet
-*.nuspec
 *.nupkg
 *.nuget.props
 *.nuget.targets

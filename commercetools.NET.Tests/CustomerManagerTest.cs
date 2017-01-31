@@ -188,7 +188,7 @@ namespace commercetools.Tests
             Assert.NotNull(customerSignInResult.Customer);
             Assert.AreEqual(customerSignInResult.Customer.Email, email);
 
-            Response<Customer> customerResponse = await _client.Customers().DeleteCustomerAsync(customer);
+            await _client.Customers().DeleteCustomerAsync(customer);
         }
     }
 }
