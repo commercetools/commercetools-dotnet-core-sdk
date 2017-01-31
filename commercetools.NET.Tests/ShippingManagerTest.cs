@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using commercetools.Common;
@@ -8,6 +9,7 @@ using commercetools.Project;
 using commercetools.ShippingMethods;
 using commercetools.TaxCategories;
 using commercetools.Zones;
+using commercetools.Zones.UpdateActions;
 
 using NUnit.Framework;
 
@@ -22,8 +24,9 @@ namespace commercetools.Tests
         private Client _client;
         private Project.Project _project;
         private List<ShippingMethod> _testShippingMethods;
-        private List<Zone> _testZones;
+        private Zone _testZone;
         private TaxCategory _testTaxCategory;
+        private bool _createdTestZone;
 
         /// <summary>
         /// Test setup
@@ -38,6 +41,9 @@ namespace commercetools.Tests
             Assert.IsTrue(projectTask.Result.Success);
             _project = projectTask.Result.Result;
 
+            Assert.IsTrue(_project.Languages.Count > 0);
+            Assert.IsTrue(_project.Currencies.Count > 0);
+
             TaxCategoryDraft taxCategoryDraft = Helper.GetTestTaxCategoryDraft(_project);
             Task<Response<TaxCategory>> taxCategoryTask = _client.TaxCategories().CreateTaxCategoryAsync(taxCategoryDraft);
             taxCategoryTask.Wait();
@@ -46,22 +52,54 @@ namespace commercetools.Tests
             _testTaxCategory = taxCategoryTask.Result.Result;
             Assert.NotNull(_testTaxCategory.Id);
 
-            _testZones = new List<Zone>();
-            _testShippingMethods = new List<ShippingMethod>();
+            Task<Response<ZoneQueryResult>> zoneQueryResultTask = _client.Zones().QueryZonesAsync();
+            zoneQueryResultTask.Wait();
+            Assert.IsTrue(zoneQueryResultTask.Result.Success);
 
-            for (int i = 0; i < 5; i++)
+            if (zoneQueryResultTask.Result.Result.Results.Count > 0)
+            {
+                _testZone = zoneQueryResultTask.Result.Result.Results[0];
+                _createdTestZone = false;
+            }
+            else
             {
                 ZoneDraft zoneDraft = Helper.GetTestZoneDraft();
                 Task<Response<Zone>> zoneTask = _client.Zones().CreateZoneAsync(zoneDraft);
                 zoneTask.Wait();
                 Assert.IsTrue(zoneTask.Result.Success);
+                _testZone = zoneTask.Result.Result;
+                _createdTestZone = true;
+            }
 
-                Zone zone = zoneTask.Result.Result;
-                Assert.NotNull(zone.Id);
+            Assert.NotNull(_testZone.Id);
 
-                _testZones.Add(zone);
+            foreach (string country in _project.Countries)
+            {
+                Location location =
+                    _testZone.Locations
+                        .Where(l => l.Country.Equals(country, StringComparison.OrdinalIgnoreCase))
+                        .FirstOrDefault();
 
-                ShippingMethodDraft shippingMethodDraft = Helper.GetTestShippingMethodDraft(_project, _testTaxCategory, zone);
+                if (location == null)
+                {
+                    location = new Location();
+                    location.Country = country;
+
+                    AddLocationAction addLocationAction = new AddLocationAction(location);
+                    Task<Response<Zone>> updateZoneTask = _client.Zones().UpdateZoneAsync(_testZone, addLocationAction);
+                    updateZoneTask.Wait();
+                    Assert.IsTrue(updateZoneTask.Result.Success);
+                    _testZone = updateZoneTask.Result.Result;
+                }
+            }
+
+            Assert.NotNull(_testZone.Locations.Count > 0);
+
+            _testShippingMethods = new List<ShippingMethod>();
+
+            for (int i = 0; i < 5; i++)
+            {
+                ShippingMethodDraft shippingMethodDraft = Helper.GetTestShippingMethodDraft(_project, _testTaxCategory, _testZone);
                 Task<Response<ShippingMethod>> shippingMethodTask = _client.ShippingMethods().CreateShippingMethodAsync(shippingMethodDraft);
                 shippingMethodTask.Wait();
                 Assert.IsTrue(shippingMethodTask.Result.Success);
@@ -90,9 +128,9 @@ namespace commercetools.Tests
             task = _client.TaxCategories().DeleteTaxCategoryAsync(_testTaxCategory);
             task.Wait();
 
-            foreach (Zone zone in _testZones)
+            if (_createdTestZone)
             {
-                task = _client.Zones().DeleteZoneAsync(zone);
+                task = _client.Zones().DeleteZoneAsync(_testZone);
                 task.Wait();
             }
         }
@@ -143,7 +181,7 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldCreateAndDeleteShippingMethodAsync()
         {
-            ShippingMethodDraft shippingMethodDraft = Helper.GetTestShippingMethodDraft(_project, _testTaxCategory, _testZones[0]);
+            ShippingMethodDraft shippingMethodDraft = Helper.GetTestShippingMethodDraft(_project, _testTaxCategory, _testZone);
             Response<ShippingMethod> response = await _client.ShippingMethods().CreateShippingMethodAsync(shippingMethodDraft);
             Assert.IsTrue(response.Success);
 
