@@ -155,6 +155,26 @@ Task("InitializeBuild")
         }
     });
 
+Task("PatchAssembly")
+	.Description("Creates new AssemblyInfo")
+	.Does(() =>
+	{
+		var file = PROJECT_DIR + "/commercetools.NET/Properties/AssemblyInfo.cs";
+		Information("Assembly Version:" + version);
+		Information("Assembly Informational version:" + packageVersion);
+		CreateAssemblyInfo(file, new AssemblyInfoSettings {
+			Title = "commercetools.NET",
+			Description = "commercetools.NET",
+			Product = "commercetools.NET",
+			Version = version,
+		    FileVersion = version,
+			InformationalVersion = packageVersion,
+			Copyright = string.Format("Copyright © Falcon-Software Company Inc. {0}", DateTime.Now.Year),
+			Company = "Falcon-Software Company Inc.",
+			ComVisible = false,
+			Guid = "9280917f-5440-49fe-a407-6e12b5cb6a27"
+		});
+	});
 //////////////////////////////////////////////////////////////////////
 // BUILD FRAMEWORKS
 //////////////////////////////////////////////////////////////////////
@@ -434,6 +454,7 @@ Task("Rebuild")
 Task("Build")
     .Description("Builds all versions of the framework")
     .IsDependentOn("InitializeBuild")
+    .IsDependentOn("PatchAssembly")
     .IsDependentOn("Build45");
 
 Task("Test")
