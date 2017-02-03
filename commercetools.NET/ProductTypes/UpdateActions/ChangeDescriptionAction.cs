@@ -2,13 +2,13 @@
 
 using Newtonsoft.Json;
 
-namespace commercetools.Zones.UpdateActions
+namespace commercetools.ProductTypes.UpdateActions
 {
     /// <summary>
-    /// SetDescriptionAction
+    /// Change Description
     /// </summary>
-    /// <see href="https://dev.commercetools.com/http-api-projects-zones.html#set-description"/>
-    public class SetDescriptionAction : UpdateAction
+    /// <see href="https://dev.commercetools.com/http-api-projects-productTypes.html#change-description"/>
+    public class ChangeDescriptionAction : UpdateAction
     {
         #region Properties
 
@@ -25,9 +25,11 @@ namespace commercetools.Zones.UpdateActions
         /// <summary>
         /// Constructor.
         /// </summary>
-        public SetDescriptionAction()
+        /// <param name="description">Description</param>
+        public ChangeDescriptionAction(string description)
         {
-            this.Action = "setDescription";
+            this.Action = "changeDescription";
+            this.Description = description;
         }
 
         #endregion

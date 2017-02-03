@@ -139,11 +139,35 @@ namespace commercetools.ProductTypes
         /// Updates a product type.
         /// </summary>
         /// <param name="productType">Product type</param>
+        /// <param name="action">The update action to apply to the product type.</param>
+        /// <returns>ProductType</returns>
+        public Task<Response<ProductType>> UpdateProductTypeAsync(ProductType productType, UpdateAction action)
+        {
+            return UpdateProductTypeByIdAsync(productType.Id, productType.Version, new List<UpdateAction> { action });
+        }
+
+        /// <summary>
+        /// Updates a product type.
+        /// </summary>
+        /// <param name="productType">Product type</param>
         /// <param name="actions">The list of update actions to apply to the product type.</param>
         /// <returns>ProductType</returns>
         public Task<Response<ProductType>> UpdateProductTypeAsync(ProductType productType, List<UpdateAction> actions)
         {
             return UpdateProductTypeByIdAsync(productType.Id, productType.Version, actions);
+        }
+
+        /// <summary>
+        /// Updates a product type by ID.
+        /// </summary>
+        /// <param name="productTypeId">ID of the product type</param>
+        /// <param name="version">The expected version of the product type on which the changes should be applied.</param>
+        /// <param name="action">The update action to apply to the product type.</param>
+        /// <returns>ProductType</returns>
+        /// <see href="http://dev.commercetools.com/http-api-projects-productTypes.html#update-producttype-by-id"/>
+        public Task<Response<ProductType>> UpdateProductTypeByIdAsync(string productTypeId, int version, UpdateAction action)
+        {
+            return UpdateProductTypeByIdAsync(productTypeId, version, new List<UpdateAction> { action });
         }
 
         /// <summary>
@@ -163,6 +187,19 @@ namespace commercetools.ProductTypes
 
             string endpoint = string.Concat(ENDPOINT_PREFIX, "/", productTypeId);
             return UpdateProductTypeAsync(endpoint, version, actions);
+        }
+
+        /// <summary>
+        /// Update a product type found by its Key.
+        /// </summary>
+        /// <param name="key">Product type key</param>
+        /// <param name="version">The expected version of the product type on which the changes should be applied.</param>
+        /// <param name="action">The action to apply to the product type.</param>
+        /// <returns>ProductType</returns>
+        /// <see href="http://dev.commercetools.com/http-api-projects-productTypes.html#update-producttype-by-key"/>
+        public Task<Response<ProductType>> UpdateProductTypeByKeyAsync(string key, int version, UpdateAction action)
+        {
+            return UpdateProductTypeByKeyAsync(key, version, new List<UpdateAction> { action });
         }
 
         /// <summary>

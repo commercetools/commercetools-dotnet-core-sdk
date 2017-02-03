@@ -142,6 +142,19 @@ namespace commercetools.Zones
         /// </summary>
         /// <param name="zoneId">ID of the zone</param>
         /// <param name="version">The expected version of the zone on which the changes should be applied.</param>
+        /// <param name="action">The update action to be performed on the zone.</param>
+        /// <returns>Zone</returns>
+        /// <see href="http://dev.commercetools.com/http-api-projects-zones.html#update-zone"/>
+        public Task<Response<Zone>> UpdateZoneAsync(string zoneId, int version, UpdateAction action)
+        {
+            return UpdateZoneAsync(zoneId, version, new List<UpdateAction> { action });
+        }
+
+        /// <summary>
+        /// Updates a zone.
+        /// </summary>
+        /// <param name="zoneId">ID of the zone</param>
+        /// <param name="version">The expected version of the zone on which the changes should be applied.</param>
         /// <param name="actions">The list of update actions to be performed on the zone.</param>
         /// <returns>Zone</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-zones.html#update-zone"/>

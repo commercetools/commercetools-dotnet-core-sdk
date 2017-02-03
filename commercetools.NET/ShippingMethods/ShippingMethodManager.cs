@@ -174,8 +174,20 @@ namespace commercetools.ShippingMethods
         /// Updates a shipping method.
         /// </summary>
         /// <param name="shippingMethod">Shipping method</param>
-        /// <param name="actions">The list of update actions to apply to the product.</param>
-        /// <returns>Product</returns>
+        /// <param name="action">The update action to apply to the shipping method.</param>
+        /// <returns>ShippingMethod</returns>
+        /// <see href="http://dev.commercetools.com/http-api-projects-shippingMethods.html#update-shippingmethod"/>
+        public Task<Response<ShippingMethod>> UpdateShippingMethodAsync(ShippingMethod shippingMethod, UpdateAction action)
+        {
+            return UpdateShippingMethodAsync(shippingMethod.Id, shippingMethod.Version, new List<UpdateAction> { action });
+        }
+
+        /// <summary>
+        /// Updates a shipping method.
+        /// </summary>
+        /// <param name="shippingMethod">Shipping method</param>
+        /// <param name="actions">The list of update actions to apply to the shipping method.</param>
+        /// <returns>ShippingMethod</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-shippingMethods.html#update-shippingmethod"/>
         public Task<Response<ShippingMethod>> UpdateShippingMethodAsync(ShippingMethod shippingMethod, List<UpdateAction> actions)
         {
@@ -186,9 +198,22 @@ namespace commercetools.ShippingMethods
         /// Updates a shipping method.
         /// </summary>
         /// <param name="shippingMethodId">ID of the shipping method</param>
-        /// <param name="version">The expected version of the product on which the changes should be applied.</param>
-        /// <param name="actions">The list of update actions to apply to the product.</param>
-        /// <returns>Product</returns>
+        /// <param name="version">The expected version of the shipping method on which the changes should be applied.</param>
+        /// <param name="action">The update action to apply to the shipping method.</param>
+        /// <returns>ShippingMethod</returns>
+        /// <see href="http://dev.commercetools.com/http-api-projects-shippingMethods.html#update-shippingmethod"/>
+        public Task<Response<ShippingMethod>> UpdateShippingMethodAsync(string shippingMethodId, int version, UpdateAction action)
+        {
+            return UpdateShippingMethodAsync(shippingMethodId, version, new List<UpdateAction> { action });
+        }
+
+        /// <summary>
+        /// Updates a shipping method.
+        /// </summary>
+        /// <param name="shippingMethodId">ID of the shipping method</param>
+        /// <param name="version">The expected version of the shipping method on which the changes should be applied.</param>
+        /// <param name="actions">The list of update actions to apply to the shipping method.</param>
+        /// <returns>ShippingMethod</returns>
         /// <see href="http://dev.commercetools.com/http-api-projects-shippingMethods.html#update-shippingmethod"/>
         public Task<Response<ShippingMethod>> UpdateShippingMethodAsync(string shippingMethodId, int version, List<UpdateAction> actions)
         {

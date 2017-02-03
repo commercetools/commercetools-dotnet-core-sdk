@@ -201,6 +201,32 @@ namespace commercetools.Common
             return str;
         }
 
+        /// <summary>
+        /// Determines if a type is a generic list.
+        /// </summary>
+        /// <param name="type">Type</param>
+        /// <returns>True if type is generic list, false otherwise</returns>
+        public static bool IsGenericList(Type type)
+        {
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
+            Type[] interfaces = type.GetInterfaces();
+
+            foreach (Type @interface in interfaces)
+            {
+                if (@interface.IsGenericType)
+                {
+                    if (@interface.GetGenericTypeDefinition() == typeof(ICollection<>))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         #endregion
     }
 }

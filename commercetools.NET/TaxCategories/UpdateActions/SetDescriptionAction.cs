@@ -2,18 +2,18 @@
 
 using Newtonsoft.Json;
 
-namespace commercetools.Zones.UpdateActions
+namespace commercetools.TaxCategories.UpdateActions
 {
     /// <summary>
-    /// SetDescriptionAction
+    /// Set Description 
     /// </summary>
-    /// <see href="https://dev.commercetools.com/http-api-projects-zones.html#set-description"/>
+    /// <see href="https://dev.commercetools.com/http-api-projects-taxCategories.html#set-description"/>
     public class SetDescriptionAction : UpdateAction
     {
         #region Properties
 
         /// <summary>
-        /// Description
+        /// Deescription
         /// </summary>
         [JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
