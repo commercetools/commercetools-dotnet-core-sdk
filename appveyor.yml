@@ -3,3 +3,12 @@ build_script:
 
 # disable built-in tests.
 test: off
+
+deploy:
+- provider: NuGet
+  server: https://www.myget.org/F/commercetools-dotnet-sdk/api/v2/package
+  api_key:
+    secure: wODMBph/C6fpMj92W0EfeV0teSwNDK69RdAxys+4VHbEgv/Cqrwino+Q1rLGBc5w
+  skip_symbols: true
+  on:
+    branch: master
