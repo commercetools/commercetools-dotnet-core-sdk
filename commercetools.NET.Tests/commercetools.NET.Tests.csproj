@@ -76,6 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShippingManagerTest.cs" />
     <Compile Include="TaxCategoryManagerTest.cs" />
+    <Compile Include="TypeManagerTest.cs" />
     <Compile Include="ZoneManagerTest.cs" />
   </ItemGroup>
   <ItemGroup>

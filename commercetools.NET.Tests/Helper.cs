@@ -103,8 +103,9 @@ namespace commercetools.Tests
 
             foreach (string language in project.Languages)
             {
-                name.SetValue(language, string.Concat("Test Category ", language, " ", Helper.GetRandomString(10)));
-                slug.SetValue(language, string.Concat("test-category-", language, "-", Helper.GetRandomString(10)));
+                string randomPostfix = Helper.GetRandomString(10);
+                name.SetValue(language, string.Concat("Test Category ", language, " ", randomPostfix));
+                slug.SetValue(language, string.Concat("test-category-", language, "-", randomPostfix));
                 description.SetValue(language, string.Concat("Created by commercetools.NET ", language));
                 metaTitle.SetValue(language, string.Concat("Category Meta Title ", language));
                 metaDescription.SetValue(language, string.Concat("Category Meta Description ", language));
@@ -253,8 +254,9 @@ namespace commercetools.Tests
                 priceDrafts.Add(new PriceDraft(value));
             }
 
+            string randomSku = Helper.GetRandomString(10);
             ProductVariantDraft productVariantDraft = new ProductVariantDraft();
-            productVariantDraft.Sku = Helper.GetRandomString(10);
+            productVariantDraft.Sku = randomSku;
             productVariantDraft.Prices = priceDrafts;
 
             ResourceIdentifier productType = new ResourceIdentifier();
@@ -270,8 +272,8 @@ namespace commercetools.Tests
 
             foreach (string language in project.Languages)
             {
-                name.SetValue(language, string.Concat("Test Product ", language, " ", Helper.GetRandomString(10)));
-                slug.SetValue(language, string.Concat("test-product-", language, "-", Helper.GetRandomString(10)));
+                name.SetValue(language, string.Concat("Test Product ", language, " ", randomSku));
+                slug.SetValue(language, string.Concat("test-product-", language, "-", randomSku));
                 description.SetValue(language, string.Concat("Created by commercetools.NET ", language));
                 metaTitle.SetValue(language, string.Concat("Product Meta Title ", language));
                 metaDescription.SetValue(language, string.Concat("Product Meta Description ", language));
@@ -455,12 +457,13 @@ namespace commercetools.Tests
         public static TypeDraft GetTypeDraft(Project.Project project)
         {
             LocalizedString typeName = new LocalizedString();
-            typeName.SetValue(project.Languages[0], string.Concat("Test Type", Helper.GetRandomString(10)));
+            string randomPostfix = Helper.GetRandomString(10);
+            typeName.SetValue(project.Languages[0], string.Concat("Test Type", randomPostfix));
 
             List<string> resourceTypeIds = new List<string> { "order" };
 
-            TypeDraft typeDraft = 
-                new TypeDraft(string.Concat("test-type-", Helper.GetRandomString(10)), typeName, resourceTypeIds);
+            TypeDraft typeDraft =
+                new TypeDraft(string.Concat("test-type-", randomPostfix), typeName, resourceTypeIds);
 
             typeDraft.FieldDefinitions = new List<FieldDefinition> { 
                 Helper.GetFieldDefinition(project, "field1", "Field 1", new commercetools.Types.StringType()),
@@ -540,30 +543,6 @@ namespace commercetools.Tests
         public static int GetRandomNumber(int minValue, int maxValue)
         {
             return _random.Next(minValue, maxValue);
-        }
-
-        /// <summary>
-        /// Gets a list of countries for testing.
-        /// </summary>
-        /// <returns></returns>
-        public static List<string> GetTestCountries()
-        {
-            List<string> countries = new List<string>();
-
-            countries.Add("CA");
-            countries.Add("CN");
-            countries.Add("DE");
-            countries.Add("ES");
-            countries.Add("GB");
-            countries.Add("FR");
-            countries.Add("IT");
-            countries.Add("JP");
-            countries.Add("RU");
-            countries.Add("US");
-            countries.Add("TR");
-            countries.Add("ZA");
-           
-            return countries;
         }
 
         #endregion 

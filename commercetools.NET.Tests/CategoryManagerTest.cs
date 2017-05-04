@@ -159,8 +159,8 @@ namespace commercetools.Tests
 
             foreach (string language in _project.Languages)
             {
-                Assert.AreEqual(_testCategories[2].Name.GetValue(language), newName.GetValue(language));
-                Assert.AreEqual(_testCategories[2].Slug.GetValue(language), newSlug.GetValue(language));
+                Assert.AreEqual(_testCategories[2].Name[language], newName[language]);
+                Assert.AreEqual(_testCategories[2].Slug[language], newSlug[language]);
             }
         }
     }
