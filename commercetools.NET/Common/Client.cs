@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -88,8 +89,12 @@ namespace commercetools.Common
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
-                HttpResponseMessage httpResponseMessage = await client.GetAsync(url);
+                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri(url))
+                {
+                    Version = HttpVersion.Version10
+                };
 
+                HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
                 response = await GetResponse<T>(httpResponseMessage);
             }
 
@@ -129,9 +134,13 @@ namespace commercetools.Common
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
-                StringContent content = new StringContent(payload, Encoding.UTF8, "application/json");
-                HttpResponseMessage httpResponseMessage = await client.PostAsync(url, content);
+                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url))
+                {
+                    Version = HttpVersion.Version10,
+                    Content = new StringContent(payload, Encoding.UTF8, "application/json")
+                };
 
+                HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
                 response = await GetResponse<T>(httpResponseMessage);
             }
 
@@ -171,8 +180,12 @@ namespace commercetools.Common
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
-                HttpResponseMessage httpResponseMessage = await client.DeleteAsync(url);
+                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, new Uri(url))
+                {
+                    Version = HttpVersion.Version10
+                };
 
+                HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
                 response = await GetResponse<T>(httpResponseMessage);
             }
 
@@ -223,8 +236,6 @@ namespace commercetools.Common
                 new KeyValuePair<string, string>("scope", string.Concat(this.Configuration.Scope.ToEnumMemberString(), ":", this.Configuration.ProjectKey))
             };
 
-            FormUrlEncodedContent content = new FormUrlEncodedContent(pairs);
-
             string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Concat(this.Configuration.ClientID, ":", this.Configuration.ClientSecret)));
 
             using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
@@ -234,7 +245,13 @@ namespace commercetools.Common
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
-                HttpResponseMessage httpResponseMessage = await client.PostAsync(this.Configuration.OAuthUrl, content);
+                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(this.Configuration.OAuthUrl))
+                {
+                    Version = HttpVersion.Version10,
+                    Content = new FormUrlEncodedContent(pairs)
+                };
+
+                HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
                 response = await GetResponse<Token>(httpResponseMessage);
             }
 
@@ -257,8 +274,6 @@ namespace commercetools.Common
                 new KeyValuePair<string, string>("refresh_token", refreshToken)
             };
 
-            FormUrlEncodedContent content = new FormUrlEncodedContent(pairs);
-
             string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Concat(this.Configuration.ClientID, ":", this.Configuration.ClientSecret)));
 
             using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
@@ -268,7 +283,13 @@ namespace commercetools.Common
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
-                HttpResponseMessage httpResponseMessage = await client.PostAsync(this.Configuration.OAuthUrl, content);
+                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(this.Configuration.OAuthUrl))
+                {
+                    Version = HttpVersion.Version10,
+                    Content = new FormUrlEncodedContent(pairs)
+                };
+
+                HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
                 response = await GetResponse<Token>(httpResponseMessage);
             }
 
