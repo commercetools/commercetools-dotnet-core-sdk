@@ -20,6 +20,22 @@ namespace commercetools.Common.UpdateActions
         /// </summary>
         public Dictionary<string, JToken> Properties { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the value for a property.
+        /// </summary>
+        /// <param name="propertyName">Property name</param>
+        public object this[string propertyName]
+        {
+            get
+            {
+                return GetProperty(propertyName);
+            }
+            set
+            {
+                SetProperty(propertyName, value);
+            }
+        }
+
         #endregion
 
         #region Constructors

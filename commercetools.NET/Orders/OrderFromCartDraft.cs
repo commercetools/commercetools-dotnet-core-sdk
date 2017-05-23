@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
+using commercetools.Carts;
+
 namespace commercetools.Orders
 {
     /// <summary>
@@ -27,6 +29,16 @@ namespace commercetools.Orders
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="cart">Cart from which an order is created.</param>
+        public OrderFromCartDraft(Cart cart)
+        {
+            this.Id = cart.Id;
+            this.Version = cart.Version;
+        }
 
         /// <summary>
         /// Constructor.
