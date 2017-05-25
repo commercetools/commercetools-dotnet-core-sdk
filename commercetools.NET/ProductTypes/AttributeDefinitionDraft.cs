@@ -67,7 +67,7 @@ namespace commercetools.ProductTypes
         /// Whether the attribute’s values should generally be enabled in product search.
         /// </summary>
         /// <remarks>
-        /// This determines whether the value is stored in products for matching terms in the context of full-text search queries and can be used in facets & filters as part of product search queries. The exact features that are enabled/disabled with this flag depend on the concrete attribute type and are described there.
+        /// This determines whether the value is stored in products for matching terms in the context of full-text search queries and can be used in facets &amp; filters as part of product search queries. The exact features that are enabled/disabled with this flag depend on the concrete attribute type and are described there.
         /// </remarks>
         [JsonProperty(PropertyName = "isSearchable")]
         public bool? IsSearchable { get; set; }

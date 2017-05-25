@@ -35,7 +35,7 @@ namespace commercetools.Payments.UpdateActions
         /// Constructor.
         /// </summary>
         /// <param name="transactionId">UUID of the transaction to be updated</param>
-        /// <param name="InteractionId">The new interactionId.</param>
+        /// <param name="interactionId">The new interactionId.</param>
         public ChangeTransactionInteractionIdAction(string transactionId, string interactionId)
         {
             this.Action = "changeTransactionInteractionId";

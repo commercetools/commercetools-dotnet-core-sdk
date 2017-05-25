@@ -138,7 +138,7 @@ namespace commercetools.Types
         /// Updates a type.
         /// </summary>
         /// <param name="type">Type</param>
-        /// <param name="action">The update action to be performed on the type.</param>
+        /// <param name="actions">The update actions to be performed on the type.</param>
         /// <returns>Type</returns>
         public Task<Response<Type>> UpdateTypeAsync(Type type, List<UpdateAction> actions)
         {
@@ -241,7 +241,7 @@ namespace commercetools.Types
         /// Deletes a type.
         /// </summary>
         /// <param name="type">Type</param>
-        /// <returns>Response<JObject></returns>
+        /// <returns>Response of type JObject</returns>
         public Task<Response<JObject>> DeleteTypeAsync(Type type)
         {
             return DeleteTypeByIdAsync(type.Id, type.Version);
@@ -268,7 +268,7 @@ namespace commercetools.Types
         /// <summary>
         /// Deletes a type.
         /// </summary>
-        /// <param name="typeId">Type ID</param>
+        /// <param name="key">Type key</param>
         /// <param name="version">Type version</param>
         /// <returns>JObject</returns>
         /// <see href="https://dev.commercetools.com/http-api-projects-types.html#delete-type-by-key"/>
