@@ -54,7 +54,7 @@ namespace commercetools.Products.UpdateActions
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="The URL of the image">Name</param>
+        /// <param name="imageUrl">The URL of the image</param>
         /// <param name="position">Position</param>
         /// <param name="variantId">Variant ID</param>
         /// <param name="sku">Sku</param>

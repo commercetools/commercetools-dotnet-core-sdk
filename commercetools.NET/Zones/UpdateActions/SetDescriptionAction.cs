@@ -13,10 +13,10 @@ namespace commercetools.Zones.UpdateActions
         #region Properties
 
         /// <summary>
-        /// Deescription
+        /// Description
         /// </summary>
         [JsonProperty(PropertyName = "description")]
-        public string Deescription { get; set; }
+        public string Description { get; set; }
 
         #endregion
 

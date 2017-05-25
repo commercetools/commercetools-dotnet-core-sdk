@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -33,14 +33,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\bin\Release\net-4.5\commercetools.NET.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -239,14 +240,26 @@
     <Compile Include="Payments\PaymentStatus.cs" />
     <Compile Include="Payments\Transaction.cs" />
     <Compile Include="Payments\TransactionDraft.cs" />
+    <Compile Include="Payments\UpdateActions\AddInterfaceInteractionAction.cs" />
+    <Compile Include="Payments\UpdateActions\AddTransactionAction.cs" />
     <Compile Include="Payments\UpdateActions\ChangeAmountPlannedAction.cs" />
+    <Compile Include="Payments\UpdateActions\ChangeTransactionInteractionIdAction.cs" />
+    <Compile Include="Payments\UpdateActions\ChangeTransactionStateAction.cs" />
+    <Compile Include="Payments\UpdateActions\ChangeTransactionTimestampAction.cs" />
     <Compile Include="Payments\UpdateActions\SetAmountPaidAction.cs" />
     <Compile Include="Payments\UpdateActions\SetAmountRefundedAction.cs" />
     <Compile Include="Payments\UpdateActions\SetAuthorizationAction.cs" />
     <Compile Include="Payments\UpdateActions\SetCustomerAction.cs" />
+    <Compile Include="Payments\UpdateActions\SetCustomFieldAction.cs" />
+    <Compile Include="Payments\UpdateActions\SetCustomTypeAction.cs" />
     <Compile Include="Payments\UpdateActions\SetExternalIdAction.cs" />
     <Compile Include="Payments\UpdateActions\SetInterfaceIdAction.cs" />
     <Compile Include="Payments\UpdateActions\SetMethodInfoInterfaceAction.cs" />
+    <Compile Include="Payments\UpdateActions\SetMethodInfoMethodAction.cs" />
+    <Compile Include="Payments\UpdateActions\SetMethodInfoNameAction.cs" />
+    <Compile Include="Payments\UpdateActions\SetStatusInterfaceCodeAction.cs" />
+    <Compile Include="Payments\UpdateActions\SetStatusInterfaceTextAction.cs" />
+    <Compile Include="Payments\UpdateActions\TransitionStateAction.cs" />
     <Compile Include="ProductProjectionSearch\Enums.cs" />
     <Compile Include="ProductProjectionSearch\Extensions.cs" />
     <Compile Include="ProductProjectionSearch\Facet.cs" />
@@ -363,6 +376,21 @@
     <Compile Include="ProductTypes\ReferenceType.cs" />
     <Compile Include="ProductTypes\TextType.cs" />
     <Compile Include="ProductTypes\TimeType.cs" />
+    <Compile Include="ProductTypes\UpdateActions\AddAttributeDefinitionAction.cs" />
+    <Compile Include="ProductTypes\UpdateActions\AddLocalizedEnumValueAction.cs" />
+    <Compile Include="ProductTypes\UpdateActions\AddPlainEnumValueAction.cs" />
+    <Compile Include="ProductTypes\UpdateActions\ChangeAttributeDefinitionLabelAction.cs" />
+    <Compile Include="ProductTypes\UpdateActions\ChangeAttributeOrderAction.cs" />
+    <Compile Include="ProductTypes\UpdateActions\ChangeDescriptionAction.cs" />
+    <Compile Include="ProductTypes\UpdateActions\ChangeIsSearchableAction.cs" />
+    <Compile Include="ProductTypes\UpdateActions\ChangeLocalizedEnumValueLabelAction.cs" />
+    <Compile Include="ProductTypes\UpdateActions\ChangeLocalizedEnumValueOrderAction.cs" />
+    <Compile Include="ProductTypes\UpdateActions\ChangeNameAction.cs" />
+    <Compile Include="ProductTypes\UpdateActions\ChangePlainEnumValueLabelAction.cs" />
+    <Compile Include="ProductTypes\UpdateActions\ChangePlainEnumValueOrderAction.cs" />
+    <Compile Include="ProductTypes\UpdateActions\RemoveAttributeDefinitionAction.cs" />
+    <Compile Include="ProductTypes\UpdateActions\SetInputTipAction.cs" />
+    <Compile Include="ProductTypes\UpdateActions\SetKeyAction.cs" />
     <Compile Include="Project\Extensions.cs" />
     <Compile Include="Project\Project.cs" />
     <Compile Include="Project\ProjectManager.cs" />
@@ -374,9 +402,18 @@
     <Compile Include="ShippingMethods\ShippingMethodManager.cs" />
     <Compile Include="ShippingMethods\ShippingMethodQueryResult.cs" />
     <Compile Include="ShippingMethods\ShippingRate.cs" />
+    <Compile Include="ShippingMethods\UpdateActions\AddShippingRateAction.cs" />
+    <Compile Include="ShippingMethods\UpdateActions\AddZoneAction.cs" />
+    <Compile Include="ShippingMethods\UpdateActions\ChangeIsDefaultAction.cs" />
+    <Compile Include="ShippingMethods\UpdateActions\ChangeNameAction.cs" />
+    <Compile Include="ShippingMethods\UpdateActions\ChangeTaxCategoryAction.cs" />
+    <Compile Include="ShippingMethods\UpdateActions\RemoveShippingRateAction.cs" />
+    <Compile Include="ShippingMethods\UpdateActions\RemoveZoneAction.cs" />
+    <Compile Include="ShippingMethods\UpdateActions\SetDescriptionAction.cs" />
     <Compile Include="ShippingMethods\ZoneRate.cs" />
     <Compile Include="States\Enums.cs" />
     <Compile Include="States\State.cs" />
+    <Compile Include="States\StateDraft.cs" />
     <Compile Include="TaxCategories\Extensions.cs" />
     <Compile Include="TaxCategories\SubRate.cs" />
     <Compile Include="TaxCategories\TaxCategory.cs" />
@@ -403,6 +440,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Reference.cs" />
     <Compile Include="TaxCategories\TaxRateDraft.cs" />
+    <Compile Include="TaxCategories\UpdateActions\AddTaxRateAction.cs" />
+    <Compile Include="TaxCategories\UpdateActions\ChangeNameAction.cs" />
+    <Compile Include="TaxCategories\UpdateActions\RemoveTaxRateAction.cs" />
+    <Compile Include="TaxCategories\UpdateActions\ReplaceTaxRateAction.cs" />
+    <Compile Include="TaxCategories\UpdateActions\SetDescriptionAction.cs" />
     <Compile Include="Types\BooleanType.cs" />
     <Compile Include="Types\Extensions.cs" />
     <Compile Include="Types\TypeManager.cs" />

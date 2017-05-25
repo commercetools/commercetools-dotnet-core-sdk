@@ -16,8 +16,27 @@ namespace commercetools.Common
     {
         #region Properties
 
+        /// <summary>
+        /// Values
+        /// </summary>
         [JsonExtensionData]
         public Dictionary<string, object> Values { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the value for a language.
+        /// </summary>
+        /// <param name="language">Language in the format of an IETF language tag</param>
+        public string this[string language]
+        {
+            get
+            {
+                return GetValue(language);
+            }
+            set
+            {
+                SetValue(language, value);
+            }
+        }
 
         #endregion 
 
@@ -58,7 +77,7 @@ namespace commercetools.Common
         /// Sets a value for a particular language.
         /// </summary>
         /// <remarks>If a previous value has been set for the language, it will be overwritten</remarks>
-        /// <param name="language">Language</param>
+        /// <param name="language">Language in the format of an IETF language tag</param>
         /// <param name="value">Value</param>
         public void SetValue(string language, string value)
         {
@@ -75,7 +94,7 @@ namespace commercetools.Common
         /// <summary>
         /// Gets the value for a language.
         /// </summary>
-        /// <param name="language">Language</param>
+        /// <param name="language">Language in the format of an IETF language tag</param>
         /// <returns>Value, or an empty string if not set</returns>
         public string GetValue(string language)
         {

@@ -31,7 +31,7 @@ namespace commercetools.Carts.UpdateActions
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="lineItemId">ID of an existing CustomLineItem in the cart.</param>
+        /// <param name="customLineItemId">ID of an existing CustomLineItem in the cart.</param>
         /// <param name="money">The new money.</param>
         public ChangeCustomLineItemMoneyAction(string customLineItemId, Money money)
         {

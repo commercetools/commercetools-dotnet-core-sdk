@@ -6,18 +6,18 @@
     public class MessageFactory
     {
         /// <summary>
-        /// Creates an AttributeType using JSON data from an API response.
+        /// Creates a Message using JSON data from an API response.
         /// </summary>
         /// <param name="data">JSON object</param>
-        /// <returns>A object derived from AttributeType, or null</returns>
+        /// <returns>A object derived from Message, or null</returns>
         public static Message Create(dynamic data = null)
         {
-            if (data == null || data.name == null)
+            if (data == null || data.type == null)
             {
                 return null;
             }
 
-            switch ((string)data.name)
+            switch ((string)data.type)
             {
                 case "LineItemStateTransition":
                     return new LineItemStateTransitionMessage(data);

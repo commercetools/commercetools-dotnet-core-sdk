@@ -31,7 +31,7 @@ namespace commercetools.Products.UpdateActions
         /// Defaults to true
         /// </remarks>
         [JsonProperty(PropertyName = "staged")]
-        public bool Staged { get; set; }
+        public bool? Staged { get; set; }
 
         #endregion
 

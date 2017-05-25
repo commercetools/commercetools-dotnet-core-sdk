@@ -33,7 +33,12 @@ namespace commercetools.Messages
                 return;
             }
 
-            this.Results = Helper.GetListFromJsonArray<Message>(data.results);
+            this.Results = new List<Message>();
+
+            foreach (dynamic result in data.results)
+            {
+                this.Results.Add(MessageFactory.Create(result));
+            }
         }
 
         #endregion
