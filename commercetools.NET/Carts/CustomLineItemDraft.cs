@@ -31,7 +31,7 @@ namespace commercetools.Carts
         public Reference TaxCategory { get; set; }
 
         [JsonProperty(PropertyName = "custom")]
-        public List<CustomFieldsDraft> Custom { get; set; }
+        public CustomFieldsDraft Custom { get; set; }
 
         #endregion
 
