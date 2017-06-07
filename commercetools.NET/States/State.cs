@@ -73,7 +73,7 @@ namespace commercetools.States
             string typeStr = (data.taxMode != null ? data.taxMode.ToString() : string.Empty);
 
             this.Id = data.id;
-            this.Version = data.version;
+            this.Version = data.version ?? 0;
             this.CreatedAt = data.createdAt;
             this.LastModifiedAt = data.lastModifiedAt;
             this.Key = data.key;

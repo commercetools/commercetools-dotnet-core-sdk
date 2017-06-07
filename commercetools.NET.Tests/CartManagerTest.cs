@@ -305,6 +305,37 @@ namespace commercetools.Tests
         }
 
         /// <summary>
+        /// Tests the CartManager.CreateCartAsync and CartManager.DeleteCartAsync methods for a cart with custom line items.
+        /// </summary>
+        /// <see cref="CartManager.CreateCartAsync"/>
+        /// <seealso cref="CartManager.DeleteCartAsync(commercetools.Carts.Cart)"/>
+        [Test]
+        public async Task ShouldCreateAndDeleteCartWithCustomLineItemsAsync()
+        {
+            CartDraft cartDraft = Helper.GetTestCartDraftWithCustomLineItems(_project);
+
+            Response<Cart> response = await _client.Carts().CreateCartAsync(cartDraft);
+            Assert.IsTrue(response.Success);
+
+            Cart cart = response.Result;
+            Assert.NotNull(cart.Id);
+            Assert.AreEqual(cart.Country, cartDraft.Country);
+            Assert.AreEqual(cart.InventoryMode, cartDraft.InventoryMode);
+            Assert.AreEqual(cart.ShippingAddress, cartDraft.ShippingAddress);
+            Assert.AreEqual(cart.BillingAddress, cartDraft.BillingAddress);
+
+            string deletedCartId = cart.Id;
+
+            response = await _client.Carts().DeleteCartAsync(cart);
+            Assert.IsTrue(response.Success);
+
+            cart = response.Result;
+
+            response = await _client.Carts().GetCartByIdAsync(deletedCartId);
+            Assert.IsFalse(response.Success);
+        }
+
+        /// <summary>
         /// Tests the AddLineItemAction, ChangeLineItemQuantityAction and RemoveLineItemAction update actions.
         /// </summary>
         /// <see cref="CartManager.UpdateCartAsync(commercetools.Carts.Cart, commercetools.Common.UpdateAction)"/>
