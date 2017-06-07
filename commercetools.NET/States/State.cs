@@ -20,7 +20,7 @@ namespace commercetools.States
         public string Id { get; private set; }
 
         [JsonProperty(PropertyName = "version")]
-        public int Version { get; private set; }
+        public int? Version { get; private set; }
 
         [JsonProperty(PropertyName = "createdAt")]
         public DateTime? CreatedAt { get; private set; }
@@ -73,7 +73,7 @@ namespace commercetools.States
             string typeStr = (data.taxMode != null ? data.taxMode.ToString() : string.Empty);
 
             this.Id = data.id;
-            this.Version = data.version ?? 0;
+            this.Version = data.version;
             this.CreatedAt = data.createdAt;
             this.LastModifiedAt = data.lastModifiedAt;
             this.Key = data.key;
