@@ -79,7 +79,48 @@ namespace commercetools.Tests
             {
                 cartDraft.CustomerId = customerId;
             }
+            return cartDraft;
+        }
 
+        /// <summary>
+        /// Gets a test cart draft with custom line items.
+        /// </summary>
+        /// <param name="project">Project</param>
+        /// <param name="customerId">Customer ID</param>
+        /// <returns>CartDraft</returns>
+        public static CartDraft GetTestCartDraftWithCustomLineItems(Project.Project project, string customerId = null)
+        {
+            var shippingAddress = GetTestAddress(project);
+            var billingAddress = GetTestAddress(project);
+            var name = new LocalizedString();
+            name.Values.Add("en", "Test-CustomLineItem");
+            var currency = project.Currencies[0];
+            var country = project.Countries[0];
+
+            var cartDraft = new CartDraft(currency)
+            {
+                Country = country,
+                InventoryMode = InventoryMode.None,
+                ShippingAddress = shippingAddress,
+                BillingAddress = billingAddress,
+                TaxMode = TaxMode.Disabled,
+                CustomLineItems = new List<CustomLineItemDraft>()
+            };
+
+            if (!string.IsNullOrWhiteSpace(customerId))
+            {
+                cartDraft.CustomerId = customerId;
+            }
+            cartDraft.CustomLineItems.Add(new CustomLineItemDraft(name)
+            {
+                Quantity = 40,
+                Money = new Money
+                {
+                    CentAmount = 30,
+                    CurrencyCode = currency
+                },
+                Slug = "Test-CustomLineItem-Slug",
+            });
             return cartDraft;
         }
 

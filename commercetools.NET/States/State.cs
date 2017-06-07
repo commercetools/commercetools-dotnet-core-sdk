@@ -20,7 +20,7 @@ namespace commercetools.States
         public string Id { get; private set; }
 
         [JsonProperty(PropertyName = "version")]
-        public int Version { get; private set; }
+        public int? Version { get; private set; }
 
         [JsonProperty(PropertyName = "createdAt")]
         public DateTime? CreatedAt { get; private set; }
