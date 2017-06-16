@@ -74,7 +74,7 @@ namespace commercetools.Tests
             cartDraft.InventoryMode = InventoryMode.None;
             cartDraft.ShippingAddress = shippingAddress;
             cartDraft.BillingAddress = billingAddress;
-
+            cartDraft.DeleteDaysAfterLastModification = GetRandomNumber(1, 10);
             if (!string.IsNullOrWhiteSpace(customerId))
             {
                 cartDraft.CustomerId = customerId;
@@ -106,6 +106,7 @@ namespace commercetools.Tests
                 TaxMode = TaxMode.Disabled,
                 CustomLineItems = new List<CustomLineItemDraft>()
             };
+            cartDraft.DeleteDaysAfterLastModification = GetRandomNumber(1, 10);
 
             if (!string.IsNullOrWhiteSpace(customerId))
             {

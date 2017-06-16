@@ -292,6 +292,7 @@ namespace commercetools.Tests
             Assert.AreEqual(cart.InventoryMode, cartDraft.InventoryMode);
             Assert.AreEqual(cart.ShippingAddress, cartDraft.ShippingAddress);
             Assert.AreEqual(cart.BillingAddress, cartDraft.BillingAddress);
+            Assert.AreEqual(cartDraft.DeleteDaysAfterLastModification, cart.DeleteDaysAfterLastModification);
 
             string deletedCartId = cart.Id;
 

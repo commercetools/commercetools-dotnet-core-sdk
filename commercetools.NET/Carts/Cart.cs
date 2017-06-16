@@ -174,6 +174,13 @@ namespace commercetools.Carts
         [JsonProperty(PropertyName = "locale")]
         public string Locale { get; private set; }
 
+        /// <summary>
+        /// The cart will be deleted automatically if it hasn’t been modified 
+        /// for the specified amount of days and it is in the Active CartState.
+        /// </summary>
+        [JsonProperty(PropertyName = "deleteDaysAfterLastModification")]
+        public int? DeleteDaysAfterLastModification { get; private set; }
+
         #endregion
 
         #region Constructors
@@ -223,6 +230,7 @@ namespace commercetools.Carts
             this.Custom = new CustomFields.CustomFields(data.custom);
             this.PaymentInfo = new PaymentInfo(data.paymentInfo);
             this.Locale = data.locale;
+            this.DeleteDaysAfterLastModification = data.deleteDaysAfterLastModification;
         }
 
         #endregion
