@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using commercetools.Common;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace commercetools.CartDiscount
 {
@@ -98,6 +100,104 @@ namespace commercetools.CartDiscount
         {
             string payload = JsonConvert.SerializeObject(cartDiscountDraft, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             return _client.PostAsync<CartDiscount>(ENDPOINT_PREFIX, payload);
+        }
+
+        /// <summary>
+        /// Removes a CartDiscount.
+        /// </summary>
+        /// <param name="cartDiscount">CartDiscount</param>
+        /// <returns>CartDiscount</returns>
+        /// <see href="https://dev.commercetools.com/http-api-projects-cartDiscounts.html#delete-cartdiscount"/>
+        public Task<Response<CartDiscount>> DeleteCartDiscountAsync(CartDiscount cartDiscount)
+        {
+            return DeleteCartDiscountAsync(cartDiscount.Id, cartDiscount.Version);
+        }
+
+        /// <summary>
+        /// Removes a CartDiscount.
+        /// </summary>
+        /// <param name="cartDiscountId">CartDiscount ID</param>
+        /// <param name="version">CartDiscount version</param>
+        /// <returns>CartDiscount</returns>
+        /// <see href="https://dev.commercetools.com/http-api-projects-cartDiscounts.html#delete-cartdiscount"/>
+        public Task<Response<CartDiscount>> DeleteCartDiscountAsync(string cartDiscountId, int version)
+        {
+            if (string.IsNullOrWhiteSpace(cartDiscountId))
+            {
+                throw new ArgumentException("CartDiscount ID is required");
+            }
+
+            if (version < 1)
+            {
+                throw new ArgumentException("Version is required");
+            }
+
+            var values = new NameValueCollection
+            {
+                { "version", version.ToString() }
+            };
+
+            string endpoint = string.Concat(ENDPOINT_PREFIX, "/", cartDiscountId);
+            return _client.DeleteAsync<CartDiscount>(endpoint, values);
+        }
+
+        /// <summary>
+        /// Updates a cart discount.
+        /// </summary>
+        /// <param name="cartDiscount">CartDiscount</param>
+        /// <param name="action">The update action to be performed on the cart discount.</param>
+        /// <returns>CartDiscount</returns>
+        /// <see href="https://dev.commercetools.com/http-api-projects-cartDiscounts.html#update-cartdiscount"/>
+        public Task<Response<CartDiscount>> UpdateCartDiscountAsync(CartDiscount cartDiscount, UpdateAction action)
+        {
+            return UpdateCartDiscountAsync(cartDiscount.Id, cartDiscount.Version, new List<UpdateAction> { action });
+        }
+
+        /// <summary>
+        /// Updates a cart discount.
+        /// </summary>
+        /// <param name="cartDiscount">CartDiscount</param>
+        /// <param name="actions">The list of update actions to be performed on the cart discount.</param>
+        /// <returns>CartDiscount</returns>
+        /// <see href="https://dev.commercetools.com/http-api-projects-cartDiscounts.html#update-cartdiscount"/>
+        public Task<Response<CartDiscount>> UpdateCartDiscountAsync(CartDiscount cartDiscount, List<UpdateAction> actions)
+        {
+            return UpdateCartDiscountAsync(cartDiscount.Id, cartDiscount.Version, actions);
+        }
+
+        /// <summary>
+        /// Updates a cart discount.
+        /// </summary>
+        /// <param name="cartDiscountId">ID of the cart discount</param>
+        /// <param name="version">The expected version of the cart discount on which the changes should be applied.</param>
+        /// <param name="actions">The list of update actions to be performed on the cart discount.</param>
+        /// <returns>CartDiscount</returns>
+        /// <see href="https://dev.commercetools.com/http-api-projects-cartDiscounts.html#update-cartdiscount"/>
+        public Task<Response<CartDiscount>> UpdateCartDiscountAsync(string cartDiscountId, int version, List<UpdateAction> actions)
+        {
+            if (string.IsNullOrWhiteSpace(cartDiscountId))
+            {
+                throw new ArgumentException("CartDiscount ID is required");
+            }
+
+            if (version < 1)
+            {
+                throw new ArgumentException("Version is required");
+            }
+
+            if (actions == null || actions.Count < 1)
+            {
+                throw new ArgumentException("One or more update actions is required");
+            }
+
+            var data = JObject.FromObject(new
+            {
+                version,
+                actions = JArray.FromObject(actions, new JsonSerializer { NullValueHandling = NullValueHandling.Ignore })
+            });
+
+            string endpoint = string.Concat(ENDPOINT_PREFIX, "/", cartDiscountId);
+            return _client.PostAsync<CartDiscount>(endpoint, data.ToString());
         }
         #endregion
     }

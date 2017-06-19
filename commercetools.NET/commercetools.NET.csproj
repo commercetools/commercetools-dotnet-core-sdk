@@ -64,6 +64,17 @@
     <Compile Include="CartDiscount\CartDiscountTarget.cs" />
     <Compile Include="CartDiscount\CartDiscountValue.cs" />
     <Compile Include="CartDiscount\Enums.cs" />
+    <Compile Include="CartDiscount\Extensions.cs" />
+    <Compile Include="CartDiscount\UpdateActions\ChangeCartPredicate.cs" />
+    <Compile Include="CartDiscount\UpdateActions\ChangeIsActive.cs" />
+    <Compile Include="CartDiscount\UpdateActions\ChangeName.cs" />
+    <Compile Include="CartDiscount\UpdateActions\ChangeRequiresDiscountCode.cs" />
+    <Compile Include="CartDiscount\UpdateActions\ChangeSortOrder.cs" />
+    <Compile Include="CartDiscount\UpdateActions\ChangeTarget.cs" />
+    <Compile Include="CartDiscount\UpdateActions\ChangeValue.cs" />
+    <Compile Include="CartDiscount\UpdateActions\SetDescription.cs" />
+    <Compile Include="CartDiscount\UpdateActions\SetValidFrom.cs" />
+    <Compile Include="CartDiscount\UpdateActions\SetValidUntil.cs" />
     <Compile Include="Carts\ExternalLineItemTotalPrice.cs" />
     <Compile Include="Carts\UpdateActions\AddCustomLineItemAction.cs" />
     <Compile Include="Carts\UpdateActions\AddDiscountCodeAction.cs" />

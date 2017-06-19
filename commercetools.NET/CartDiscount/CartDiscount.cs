@@ -87,5 +87,29 @@ namespace commercetools.CartDiscount
         [JsonProperty(PropertyName = "references")]
         public List<Reference> References { get; private set; }
         #endregion
+
+        public CartDiscount(dynamic data)
+        {
+            if (data == null)
+            {
+                return;
+            }
+
+            this.Id = data.id;
+            this.Version = data.version;
+            this.CreatedAt = data.createdAt;
+            this.LastModifiedAt = data.lastModifiedAt;
+            this.Name = new LocalizedString(data.name);
+            this.Description = new LocalizedString(data.description);
+            this.SortOrder = data.sortOrder;
+            this.ValidFrom = data.validFrom;
+            this.ValidUntil = data.validUntil;
+            this.IsActive = data.isActive;
+            this.RequiresDiscountCode = data.requiresDiscountCode;
+            this.CartPredicate = data.cartPredicate;
+            this.Value = new CartDiscountValue(data.value);
+            this.Target = new CartDiscountTarget(data.target);
+            this.References = Helper.GetListFromJsonArray<Reference>(data.references);
+        }
     }
 }
