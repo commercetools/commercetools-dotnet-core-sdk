@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using commercetools.Common;
 using Newtonsoft.Json;
 
-namespace commercetools.CartDiscount
+namespace commercetools.CartDiscounts
 {
     public class CartDiscount
     {

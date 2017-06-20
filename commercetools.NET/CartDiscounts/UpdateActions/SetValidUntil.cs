@@ -2,7 +2,7 @@
 using commercetools.Common;
 using Newtonsoft.Json;
 
-namespace commercetools.CartDiscount.UpdateActions
+namespace commercetools.CartDiscounts.UpdateActions
 {
     public class SetValidUntil:UpdateAction
     {

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace commercetools.CartDiscount
+namespace commercetools.CartDiscounts
 {
     public enum CartDiscountType
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-using commercetools.CartDiscount;
+using commercetools.CartDiscounts;
 using commercetools.Carts;
 using commercetools.Categories;
 using commercetools.Customers;
@@ -159,11 +159,11 @@ namespace commercetools.Tests
                 sortOrder,
                 GetRandomBoolean(),
                 DateTime.UtcNow, 
-                GetRandomDateAfter(DateTime.UtcNow),
+                GetRandomDateAfter(DateTime.UtcNow.AddDays(100)),
                 GetRandomBoolean());
         }
 
-        public static async Task<CartDiscount.CartDiscount> CreateTestCartDiscount(Project.Project project, Client client)
+        public static async Task<CartDiscount> CreateTestCartDiscount(Project.Project project, Client client)
         {
             var cartDiscountDraft = await GetTestCartDiscountDraft(project, client);
             var cartDiscountResponse = await client.CartDiscounts().CreateCartDiscountAsync(cartDiscountDraft);

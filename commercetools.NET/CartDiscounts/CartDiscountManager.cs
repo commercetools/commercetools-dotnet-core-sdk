@@ -6,7 +6,7 @@ using commercetools.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace commercetools.CartDiscount
+namespace commercetools.CartDiscounts
 {
     public class CartDiscountManager
     {

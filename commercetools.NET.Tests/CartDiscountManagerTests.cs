@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using commercetools.CartDiscount;
-using commercetools.CartDiscount.UpdateActions;
+using commercetools.CartDiscounts;
+using commercetools.CartDiscounts.UpdateActions;
 using commercetools.Common;
 using commercetools.Project;
 using FluentAssertions;
@@ -17,7 +17,7 @@ namespace commercetools.Tests
     public class CartDiscountManagerTest
     {
         private Client _client;
-        private CartDiscount.CartDiscount _testCartDiscount;
+        private CartDiscount _testCartDiscount;
         private Project.Project _project;
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace commercetools.Tests
             Assert.IsTrue(_project.Languages.Count > 0);
             Assert.IsTrue(_project.Currencies.Count > 0);
 
-            Task<CartDiscount.CartDiscount> cartDiscountTask =
+            Task<CartDiscount> cartDiscountTask =
                 Helper.CreateTestCartDiscount(this._project, this._client);
             cartDiscountTask.Wait();
 
@@ -64,10 +64,10 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldGetCartDiscountByIdAsync()
         {
-            Response<CartDiscount.CartDiscount> response = await _client.CartDiscounts().GetCartDiscountByIdAsync(_testCartDiscount.Id);
+            Response<CartDiscount> response = await _client.CartDiscounts().GetCartDiscountByIdAsync(_testCartDiscount.Id);
             Assert.IsTrue(response.Success);
 
-            CartDiscount.CartDiscount cartDiscount = response.Result;
+            CartDiscount cartDiscount = response.Result;
             Assert.NotNull(cartDiscount.Id);
             Assert.AreEqual(cartDiscount.Id, _testCartDiscount.Id);
         }
@@ -83,7 +83,7 @@ namespace commercetools.Tests
             CartDiscountDraft cartDiscountDraft = await Helper.GetTestCartDiscountDraft(this._project, this._client);
 
             // Act
-            Response<CartDiscount.CartDiscount> cartDiscountResponse = await _client.CartDiscounts().CreateCartDiscountAsync(cartDiscountDraft);
+            Response<CartDiscount> cartDiscountResponse = await _client.CartDiscounts().CreateCartDiscountAsync(cartDiscountDraft);
 
             // Assert
             var cartDiscount = cartDiscountResponse.Result;

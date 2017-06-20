@@ -1,6 +1,6 @@
 ﻿using commercetools.Common;
 
-namespace commercetools.CartDiscount
+namespace commercetools.CartDiscounts
 {
     public static class Extensions
     {
