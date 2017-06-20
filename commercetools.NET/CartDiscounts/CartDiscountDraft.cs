@@ -18,7 +18,7 @@ namespace commercetools.CartDiscounts
         /// Description
         /// </summary>
         [JsonProperty(PropertyName = "description")]
-        public LocalizedString Description { get; private set; }
+        public LocalizedString Description { get; set; }
 
         /// <summary>
         /// Value
@@ -36,7 +36,7 @@ namespace commercetools.CartDiscounts
         /// Cart Discount Target
         /// </summary>
         [JsonProperty(PropertyName = "target")]
-        public CartDiscountTarget Target { get; private set; }
+        public CartDiscountTarget Target { get; set; }
 
         /// <summary>
         /// Sort Order
@@ -45,13 +45,13 @@ namespace commercetools.CartDiscounts
         public string SortOrder { get; private set; }
 
         [JsonProperty(PropertyName = "isActive")]
-        public bool IsActive { get; private set; }
+        public bool IsActive { get; set; }
 
         [JsonProperty(PropertyName = "validFrom")]
-        public DateTime? ValidFrom { get; private set; }
+        public DateTime? ValidFrom { get; set; }
 
         [JsonProperty(PropertyName = "validUntil")]
-        public DateTime? ValidUntil { get; private set; }
+        public DateTime? ValidUntil { get; set; }
 
         /// <summary>
         /// States whether the discount can only be used in a connection with a DiscountCode.
@@ -63,14 +63,9 @@ namespace commercetools.CartDiscounts
 
         public CartDiscountDraft(
             LocalizedString name, 
-            LocalizedString description,
             CartDiscountValue cartDiscountValue,
-            CartDiscountTarget cartDiscountTarget,
             string cartPredicate,
             string sortOrder,
-            bool isActive,
-            DateTime? validFrom,
-            DateTime? validUnitil,
             bool requiresDiscountCode)
         {
             if (name == null)
@@ -85,18 +80,10 @@ namespace commercetools.CartDiscounts
             if (cartDiscountValue == null)
                 throw new ArgumentException(nameof(cartDiscountValue));
 
-            if (cartDiscountValue.Type != CartDiscountType.GiftLineItem && cartDiscountTarget == null)
-                throw new ArgumentException(nameof(cartDiscountTarget));
 
-
-            Description = description;
             Name = name;
             CartPredicate = cartPredicate;
             Value = cartDiscountValue;
-            Target = cartDiscountTarget;
-            ValidUntil = validUnitil;
-            ValidFrom = validFrom;
-            IsActive = isActive;
             SortOrder = sortOrder;
             RequiresDiscountCode = requiresDiscountCode;
         }

@@ -152,15 +152,17 @@ namespace commercetools.Tests
 
             return new CartDiscountDraft(
                 name,
-                description,
-                new CartDiscountValue(CartDiscountType.Relative, 5000, new List<Money>(), new ResourceIdentifier(), null, new ResourceIdentifier(), new ResourceIdentifier()),
-                new CartDiscountTarget(CartDiscountTargetType.LineItems, "1=1"),
+                new RelativeCartDiscountValue(5000),
                 "lineItemCount(1=1) > 0",
                 sortOrder,
-                GetRandomBoolean(),
-                DateTime.UtcNow, 
-                GetRandomDateAfter(DateTime.UtcNow.AddDays(100)),
-                GetRandomBoolean());
+                GetRandomBoolean())
+            {
+                Description = description,
+                IsActive = GetRandomBoolean(),
+                ValidFrom = DateTime.UtcNow,
+                ValidUntil = GetRandomDateAfter(DateTime.UtcNow.AddDays(100)),
+                Target = new CartDiscountTarget(CartDiscountTargetType.LineItems, "1=1")
+            };
         }
 
         public static async Task<CartDiscount> CreateTestCartDiscount(Project.Project project, Client client)

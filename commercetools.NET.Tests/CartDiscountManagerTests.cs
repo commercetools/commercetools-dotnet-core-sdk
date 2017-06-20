@@ -242,10 +242,7 @@ namespace commercetools.Tests
                 moneyList.Add(new Money { CentAmount = Helper.GetRandomNumber(100, 1000), CurrencyCode = currency}); 
             }
             var cartDiscount = await Helper.CreateTestCartDiscount(this._project, this._client);
-            var changeValue = new ChangeValue(
-                new CartDiscountValue(
-                    CartDiscountType.Absolute,
-                    null, moneyList, new ResourceIdentifier(), null, new ResourceIdentifier(), new ResourceIdentifier()));
+            var changeValue = new ChangeValue(new AbsoluteCartDiscountValue(moneyList));
 
             // Act
             var updatedCartDiscountResponse = await this._client.CartDiscounts()

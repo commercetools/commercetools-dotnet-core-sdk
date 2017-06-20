@@ -57,14 +57,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CartDiscounts\AbsoluteCartDiscountValue.cs" />
     <Compile Include="CartDiscounts\CartDiscount.cs" />
     <Compile Include="CartDiscounts\CartDiscountDraft.cs" />
     <Compile Include="CartDiscounts\CartDiscountManager.cs" />
     <Compile Include="CartDiscounts\CartDiscountQueryResult.cs" />
     <Compile Include="CartDiscounts\CartDiscountTarget.cs" />
     <Compile Include="CartDiscounts\CartDiscountValue.cs" />
+    <Compile Include="CartDiscounts\CartDiscountValueFactory.cs" />
     <Compile Include="CartDiscounts\Enums.cs" />
     <Compile Include="CartDiscounts\Extensions.cs" />
+    <Compile Include="CartDiscounts\GiftLineItemCartDiscountValue.cs" />
+    <Compile Include="CartDiscounts\RelativeCartDiscountValue.cs" />
     <Compile Include="CartDiscounts\UpdateActions\ChangeCartPredicate.cs" />
     <Compile Include="CartDiscounts\UpdateActions\ChangeIsActive.cs" />
     <Compile Include="CartDiscounts\UpdateActions\ChangeName.cs" />

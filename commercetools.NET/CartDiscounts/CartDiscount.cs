@@ -107,7 +107,7 @@ namespace commercetools.CartDiscounts
             this.IsActive = data.isActive;
             this.RequiresDiscountCode = data.requiresDiscountCode;
             this.CartPredicate = data.cartPredicate;
-            this.Value = new CartDiscountValue(data.value);
+            this.Value = CartDiscountValueFactory.Create(data.value);
             this.Target = new CartDiscountTarget(data.target);
             this.References = Helper.GetListFromJsonArray<Reference>(data.references);
         }
