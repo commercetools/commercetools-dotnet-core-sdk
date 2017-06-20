@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-
+using commercetools.CartDiscounts;
 using commercetools.Carts;
 using commercetools.Categories;
 using commercetools.Customers;
@@ -123,6 +123,54 @@ namespace commercetools.Tests
                 Slug = "Test-CustomLineItem-Slug",
             });
             return cartDraft;
+        }
+
+        #endregion
+
+        #region Cart Discounts
+
+        public static async Task<CartDiscountDraft> GetTestCartDiscountDraft(Project.Project project, Client client)
+        {
+            LocalizedString name = new LocalizedString();
+            LocalizedString description = new LocalizedString();
+
+            foreach (string language in project.Languages)
+            {
+                string randomPostfix = GetRandomString(10);
+                name.SetValue(language, string.Concat("test-cart-discount-name", language, " ", randomPostfix));
+                description.SetValue(language, string.Concat("test-cart-discount-description", language, "-", randomPostfix));
+            }
+
+            CartDiscountQueryResult queryResults;
+            string sortOrder;
+            do
+            {
+                sortOrder = GetRandomSortOrder();
+                var queryResultsResponse = await client.CartDiscounts().QueryCartDiscountsAsync($"sortOrder=\"{sortOrder}\"");
+                queryResults = queryResultsResponse.Result;
+            } while (queryResults.Results != null && queryResults.Count > 0);
+
+            return new CartDiscountDraft(
+                name,
+                new RelativeCartDiscountValue(5000),
+                "lineItemCount(1=1) > 0",
+                sortOrder,
+                GetRandomBoolean())
+            {
+                Description = description,
+                IsActive = GetRandomBoolean(),
+                ValidFrom = DateTime.UtcNow,
+                ValidUntil = GetRandomDateAfter(DateTime.UtcNow.AddDays(100)),
+                Target = new CartDiscountTarget(CartDiscountTargetType.LineItems, "1=1")
+            };
+        }
+
+        public static async Task<CartDiscount> CreateTestCartDiscount(Project.Project project, Client client)
+        {
+            var cartDiscountDraft = await GetTestCartDiscountDraft(project, client);
+            var cartDiscountResponse = await client.CartDiscounts().CreateCartDiscountAsync(cartDiscountDraft);
+
+            return cartDiscountResponse.Result;
         }
 
         #endregion
@@ -587,6 +635,32 @@ namespace commercetools.Tests
             return _random.Next(minValue, maxValue);
         }
 
+        public static double GetRandomDouble(int minValue, int maxValue)
+        {
+            return _random.NextDouble();
+        }
+
+        public static string GetRandomSortOrder()
+        {
+            var order = GetRandomDouble(0, 2).ToString("0.000");
+            if (order.EndsWith("0"))
+            {
+                order = order.TrimEnd('0') + GetRandomNumber(1, 9);
+            }
+            return order;
+
+        }
+
+        public static DateTime GetRandomDateAfter(DateTime date)
+        {
+            int days = GetRandomNumber(1, 100);
+            return date.AddDays(days);
+        }
+
+        public static bool GetRandomBoolean()
+        {
+            return GetRandomDouble(0, 2) >= 0.5;
+        }
         #endregion 
     }
 }
