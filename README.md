@@ -113,7 +113,17 @@ This software is licenses under the MIT License, which allows commercial use and
 We are warmly welcoming contributors and are happy to help out.
 To contribute changes or improvements, please fork the repository into your account on GitHub and create a pull request.  
 
-## Developing
+## Contribution Guidelines
+
+* The namespaces and directory names in the SDK should match up exactly with the project name in the documentation. For your contributions. 
+    > For Example: The namespace should be commercetools.CartDiscounts (plural) should be used rather than commercetools.CartDiscount (singular).
+
+* Only the required properties for an API entity should be used as constructor parameters in the corresponding SDK class. Parameters marked as optional in the documentation should not be required for creating a new instance of the class. 
+    > For Example: In the commercetools.CartDiscounts.CartDiscountDraft class, description, target, isActive, validFrom and validUntil should not be used as constructor parameters as they are not required.
+
+* Wherever applicable, try to treat objects as groups of entities and use a factory to create these groups of entities when response is being parsed.
+    > For Example: The CartDiscountValue entities (AbsoluteCartDiscountValue/RelativeCartDiscountValue/GiftLineItemCartDiscountValue) are treated as a group of entities that share a common type property, Type (Relative/Absolute/GiftLineItem). These entities are created by a CartDiscountValueFactory when we parse the response from the CommerceTools API.
+
 
 ### Mac Users
 
