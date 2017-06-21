@@ -1,14 +1,14 @@
 ﻿using commercetools.Common;
 using Newtonsoft.Json;
 
-namespace commercetools.CartDiscounts.UpdateActions
+namespace commercetools.DiscountCodes.UpdateActions
 {
-    public class ChangeIsActive: UpdateAction
+    public class ChangeIsActiveAction : UpdateAction
     {
         [JsonProperty(PropertyName = "isActive")]
-        public bool IsActive { get; }
+        public bool IsActive { get; private set; }
 
-        public ChangeIsActive(bool isActive)
+        public ChangeIsActiveAction(bool isActive)
         {
             this.Action = "changeIsActive";
             this.IsActive = isActive;

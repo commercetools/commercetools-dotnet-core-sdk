@@ -3,12 +3,12 @@ using Newtonsoft.Json;
 
 namespace commercetools.CartDiscounts.UpdateActions
 {
-    public class ChangeValue : UpdateAction
+    public class ChangeValueAction : UpdateAction
     {
         [JsonProperty(PropertyName = "value")]
         public CartDiscountValue Value { get; }
 
-        public ChangeValue(CartDiscountValue value)
+        public ChangeValueAction(CartDiscountValue value)
         {
             this.Action = "changeValue";
             this.Value = value;
