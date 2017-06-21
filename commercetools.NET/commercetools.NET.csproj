@@ -188,6 +188,8 @@
     <Compile Include="Customers\UpdateActions\SetMiddleNameAction.cs" />
     <Compile Include="Customers\UpdateActions\SetTitleAction.cs" />
     <Compile Include="Customers\UpdateActions\SetVatIdAction.cs" />
+    <Compile Include="DiscountCodes\DiscountCode.cs" />
+    <Compile Include="DiscountCodes\DiscountCodeDraft.cs" />
     <Compile Include="Messages\CategoryCreatedMessage.cs" />
     <Compile Include="Messages\CategorySlugChangedMessage.cs" />
     <Compile Include="Messages\CustomerCreatedMessage.cs" />
