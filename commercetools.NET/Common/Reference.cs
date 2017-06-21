@@ -42,7 +42,7 @@ namespace commercetools.Common
 
             ReferenceType? referenceType;
 
-            this.ReferenceType = Helper.TryGetEnumByEnumMemberAttribute<ReferenceType?>((string)data.referenceType, out referenceType) ? referenceType : null;
+            this.ReferenceType = Helper.TryGetEnumByEnumMemberAttribute<ReferenceType?>((string)data.typeId, out referenceType) ? referenceType : null;
             this.Id = data.id;
         }
 
