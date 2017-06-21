@@ -141,7 +141,7 @@ Task("InitializeBuild")
                     else if (AppVeyor.Environment.Repository.Branch.StartsWith("release", StringComparison.OrdinalIgnoreCase))
                         suffix += "-pre-" + buildNumber;
                     else
-                        suffix += "-" + branch.Replace("_", "-");
+                        suffix += "-" + branch.Replace("_", "-").Replace("/", "-");
 
                     // Nuget limits "special version part" to 20 chars. Add one for the hyphen.
                     if (suffix.Length > 21)
