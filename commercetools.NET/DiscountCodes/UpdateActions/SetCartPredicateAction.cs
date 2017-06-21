@@ -3,12 +3,12 @@ using Newtonsoft.Json;
 
 namespace commercetools.DiscountCodes.UpdateActions
 {
-    public class SetCartPredicate : UpdateAction
+    public class SetCartPredicateAction : UpdateAction
     {
         [JsonProperty(PropertyName = "cartPredicate")]
         public string CartPredicate { get; set; }
 
-        public SetCartPredicate()
+        public SetCartPredicateAction()
         {
             this.Action = "setCartPredicate";
         }

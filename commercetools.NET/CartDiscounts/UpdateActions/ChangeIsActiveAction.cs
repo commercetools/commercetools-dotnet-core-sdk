@@ -3,12 +3,12 @@ using Newtonsoft.Json;
 
 namespace commercetools.CartDiscounts.UpdateActions
 {
-    public class ChangeIsActive: UpdateAction
+    public class ChangeIsActiveAction: UpdateAction
     {
         [JsonProperty(PropertyName = "isActive")]
         public bool IsActive { get; }
 
-        public ChangeIsActive(bool isActive)
+        public ChangeIsActiveAction(bool isActive)
         {
             this.Action = "changeIsActive";
             this.IsActive = isActive;

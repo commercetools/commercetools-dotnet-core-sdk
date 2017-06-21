@@ -4,11 +4,11 @@ using Newtonsoft.Json;
 
 namespace commercetools.CartDiscounts.UpdateActions
 {
-    public class SetValidUntil:UpdateAction
+    public class SetValidUntilAction:UpdateAction
     {
         [JsonProperty(PropertyName = "validUntil")]
         public DateTime? ValidUntil { get; }
-        public SetValidUntil(DateTime validUntil)
+        public SetValidUntilAction(DateTime validUntil)
         {
             this.Action = "setValidUntil";
             this.ValidUntil = validUntil;

@@ -8,8 +8,8 @@ using commercetools.DiscountCodes.UpdateActions;
 using commercetools.Project;
 using FluentAssertions;
 using NUnit.Framework;
-using ChangeIsActive = commercetools.DiscountCodes.UpdateActions.ChangeIsActive;
-using SetDescription = commercetools.DiscountCodes.UpdateActions.SetDescription;
+using ChangeIsActiveAction = commercetools.DiscountCodes.UpdateActions.ChangeIsActiveAction;
+using SetDescriptionAction = commercetools.DiscountCodes.UpdateActions.SetDescriptionAction;
 
 namespace commercetools.Tests
 {
@@ -164,8 +164,8 @@ namespace commercetools.Tests
                 name.SetValue(language, string.Concat("change-discount-code-name", language, " ", randomPostfix));
                 description.SetValue(language, string.Concat("change-discount-code-description", language, "-", randomPostfix));
             }
-            var setNameAction = new SetName { Name = name };
-            var setDescriptionAction = new SetDescription { Description = description };
+            var setNameAction = new SetNameAction { Name = name };
+            var setDescriptionAction = new SetDescriptionAction { Description = description };
 
             // Act
             var updatedDiscountCodeResponse = await this._client.DiscountCodes()
@@ -193,8 +193,8 @@ namespace commercetools.Tests
         {
             // Arrange
             var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client);
-            var setNameAction = new SetName();
-            var setDescriptionAction = new SetDescription();
+            var setNameAction = new SetNameAction();
+            var setDescriptionAction = new SetDescriptionAction();
 
             // Act
             var updatedDiscountCodeResponse = await this._client.DiscountCodes()
@@ -222,8 +222,8 @@ namespace commercetools.Tests
         {
             // Arrange
             var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client);
-            var setMaxApplications = new SetMaxApplications { MaxApplications = Helper.GetRandomNumber(3000, 5000) };
-            var setMaxApplicationsPerCustomer = new SetMaxApplicationsPerCustomer { MaxApplicationsPerCustomer = Helper.GetRandomNumber(3000, 5000) };
+            var setMaxApplications = new SetMaxApplicationsAction { MaxApplications = Helper.GetRandomNumber(3000, 5000) };
+            var setMaxApplicationsPerCustomer = new SetMaxApplicationsPerCustomerAction { MaxApplicationsPerCustomer = Helper.GetRandomNumber(3000, 5000) };
 
             // Act
             var updatedDiscountCodeResponse = await this._client.DiscountCodes()
@@ -251,8 +251,8 @@ namespace commercetools.Tests
         {
             // Arrange
             var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client);
-            var setMaxApplications = new SetMaxApplications();
-            var setMaxApplicationsPerCustomer = new SetMaxApplicationsPerCustomer();
+            var setMaxApplications = new SetMaxApplicationsAction();
+            var setMaxApplicationsPerCustomer = new SetMaxApplicationsPerCustomerAction();
 
             // Act
             var updatedDiscountCodeResponse = await this._client.DiscountCodes()
@@ -280,7 +280,7 @@ namespace commercetools.Tests
         {
             // Arrange
             var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client);
-            var setCartPredicate = new SetCartPredicate {CartPredicate = "totalPrice.centAmount > 100000" };
+            var setCartPredicate = new SetCartPredicateAction {CartPredicate = "totalPrice.centAmount > 100000" };
 
             // Act
             var updatedDiscountCodeResponse = await this._client.DiscountCodes()
@@ -306,7 +306,7 @@ namespace commercetools.Tests
         {
             // Arrange
             var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client);
-            var setCartPredicate = new SetCartPredicate();
+            var setCartPredicate = new SetCartPredicateAction();
 
             // Act
             var updatedDiscountCodeResponse = await this._client.DiscountCodes()
@@ -338,7 +338,7 @@ namespace commercetools.Tests
             {
                 new Reference {ReferenceType = ReferenceType.CartDiscount, Id = cartDiscount.Id}
             };
-            var changeCartDiscounts = new ChangeCartDiscounts(reference);
+            var changeCartDiscounts = new ChangeCartDiscountsAction(reference);
 
             // Act
             var updatedDiscountCodeResponse = await this._client.DiscountCodes()
@@ -365,7 +365,7 @@ namespace commercetools.Tests
         {
             // Arrange
             var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client);
-            var changeIsActive = new ChangeIsActive(!discountCode.IsActive);
+            var changeIsActive = new ChangeIsActiveAction(!discountCode.IsActive);
 
             // Act
             var updatedDiscountCodeResponse = await this._client.DiscountCodes()

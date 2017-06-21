@@ -3,12 +3,12 @@ using Newtonsoft.Json;
 
 namespace commercetools.DiscountCodes.UpdateActions
 {
-    public class SetMaxApplications : UpdateAction
+    public class SetMaxApplicationsAction : UpdateAction
     {
         [JsonProperty(PropertyName = "maxApplications")]
         public int? MaxApplications { get; set; }
 
-        public SetMaxApplications()
+        public SetMaxApplicationsAction()
         {
             this.Action = "setMaxApplications";
         }

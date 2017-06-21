@@ -108,7 +108,7 @@ namespace commercetools.Tests
         public async Task ShouldChangeCartPredicateCartDiscountAsync()
         {
             // Arrange
-            var changePredicateAction = new ChangeCartPredicate("lineItemCount(1=1) > 4");
+            var changePredicateAction = new ChangeCartPredicateAction("lineItemCount(1=1) > 4");
             var cartDiscount = await Helper.CreateTestCartDiscount(this._project, this._client);
 
             // Act
@@ -131,8 +131,8 @@ namespace commercetools.Tests
         {
             // Arrange
             var cartDiscount = await Helper.CreateTestCartDiscount(this._project, this._client);
-            var changeActiveAction = new ChangeIsActive(!cartDiscount.IsActive);
-            var changeRequiresDiscountCodeAction = new ChangeRequiresDiscountCode(!cartDiscount.RequiresDiscountCode);
+            var changeActiveAction = new ChangeIsActiveAction(!cartDiscount.IsActive);
+            var changeRequiresDiscountCodeAction = new ChangeRequiresDiscountCodeAction(!cartDiscount.RequiresDiscountCode);
 
 
             // Act
@@ -165,8 +165,8 @@ namespace commercetools.Tests
                 name.SetValue(language, string.Concat("change-cart-discount-name", language, " ", randomPostfix));
                 description.SetValue(language, string.Concat("change-cart-discount-description", language, "-", randomPostfix));
             }
-            var changeNameAction = new ChangeName(name);
-            var setDescriptionAction = new SetDescription(description);
+            var changeNameAction = new ChangeNameAction(name);
+            var setDescriptionAction = new SetDescriptionAction(description);
 
             // Act
             var updatedCartDiscountResponse = await this._client.CartDiscounts()
@@ -190,8 +190,8 @@ namespace commercetools.Tests
         {
             // Arrange 
             var cartDiscount = await Helper.CreateTestCartDiscount(this._project, this._client);
-            var setValidFrom = new SetValidFrom(DateTime.UtcNow.AddDays(3));
-            var setValidUntil = new SetValidUntil(setValidFrom.ValidFrom.Value.AddDays(10));
+            var setValidFrom = new SetValidFromAction(DateTime.UtcNow.AddDays(3));
+            var setValidUntil = new SetValidUntilAction(setValidFrom.ValidFrom.Value.AddDays(10));
 
             // Act
             var updatedCartDiscountResponse = await this._client.CartDiscounts()
@@ -215,7 +215,7 @@ namespace commercetools.Tests
         {
             // Arrange 
             var cartDiscount = await Helper.CreateTestCartDiscount(this._project, this._client);
-            var changetarget = new ChangeTarget(new CartDiscountTarget(CartDiscountTargetType.CustomLineItems, "money.centAmount > 1000"));
+            var changetarget = new ChangeTargetAction(new CartDiscountTarget(CartDiscountTargetType.CustomLineItems, "money.centAmount > 1000"));
 
             // Act
             var updatedCartDiscountResponse = await this._client.CartDiscounts()
@@ -242,7 +242,7 @@ namespace commercetools.Tests
                 moneyList.Add(new Money { CentAmount = Helper.GetRandomNumber(100, 1000), CurrencyCode = currency}); 
             }
             var cartDiscount = await Helper.CreateTestCartDiscount(this._project, this._client);
-            var changeValue = new ChangeValue(new AbsoluteCartDiscountValue(moneyList));
+            var changeValue = new ChangeValueAction(new AbsoluteCartDiscountValue(moneyList));
 
             // Act
             var updatedCartDiscountResponse = await this._client.CartDiscounts()
@@ -265,7 +265,7 @@ namespace commercetools.Tests
             // Arrange            
             var cartDiscount = await Helper.CreateTestCartDiscount(this._project, this._client);
             var cartDiscountDraft = await Helper.GetTestCartDiscountDraft(this._project, this._client);
-            var changeSortOrder = new ChangeSortOrder(cartDiscountDraft.SortOrder);
+            var changeSortOrder = new ChangeSortOrderAction(cartDiscountDraft.SortOrder);
 
             // Act
             var updatedCartDiscountResponse = await this._client.CartDiscounts()

@@ -4,11 +4,11 @@ using Newtonsoft.Json;
 
 namespace commercetools.CartDiscounts.UpdateActions
 {
-    public class SetValidFrom: UpdateAction
+    public class SetValidFromAction: UpdateAction
     {
         [JsonProperty(PropertyName = "validFrom")]
         public DateTime? ValidFrom { get; }
-        public SetValidFrom(DateTime validFrom)
+        public SetValidFromAction(DateTime validFrom)
         {
             this.Action = "setValidFrom";
             this.ValidFrom = validFrom;

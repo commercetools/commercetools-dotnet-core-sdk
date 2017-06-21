@@ -3,12 +3,12 @@ using Newtonsoft.Json;
 
 namespace commercetools.CartDiscounts.UpdateActions
 {
-    public class SetDescription: UpdateAction
+    public class SetDescriptionAction: UpdateAction
     {
         [JsonProperty(PropertyName = "description")]
         public LocalizedString Description { get; }
 
-        public SetDescription(LocalizedString description)
+        public SetDescriptionAction(LocalizedString description)
         {
             this.Action = "setDescription";
             this.Description = description;

@@ -5,12 +5,12 @@ using Newtonsoft.Json;
 
 namespace commercetools.DiscountCodes.UpdateActions
 {
-    public class ChangeCartDiscounts : UpdateAction
+    public class ChangeCartDiscountsAction : UpdateAction
     {
         [JsonProperty(PropertyName = "cartDiscounts")]
         public List<Reference> CartDiscounts { get; private set; }
 
-        public ChangeCartDiscounts(List<Reference> cartDiscounts)
+        public ChangeCartDiscountsAction(List<Reference> cartDiscounts)
         {
             if (cartDiscounts == null || cartDiscounts.Count == 0)
             {
