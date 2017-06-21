@@ -8,6 +8,7 @@ using commercetools.Carts;
 using commercetools.Categories;
 using commercetools.Customers;
 using commercetools.Common;
+using commercetools.DiscountCodes;
 using commercetools.Orders;
 using commercetools.Payments;
 using commercetools.Products;
@@ -18,6 +19,7 @@ using commercetools.Types;
 using commercetools.Zones;
 
 using Configuration = commercetools.Common.Configuration;
+using ReferenceType = commercetools.Common.ReferenceType;
 
 namespace commercetools.Tests
 {
@@ -278,6 +280,81 @@ namespace commercetools.Tests
             customerDraft.LastName = "Customer";
 
             return customerDraft;
+        }
+
+        #endregion
+
+        #region Discount Codes
+
+        public static async Task<DiscountCode> CreateTestDiscountCode(Project.Project project, Client client)
+        {
+            LocalizedString name = new LocalizedString();
+            LocalizedString description = new LocalizedString();
+
+            foreach (string language in project.Languages)
+            {
+                string randomPostfix = GetRandomString(10);
+                name.SetValue(language, string.Concat("test-discount-code-name", language, " ", randomPostfix));
+                description.SetValue(language, string.Concat("test-discount-code-description", language, "-", randomPostfix));
+            }
+            var cartDiscountDraft = await GetTestCartDiscountDraft(project, client);
+            var cartDiscountResponse = await client.CartDiscounts().CreateCartDiscountAsync(cartDiscountDraft);
+            var discountCodeDraft = new DiscountCodeDraft(
+                GetRandomString(10),
+                new List<Reference>
+                {
+                    new Reference {Id = cartDiscountResponse.Result.Id, ReferenceType = ReferenceType.CartDiscount}
+                },
+                GetRandomBoolean())
+            {
+                Description = description,
+                Name = name,
+                MaxApplications = GetRandomNumber(100, 1000),
+                MaxApplicationsPerCustomer = GetRandomNumber(100, 1000),
+                CartPredicate = "totalPrice.centAmount > 1000"
+            };
+            var discountCode = await client.DiscountCodes().CreateDiscountCodeAsync(discountCodeDraft);
+
+            return discountCode.Result;
+        }
+
+        public static async Task<DiscountCode> DeleteDiscountCode(Client client, DiscountCode discountCode)
+        {
+            Response<DiscountCode> taskDeleteDiscountCode = await client.DiscountCodes().DeleteDiscountCodeAsync(discountCode);
+            var deletedDiscountCode = taskDeleteDiscountCode.Result;
+
+            foreach (var discountCodeCartDiscount in deletedDiscountCode.CartDiscounts)
+            {
+                await client.CartDiscounts().DeleteCartDiscountAsync(discountCodeCartDiscount.Id, 1);
+            }
+            return deletedDiscountCode;
+        }
+
+        public static async Task<DiscountCodeDraft> GetDiscountCodeDraft(Project.Project project, Client client)
+        {
+            var name = new LocalizedString();
+            var description = new LocalizedString();
+
+            foreach (string language in project.Languages)
+            {
+                string randomPostfix = Helper.GetRandomString(10);
+                name.SetValue(language, string.Concat("test-discount-code-name", language, " ", randomPostfix));
+                description.SetValue(language, string.Concat("test-discount-code-description", language, "-", randomPostfix));
+            }
+            CartDiscount cartDiscount = await Helper.CreateTestCartDiscount(project, client);
+            var references = new List<Reference>
+            {
+                new Reference {Id = cartDiscount.Id, ReferenceType = ReferenceType.CartDiscount}
+            };
+            var discountCodeDraft = new DiscountCodeDraft(Helper.GetRandomString(10), references, GetRandomBoolean())
+            {
+                Description = description,
+                Name = name,
+                MaxApplications = Helper.GetRandomNumber(100, 1000),
+                MaxApplicationsPerCustomer = Helper.GetRandomNumber(100, 1000)
+            };
+
+            return discountCodeDraft;
         }
 
         #endregion
