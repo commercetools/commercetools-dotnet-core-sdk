@@ -190,6 +190,16 @@
     <Compile Include="Customers\UpdateActions\SetVatIdAction.cs" />
     <Compile Include="DiscountCodes\DiscountCode.cs" />
     <Compile Include="DiscountCodes\DiscountCodeDraft.cs" />
+    <Compile Include="DiscountCodes\DiscountCodeManager.cs" />
+    <Compile Include="DiscountCodes\DiscountCodeQueryResult.cs" />
+    <Compile Include="DiscountCodes\Extensions.cs" />
+    <Compile Include="DiscountCodes\UpdateActions\ChangeCartDiscounts.cs" />
+    <Compile Include="DiscountCodes\UpdateActions\ChangeIsActive.cs" />
+    <Compile Include="DiscountCodes\UpdateActions\SetCartPredicate.cs" />
+    <Compile Include="DiscountCodes\UpdateActions\SetMaxApplications.cs" />
+    <Compile Include="DiscountCodes\UpdateActions\SetMaxApplicationsPerCustomer.cs" />
+    <Compile Include="DiscountCodes\UpdateActions\SetDescription.cs" />
+    <Compile Include="DiscountCodes\UpdateActions\SetName.cs" />
     <Compile Include="Messages\CategoryCreatedMessage.cs" />
     <Compile Include="Messages\CategorySlugChangedMessage.cs" />
     <Compile Include="Messages\CustomerCreatedMessage.cs" />
