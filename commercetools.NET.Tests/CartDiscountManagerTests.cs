@@ -80,7 +80,8 @@ namespace commercetools.Tests
         public async Task ShouldCreateCartDiscountAsync()
         {
             // Arrange
-            CartDiscountDraft cartDiscountDraft = await Helper.GetTestCartDiscountDraft(this._project, this._client);
+            CartDiscountDraft cartDiscountDraft = await Helper.GetTestCartDiscountDraft(this._project, this._client, Helper.GetRandomBoolean(),
+                Helper.GetRandomBoolean(), "lineItemCount(1 = 1) > 0", "1=1", 5000, false);
 
             // Act
             Response<CartDiscount> cartDiscountResponse = await _client.CartDiscounts().CreateCartDiscountAsync(cartDiscountDraft);
@@ -264,7 +265,8 @@ namespace commercetools.Tests
         {
             // Arrange            
             var cartDiscount = await Helper.CreateTestCartDiscount(this._project, this._client);
-            var cartDiscountDraft = await Helper.GetTestCartDiscountDraft(this._project, this._client);
+            var cartDiscountDraft = await Helper.GetTestCartDiscountDraft(this._project, this._client, Helper.GetRandomBoolean(),
+                Helper.GetRandomBoolean(), "lineItemCount(1 = 1) > 0", "1=1", 5000, false);
             var changeSortOrder = new ChangeSortOrderAction(cartDiscountDraft.SortOrder);
 
             // Act

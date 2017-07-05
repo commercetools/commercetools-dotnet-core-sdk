@@ -35,8 +35,8 @@ namespace commercetools.Carts
                 return;
             }
 
-            this.Value = new Money(data.value);
-            this.IncludedDiscounts = Helper.GetListFromJsonArray<DiscountedLineItemPortion>(data.includedDiscounts);
+            this.Value = new Money(data.discountedPrice.value);
+            this.IncludedDiscounts = Helper.GetListFromJsonArray<DiscountedLineItemPortion>(data.discountedPrice.includedDiscounts);
         }
 
         #endregion
