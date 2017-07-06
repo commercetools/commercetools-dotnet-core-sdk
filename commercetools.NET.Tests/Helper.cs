@@ -131,7 +131,15 @@ namespace commercetools.Tests
 
         #region Cart Discounts
 
-        public static async Task<CartDiscountDraft> GetTestCartDiscountDraft(Project.Project project, Client client)
+        public static async Task<CartDiscountDraft> GetTestCartDiscountDraft(
+            Project.Project project, 
+            Client client, 
+            bool isActive, 
+            bool requiresDiscountCode,
+            string cartPredicate ,
+            string lineItemPredicate,
+            int perMyriadAmount,
+            bool targetCustomLineItem)
         {
             LocalizedString name = new LocalizedString();
             LocalizedString description = new LocalizedString();
@@ -154,22 +162,42 @@ namespace commercetools.Tests
 
             return new CartDiscountDraft(
                 name,
-                new RelativeCartDiscountValue(5000),
-                "lineItemCount(1=1) > 0",
+                new RelativeCartDiscountValue(perMyriadAmount),
+                cartPredicate,
                 sortOrder,
-                GetRandomBoolean())
+                requiresDiscountCode)
             {
                 Description = description,
-                IsActive = GetRandomBoolean(),
+                IsActive = isActive,
                 ValidFrom = DateTime.UtcNow,
                 ValidUntil = GetRandomDateAfter(DateTime.UtcNow.AddDays(100)),
-                Target = new CartDiscountTarget(CartDiscountTargetType.LineItems, "1=1")
+                Target = targetCustomLineItem ?
+                            new CartDiscountTarget(CartDiscountTargetType.CustomLineItems, lineItemPredicate) :
+                            new CartDiscountTarget(CartDiscountTargetType.LineItems, lineItemPredicate)
             };
         }
 
         public static async Task<CartDiscount> CreateTestCartDiscount(Project.Project project, Client client)
         {
-            var cartDiscountDraft = await GetTestCartDiscountDraft(project, client);
+
+            var cartDiscountDraft = await GetTestCartDiscountDraft(project, client, GetRandomBoolean(),
+                GetRandomBoolean(), "lineItemCount(1 = 1) > 0", "1=1", 5000, false);
+            var cartDiscountResponse = await client.CartDiscounts().CreateCartDiscountAsync(cartDiscountDraft);
+
+            return cartDiscountResponse.Result;
+        }
+
+        public static async Task<CartDiscount> CreateCartDiscountForCustomLineItems(
+            Project.Project project, 
+            Client client,
+            bool isActive = true,
+            bool requiresDiscountCode = false,
+            string cartPredicate = "customLineItemCount(1=1) > 0",
+            string lineItemPredicate = "1=1",
+            int perMyriadAmount = 5000)
+        {
+            var cartDiscountDraft = await GetTestCartDiscountDraft(project, client, isActive, requiresDiscountCode,
+                cartPredicate, lineItemPredicate, 5000, true);
             var cartDiscountResponse = await client.CartDiscounts().CreateCartDiscountAsync(cartDiscountDraft);
 
             return cartDiscountResponse.Result;
@@ -297,7 +325,8 @@ namespace commercetools.Tests
                 name.SetValue(language, string.Concat("test-discount-code-name", language, " ", randomPostfix));
                 description.SetValue(language, string.Concat("test-discount-code-description", language, "-", randomPostfix));
             }
-            var cartDiscountDraft = await GetTestCartDiscountDraft(project, client);
+            var cartDiscountDraft = await GetTestCartDiscountDraft(project, client, GetRandomBoolean(),
+                GetRandomBoolean(), "lineItemCount(1 = 1) > 0", "1=1", 5000, false);
             var cartDiscountResponse = await client.CartDiscounts().CreateCartDiscountAsync(cartDiscountDraft);
             var discountCodeDraft = new DiscountCodeDraft(
                 GetRandomString(10),
