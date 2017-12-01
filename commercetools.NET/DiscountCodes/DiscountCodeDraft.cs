@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using commercetools.Common;
+using commercetools.CustomFields;
 using Newtonsoft.Json;
 
 namespace commercetools.DiscountCodes
@@ -49,6 +50,12 @@ namespace commercetools.DiscountCodes
         [JsonProperty(PropertyName = "maxApplicationsPerCustomer")]
         public int? MaxApplicationsPerCustomer { get; set; }
 
+        /// <summary>
+        /// The custom fields.
+        /// </summary>
+        [JsonProperty(PropertyName = "custom")]
+        public CustomFieldsDraft Custom { get; set; }
+
         #endregion
 
         public DiscountCodeDraft(
@@ -61,7 +68,6 @@ namespace commercetools.DiscountCodes
 
             if (cartDiscounts == null || cartDiscounts.Count == 0)
                 throw new ArgumentException($"{nameof(cartDiscounts)} cannot be null or empty.");
-
 
             Code = code;
             CartDiscounts = cartDiscounts;

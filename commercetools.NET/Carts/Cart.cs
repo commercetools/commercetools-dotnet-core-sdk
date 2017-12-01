@@ -30,18 +30,6 @@ namespace commercetools.Carts
         public int Version { get; private set; }
 
         /// <summary>
-        /// Created At
-        /// </summary>
-        [JsonProperty(PropertyName = "createdAt")]
-        public DateTime? CreatedAt { get; private set; }
-
-        /// <summary>
-        /// Last Modified At
-        /// </summary>
-        [JsonProperty(PropertyName = "lastModifiedAt")]
-        public DateTime? LastModifiedAt { get; private set; }
-
-        /// <summary>
         /// Customer Id
         /// </summary>
         [JsonProperty(PropertyName = "customerId")]
@@ -157,6 +145,12 @@ namespace commercetools.Carts
         public List<DiscountCodeInfo> DiscountCodes { get; private set; }
 
         /// <summary>
+        /// Automatically filled when a line item with LineItemMode GiftLineItem is removed from the cart.
+        /// </summary>
+        [JsonProperty(PropertyName = "refusedGifts")]
+        public List<Reference> RefusedGifts { get; private set; }
+
+        /// <summary>
         /// The custom fields.
         /// </summary>
         [JsonProperty(PropertyName = "custom")]
@@ -180,6 +174,18 @@ namespace commercetools.Carts
         /// </summary>
         [JsonProperty(PropertyName = "deleteDaysAfterLastModification")]
         public int? DeleteDaysAfterLastModification { get; private set; }
+
+        /// <summary>
+        /// Created At
+        /// </summary>
+        [JsonProperty(PropertyName = "createdAt")]
+        public DateTime? CreatedAt { get; private set; }
+
+        /// <summary>
+        /// Last Modified At
+        /// </summary>
+        [JsonProperty(PropertyName = "lastModifiedAt")]
+        public DateTime? LastModifiedAt { get; private set; }
 
         #endregion
 
@@ -208,8 +214,6 @@ namespace commercetools.Carts
 
             this.Id = data.id;
             this.Version = data.version;
-            this.CreatedAt = data.createdAt;
-            this.LastModifiedAt = data.lastModifiedAt;
             this.CustomerId = data.customerId;
             this.CustomerEmail = data.customerEmail;
             this.AnonymousId = data.anonymousId;
@@ -227,10 +231,13 @@ namespace commercetools.Carts
             this.Country = data.country;
             this.ShippingInfo = new ShippingInfo(data.shippingInfo);
             this.DiscountCodes = Helper.GetListFromJsonArray<DiscountCodeInfo>(data.discountCodes);
+            this.RefusedGifts = Helper.GetListFromJsonArray<Reference>(data.refusedGifts);
             this.Custom = new CustomFields.CustomFields(data.custom);
             this.PaymentInfo = new PaymentInfo(data.paymentInfo);
             this.Locale = data.locale;
             this.DeleteDaysAfterLastModification = data.deleteDaysAfterLastModification;
+            this.CreatedAt = data.createdAt;
+            this.LastModifiedAt = data.lastModifiedAt;
         }
 
         #endregion

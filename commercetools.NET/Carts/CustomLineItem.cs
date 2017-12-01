@@ -19,36 +19,81 @@ namespace commercetools.Carts
     {
         #region Properties
 
+        /// <summary>
+        /// The unique ID of this CustomLineItem.
+        /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; private set; }
 
+        /// <summary>
+        /// The name of this CustomLineItem.
+        /// </summary>
         [JsonProperty(PropertyName = "name")]
         public LocalizedString Name { get; private set; }
 
+        /// <summary>
+        /// The cost to add to the cart. The amount can be negative.
+        /// </summary>
         [JsonProperty(PropertyName = "money")]
         public Money Money { get; private set; }
 
+        /// <summary>
+        /// Set once the taxRate is set.
+        /// </summary>
+        [JsonProperty(PropertyName = "taxedPrice")]
+        public TaxedItemPrice TaxedPrice { get; private set; }
+
+        /// <summary>
+        /// The total price of this custom line item.
+        /// </summary>
+        /// <remarks>
+        /// If custom line item is discounted, then the totalPrice would be the discounted custom line item price multiplied by quantity. Otherwise a total price is just a money multiplied by the quantity. totalPrice may or may not include the taxes: it depends on the taxRate.includedInPrice property.
+        /// </remarks>
         [JsonProperty(PropertyName = "totalPrice")]
         public Money TotalPrice { get; private set; }
 
+        /// <summary>
+        /// A unique String in the cart to identify this CustomLineItem.
+        /// </summary>
         [JsonProperty(PropertyName = "slug")]
         public string Slug { get; private set; }
 
+        /// <summary>
+        /// Quantity
+        /// </summary>
         [JsonProperty(PropertyName = "quantity")]
         public int? Quantity { get; private set; }
 
+        /// <summary>
+        /// Item states
+        /// </summary>
         [JsonProperty(PropertyName = "state")]
         public List<ItemState> State { get; private set; }
 
+        /// <summary>
+        /// Reference to a TaxCategory
+        /// </summary>
         [JsonProperty(PropertyName = "taxCategory")]
         public Reference TaxCategory { get; private set; }
 
+        /// <summary>
+        /// Will be set automatically in the Platform TaxMode once the shipping address is set is set. 
+        /// </summary>
+        /// <remarks>
+        /// For the External tax mode the tax rate has to be set explicitly with the ExternalTaxRateDraft.
+        /// </remarks>
         [JsonProperty(PropertyName = "taxRate")]
         public TaxRate TaxRate { get; private set; }
 
+        /// <summary>
+        /// List of of DiscountedLineItemPriceForQuantity
+        /// </summary>
         [JsonProperty(PropertyName = "discountedPricePerQuantity")]
         public List<DiscountedLineItemPriceForQuantity> DiscountedPricePerQuantity { get; private set; }
 
+        /// <summary>
+        /// Custom fields
+        /// </summary>
         [JsonProperty(PropertyName = "custom")]
         public CustomFields.CustomFields Custom { get; private set; }
 
@@ -71,6 +116,7 @@ namespace commercetools.Carts
             this.Name = new LocalizedString(data.name);
             this.Money = new Money(data.money);
             this.TotalPrice = new Money(data.totalPrice);
+            this.TaxedPrice = new TaxedItemPrice(data.taxedPrice);
             this.Slug = data.slug;
             this.Quantity = data.quantity;
             this.State = Helper.GetListFromJsonArray<ItemState>(data.state);

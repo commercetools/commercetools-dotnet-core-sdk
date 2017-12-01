@@ -37,12 +37,23 @@ namespace commercetools.Carts
     }
 
     /// <summary>
+    /// LineItemMode enumeration.
+    /// </summary>
+    /// <see href="https://dev.commercetools.com/http-api-projects-carts.html#lineitemmode"/>
+    public enum LineItemMode
+    {
+        Standard,
+        GiftLineItem
+    }
+
+    /// <summary>
     /// LineItemPriceMode enumeration.
     /// </summary>
     /// <see href="http://dev.commercetools.com/http-api-projects-carts.html#lineitempricemode"/>
     public enum LineItemPriceMode
     {
         Platform,
+        ExternalPrice,
         ExternalTotal
     }
 

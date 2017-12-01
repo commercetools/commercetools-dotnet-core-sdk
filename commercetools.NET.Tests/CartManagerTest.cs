@@ -59,41 +59,72 @@ namespace commercetools.Tests
             Assert.IsTrue(projectTask.Result.Success);
             _project = projectTask.Result.Result;
 
-            Assert.IsTrue(_project.Languages.Count > 0);
-            Assert.IsTrue(_project.Currencies.Count > 0);
+            Assert.IsTrue(_project.Languages.Count > 0, "No Languages");
+            Assert.IsTrue(_project.Currencies.Count > 0, "No Currencies");
 
             _testCustomers = new List<Customer>();
             _testCarts = new List<Cart>();
-
+            CustomerDraft customerDraft;
+            Task<Response<CustomerCreatedMessage>> customerTask;
+            CustomerCreatedMessage customerCreatedMessage;
+            CartDraft cartDraft;
+            Cart cart;
+            Task<Response<Cart>> cartTask;
             for (int i = 0; i < 5; i++)
             {
-                CustomerDraft customerDraft = Helper.GetTestCustomerDraft();
-                Task<Response<CustomerCreatedMessage>> customerTask =
-                    _client.Customers().CreateCustomerAsync(customerDraft);
+                customerDraft = Helper.GetTestCustomerDraft();
+                customerTask = _client.Customers().CreateCustomerAsync(customerDraft);
                 customerTask.Wait();
                 Assert.IsTrue(customerTask.Result.Success);
 
-                CustomerCreatedMessage customerCreatedMessage = customerTask.Result.Result;
+                customerCreatedMessage = customerTask.Result.Result;
                 Assert.NotNull(customerCreatedMessage.Customer);
                 Assert.NotNull(customerCreatedMessage.Customer.Id);
 
                 _testCustomers.Add(customerCreatedMessage.Customer);
 
-                CartDraft cartDraft = Helper.GetTestCartDraft(_project, customerCreatedMessage.Customer.Id);
-                Task<Response<Cart>> cartTask = _client.Carts().CreateCartAsync(cartDraft);
+                cartDraft = Helper.GetTestCartDraft(_project, customerCreatedMessage.Customer.Id);
+                cartTask = _client.Carts().CreateCartAsync(cartDraft);
                 cartTask.Wait();
-                Assert.IsTrue(cartTask.Result.Success);
-                Cart cart = cartTask.Result.Result;
+                Assert.NotNull(cartTask.Result);
+                Assert.IsTrue(cartTask.Result.Success, "CreateCartAsync failed");
+                cart = cartTask.Result.Result;
                 Assert.NotNull(cart.Id);
+                Console.Error.WriteLine(string.Format("CartManagerTest - Information Only - Init TestCartDraft TaxMode: {0}", cartDraft.TaxMode == null ? "(default)" : cart.TaxMode.ToString()));
 
                 _testCarts.Add(cart);
             }
+
+            //customer/cart with external tax mode enabled
+
+            customerDraft = Helper.GetTestCustomerDraft();
+            customerTask = _client.Customers().CreateCustomerAsync(customerDraft);
+            customerTask.Wait();
+            Assert.IsTrue(customerTask.Result.Success);
+            customerCreatedMessage = customerTask.Result.Result;
+            Assert.NotNull(customerCreatedMessage.Customer);
+            Assert.NotNull(customerCreatedMessage.Customer.Id);
+
+            _testCustomers.Add(customerCreatedMessage.Customer);
+
+            cartDraft = Helper.GetTestCartDraftUsingExternalTaxMode(_project, customerCreatedMessage.Customer.Id);
+            cartTask = _client.Carts().CreateCartAsync(cartDraft);
+            cartTask.Wait();
+            Assert.NotNull(cartTask.Result);
+            Assert.IsTrue(cartTask.Result.Success, "CreateCartAsync failed");
+            cart = cartTask.Result.Result;
+            Assert.NotNull(cart.Id);
+            Console.Error.WriteLine(string.Format("CartManagerTest - Information Only - Init TestCartDraft TaxMode: {0}", cart.TaxMode));
+
+            _testCarts.Add(cart);
+
+
 
             ProductTypeDraft productTypeDraft = Helper.GetTestProductTypeDraft();
             Task<Response<ProductType>> testProductTypeTask =
                 _client.ProductTypes().CreateProductTypeAsync(productTypeDraft);
             testProductTypeTask.Wait();
-            Assert.IsTrue(testProductTypeTask.Result.Success);
+            Assert.IsTrue(testProductTypeTask.Result.Success, "CreateProductType failed");
             _testProductType = testProductTypeTask.Result.Result;
             Assert.NotNull(_testProductType.Id);
 
@@ -101,7 +132,7 @@ namespace commercetools.Tests
             Task<Response<TaxCategory>> taxCategoryTask =
                 _client.TaxCategories().CreateTaxCategoryAsync(taxCategoryDraft);
             taxCategoryTask.Wait();
-            Assert.IsTrue(taxCategoryTask.Result.Success);
+            Assert.IsTrue(taxCategoryTask.Result.Success, "CreateTaxCategory failed");
             _testTaxCategory = taxCategoryTask.Result.Result;
             Assert.NotNull(_testTaxCategory.Id);
 
@@ -119,7 +150,7 @@ namespace commercetools.Tests
                 ZoneDraft zoneDraft = Helper.GetTestZoneDraft();
                 Task<Response<Zone>> zoneTask = _client.Zones().CreateZoneAsync(zoneDraft);
                 zoneTask.Wait();
-                Assert.IsTrue(zoneTask.Result.Success);
+                Assert.IsTrue(zoneTask.Result.Success, "CreateZone failed");
                 _testZone = zoneTask.Result.Result;
                 _createdTestZone = true;
             }
@@ -141,7 +172,7 @@ namespace commercetools.Tests
                     AddLocationAction addLocationAction = new AddLocationAction(location);
                     Task<Response<Zone>> updateZoneTask = _client.Zones().UpdateZoneAsync(_testZone, addLocationAction);
                     updateZoneTask.Wait();
-                    Assert.IsTrue(updateZoneTask.Result.Success);
+                    Assert.IsTrue(updateZoneTask.Result.Success, "UpdateZone failed");
                     _testZone = updateZoneTask.Result.Result;
                 }
             }
@@ -153,7 +184,7 @@ namespace commercetools.Tests
             Task<Response<ShippingMethod>> shippingMethodTask =
                 _client.ShippingMethods().CreateShippingMethodAsync(shippingMethodDraft);
             shippingMethodTask.Wait();
-            Assert.IsTrue(shippingMethodTask.Result.Success);
+            Assert.IsTrue(shippingMethodTask.Result.Success, "CreateShippingMethod failed");
             _testShippingMethod = shippingMethodTask.Result.Result;
 
             Assert.NotNull(_testShippingMethod.Id);
@@ -161,7 +192,7 @@ namespace commercetools.Tests
             ProductDraft productDraft = Helper.GetTestProductDraft(_project, _testProductType.Id, _testTaxCategory.Id);
             Task<Response<Product>> testProductTask = _client.Products().CreateProductAsync(productDraft);
             testProductTask.Wait();
-            Assert.IsTrue(testProductTask.Result.Success);
+            Assert.IsTrue(testProductTask.Result.Success, "CreateProduct failed");
             _testProduct = testProductTask.Result.Result;
 
             Assert.NotNull(_testProduct.Id);
@@ -169,7 +200,7 @@ namespace commercetools.Tests
             PaymentDraft paymentDraft = Helper.GetTestPaymentDraft(_project, _testCustomers[0].Id);
             Task<Response<Payment>> paymentTask = _client.Payments().CreatePaymentAsync(paymentDraft);
             paymentTask.Wait();
-            Assert.IsTrue(paymentTask.Result.Success);
+            Assert.IsTrue(paymentTask.Result.Success, "CreatePayment failed");
             _testPayment = paymentTask.Result.Result;
 
             Assert.NotNull(_testPayment.Id);
@@ -177,7 +208,7 @@ namespace commercetools.Tests
             TypeDraft typeDraft = Helper.GetTypeDraft(_project);
             Task<Response<Type>> typeTask = _client.Types().CreateTypeAsync(typeDraft);
             typeTask.Wait();
-            Assert.IsTrue(typeTask.Result.Success);
+            Assert.IsTrue(typeTask.Result.Success, "CreateType failed");
             _testType = typeTask.Result.Result;
         }
 
@@ -195,8 +226,11 @@ namespace commercetools.Tests
                 task.Wait();
             }
 
-            task = _client.Payments().DeletePaymentAsync(_testPayment);
-            task.Wait();
+            if (_testPayment != null)
+            {
+                task = _client.Payments().DeletePaymentAsync(_testPayment);
+                task.Wait();
+            }
 
             foreach (Customer customer in _testCustomers)
             {
@@ -204,17 +238,29 @@ namespace commercetools.Tests
                 task.Wait();
             }
 
-            task = _client.Products().DeleteProductAsync(_testProduct);
-            task.Wait();
+            if (_testProduct != null)
+            {
+                task = _client.Products().DeleteProductAsync(_testProduct);
+                task.Wait();
+            }
 
-            task = _client.ProductTypes().DeleteProductTypeAsync(_testProductType);
-            task.Wait();
+            if (_testProductType != null)
+            {
+                task = _client.ProductTypes().DeleteProductTypeAsync(_testProductType);
+                task.Wait();
+            }
 
-            task = _client.ShippingMethods().DeleteShippingMethodAsync(_testShippingMethod);
-            task.Wait();
+            if (_testShippingMethod != null)
+            {
+                task = _client.ShippingMethods().DeleteShippingMethodAsync(_testShippingMethod);
+                task.Wait();
+            }
 
-            task = _client.TaxCategories().DeleteTaxCategoryAsync(_testTaxCategory);
-            task.Wait();
+            if (_testTaxCategory != null)
+            {
+                task = _client.TaxCategories().DeleteTaxCategoryAsync(_testTaxCategory);
+                task.Wait();
+            }
 
             if (_createdTestZone)
             {
@@ -222,8 +268,11 @@ namespace commercetools.Tests
                 task.Wait();
             }
 
-            task = _client.Types().DeleteTypeAsync(_testType);
-            task.Wait();
+            if (_testType != null)
+            {
+                task = _client.Types().DeleteTypeAsync(_testType);
+                task.Wait();
+            }
         }
 
         /// <summary>
@@ -286,7 +335,7 @@ namespace commercetools.Tests
         [Test]
         public async Task ShouldCreateAndDeleteCartAsync()
         {
-            CartDraft cartDraft = Helper.GetTestCartDraft(_project);
+            CartDraft cartDraft = Helper.GetTestCartDraft(_project, null);
 
             Response<Cart> response = await _client.Carts().CreateCartAsync(cartDraft);
             Assert.IsTrue(response.Success);
@@ -297,7 +346,40 @@ namespace commercetools.Tests
             Assert.AreEqual(cart.InventoryMode, cartDraft.InventoryMode);
             Assert.AreEqual(cart.ShippingAddress, cartDraft.ShippingAddress);
             Assert.AreEqual(cart.BillingAddress, cartDraft.BillingAddress);
-            Assert.AreEqual(cartDraft.DeleteDaysAfterLastModification, cart.DeleteDaysAfterLastModification);
+
+            string deletedCartId = cart.Id;
+
+            response = await _client.Carts().DeleteCartAsync(cart);
+            Assert.IsTrue(response.Success);
+
+            cart = response.Result;
+
+            response = await _client.Carts().GetCartByIdAsync(deletedCartId);
+            Assert.IsFalse(response.Success);
+        }
+
+        /// <summary>
+        /// Tests the CartManager.CreateCartAsync and CartManager.DeleteCartAsync methods for a cart in external tax mode with custom line items having an external tax rate.
+        /// </summary>
+        /// <see cref="CartManager.CreateCartAsync"/>
+        /// <seealso cref="CartManager.DeleteCartAsync(commercetools.Carts.Cart)"/>
+        [Test]
+        public async Task ShouldCreateAndDeleteCartInExternalTaxModeWithCustomLineItemsHavingExternalTaxRate()
+        {
+            CartDraft cartDraft = Helper.GetTestCartDraftWithCustomLineItemsUsingExternalTaxMode(_project);
+            Response<Cart> response = await _client.Carts().CreateCartAsync(cartDraft);
+            Assert.IsTrue(response.Success);
+
+            Cart cart = response.Result;
+            Assert.NotNull(cart.Id);
+            Assert.NotNull(cart.CustomLineItems);
+            Assert.IsTrue(cart.CustomLineItems.Count > 0);
+            Assert.NotNull(cart.CustomLineItems[0].TaxRate);
+            Assert.NotNull(cart.CustomLineItems[0].TaxRate.Name);
+            Assert.AreEqual(cart.Country, cartDraft.Country);
+            Assert.AreEqual(cart.InventoryMode, cartDraft.InventoryMode);
+            Assert.AreEqual(cart.ShippingAddress, cartDraft.ShippingAddress);
+            Assert.AreEqual(cart.BillingAddress, cartDraft.BillingAddress);
 
             string deletedCartId = cart.Id;
 
@@ -319,12 +401,12 @@ namespace commercetools.Tests
         public async Task ShouldCreateAndDeleteCartWithCustomLineItemsAsync()
         {
             CartDraft cartDraft = Helper.GetTestCartDraftWithCustomLineItems(_project);
-
             Response<Cart> response = await _client.Carts().CreateCartAsync(cartDraft);
             Assert.IsTrue(response.Success);
 
             Cart cart = response.Result;
             Assert.NotNull(cart.Id);
+
             Assert.AreEqual(cart.Country, cartDraft.Country);
             Assert.AreEqual(cart.InventoryMode, cartDraft.InventoryMode);
             Assert.AreEqual(cart.ShippingAddress, cartDraft.ShippingAddress);
@@ -351,39 +433,62 @@ namespace commercetools.Tests
             int quantity = 2;
             int newQuantity = 3;
 
-            AddLineItemAction addLineItemAction =
-                new AddLineItemAction(_testProduct.Id, _testProduct.MasterData.Current.MasterVariant.Id);
-            addLineItemAction.Quantity = quantity;
-            Response<Cart> response = await _client.Carts().UpdateCartAsync(_testCarts[0], addLineItemAction);
-            Assert.IsTrue(response.Success);
+            for(int i = 4; i < _testCarts.Count; i++)
+            {
+                var cart = _testCarts[i];
+                AddLineItemAction addLineItemAction = new AddLineItemAction(_testProduct.Id, _testProduct.MasterData.Current.MasterVariant.Id);
+                addLineItemAction.Quantity = quantity;
 
-            _testCarts[0] = response.Result;
-            Assert.NotNull(_testCarts[0].Id);
-            Assert.NotNull(_testCarts[0].LineItems);
-            Assert.AreEqual(_testCarts[0].LineItems.Count, 1);
-            Assert.AreEqual(_testCarts[0].LineItems[0].ProductId, _testProduct.Id);
-            Assert.AreEqual(_testCarts[0].LineItems[0].Variant.Id, _testProduct.MasterData.Current.MasterVariant.Id);
-            Assert.AreEqual(_testCarts[0].LineItems[0].Quantity, quantity);
+                if (cart.TaxMode != null && cart.TaxMode == TaxMode.External)
+                {
+                    addLineItemAction.ExternalTaxRate = new ExternalTaxRateDraft("TestTaxRate", _project.Countries[0]) { Amount = 0.1m };
+                    addLineItemAction.ExternalPrice = new Money() { CentAmount = 5, CurrencyCode = _project.Currencies[0] };
+                }
 
-            ChangeLineItemQuantityAction changeLineItemQuantityAction =
-                new ChangeLineItemQuantityAction(_testCarts[0].LineItems[0].Id, newQuantity);
-            response = await _client.Carts().UpdateCartAsync(_testCarts[0], changeLineItemQuantityAction);
-            Assert.IsTrue(response.Success);
+                Response<Cart> response = await _client.Carts().UpdateCartAsync(cart, addLineItemAction);
+                Assert.IsTrue(response.Success);
 
-            _testCarts[0] = response.Result;
-            Assert.NotNull(_testCarts[0].Id);
-            Assert.NotNull(_testCarts[0].LineItems);
-            Assert.AreEqual(_testCarts[0].LineItems.Count, 1);
-            Assert.AreEqual(_testCarts[0].LineItems[0].Quantity, newQuantity);
+                cart = response.Result;
+                Assert.NotNull(cart.Id);
+                Assert.NotNull(cart.LineItems, "LineItems are null");
+                Assert.AreEqual(cart.LineItems.Count, 1);
+                Assert.AreEqual(cart.LineItems[0].ProductId, _testProduct.Id);
+                Assert.AreEqual(cart.LineItems[0].Variant.Id, _testProduct.MasterData.Current.MasterVariant.Id);
+                Assert.AreEqual(cart.LineItems[0].Quantity, quantity);
+                Assert.NotNull(cart.LineItems[0].TaxRate, "TaxRate is null");
 
-            RemoveLineItemAction removeLineItemAction = new RemoveLineItemAction(_testCarts[0].LineItems[0].Id);
-            response = await _client.Carts().UpdateCartAsync(_testCarts[0], removeLineItemAction);
-            Assert.IsTrue(response.Success);
+                if (cart.TaxMode != null && cart.TaxMode == TaxMode.External)
+                {
+                    Assert.AreEqual(cart.LineItems[0].TaxRate.Name, addLineItemAction.ExternalTaxRate.Name);
+                    Assert.AreEqual(cart.LineItems[0].TaxRate.Country, addLineItemAction.ExternalTaxRate.Country);
+                    Assert.AreEqual(cart.LineItems[0].TaxRate.Amount, addLineItemAction.ExternalTaxRate.Amount);
+                    Assert.AreEqual(cart.LineItems[0].Price.Value.CentAmount, addLineItemAction.ExternalPrice.CentAmount);
+                    Assert.AreEqual(cart.LineItems[0].Price.Value.CurrencyCode, addLineItemAction.ExternalPrice.CurrencyCode);
+                }
+                ChangeLineItemQuantityAction changeLineItemQuantityAction =
+                   new ChangeLineItemQuantityAction(cart.LineItems[0].Id, newQuantity);
+                if (cart.TaxMode != null && cart.TaxMode == TaxMode.External)
+                {
+                    changeLineItemQuantityAction.ExternalPrice = new Money() { CentAmount = 10, CurrencyCode = _project.Currencies[0] };
+                }
 
-            _testCarts[0] = response.Result;
-            Assert.NotNull(_testCarts[0].Id);
-            Assert.NotNull(_testCarts[0].LineItems);
-            Assert.AreEqual(_testCarts[0].LineItems.Count, 0);
+                response = await _client.Carts().UpdateCartAsync(cart, changeLineItemQuantityAction);
+                Assert.IsTrue(response.Success, string.Format("TaxMode: {0}", cart.TaxMode));
+                Console.Error.WriteLine(string.Format("CartManagerTest - Information Only - CartId: {0} TaxMode: {1}", cart.Id, cart.TaxMode));
+                cart = response.Result;
+                Assert.NotNull(cart.Id);
+                Assert.NotNull(cart.LineItems);
+                Assert.AreEqual(cart.LineItems.Count, 1);
+                Assert.AreEqual(cart.LineItems[0].Quantity, newQuantity);
+                RemoveLineItemAction removeLineItemAction = new RemoveLineItemAction(cart.LineItems[0].Id);
+                response = await _client.Carts().UpdateCartAsync(cart, removeLineItemAction);
+                Assert.IsTrue(response.Success);
+
+                cart = response.Result;
+                Assert.NotNull(cart.Id);
+                Assert.NotNull(cart.LineItems);
+                Assert.AreEqual(cart.LineItems.Count, 0);
+            }
         }
 
         /// <summary>
@@ -449,6 +554,21 @@ namespace commercetools.Tests
             Assert.AreEqual(_testCarts[2].BillingAddress.StreetNumber, newBillingAddress.StreetNumber);
             Assert.AreEqual(_testCarts[2].BillingAddress.Country, newBillingAddress.Country);
             Assert.AreEqual(_testCarts[2].BillingAddress.PostalCode, newBillingAddress.PostalCode);
+        }
+
+        /// <summary>
+        /// Tests the SetDeleteDaysAfterLastModification update action.
+        /// </summary>
+        /// <see cref="CartManager.UpdateCartAsync(commercetools.Carts.Cart, commercetools.Common.UpdateAction)"/>
+        [Test]
+        public async Task ShouldSetDeleteDaysAfterLastModificationAsync()
+        {
+            SetDeleteDaysAfterLastModificationAction setDeleteDays = new SetDeleteDaysAfterLastModificationAction(1);
+            Response<Cart> response = await _client.Carts().UpdateCartAsync(_testCarts[2], setDeleteDays);
+            Assert.IsTrue(response.Success);
+            _testCarts[2] = response.Result;
+            Assert.NotNull(_testCarts[2].DeleteDaysAfterLastModification);
+            Assert.IsTrue(_testCarts[2].DeleteDaysAfterLastModification == 1);
         }
 
         /// <summary>
@@ -639,15 +759,13 @@ namespace commercetools.Tests
             var customLineItem = response.Result.CustomLineItems.First();
             customLineItem.DiscountedPricePerQuantity.Count.Should().BeGreaterThan(0);
             var discountedLineItemPrice = customLineItem.DiscountedPricePerQuantity.First();
-            discountedLineItemPrice.Value.CentAmount.Should().BeGreaterThan(1);
-            discountedLineItemPrice.Value.CurrencyCode.Should().Be("EUR");
-
-            var discountedLineItemPriceHasDiscounts = discountedLineItemPrice.IncludedDiscounts.TrueForAll(
-                portion => !string.IsNullOrWhiteSpace(portion.Discount?.Id) && portion.DiscountedAmount != null &&
-                           portion.DiscountedAmount.CentAmount != null &&
-                           !string.IsNullOrWhiteSpace(portion.DiscountedAmount.CurrencyCode));
-
-            discountedLineItemPriceHasDiscounts.Should().BeTrue();
+            discountedLineItemPrice.DiscountedPrice.Value.CentAmount.Should().BeGreaterThan(1);
+            discountedLineItemPrice.DiscountedPrice.Value.CurrencyCode.Should().Be("EUR");
+            Assert.NotNull(discountedLineItemPrice);
+            Assert.NotNull(discountedLineItemPrice.DiscountedPrice);
+            Assert.NotNull(discountedLineItemPrice.DiscountedPrice.Value);
+            Assert.NotNull(discountedLineItemPrice.DiscountedPrice.Value);
+            Assert.IsFalse(string.IsNullOrEmpty(discountedLineItemPrice.DiscountedPrice.Value.CurrencyCode));
 
             // Cleanup
             await this._client.CartDiscounts().DeleteCartDiscountAsync(cartDiscount.Id, 1);

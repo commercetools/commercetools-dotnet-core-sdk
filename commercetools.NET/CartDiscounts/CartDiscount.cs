@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using commercetools.Common;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace commercetools.CartDiscounts
 {
@@ -69,12 +70,21 @@ namespace commercetools.CartDiscounts
         [JsonProperty(PropertyName = "sortOrder")]
         public string SortOrder { get; private set; }
 
+        /// <summary>
+        /// Only active discount can be applied to the cart.
+        /// </summary>
         [JsonProperty(PropertyName = "isActive")]
         public bool IsActive { get; set; }
 
+        /// <summary>
+        /// Valid from
+        /// </summary>
         [JsonProperty(PropertyName = "validFrom")]
         public DateTime? ValidFrom { get; private set; }
 
+        /// <summary>
+        /// Valid until
+        /// </summary>
         [JsonProperty(PropertyName = "validUntil")]
         public DateTime? ValidUntil { get; private set; }
 
@@ -84,8 +94,19 @@ namespace commercetools.CartDiscounts
         [JsonProperty(PropertyName = "requiresDiscountCode")]
         public bool RequiresDiscountCode { get; private set; }
 
+        /// <summary>
+        /// The platform will generate this array from the predicate. It contains the references of all the resources that are addressed in the predicate.
+        /// </summary>
         [JsonProperty(PropertyName = "references")]
         public List<Reference> References { get; private set; }
+
+        /// <summary>
+        /// Specifies whether the application of this discount causes the following discounts to be ignored. Defaults to Stacking.
+        /// </summary>
+        [JsonProperty(PropertyName = "stackingMode")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public StackingMode? StackingMode { get; private set; }
+
         #endregion
 
         public CartDiscount(dynamic data)
@@ -94,6 +115,9 @@ namespace commercetools.CartDiscounts
             {
                 return;
             }
+
+            StackingMode stackingMode;
+            string stackingModeStr = (data.stackingMode != null ? data.stackingMode.ToString() : string.Empty);
 
             this.Id = data.id;
             this.Version = data.version;
@@ -110,6 +134,7 @@ namespace commercetools.CartDiscounts
             this.Value = CartDiscountValueFactory.Create(data.value);
             this.Target = new CartDiscountTarget(data.target);
             this.References = Helper.GetListFromJsonArray<Reference>(data.references);
+            this.StackingMode = Enum.TryParse(stackingModeStr, out stackingMode) ? (StackingMode?)stackingMode : null;
         }
     }
 }

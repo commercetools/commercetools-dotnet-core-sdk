@@ -33,17 +33,16 @@ namespace commercetools.Tests
             Assert.IsTrue(projectTask.Result.Success);
             _project = projectTask.Result.Result;
 
-            Assert.IsTrue(_project.Languages.Count > 0);
-            Assert.IsTrue(_project.Currencies.Count > 0);
-
+            Assert.IsTrue(_project.Languages.Count > 0, "No Languages");
+            Assert.IsTrue(_project.Currencies.Count > 0, "No Currencies");
             Task<DiscountCode> discountCodeTask =
-                Helper.CreateTestDiscountCode(this._project, this._client);
+            Helper.CreateTestDiscountCode(this._project, this._client, true, true, true);
             discountCodeTask.Wait();
 
-            Assert.IsNotNull(discountCodeTask.Result);
+            Assert.IsNotNull(discountCodeTask.Result, "CreateTestDiscountCode result null");
 
             _testDiscountCode = discountCodeTask.Result;
-            Assert.NotNull(_testDiscountCode);
+            Assert.NotNull(_testDiscountCode, "CreateTestDiscountCode DiscountCode null");
             Assert.NotNull(_testDiscountCode.Id);
         }
 
@@ -53,9 +52,12 @@ namespace commercetools.Tests
         [OneTimeTearDown]
         public void Dispose()
         {
-            Task<DiscountCode> deleteDiscountCodeTask =
-                Helper.DeleteDiscountCode(this._client, _testDiscountCode);
-            deleteDiscountCodeTask.Wait();
+            if (_client != null && _testDiscountCode != null)
+            {
+                Task<DiscountCode> deleteDiscountCodeTask =
+                    Helper.DeleteDiscountCode(this._client, _testDiscountCode);
+                deleteDiscountCodeTask.Wait();
+            }
         }
 
         /// <summary>
@@ -97,7 +99,7 @@ namespace commercetools.Tests
         public async Task ShouldCreateDiscountCodeAsync()
         {
             // Arrange
-            var discountCodeDraft = await Helper.GetDiscountCodeDraft(this._project, this._client);
+            var discountCodeDraft = await Helper.GetDiscountCodeDraft(this._project, this._client, true, true);
             var cartDiscountReferences = discountCodeDraft.CartDiscounts.Select(d => new Reference
             {
                 Id = d.Id,
@@ -107,6 +109,7 @@ namespace commercetools.Tests
             Response<DiscountCode> discountCodeResponse = await _client.DiscountCodes().CreateDiscountCodeAsync(discountCodeDraft);
 
             // Assert
+            Assert.IsTrue(discountCodeResponse.Success, "CreateDiscountCode failed");
             var discountCode = discountCodeResponse.Result;
             Assert.IsNotNull(discountCode);
             Assert.IsNotNull(discountCode.Id);
@@ -130,7 +133,7 @@ namespace commercetools.Tests
         public async Task ShouldDeleteDiscountCodeAsync()
         {
             // Arrange            
-            var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client);
+            var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client, true, true, true);
 
             // Act
             Response<DiscountCode> discountCodeDeleteResponse = await _client.DiscountCodes().DeleteDiscountCodeAsync(discountCode);
@@ -154,7 +157,7 @@ namespace commercetools.Tests
         public async Task ShouldSetNameSetDescriptionDiscountCodeAsync()
         {
             // Arrange
-            var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client);
+            var discountCode = await Helper.CreateTestDiscountCode(_project, _client, true, true, true);
             LocalizedString name = new LocalizedString();
             LocalizedString description = new LocalizedString();
 
@@ -192,7 +195,7 @@ namespace commercetools.Tests
         public async Task ShouldRemoveNameandDescriptionDiscountCodeAsync()
         {
             // Arrange
-            var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client);
+            var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client, true, true, true);
             var setNameAction = new SetNameAction();
             var setDescriptionAction = new SetDescriptionAction();
 
@@ -221,7 +224,7 @@ namespace commercetools.Tests
         public async Task ShouldSetMaxApplicationsSetMaxApplicationsPerCustomerDiscountCodeAsync()
         {
             // Arrange
-            var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client);
+            var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client, true, true, true);
             var setMaxApplications = new SetMaxApplicationsAction { MaxApplications = Helper.GetRandomNumber(3000, 5000) };
             var setMaxApplicationsPerCustomer = new SetMaxApplicationsPerCustomerAction { MaxApplicationsPerCustomer = Helper.GetRandomNumber(3000, 5000) };
 
@@ -250,7 +253,7 @@ namespace commercetools.Tests
         public async Task ShouldRemoveMaxApplicationsAndMAxApplicationsPerCustomerDiscountCodeAsync()
         {
             // Arrange
-            var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client);
+            var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client, true, true, true);
             var setMaxApplications = new SetMaxApplicationsAction();
             var setMaxApplicationsPerCustomer = new SetMaxApplicationsPerCustomerAction();
 
@@ -279,7 +282,9 @@ namespace commercetools.Tests
         public async Task ShouldChangeCartPredicateDiscountCodeAsync()
         {
             // Arrange
-            var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client);
+            var discountCode = await Helper.CreateTestDiscountCode(_project, _client, true, true, true);
+            Assert.NotNull(discountCode, "CreateTestDiscountCode returned null");
+
             var setCartPredicate = new SetCartPredicateAction {CartPredicate = "totalPrice.centAmount > 100000" };
 
             // Act
@@ -305,7 +310,7 @@ namespace commercetools.Tests
         public async Task ShouldRemoveCartPredicateDiscountCodeAsync()
         {
             // Arrange
-            var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client);
+            var discountCode = await Helper.CreateTestDiscountCode(_project, _client, true, true, true);
             var setCartPredicate = new SetCartPredicateAction();
 
             // Act
@@ -331,9 +336,9 @@ namespace commercetools.Tests
         public async Task ShouldChangeCartDiscountsDiscountCodeAsync()
         {
             // Arrange
-            var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client);
+            var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client, true, true, true);
             var oldCartDiscountId = discountCode.CartDiscounts.First().Id;
-            var cartDiscount = await Helper.CreateTestCartDiscount(this._project, this._client);
+            var cartDiscount = await Helper.CreateTestCartDiscount(this._project, this._client, true, true);
             var reference = new List<Reference>()
             {
                 new Reference {ReferenceType = ReferenceType.CartDiscount, Id = cartDiscount.Id}
@@ -343,7 +348,6 @@ namespace commercetools.Tests
             // Act
             var updatedDiscountCodeResponse = await this._client.DiscountCodes()
                 .UpdateDiscountCodeAsync(discountCode, changeCartDiscounts);
-
 
             // Assert
             var updatedDiscountCode = updatedDiscountCodeResponse.Result;
@@ -364,7 +368,7 @@ namespace commercetools.Tests
         public async Task ShouldChangeIsActiveDiscountCodeAsync()
         {
             // Arrange
-            var discountCode = await Helper.CreateTestDiscountCode(this._project, this._client);
+            var discountCode = await Helper.CreateTestDiscountCode(_project, _client, true, true, true);
             var changeIsActive = new ChangeIsActiveAction(!discountCode.IsActive);
 
             // Act

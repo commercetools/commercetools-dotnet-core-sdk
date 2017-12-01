@@ -53,6 +53,18 @@ namespace commercetools.Carts.UpdateActions
         public ExternalTaxRateDraft ExternalTaxRate { get; set; }
 
         /// <summary>
+        /// Sets the line item price to the given value and sets the line item priceMode to ExternalPrice LineItemPriceMode
+        /// </summary>
+        [JsonProperty(PropertyName = "externalPrice")]
+        public Money ExternalPrice { get; set; }
+
+        /// <summary>
+        /// Sets the line item price and totalPrice to the given values and sets the line item priceMode to ExternalPrice LineItemPriceMode
+        /// </summary>
+        [JsonProperty(PropertyName = "externalTotalPrice")]
+        public Money ExternalTotalPrice { get; set; }
+
+        /// <summary>
         /// The custom fields.
         /// </summary>
         [JsonProperty(PropertyName = "custom")]

@@ -14,11 +14,11 @@ namespace commercetools.Carts
     {
         #region Properties
 
-        [JsonProperty(PropertyName = "value")]
-        public Money Value { get; private set; }
+        [JsonProperty(PropertyName = "quantity")]
+        public int Quantity { get; private set; }
 
-        [JsonProperty(PropertyName = "includedDiscounts")]
-        public List<DiscountedLineItemPortion> IncludedDiscounts { get; private set; }
+        [JsonProperty(PropertyName = "discountedPrice")]
+        public DiscountedLineItemPrice DiscountedPrice { get; private set; }
 
         #endregion
 
@@ -34,9 +34,8 @@ namespace commercetools.Carts
             {
                 return;
             }
-
-            this.Value = new Money(data.discountedPrice.value);
-            this.IncludedDiscounts = Helper.GetListFromJsonArray<DiscountedLineItemPortion>(data.discountedPrice.includedDiscounts);
+            this.Quantity = data.quantity;
+            this.DiscountedPrice = new DiscountedLineItemPrice(data.discountedPrice);
         }
 
         #endregion

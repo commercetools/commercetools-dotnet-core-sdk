@@ -35,6 +35,15 @@ namespace commercetools.Carts
         public string CustomerEmail { get; set; }
 
         /// <summary>
+        /// Reference to a CustomerGroup
+        /// </summary>
+        /// <remarks>
+        /// Will be set automatically when the customerId is set and the customer is a member of a customer group. Can be set explicitly when no customerId is present.
+        /// </remarks>
+        [JsonProperty(PropertyName = "customerGroup")]
+        public Reference CustomerGroup { get; private set; }
+
+        /// <summary>
         /// Assigns the new cart to an anonymous session (the customer has not signed up/in yet).
         /// </summary>
         [JsonProperty(PropertyName = "anonymousId")]
@@ -120,7 +129,7 @@ namespace commercetools.Carts
         /// and it is in the Active CartState. If a ChangeSubscription for carts exists, a ResourceDeleted notification will be sent.
         /// </summary>
         [JsonProperty(PropertyName = "deleteDaysAfterLastModification")]
-        public int DeleteDaysAfterLastModification { get; set; }
+        public int? DeleteDaysAfterLastModification { get; set; }
 
         #endregion
 

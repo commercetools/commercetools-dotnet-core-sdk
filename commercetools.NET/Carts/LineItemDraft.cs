@@ -26,6 +26,12 @@ namespace commercetools.Carts
         public int VariantId { get; set; }
 
         /// <summary>
+        /// SKU of an existing ProductVariant.
+        /// </summary>
+        [JsonProperty(PropertyName = "sku")]
+        public string Sku { get; set; }
+
+        /// <summary>
         /// Quantity - Defaults to 1
         /// </summary>
         [JsonProperty(PropertyName = "quantity")]
@@ -54,6 +60,18 @@ namespace commercetools.Carts
         /// </summary>
         [JsonProperty(PropertyName = "externalTaxRate")]
         public ExternalTaxRateDraft ExternalTaxRate { get; set; }
+
+        /// <summary>
+        /// Sets the line item price to the given value and sets the line item priceMode to ExternalPrice LineItemPriceMode.
+        /// </summary>
+        [JsonProperty(PropertyName = "externalPrice")]
+        public Money ExternalPrice { get; set; }
+
+        /// <summary>
+        /// Sets the line item price and totalPrice to the given values and sets the line item priceMode to ExternalTotal LineItemPriceMode.
+        /// </summary>
+        [JsonProperty(PropertyName = "externalTotalPrice")]
+        public ExternalLineItemTotalPrice ExternalTotalPrice { get; set; }
 
         /// <summary>
         /// The custom fields.

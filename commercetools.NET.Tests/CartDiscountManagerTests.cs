@@ -44,7 +44,7 @@ namespace commercetools.Tests
 
             _testCartDiscount = cartDiscountTask.Result;
             Assert.NotNull(_testCartDiscount);
-            Assert.NotNull(_testCartDiscount.Id); 
+            Assert.NotNull(_testCartDiscount.Id);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace commercetools.Tests
         public void Dispose()
         {
             Task task = _client.CartDiscounts().DeleteCartDiscountAsync(_testCartDiscount);
-            task.Wait();         
+            task.Wait();
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace commercetools.Tests
 
             // Act
             var updatedCartDiscountResponse = await this._client.CartDiscounts()
-                .UpdateCartDiscountAsync(cartDiscount, new List<UpdateAction> { changeActiveAction, changeRequiresDiscountCodeAction});
+                .UpdateCartDiscountAsync(cartDiscount, new List<UpdateAction> { changeActiveAction, changeRequiresDiscountCodeAction });
 
 
             // Assert
@@ -240,7 +240,7 @@ namespace commercetools.Tests
             var moneyList = new List<Money>();
             foreach (var currency in this._project.Currencies)
             {
-                moneyList.Add(new Money { CentAmount = Helper.GetRandomNumber(100, 1000), CurrencyCode = currency}); 
+                moneyList.Add(new Money { CentAmount = Helper.GetRandomNumber(100, 1000), CurrencyCode = currency });
             }
             var cartDiscount = await Helper.CreateTestCartDiscount(this._project, this._client);
             var changeValue = new ChangeValueAction(new AbsoluteCartDiscountValue(moneyList));

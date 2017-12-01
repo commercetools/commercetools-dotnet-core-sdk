@@ -49,7 +49,7 @@ namespace commercetools.Tests
 
             _testCustomer = customerCreatedMessage.Customer;
 
-            CartDraft cartDraft = Helper.GetTestCartDraft(_project, _testCustomer.Id);
+            CartDraft cartDraft = Helper.GetTestCartDraft(_project,_testCustomer.Id);
             Task<Response<Cart>> cartTask = _client.Carts().CreateCartAsync(cartDraft);
             cartTask.Wait();
             Assert.IsTrue(cartTask.Result.Success);

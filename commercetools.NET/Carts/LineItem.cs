@@ -65,6 +65,10 @@ namespace commercetools.Carts
         [JsonConverter(typeof(StringEnumConverter))]
         public LineItemPriceMode? PriceMode { get; private set; }
 
+        [JsonProperty(PropertyName = "lineItemMode")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public LineItemMode? LineItemMode { get; private set; }
+
         [JsonProperty(PropertyName = "custom")]
         public CustomFields.CustomFields Custom { get; private set; }
 
@@ -84,7 +88,9 @@ namespace commercetools.Carts
             }
 
             LineItemPriceMode priceMode;
+            LineItemMode lineItemMode;
             string priceModeStr = (data.priceMode != null ? data.priceMode.ToString() : string.Empty);
+            string lineItemModeStr = (data.lineItemMode != null ? data.lineItemMode.ToString() : string.Empty);
 
             this.Id = data.id;
             this.ProductId = data.productId;
@@ -101,6 +107,7 @@ namespace commercetools.Carts
             this.DistributionChannel = new Reference(data.distributionChannel);
             this.DiscountedPricePerQuantity = Helper.GetListFromJsonArray<DiscountedLineItemPriceForQuantity>(data.discountedPricePerQuantity);
             this.PriceMode = Enum.TryParse(priceModeStr, out priceMode) ? (LineItemPriceMode?)priceMode : null;
+            this.LineItemMode = Enum.TryParse(lineItemModeStr, out lineItemMode) ? (LineItemMode?)lineItemMode : null;
             this.Custom = new CustomFields.CustomFields(data.custom);
         }
 

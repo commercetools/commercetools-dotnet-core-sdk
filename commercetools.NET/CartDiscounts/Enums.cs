@@ -19,6 +19,17 @@ namespace commercetools.CartDiscounts
         [EnumMember(Value = "customLineItems")]
         CustomLineItems,
         [EnumMember(Value = "shipping")]
-        Shipping
+        Shipping,
+        [EnumMember(Value = "multiBuyLineItems")]
+        MultiBuyLineItems
+    }
+
+    /// <summary>
+    /// Describes how this discount interacts with other discounts.
+    /// </summary>
+    public enum StackingMode
+    {
+        Stacking,
+        StopAfterThisDiscount 
     }
 }

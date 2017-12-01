@@ -80,6 +80,12 @@ namespace commercetools.DiscountCodes
         [JsonProperty(PropertyName = "references")]
         public List<Reference> References { get; private set; }
 
+        /// <summary>
+        /// The custom fields.
+        /// </summary>
+        [JsonProperty(PropertyName = "custom")]
+        public CustomFields.CustomFields Custom { get; private set; }
+
         #endregion
 
         public DiscountCode(dynamic data)
@@ -102,6 +108,7 @@ namespace commercetools.DiscountCodes
             this.References = Helper.GetListFromJsonArray<Reference>(data.references);
             this.MaxApplications = data.maxApplications;
             this.MaxApplicationsPerCustomer = data.maxApplicationsPerCustomer;
+            this.Custom = new CustomFields.CustomFields(data.custom);
         }
     }
 }

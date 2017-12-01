@@ -45,14 +45,22 @@
                     return new OrderBillingAddressSetMessage(data);
                 case "ProductCreated":
                     return new ProductCreatedMessage(data);
+                case "ProductDeleted":
+                    return new ProductDeletedMessage(data);
+                case "ProductImageAdded":
+                    return new ProductImageAddedMessage(data);
                 case "ProductPublished":
                     return new ProductPublishedMessage(data);
-                case "ProductUnpublished":
-                    return new ProductUnpublishedMessage(data);
-                case "ProductStateTransition":
-                    return new ProductStateTransitionMessage(data);
+                case "ProductRevertedStagedChanges":
+                    return new ProductRevertedStagedChangesMessage(data);
                 case "ProductSlugChanged":
                     return new ProductSlugChangedMessage(data);
+                case "ProductStateTransition":
+                    return new ProductStateTransitionMessage(data);
+                case "ProductUnpublished":
+                    return new ProductUnpublishedMessage(data);
+                case "ProductVariantDeleted":
+                    return new ProductVariantDeletedMessage(data);
                 case "CategoryCreated":
                     return new CategoryCreatedMessage(data);
                 case "CategorySlugChanged":

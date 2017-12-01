@@ -1,6 +1,7 @@
 ﻿using System;
 using commercetools.Common;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace commercetools.CartDiscounts
 {
@@ -44,12 +45,21 @@ namespace commercetools.CartDiscounts
         [JsonProperty(PropertyName = "sortOrder")]
         public string SortOrder { get; private set; }
 
+        /// <summary>
+        /// Only active discount can be applied to the cart. Defaults to true.
+        /// </summary>
         [JsonProperty(PropertyName = "isActive")]
         public bool IsActive { get; set; }
 
+        /// <summary>
+        /// Valid from
+        /// </summary>
         [JsonProperty(PropertyName = "validFrom")]
         public DateTime? ValidFrom { get; set; }
 
+        /// <summary>
+        /// Valid until
+        /// </summary>
         [JsonProperty(PropertyName = "validUntil")]
         public DateTime? ValidUntil { get; set; }
 
@@ -58,6 +68,13 @@ namespace commercetools.CartDiscounts
         /// </summary>
         [JsonProperty(PropertyName = "requiresDiscountCode")]
         public bool RequiresDiscountCode { get; private set; }
+
+        /// <summary>
+        /// Specifies whether the application of this discount causes the following discounts to be ignored. Defaults to Stacking.
+        /// </summary>
+        [JsonProperty(PropertyName = "stackingMode")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public StackingMode? StackingMode { get; private set; }
 
         #endregion
 

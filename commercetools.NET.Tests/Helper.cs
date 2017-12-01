@@ -20,6 +20,7 @@ using commercetools.Zones;
 
 using Configuration = commercetools.Common.Configuration;
 using ReferenceType = commercetools.Common.ReferenceType;
+using commercetools.Subscriptions;
 
 namespace commercetools.Tests
 {
@@ -29,7 +30,7 @@ namespace commercetools.Tests
     public class Helper
     {
         private static Random _random = new Random();
-		private static Configuration _configuration = null;
+        private static Configuration _configuration = null;
 
         #region Configuration
 
@@ -42,13 +43,13 @@ namespace commercetools.Tests
             if (_configuration == null)
             {
                 _configuration = new Configuration(
-                	Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.OAuthUrl"]),
-                	Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ApiUrl"]),
-                	Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ProjectKey"]),
-                	Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientID"]),
-                	Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientSecret"]),
+                    Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.OAuthUrl"]),
+                    Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ApiUrl"]),
+                    Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ProjectKey"]),
+                    Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientID"]),
+                    Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientSecret"]),
                     ProjectScope.ManageProject);
-			}
+            }
 
             return _configuration;
         }
@@ -77,6 +78,34 @@ namespace commercetools.Tests
             cartDraft.ShippingAddress = shippingAddress;
             cartDraft.BillingAddress = billingAddress;
             cartDraft.DeleteDaysAfterLastModification = GetRandomNumber(1, 10);
+            if (!string.IsNullOrWhiteSpace(customerId))
+            {
+                cartDraft.CustomerId = customerId;
+            }
+            return cartDraft;
+        }
+
+        /// <summary>
+        /// Gets a test cart draft using external tax mode.
+        /// </summary>
+        /// <param name="project">Project</param>
+        /// <param name="customerId">Customer ID</param>
+        /// <returns>CartDraft</returns>
+        public static CartDraft GetTestCartDraftUsingExternalTaxMode(Project.Project project, string customerId = null)
+        {
+            Address shippingAddress = Helper.GetTestAddress(project);
+            Address billingAddress = Helper.GetTestAddress(project);
+
+            string currency = project.Currencies[0];
+            string country = project.Countries[0];
+
+            CartDraft cartDraft = new CartDraft(currency);
+            cartDraft.Country = country;
+            cartDraft.InventoryMode = InventoryMode.None;
+            cartDraft.ShippingAddress = shippingAddress;
+            cartDraft.BillingAddress = billingAddress;
+            cartDraft.TaxMode = TaxMode.External;
+
             if (!string.IsNullOrWhiteSpace(customerId))
             {
                 cartDraft.CustomerId = customerId;
@@ -126,7 +155,49 @@ namespace commercetools.Tests
             });
             return cartDraft;
         }
+ 
+        /// <summary>
+        /// Gets a test cart draft with custom line items using external tax mode.
+        /// </summary>
+        /// <param name="project">Project</param>
+        /// <param name="customerId">Customer ID</param>
+        /// <returns>CartDraft</returns>
+        public static CartDraft GetTestCartDraftWithCustomLineItemsUsingExternalTaxMode(Project.Project project, string customerId = null)
+        {
+            var shippingAddress = GetTestAddress(project);
+            var billingAddress = GetTestAddress(project);
+            var name = new LocalizedString();
+            name.Values.Add("en", "Test-CustomLineItem");
+            var currency = project.Currencies[0];
+            var country = project.Countries[0];
 
+            var cartDraft = new CartDraft(currency)
+            {
+                Country = country,
+                InventoryMode = InventoryMode.None,
+                ShippingAddress = shippingAddress,
+                BillingAddress = billingAddress,
+                TaxMode = TaxMode.External,
+                CustomLineItems = new List<CustomLineItemDraft>()
+            };
+
+            if (!string.IsNullOrWhiteSpace(customerId))
+            {
+                cartDraft.CustomerId = customerId;
+            }
+            cartDraft.CustomLineItems.Add(new CustomLineItemDraft(name)
+            {
+                Quantity = 40,
+                Money = new Money
+                {
+                    CentAmount = 30,
+                    CurrencyCode = currency
+                },
+                Slug = "Test-CustomLineItem-Slug",
+                ExternalTaxRate = new ExternalTaxRateDraft("TestExternalTaxRate", project.Countries[0]) { Amount = 0 }
+            });
+            return cartDraft;
+        }
         #endregion
 
         #region Cart Discounts
@@ -177,11 +248,18 @@ namespace commercetools.Tests
             };
         }
 
-        public static async Task<CartDiscount> CreateTestCartDiscount(Project.Project project, Client client)
+        public static async Task<CartDiscount> CreateTestCartDiscount(Project.Project project, Client client, bool? isActive = null, bool? requiresDiscountCode = null)
         {
-
-            var cartDiscountDraft = await GetTestCartDiscountDraft(project, client, GetRandomBoolean(),
-                GetRandomBoolean(), "lineItemCount(1 = 1) > 0", "1=1", 5000, false);
+            if (isActive == null)
+            {
+                isActive = GetRandomBoolean();
+            }
+            if (requiresDiscountCode == null)
+            {
+                requiresDiscountCode = isActive.Value ? GetRandomBoolean() : false;
+            }
+            var cartDiscountDraft = await GetTestCartDiscountDraft(project, client, isActive.Value, requiresDiscountCode.Value, 
+                "lineItemCount(1 = 1) > 0", "1=1", 5000, false);
             var cartDiscountResponse = await client.CartDiscounts().CreateCartDiscountAsync(cartDiscountDraft);
 
             return cartDiscountResponse.Result;
@@ -313,28 +391,37 @@ namespace commercetools.Tests
         #endregion
 
         #region Discount Codes
-
-        public static async Task<DiscountCode> CreateTestDiscountCode(Project.Project project, Client client)
+        public static async Task<DiscountCode> CreateTestDiscountCode(Project.Project project, Client client, bool? requiresCartDiscount = null, bool? isActive = null, bool? requiresDiscountCode = null)
         {
             LocalizedString name = new LocalizedString();
             LocalizedString description = new LocalizedString();
 
             foreach (string language in project.Languages)
             {
-                string randomPostfix = GetRandomString(10);
-                name.SetValue(language, string.Concat("test-discount-code-name", language, " ", randomPostfix));
-                description.SetValue(language, string.Concat("test-discount-code-description", language, "-", randomPostfix));
+                string randomStringValue = GetRandomString(10);
+                name.SetValue(language, string.Concat("test-discount-code-name-", language, " ", randomStringValue));
+                description.SetValue(language, string.Concat("test-discount-code-description-", language, "-", randomStringValue));
             }
-            var cartDiscountDraft = await GetTestCartDiscountDraft(project, client, GetRandomBoolean(),
-                GetRandomBoolean(), "lineItemCount(1 = 1) > 0", "1=1", 5000, false);
+            if (isActive == null) {
+                isActive = GetRandomBoolean();
+            }
+            if (requiresCartDiscount == null)
+            {
+                requiresCartDiscount = isActive.Value ? GetRandomBoolean() : false;
+            }
+            if (requiresDiscountCode == null)
+            {
+                requiresDiscountCode = isActive.Value ? GetRandomBoolean() : false;
+            }
+            var cartDiscountDraft = await GetTestCartDiscountDraft(project, client, isActive.Value, requiresCartDiscount.Value, "lineItemCount(1 = 1) > 0", "1=1", 5000, false);
+
             var cartDiscountResponse = await client.CartDiscounts().CreateCartDiscountAsync(cartDiscountDraft);
-            var discountCodeDraft = new DiscountCodeDraft(
-                GetRandomString(10),
+            var discountCodeDraft = new DiscountCodeDraft(requiresDiscountCode.Value ? GetRandomString(10) : null,
                 new List<Reference>
                 {
                     new Reference {Id = cartDiscountResponse.Result.Id, ReferenceType = ReferenceType.CartDiscount}
                 },
-                GetRandomBoolean())
+                isActive.Value)
             {
                 Description = description,
                 Name = name,
@@ -343,7 +430,6 @@ namespace commercetools.Tests
                 CartPredicate = "totalPrice.centAmount > 1000"
             };
             var discountCode = await client.DiscountCodes().CreateDiscountCodeAsync(discountCodeDraft);
-
             return discountCode.Result;
         }
 
@@ -359,7 +445,7 @@ namespace commercetools.Tests
             return deletedDiscountCode;
         }
 
-        public static async Task<DiscountCodeDraft> GetDiscountCodeDraft(Project.Project project, Client client)
+        public static async Task<DiscountCodeDraft> GetDiscountCodeDraft(Project.Project project, Client client, bool? isActive = null, bool? requiresDiscountCode = null)
         {
             var name = new LocalizedString();
             var description = new LocalizedString();
@@ -370,12 +456,20 @@ namespace commercetools.Tests
                 name.SetValue(language, string.Concat("test-discount-code-name", language, " ", randomPostfix));
                 description.SetValue(language, string.Concat("test-discount-code-description", language, "-", randomPostfix));
             }
-            CartDiscount cartDiscount = await Helper.CreateTestCartDiscount(project, client);
+            if (isActive == null)
+            {
+                isActive = GetRandomBoolean();
+            }
+            if (requiresDiscountCode == null)
+            {
+                requiresDiscountCode = isActive.Value ? GetRandomBoolean() : false;
+            }
+            CartDiscount cartDiscount = await Helper.CreateTestCartDiscount(project, client, isActive, requiresDiscountCode);
             var references = new List<Reference>
             {
                 new Reference {Id = cartDiscount.Id, ReferenceType = ReferenceType.CartDiscount}
             };
-            var discountCodeDraft = new DiscountCodeDraft(Helper.GetRandomString(10), references, GetRandomBoolean())
+            var discountCodeDraft = new DiscountCodeDraft(requiresDiscountCode.Value ? Helper.GetRandomString(10) : null, references, isActive.Value)
             {
                 Description = description,
                 Name = name,
@@ -614,7 +708,65 @@ namespace commercetools.Tests
         }
 
         #endregion
+        #region Subscriptions 
+        /// <summary>
+        /// Gets a list of subscription drafts containing all current subscription destination types.
+        /// </summary>
+        /// <returns>ProductTypeDraft</returns>
+        public static List<SubscriptionDraft> GetTestSubscriptionsDrafts()
+        {
+            List<SubscriptionDraft> testSubscriptions = new List<SubscriptionDraft>();
 
+            string configAWSSQSQueueUrl = ConfigurationManager.AppSettings["AWSSQS.QueueUrl"];
+            string configAWSSQSKey = ConfigurationManager.AppSettings["AWSSQS.Key"];
+            string configAWSSQSSecret = ConfigurationManager.AppSettings["AWSSQS.Secret"];
+            string configAWSSQSRegion = ConfigurationManager.AppSettings["AWSSQS.Region"];
+            string configAWSSNSArn = ConfigurationManager.AppSettings["AWSSNS.Arn"];
+            string configAWSSNSKey = ConfigurationManager.AppSettings["AWSSNS.Key"];
+            string configAWSSNSSecret = ConfigurationManager.AppSettings["AWSSNS.Secret"];
+            string configIronMQUri = ConfigurationManager.AppSettings["IronMQ.Uri"];
+            SubscriptionDraft draftSubscription;
+
+            if (!string.IsNullOrEmpty(configAWSSQSQueueUrl) &&
+                !string.IsNullOrEmpty(configAWSSQSKey) &&
+                !string.IsNullOrEmpty(configAWSSQSSecret) &&
+                !string.IsNullOrEmpty(configAWSSQSRegion))
+            {
+                draftSubscription = new SubscriptionDraft(
+                    new AWSSQSDestination(configAWSSQSQueueUrl, configAWSSQSKey, configAWSSQSSecret, configAWSSQSRegion),
+                    new List<MessageSubscription>() { new MessageSubscription("product") },
+                    new List<ChangeSubscription>() { new ChangeSubscription("product") }
+                );
+                draftSubscription.Key = Helper.GetRandomString(6);
+                testSubscriptions.Add(draftSubscription);
+            }
+
+            if (!string.IsNullOrEmpty(configAWSSNSArn) &&
+                !string.IsNullOrEmpty(configAWSSNSKey) &&
+                !string.IsNullOrEmpty(configAWSSNSSecret))
+            {
+                draftSubscription = new SubscriptionDraft(
+                new AWSSNSDestination(configAWSSNSArn, configAWSSNSKey, configAWSSNSSecret),
+                new List<MessageSubscription>() { new MessageSubscription("product") },
+                new List<ChangeSubscription>() { new ChangeSubscription("product") }
+            );
+                draftSubscription.Key = Helper.GetRandomString(6);
+                testSubscriptions.Add(draftSubscription);
+            }
+            if (!string.IsNullOrEmpty(configIronMQUri))
+            {
+                draftSubscription = new SubscriptionDraft(
+                    new IronMQDestination(configIronMQUri),
+                    new List<MessageSubscription>() { new MessageSubscription("product") },
+                    new List<ChangeSubscription>() { new ChangeSubscription("product") }
+                );
+                draftSubscription.Key = Helper.GetRandomString(6);
+                testSubscriptions.Add(draftSubscription);
+            }
+
+            return testSubscriptions;
+        }
+        #endregion
         #region Tax Categories
 
         /// <summary>
@@ -661,7 +813,7 @@ namespace commercetools.Tests
             TypeDraft typeDraft =
                 new TypeDraft(string.Concat("test-type-", randomPostfix), typeName, resourceTypeIds);
 
-            typeDraft.FieldDefinitions = new List<FieldDefinition> { 
+            typeDraft.FieldDefinitions = new List<FieldDefinition> {
                 Helper.GetFieldDefinition(project, "field1", "Field 1", new commercetools.Types.StringType()),
                 Helper.GetFieldDefinition(project, "field2", "Field 2", new commercetools.Types.StringType()),
                 Helper.GetFieldDefinition(project, "field3", "Field 3", new commercetools.Types.StringType())
@@ -706,12 +858,12 @@ namespace commercetools.Tests
             string name = string.Concat("Test Zone ", Helper.GetRandomString(10));
 
             ZoneDraft zoneDraft = new ZoneDraft(name);
-            
+
             if (locations != null)
             {
                 zoneDraft.Locations = locations;
             }
-           
+
             return zoneDraft;
         }
 
