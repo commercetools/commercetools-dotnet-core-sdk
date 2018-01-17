@@ -1,6 +1,6 @@
 ﻿using System;
 
-using commercetools.States;
+using commercetools.Common;
 
 using Newtonsoft.Json;
 
@@ -18,7 +18,7 @@ namespace commercetools.Orders
         public int? Quantity { get; private set; }
 
         [JsonProperty(PropertyName = "state")]
-        public State State { get; private set; }
+        public Reference State { get; private set; }
 
         #endregion
 
@@ -36,7 +36,7 @@ namespace commercetools.Orders
             }
 
             this.Quantity = data.quantity;
-            this.State = new State(data.state);
+            this.State = new Reference(data.state);
         }
 
         #endregion
