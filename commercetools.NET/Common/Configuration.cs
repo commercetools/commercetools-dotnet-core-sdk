@@ -13,6 +13,8 @@
         public string ClientID { get; private set; }
         public string ClientSecret { get; private set; }
         public ProjectScope Scope { get; private set; }
+        public int InternalServerErrorRetries { get; set; }
+        public int InternalServerErrorRetryInterval { get; set; }
 
         #endregion
 
@@ -27,7 +29,9 @@
         /// <param name="clientID"></param>
         /// <param name="clientSecret"></param>
         /// <param name="scope"></param>
-        public Configuration(string oAuthUrl, string apiUrl, string projectKey, string clientID, string clientSecret, ProjectScope scope)
+        /// <param name="internalServerErrorRetries">Used to specify amount of retries when an internal server error occurs</param>
+        /// <param name="internalServerErrorRetryInterval">Used to specify the amount of time in milliseconds to wait between retries when an internal server error occurs</param>
+        public Configuration(string oAuthUrl, string apiUrl, string projectKey, string clientID, string clientSecret, ProjectScope scope, int internalServerErrorRetries = 1, int internalServerErrorRetryInterval = 100)
         {
             this.OAuthUrl = oAuthUrl;
             this.ApiUrl = apiUrl;
@@ -35,7 +39,8 @@
             this.ClientID = clientID;
             this.ClientSecret = clientSecret;
             this.Scope = scope;
-
+            this.InternalServerErrorRetries = internalServerErrorRetries;
+            this.InternalServerErrorRetryInterval = internalServerErrorRetryInterval;
             if (this.OAuthUrl.EndsWith("/"))
             {
                 this.OAuthUrl = this.OAuthUrl.Remove(this.OAuthUrl.Length - 1);

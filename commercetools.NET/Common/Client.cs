@@ -82,22 +82,32 @@ namespace commercetools.Common
 
             string url = string.Concat(this.Configuration.ApiUrl, "/", this.Configuration.ProjectKey, endpoint, values.ToQueryString());
 
-            using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
+            for (int internalServerErrorRetries = -1; internalServerErrorRetries < this.Configuration.InternalServerErrorRetries; internalServerErrorRetries++)
             {
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
-                client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
-
-                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri(url))
+                using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
                 {
-                    Version = HttpVersion.Version10
-                };
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
-                HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
-                response = await GetResponse<T>(httpResponseMessage);
+                    HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri(url))
+                    {
+                        Version = HttpVersion.Version10
+                    };
+
+                    HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
+                    response = await GetResponse<T>(httpResponseMessage);
+                }
+                if (response.StatusCode < 500)
+                {
+                    return response;
+                }
+                else if (this.Configuration.InternalServerErrorRetryInterval > 0)
+                {
+                    await Task.Delay(this.Configuration.InternalServerErrorRetryInterval);
+                }
             }
-
             return response;
         }
 
@@ -126,24 +136,33 @@ namespace commercetools.Common
             }
 
             string url = string.Concat(this.Configuration.ApiUrl, "/", this.Configuration.ProjectKey, endpoint);
-
-            using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
+            for (int internalServerErrorRetry = -1; internalServerErrorRetry < this.Configuration.InternalServerErrorRetries; internalServerErrorRetry++)
             {
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
-                client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
-
-                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url))
+                using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
                 {
-                    Version = HttpVersion.Version10,
-                    Content = new StringContent(payload, Encoding.UTF8, "application/json")
-                };
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
-                HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
-                response = await GetResponse<T>(httpResponseMessage);
+                    HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url))
+                    {
+                        Version = HttpVersion.Version10,
+                        Content = new StringContent(payload, Encoding.UTF8, "application/json")
+                    };
+
+                    HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
+                    response = await GetResponse<T>(httpResponseMessage);
+                    if (response.StatusCode < 500)
+                    {
+                        return response;
+                    }
+                    else if (this.Configuration.InternalServerErrorRetryInterval > 0)
+                    {
+                        await Task.Delay(this.Configuration.InternalServerErrorRetryInterval);
+                    }
+                }
             }
-
             return response;
         }
 
@@ -173,22 +192,32 @@ namespace commercetools.Common
 
             string url = string.Concat(this.Configuration.ApiUrl, "/", this.Configuration.ProjectKey, endpoint, values.ToQueryString());
 
-            using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
+            for (int internalServerErrorRetries = -1; internalServerErrorRetries < this.Configuration.InternalServerErrorRetries; internalServerErrorRetries++)
             {
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
-                client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
-
-                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, new Uri(url))
+                using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
                 {
-                    Version = HttpVersion.Version10
-                };
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
-                HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
-                response = await GetResponse<T>(httpResponseMessage);
+                    HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, new Uri(url))
+                    {
+                        Version = HttpVersion.Version10
+                    };
+
+                    HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
+                    response = await GetResponse<T>(httpResponseMessage);
+                }
+                if (response.StatusCode < 500)
+                {
+                    return response;
+                }
+                else if (this.Configuration.InternalServerErrorRetryInterval > 0)
+                {
+                    await Task.Delay(this.Configuration.InternalServerErrorRetryInterval);
+                }
             }
-
             return response;
         }
 
@@ -239,23 +268,33 @@ namespace commercetools.Common
 
             string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Concat(this.Configuration.ClientID, ":", this.Configuration.ClientSecret)));
 
-            using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
+            for (int internalServerErrorRetries = -1; internalServerErrorRetries < this.Configuration.InternalServerErrorRetries; internalServerErrorRetries++)
             {
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
-                client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
-
-                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(this.Configuration.OAuthUrl))
+                using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
                 {
-                    Version = HttpVersion.Version10,
-                    Content = new FormUrlEncodedContent(pairs)
-                };
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
-                HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
-                response = await GetResponse<Token>(httpResponseMessage);
+                    HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(this.Configuration.OAuthUrl))
+                    {
+                        Version = HttpVersion.Version10,
+                        Content = new FormUrlEncodedContent(pairs)
+                    };
+
+                    HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
+                    response = await GetResponse<Token>(httpResponseMessage);
+                }
+                if (response.StatusCode < 500)
+                {
+                    return response;
+                }
+                else if (this.Configuration.InternalServerErrorRetryInterval > 0)
+                {
+                    await Task.Delay(this.Configuration.InternalServerErrorRetryInterval);
+                }
             }
-
             return response;
         }
 
@@ -277,23 +316,33 @@ namespace commercetools.Common
 
             string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Concat(this.Configuration.ClientID, ":", this.Configuration.ClientSecret)));
 
-            using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
+            for (int internalServerErrorRetries = -1; internalServerErrorRetries < this.Configuration.InternalServerErrorRetries; internalServerErrorRetries++)
             {
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
-                client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
-
-                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(this.Configuration.OAuthUrl))
+                using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
                 {
-                    Version = HttpVersion.Version10,
-                    Content = new FormUrlEncodedContent(pairs)
-                };
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
 
-                HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
-                response = await GetResponse<Token>(httpResponseMessage);
+                    HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(this.Configuration.OAuthUrl))
+                    {
+                        Version = HttpVersion.Version10,
+                        Content = new FormUrlEncodedContent(pairs)
+                    };
+
+                    HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
+                    response = await GetResponse<Token>(httpResponseMessage);
+                }
+                if (response.StatusCode < 500)
+                {
+                    return response;
+                }
+                else if (this.Configuration.InternalServerErrorRetryInterval > 0)
+                {
+                    await Task.Delay(this.Configuration.InternalServerErrorRetryInterval);
+                }
             }
-
             return response;
         }
 
