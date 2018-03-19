@@ -81,6 +81,7 @@
     <Compile Include="CartDiscounts\UpdateActions\SetValidFromAction.cs" />
     <Compile Include="CartDiscounts\UpdateActions\SetValidUntilAction.cs" />
     <Compile Include="Carts\ExternalLineItemTotalPrice.cs" />
+    <Compile Include="Carts\ExternalTaxAmountDraft.cs" />
     <Compile Include="Carts\UpdateActions\AddCustomLineItemAction.cs" />
     <Compile Include="Carts\UpdateActions\AddDiscountCodeAction.cs" />
     <Compile Include="Carts\UpdateActions\AddLineItemAction.cs" />
@@ -116,11 +117,13 @@
     <Compile Include="Carts\UpdateActions\RemoveLineItemAction.cs" />
     <Compile Include="Carts\UpdateActions\RemovePaymentAction.cs" />
     <Compile Include="Carts\UpdateActions\SetBillingAddressAction.cs" />
+    <Compile Include="Carts\UpdateActions\SetCartTotalTaxAction.cs" />
     <Compile Include="Carts\UpdateActions\SetCountryAction.cs" />
     <Compile Include="Carts\UpdateActions\SetCustomerEmailAction.cs" />
     <Compile Include="Carts\UpdateActions\SetCustomerIdAction.cs" />
     <Compile Include="Carts\UpdateActions\SetCustomLineItemCustomFieldAction.cs" />
     <Compile Include="Carts\UpdateActions\SetCustomLineItemCustomTypeAction.cs" />
+    <Compile Include="Carts\UpdateActions\SetCustomLineItemTaxAmountAction.cs" />
     <Compile Include="Carts\UpdateActions\SetCustomLineItemTaxRateAction.cs" />
     <Compile Include="Carts\UpdateActions\SetCustomShippingMethodAction.cs" />
     <Compile Include="Carts\UpdateActions\SetCustomTypeAction.cs" />
@@ -128,11 +131,13 @@
     <Compile Include="Carts\UpdateActions\SetLineItemCustomFieldAction.cs" />
     <Compile Include="Carts\UpdateActions\SetLineItemCustomTypeAction.cs" />
     <Compile Include="Carts\UpdateActions\SetLineItemPriceAction.cs" />
+    <Compile Include="Carts\UpdateActions\SetLineItemTaxAmountAction.cs" />
     <Compile Include="Carts\UpdateActions\SetLineItemTaxRateAction.cs" />
     <Compile Include="Carts\UpdateActions\SetLineItemTotalPriceAction.cs" />
     <Compile Include="Carts\UpdateActions\SetLocaleAction.cs" />
     <Compile Include="Carts\UpdateActions\SetShippingAddressAction.cs" />
     <Compile Include="Carts\UpdateActions\SetShippingMethodAction.cs" />
+    <Compile Include="Carts\UpdateActions\SetShippingMethodTaxAmountAction.cs" />
     <Compile Include="Carts\UpdateActions\SetShippingMethodTaxRateAction.cs" />
     <Compile Include="Categories\CategoryQueryResult.cs" />
     <Compile Include="Categories\Extensions.cs" />

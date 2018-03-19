@@ -76,6 +76,7 @@ namespace commercetools.Carts
     {
         Platform,
         External,
+        ExternalAmount,
         Disabled
     }
 }
