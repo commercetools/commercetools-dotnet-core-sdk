@@ -222,7 +222,6 @@ namespace commercetools.Tests
             var updatedCartDiscountResponse = await this._client.CartDiscounts()
                 .UpdateCartDiscountAsync(cartDiscount, changetarget);
 
-
             // Assert
             var updatedCartDiscount = updatedCartDiscountResponse.Result;
             Assert.IsNotNull(updatedCartDiscount);
@@ -248,7 +247,6 @@ namespace commercetools.Tests
             // Act
             var updatedCartDiscountResponse = await this._client.CartDiscounts()
                 .UpdateCartDiscountAsync(cartDiscount, changeValue);
-
 
             // Assert
             var updatedCartDiscount = updatedCartDiscountResponse.Result;

@@ -49,7 +49,7 @@ namespace commercetools.Tests
                     Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientID"]),
                     Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientSecret"]),
                     ProjectScope.ManageProject);
-            }
+            }          
 
             return _configuration;
         }

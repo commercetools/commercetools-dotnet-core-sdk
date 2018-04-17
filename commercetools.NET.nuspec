@@ -20,7 +20,6 @@
   <files>
     <file src="LICENSE"/>
     <file src="README.md"/>
-    <file src="bin/net-4.5/commercetools.NET.dll" target="lib/net45"/>
-    <file src="bin/net-4.5/commercetools.NET.xml" target="lib/net45"/>
+    <file src="bin/netstandard2.0/commercetools.NET.dll" target="lib\netstandard2.0"/>
   </files>
 </package>

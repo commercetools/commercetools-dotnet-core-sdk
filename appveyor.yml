@@ -1,4 +1,6 @@
-build_script: 
+image: Visual Studio 2017
+
+build_script:
   - ps: .\build.ps1 -Target "Appveyor"
 
 # disable built-in tests.

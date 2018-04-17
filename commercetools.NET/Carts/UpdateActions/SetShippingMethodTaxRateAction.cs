@@ -1,5 +1,4 @@
 ﻿using commercetools.Common;
-
 using Newtonsoft.Json;
 
 namespace commercetools.Carts.UpdateActions

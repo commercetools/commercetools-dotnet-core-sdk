@@ -46,8 +46,9 @@ namespace commercetools.Examples
                 Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientID"]),
                 Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["commercetools.ClientSecret"]),
                 ProjectScope.ManageProject);
+            
+            Client client = new Client(configuration);            
 
-            Client client = new Client(configuration);
 
             /*  GET PROJECT
              *  ===================================================================================
@@ -70,7 +71,10 @@ namespace commercetools.Examples
             await CartExamples.Run(client, project);
             await CategoryExamples.Run(client, project);
             await OrderExamples.Run(client, project);
-            await ProductExamples.Run(client, project);    
+            await ProductExamples.Run(client, project);
+                        
+
+           
         }
     }
 }

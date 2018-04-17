@@ -33,6 +33,8 @@ namespace commercetools.Tests
         {
             _client = new Client(Helper.GetConfiguration());
 
+            
+
             Task<Response<Project.Project>> projectTask = _client.Project().GetProjectAsync();
             projectTask.Wait();
             Assert.IsTrue(projectTask.Result.Success);

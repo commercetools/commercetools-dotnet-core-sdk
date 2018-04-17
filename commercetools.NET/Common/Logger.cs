@@ -1,6 +1,8 @@
-﻿using System.Reflection;
+﻿using System.IO;
+using System.Reflection;
 
 using log4net;
+using log4net.Repository;
 
 namespace commercetools.Common
 {
@@ -11,6 +13,18 @@ namespace commercetools.Common
     {
         private static bool _configurationAttempted = false;
         private static ILog _log;
+        private static string _configurationFile;       
+        
+        public string ConfigurationFile {
+            get {
+                return _configurationFile;
+            }
+            set {
+                _configurationFile = value;
+                _log = null;
+                _configurationAttempted = false;
+            }
+        }
 
         /// <summary>
         /// ILog
@@ -22,13 +36,23 @@ namespace commercetools.Common
                 if (!_configurationAttempted)
                 {
                     _configurationAttempted = true;
-
                     try
                     {
-                        if (!log4net.LogManager.GetRepository().Configured)
+                        Assembly assembly = Assembly.GetCallingAssembly() ?? Assembly.GetEntryAssembly();
+                        if (assembly != null && !LogManager.GetRepository(assembly).Configured)
                         {
-                            log4net.Config.XmlConfigurator.Configure();
-                            _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+                            if (string.IsNullOrEmpty(_configurationFile))
+                            {
+                                //attempt to load the config from the default location                                
+                                log4net.Config.XmlConfigurator.Configure(LogManager.GetRepository(assembly));
+                                _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+                            } else
+                            {
+                                //load from the specified log file
+                                ILoggerRepository logRepository = LogManager.GetRepository(assembly);
+                                log4net.Config.XmlConfigurator.Configure(logRepository, new FileInfo(_configurationFile));
+                                _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+                            }
                         }
                     }
                     catch
@@ -36,7 +60,6 @@ namespace commercetools.Common
                         _log = null;
                     }
                 }
-
                 return _log;
             }
         }

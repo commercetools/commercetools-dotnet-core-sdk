@@ -1,13 +1,15 @@
 language: csharp
-solution: commercetools.NET-Net45.sln
-dist: trusty # dotnet core is released only for Ubuntu trusty
-# sudo: required
+sudo: false
+
+dotnet: 2.1.4 # SDK version; includes runtime version 2.0.5. Need 2.0+ for netcoreapp2.0 tests.
+mono: 5.10.0 # Need 5.2+ for the included MSBuild.
+
+solution: commercetools.NET.sln
+
 matrix:
-  include:
-    - dotnet: 1.0.0-preview2-003131 # latest available on travis (Microsoft .NET Core 1.0.1 - SDK 1.0.0 Preview 2)
-      env: DOTNETCORE=1
-    - mono: 4.2.1 # this is the default on Ubuntu 16.04 LTS. And it's a 4.x release so it's dotnet profile 4.5
   allow_failures:
-    - dotnet: 1.0.0-preview2-003131 # 
+    - mono: 5.10.0
+
+
 script:
-  - ./build.sh --target "Travis"
+  - ./build.sh --target=Travis
