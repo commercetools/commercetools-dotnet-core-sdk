@@ -10,7 +10,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>The commercetools.NET SDK allows developers to work effectively with the commercetools platform in their .NET applications by providing typesafe access to the commercetools HTTP API.</description>
     <releaseNotes>Initial release</releaseNotes>
-    <copyright>Copyright Falcon-Software Company Inc. 2016</copyright>
+    <copyright>Copyright Falcon-Software Company Inc. 2018</copyright>
     <tags>commercetools</tags>
     <dependencies>
       <dependency id="log4net" version="2.0.5" />
