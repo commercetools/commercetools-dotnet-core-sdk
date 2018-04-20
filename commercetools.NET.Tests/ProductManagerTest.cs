@@ -60,6 +60,7 @@ namespace commercetools.Tests
             for (int i = 0; i < 5; i++)
             {
                 ProductDraft productDraft = Helper.GetTestProductDraft(_project, _testProductType.Id, _testTaxCategory.Id);
+
                 Task<Response<Product>> productTask = _client.Products().CreateProductAsync(productDraft);
                 productTask.Wait();
                 Assert.IsTrue(productTask.Result.Success);
@@ -154,6 +155,8 @@ namespace commercetools.Tests
         public async Task ShouldCreateAndDeleteProductAsync()
         {
             ProductDraft productDraft = Helper.GetTestProductDraft(_project, _testProductType.Id, _testTaxCategory.Id);
+            Image image = new Image("http://via.placeholder.com/350x150", new ImageDimensions(350, 150)) { Label = "TestLabel" };
+            productDraft.MasterVariant.Images = new List<Image>() { image };
 
             LocalizedString name = new LocalizedString();
             LocalizedString slug = new LocalizedString();
@@ -172,6 +175,17 @@ namespace commercetools.Tests
 
             Product product = response.Result;
             Assert.NotNull(product.Id);
+
+            Assert.NotNull(product.MasterData);
+            Assert.NotNull(product.MasterData.Current);
+            Assert.NotNull(product.MasterData.Current.MasterVariant);
+            Assert.NotNull(product.MasterData.Current.MasterVariant.Images);
+            Assert.IsTrue(product.MasterData.Current.MasterVariant.Images.Count == 1);
+            Image imageReturned = product.MasterData.Current.MasterVariant.Images[0];
+            Assert.AreEqual(image.Label, imageReturned.Label);
+            Assert.AreEqual(image.Url, imageReturned.Url);
+            Assert.AreEqual(image.Dimensions.Width, imageReturned.Dimensions.Width);
+            Assert.AreEqual(image.Dimensions.Height, imageReturned.Dimensions.Height);
 
             string deletedProductId = product.Id;
 

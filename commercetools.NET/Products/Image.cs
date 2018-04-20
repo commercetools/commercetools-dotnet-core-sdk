@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-
+using commercetools.Common;
 using Newtonsoft.Json;
 
 namespace commercetools.Products
@@ -14,30 +14,51 @@ namespace commercetools.Products
         #region Properties
 
         [JsonProperty(PropertyName = "url")]
-        public string Url { get; private set; }
+        public string Url { get; set; }
 
-        [JsonProperty(PropertyName = "width")]
-        public int? Width { get; private set; }
-
-        [JsonProperty(PropertyName = "height")]
-        public int? Height { get; private set; }
+        [JsonProperty(PropertyName = "dimensions")]
+        public ImageDimensions Dimensions { get; set; }
 
         [JsonProperty(PropertyName = "label")]
-        public string Label { get; private set; }
+        public string Label { get; set; }
 
-        [JsonProperty(PropertyName = "thumbUrl")]
+        [JsonIgnore]
+        public int? Width {
+            get
+            {
+                if (this.Dimensions != null)
+                {
+                    return this.Dimensions.Width;
+                }
+                return null; 
+            }
+        }
+
+        [JsonIgnore]
+        public int? Height {
+            get
+            {
+                if (this.Dimensions != null)
+                {
+                    return this.Dimensions.Height;
+                }
+                return null;
+            }
+        }
+
+        [JsonIgnore]
         public string ThumbUrl { get; private set; }
 
-        [JsonProperty(PropertyName = "smallUrl")]
+        [JsonIgnore]
         public string SmallUrl { get; private set; }
 
-        [JsonProperty(PropertyName = "mediumUrl")]
+        [JsonIgnore]
         public string MediumUrl { get; private set; }
 
-        [JsonProperty(PropertyName = "largeUrl")]
+        [JsonIgnore]
         public string LargeUrl { get; private set; }
 
-        [JsonProperty(PropertyName = "zoomUrl")]
+        [JsonIgnore]
         public string ZoomUrl { get; private set; }
 
         #endregion
@@ -56,8 +77,7 @@ namespace commercetools.Products
             }
 
             this.Url = data.url;
-            this.Width = data.dimensions != null ? data.dimensions.w : null;
-            this.Height = data.dimensions != null ? data.dimensions.h : null;
+            this.Dimensions = new ImageDimensions(data.dimensions);
             this.Label = data.label;
 
             Uri uri = new Uri(this.Url);
@@ -73,6 +93,14 @@ namespace commercetools.Products
                 this.LargeUrl = this.Url.Replace(extension, string.Concat("-large", extension));
                 this.ZoomUrl = this.Url.Replace(extension, string.Concat("-zoom", extension));
             }
+        }
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public Image(string url, ImageDimensions dimensions)
+        {
+            this.Url = url;
+            this.Dimensions = dimensions;
         }
 
         #endregion
@@ -93,7 +121,7 @@ namespace commercetools.Products
                 return false;
             }
 
-            return image.Url.Equals(this.Url);
+            return image.Url.Equals(this.Url) && image.Dimensions.Equals(this.Dimensions) && image.Label.Equals(this.Label);
         }
 
         /// <summary>
@@ -102,7 +130,7 @@ namespace commercetools.Products
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return this.Url.GetHashCode();
+            return HashCode.Of(this.Url).And(this.Dimensions).And(this.Label);
         }  
 
         #endregion
