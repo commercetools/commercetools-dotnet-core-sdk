@@ -170,7 +170,7 @@ Task("TestNetStandard20")
     .OnError(exception => { ErrorDetail.Add(exception.Message); })
     .Does(() =>
     {
-        var runtime = "netstandard2.0";
+        var runtime = "net461";
         var dir = TEST_BIN_DIR + runtime + "/";
         RunNUnitTests(dir, SDK_TESTS, runtime, ref ErrorDetail);
 		if (isAppveyor)
