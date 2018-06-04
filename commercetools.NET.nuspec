@@ -7,7 +7,6 @@
     <owners>Falcon-Software Company Inc.</owners>
     <licenseUrl>https://github.com/commercetools/commercetools-dotnet-sdk/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/commercetools/commercetools-dotnet-sdk</projectUrl>
-		<iconUrl>https://avatars3.githubusercontent.com/u/1084585?s=200&v=4</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>The commercetools.NET SDK allows developers to work effectively with the commercetools platform in their .NET applications by providing typesafe access to the commercetools HTTP API.</description>
     <releaseNotes>Initial release</releaseNotes>
