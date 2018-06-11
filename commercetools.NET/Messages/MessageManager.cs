@@ -19,7 +19,7 @@ namespace commercetools.Messages
 
         #region Member Variables
 
-        private Client _client;
+        private readonly IClient _client;
 
         #endregion
 
@@ -29,7 +29,7 @@ namespace commercetools.Messages
         /// Constructor
         /// </summary>
         /// <param name="client">Client</param>
-        public MessageManager(Client client)
+        public MessageManager(IClient client)
         {
             _client = client;
         }

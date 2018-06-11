@@ -11,7 +11,7 @@ namespace commercetools.ShippingMethods
         /// Creates an instance of the ShippingMethodManager.
         /// </summary>
         /// <returns>ShippingMethodManager</returns>
-        public static ShippingMethodManager ShippingMethods(this Client client)
+        public static ShippingMethodManager ShippingMethods(this IClient client)
         {
             return new ShippingMethodManager(client);
         }

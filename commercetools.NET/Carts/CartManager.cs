@@ -25,7 +25,7 @@ namespace commercetools.Carts
 
         #region Member Variables
 
-        private Client _client;
+        private readonly IClient _client;
 
         #endregion
 
@@ -35,7 +35,7 @@ namespace commercetools.Carts
         /// Constructor
         /// </summary>
         /// <param name="client">Client</param>
-        public CartManager(Client client)
+        public CartManager(IClient client)
         {
             _client = client;
         }

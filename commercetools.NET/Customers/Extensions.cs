@@ -11,7 +11,7 @@ namespace commercetools.Customers
         /// Creates an instance of the CustomerManager.
         /// </summary>
         /// <returns>CustomerManager</returns>
-        public static CustomerManager Customers(this Client client)
+        public static CustomerManager Customers(this IClient client)
         {
             return new CustomerManager(client);
         }

@@ -10,13 +10,14 @@ using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Threading;
 
 namespace commercetools.Common
 {
     /// <summary>
     /// A client for executing requests against the commercetools web service.
     /// </summary>
-    public class Client
+    public class Client : IClient
     {
         #region Properties
 
@@ -35,6 +36,33 @@ namespace commercetools.Common
         /// </summary>
         public string UserAgent { get; private set; }
 
+        /// <summary>
+        /// The HttpClient to utilize in all API requests. If null, HttpClientPool instances are utilized
+        /// </summary>
+        public HttpClient HttpClientInstance { get; set; }
+
+        private static LimitedPool<HttpClient> _HttpClientPool = null;
+        private static object httpClientPoolLock = new object();
+        /// <summary>
+        /// Application scope HttpClientPool to utilize for all API requests when HttpClientInstance of Client instance is null
+        /// </summary>
+        private static LimitedPool<HttpClient> HttpClientPool
+        {
+            get {
+                if (_HttpClientPool == null)
+                {
+                    lock (httpClientPoolLock)
+                    {
+                        if (_HttpClientPool == null)
+                        {
+                            _HttpClientPool = new LimitedPool<HttpClient>(() => { return new HttpClient(new ClientLoggingHandler(new HttpClientHandler())); }, client => client.Dispose());
+                        }
+                    }
+                }
+                return _HttpClientPool;
+            }
+        }
+
         #endregion
 
         #region Constructors
@@ -42,10 +70,10 @@ namespace commercetools.Common
         /// <summary>
         /// Constructor
         /// </summary>
-        public Client(Configuration configuration)
+        public Client(Configuration configuration, HttpClient httpClientInstance = null)
         {
             this.Configuration = configuration;
-
+            this.HttpClientInstance = httpClientInstance;
             Assembly assembly = Assembly.GetExecutingAssembly();
             string assemblyVersion = assembly.GetName().Version.ToString();
             string dotNetVersion = Environment.Version.ToString();
@@ -82,32 +110,35 @@ namespace commercetools.Common
 
             string url = string.Concat(this.Configuration.ApiUrl, "/", this.Configuration.ProjectKey, endpoint, values.ToQueryString());
 
-            for (int internalServerErrorRetries = -1; internalServerErrorRetries < this.Configuration.InternalServerErrorRetries; internalServerErrorRetries++)
+            using (LimitedPoolItem<HttpClient> poolItem = HttpClientInstance != null ? null : HttpClientPool.Get(this.Configuration.HttpClientPoolItemLifetime))
             {
-                using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
+                HttpClient client = HttpClientInstance ?? poolItem.Value;
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
+                client.DefaultRequestHeaders.UserAgent.Clear();
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
+
+                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri(url))
                 {
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
-                    client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
+                    Version = HttpVersion.Version10
+                };
 
-                    HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri(url))
-                    {
-                        Version = HttpVersion.Version10
-                    };
-
+                for (int internalServerErrorRetries = -1; internalServerErrorRetries < this.Configuration.InternalServerErrorRetries; internalServerErrorRetries++)
+                {
                     HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
                     response = await GetResponse<T>(httpResponseMessage);
-                }
-                if (response.StatusCode < 500)
-                {
-                    return response;
-                }
-                else if (this.Configuration.InternalServerErrorRetryInterval > 0)
-                {
-                    await Task.Delay(this.Configuration.InternalServerErrorRetryInterval);
+                    if (response.StatusCode < 500)
+                    {
+                        return response;
+                    }
+                    else if (this.Configuration.InternalServerErrorRetryInterval > 0)
+                    {
+                        await Task.Delay(this.Configuration.InternalServerErrorRetryInterval);
+                    }
                 }
             }
+
             return response;
         }
 
@@ -136,21 +167,22 @@ namespace commercetools.Common
             }
 
             string url = string.Concat(this.Configuration.ApiUrl, "/", this.Configuration.ProjectKey, endpoint);
-            for (int internalServerErrorRetry = -1; internalServerErrorRetry < this.Configuration.InternalServerErrorRetries; internalServerErrorRetry++)
+            using (LimitedPoolItem<HttpClient> poolItem = HttpClientInstance != null ? null : HttpClientPool.Get(this.Configuration.HttpClientPoolItemLifetime))
             {
-                using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
+                HttpClient client = HttpClientInstance ?? poolItem.Value;
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
+                client.DefaultRequestHeaders.UserAgent.Clear();
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
+
+                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url))
                 {
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
-                    client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
-
-                    HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url))
-                    {
-                        Version = HttpVersion.Version10,
-                        Content = new StringContent(payload, Encoding.UTF8, "application/json")
-                    };
-
+                    Version = HttpVersion.Version10,
+                    Content = new StringContent(payload, Encoding.UTF8, "application/json")
+                };
+                for (int internalServerErrorRetry = -1; internalServerErrorRetry < this.Configuration.InternalServerErrorRetries; internalServerErrorRetry++)
+                {
                     HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
                     response = await GetResponse<T>(httpResponseMessage);
                     if (response.StatusCode < 500)
@@ -192,30 +224,32 @@ namespace commercetools.Common
 
             string url = string.Concat(this.Configuration.ApiUrl, "/", this.Configuration.ProjectKey, endpoint, values.ToQueryString());
 
-            for (int internalServerErrorRetries = -1; internalServerErrorRetries < this.Configuration.InternalServerErrorRetries; internalServerErrorRetries++)
+            using (LimitedPoolItem<HttpClient> poolItem = HttpClientInstance != null ? null : HttpClientPool.Get(this.Configuration.HttpClientPoolItemLifetime))
             {
-                using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
+                HttpClient client = HttpClientInstance ?? poolItem.Value;
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
+                client.DefaultRequestHeaders.UserAgent.Clear();
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
+
+                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, new Uri(url))
                 {
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(this.Token.TokenType, this.Token.AccessToken);
-                    client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
+                    Version = HttpVersion.Version10
+                };
 
-                    HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, new Uri(url))
-                    {
-                        Version = HttpVersion.Version10
-                    };
-
+                for (int internalServerErrorRetries = -1; internalServerErrorRetries < this.Configuration.InternalServerErrorRetries; internalServerErrorRetries++)
+                {
                     HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
                     response = await GetResponse<T>(httpResponseMessage);
-                }
-                if (response.StatusCode < 500)
-                {
-                    return response;
-                }
-                else if (this.Configuration.InternalServerErrorRetryInterval > 0)
-                {
-                    await Task.Delay(this.Configuration.InternalServerErrorRetryInterval);
+                    if (response.StatusCode < 500)
+                    {
+                        return response;
+                    }
+                    else if (this.Configuration.InternalServerErrorRetryInterval > 0)
+                    {
+                        await Task.Delay(this.Configuration.InternalServerErrorRetryInterval);
+                    }
                 }
             }
             return response;
@@ -244,10 +278,10 @@ namespace commercetools.Common
              * The refresh token flow is currently only available for the password flow, which is currently not supported by the SDK.
              * More info: https://dev.commercetools.com/http-api-authorization.html#password-flow
              * 
-            else if (this.Token.IsExpired())
-            {
-                this.Token = RefreshTokenAsync(this.Token.RefreshToken);
-            }
+                else if (this.Token.IsExpired())
+                {
+                    this.Token = RefreshTokenAsync(this.Token.RefreshToken);
+                }
              */
         }
 
@@ -267,32 +301,33 @@ namespace commercetools.Common
             };
 
             string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Concat(this.Configuration.ClientID, ":", this.Configuration.ClientSecret)));
-
-            for (int internalServerErrorRetries = -1; internalServerErrorRetries < this.Configuration.InternalServerErrorRetries; internalServerErrorRetries++)
+            using (LimitedPoolItem<HttpClient> poolItem = HttpClientInstance != null ? null : HttpClientPool.Get(this.Configuration.HttpClientPoolItemLifetime))
             {
-                using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
+                HttpClient client = HttpClientInstance ?? poolItem.Value;
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
+                client.DefaultRequestHeaders.UserAgent.Clear();
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
+
+                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(this.Configuration.OAuthUrl))
                 {
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
-                    client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
+                    Version = HttpVersion.Version10,
+                    Content = new FormUrlEncodedContent(pairs)
+                };
 
-                    HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(this.Configuration.OAuthUrl))
-                    {
-                        Version = HttpVersion.Version10,
-                        Content = new FormUrlEncodedContent(pairs)
-                    };
-
+                for (int internalServerErrorRetries = -1; internalServerErrorRetries < this.Configuration.InternalServerErrorRetries; internalServerErrorRetries++)
+                {
                     HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
                     response = await GetResponse<Token>(httpResponseMessage);
-                }
-                if (response.StatusCode < 500)
-                {
-                    return response;
-                }
-                else if (this.Configuration.InternalServerErrorRetryInterval > 0)
-                {
-                    await Task.Delay(this.Configuration.InternalServerErrorRetryInterval);
+                    if (response.StatusCode < 500)
+                    {
+                        return response;
+                    }
+                    else if (this.Configuration.InternalServerErrorRetryInterval > 0)
+                    {
+                        await Task.Delay(this.Configuration.InternalServerErrorRetryInterval);
+                    }
                 }
             }
             return response;
@@ -315,32 +350,33 @@ namespace commercetools.Common
             };
 
             string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Concat(this.Configuration.ClientID, ":", this.Configuration.ClientSecret)));
-
-            for (int internalServerErrorRetries = -1; internalServerErrorRetries < this.Configuration.InternalServerErrorRetries; internalServerErrorRetries++)
+            using (LimitedPoolItem<HttpClient> poolItem = HttpClientInstance != null ? null : HttpClientPool.Get(this.Configuration.HttpClientPoolItemLifetime))
             {
-                using (HttpClient client = new HttpClient(new ClientLoggingHandler(new HttpClientHandler())))
+                HttpClient client = HttpClientInstance ?? poolItem.Value;
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
+                client.DefaultRequestHeaders.UserAgent.Clear();
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
+
+                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(this.Configuration.OAuthUrl))
                 {
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
-                    client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
+                    Version = HttpVersion.Version10,
+                    Content = new FormUrlEncodedContent(pairs)
+                };
 
-                    HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(this.Configuration.OAuthUrl))
-                    {
-                        Version = HttpVersion.Version10,
-                        Content = new FormUrlEncodedContent(pairs)
-                    };
-
+                for (int internalServerErrorRetries = -1; internalServerErrorRetries < this.Configuration.InternalServerErrorRetries; internalServerErrorRetries++)
+                {
                     HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
                     response = await GetResponse<Token>(httpResponseMessage);
-                }
-                if (response.StatusCode < 500)
-                {
-                    return response;
-                }
-                else if (this.Configuration.InternalServerErrorRetryInterval > 0)
-                {
-                    await Task.Delay(this.Configuration.InternalServerErrorRetryInterval);
+                    if (response.StatusCode < 500)
+                    {
+                        return response;
+                    }
+                    else if (this.Configuration.InternalServerErrorRetryInterval > 0)
+                    {
+                        await Task.Delay(this.Configuration.InternalServerErrorRetryInterval);
+                    }
                 }
             }
             return response;
@@ -367,7 +403,6 @@ namespace commercetools.Common
             if (response.StatusCode >= 200 && response.StatusCode < 300)
             {
                 response.Success = true;
-
                 if (resultType == typeof(JObject) || resultType == typeof(JArray) || resultType.IsArray || (resultType.IsGenericType && resultType.Name.Equals(typeof(List<>).Name)))
                 {
                     response.Result = JsonConvert.DeserializeObject<T>(await httpResponseMessage.Content.ReadAsStringAsync());

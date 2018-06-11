@@ -20,7 +20,7 @@ namespace commercetools.ProductProjections
 
         #region Member Variables
 
-        private Client _client;
+        private readonly IClient _client;
 
         #endregion 
 
@@ -30,7 +30,7 @@ namespace commercetools.ProductProjections
         /// Constructor
         /// </summary>
         /// <param name="client">Client</param>
-        public ProductProjectionManager(Client client)
+        public ProductProjectionManager(IClient client)
         {
             _client = client;
         }

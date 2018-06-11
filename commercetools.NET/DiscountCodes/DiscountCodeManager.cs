@@ -18,7 +18,7 @@ namespace commercetools.DiscountCodes
 
         #region Member Variables
 
-        private readonly Client _client;
+        private readonly IClient _client;
 
         #endregion
 
@@ -28,7 +28,7 @@ namespace commercetools.DiscountCodes
         /// Constructor
         /// </summary>
         /// <param name="client">Client</param>
-        public DiscountCodeManager(Client client)
+        public DiscountCodeManager(IClient client)
         {
             _client = client;
         }

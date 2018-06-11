@@ -11,7 +11,7 @@ namespace commercetools.Project
         /// Creates an instance of the ProjectManager.
         /// </summary>
         /// <returns>ProjectManager</returns>
-        public static ProjectManager Project(this Client client)
+        public static ProjectManager Project(this IClient client)
         {
             return new ProjectManager(client);
         }

@@ -24,7 +24,7 @@ namespace commercetools.Types
 
         #region Member Variables
 
-        private Client _client;
+        private readonly IClient _client;
 
         #endregion
 
@@ -34,7 +34,7 @@ namespace commercetools.Types
         /// Constructor
         /// </summary>
         /// <param name="client">Client</param>
-        public TypeManager(Client client)
+        public TypeManager(IClient client)
         {
             _client = client;
         }

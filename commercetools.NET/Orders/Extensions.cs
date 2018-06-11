@@ -11,7 +11,7 @@ namespace commercetools.Orders
         /// Creates an instance of the OrderManager.
         /// </summary>
         /// <returns>OrderManager</returns>
-        public static OrderManager Orders(this Client client)
+        public static OrderManager Orders(this IClient client)
         {
             return new OrderManager(client);
         }

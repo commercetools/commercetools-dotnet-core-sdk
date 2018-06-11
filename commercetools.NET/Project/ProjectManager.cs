@@ -12,7 +12,7 @@ namespace commercetools.Project
     {
         #region Member Variables
 
-        private Client _client;
+        private readonly IClient _client;
 
         #endregion 
 
@@ -22,7 +22,7 @@ namespace commercetools.Project
         /// Constructor.
         /// </summary>
         /// <param name="client">Client</param>
-        public ProjectManager(Client client)
+        public ProjectManager(IClient client)
         {
             _client = client;
         }

@@ -11,7 +11,7 @@ namespace commercetools.TaxCategories
         /// Creates an instance of the TaxCategoryManager.
         /// </summary>
         /// <returns>TaxCategoryManager</returns>
-        public static TaxCategoryManager TaxCategories(this Client client)
+        public static TaxCategoryManager TaxCategories(this IClient client)
         {
             return new TaxCategoryManager(client);
         }

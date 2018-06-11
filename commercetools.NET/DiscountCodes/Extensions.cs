@@ -9,7 +9,7 @@ namespace commercetools.DiscountCodes
         /// Creates an instance of the CartDiscountManager.
         /// </summary>
         /// <returns>CartDiscountManager</returns>
-        public static DiscountCodeManager DiscountCodes(this Client client)
+        public static DiscountCodeManager DiscountCodes(this IClient client)
         {
             return new DiscountCodeManager(client);
         }

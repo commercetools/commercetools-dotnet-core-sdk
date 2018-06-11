@@ -24,7 +24,7 @@ namespace commercetools.Subscriptions
 
         #region Member Variables
 
-        private Client _client;
+        private readonly IClient _client;
 
         #endregion 
 
@@ -34,7 +34,7 @@ namespace commercetools.Subscriptions
         /// Constructor
         /// </summary>
         /// <param name="client">Client</param>
-        public SubscriptionManager(Client client)
+        public SubscriptionManager(IClient client)
         {
             _client = client;
         }

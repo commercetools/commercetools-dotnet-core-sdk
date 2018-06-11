@@ -11,7 +11,7 @@ namespace commercetools.Categories
         /// Creates an instance of the CategoryManager.
         /// </summary>
         /// <returns>CategoryManager</returns>
-        public static CategoryManager Categories(this Client client)
+        public static CategoryManager Categories(this IClient client)
         {
             return new CategoryManager(client);
         }

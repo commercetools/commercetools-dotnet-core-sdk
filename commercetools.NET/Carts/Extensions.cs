@@ -11,7 +11,7 @@ namespace commercetools.Carts
         /// Creates an instance of the CartManager.
         /// </summary>
         /// <returns>CartManager</returns>
-        public static CartManager Carts(this Client client)
+        public static CartManager Carts(this IClient client)
         {
             return new CartManager(client);
         }

@@ -11,7 +11,7 @@ namespace commercetools.Messages
         /// Creates an instance of the MessageManager.
         /// </summary>
         /// <returns>MessageManager</returns>
-        public static MessageManager Messages(this Client client)
+        public static MessageManager Messages(this IClient client)
         {
             return new MessageManager(client);
         }

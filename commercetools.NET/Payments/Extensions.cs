@@ -11,7 +11,7 @@ namespace commercetools.Payments
         /// Creates an instance of the PaymentManager.
         /// </summary>
         /// <returns>PaymentManager</returns>
-        public static PaymentManager Payments(this Client client)
+        public static PaymentManager Payments(this IClient client)
         {
             return new PaymentManager(client);
         }

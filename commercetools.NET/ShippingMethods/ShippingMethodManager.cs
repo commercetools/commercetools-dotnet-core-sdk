@@ -24,7 +24,7 @@ namespace commercetools.ShippingMethods
 
         #region Member Variables
 
-        private Client _client;
+        private readonly IClient _client;
 
         #endregion
 
@@ -34,7 +34,7 @@ namespace commercetools.ShippingMethods
         /// Constructor
         /// </summary>
         /// <param name="client">Client</param>
-        public ShippingMethodManager(Client client)
+        public ShippingMethodManager(IClient client)
         {
             _client = client;
         }

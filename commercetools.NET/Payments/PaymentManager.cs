@@ -24,7 +24,7 @@ namespace commercetools.Payments
 
         #region Member Variables
 
-        private Client _client;
+        private readonly IClient _client;
 
         #endregion
 
@@ -34,7 +34,7 @@ namespace commercetools.Payments
         /// Constructor
         /// </summary>
         /// <param name="client">Client</param>
-        public PaymentManager(Client client)
+        public PaymentManager(IClient client)
         {
             _client = client;
         }

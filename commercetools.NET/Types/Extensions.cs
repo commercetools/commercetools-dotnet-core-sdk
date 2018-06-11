@@ -11,7 +11,7 @@ namespace commercetools.Types
         /// Creates an instance of the TypeManager.
         /// </summary>
         /// <returns>TypeManager</returns>
-        public static TypeManager Types(this Client client)
+        public static TypeManager Types(this IClient client)
         {
             return new TypeManager(client);
         }

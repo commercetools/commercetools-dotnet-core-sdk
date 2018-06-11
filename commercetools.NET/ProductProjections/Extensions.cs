@@ -11,7 +11,7 @@ namespace commercetools.ProductProjections
         /// Creates an instance of the ProductProjectionManager.
         /// </summary>
         /// <returns>ProductProjectionManager</returns>
-        public static ProductProjectionManager ProductProjections(this Client client)
+        public static ProductProjectionManager ProductProjections(this IClient client)
         {
             return new ProductProjectionManager(client);
         }

@@ -24,7 +24,7 @@ namespace commercetools.TaxCategories
 
         #region Member Variables
 
-        private Client _client;
+        private readonly IClient _client;
 
         #endregion
 
@@ -34,7 +34,7 @@ namespace commercetools.TaxCategories
         /// Constructor
         /// </summary>
         /// <param name="client">Client</param>
-        public TaxCategoryManager(Client client)
+        public TaxCategoryManager(IClient client)
         {
             _client = client;
         }

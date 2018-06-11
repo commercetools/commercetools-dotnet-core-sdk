@@ -11,7 +11,7 @@ namespace commercetools.ProductTypes
         /// Creates an instance of the ProductTypeManager.
         /// </summary>
         /// <returns>ProductTypeManager</returns>
-        public static ProductTypeManager ProductTypes(this Client client)
+        public static ProductTypeManager ProductTypes(this IClient client)
         {
             return new ProductTypeManager(client);
         }

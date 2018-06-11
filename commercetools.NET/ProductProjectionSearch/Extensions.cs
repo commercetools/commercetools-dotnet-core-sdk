@@ -11,7 +11,7 @@ namespace commercetools.ProductProjectionSearch
         /// Creates an instance of the ProductProjectionSearchManager.
         /// </summary>
         /// <returns>ProductProjectionSearchManager</returns>
-        public static ProductProjectionSearchManager ProductProjectionSearch(this Client client)
+        public static ProductProjectionSearchManager ProductProjectionSearch(this IClient client)
         {
             return new ProductProjectionSearchManager(client);
         }
