@@ -37,32 +37,14 @@ namespace commercetools.Common
         public string UserAgent { get; private set; }
 
         /// <summary>
-        /// The HttpClient to utilize in all API requests. If null, HttpClientPool instances are utilized
+        /// The HttpClient to utilize in all API requests.
         /// </summary>
-        public HttpClient HttpClientInstance { get; set; }
+        private RestClient RestClientInstance { get; set; }
 
-        private static LimitedPool<HttpClient> _HttpClientPool = null;
-        private static object httpClientPoolLock = new object();
-        /// <summary>
-        /// Application scope HttpClientPool to utilize for all API requests when HttpClientInstance of Client instance is null
-        /// </summary>
-        private static LimitedPool<HttpClient> HttpClientPool
-        {
-            get {
-                if (_HttpClientPool == null)
-                {
-                    lock (httpClientPoolLock)
-                    {
-                        if (_HttpClientPool == null)
-                        {
-                            _HttpClientPool = new LimitedPool<HttpClient>(() => { return new HttpClient(new ClientLoggingHandler(new HttpClientHandler())); }, client => client.Dispose());
-                        }
-                    }
-                }
-                return _HttpClientPool;
-            }
+        public HttpClient HttpClientInstance {
+            get { return RestClientInstance.Client; }
+            set { RestClientInstance = new RestClient(value); }
         }
-
         #endregion
 
         #region Constructors
@@ -207,22 +189,17 @@ namespace commercetools.Common
         {
             Response<T> response = new Response<T>();
 
-            using (LimitedPoolItem<HttpClient> poolItem = HttpClientInstance != null ? null : HttpClientPool.Get(this.Configuration.HttpClientPoolItemLifetime))
+            for (int internalServerErrorRetries = -1; internalServerErrorRetries < this.Configuration.InternalServerErrorRetries; internalServerErrorRetries++)
             {
-                HttpClient client = HttpClientInstance ?? poolItem.Value;
-
-                for (int internalServerErrorRetries = -1; internalServerErrorRetries < this.Configuration.InternalServerErrorRetries; internalServerErrorRetries++)
+                HttpResponseMessage httpResponseMessage = await RestClientInstance.SendAsync(httpRequestMessage);
+                response = await GetResponse<T>(httpResponseMessage);
+                if (response.StatusCode < 500)
                 {
-                    HttpResponseMessage httpResponseMessage = await client.SendAsync(httpRequestMessage);
-                    response = await GetResponse<T>(httpResponseMessage);
-                    if (response.StatusCode < 500)
-                    {
-                        return response;
-                    }
-                    else if (this.Configuration.InternalServerErrorRetryInterval > 0)
-                    {
-                        await Task.Delay(this.Configuration.InternalServerErrorRetryInterval);
-                    }
+                    return response;
+                }
+                else if (this.Configuration.InternalServerErrorRetryInterval > 0)
+                {
+                    await Task.Delay(this.Configuration.InternalServerErrorRetryInterval);
                 }
             }
             return response;
