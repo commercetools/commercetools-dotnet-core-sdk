@@ -21,6 +21,10 @@ using commercetools.Zones;
 using Configuration = commercetools.Common.Configuration;
 using ReferenceType = commercetools.Common.ReferenceType;
 using commercetools.Subscriptions;
+using commercetools.Channels;
+
+using commercetools.Inventory;
+using commercetools.GeoLocation;
 
 namespace commercetools.Tests
 {
@@ -616,7 +620,6 @@ namespace commercetools.Tests
             ProductVariantDraft productVariantDraft = new ProductVariantDraft();
             productVariantDraft.Sku = randomSku;
             productVariantDraft.Prices = priceDrafts;
-
             ResourceIdentifier productType = new ResourceIdentifier();
             productType.Id = productTypeId;
             productType.TypeId = Common.ReferenceType.ProductType;
@@ -891,6 +894,31 @@ namespace commercetools.Tests
         }
 
         /// <summary>
+        /// Gets a test type draft to inventory.
+        /// </summary>
+        /// <param name="project">Project</param>
+        /// <returns>TypeDraft</returns>
+        public static TypeDraft GetTypeDraftForInventory(Project.Project project)
+        {
+            LocalizedString typeName = new LocalizedString();
+            string randomPostfix = Helper.GetRandomString(10);
+            typeName.SetValue(project.Languages[0], string.Concat("Test Type", randomPostfix));
+
+            List<string> resourceTypeIds = new List<string> { "inventory-entry" };
+
+            TypeDraft typeDraft =
+                new TypeDraft(string.Concat("test-type-", randomPostfix), typeName, resourceTypeIds);
+
+            typeDraft.FieldDefinitions = new List<FieldDefinition> {
+                Helper.GetFieldDefinition(project, "field1", "Field 1", new commercetools.Types.StringType()),
+                Helper.GetFieldDefinition(project, "field2", "Field 2", new commercetools.Types.StringType()),
+                Helper.GetFieldDefinition(project, "field3", "Field 3", new commercetools.Types.StringType())
+            };
+
+            return typeDraft;
+        }
+
+        /// <summary>
         /// Gets a FieldDefinition.
         /// </summary>
         /// <param name="project">Project</param>
@@ -988,5 +1016,68 @@ namespace commercetools.Tests
             return GetRandomDouble(0, 2) >= 0.5;
         }
         #endregion 
+
+        #region Channels
+
+        /// <summary>
+        /// Gets a test channel draft.
+        /// </summary>
+        /// <param name="project">Project</param>
+        /// <returns>ChannelDraft</returns>
+        public static ChannelDraft GetTestChannelDraft(Project.Project project)
+        {
+            string key = Helper.GetRandomString(15);
+            LocalizedString name = new LocalizedString();
+            LocalizedString description = new LocalizedString();
+            Address address = Helper.GetTestAddress(project);
+            IGeoLocationObject point = new Point(GetRandomDouble(0,10), GetRandomDouble(0, 10));
+
+            foreach (string language in project.Languages)
+            {
+                string randomPostfix = Helper.GetRandomString(10);
+                name.SetValue(language, string.Concat("Test Channel ", language, " ", randomPostfix));
+                description.SetValue(language, string.Concat("Created by commercetools.NET ", language));                
+            }
+
+            ChannelDraft channelDraft = new ChannelDraft(key);
+            channelDraft.Name = name;
+            channelDraft.Description = description;
+            channelDraft.Address = address;
+            channelDraft.GeoLocation = point;
+            channelDraft.Roles = new List<ChannelRoleEnum>() {
+                ChannelRoleEnum.InventorySupply,
+                ChannelRoleEnum.OrderExport
+            };
+            
+            return channelDraft;
+        }
+
+        #endregion
+
+        #region Inventory
+
+        /// <summary>
+        /// Gets a test inventory draft.
+        /// </summary>
+        /// <param name="project">Project</param>
+        /// <returns>InventoryDraft</returns>
+        public static InventoryEntryDraft GetTestInventoryDraft(Project.Project project)
+        {
+            string sku = Helper.GetRandomString(10);
+            int quantityOnStock = Helper.GetRandomNumber(1,10);
+            int restockableInDays = Helper.GetRandomNumber(1, 10);
+            DateTime expectedDelivery = DateTime.UtcNow.AddDays(Helper.GetRandomDouble(1, 10));
+
+            InventoryEntryDraft inventoryEntryDraft = new InventoryEntryDraft(sku);
+            inventoryEntryDraft.QuantityOnStock = quantityOnStock;
+            inventoryEntryDraft.RestockableInDays = restockableInDays;
+            inventoryEntryDraft.ExpectedDelivery = expectedDelivery;
+
+            return inventoryEntryDraft;
+        }
+
+        #endregion
+
+        
     }
 }
