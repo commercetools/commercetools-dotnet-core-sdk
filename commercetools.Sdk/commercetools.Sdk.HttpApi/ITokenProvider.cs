@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace commercetools.Sdk.HttpApi
+﻿namespace commercetools.Sdk.HttpApi
 {
     public interface ITokenProvider
     {
-        Token GetToken();
+        Token Token { get; }
     }
 }

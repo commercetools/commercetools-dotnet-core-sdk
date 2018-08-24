@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.Domain", "commercetools.Sdk\commercetools.Sdk.Domain.csproj", "{1FD56D94-38DC-419B-99C4-9E321D062827}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Domain", "commercetools.Sdk\commercetools.Sdk.Domain.csproj", "{1FD56D94-38DC-419B-99C4-9E321D062827}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.HttpApi", "commercetools.Sdk.HttpApi\commercetools.Sdk.HttpApi.csproj", "{9B343966-3BA2-4377-8D17-A35D1D630976}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.HttpApi", "commercetools.Sdk.HttpApi\commercetools.Sdk.HttpApi.csproj", "{9B343966-3BA2-4377-8D17-A35D1D630976}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.HttpApi.Tests", "XUnitTestProject1\commercetools.Sdk.HttpApi.Tests.csproj", "{9C764F89-B8F5-4706-B5C8-A28CD70C80A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.HttpApi.Tests", "commercetools.Sdk.HttpApi.Tests\commercetools.Sdk.HttpApi.Tests.csproj", "{D5D8447E-9C5A-40C1-AE23-8876AE8E4110}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.Client", "commercetools.Sdk.Client\commercetools.Sdk.Client.csproj", "{9B105327-3D7D-4857-9811-50F355A4DC2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +25,14 @@ Global
 		{9B343966-3BA2-4377-8D17-A35D1D630976}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B343966-3BA2-4377-8D17-A35D1D630976}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B343966-3BA2-4377-8D17-A35D1D630976}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C764F89-B8F5-4706-B5C8-A28CD70C80A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C764F89-B8F5-4706-B5C8-A28CD70C80A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C764F89-B8F5-4706-B5C8-A28CD70C80A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C764F89-B8F5-4706-B5C8-A28CD70C80A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5D8447E-9C5A-40C1-AE23-8876AE8E4110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5D8447E-9C5A-40C1-AE23-8876AE8E4110}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5D8447E-9C5A-40C1-AE23-8876AE8E4110}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5D8447E-9C5A-40C1-AE23-8876AE8E4110}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B105327-3D7D-4857-9811-50F355A4DC2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B105327-3D7D-4857-9811-50F355A4DC2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B105327-3D7D-4857-9811-50F355A4DC2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B105327-3D7D-4857-9811-50F355A4DC2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
