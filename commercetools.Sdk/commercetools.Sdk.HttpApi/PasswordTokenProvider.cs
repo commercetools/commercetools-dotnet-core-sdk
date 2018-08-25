@@ -10,6 +10,8 @@
         private IClientConfiguration clientConfiguration;
         private Token token;
         public TokenFlow TokenFlow = TokenFlow.Password;
+        private string username { get; set; }
+        private string password { get; set; }
 
         // TODO Maybe move to a parent class, it might be the same as in other providers
         public Token Token
@@ -24,10 +26,12 @@
             }
         }
 
-        public PasswordTokenProvider(IAuthorizationClient authorizationClient, IClientConfiguration clientConfiguration)
+        public PasswordTokenProvider(IAuthorizationClient authorizationClient, IClientConfiguration clientConfiguration, string username, string password)
         {
             this.authorizationClient = authorizationClient;
             this.clientConfiguration = clientConfiguration;
+            this.username = username;
+            this.password = password;
         }
 
         private async Task<Token> GetTokenTask()
@@ -42,7 +46,7 @@
         private HttpRequestMessage GetRequestMessage()
         {
             HttpRequestMessage request = new HttpRequestMessage();
-            // TODO Implement
+            // TODO Implement; use username and password
             return request;
         }
     }

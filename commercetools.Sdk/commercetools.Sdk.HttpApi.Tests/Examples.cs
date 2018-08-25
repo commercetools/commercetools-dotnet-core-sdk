@@ -1,5 +1,6 @@
 namespace commercetools.Sdk.HttpApi.Tests
 {
+    using commercetools.Sdk.Client;
     using commercetools.Sdk.HttpApi;
     using System.Net.Http;
     using Xunit;
@@ -50,6 +51,30 @@ namespace commercetools.Sdk.HttpApi.Tests
             tokenFlowRegister.RegisterFlow("client2", TokenFlow.Password);
             TokenFlow tokenFlowForClient1 = tokenFlowRegister.GetFlow("client1");
             Assert.Equal(TokenFlow.ClientCredentials, tokenFlowForClient1);
+        }
+
+        [Fact]
+        public void ClientGeneration()
+        {
+            IClientConfiguration clientConfiguration = new ClientConfiguration();
+            HttpClient apiHttpClient = new HttpClient();
+            
+            
+            HttpClient authorizationHttpClient = new HttpClient();
+            IAuthorizationClient authorizationClient = new AuthorizationClient(authorizationHttpClient);
+            string username1 = "bob";
+            string password1 = "password";
+            ITokenProvider tokenProviderForClient1 = new PasswordTokenProvider(authorizationClient, clientConfiguration, username1, password1);
+            IApiClient apiClient1 = new ApiClient(apiHttpClient, tokenProviderForClient1);
+            IClient client1 = new Client(apiClient1);
+
+            string username2 = "alice";
+            string password2 = "password";
+            ITokenProvider tokenProviderForClient2 = new PasswordTokenProvider(authorizationClient, clientConfiguration, username2, password2);
+            IApiClient apiClient2 = new ApiClient(apiHttpClient, tokenProviderForClient2);
+            IClient client2 = new Client(apiClient2);
+
+
         }
     }
 }
