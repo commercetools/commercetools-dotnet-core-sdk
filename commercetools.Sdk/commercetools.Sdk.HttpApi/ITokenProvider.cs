@@ -3,5 +3,6 @@
     public interface ITokenProvider
     {
         Token Token { get; }
+        TokenFlow TokenFlow { get; }
     }
 }

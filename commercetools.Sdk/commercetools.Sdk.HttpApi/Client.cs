@@ -1,26 +1,42 @@
-﻿using commercetools.Sdk.Client;
-using commercetools.Sdk.Domain;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace commercetools.Sdk.HttpApi
+﻿namespace commercetools.Sdk.HttpApi
 {
+    using commercetools.Sdk.Client;
+    using commercetools.Sdk.Domain;
+    using Newtonsoft.Json;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+
     // commerce tools client, do not mistake for HttpClient
     public class Client : IClient
     {
         public string Name { get; set; }
-        private IApiClient apiClient; 
+        private IHttpClientFactory httpClientFactory;
+        private HttpClient client;
 
         public Category GetCategoryById(int categoryId)
         {
-            return this.apiClient.GetCategoryById(categoryId); 
+            return GetCategoryByIdTask(categoryId).Result;
         }
 
-        // TODO An idea is to move the code from ApiClient to here so that we remove one class step that is not needed
-        public Client(IApiClient apiClient)
+        private async Task<Category> GetCategoryByIdTask(int categoryId)
         {
-            this.apiClient = apiClient;
+            var result = await this.client.SendAsync(this.GetRequestMessage());
+            string content = await result.Content.ReadAsStringAsync();
+            // TODO Do not use Newtonsoft here directly, but move it to another project
+            return JsonConvert.DeserializeObject<Category>(content);
+        }
+
+        private HttpRequestMessage GetRequestMessage()
+        {
+            HttpRequestMessage requestMessage = new HttpRequestMessage();
+            // TODO Set all necessary headers, body, uri etc.
+            return requestMessage;
+        }
+
+        public Client(IHttpClientFactory httpClientFactory)
+        {
+            this.httpClientFactory = httpClientFactory;
+            this.client = this.httpClientFactory.CreateClient("api");
         }
     }
 }

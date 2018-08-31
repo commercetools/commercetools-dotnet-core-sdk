@@ -4,36 +4,39 @@
     using System.Net.Http;
     using System.Threading.Tasks;
 
-    public class AnonymousSessionsTokenProvider : ITokenProvider
+    public class AnonymousSessionTokenProvider : ITokenProvider
     {
-        private IAuthorizationClient authorizationClient;
+        private IHttpClientFactory httpClientFactory;
         private IClientConfiguration clientConfiguration;
-        private Token token;
+        private ISessionManager sessionManager;
 
-        public TokenFlow TokenFlow = TokenFlow.AnonymousSession;
+        public TokenFlow TokenFlow => TokenFlow.AnonymousSession;
 
         // TODO Maybe move to a parent class, it might be the same as in other providers
         public Token Token
         {
             get
             {
+                Token token = this.sessionManager.Token;
                 if (token == null || token.Expired)
                 {
-                    this.token = GetTokenTask().Result;
+                    token = GetTokenTask().Result;
+                    this.sessionManager.Token = token;
                 }
-                return this.token;
+                return token;
             }
         }
 
-        public AnonymousSessionsTokenProvider(IAuthorizationClient authorizationClient, IClientConfiguration clientConfiguration)
+        public AnonymousSessionTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, ISessionManager sessionManager)
         {
-            this.authorizationClient = authorizationClient;
+            this.httpClientFactory = httpClientFactory;
             this.clientConfiguration = clientConfiguration;
+            this.sessionManager = sessionManager;
         }
 
         private async Task<Token> GetTokenTask()
         {
-            HttpClient client = this.authorizationClient.Client;
+            HttpClient client = this.httpClientFactory.CreateClient("auth");
             var result = await client.SendAsync(this.GetRequestMessage());
             string content = await result.Content.ReadAsStringAsync();
             // TODO ensure status 200
@@ -43,7 +46,7 @@
         private HttpRequestMessage GetRequestMessage()
         {
             HttpRequestMessage request = new HttpRequestMessage();
-            // TODO Implement
+            // TODO Implement; use anonymous id
             return request;
         }
     }

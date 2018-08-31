@@ -6,37 +6,36 @@
 
     public class PasswordTokenProvider : ITokenProvider
     {
-        private IAuthorizationClient authorizationClient;
+        private IHttpClientFactory httpClientFactory;
         private IClientConfiguration clientConfiguration;
-        private Token token;
-        public TokenFlow TokenFlow = TokenFlow.Password;
-        private string username { get; set; }
-        private string password { get; set; }
+        public TokenFlow TokenFlow => TokenFlow.Password;
+        private ISessionManager sessionManager;
 
         // TODO Maybe move to a parent class, it might be the same as in other providers
         public Token Token
         {
             get
             {
+                Token token = this.sessionManager.Token;
                 if (token == null || token.Expired)
                 {
-                    this.token = GetTokenTask().Result;
+                    token = GetTokenTask().Result;
+                    this.sessionManager.Token = token;
                 }
-                return this.token;
+                return token;
             }
         }
 
-        public PasswordTokenProvider(IAuthorizationClient authorizationClient, IClientConfiguration clientConfiguration, string username, string password)
+        public PasswordTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, ISessionManager sessionManager)
         {
-            this.authorizationClient = authorizationClient;
+            this.httpClientFactory = httpClientFactory;
             this.clientConfiguration = clientConfiguration;
-            this.username = username;
-            this.password = password;
+            this.sessionManager = sessionManager;
         }
 
         private async Task<Token> GetTokenTask()
         {
-            HttpClient client = this.authorizationClient.Client;
+            HttpClient client = this.httpClientFactory.CreateClient("auth");
             var result = await client.SendAsync(this.GetRequestMessage());
             string content = await result.Content.ReadAsStringAsync();
             // TODO ensure status 200

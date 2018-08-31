@@ -15,14 +15,13 @@ namespace commercetools.Sdk.HttpApi.Tests
             // TODO Move configuration to a separate file
             IClientConfiguration clientConfiguration = new ClientConfiguration();
             clientConfiguration.ClientId = "pV7ogtY4wPRWbqQUQJ5TBWmh";
-            clientConfiguration.ClientSecret = "";
+            clientConfiguration.ClientSecret = "s-mSeiIojSUUgiht5kAA_7cLvaxXrMl6";
             // this is the only scope defined on the client
             //clientConfiguration.Scope = "manage_project:portablevendor";
             clientConfiguration.AuthorizationBaseAddress = "https://auth.sphere.io/";
-            HttpClient client = new HttpClient();
-            // normally client would be created by IHttpClientFactory
-            IAuthorizationClient authorizationClient = new AuthorizationClient(client);
-            ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(authorizationClient, clientConfiguration);
+            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
+            ISessionManager sessionManager = new MockSessionManager();
+            ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(httpClientFactory, clientConfiguration, sessionManager);
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
         }
@@ -32,12 +31,12 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClientConfiguration clientConfiguration = new ClientConfiguration();
             clientConfiguration.ClientId = "jBRiUPK2i9BuavWFsNZtyZt2";
-            clientConfiguration.ClientSecret = "";
+            clientConfiguration.ClientSecret = "5A-sGKns7k8h5APKCBTmGb60DjMYOG3j";
             clientConfiguration.Scope = "view_products:portablevendor";
             clientConfiguration.AuthorizationBaseAddress = "https://auth.sphere.io/";
-            HttpClient client = new HttpClient();
-            IAuthorizationClient authorizationClient = new AuthorizationClient(client);
-            ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(authorizationClient, clientConfiguration);
+            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
+            ISessionManager sessionManager = new MockSessionManager();
+            ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(httpClientFactory, clientConfiguration, sessionManager);
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
             Assert.Equal(clientConfiguration.Scope, token.Scope);
@@ -57,24 +56,52 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void ClientGeneration()
         {
             IClientConfiguration clientConfiguration = new ClientConfiguration();
-            HttpClient apiHttpClient = new HttpClient();
-            
-            
-            HttpClient authorizationHttpClient = new HttpClient();
-            IAuthorizationClient authorizationClient = new AuthorizationClient(authorizationHttpClient);
-            string username1 = "bob";
-            string password1 = "password";
-            ITokenProvider tokenProviderForClient1 = new PasswordTokenProvider(authorizationClient, clientConfiguration, username1, password1);
-            IApiClient apiClient1 = new ApiClient(apiHttpClient, tokenProviderForClient1);
-            IClient client1 = new Client(apiClient1);
+            ITokenProviderFactory tokenProviderFactory = new TokenProviderFactory();
+            ISessionManager sessionManager = new MockSessionManager();
+            AuthorizationHandler authorizationHandler = new AuthorizationHandler(sessionManager, tokenProviderFactory);
+            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(authorizationHandler);
+            ITokenProvider clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(httpClientFactory, clientConfiguration, sessionManager);
+            ITokenProvider passwordTokenProvider = new PasswordTokenProvider(httpClientFactory, clientConfiguration, sessionManager);
+            ITokenProvider anonymousTokenProvider = new AnonymousSessionTokenProvider(httpClientFactory, clientConfiguration, sessionManager);
+            tokenProviderFactory.RegisterTokenProvider(clientCredentialsTokenProvider);
+            tokenProviderFactory.RegisterTokenProvider(passwordTokenProvider);
+            tokenProviderFactory.RegisterTokenProvider(anonymousTokenProvider);
 
-            string username2 = "alice";
-            string password2 = "password";
-            ITokenProvider tokenProviderForClient2 = new PasswordTokenProvider(authorizationClient, clientConfiguration, username2, password2);
-            IApiClient apiClient2 = new ApiClient(apiHttpClient, tokenProviderForClient2);
-            IClient client2 = new Client(apiClient2);
+            sessionManager.Username = "bob";
+            sessionManager.Password = "password";
+            sessionManager.TokenFlow = TokenFlow.Password;
 
+            IClient commerceToolsClient = new Client(httpClientFactory);
+        }
 
+        public class MockHttpClientFactory : IHttpClientFactory
+        {
+            private AuthorizationHandler authorizationHandler;
+
+            public MockHttpClientFactory(AuthorizationHandler authorizationHandler)
+            {
+                this.authorizationHandler = authorizationHandler;
+            }
+
+            public HttpClient CreateClient(string name)
+            {
+                if (name == "api")
+                {
+                    HttpClient client = new HttpClient(this.authorizationHandler);
+                    return client;
+                }
+                return new HttpClient();
+            }
+        }
+
+        public class MockSessionManager : ISessionManager
+        {
+            public string ClientName { get; set; }
+            public Token Token { get; set; }
+            public TokenFlow TokenFlow { get; set; }
+            public string Username { get; set; }
+            public string Password { get; set; }
+            public string AnonymousId { get; set; }
         }
     }
 }

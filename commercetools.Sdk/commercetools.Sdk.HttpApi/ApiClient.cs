@@ -1,10 +1,9 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
-    using System;
-    using System.Net.Http;
-    using System.Threading.Tasks;
     using commercetools.Sdk.Domain;
     using Newtonsoft.Json;
+    using System.Net.Http;
+    using System.Threading.Tasks;
 
     public class ApiClient : IApiClient
     {

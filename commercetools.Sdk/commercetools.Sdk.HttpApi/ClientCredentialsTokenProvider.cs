@@ -7,33 +7,36 @@
 
     public class ClientCredentialsTokenProvider : ITokenProvider
     {
-        private IAuthorizationClient authorizationClient;
+        private IHttpClientFactory httpClientFactory;
         private IClientConfiguration clientConfiguration;
-        private Token token;
-        public TokenFlow TokenFlow = TokenFlow.ClientCredentials;
+        private ISessionManager sessionManager;
+        public TokenFlow TokenFlow => TokenFlow.ClientCredentials;
 
         // TODO Maybe move to a parent class, it might be the same as in other providers
         public Token Token
         {
             get
             {
+                Token token = this.sessionManager.Token;
                 if (token == null || token.Expired)
                 {
-                    this.token = GetTokenTask().Result;
-                }                
-                return this.token;
+                    token = GetTokenTask().Result;
+                    this.sessionManager.Token = token;
+                }
+                return token;
             }
         }
 
-        public ClientCredentialsTokenProvider(IAuthorizationClient authorizationClient, IClientConfiguration clientConfiguration)
+        public ClientCredentialsTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, ISessionManager sessionManager)
         {
-            this.authorizationClient = authorizationClient;
+            this.httpClientFactory = httpClientFactory;
             this.clientConfiguration = clientConfiguration;
+            this.sessionManager = sessionManager;
         }
 
         private async Task<Token> GetTokenTask()
         {
-            HttpClient client = this.authorizationClient.Client;
+            HttpClient client = this.httpClientFactory.CreateClient("auth");
             var result = await client.SendAsync(this.GetRequestMessage());
             string content = await result.Content.ReadAsStringAsync();
             // TODO ensure status 200
