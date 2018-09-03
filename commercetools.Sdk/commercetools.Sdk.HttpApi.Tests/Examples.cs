@@ -1,7 +1,9 @@
 namespace commercetools.Sdk.HttpApi.Tests
 {
     using commercetools.Sdk.Client;
+    using commercetools.Sdk.Domain;
     using commercetools.Sdk.HttpApi;
+    using System;
     using System.Net.Http;
     using Xunit;
 
@@ -15,7 +17,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             // TODO Move configuration to a separate file
             IClientConfiguration clientConfiguration = new ClientConfiguration();
             clientConfiguration.ClientId = "pV7ogtY4wPRWbqQUQJ5TBWmh";
-            clientConfiguration.ClientSecret = "s-mSeiIojSUUgiht5kAA_7cLvaxXrMl6";
+            clientConfiguration.ClientSecret = "";
             // this is the only scope defined on the client
             //clientConfiguration.Scope = "manage_project:portablevendor";
             clientConfiguration.AuthorizationBaseAddress = "https://auth.sphere.io/";
@@ -31,7 +33,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClientConfiguration clientConfiguration = new ClientConfiguration();
             clientConfiguration.ClientId = "jBRiUPK2i9BuavWFsNZtyZt2";
-            clientConfiguration.ClientSecret = "5A-sGKns7k8h5APKCBTmGb60DjMYOG3j";
+            clientConfiguration.ClientSecret = "";
             clientConfiguration.Scope = "view_products:portablevendor";
             clientConfiguration.AuthorizationBaseAddress = "https://auth.sphere.io/";
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
@@ -40,6 +42,26 @@ namespace commercetools.Sdk.HttpApi.Tests
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
             Assert.Equal(clientConfiguration.Scope, token.Scope);
+        }
+
+        [Fact]
+        public void GetPasswordToken()
+        {
+            // TODO Move configuration to a separate file
+            IClientConfiguration clientConfiguration = new ClientConfiguration();
+            clientConfiguration.ClientId = "jBRiUPK2i9BuavWFsNZtyZt2";
+            clientConfiguration.ClientSecret = "";
+            clientConfiguration.Scope = "view_products:portablevendor";
+            clientConfiguration.ProjectKey = "portablevendor";
+            clientConfiguration.AuthorizationBaseAddress = "https://auth.sphere.io/";
+            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
+            ISessionManager sessionManager = new MockSessionManager();
+            sessionManager.Username = "mick.jagger@commercetools.com";
+            sessionManager.Password = "st54e9m4";
+            sessionManager.TokenFlow = TokenFlow.Password;
+            ITokenProvider tokenProvider = new PasswordTokenProvider(httpClientFactory, clientConfiguration, sessionManager);
+            Token token = tokenProvider.Token;
+            Assert.NotNull(token.AccessToken);
         }
 
         [Fact]
@@ -53,9 +75,15 @@ namespace commercetools.Sdk.HttpApi.Tests
         }
 
         [Fact]
-        public void ClientGeneration()
+        public void GetCategoryByIdSingleClientCredentials()
         {
             IClientConfiguration clientConfiguration = new ClientConfiguration();
+            clientConfiguration.ClientId = "pV7ogtY4wPRWbqQUQJ5TBWmh";
+            clientConfiguration.ClientSecret = "";
+            clientConfiguration.Scope = "manage_project:portablevendor";
+            clientConfiguration.ProjectKey = "portablevendor";
+            clientConfiguration.AuthorizationBaseAddress = "https://auth.sphere.io/";
+            clientConfiguration.ApiBaseAddress = "https://api.sphere.io/";
             ITokenProviderFactory tokenProviderFactory = new TokenProviderFactory();
             ISessionManager sessionManager = new MockSessionManager();
             AuthorizationHandler authorizationHandler = new AuthorizationHandler(sessionManager, tokenProviderFactory);
@@ -66,12 +94,12 @@ namespace commercetools.Sdk.HttpApi.Tests
             tokenProviderFactory.RegisterTokenProvider(clientCredentialsTokenProvider);
             tokenProviderFactory.RegisterTokenProvider(passwordTokenProvider);
             tokenProviderFactory.RegisterTokenProvider(anonymousTokenProvider);
+            sessionManager.TokenFlow = TokenFlow.ClientCredentials;
 
-            sessionManager.Username = "bob";
-            sessionManager.Password = "password";
-            sessionManager.TokenFlow = TokenFlow.Password;
-
-            IClient commerceToolsClient = new Client(httpClientFactory);
+            IClient commerceToolsClient = new Client(httpClientFactory, clientConfiguration);
+            string categoryId = "f40fcd15-b1c2-4279-9cfa-f6083e6a2988";
+            Category category = commerceToolsClient.GetCategoryById(new Guid(categoryId));
+            Assert.Equal(categoryId, category.Id.ToString());
         }
 
         public class MockHttpClientFactory : IHttpClientFactory
@@ -87,6 +115,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             {
                 if (name == "api")
                 {
+                    this.authorizationHandler.InnerHandler = new HttpClientHandler();
                     HttpClient client = new HttpClient(this.authorizationHandler);
                     return client;
                 }

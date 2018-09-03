@@ -1,6 +1,7 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
     using Newtonsoft.Json;
+    using System;
     using System.Net.Http;
     using System.Threading.Tasks;
 
@@ -45,7 +46,14 @@
         private HttpRequestMessage GetRequestMessage()
         {
             HttpRequestMessage request = new HttpRequestMessage();
-            // TODO Implement; use username and password
+            string requestUri = this.clientConfiguration.AuthorizationBaseAddress + $"oauth/{this.clientConfiguration.ProjectKey}/customers/token?grant_type=password";
+            requestUri += $"&username={this.sessionManager.Username}";
+            requestUri += $"&password={this.sessionManager.Password}";
+            requestUri += $"&scope={this.clientConfiguration.Scope}";
+            request.RequestUri = new Uri(requestUri);
+            string credentials = $"{this.clientConfiguration.ClientId}:{this.clientConfiguration.ClientSecret}";
+            request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(credentials)));
+            request.Method = HttpMethod.Post;
             return request;
         }
     }

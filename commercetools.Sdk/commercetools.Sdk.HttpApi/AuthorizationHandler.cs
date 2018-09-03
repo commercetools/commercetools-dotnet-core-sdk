@@ -20,7 +20,7 @@
             TokenFlow tokenFlow = this.sessionManager.TokenFlow;
             ITokenProvider tokenProvider = this.tokenProviderFactory.GetTokenProviderByFlow(tokenFlow);
             Token token = tokenProvider.Token;
-            // TODO add token to request
+            request.Headers.Add("Authorization", $"Bearer {token.AccessToken}");
             return await base.SendAsync(request, cancellationToken);
         }
     }

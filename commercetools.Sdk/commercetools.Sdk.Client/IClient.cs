@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.Domain;
+using System;
 
 namespace commercetools.Sdk.Client
 {
@@ -7,6 +8,6 @@ namespace commercetools.Sdk.Client
         string Name { get; set; }
 
         // TODO just an example to start with, will be replaced with generics
-        Category GetCategoryById(int categoryId);
+        Category GetCategoryById(Guid categoryId);
     }
 }
