@@ -5,6 +5,7 @@ namespace commercetools.Sdk.HttpApi.Tests
     using commercetools.Sdk.HttpApi;
     using Microsoft.Extensions.Configuration;
     using System;
+    using System.Collections.Generic;
     using System.Net.Http;
     using Xunit;
 
@@ -19,8 +20,8 @@ namespace commercetools.Sdk.HttpApi.Tests
             // Resetting scope to an empty string for testing purposes
             clientConfiguration.Scope = "";
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
-            ISessionManager sessionManager = new MockSessionManager();
-            ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(httpClientFactory, clientConfiguration, sessionManager);
+            ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
+            ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(httpClientFactory, clientConfiguration, tokenStoreManager);
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
         }
@@ -30,8 +31,8 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClientConfiguration clientConfiguration = getClientConfiguration("ClientWithSmallerScope");
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
-            ISessionManager sessionManager = new MockSessionManager();
-            ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(httpClientFactory, clientConfiguration, sessionManager);
+            ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
+            ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(httpClientFactory, clientConfiguration, tokenStoreManager);
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
             Assert.Equal(clientConfiguration.Scope, token.Scope);
@@ -43,11 +44,10 @@ namespace commercetools.Sdk.HttpApi.Tests
             // TODO Move configuration to a separate file
             IClientConfiguration clientConfiguration = getClientConfiguration("ClientWithSmallerScope");
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
-            ISessionManager sessionManager = new MockSessionManager();
-            sessionManager.Username = "mick.jagger@commercetools.com";
-            sessionManager.Password = "st54e9m4";
-            sessionManager.TokenFlow = TokenFlow.Password;
-            ITokenProvider tokenProvider = new PasswordTokenProvider(httpClientFactory, clientConfiguration, sessionManager);
+            IUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
+            userCredentialsStoreManager.Username = "mick.jagger@commercetools.com";
+            userCredentialsStoreManager.Password = "st54e9m4";
+            ITokenProvider tokenProvider = new PasswordTokenProvider(httpClientFactory, clientConfiguration, userCredentialsStoreManager);
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
         }
@@ -55,23 +55,23 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void RegisterTokenFlows()
         {
-            ITokenFlowRegister tokenFlowRegister = new TokenFlowRegister();
-            tokenFlowRegister.RegisterFlow("client1", TokenFlow.ClientCredentials);
-            tokenFlowRegister.RegisterFlow("client2", TokenFlow.Password);
-            TokenFlow tokenFlowForClient1 = tokenFlowRegister.GetFlow("client1");
-            Assert.Equal(TokenFlow.ClientCredentials, tokenFlowForClient1);
+            ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
+            tokenFlowRegister.TokenFlow = TokenFlow.ClientCredentials;
+            Assert.Equal(TokenFlow.ClientCredentials, tokenFlowRegister.TokenFlow);
         }
 
         [Fact]
         public void GetCategoryByIdSingleClientCredentials()
         {
             IClientConfiguration clientConfiguration = getClientConfiguration("Client");
-            ISessionManager sessionManager = new MockSessionManager();
+            ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
             IHttpClientFactory httpClientFactoryAuth = new MockHttpClientFactory(null);
-            ITokenProvider clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(httpClientFactoryAuth, clientConfiguration, sessionManager);
-            AuthorizationHandler authorizationHandler = new AuthorizationHandler(clientCredentialsTokenProvider);
+            ITokenProvider clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(httpClientFactoryAuth, clientConfiguration, tokenStoreManager);
+            ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
+            tokenFlowRegister.TokenFlow = TokenFlow.ClientCredentials;
+            ITokenProviderFactory tokenProviderFactory = new TokenProviderFactory(new List<ITokenProvider>() { clientCredentialsTokenProvider });
+            AuthorizationHandler authorizationHandler = new AuthorizationHandler(tokenProviderFactory, tokenFlowRegister);
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(authorizationHandler);
-
             IClient commerceToolsClient = new Client(httpClientFactory, clientConfiguration);
             string categoryId = "f40fcd15-b1c2-4279-9cfa-f6083e6a2988";
             Category category = commerceToolsClient.GetCategoryById(new Guid(categoryId));
@@ -103,16 +103,6 @@ namespace commercetools.Sdk.HttpApi.Tests
                 }
                 return new HttpClient();
             }
-        }
-
-        public class MockSessionManager : ISessionManager
-        {
-            public string ClientName { get; set; }
-            public Token Token { get; set; }
-            public TokenFlow TokenFlow { get; set; }
-            public string Username { get; set; }
-            public string Password { get; set; }
-            public string AnonymousId { get; set; }
         }
     }
 }

@@ -10,28 +10,28 @@
         private IHttpClientFactory httpClientFactory;
         private IClientConfiguration clientConfiguration;
         public TokenFlow TokenFlow => TokenFlow.Password;
-        private ISessionManager sessionManager;
+        private IUserCredentialsStoreManager userCredentialsManager;
 
         // TODO Maybe move to a parent class, it might be the same as in other providers
         public Token Token
         {
             get
             {
-                Token token = this.sessionManager.Token;
+                Token token = this.userCredentialsManager.Token;
                 if (token == null || token.Expired)
                 {
                     token = GetTokenTask().Result;
-                    this.sessionManager.Token = token;
+                    this.userCredentialsManager.Token = token;
                 }
                 return token;
             }
         }
 
-        public PasswordTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, ISessionManager sessionManager)
+        public PasswordTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, IUserCredentialsStoreManager userCredentialsStoreManager)
         {
             this.httpClientFactory = httpClientFactory;
             this.clientConfiguration = clientConfiguration;
-            this.sessionManager = sessionManager;
+            this.userCredentialsManager = userCredentialsStoreManager;
         }
 
         private async Task<Token> GetTokenTask()
@@ -47,8 +47,8 @@
         {
             HttpRequestMessage request = new HttpRequestMessage();
             string requestUri = this.clientConfiguration.AuthorizationBaseAddress + $"oauth/{this.clientConfiguration.ProjectKey}/customers/token?grant_type=password";
-            requestUri += $"&username={this.sessionManager.Username}";
-            requestUri += $"&password={this.sessionManager.Password}";
+            requestUri += $"&username={this.userCredentialsManager.Username}";
+            requestUri += $"&password={this.userCredentialsManager.Password}";
             requestUri += $"&scope={this.clientConfiguration.Scope}";
             request.RequestUri = new Uri(requestUri);
             string credentials = $"{this.clientConfiguration.ClientId}:{this.clientConfiguration.ClientSecret}";

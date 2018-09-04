@@ -22,10 +22,12 @@ namespace commercetools.Sdk.HttpApi.MvcExample
             ClientConfiguration clientConfiguration = this.configuration.GetSection("Client").Get<ClientConfiguration>();          
             services.AddSingleton<IClientConfiguration>(clientConfiguration);
 
-            services.AddHttpContextAccessor();
-            services.AddSingleton<ISessionManager, SessionManager>();
+            services.AddSingleton<ITokenStoreManager, InMemoryTokenStoreManager>();
             services.AddSingleton<ITokenProvider, ClientCredentialsTokenProvider>();
-            
+            services.AddSingleton<ITokenProviderFactory, TokenProviderFactory>();
+            ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
+            tokenFlowRegister.TokenFlow = TokenFlow.ClientCredentials;
+            services.AddSingleton<ITokenFlowRegister>(tokenFlowRegister);
             services.AddSingleton<AuthorizationHandler>();           
 
             services.AddHttpClient("auth");
@@ -34,7 +36,6 @@ namespace commercetools.Sdk.HttpApi.MvcExample
             services.AddSingleton<IClient, Client>();            
 
             services.AddMvc();
-            services.AddSession();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -43,8 +44,6 @@ namespace commercetools.Sdk.HttpApi.MvcExample
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseSession();
 
             app.UseMvcWithDefaultRoute();
         }

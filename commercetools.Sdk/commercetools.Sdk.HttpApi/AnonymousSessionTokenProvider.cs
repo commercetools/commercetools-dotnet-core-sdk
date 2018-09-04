@@ -8,7 +8,7 @@
     {
         private IHttpClientFactory httpClientFactory;
         private IClientConfiguration clientConfiguration;
-        private ISessionManager sessionManager;
+        private IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager;
 
         public TokenFlow TokenFlow => TokenFlow.AnonymousSession;
 
@@ -17,21 +17,21 @@
         {
             get
             {
-                Token token = this.sessionManager.Token;
+                Token token = this.anonymousCredentialsStoreManager.Token;
                 if (token == null || token.Expired)
                 {
                     token = GetTokenTask().Result;
-                    this.sessionManager.Token = token;
+                    this.anonymousCredentialsStoreManager.Token = token;
                 }
                 return token;
             }
         }
 
-        public AnonymousSessionTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, ISessionManager sessionManager)
+        public AnonymousSessionTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager)
         {
             this.httpClientFactory = httpClientFactory;
             this.clientConfiguration = clientConfiguration;
-            this.sessionManager = sessionManager;
+            this.anonymousCredentialsStoreManager = anonymousCredentialsStoreManager;
         }
 
         private async Task<Token> GetTokenTask()

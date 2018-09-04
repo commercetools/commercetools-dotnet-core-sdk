@@ -9,7 +9,7 @@
     {
         private IHttpClientFactory httpClientFactory;
         private IClientConfiguration clientConfiguration;
-        private ISessionManager sessionManager;
+        private ITokenStoreManager tokenStoreManager;
         public TokenFlow TokenFlow => TokenFlow.ClientCredentials;
 
         // TODO Maybe move to a parent class, it might be the same as in other providers
@@ -17,21 +17,21 @@
         {
             get
             {
-                Token token = this.sessionManager.Token;
+                Token token = this.tokenStoreManager.Token;
                 if (token == null || token.Expired)
                 {
                     token = GetTokenTask().Result;
-                    this.sessionManager.Token = token;
+                    this.tokenStoreManager.Token = token;
                 }
                 return token;
             }
         }
 
-        public ClientCredentialsTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, ISessionManager sessionManager)
+        public ClientCredentialsTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, ITokenStoreManager tokenStoreManager)
         {
             this.httpClientFactory = httpClientFactory;
             this.clientConfiguration = clientConfiguration;
-            this.sessionManager = sessionManager;
+            this.tokenStoreManager = tokenStoreManager;
         }
 
         private async Task<Token> GetTokenTask()

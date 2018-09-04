@@ -2,8 +2,6 @@
 {
     public interface ITokenFlowRegister
     {
-        void RegisterFlow(string clientName, TokenFlow tokenFlow);
-
-        TokenFlow GetFlow(string clientName);
+        TokenFlow TokenFlow { get; set; }
     }
 }
