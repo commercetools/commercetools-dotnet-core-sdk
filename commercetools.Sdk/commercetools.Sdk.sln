@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.HttpApi",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.HttpApi.Tests", "commercetools.Sdk.HttpApi.Tests\commercetools.Sdk.HttpApi.Tests.csproj", "{D5D8447E-9C5A-40C1-AE23-8876AE8E4110}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.Client", "commercetools.Sdk.Client\commercetools.Sdk.Client.csproj", "{9B105327-3D7D-4857-9811-50F355A4DC2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Client", "commercetools.Sdk.Client\commercetools.Sdk.Client.csproj", "{9B105327-3D7D-4857-9811-50F355A4DC2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.HttpApi.MvcExample", "commercetools.Sdk.HttpApi.MvcExample\commercetools.Sdk.HttpApi.MvcExample.csproj", "{89518E0D-DF0C-452A-B638-583BF3CB50B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{9B105327-3D7D-4857-9811-50F355A4DC2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B105327-3D7D-4857-9811-50F355A4DC2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B105327-3D7D-4857-9811-50F355A4DC2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89518E0D-DF0C-452A-B638-583BF3CB50B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89518E0D-DF0C-452A-B638-583BF3CB50B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89518E0D-DF0C-452A-B638-583BF3CB50B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89518E0D-DF0C-452A-B638-583BF3CB50B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

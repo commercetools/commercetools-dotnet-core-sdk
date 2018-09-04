@@ -6,19 +6,15 @@
 
     public class AuthorizationHandler : DelegatingHandler
     {
-        private ISessionManager sessionManager;
-        private ITokenProviderFactory tokenProviderFactory;
+        private ITokenProvider tokenProvider;
 
-        public AuthorizationHandler(ISessionManager sessionManager, ITokenProviderFactory tokenProviderFactory)
+        public AuthorizationHandler(ITokenProvider tokenProvider)
         {
-            this.sessionManager = sessionManager;
-            this.tokenProviderFactory = tokenProviderFactory;
+            this.tokenProvider = tokenProvider;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            TokenFlow tokenFlow = this.sessionManager.TokenFlow;
-            ITokenProvider tokenProvider = this.tokenProviderFactory.GetTokenProviderByFlow(tokenFlow);
             Token token = tokenProvider.Token;
             request.Headers.Add("Authorization", $"Bearer {token.AccessToken}");
             return await base.SendAsync(request, cancellationToken);

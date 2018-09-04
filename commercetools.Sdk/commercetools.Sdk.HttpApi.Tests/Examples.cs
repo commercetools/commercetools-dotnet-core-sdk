@@ -3,6 +3,7 @@ namespace commercetools.Sdk.HttpApi.Tests
     using commercetools.Sdk.Client;
     using commercetools.Sdk.Domain;
     using commercetools.Sdk.HttpApi;
+    using Microsoft.Extensions.Configuration;
     using System;
     using System.Net.Http;
     using Xunit;
@@ -14,13 +15,9 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetClientCredentialsToken()
         {
-            // TODO Move configuration to a separate file
-            IClientConfiguration clientConfiguration = new ClientConfiguration();
-            clientConfiguration.ClientId = "pV7ogtY4wPRWbqQUQJ5TBWmh";
-            clientConfiguration.ClientSecret = "";
-            // this is the only scope defined on the client
-            //clientConfiguration.Scope = "manage_project:portablevendor";
-            clientConfiguration.AuthorizationBaseAddress = "https://auth.sphere.io/";
+            IClientConfiguration clientConfiguration = getClientConfiguration("Client");
+            // Resetting scope to an empty string for testing purposes
+            clientConfiguration.Scope = "";
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
             ISessionManager sessionManager = new MockSessionManager();
             ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(httpClientFactory, clientConfiguration, sessionManager);
@@ -31,11 +28,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetClientCredentialsTokenWithScope()
         {
-            IClientConfiguration clientConfiguration = new ClientConfiguration();
-            clientConfiguration.ClientId = "jBRiUPK2i9BuavWFsNZtyZt2";
-            clientConfiguration.ClientSecret = "";
-            clientConfiguration.Scope = "view_products:portablevendor";
-            clientConfiguration.AuthorizationBaseAddress = "https://auth.sphere.io/";
+            IClientConfiguration clientConfiguration = getClientConfiguration("ClientWithSmallerScope");
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
             ISessionManager sessionManager = new MockSessionManager();
             ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(httpClientFactory, clientConfiguration, sessionManager);
@@ -48,12 +41,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void GetPasswordToken()
         {
             // TODO Move configuration to a separate file
-            IClientConfiguration clientConfiguration = new ClientConfiguration();
-            clientConfiguration.ClientId = "jBRiUPK2i9BuavWFsNZtyZt2";
-            clientConfiguration.ClientSecret = "";
-            clientConfiguration.Scope = "view_products:portablevendor";
-            clientConfiguration.ProjectKey = "portablevendor";
-            clientConfiguration.AuthorizationBaseAddress = "https://auth.sphere.io/";
+            IClientConfiguration clientConfiguration = getClientConfiguration("ClientWithSmallerScope");
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
             ISessionManager sessionManager = new MockSessionManager();
             sessionManager.Username = "mick.jagger@commercetools.com";
@@ -77,29 +65,23 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetCategoryByIdSingleClientCredentials()
         {
-            IClientConfiguration clientConfiguration = new ClientConfiguration();
-            clientConfiguration.ClientId = "pV7ogtY4wPRWbqQUQJ5TBWmh";
-            clientConfiguration.ClientSecret = "";
-            clientConfiguration.Scope = "manage_project:portablevendor";
-            clientConfiguration.ProjectKey = "portablevendor";
-            clientConfiguration.AuthorizationBaseAddress = "https://auth.sphere.io/";
-            clientConfiguration.ApiBaseAddress = "https://api.sphere.io/";
-            ITokenProviderFactory tokenProviderFactory = new TokenProviderFactory();
+            IClientConfiguration clientConfiguration = getClientConfiguration("Client");
             ISessionManager sessionManager = new MockSessionManager();
-            AuthorizationHandler authorizationHandler = new AuthorizationHandler(sessionManager, tokenProviderFactory);
+            IHttpClientFactory httpClientFactoryAuth = new MockHttpClientFactory(null);
+            ITokenProvider clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(httpClientFactoryAuth, clientConfiguration, sessionManager);
+            AuthorizationHandler authorizationHandler = new AuthorizationHandler(clientCredentialsTokenProvider);
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(authorizationHandler);
-            ITokenProvider clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(httpClientFactory, clientConfiguration, sessionManager);
-            ITokenProvider passwordTokenProvider = new PasswordTokenProvider(httpClientFactory, clientConfiguration, sessionManager);
-            ITokenProvider anonymousTokenProvider = new AnonymousSessionTokenProvider(httpClientFactory, clientConfiguration, sessionManager);
-            tokenProviderFactory.RegisterTokenProvider(clientCredentialsTokenProvider);
-            tokenProviderFactory.RegisterTokenProvider(passwordTokenProvider);
-            tokenProviderFactory.RegisterTokenProvider(anonymousTokenProvider);
-            sessionManager.TokenFlow = TokenFlow.ClientCredentials;
 
             IClient commerceToolsClient = new Client(httpClientFactory, clientConfiguration);
             string categoryId = "f40fcd15-b1c2-4279-9cfa-f6083e6a2988";
             Category category = commerceToolsClient.GetCategoryById(new Guid(categoryId));
             Assert.Equal(categoryId, category.Id.ToString());
+        }
+
+        private ClientConfiguration getClientConfiguration(string clientSettings)
+        {
+            var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            return config.GetSection(clientSettings).Get<ClientConfiguration>();
         }
 
         public class MockHttpClientFactory : IHttpClientFactory
