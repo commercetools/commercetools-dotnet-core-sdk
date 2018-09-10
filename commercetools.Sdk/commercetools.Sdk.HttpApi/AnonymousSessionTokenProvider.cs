@@ -1,52 +1,31 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
-    using Newtonsoft.Json;
+    using System;
     using System.Net.Http;
-    using System.Threading.Tasks;
 
-    public class AnonymousSessionTokenProvider : ITokenProvider
+    public class AnonymousSessionTokenProvider : TokenProvider, ITokenProvider
     {
-        private IHttpClientFactory httpClientFactory;
-        private IClientConfiguration clientConfiguration;
         private IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager;
+        public TokenFlow TokenFlow => TokenFlow.AnonymousSession;        
 
-        public TokenFlow TokenFlow => TokenFlow.AnonymousSession;
-
-        // TODO Maybe move to a parent class, it might be the same as in other providers
-        public Token Token
+        public AnonymousSessionTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager) : base(httpClientFactory, clientConfiguration, anonymousCredentialsStoreManager)
         {
-            get
-            {
-                Token token = this.anonymousCredentialsStoreManager.Token;
-                if (token == null || token.Expired)
-                {
-                    token = GetTokenTask().Result;
-                    this.anonymousCredentialsStoreManager.Token = token;
-                }
-                return token;
-            }
-        }
-
-        public AnonymousSessionTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager)
-        {
-            this.httpClientFactory = httpClientFactory;
-            this.clientConfiguration = clientConfiguration;
             this.anonymousCredentialsStoreManager = anonymousCredentialsStoreManager;
         }
 
-        private async Task<Token> GetTokenTask()
-        {
-            HttpClient client = this.httpClientFactory.CreateClient("auth");
-            var result = await client.SendAsync(this.GetRequestMessage());
-            string content = await result.Content.ReadAsStringAsync();
-            // TODO ensure status 200
-            return JsonConvert.DeserializeObject<Token>(content);
-        }
-
-        private HttpRequestMessage GetRequestMessage()
+        public override HttpRequestMessage GetRequestMessage()
         {
             HttpRequestMessage request = new HttpRequestMessage();
-            // TODO Implement; use anonymous id
+            string requestUri = this.ClientConfiguration.AuthorizationBaseAddress + $"oauth/{this.ClientConfiguration.ProjectKey}/anonymous/token?grant_type=client_credentials";
+            requestUri += $"&scope={this.ClientConfiguration.Scope}";
+            if (!string.IsNullOrEmpty(this.anonymousCredentialsStoreManager.AnonymousId))
+            { 
+                requestUri += $"&anonymous_id={this.anonymousCredentialsStoreManager.AnonymousId}";
+            }
+            request.RequestUri = new Uri(requestUri);
+            string credentials = $"{this.ClientConfiguration.ClientId}:{this.ClientConfiguration.ClientSecret}";
+            request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(credentials)));
+            request.Method = HttpMethod.Post;
             return request;
         }
     }

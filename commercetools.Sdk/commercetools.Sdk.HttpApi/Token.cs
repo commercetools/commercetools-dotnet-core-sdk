@@ -22,6 +22,9 @@
         [JsonProperty("scope")]
         public string Scope { get; set; }
 
+        [JsonProperty("refresh_token")]
+        public string RefreshToken { get; set; }
+
         public DateTime CreationDate { get; private set; }
 
         public bool Expired

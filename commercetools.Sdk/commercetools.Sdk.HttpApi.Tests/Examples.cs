@@ -6,6 +6,7 @@ namespace commercetools.Sdk.HttpApi.Tests
     using Microsoft.Extensions.Configuration;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net.Http;
     using Xunit;
 
@@ -41,7 +42,6 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetPasswordToken()
         {
-            // TODO Move configuration to a separate file
             IClientConfiguration clientConfiguration = getClientConfiguration("ClientWithSmallerScope");
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
             IUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
@@ -53,8 +53,32 @@ namespace commercetools.Sdk.HttpApi.Tests
         }
 
         [Fact]
+        public void GetAnonymousTokenNoIdProvided()
+        {
+            IClientConfiguration clientConfiguration = getClientConfiguration("ClientWithAnonymousScope");
+            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
+            IAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
+            ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(httpClientFactory, clientConfiguration, anonymousStoreManager);
+            Token token = tokenProvider.Token;
+            Assert.NotNull(token.AccessToken);
+        }
+
+        [Fact]
+        public void GetAnonymousTokenIdProvided()
+        {
+            IClientConfiguration clientConfiguration = getClientConfiguration("ClientWithAnonymousScope");
+            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
+            IAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
+            anonymousStoreManager.AnonymousId = RandomString(10);
+            ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(httpClientFactory, clientConfiguration, anonymousStoreManager);
+            Token token = tokenProvider.Token;
+            Assert.NotNull(token.AccessToken);
+        }
+
+        [Fact]
         public void RegisterTokenFlows()
         {
+            // TODO Remove this tests since now it is very simple and there is no business logic
             ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
             tokenFlowRegister.TokenFlow = TokenFlow.ClientCredentials;
             Assert.Equal(TokenFlow.ClientCredentials, tokenFlowRegister.TokenFlow);
@@ -103,6 +127,14 @@ namespace commercetools.Sdk.HttpApi.Tests
                 }
                 return new HttpClient();
             }
+        }
+
+        private static Random random = new Random();
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }
