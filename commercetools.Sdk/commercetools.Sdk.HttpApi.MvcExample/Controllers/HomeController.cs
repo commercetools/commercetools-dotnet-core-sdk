@@ -19,7 +19,7 @@ namespace commercetools.Sdk.HttpApi.MvcExample.Controllers
 
         public IActionResult Index()
         {
-            Category category = client.GetCategoryById(new Guid("f40fcd15-b1c2-4279-9cfa-f6083e6a2988"));
+            Category category = client.GetByIdAsync<Category>(new Guid("f40fcd15-b1c2-4279-9cfa-f6083e6a2988")).Result;
             return Content(category.Id);
         }
     }

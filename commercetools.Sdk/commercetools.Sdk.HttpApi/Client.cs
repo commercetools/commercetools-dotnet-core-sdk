@@ -13,35 +13,30 @@
         public string Name { get; set; }
         private IHttpClientFactory httpClientFactory;
         private HttpClient client;
-        private IClientConfiguration clientConfiguration;
+        private IRequestBuilder requestBuilder;
 
-        public Category GetCategoryById(Guid categoryId)
+        public async Task<T> GetByIdAsync<T>(Guid guid)
         {
-            return GetCategoryByIdTask(categoryId).Result;
+            return await SendRequest<T>(this.requestBuilder.GetRequestMessageById<T>(guid));
         }
 
-        private async Task<Category> GetCategoryByIdTask(Guid categoryId)
+        public async Task<T> GetByKeyAsync<T>(string key)
         {
-            var result = await this.client.SendAsync(this.GetRequestMessage(categoryId));
+            return await SendRequest<T>(this.requestBuilder.GetRequestMessageByKey<T>(key));
+        }
+
+        private async Task<T> SendRequest<T>(HttpRequestMessage requestMessage)
+        {
+            var result = await this.client.SendAsync(requestMessage);
             string content = await result.Content.ReadAsStringAsync();
-            // TODO Do not use Newtonsoft here directly, but move it to another project
-            return JsonConvert.DeserializeObject<Category>(content);
+            return JsonConvert.DeserializeObject<T>(content);
         }
 
-        private HttpRequestMessage GetRequestMessage(Guid id)
-        {
-            HttpRequestMessage request = new HttpRequestMessage();
-            string requestUri = this.clientConfiguration.ApiBaseAddress + $"{this.clientConfiguration.ProjectKey}/categories/{id}";
-            request.RequestUri = new Uri(requestUri);
-            request.Method = HttpMethod.Get;
-            return request;
-        }
-
-        public Client(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration)
-        {
+        public Client(IHttpClientFactory httpClientFactory, IRequestBuilder requestBuilder)
+        {            
             this.httpClientFactory = httpClientFactory;
             this.client = this.httpClientFactory.CreateClient("api");
-            this.clientConfiguration = clientConfiguration;
+            this.requestBuilder = requestBuilder;
         }
     }
 }

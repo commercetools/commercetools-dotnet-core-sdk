@@ -1,5 +1,6 @@
 ﻿using commercetools.Sdk.Domain;
 using System;
+using System.Threading.Tasks;
 
 namespace commercetools.Sdk.Client
 {
@@ -7,7 +8,7 @@ namespace commercetools.Sdk.Client
     {
         string Name { get; set; }
 
-        // TODO just an example to start with, will be replaced with generics
-        Category GetCategoryById(Guid categoryId);
+        Task<T> GetByIdAsync<T>(Guid id);
+        Task<T> GetByKeyAsync<T>(string key);
     }
 }
