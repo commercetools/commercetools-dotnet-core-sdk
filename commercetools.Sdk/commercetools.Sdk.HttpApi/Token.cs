@@ -31,7 +31,10 @@
         {
             get
             {
-                // TODO Implement based on creation time
+                if (CreationDate.AddSeconds(ExpiresIn) < DateTime.Now)
+                {
+                    return true;
+                }
                 return false;
             }
         }

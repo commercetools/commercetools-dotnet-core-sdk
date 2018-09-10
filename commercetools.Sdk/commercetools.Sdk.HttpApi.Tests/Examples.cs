@@ -10,10 +10,10 @@ namespace commercetools.Sdk.HttpApi.Tests
     using System.Net.Http;
     using Xunit;
 
+    // TODO Thing of better names for tests
+    // These are not real unit tests, but something like "integration tests" and a way to test code in a simple way
     public class Examples
-    {
-        // These are not real unit tests, but something like "integration tests" and a way to test code in a simple way
-
+    {      
         [Fact]
         public void GetClientCredentialsToken()
         {
@@ -73,6 +73,23 @@ namespace commercetools.Sdk.HttpApi.Tests
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(httpClientFactory, clientConfiguration, anonymousStoreManager);
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
+        }
+
+        [Fact]
+        public void RefreshTokenPasswordFlow()
+        {
+            IClientConfiguration clientConfiguration = getClientConfiguration("ClientWithSmallerScope");
+            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
+            IUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
+            userCredentialsStoreManager.Username = "mick.jagger@commercetools.com";
+            userCredentialsStoreManager.Password = "st54e9m4";
+            ITokenProvider tokenProvider = new PasswordTokenProvider(httpClientFactory, clientConfiguration, userCredentialsStoreManager);
+            Token token = tokenProvider.Token;
+            string initialAccessToken = token.AccessToken;
+            // TODO Find a better way to test this (with mock objects perhaps)
+            token.ExpiresIn = 0;
+            token = tokenProvider.Token;
+            Assert.NotEqual(token.AccessToken, initialAccessToken);
         }
 
         [Fact]
