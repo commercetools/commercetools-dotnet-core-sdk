@@ -1,5 +1,6 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
+    using commercetools.Sdk.Serialization;
     using System;
     using System.Net.Http;
 
@@ -8,7 +9,7 @@
         private ITokenStoreManager tokenStoreManager;
         public TokenFlow TokenFlow => TokenFlow.ClientCredentials;        
 
-        public ClientCredentialsTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, ITokenStoreManager tokenStoreManager) : base(httpClientFactory, clientConfiguration, tokenStoreManager)
+        public ClientCredentialsTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, ITokenStoreManager tokenStoreManager, ISerializerService serializerService) : base(httpClientFactory, clientConfiguration, tokenStoreManager, serializerService)
         {
             this.tokenStoreManager = tokenStoreManager;
         }

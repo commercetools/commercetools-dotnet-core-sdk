@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using System;
-
-namespace commercetools.Sdk.HttpApi
+﻿namespace commercetools.Sdk.HttpApi
 {
+    using commercetools.Sdk.Serialization;
+    using Microsoft.AspNetCore.Http;
+
     public class SessionAnonymousCredentialsStoreManager : SessionTokenStoreManager, IAnonymousCredentialsStoreManager
     {
-        public SessionAnonymousCredentialsStoreManager(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public SessionAnonymousCredentialsStoreManager(IHttpContextAccessor httpContextAccessor, ISerializerService serializerService) : base(httpContextAccessor, serializerService)
         {
         }
 

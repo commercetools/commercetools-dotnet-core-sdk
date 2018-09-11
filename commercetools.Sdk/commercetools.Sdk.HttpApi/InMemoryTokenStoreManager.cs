@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using System;
-
-namespace commercetools.Sdk.HttpApi
+﻿namespace commercetools.Sdk.HttpApi
 {
     public class InMemoryTokenStoreManager : ITokenStoreManager
     {

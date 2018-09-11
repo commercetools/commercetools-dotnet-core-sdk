@@ -1,8 +1,7 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
     using commercetools.Sdk.Client;
-    using commercetools.Sdk.Domain;
-    using Newtonsoft.Json;
+    using commercetools.Sdk.Serialization;
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -14,6 +13,7 @@
         private IHttpClientFactory httpClientFactory;
         private HttpClient client;
         private IRequestBuilder requestBuilder;
+        private ISerializerService serializerService;
 
         public async Task<T> GetByIdAsync<T>(Guid guid)
         {
@@ -29,7 +29,7 @@
         {
             var result = await this.client.SendAsync(requestMessage);
             string content = await result.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(content);
+            return this.serializerService.Deserialize<T>(content);
         }
 
         public async Task<T> Execute<T>(ICommand command)
@@ -38,11 +38,12 @@
             return await SendRequest<T>(this.requestBuilder.GetRequestMessage<T>((IHttpApiCommand)command));
         }
 
-        public Client(IHttpClientFactory httpClientFactory, IRequestBuilder requestBuilder)
+        public Client(IHttpClientFactory httpClientFactory, IRequestBuilder requestBuilder, ISerializerService serializerService)
         {            
             this.httpClientFactory = httpClientFactory;
             this.client = this.httpClientFactory.CreateClient("api");
             this.requestBuilder = requestBuilder;
+            this.serializerService = serializerService;
         }
     }
 }

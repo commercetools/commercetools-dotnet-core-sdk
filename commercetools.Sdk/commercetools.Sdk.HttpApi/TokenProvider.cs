@@ -1,24 +1,24 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace commercetools.Sdk.HttpApi
+﻿namespace commercetools.Sdk.HttpApi
 {
+    using commercetools.Sdk.Serialization;
+    using System;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+
     public abstract class TokenProvider
     {
         private ITokenStoreManager tokenStoreManager;
+        private ISerializerService serializerService;
 
         protected IHttpClientFactory HttpClientFactory { get; }
         protected IClientConfiguration ClientConfiguration { get; }
 
-        public TokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, ITokenStoreManager tokenStoreManager)
+        public TokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, ITokenStoreManager tokenStoreManager, ISerializerService serializerService)
         {
             this.HttpClientFactory = httpClientFactory;
             this.ClientConfiguration = clientConfiguration;
             this.tokenStoreManager = tokenStoreManager;
+            this.serializerService = serializerService;
         }
 
         public Token Token
@@ -48,7 +48,7 @@ namespace commercetools.Sdk.HttpApi
             var result = await client.SendAsync(this.GetRequestMessage());
             string content = await result.Content.ReadAsStringAsync();
             // TODO ensure status 200
-            return JsonConvert.DeserializeObject<Token>(content);
+            return this.serializerService.Deserialize<Token>(content);
         }
 
         private HttpRequestMessage GetRefreshTokenRequestMessage()

@@ -1,5 +1,6 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
+    using commercetools.Sdk.Serialization;
     using System;
     using System.Net.Http;
 
@@ -8,7 +9,7 @@
         private IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager;
         public TokenFlow TokenFlow => TokenFlow.AnonymousSession;        
 
-        public AnonymousSessionTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager) : base(httpClientFactory, clientConfiguration, anonymousCredentialsStoreManager)
+        public AnonymousSessionTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager, ISerializerService serializerService) : base(httpClientFactory, clientConfiguration, anonymousCredentialsStoreManager, serializerService)
         {
             this.anonymousCredentialsStoreManager = anonymousCredentialsStoreManager;
         }
