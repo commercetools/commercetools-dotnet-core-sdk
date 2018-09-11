@@ -32,6 +32,12 @@
             return JsonConvert.DeserializeObject<T>(content);
         }
 
+        public async Task<T> Execute<T>(ICommand command)
+        {
+            // TODO See how to better cast between interfaces and do some checkss
+            return await SendRequest<T>(this.requestBuilder.GetRequestMessage<T>((IHttpApiCommand)command));
+        }
+
         public Client(IHttpClientFactory httpClientFactory, IRequestBuilder requestBuilder)
         {            
             this.httpClientFactory = httpClientFactory;

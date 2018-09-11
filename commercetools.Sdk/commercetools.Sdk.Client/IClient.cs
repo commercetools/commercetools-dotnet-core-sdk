@@ -8,7 +8,11 @@ namespace commercetools.Sdk.Client
     {
         string Name { get; set; }
 
+        Task<T> Execute<T>(ICommand command);
+
+        // TODO Remove these concrete commands in favor of the generic one
         Task<T> GetByIdAsync<T>(Guid id);
         Task<T> GetByKeyAsync<T>(string key);
+        
     }
 }
