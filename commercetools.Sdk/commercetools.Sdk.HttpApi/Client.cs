@@ -2,35 +2,26 @@
 {
     using commercetools.Sdk.Client;
     using commercetools.Sdk.Serialization;
-    using System;
     using System.Net.Http;
     using System.Threading.Tasks;
 
     // commerce tools client, do not mistake for HttpClient
     public class Client : IClient
     {
-        public string Name { get; set; }
-        private IHttpClientFactory httpClientFactory;
-        private HttpClient client;
-        private IRequestBuilder requestBuilder;
-        private ISerializerService serializerService;
+        private readonly HttpClient client;
+        private readonly IHttpClientFactory httpClientFactory;
+        private readonly IRequestBuilder requestBuilder;
+        private readonly ISerializerService serializerService;
 
-        public async Task<T> GetByIdAsync<T>(Guid guid)
+        public Client(IHttpClientFactory httpClientFactory, IRequestBuilder requestBuilder, ISerializerService serializerService)
         {
-            return await SendRequest<T>(this.requestBuilder.GetRequestMessageById<T>(guid));
+            this.httpClientFactory = httpClientFactory;
+            this.client = this.httpClientFactory.CreateClient(this.Name);
+            this.requestBuilder = requestBuilder;
+            this.serializerService = serializerService;
         }
 
-        public async Task<T> GetByKeyAsync<T>(string key)
-        {
-            return await SendRequest<T>(this.requestBuilder.GetRequestMessageByKey<T>(key));
-        }
-
-        private async Task<T> SendRequest<T>(HttpRequestMessage requestMessage)
-        {
-            var result = await this.client.SendAsync(requestMessage);
-            string content = await result.Content.ReadAsStringAsync();
-            return this.serializerService.Deserialize<T>(content);
-        }
+        public string Name { get; set; } = "api";
 
         public async Task<T> Execute<T>(ICommand command)
         {
@@ -38,12 +29,11 @@
             return await SendRequest<T>(this.requestBuilder.GetRequestMessage<T>((IHttpApiCommand)command));
         }
 
-        public Client(IHttpClientFactory httpClientFactory, IRequestBuilder requestBuilder, ISerializerService serializerService)
+        private async Task<T> SendRequest<T>(HttpRequestMessage requestMessage)
         {
-            this.httpClientFactory = httpClientFactory;
-            this.client = this.httpClientFactory.CreateClient("api");
-            this.requestBuilder = requestBuilder;
-            this.serializerService = serializerService;
+            var result = await this.client.SendAsync(requestMessage);
+            string content = await result.Content.ReadAsStringAsync();
+            return this.serializerService.Deserialize<T>(content);
         }
     }
 }

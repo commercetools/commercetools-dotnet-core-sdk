@@ -28,7 +28,6 @@ namespace commercetools.Sdk.HttpApi.Tests
             
             IClient commerceToolsClient = new Client(httpClientFactory, requestBuilder, serializerService);
             string categoryId = "2bafc816-4223-4ff0-ac8a-0f08a8f29fd6";
-            //Category category = commerceToolsClient.GetByIdAsync<Category>(new Guid(categoryId)).Result;
             Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand(new Guid(categoryId))).Result;
             Assert.Equal(categoryId, category.Id.ToString());
         }
@@ -50,7 +49,6 @@ namespace commercetools.Sdk.HttpApi.Tests
             
             IClient commerceToolsClient = new Client(httpClientFactory, requestBuilder, serializerService);
             string categoryKey = "c2";
-            //Category category = commerceToolsClient.GetByKeyAsync<Category>(categoryKey).Result;
             Category category = commerceToolsClient.Execute<Category>(new GetByKeyCommand(categoryKey)).Result;
             Assert.Equal(categoryKey, category.Key.ToString());
         }
