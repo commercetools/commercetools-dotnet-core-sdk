@@ -1,6 +1,8 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    public class LocalizedString
+    using System.Collections.Generic;
+
+    public class LocalizedString : Dictionary<string, string>
     {
     }
 }

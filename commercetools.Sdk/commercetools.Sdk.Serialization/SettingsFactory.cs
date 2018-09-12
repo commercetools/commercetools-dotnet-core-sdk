@@ -5,12 +5,12 @@ using System;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class SettingsFactory
+    public class JsonSerializerSettingsFactory
     {
-        public static JsonSerializerSettings Create(Type obj)
+        public static JsonSerializerSettings Create(Type type)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings();
-            if (obj == typeof(Token))
+            if (type == typeof(Token))
             {
                 DefaultContractResolver contractResolver = new DefaultContractResolver
                 {

@@ -1,8 +1,11 @@
 ﻿using commercetools.Sdk.Client;
+using commercetools.Sdk.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using System;
 
 namespace commercetools.Sdk.HttpApi.MvcExample
 {
@@ -30,7 +33,9 @@ namespace commercetools.Sdk.HttpApi.MvcExample
 
             services.AddHttpClient("auth");
             services.AddHttpClient("api").AddHttpMessageHandler<AuthorizationHandler>();
-
+            services.AddSingleton<IRequestBuilder, RequestBuilder>();
+            services.AddSingleton<Func<Type, JsonSerializerSettings>>(JsonSerializerSettingsFactory.Create);
+            services.AddSingleton<ISerializerService, SerializerService>();
             services.AddSingleton<IClient, Client>();
 
             services.AddMvc();
