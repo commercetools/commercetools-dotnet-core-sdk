@@ -1,8 +1,4 @@
-﻿using commercetools.Sdk.Client;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
+﻿using System.Net.Http;
 
 namespace commercetools.Sdk.HttpApi
 {
@@ -17,6 +13,6 @@ namespace commercetools.Sdk.HttpApi
 
         public HttpMethod HttpMethod => HttpMethod.Get;
 
-        public string RequestUriEnd => $"/key={this.key}";        
+        public string RequestUriEnd => $"/key={this.key}";
     }
 }

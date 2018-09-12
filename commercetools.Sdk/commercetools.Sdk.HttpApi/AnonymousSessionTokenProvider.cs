@@ -7,7 +7,7 @@
     public class AnonymousSessionTokenProvider : TokenProvider, ITokenProvider
     {
         private IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager;
-        public TokenFlow TokenFlow => TokenFlow.AnonymousSession;        
+        public TokenFlow TokenFlow => TokenFlow.AnonymousSession;
 
         public AnonymousSessionTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager, ISerializerService serializerService) : base(httpClientFactory, clientConfiguration, anonymousCredentialsStoreManager, serializerService)
         {
@@ -20,7 +20,7 @@
             string requestUri = this.ClientConfiguration.AuthorizationBaseAddress + $"oauth/{this.ClientConfiguration.ProjectKey}/anonymous/token?grant_type=client_credentials";
             requestUri += $"&scope={this.ClientConfiguration.Scope}";
             if (!string.IsNullOrEmpty(this.anonymousCredentialsStoreManager.AnonymousId))
-            { 
+            {
                 requestUri += $"&anonymous_id={this.anonymousCredentialsStoreManager.AnonymousId}";
             }
             request.RequestUri = new Uri(requestUri);

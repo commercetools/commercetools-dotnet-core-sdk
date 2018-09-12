@@ -1,5 +1,6 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
+    using commercetools.Sdk.HttpApi.Domain;
     using commercetools.Sdk.Serialization;
     using Microsoft.AspNetCore.Http;
 

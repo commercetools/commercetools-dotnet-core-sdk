@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.HttpApi
+﻿using commercetools.Sdk.HttpApi.Domain;
+
+namespace commercetools.Sdk.HttpApi
 {
     public class InMemoryTokenStoreManager : ITokenStoreManager
     {

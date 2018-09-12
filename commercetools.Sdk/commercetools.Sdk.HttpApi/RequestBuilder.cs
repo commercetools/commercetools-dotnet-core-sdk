@@ -1,16 +1,15 @@
-﻿using commercetools.Sdk.Client;
-using commercetools.Sdk.Domain;
+﻿using commercetools.Sdk.Domain;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 
 namespace commercetools.Sdk.HttpApi
 {
     public class RequestBuilder : IRequestBuilder
     {
         private IClientConfiguration clientConfiguration;
-        IDictionary<Type, string> mapping = new Dictionary<Type, string>()
+
+        private IDictionary<Type, string> mapping = new Dictionary<Type, string>()
         {
             {  typeof(Category), "categories" }
         };

@@ -4,8 +4,8 @@
     using Microsoft.AspNetCore.Http;
 
     public class SessionUserCredentialsStoreManager : SessionTokenStoreManager, IUserCredentialsStoreManager
-    {   
-        public SessionUserCredentialsStoreManager(IHttpContextAccessor httpContextAccessor, ISerializerService serializerService) : base (httpContextAccessor, serializerService)
+    {
+        public SessionUserCredentialsStoreManager(IHttpContextAccessor httpContextAccessor, ISerializerService serializerService) : base(httpContextAccessor, serializerService)
         {
         }
 

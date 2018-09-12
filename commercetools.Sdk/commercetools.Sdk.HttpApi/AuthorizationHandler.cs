@@ -1,5 +1,6 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
+    using commercetools.Sdk.HttpApi.Domain;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;

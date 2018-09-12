@@ -7,7 +7,7 @@
     public class ClientCredentialsTokenProvider : TokenProvider, ITokenProvider
     {
         private ITokenStoreManager tokenStoreManager;
-        public TokenFlow TokenFlow => TokenFlow.ClientCredentials;        
+        public TokenFlow TokenFlow => TokenFlow.ClientCredentials;
 
         public ClientCredentialsTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, ITokenStoreManager tokenStoreManager, ISerializerService serializerService) : base(httpClientFactory, clientConfiguration, tokenStoreManager, serializerService)
         {

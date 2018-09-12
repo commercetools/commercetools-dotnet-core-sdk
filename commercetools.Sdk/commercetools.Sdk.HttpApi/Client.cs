@@ -34,12 +34,12 @@
 
         public async Task<T> Execute<T>(ICommand command)
         {
-            // TODO See how to better cast between interfaces and do some checkss
+            // TODO See how to better cast between interfaces and do some checks
             return await SendRequest<T>(this.requestBuilder.GetRequestMessage<T>((IHttpApiCommand)command));
         }
 
         public Client(IHttpClientFactory httpClientFactory, IRequestBuilder requestBuilder, ISerializerService serializerService)
-        {            
+        {
             this.httpClientFactory = httpClientFactory;
             this.client = this.httpClientFactory.CreateClient("api");
             this.requestBuilder = requestBuilder;

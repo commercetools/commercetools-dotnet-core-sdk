@@ -1,5 +1,4 @@
-﻿using commercetools.Sdk.Domain;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace commercetools.Sdk.Client
@@ -12,7 +11,7 @@ namespace commercetools.Sdk.Client
 
         // TODO Remove these concrete commands in favor of the generic one
         Task<T> GetByIdAsync<T>(Guid id);
+
         Task<T> GetByKeyAsync<T>(string key);
-        
     }
 }
