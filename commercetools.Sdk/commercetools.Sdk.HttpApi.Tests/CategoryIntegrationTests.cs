@@ -84,5 +84,31 @@ namespace commercetools.Sdk.HttpApi.Tests
             Category category = commerceToolsClient.Execute<Category>(new CreateCommand(categoryDraft)).Result;
             Assert.Equal(categoryName, category.Name["en"]);
         }
+
+        [Fact]
+        public void UpdateCategoryById()
+        {
+            ISerializerService serializerService = new SerializerService(JsonSerializerSettingsFactory.Create);
+            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
+            ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
+            IHttpClientFactory httpClientFactoryAuth = new MockHttpClientFactory(null);
+            ITokenProvider clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(httpClientFactoryAuth, clientConfiguration, tokenStoreManager, serializerService);
+            ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
+            tokenFlowRegister.TokenFlow = TokenFlow.ClientCredentials;
+            ITokenProviderFactory tokenProviderFactory = new TokenProviderFactory(new List<ITokenProvider>() { clientCredentialsTokenProvider });
+            AuthorizationHandler authorizationHandler = new AuthorizationHandler(tokenProviderFactory, tokenFlowRegister);
+            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(authorizationHandler);
+            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(TestUtils.GetRegisteredRequestMessageBuilders());
+            IRequestBuilder requestBuilder = new RequestBuilder(requestMessageBuilderFactory, clientConfiguration, serializerService);
+
+            IClient commerceToolsClient = new Client(httpClientFactory, requestBuilder, serializerService);
+            string categoryId = "8994e5d7-d81f-4480-af60-286dc96c1fe8";
+            Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand(new Guid(categoryId))).Result;
+            string currentKey = category.Key;
+            SetKey setKeyAction = new SetKey();
+            setKeyAction.Key = "newKey" + TestUtils.RandomString(3);
+            Category updatedCategory = commerceToolsClient.Execute<Category>(new UpdateByIdCommand(new Guid(category.Id), category.Version, new List<UpdateAction>() { setKeyAction })).Result;
+            Assert.Equal(updatedCategory.Key, setKeyAction.Key);
+        }
     }
 }

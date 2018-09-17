@@ -29,6 +29,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             registeredRequestMessageBuilders.Add(typeof(GetByIdCommand), typeof(GetByIdRequestMessageBuilder));
             registeredRequestMessageBuilders.Add(typeof(GetByKeyCommand), typeof(GetByKeyRequestMessageBuilder));
             registeredRequestMessageBuilders.Add(typeof(CreateCommand), typeof(CreateRequestMessageBuilder));
+            registeredRequestMessageBuilders.Add(typeof(UpdateByIdCommand), typeof(UpdateByIdRequestMessageBuilder));
             return registeredRequestMessageBuilders;
         }
     }
