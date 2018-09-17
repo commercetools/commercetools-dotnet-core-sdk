@@ -8,5 +8,6 @@ namespace commercetools.Sdk.HttpApi
     {
         HttpMethod HttpMethod { get; }
         string RequestUriEnd { get; }
+        object RequestBody { get; }
     }
 }

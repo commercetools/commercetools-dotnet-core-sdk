@@ -25,7 +25,6 @@
 
         public async Task<T> Execute<T>(ICommand command)
         {
-            // TODO See how to better cast between interfaces and do some checks
             return await SendRequest<T>(this.requestBuilder.GetRequestMessage<T>(command));
         }
 

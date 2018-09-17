@@ -28,6 +28,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             IDictionary<Type, Type> registeredRequestMessageBuilders  = new Dictionary<Type, Type>();
             registeredRequestMessageBuilders.Add(typeof(GetByIdCommand), typeof(GetByIdRequestMessageBuilder));
             registeredRequestMessageBuilders.Add(typeof(GetByKeyCommand), typeof(GetByKeyRequestMessageBuilder));
+            registeredRequestMessageBuilders.Add(typeof(CreateCommand), typeof(CreateRequestMessageBuilder));
             return registeredRequestMessageBuilders;
         }
     }

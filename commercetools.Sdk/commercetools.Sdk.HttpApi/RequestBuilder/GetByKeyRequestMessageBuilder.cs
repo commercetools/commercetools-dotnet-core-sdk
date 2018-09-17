@@ -20,5 +20,7 @@ namespace commercetools.Sdk.HttpApi
         public HttpMethod HttpMethod => HttpMethod.Get;
 
         public string RequestUriEnd => $"/key={this.command.Key}";
+
+        public object RequestBody => null;
     }
 }
