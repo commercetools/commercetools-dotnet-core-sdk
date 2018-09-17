@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using commercetools.Sdk.Client;
+using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace commercetools.Sdk.HttpApi.Tests
@@ -19,6 +21,14 @@ namespace commercetools.Sdk.HttpApi.Tests
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        public static IDictionary<Type, Type> GetRegisteredRequestMessageBuilders()
+        {
+            IDictionary<Type, Type> registeredRequestMessageBuilders  = new Dictionary<Type, Type>();
+            registeredRequestMessageBuilders.Add(typeof(GetByIdCommand), typeof(GetByIdRequestMessageBuilder));
+            registeredRequestMessageBuilders.Add(typeof(GetByKeyCommand), typeof(GetByKeyRequestMessageBuilder));
+            return registeredRequestMessageBuilders;
         }
     }
 }

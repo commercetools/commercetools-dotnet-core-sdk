@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace commercetools.Sdk.HttpApi.MvcExample
 {
@@ -33,6 +34,12 @@ namespace commercetools.Sdk.HttpApi.MvcExample
 
             services.AddHttpClient("auth");
             services.AddHttpClient("api").AddHttpMessageHandler<AuthorizationHandler>();
+            // TODO Find automated way to register all message builders
+            IDictionary<Type, Type> registeredRequestMessageBuilders = new Dictionary<Type, Type>();
+            registeredRequestMessageBuilders.Add(typeof(GetByIdCommand), typeof(GetByIdRequestMessageBuilder));
+            registeredRequestMessageBuilders.Add(typeof(GetByKeyCommand), typeof(GetByKeyRequestMessageBuilder));
+            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(registeredRequestMessageBuilders);
+            services.AddSingleton<IRequestMessageBuilderFactory>(requestMessageBuilderFactory);
             services.AddSingleton<IRequestBuilder, RequestBuilder>();
             services.AddSingleton<Func<Type, JsonSerializerSettings>>(JsonSerializerSettingsFactory.Create);
             services.AddSingleton<ISerializerService, SerializerService>();

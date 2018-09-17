@@ -24,7 +24,8 @@ namespace commercetools.Sdk.HttpApi.Tests
             ITokenProviderFactory tokenProviderFactory = new TokenProviderFactory(new List<ITokenProvider>() { clientCredentialsTokenProvider });
             AuthorizationHandler authorizationHandler = new AuthorizationHandler(tokenProviderFactory, tokenFlowRegister);
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(authorizationHandler);
-            IRequestBuilder requestBuilder = new RequestBuilder(clientConfiguration);
+            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(TestUtils.GetRegisteredRequestMessageBuilders());
+            IRequestBuilder requestBuilder = new RequestBuilder(requestMessageBuilderFactory, clientConfiguration);
             
             IClient commerceToolsClient = new Client(httpClientFactory, requestBuilder, serializerService);
             string categoryId = "2bafc816-4223-4ff0-ac8a-0f08a8f29fd6";
@@ -45,7 +46,8 @@ namespace commercetools.Sdk.HttpApi.Tests
             ITokenProviderFactory tokenProviderFactory = new TokenProviderFactory(new List<ITokenProvider>() { clientCredentialsTokenProvider });
             AuthorizationHandler authorizationHandler = new AuthorizationHandler(tokenProviderFactory, tokenFlowRegister);
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(authorizationHandler);
-            IRequestBuilder requestBuilder = new RequestBuilder(clientConfiguration);
+            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(TestUtils.GetRegisteredRequestMessageBuilders());
+            IRequestBuilder requestBuilder = new RequestBuilder(requestMessageBuilderFactory, clientConfiguration);
             
             IClient commerceToolsClient = new Client(httpClientFactory, requestBuilder, serializerService);
             string categoryKey = "c2";
