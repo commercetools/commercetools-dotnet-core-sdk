@@ -1,26 +1,42 @@
-﻿using commercetools.Sdk.Client;
-using commercetools.Sdk.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-
-namespace commercetools.Sdk.HttpApi
+﻿namespace commercetools.Sdk.HttpApi
 {
-    public class CreateRequestMessageBuilder : IRequestMessageBuilder
-    {
-        public static Type CommandType = typeof(CreateCommand);
-        private CreateCommand command;
+    using commercetools.Sdk.Client;
+    using commercetools.Sdk.Serialization;
+    using System;
+    using System.Net.Http;
 
-        public CreateRequestMessageBuilder(CreateCommand command)
+    public class CreateRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
+    {
+        public Type CommandType => typeof(CreateCommand);
+
+        private CreateCommand command;
+        private ISerializerService serializerService;
+
+        public CreateRequestMessageBuilder(ISerializerService serializerService, IClientConfiguration clientConfiguration) : base(clientConfiguration)
         {
-            this.command = command;
+            this.serializerService = serializerService;
         }
 
-        public object RequestBody => command.Entity;
+        protected override HttpContent HttpContent
+        {
+            get
+            {
+                return new StringContent(this.serializerService.Serialize(this.command.Entity));
+            }
+        }
 
-        public HttpMethod HttpMethod => HttpMethod.Post;
+        protected override HttpMethod HttpMethod => HttpMethod.Post;
 
-        public string RequestUriEnd => $"/";
+        public HttpRequestMessage GetRequestMessage<T>(ICommand command)
+        {
+            this.command = command as CreateCommand;
+            return this.GetRequestMessage<T>();
+        }
+
+        protected override Uri GetRequestUri<T>()
+        {
+            string requestUri = this.GetMessageBase<T>() + "/";
+            return new Uri(requestUri);
+        }
     }
 }

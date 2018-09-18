@@ -2,29 +2,24 @@
 using commercetools.Sdk.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace commercetools.Sdk.HttpApi
 {
     public class RequestMessageBuilderFactory : IRequestMessageBuilderFactory
     {
-        private readonly IDictionary<Type, Type> registeredMessageBuilderTypes;
+        private readonly IEnumerable<IRequestMessageBuilder> registeredRequestMessageBuilders;
 
-        public RequestMessageBuilderFactory(IDictionary<Type, Type> registeredMessageBuilderTypes)
+        public RequestMessageBuilderFactory(IEnumerable<IRequestMessageBuilder> registeredRequestMessageBuilders)
         {
-            this.registeredMessageBuilderTypes = registeredMessageBuilderTypes;
+            this.registeredRequestMessageBuilders = registeredRequestMessageBuilders;
         }
 
         public IRequestMessageBuilder GetRequestMessageBuilder(ICommand command)
         {
             Type typeOfCommand = command.GetType();
-            if (registeredMessageBuilderTypes.ContainsKey(typeOfCommand))
-            {
-                Type typeOfBuilder = registeredMessageBuilderTypes[typeOfCommand];
-                IRequestMessageBuilder builder = Activator.CreateInstance(typeOfBuilder, command) as IRequestMessageBuilder;
-                return builder;
-            }
-            return null;
+            return registeredRequestMessageBuilders.Where(x => x.CommandType == typeOfCommand).FirstOrDefault();
         }
     }
 }

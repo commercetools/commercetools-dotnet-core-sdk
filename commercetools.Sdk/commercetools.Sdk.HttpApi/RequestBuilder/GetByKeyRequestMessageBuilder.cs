@@ -1,26 +1,31 @@
-﻿using commercetools.Sdk.Client;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-
-namespace commercetools.Sdk.HttpApi
+﻿namespace commercetools.Sdk.HttpApi
 {
-    public class GetByKeyRequestMessageBuilder : IRequestMessageBuilder
-    {
-        public static Type CommandType = typeof(GetByKeyCommand);
+    using commercetools.Sdk.Client;
+    using System;
+    using System.Net.Http;
 
+    public class GetByKeyRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
+    {
+        public Type CommandType => typeof(GetByKeyCommand);
         private GetByKeyCommand command;
 
-        public GetByKeyRequestMessageBuilder(GetByKeyCommand command)
+        public GetByKeyRequestMessageBuilder(IClientConfiguration clientConfiguration) : base(clientConfiguration)
         {
-            this.command = command;
         }
 
-        public HttpMethod HttpMethod => HttpMethod.Get;
+        protected override HttpContent HttpContent => null;
+        protected override HttpMethod HttpMethod => HttpMethod.Get;
 
-        public string RequestUriEnd => $"/key={this.command.Key}";
+        public HttpRequestMessage GetRequestMessage<T>(ICommand command)
+        {
+            this.command = command as GetByKeyCommand;
+            return this.GetRequestMessage<T>();
+        }
 
-        public object RequestBody => null;
+        protected override Uri GetRequestUri<T>()
+        {
+            string requestUri = this.GetMessageBase<T>() + $"/key={this.command.Key}";
+            return new Uri(requestUri);
+        }
     }
 }

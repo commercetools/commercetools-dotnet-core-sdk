@@ -22,15 +22,5 @@ namespace commercetools.Sdk.HttpApi.Tests
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-
-        public static IDictionary<Type, Type> GetRegisteredRequestMessageBuilders()
-        {
-            IDictionary<Type, Type> registeredRequestMessageBuilders  = new Dictionary<Type, Type>();
-            registeredRequestMessageBuilders.Add(typeof(GetByIdCommand), typeof(GetByIdRequestMessageBuilder));
-            registeredRequestMessageBuilders.Add(typeof(GetByKeyCommand), typeof(GetByKeyRequestMessageBuilder));
-            registeredRequestMessageBuilders.Add(typeof(CreateCommand), typeof(CreateRequestMessageBuilder));
-            registeredRequestMessageBuilders.Add(typeof(UpdateByIdCommand), typeof(UpdateByIdRequestMessageBuilder));
-            return registeredRequestMessageBuilders;
-        }
     }
 }

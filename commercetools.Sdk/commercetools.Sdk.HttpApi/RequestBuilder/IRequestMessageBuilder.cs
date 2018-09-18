@@ -1,13 +1,12 @@
-﻿using commercetools.Sdk.Client;
-using System;
-using System.Net.Http;
-
-namespace commercetools.Sdk.HttpApi
+﻿namespace commercetools.Sdk.HttpApi
 {
+    using commercetools.Sdk.Client;
+    using System;
+    using System.Net.Http;
+
     public interface IRequestMessageBuilder
     {
-        HttpMethod HttpMethod { get; }
-        string RequestUriEnd { get; }
-        object RequestBody { get; }
+        Type CommandType { get; }
+        HttpRequestMessage GetRequestMessage<T>(ICommand command);
     }
 }

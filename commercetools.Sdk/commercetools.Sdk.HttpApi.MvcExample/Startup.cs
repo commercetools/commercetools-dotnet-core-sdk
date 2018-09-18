@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
 namespace commercetools.Sdk.HttpApi.MvcExample
 {
@@ -17,6 +16,16 @@ namespace commercetools.Sdk.HttpApi.MvcExample
         public Startup(IConfiguration configuration)
         {
             this.configuration = configuration;
+        }
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseMvcWithDefaultRoute();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -34,28 +43,19 @@ namespace commercetools.Sdk.HttpApi.MvcExample
 
             services.AddHttpClient("auth");
             services.AddHttpClient("api").AddHttpMessageHandler<AuthorizationHandler>();
-            // TODO Find automated way to register all message builders
-            IDictionary<Type, Type> registeredRequestMessageBuilders = new Dictionary<Type, Type>();
-            registeredRequestMessageBuilders.Add(typeof(GetByIdCommand), typeof(GetByIdRequestMessageBuilder));
-            registeredRequestMessageBuilders.Add(typeof(GetByKeyCommand), typeof(GetByKeyRequestMessageBuilder));
-            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(registeredRequestMessageBuilders);
-            services.AddSingleton<IRequestMessageBuilderFactory>(requestMessageBuilderFactory);
+            // TODO Auto register all message builders by looping through interface implementations
+            services.AddSingleton<IRequestMessageBuilder, CreateRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, UpdateByIdRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, GetByIdRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, GetByKeyRequestMessageBuilder>();
+
+            services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
             services.AddSingleton<IRequestBuilder, RequestBuilder>();
             services.AddSingleton<Func<Type, JsonSerializerSettings>>(JsonSerializerSettingsFactory.Create);
             services.AddSingleton<ISerializerService, SerializerService>();
             services.AddSingleton<IClient, Client>();
 
             services.AddMvc();
-        }
-
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseMvcWithDefaultRoute();
         }
     }
 }
