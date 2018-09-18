@@ -14,22 +14,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetCategoryById()
         {
-            ISerializerService serializerService = new SerializerService(JsonSerializerSettingsFactory.Create);
-            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
-            ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
-            IHttpClientFactory httpClientFactoryAuth = new MockHttpClientFactory(null);
-            ITokenProvider clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(httpClientFactoryAuth, clientConfiguration, tokenStoreManager, serializerService);
-            ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
-            tokenFlowRegister.TokenFlow = TokenFlow.ClientCredentials;
-            ITokenProviderFactory tokenProviderFactory = new TokenProviderFactory(new List<ITokenProvider>() { clientCredentialsTokenProvider });
-            AuthorizationHandler authorizationHandler = new AuthorizationHandler(tokenProviderFactory, tokenFlowRegister);
-            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(authorizationHandler);
-            GetByIdRequestMessageBuilder getByIdRequestMessageBuilder = new GetByIdRequestMessageBuilder(clientConfiguration);
-            IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { getByIdRequestMessageBuilder };
-            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(requestMessageBuilders);
-            IRequestBuilder requestBuilder = new RequestBuilder(requestMessageBuilderFactory);
-            
-            IClient commerceToolsClient = new Client(httpClientFactory, requestBuilder, serializerService);
+            IClient commerceToolsClient = TestUtils.SetupClient();
             string categoryId = "2bafc816-4223-4ff0-ac8a-0f08a8f29fd6";
             Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand(new Guid(categoryId))).Result;
             Assert.Equal(categoryId, category.Id.ToString());
@@ -38,46 +23,17 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetCategoryByKey()
         {
-            ISerializerService serializerService = new SerializerService(JsonSerializerSettingsFactory.Create);
-            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
-            ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
-            IHttpClientFactory httpClientFactoryAuth = new MockHttpClientFactory(null);
-            ITokenProvider clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(httpClientFactoryAuth, clientConfiguration, tokenStoreManager, serializerService);
-            ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
-            tokenFlowRegister.TokenFlow = TokenFlow.ClientCredentials;
-            ITokenProviderFactory tokenProviderFactory = new TokenProviderFactory(new List<ITokenProvider>() { clientCredentialsTokenProvider });
-            AuthorizationHandler authorizationHandler = new AuthorizationHandler(tokenProviderFactory, tokenFlowRegister);
-            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(authorizationHandler);
-            GetByKeyRequestMessageBuilder getByKeyRequestMessageBuilder = new GetByKeyRequestMessageBuilder(clientConfiguration);
-            IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { getByKeyRequestMessageBuilder };
-            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(requestMessageBuilders);
-            IRequestBuilder requestBuilder = new RequestBuilder(requestMessageBuilderFactory);
-            
-            IClient commerceToolsClient = new Client(httpClientFactory, requestBuilder, serializerService);
+            IClient commerceToolsClient = TestUtils.SetupClient();
             string categoryKey = "c2";
             Category category = commerceToolsClient.Execute<Category>(new GetByKeyCommand(categoryKey)).Result;
             Assert.Equal(categoryKey, category.Key.ToString());
         }
 
         [Fact]
-        public void CreateCategory()
+        public void CreateAndDeleteCategory()
         {
-            ISerializerService serializerService = new SerializerService(JsonSerializerSettingsFactory.Create);
-            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
-            ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
-            IHttpClientFactory httpClientFactoryAuth = new MockHttpClientFactory(null);
-            ITokenProvider clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(httpClientFactoryAuth, clientConfiguration, tokenStoreManager, serializerService);
-            ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
-            tokenFlowRegister.TokenFlow = TokenFlow.ClientCredentials;
-            ITokenProviderFactory tokenProviderFactory = new TokenProviderFactory(new List<ITokenProvider>() { clientCredentialsTokenProvider });
-            AuthorizationHandler authorizationHandler = new AuthorizationHandler(tokenProviderFactory, tokenFlowRegister);
-            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(authorizationHandler);
-            CreateRequestMessageBuilder createRequestMessageBuilder = new CreateRequestMessageBuilder(serializerService, clientConfiguration);
-            IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { createRequestMessageBuilder };
-            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(requestMessageBuilders);
-            IRequestBuilder requestBuilder = new RequestBuilder(requestMessageBuilderFactory);
-
-            IClient commerceToolsClient = new Client(httpClientFactory, requestBuilder, serializerService);
+            // create and delete are in the same method so that the client does not get field up with test categories
+            IClient commerceToolsClient = TestUtils.SetupClient();
             CategoryDraft categoryDraft = new CategoryDraft();
             string categoryName = TestUtils.RandomString(4);
             LocalizedString localizedStringName = new LocalizedString();
@@ -89,28 +45,14 @@ namespace commercetools.Sdk.HttpApi.Tests
             categoryDraft.Slug = localizedStringSlug;
             Category category = commerceToolsClient.Execute<Category>(new CreateCommand(categoryDraft)).Result;
             Assert.Equal(categoryName, category.Name["en"]);
+            Category deletedCategory = commerceToolsClient.Execute<Category>(new DeleteByIdCommand(new Guid(category.Id), category.Version)).Result;
+            Assert.ThrowsAsync<ResourceNotFoundException>(() => commerceToolsClient.Execute<Category>(new GetByIdCommand(new Guid(deletedCategory.Id))));
         }
 
         [Fact]
         public void UpdateCategoryById()
         {
-            ISerializerService serializerService = new SerializerService(JsonSerializerSettingsFactory.Create);
-            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
-            ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
-            IHttpClientFactory httpClientFactoryAuth = new MockHttpClientFactory(null);
-            ITokenProvider clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(httpClientFactoryAuth, clientConfiguration, tokenStoreManager, serializerService);
-            ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
-            tokenFlowRegister.TokenFlow = TokenFlow.ClientCredentials;
-            ITokenProviderFactory tokenProviderFactory = new TokenProviderFactory(new List<ITokenProvider>() { clientCredentialsTokenProvider });
-            AuthorizationHandler authorizationHandler = new AuthorizationHandler(tokenProviderFactory, tokenFlowRegister);
-            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(authorizationHandler);
-            GetByIdRequestMessageBuilder getByIdRequestMessageBuilder = new GetByIdRequestMessageBuilder(clientConfiguration);
-            UpdateByIdRequestMessageBuilder updateByIdRequestMessageBuilder = new UpdateByIdRequestMessageBuilder(serializerService, clientConfiguration);
-            IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { updateByIdRequestMessageBuilder, getByIdRequestMessageBuilder };
-            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(requestMessageBuilders);
-            IRequestBuilder requestBuilder = new RequestBuilder(requestMessageBuilderFactory);
-
-            IClient commerceToolsClient = new Client(httpClientFactory, requestBuilder, serializerService);
+            IClient commerceToolsClient = TestUtils.SetupClient();
             string categoryId = "8994e5d7-d81f-4480-af60-286dc96c1fe8";
             Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand(new Guid(categoryId))).Result;
             string currentKey = category.Key;
@@ -123,23 +65,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void UpdateCategoryByKey()
         {
-            ISerializerService serializerService = new SerializerService(JsonSerializerSettingsFactory.Create);
-            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
-            ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
-            IHttpClientFactory httpClientFactoryAuth = new MockHttpClientFactory(null);
-            ITokenProvider clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(httpClientFactoryAuth, clientConfiguration, tokenStoreManager, serializerService);
-            ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
-            tokenFlowRegister.TokenFlow = TokenFlow.ClientCredentials;
-            ITokenProviderFactory tokenProviderFactory = new TokenProviderFactory(new List<ITokenProvider>() { clientCredentialsTokenProvider });
-            AuthorizationHandler authorizationHandler = new AuthorizationHandler(tokenProviderFactory, tokenFlowRegister);
-            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(authorizationHandler);
-            GetByIdRequestMessageBuilder getByIdRequestMessageBuilder = new GetByIdRequestMessageBuilder(clientConfiguration);
-            UpdateByKeyRequestMessageBuilder updateByKeyRequestMessageBuilder = new UpdateByKeyRequestMessageBuilder(serializerService, clientConfiguration);
-            IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { updateByKeyRequestMessageBuilder, getByIdRequestMessageBuilder };
-            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(requestMessageBuilders);
-            IRequestBuilder requestBuilder = new RequestBuilder(requestMessageBuilderFactory);
-
-            IClient commerceToolsClient = new Client(httpClientFactory, requestBuilder, serializerService);
+            IClient commerceToolsClient = TestUtils.SetupClient();
             string categoryId = "8994e5d7-d81f-4480-af60-286dc96c1fe8";
             Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand(new Guid(categoryId))).Result;
             ChangeOrderHint changeOrderHint = new ChangeOrderHint();

@@ -6,13 +6,13 @@
 
     public class GetByKeyRequestMessageBuilder : RequestMessageBuilderBase
     {
-        public override Type CommandType => typeof(GetByKeyCommand);
         private GetByKeyCommand command;
 
         public GetByKeyRequestMessageBuilder(IClientConfiguration clientConfiguration) : base(clientConfiguration)
         {
         }
 
+        public override Type CommandType => typeof(GetByKeyCommand);
         protected override HttpContent HttpContent => null;
         protected override HttpMethod HttpMethod => HttpMethod.Get;
 

@@ -7,14 +7,15 @@ namespace commercetools.Sdk.HttpApi
 {
     public class UpdateByKeyRequestMessageBuilder : RequestMessageBuilderBase
     {
-        public override Type CommandType => typeof(UpdateByKeyCommand);
-        private UpdateByKeyCommand command;
         private readonly ISerializerService serializerService;
+        private UpdateByKeyCommand command;
 
         public UpdateByKeyRequestMessageBuilder(ISerializerService serializerService, IClientConfiguration clientConfiguration) : base(clientConfiguration)
         {
             this.serializerService = serializerService;
         }
+
+        public override Type CommandType => typeof(UpdateByKeyCommand);
 
         protected override HttpContent HttpContent
         {

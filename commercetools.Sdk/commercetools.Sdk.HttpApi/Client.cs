@@ -32,7 +32,16 @@
         {
             var result = await this.client.SendAsync(requestMessage);
             string content = await result.Content.ReadAsStringAsync();
-            return this.serializerService.Deserialize<T>(content);
+            if (result.IsSuccessStatusCode)
+            { 
+                return this.serializerService.Deserialize<T>(content);
+            }
+            if (result.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                throw new ResourceNotFoundException();
+            }
+            // TODO see what to do in else case
+            return default(T);
         }
     }
 }

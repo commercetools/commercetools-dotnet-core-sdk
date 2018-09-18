@@ -6,15 +6,13 @@
 
     public class GetByIdRequestMessageBuilder : RequestMessageBuilderBase
     {
-        public override Type CommandType => typeof(GetByIdCommand);
         private GetByIdCommand command;
 
         public GetByIdRequestMessageBuilder(IClientConfiguration clientConfiguration) : base(clientConfiguration)
         {
         }
 
-        public string RequestUriEnd => $"/{this.command.Guid}";
-
+        public override Type CommandType => typeof(GetByIdCommand);
         protected override HttpContent HttpContent => null;
         protected override HttpMethod HttpMethod => HttpMethod.Get;
 
