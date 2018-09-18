@@ -30,9 +30,9 @@ namespace commercetools.Sdk.HttpApi.Tests
         }
 
         [Fact]
-        public void CreateAndDeleteCategory()
+        public void CreateAndDeleteByIdCategory()
         {
-            // create and delete are in the same method so that the client does not get field up with test categories
+            // create and delete are in the same method so that the repository does not get filled up with test categories
             IClient commerceToolsClient = TestUtils.SetupClient();
             CategoryDraft categoryDraft = new CategoryDraft();
             string categoryName = TestUtils.RandomString(4);
@@ -46,6 +46,27 @@ namespace commercetools.Sdk.HttpApi.Tests
             Category category = commerceToolsClient.Execute<Category>(new CreateCommand(categoryDraft)).Result;
             Assert.Equal(categoryName, category.Name["en"]);
             Category deletedCategory = commerceToolsClient.Execute<Category>(new DeleteByIdCommand(new Guid(category.Id), category.Version)).Result;
+            Assert.ThrowsAsync<ResourceNotFoundException>(() => commerceToolsClient.Execute<Category>(new GetByIdCommand(new Guid(deletedCategory.Id))));
+        }
+
+        [Fact]
+        public void CreateAndDeleteByKeyCategory()
+        {
+            // create and delete are in the same method so that the repository does not get filled up with test categories
+            IClient commerceToolsClient = TestUtils.SetupClient();
+            CategoryDraft categoryDraft = new CategoryDraft();
+            string categoryName = TestUtils.RandomString(4);
+            LocalizedString localizedStringName = new LocalizedString();
+            localizedStringName.Add("en", categoryName);
+            categoryDraft.Name = localizedStringName;
+            string slug = TestUtils.RandomString(5);
+            LocalizedString localizedStringSlug = new LocalizedString();
+            localizedStringSlug.Add("en", slug);
+            categoryDraft.Slug = localizedStringSlug;
+            categoryDraft.Key = TestUtils.RandomString(3);
+            Category category = commerceToolsClient.Execute<Category>(new CreateCommand(categoryDraft)).Result;
+            Assert.Equal(categoryName, category.Name["en"]);
+            Category deletedCategory = commerceToolsClient.Execute<Category>(new DeleteByKeyCommand(category.Key, category.Version)).Result;
             Assert.ThrowsAsync<ResourceNotFoundException>(() => commerceToolsClient.Execute<Category>(new GetByIdCommand(new Guid(deletedCategory.Id))));
         }
 
