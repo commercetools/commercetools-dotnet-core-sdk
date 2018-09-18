@@ -7,9 +7,6 @@
 
     public class CreateRequestMessageBuilder : RequestMessageBuilderBase
     {
-        public override Type CommandType => typeof(CreateCommand);
-
-        private CreateCommand command;
         private readonly ISerializerService serializerService;
 
         public CreateRequestMessageBuilder(ISerializerService serializerService, IClientConfiguration clientConfiguration) : base(clientConfiguration)
@@ -17,24 +14,23 @@
             this.serializerService = serializerService;
         }
 
-        protected override HttpContent HttpContent
+        private HttpContent GetHttpContent<T>(CreateCommand<T> command)
         {
-            get
-            {
-                return new StringContent(this.serializerService.Serialize(this.command.Entity));
-            }
+            return new StringContent(this.serializerService.Serialize(command.Entity));
         }
 
         protected override HttpMethod HttpMethod => HttpMethod.Post;
 
-        public override HttpRequestMessage GetRequestMessage<T>(ICommand command)
+        public override HttpRequestMessage GetRequestMessage<T>(ICommand<T> command)
         {
-            // TODO Add a wrong cast check
-            this.command = command as CreateCommand;
-            return this.GetRequestMessage<T>();
+            if (!(command is CreateCommand<T> createCommand))
+            {
+                throw new InvalidCastException();
+            }
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(), this.GetHttpContent<T>(createCommand));
         }
 
-        protected override Uri GetRequestUri<T>()
+        private Uri GetRequestUri<T>()
         {
             string requestUri = this.GetMessageBase<T>() + "/";
             return new Uri(requestUri);

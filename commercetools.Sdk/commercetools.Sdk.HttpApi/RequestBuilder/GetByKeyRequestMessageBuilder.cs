@@ -6,25 +6,24 @@
 
     public class GetByKeyRequestMessageBuilder : RequestMessageBuilderBase
     {
-        private GetByKeyCommand command;
-
         public GetByKeyRequestMessageBuilder(IClientConfiguration clientConfiguration) : base(clientConfiguration)
         {
         }
 
-        public override Type CommandType => typeof(GetByKeyCommand);
-        protected override HttpContent HttpContent => null;
         protected override HttpMethod HttpMethod => HttpMethod.Get;
 
-        public override HttpRequestMessage GetRequestMessage<T>(ICommand command)
+        public override HttpRequestMessage GetRequestMessage<T>(ICommand<T> command)
         {
-            this.command = command as GetByKeyCommand;
-            return this.GetRequestMessage<T>();
+            if (!(command is GetByKeyCommand<T> getByKeyCommand))
+            {
+                throw new InvalidCastException();
+            }
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(getByKeyCommand), null);
         }
 
-        protected override Uri GetRequestUri<T>()
+        private Uri GetRequestUri<T>(GetByKeyCommand<T> command)
         {
-            string requestUri = this.GetMessageBase<T>() + $"/key={this.command.Key}";
+            string requestUri = this.GetMessageBase<T>() + $"/key={command.Key}";
             return new Uri(requestUri);
         }
     }

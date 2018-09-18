@@ -6,25 +6,24 @@
 
     public class GetByIdRequestMessageBuilder : RequestMessageBuilderBase
     {
-        private GetByIdCommand command;
-
         public GetByIdRequestMessageBuilder(IClientConfiguration clientConfiguration) : base(clientConfiguration)
         {
         }
 
-        public override Type CommandType => typeof(GetByIdCommand);
-        protected override HttpContent HttpContent => null;
         protected override HttpMethod HttpMethod => HttpMethod.Get;
 
-        public override HttpRequestMessage GetRequestMessage<T>(ICommand command)
+        public override HttpRequestMessage GetRequestMessage<T>(ICommand<T> command)
         {
-            this.command = command as GetByIdCommand;
-            return this.GetRequestMessage<T>();
+            if (!(command is GetByIdCommand<T> getByIdCommand))
+            {
+                throw new InvalidCastException();
+            }
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(getByIdCommand), null);
         }
 
-        protected override Uri GetRequestUri<T>()
+        private Uri GetRequestUri<T>(GetByIdCommand<T> command)
         {
-            string requestUri = this.GetMessageBase<T>() + $"/{this.command.Guid}";
+            string requestUri = this.GetMessageBase<T>() + $"/{command.Guid}";
             return new Uri(requestUri);
         }
     }

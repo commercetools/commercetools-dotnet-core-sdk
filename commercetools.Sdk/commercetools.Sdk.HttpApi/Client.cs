@@ -1,7 +1,9 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
     using commercetools.Sdk.Client;
+    using commercetools.Sdk.Domain;
     using commercetools.Sdk.Serialization;
+    using System;
     using System.Net.Http;
     using System.Threading.Tasks;
 
@@ -23,9 +25,26 @@
 
         public string Name { get; set; } = "api";
 
-        public async Task<T> Execute<T>(ICommand command)
+        //public async Task<T> CreateAsync<T>(IDraft<T> draft)
+        //{
+        //    CreateCommand createCommand = new CreateCommand(draft);
+        //    return await SendRequest<T>(this.requestBuilder.GetRequestMessage<T>(createCommand));
+        //}
+
+        public async Task<T> Execute<T>(ICommand<T> command)
         {
             return await SendRequest<T>(this.requestBuilder.GetRequestMessage<T>(command));
+        }
+
+        //public async Task<T> Get<T>(Guid id)
+        //{
+        //    GetByIdCommand createCommand = new GetByIdCommand(id);
+        //    return await SendRequest<T>(this.requestBuilder.GetRequestMessage<T>(createCommand));
+        //}
+
+        public Task<PagedQueryResult<T>> Query<T>()
+        {
+            throw new System.NotImplementedException();
         }
 
         private async Task<T> SendRequest<T>(HttpRequestMessage requestMessage)

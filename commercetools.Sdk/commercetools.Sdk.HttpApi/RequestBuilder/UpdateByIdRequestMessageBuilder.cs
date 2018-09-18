@@ -8,39 +8,36 @@ namespace commercetools.Sdk.HttpApi
     public class UpdateByIdRequestMessageBuilder : RequestMessageBuilderBase
     {
         private readonly ISerializerService serializerService;
-        private UpdateByIdCommand command;
 
         public UpdateByIdRequestMessageBuilder(ISerializerService serializerService, IClientConfiguration clientConfiguration) : base(clientConfiguration)
         {
             this.serializerService = serializerService;
         }
 
-        public override Type CommandType => typeof(UpdateByIdCommand);
-
-        protected override HttpContent HttpContent
-        {
-            get
-            {
-                var requestBody = new
-                {
-                    Version = this.command.Version,
-                    Actions = this.command.UpdateActions
-                };
-                return new StringContent(this.serializerService.Serialize(requestBody));
-            }
-        }
-
         protected override HttpMethod HttpMethod => HttpMethod.Post;
 
-        public override HttpRequestMessage GetRequestMessage<T>(ICommand command)
+        public override HttpRequestMessage GetRequestMessage<T>(ICommand<T> command)
         {
-            this.command = command as UpdateByIdCommand;
-            return this.GetRequestMessage<T>();
+            if (!(command is UpdateByIdCommand<T> updateByIdCommand))
+            {
+                throw new InvalidCastException();
+            }
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(updateByIdCommand), this.GetHttpContent<T>(updateByIdCommand));
         }
 
-        protected override Uri GetRequestUri<T>()
+        private HttpContent GetHttpContent<T>(UpdateByIdCommand<T> command)
         {
-            string requestUri = this.GetMessageBase<T>() + $"/{this.command.Guid}";
+            var requestBody = new
+            {
+                Version = command.Version,
+                Actions = command.UpdateActions
+            };
+            return new StringContent(this.serializerService.Serialize(requestBody));
+            
+        }
+        private Uri GetRequestUri<T>(UpdateByIdCommand<T> command)
+        {
+            string requestUri = this.GetMessageBase<T>() + $"/{command.Guid}";
             return new Uri(requestUri);
         }
     }

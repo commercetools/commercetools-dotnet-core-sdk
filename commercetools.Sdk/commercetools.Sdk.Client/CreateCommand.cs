@@ -1,14 +1,15 @@
-﻿using System;
+﻿using commercetools.Sdk.Domain;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace commercetools.Sdk.Client
 {
-    public class CreateCommand : ICommand
+    public class CreateCommand<T> : ICommand<T>
     {
-        public object Entity { get; set; }
+        public IDraft<T> Entity { get; set; }
 
-        public CreateCommand(object entity)
+        public CreateCommand(IDraft<T> entity)
         {
             this.Entity = entity;
         }

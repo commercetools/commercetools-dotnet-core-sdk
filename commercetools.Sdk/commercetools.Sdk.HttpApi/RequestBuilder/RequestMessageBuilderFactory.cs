@@ -16,10 +16,11 @@ namespace commercetools.Sdk.HttpApi
             this.registeredRequestMessageBuilders = registeredRequestMessageBuilders;
         }
 
-        public IRequestMessageBuilder GetRequestMessageBuilder(ICommand command)
+        public IRequestMessageBuilder GetRequestMessageBuilder<T>(ICommand<T> command)
         {
             Type typeOfCommand = command.GetType();
-            return registeredRequestMessageBuilders.Where(x => x.CommandType == typeOfCommand).FirstOrDefault();
+            //return registeredRequestMessageBuilders.Where(x => x.CommandType == typeOfCommand).FirstOrDefault();
+            return null;
         }
     }
 }

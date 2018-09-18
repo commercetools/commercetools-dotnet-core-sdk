@@ -16,7 +16,8 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClient commerceToolsClient = TestUtils.SetupClient();
             string categoryId = "2bafc816-4223-4ff0-ac8a-0f08a8f29fd6";
-            Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand(new Guid(categoryId))).Result;
+            Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(categoryId))).Result;
+            //Category category2 = commerceToolsClient.Get<Category>(new Guid(categoryId)).Result;
             Assert.Equal(categoryId, category.Id.ToString());
         }
 
@@ -25,7 +26,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClient commerceToolsClient = TestUtils.SetupClient();
             string categoryKey = "c2";
-            Category category = commerceToolsClient.Execute<Category>(new GetByKeyCommand(categoryKey)).Result;
+            Category category = commerceToolsClient.Execute<Category>(new GetByKeyCommand<Category>(categoryKey)).Result;
             Assert.Equal(categoryKey, category.Key.ToString());
         }
 
@@ -43,10 +44,10 @@ namespace commercetools.Sdk.HttpApi.Tests
             LocalizedString localizedStringSlug = new LocalizedString();
             localizedStringSlug.Add("en", slug);
             categoryDraft.Slug = localizedStringSlug;
-            Category category = commerceToolsClient.Execute<Category>(new CreateCommand(categoryDraft)).Result;
+            Category category = commerceToolsClient.Execute<Category>(new CreateCommand<Category>(categoryDraft)).Result;
             Assert.Equal(categoryName, category.Name["en"]);
-            Category deletedCategory = commerceToolsClient.Execute<Category>(new DeleteByIdCommand(new Guid(category.Id), category.Version)).Result;
-            Assert.ThrowsAsync<ResourceNotFoundException>(() => commerceToolsClient.Execute<Category>(new GetByIdCommand(new Guid(deletedCategory.Id))));
+            Category deletedCategory = commerceToolsClient.Execute<Category>(new DeleteByIdCommand<Category>(new Guid(category.Id), category.Version)).Result;
+            Assert.ThrowsAsync<ResourceNotFoundException>(() => commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(deletedCategory.Id))));
         }
 
         [Fact]
@@ -64,10 +65,11 @@ namespace commercetools.Sdk.HttpApi.Tests
             localizedStringSlug.Add("en", slug);
             categoryDraft.Slug = localizedStringSlug;
             categoryDraft.Key = TestUtils.RandomString(3);
-            Category category = commerceToolsClient.Execute<Category>(new CreateCommand(categoryDraft)).Result;
+            Category category = commerceToolsClient.Execute<Category>(new CreateCommand<Category>(categoryDraft)).Result;
+            //Category category2 = commerceToolsClient.CreateAsync(categoryDraft).Result;
             Assert.Equal(categoryName, category.Name["en"]);
-            Category deletedCategory = commerceToolsClient.Execute<Category>(new DeleteByKeyCommand(category.Key, category.Version)).Result;
-            Assert.ThrowsAsync<ResourceNotFoundException>(() => commerceToolsClient.Execute<Category>(new GetByIdCommand(new Guid(deletedCategory.Id))));
+            Category deletedCategory = commerceToolsClient.Execute<Category>(new DeleteByKeyCommand<Category>(category.Key, category.Version)).Result;
+            Assert.ThrowsAsync<ResourceNotFoundException>(() => commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(deletedCategory.Id))));
         }
 
         [Fact]
@@ -75,11 +77,11 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClient commerceToolsClient = TestUtils.SetupClient();
             string categoryId = "8994e5d7-d81f-4480-af60-286dc96c1fe8";
-            Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand(new Guid(categoryId))).Result;
+            Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(categoryId))).Result;
             string currentKey = category.Key;
             SetKey setKeyAction = new SetKey();
             setKeyAction.Key = "newKey" + TestUtils.RandomString(3);
-            Category updatedCategory = commerceToolsClient.Execute<Category>(new UpdateByIdCommand(new Guid(category.Id), category.Version, new List<UpdateAction>() { setKeyAction })).Result;
+            Category updatedCategory = commerceToolsClient.Execute<Category>(new UpdateByIdCommand<Category>(new Guid(category.Id), category.Version, new List<UpdateAction>() { setKeyAction })).Result;
             Assert.Equal(updatedCategory.Key, setKeyAction.Key);
         }
 
@@ -88,12 +90,12 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClient commerceToolsClient = TestUtils.SetupClient();
             string categoryId = "8994e5d7-d81f-4480-af60-286dc96c1fe8";
-            Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand(new Guid(categoryId))).Result;
+            Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(categoryId))).Result;
             ChangeOrderHint changeOrderHint = new ChangeOrderHint();
             changeOrderHint.OrderHint = TestUtils.RandomString(6);
             SetExternalId setExternalId = new SetExternalId();
             setExternalId.ExternalId = TestUtils.RandomString(5);
-            Category updatedCategory = commerceToolsClient.Execute<Category>(new UpdateByKeyCommand(category.Key, category.Version, new List<UpdateAction>() { changeOrderHint, setExternalId })).Result;
+            Category updatedCategory = commerceToolsClient.Execute<Category>(new UpdateByKeyCommand<Category>(category.Key, category.Version, new List<UpdateAction>() { changeOrderHint, setExternalId })).Result;
             Assert.Equal(updatedCategory.OrderHint, changeOrderHint.OrderHint);
             Assert.Equal(updatedCategory.ExternalId, setExternalId.ExternalId);
         }

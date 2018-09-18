@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Client
 {
-    public class GetByKeyCommand : ICommand
+    public class GetByKeyCommand<T> : ICommand<T>
     {
         public string Key { get; set; }
 

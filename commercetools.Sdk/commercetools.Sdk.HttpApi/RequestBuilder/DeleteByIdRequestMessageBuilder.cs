@@ -6,25 +6,29 @@
 
     public class DeleteByIdRequestMessageBuilder : RequestMessageBuilderBase
     {
-        private DeleteByIdCommand command;
-
         public DeleteByIdRequestMessageBuilder(IClientConfiguration clientConfiguration) : base(clientConfiguration)
         {
         }
 
-        public override Type CommandType => typeof(DeleteByIdCommand);
-        protected override HttpContent HttpContent => null;
-        protected override HttpMethod HttpMethod => HttpMethod.Delete;
-
-        public override HttpRequestMessage GetRequestMessage<T>(ICommand command)
+        private HttpContent GetHttpContent()
         {
-            this.command = command as DeleteByIdCommand;
-            return this.GetRequestMessage<T>();
+            return null;
         }
 
-        protected override Uri GetRequestUri<T>()
+        protected override HttpMethod HttpMethod => HttpMethod.Delete;
+
+        public override HttpRequestMessage GetRequestMessage<T>(ICommand<T> command)
         {
-            string requestUri = this.GetMessageBase<T>() + $"/{this.command.Guid}?version={this.command.Version}";
+            if (!(command is DeleteByIdCommand<T> deleteByIdCommand))
+            {
+                throw new InvalidCastException();
+            }
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(deleteByIdCommand), null);
+        }
+
+        private Uri GetRequestUri<T>(DeleteByIdCommand<T> command)
+        {
+            string requestUri = this.GetMessageBase<T>() + $"/{command.Guid}?version={command.Version}";
             return new Uri(requestUri);
         }
     }

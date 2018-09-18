@@ -21,30 +21,25 @@ namespace commercetools.Sdk.HttpApi
             this.clientConfiguration = clientConfiguration;
         }
 
-        public abstract Type CommandType { get; }
-        protected abstract HttpContent HttpContent { get; }
-
         protected abstract HttpMethod HttpMethod { get; }
 
-        public abstract HttpRequestMessage GetRequestMessage<T>(ICommand command);
+        public abstract HttpRequestMessage GetRequestMessage<T>(ICommand<T> command);
 
         protected string GetMessageBase<T>()
         {
             return this.clientConfiguration.ApiBaseAddress + $"{this.clientConfiguration.ProjectKey}/{this.mapping[typeof(T)]}";
         }
 
-        protected HttpRequestMessage GetRequestMessage<T>()
+        protected HttpRequestMessage GetRequestMessage<T>(Uri requestUri, HttpContent httpContent)
         {
             HttpRequestMessage request = new HttpRequestMessage();
-            request.RequestUri = this.GetRequestUri<T>();
+            request.RequestUri = requestUri;
             request.Method = this.HttpMethod;
-            if (this.HttpContent != null)
+            if (httpContent != null)
             {
-                request.Content = this.HttpContent;
+                request.Content = httpContent;
             }
             return request;
         }
-
-        protected abstract Uri GetRequestUri<T>();
     }
 }

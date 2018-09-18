@@ -8,6 +8,6 @@ namespace commercetools.Sdk.HttpApi
 {
     public interface IRequestBuilder
     {
-        HttpRequestMessage GetRequestMessage<T>(ICommand command);
+        HttpRequestMessage GetRequestMessage<T>(ICommand<T> command);
     }
 }

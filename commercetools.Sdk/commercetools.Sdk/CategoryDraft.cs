@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    public class CategoryDraft
+    public class CategoryDraft : IDraft<Category>
     {
         public string Key { get; set; }
 
