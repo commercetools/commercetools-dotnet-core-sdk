@@ -4,9 +4,9 @@
     using System;
     using System.Net.Http;
 
-    public class GetByIdRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
+    public class GetByIdRequestMessageBuilder : RequestMessageBuilderBase
     {
-        public Type CommandType => typeof(GetByIdCommand);
+        public override Type CommandType => typeof(GetByIdCommand);
         private GetByIdCommand command;
 
         public GetByIdRequestMessageBuilder(IClientConfiguration clientConfiguration) : base(clientConfiguration)
@@ -18,7 +18,7 @@
         protected override HttpContent HttpContent => null;
         protected override HttpMethod HttpMethod => HttpMethod.Get;
 
-        public HttpRequestMessage GetRequestMessage<T>(ICommand command)
+        public override HttpRequestMessage GetRequestMessage<T>(ICommand command)
         {
             this.command = command as GetByIdCommand;
             return this.GetRequestMessage<T>();

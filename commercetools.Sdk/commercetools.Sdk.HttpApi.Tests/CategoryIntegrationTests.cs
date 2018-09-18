@@ -119,5 +119,36 @@ namespace commercetools.Sdk.HttpApi.Tests
             Category updatedCategory = commerceToolsClient.Execute<Category>(new UpdateByIdCommand(new Guid(category.Id), category.Version, new List<UpdateAction>() { setKeyAction })).Result;
             Assert.Equal(updatedCategory.Key, setKeyAction.Key);
         }
+
+        [Fact]
+        public void UpdateCategoryByKey()
+        {
+            ISerializerService serializerService = new SerializerService(JsonSerializerSettingsFactory.Create);
+            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
+            ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
+            IHttpClientFactory httpClientFactoryAuth = new MockHttpClientFactory(null);
+            ITokenProvider clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(httpClientFactoryAuth, clientConfiguration, tokenStoreManager, serializerService);
+            ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
+            tokenFlowRegister.TokenFlow = TokenFlow.ClientCredentials;
+            ITokenProviderFactory tokenProviderFactory = new TokenProviderFactory(new List<ITokenProvider>() { clientCredentialsTokenProvider });
+            AuthorizationHandler authorizationHandler = new AuthorizationHandler(tokenProviderFactory, tokenFlowRegister);
+            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(authorizationHandler);
+            GetByIdRequestMessageBuilder getByIdRequestMessageBuilder = new GetByIdRequestMessageBuilder(clientConfiguration);
+            UpdateByKeyRequestMessageBuilder updateByKeyRequestMessageBuilder = new UpdateByKeyRequestMessageBuilder(serializerService, clientConfiguration);
+            IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { updateByKeyRequestMessageBuilder, getByIdRequestMessageBuilder };
+            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(requestMessageBuilders);
+            IRequestBuilder requestBuilder = new RequestBuilder(requestMessageBuilderFactory);
+
+            IClient commerceToolsClient = new Client(httpClientFactory, requestBuilder, serializerService);
+            string categoryId = "8994e5d7-d81f-4480-af60-286dc96c1fe8";
+            Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand(new Guid(categoryId))).Result;
+            ChangeOrderHint changeOrderHint = new ChangeOrderHint();
+            changeOrderHint.OrderHint = TestUtils.RandomString(6);
+            SetExternalId setExternalId = new SetExternalId();
+            setExternalId.ExternalId = TestUtils.RandomString(5);
+            Category updatedCategory = commerceToolsClient.Execute<Category>(new UpdateByKeyCommand(category.Key, category.Version, new List<UpdateAction>() { changeOrderHint, setExternalId })).Result;
+            Assert.Equal(updatedCategory.OrderHint, changeOrderHint.OrderHint);
+            Assert.Equal(updatedCategory.ExternalId, setExternalId.ExternalId);
+        }
     }
 }

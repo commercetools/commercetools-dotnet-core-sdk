@@ -5,12 +5,12 @@
     using System;
     using System.Net.Http;
 
-    public class CreateRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
+    public class CreateRequestMessageBuilder : RequestMessageBuilderBase
     {
-        public Type CommandType => typeof(CreateCommand);
+        public override Type CommandType => typeof(CreateCommand);
 
         private CreateCommand command;
-        private ISerializerService serializerService;
+        private readonly ISerializerService serializerService;
 
         public CreateRequestMessageBuilder(ISerializerService serializerService, IClientConfiguration clientConfiguration) : base(clientConfiguration)
         {
@@ -27,8 +27,9 @@
 
         protected override HttpMethod HttpMethod => HttpMethod.Post;
 
-        public HttpRequestMessage GetRequestMessage<T>(ICommand command)
+        public override HttpRequestMessage GetRequestMessage<T>(ICommand command)
         {
+            // TODO Add a wrong cast check
             this.command = command as CreateCommand;
             return this.GetRequestMessage<T>();
         }

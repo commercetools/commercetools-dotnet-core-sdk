@@ -15,6 +15,7 @@
 
         public HttpRequestMessage GetRequestMessage<T>(ICommand command)
         {
+            // TODO Add a null pointer check
             IRequestMessageBuilder requestMessageBuilder = this.requestMessageBuilderFactory.GetRequestMessageBuilder(command);
             return requestMessageBuilder.GetRequestMessage<T>(command);
         }

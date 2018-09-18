@@ -5,13 +5,13 @@ using System.Net.Http;
 
 namespace commercetools.Sdk.HttpApi
 {
-    public class UpdateByIdRequestMessageBuilder : RequestMessageBuilderBase
+    public class UpdateByKeyRequestMessageBuilder : RequestMessageBuilderBase
     {
-        public override Type CommandType => typeof(UpdateByIdCommand);
-        private UpdateByIdCommand command;
+        public override Type CommandType => typeof(UpdateByKeyCommand);
+        private UpdateByKeyCommand command;
         private readonly ISerializerService serializerService;
 
-        public UpdateByIdRequestMessageBuilder(ISerializerService serializerService, IClientConfiguration clientConfiguration) : base(clientConfiguration)
+        public UpdateByKeyRequestMessageBuilder(ISerializerService serializerService, IClientConfiguration clientConfiguration) : base(clientConfiguration)
         {
             this.serializerService = serializerService;
         }
@@ -33,13 +33,13 @@ namespace commercetools.Sdk.HttpApi
 
         public override HttpRequestMessage GetRequestMessage<T>(ICommand command)
         {
-            this.command = command as UpdateByIdCommand;
+            this.command = command as UpdateByKeyCommand;
             return this.GetRequestMessage<T>();
         }
 
         protected override Uri GetRequestUri<T>()
         {
-            string requestUri = this.GetMessageBase<T>() + $"/{this.command.Guid}";
+            string requestUri = this.GetMessageBase<T>() + $"/key={this.command.Key}";
             return new Uri(requestUri);
         }
     }
