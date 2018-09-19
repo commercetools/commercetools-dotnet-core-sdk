@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace commercetools.Sdk.HttpApi.MvcExample
 {
@@ -46,8 +47,22 @@ namespace commercetools.Sdk.HttpApi.MvcExample
             // TODO Auto register all message builders by looping through interface implementations
             services.AddSingleton<IRequestMessageBuilder, CreateRequestMessageBuilder>();
             services.AddSingleton<IRequestMessageBuilder, UpdateByIdRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, UpdateByKeyRequestMessageBuilder>();
             services.AddSingleton<IRequestMessageBuilder, GetByIdRequestMessageBuilder>();
             services.AddSingleton<IRequestMessageBuilder, GetByKeyRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, DeleteByIdRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, DeleteByKeyRequestMessageBuilder>();
+
+            IDictionary<Type, Type> mapping = new Dictionary<Type, Type>();
+            mapping.Add(typeof(GetByIdCommand<>), typeof(GetByIdRequestMessageBuilder));
+            mapping.Add(typeof(GetByKeyCommand<>), typeof(GetByKeyRequestMessageBuilder));
+            mapping.Add(typeof(UpdateByIdCommand<>), typeof(UpdateByIdRequestMessageBuilder));
+            mapping.Add(typeof(UpdateByKeyCommand<>), typeof(UpdateByKeyRequestMessageBuilder));
+            mapping.Add(typeof(DeleteByIdCommand<>), typeof(DeleteByIdRequestMessageBuilder));
+            mapping.Add(typeof(DeleteByKeyCommand<>), typeof(DeleteByKeyRequestMessageBuilder));
+            mapping.Add(typeof(CreateCommand<>), typeof(CreateRequestMessageBuilder));
+            // TODO Find a better way of registering this dictionary
+            services.AddSingleton<IDictionary<Type, Type>>(mapping);
 
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
             services.AddSingleton<IRequestBuilder, RequestBuilder>();

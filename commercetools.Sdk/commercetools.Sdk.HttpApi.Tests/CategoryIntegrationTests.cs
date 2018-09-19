@@ -99,5 +99,15 @@ namespace commercetools.Sdk.HttpApi.Tests
             Assert.Equal(updatedCategory.OrderHint, changeOrderHint.OrderHint);
             Assert.Equal(updatedCategory.ExternalId, setExternalId.ExternalId);
         }
+
+        [Fact]
+        public void QueryCategory()
+        {
+            IClient commerceToolsClient = TestUtils.SetupClient();
+            QueryPredicate<Category> queryPredicate = null;
+            Sort<Category> sort = null;
+            Expansion expand = null;
+            PagedQueryResult<Category> results = commerceToolsClient.Execute(new QueryCommand<Category>(queryPredicate, sort, expand, 1, 1)).Result;
+        }
     }
 }
