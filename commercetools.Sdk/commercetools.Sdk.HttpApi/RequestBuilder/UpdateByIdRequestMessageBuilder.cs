@@ -5,7 +5,7 @@ using System.Net.Http;
 
 namespace commercetools.Sdk.HttpApi
 {
-    public class UpdateByIdRequestMessageBuilder : RequestMessageBuilderBase
+    public class UpdateByIdRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
         private readonly ISerializerService serializerService;
 
@@ -16,13 +16,9 @@ namespace commercetools.Sdk.HttpApi
 
         protected override HttpMethod HttpMethod => HttpMethod.Post;
 
-        public override HttpRequestMessage GetRequestMessage<T>(ICommand<T> command)
+        public HttpRequestMessage GetRequestMessage<T>(UpdateByIdCommand<T> command)
         {
-            if (!(command is UpdateByIdCommand<T> updateByIdCommand))
-            {
-                throw new InvalidCastException();
-            }
-            return this.GetRequestMessage<T>(this.GetRequestUri<T>(updateByIdCommand), this.GetHttpContent<T>(updateByIdCommand));
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), this.GetHttpContent<T>(command));
         }
 
         private HttpContent GetHttpContent<T>(UpdateByIdCommand<T> command)

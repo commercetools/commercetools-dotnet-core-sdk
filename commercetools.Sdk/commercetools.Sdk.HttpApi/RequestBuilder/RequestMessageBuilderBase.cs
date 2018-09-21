@@ -6,7 +6,7 @@ using System.Net.Http;
 
 namespace commercetools.Sdk.HttpApi
 {
-    public abstract class RequestMessageBuilderBase : IRequestMessageBuilder
+    public abstract class RequestMessageBuilderBase
     {
         private IClientConfiguration clientConfiguration;
 
@@ -22,8 +22,6 @@ namespace commercetools.Sdk.HttpApi
         }
 
         protected abstract HttpMethod HttpMethod { get; }
-
-        public abstract HttpRequestMessage GetRequestMessage<T>(ICommand<T> command);
 
         protected string GetMessageBase<T>()
         {

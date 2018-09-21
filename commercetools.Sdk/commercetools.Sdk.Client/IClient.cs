@@ -8,7 +8,7 @@ namespace commercetools.Sdk.Client
     {
         string Name { get; set; }
 
-        Task<T> Execute<T>(ICommand<T> command);
+        Task<T> Execute<T>(Command<T> command);
 
         //Task<T> Get<T>(Guid id);
         //Task<T> CreateAsync<T>(IDraft<T> draft);

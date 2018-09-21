@@ -6,7 +6,7 @@
     using System;
     using System.Net.Http;
 
-    public class QueryRequestMessageBuilder : RequestMessageBuilderBase
+    public class QueryRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
         private readonly ISerializerService serializerService;
 
@@ -15,27 +15,16 @@
             this.serializerService = serializerService;
         }
 
-        private HttpContent GetHttpContent<T>(QueryCommand<T> command)
-        {
-            return null;
-            //return new StringContent(this.serializerService.Serialize(command));
-        }
+        protected override HttpMethod HttpMethod => HttpMethod.Get;
 
-        protected override HttpMethod HttpMethod => HttpMethod.Post;
-
-        public override HttpRequestMessage GetRequestMessage<T>(ICommand<T> command)
-        {
-            Type typeOfCommand = command.GetType();
-
-            if (!(command is QueryCommand<T> queryCommand))
-            {
-                throw new InvalidCastException();
-            }
-            return this.GetRequestMessage<T>(this.GetRequestUri<T>(), this.GetHttpContent<T>(queryCommand));
+        public HttpRequestMessage GetRequestMessage<T>(QueryCommand<T> command)
+        {            
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(), null);
         }
 
         private Uri GetRequestUri<T>()
         {
+            // TODO add query string from predicate
             string requestUri = this.GetMessageBase<T>() + "/";
             return new Uri(requestUri);
         }

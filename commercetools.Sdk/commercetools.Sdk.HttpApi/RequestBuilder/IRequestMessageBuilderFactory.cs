@@ -4,6 +4,6 @@ namespace commercetools.Sdk.HttpApi
 {
     public interface IRequestMessageBuilderFactory
     {
-        IRequestMessageBuilder GetRequestMessageBuilder<T>(ICommand<T> command);
+        T GetRequestMessageBuilder<T>();
     }
 }

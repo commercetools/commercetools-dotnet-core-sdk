@@ -3,7 +3,7 @@ using System.Net.Http;
 
 namespace commercetools.Sdk.Client
 {
-    public class GetByIdCommand<T> : ICommand<T>
+    public class GetByIdCommand<T> : Command<T>
     {
         public Guid Guid { get; set; }
 

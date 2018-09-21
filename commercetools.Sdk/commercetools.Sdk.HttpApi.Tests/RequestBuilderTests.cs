@@ -22,18 +22,25 @@ namespace commercetools.Sdk.HttpApi.Tests
             UpdateByKeyRequestMessageBuilder updateByKeyRequestMessageBuilder = new UpdateByKeyRequestMessageBuilder(serializerService, clientConfiguration);
             DeleteByIdRequestMessageBuilder deleteByIdRequestMessageBuilder = new DeleteByIdRequestMessageBuilder(clientConfiguration);
             DeleteByKeyRequestMessageBuilder deleteByKeyRequestMessageBuilder = new DeleteByKeyRequestMessageBuilder(clientConfiguration);
-            IDictionary<Type, Type> mapping = new Dictionary<Type, Type>();
-            mapping.Add(typeof(GetByIdCommand<>), typeof(GetByIdRequestMessageBuilder));
-            mapping.Add(typeof(GetByKeyCommand<>), typeof(GetByKeyRequestMessageBuilder));
-            mapping.Add(typeof(UpdateByIdCommand<>), typeof(UpdateByIdRequestMessageBuilder));
-            mapping.Add(typeof(UpdateByKeyCommand<>), typeof(UpdateByKeyRequestMessageBuilder));
-            mapping.Add(typeof(DeleteByIdCommand<>), typeof(DeleteByIdRequestMessageBuilder));
-            mapping.Add(typeof(DeleteByKeyCommand<>), typeof(DeleteByKeyRequestMessageBuilder));
-            mapping.Add(typeof(CreateCommand<>), typeof(CreateRequestMessageBuilder));
             IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { getByIdRequestMessageBuilder, getByKeyRequestMessageBuilder, createRequestMessageBuilder, updateByIdRequestMessageBuilder, updateByKeyRequestMessageBuilder, deleteByKeyRequestMessageBuilder, deleteByIdRequestMessageBuilder };
-            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(mapping, requestMessageBuilders);
-            IRequestMessageBuilder requestMessageBuilder = requestMessageBuilderFactory.GetRequestMessageBuilder(new GetByIdCommand<Category>(new Guid()));
+            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(requestMessageBuilders);
+            IRequestMessageBuilder requestMessageBuilder = requestMessageBuilderFactory.GetRequestMessageBuilder<GetByIdRequestMessageBuilder>();
             Assert.Equal(typeof(GetByIdRequestMessageBuilder), requestMessageBuilder.GetType());
+        }
+
+        [Fact]
+        public void GetHttpApiCommand()
+        {
+            CreateCommand<Category> createCommand = new CreateCommand<Category>(new CategoryDraft());
+            IEnumerable<Type> registeredTypes = new List<Type>() { typeof(CreateHttpApiCommand<>) };
+            ISerializerService serializerService = new SerializerService(JsonSerializerSettingsFactory.Create);
+            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
+            CreateRequestMessageBuilder createRequestMessageBuilder = new CreateRequestMessageBuilder(serializerService, clientConfiguration);
+            IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { createRequestMessageBuilder };
+            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(requestMessageBuilders);
+            IHttpApiCommandFactory httpApiCommandFactory = new HttpApiCommandFactory(registeredTypes, requestMessageBuilderFactory);
+            IHttpApiCommand httpApiCommand = httpApiCommandFactory.Create(createCommand);
+            Assert.Equal(typeof(CreateHttpApiCommand<Category>), httpApiCommand.GetType());
         }
     }
 }

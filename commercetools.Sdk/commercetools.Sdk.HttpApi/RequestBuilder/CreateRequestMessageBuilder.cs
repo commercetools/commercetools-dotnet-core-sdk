@@ -5,7 +5,7 @@
     using System;
     using System.Net.Http;
 
-    public class CreateRequestMessageBuilder : RequestMessageBuilderBase
+    public class CreateRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
         private readonly ISerializerService serializerService;
 
@@ -21,13 +21,9 @@
 
         protected override HttpMethod HttpMethod => HttpMethod.Post;
 
-        public override HttpRequestMessage GetRequestMessage<T>(ICommand<T> command)
+        public HttpRequestMessage GetRequestMessage<T>(CreateCommand<T> command)
         {
-            if (!(command is CreateCommand<T> createCommand))
-            {
-                throw new InvalidCastException();
-            }
-            return this.GetRequestMessage<T>(this.GetRequestUri<T>(), this.GetHttpContent<T>(createCommand));
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(), this.GetHttpContent<T>(command));
         }
 
         private Uri GetRequestUri<T>()

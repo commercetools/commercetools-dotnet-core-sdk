@@ -6,6 +6,5 @@
 
     public interface IRequestMessageBuilder
     {
-        HttpRequestMessage GetRequestMessage<T>(ICommand<T> command);
     }
 }

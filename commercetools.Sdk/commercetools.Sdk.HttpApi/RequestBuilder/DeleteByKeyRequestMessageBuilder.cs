@@ -4,7 +4,7 @@
     using System;
     using System.Net.Http;
 
-    public class DeleteByKeyRequestMessageBuilder : RequestMessageBuilderBase
+    public class DeleteByKeyRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
 
         public DeleteByKeyRequestMessageBuilder(IClientConfiguration clientConfiguration) : base(clientConfiguration)
@@ -13,13 +13,9 @@
 
         protected override HttpMethod HttpMethod => HttpMethod.Delete;
 
-        public override HttpRequestMessage GetRequestMessage<T>(ICommand<T> command)
+        public HttpRequestMessage GetRequestMessage<T>(DeleteByKeyCommand<T> command)
         {
-            if (!(command is DeleteByKeyCommand<T> deleteByKeyCommand))
-            {
-                throw new InvalidCastException();
-            }
-            return this.GetRequestMessage<T>(this.GetRequestUri<T>(deleteByKeyCommand), null);
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), null);
         }
 
         private Uri GetRequestUri<T>(DeleteByKeyCommand<T> command)

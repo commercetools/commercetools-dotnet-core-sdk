@@ -5,7 +5,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Client
 {
-    public class UpdateByIdCommand<T> : ICommand<T>
+    public class UpdateByIdCommand<T> : Command<T>
     {
         public Guid Guid { get; set; }
         public int Version { get; set; }

@@ -9,24 +9,21 @@ namespace commercetools.Sdk.HttpApi
 {
     public class RequestMessageBuilderFactory : IRequestMessageBuilderFactory
     {
-        private readonly IDictionary<Type, Type> mapping;
         private readonly IEnumerable<IRequestMessageBuilder> registeredRequestMessageBuilders;
 
-        public RequestMessageBuilderFactory(IDictionary<Type, Type> mapping, IEnumerable<IRequestMessageBuilder> registeredRequestMessageBuilders)
+        public RequestMessageBuilderFactory(IEnumerable<IRequestMessageBuilder> registeredRequestMessageBuilders)
         {
             this.registeredRequestMessageBuilders = registeredRequestMessageBuilders;
-            this.mapping = mapping;
         }
 
-        public IRequestMessageBuilder GetRequestMessageBuilder<T>(ICommand<T> command)
+        public T GetRequestMessageBuilder<T>()
         {
-            Type typeOfCommand = command.GetType().GetGenericTypeDefinition();
-            if (this.mapping.ContainsKey(typeOfCommand))
+            IRequestMessageBuilder requestMessageBuilder = this.registeredRequestMessageBuilders.Where(x => x.GetType() == typeof(T)).FirstOrDefault();
+            if (requestMessageBuilder != null)
             {
-                Type typeOfBuilder = this.mapping[typeOfCommand];
-                return this.registeredRequestMessageBuilders.Where(x => x.GetType() == typeOfBuilder).FirstOrDefault();
+                return (T)requestMessageBuilder;
             }
-            return null;
+            return default(T);
         }
     }
 }

@@ -4,7 +4,7 @@
     using System;
     using System.Net.Http;
 
-    public class GetByKeyRequestMessageBuilder : RequestMessageBuilderBase
+    public class GetByKeyRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
         public GetByKeyRequestMessageBuilder(IClientConfiguration clientConfiguration) : base(clientConfiguration)
         {
@@ -12,13 +12,9 @@
 
         protected override HttpMethod HttpMethod => HttpMethod.Get;
 
-        public override HttpRequestMessage GetRequestMessage<T>(ICommand<T> command)
+        public HttpRequestMessage GetRequestMessage<T>(GetByKeyCommand<T> command)
         {
-            if (!(command is GetByKeyCommand<T> getByKeyCommand))
-            {
-                throw new InvalidCastException();
-            }
-            return this.GetRequestMessage<T>(this.GetRequestUri<T>(getByKeyCommand), null);
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), null);
         }
 
         private Uri GetRequestUri<T>(GetByKeyCommand<T> command)

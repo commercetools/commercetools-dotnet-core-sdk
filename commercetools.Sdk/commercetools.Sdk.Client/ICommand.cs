@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Client
 {
-    public interface ICommand<T>
+    public interface ICommand
     {
     }
 }

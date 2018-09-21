@@ -5,7 +5,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Client
 {
-    public class CreateCommand<T> : ICommand<T>
+    public class CreateCommand<T> : Command<T>
     {
         public IDraft<T> Entity { get; set; }
 

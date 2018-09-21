@@ -12,39 +12,23 @@
     {
         private readonly HttpClient client;
         private readonly IHttpClientFactory httpClientFactory;
-        private readonly IRequestBuilder requestBuilder;
         private readonly ISerializerService serializerService;
+        private readonly IHttpApiCommandFactory httpApiCommandFactory;
 
-        public Client(IHttpClientFactory httpClientFactory, IRequestBuilder requestBuilder, ISerializerService serializerService)
+        public Client(IHttpClientFactory httpClientFactory, IHttpApiCommandFactory httpApiCommandFactory, ISerializerService serializerService)
         {
             this.httpClientFactory = httpClientFactory;
             this.client = this.httpClientFactory.CreateClient(this.Name);
-            this.requestBuilder = requestBuilder;
             this.serializerService = serializerService;
+            this.httpApiCommandFactory = httpApiCommandFactory;
         }
 
         public string Name { get; set; } = "api";
 
-        //public async Task<T> CreateAsync<T>(IDraft<T> draft)
-        //{
-        //    CreateCommand createCommand = new CreateCommand(draft);
-        //    return await SendRequest<T>(this.requestBuilder.GetRequestMessage<T>(createCommand));
-        //}
-
-        public async Task<T> Execute<T>(ICommand<T> command)
+        public async Task<T> Execute<T>(Command<T> command)
         {
-            return await SendRequest<T>(this.requestBuilder.GetRequestMessage<T>(command));
-        }
-
-        //public async Task<T> Get<T>(Guid id)
-        //{
-        //    GetByIdCommand createCommand = new GetByIdCommand(id);
-        //    return await SendRequest<T>(this.requestBuilder.GetRequestMessage<T>(createCommand));
-        //}
-
-        public Task<PagedQueryResult<T>> Query<T>()
-        {
-            throw new System.NotImplementedException();
+            IHttpApiCommand httpApiCommand = this.httpApiCommandFactory.Create(command);
+            return await SendRequest<T>(httpApiCommand.HttpRequestMessage);
         }
 
         private async Task<T> SendRequest<T>(HttpRequestMessage requestMessage)

@@ -45,20 +45,12 @@ namespace commercetools.Sdk.HttpApi.Tests
             DeleteByIdRequestMessageBuilder deleteByIdRequestMessageBuilder = new DeleteByIdRequestMessageBuilder(clientConfiguration);
             DeleteByKeyRequestMessageBuilder deleteByKeyRequestMessageBuilder = new DeleteByKeyRequestMessageBuilder(clientConfiguration);
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(serializerService, clientConfiguration);
-            IDictionary<Type, Type> mapping = new Dictionary<Type, Type>();
-            mapping.Add(typeof(GetByIdCommand<>), typeof(GetByIdRequestMessageBuilder));
-            mapping.Add(typeof(GetByKeyCommand<>), typeof(GetByKeyRequestMessageBuilder));
-            mapping.Add(typeof(UpdateByIdCommand<>), typeof(UpdateByIdRequestMessageBuilder));
-            mapping.Add(typeof(UpdateByKeyCommand<>), typeof(UpdateByKeyRequestMessageBuilder));
-            mapping.Add(typeof(DeleteByIdCommand<>), typeof(DeleteByIdRequestMessageBuilder));
-            mapping.Add(typeof(DeleteByKeyCommand<>), typeof(DeleteByKeyRequestMessageBuilder));
-            mapping.Add(typeof(CreateCommand<>), typeof(CreateRequestMessageBuilder));
-            mapping.Add(typeof(QueryCommand<>), typeof(QueryRequestMessageBuilder));
             IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { getByIdRequestMessageBuilder, getByKeyRequestMessageBuilder, createRequestMessageBuilder, updateByIdRequestMessageBuilder, updateByKeyRequestMessageBuilder, deleteByKeyRequestMessageBuilder, deleteByIdRequestMessageBuilder, queryRequestMessageBuilder };
-            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(mapping, requestMessageBuilders);
-            IRequestBuilder requestBuilder = new RequestBuilder(requestMessageBuilderFactory);
+            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(requestMessageBuilders);
+            IEnumerable<Type> registeredTypes = new List<Type>() { typeof(CreateHttpApiCommand<>) };
+            IHttpApiCommandFactory httpApiCommandFactory = new HttpApiCommandFactory(registeredTypes, requestMessageBuilderFactory);
 
-            IClient commerceToolsClient = new Client(httpClientFactory, requestBuilder, serializerService);
+            IClient commerceToolsClient = new Client(httpClientFactory, httpApiCommandFactory, serializerService);
             return commerceToolsClient;
         }
     }

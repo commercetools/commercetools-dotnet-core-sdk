@@ -45,13 +45,13 @@ namespace commercetools.Sdk.HttpApi.MvcExample
             services.AddHttpClient("auth");
             services.AddHttpClient("api").AddHttpMessageHandler<AuthorizationHandler>();
             // TODO Auto register all message builders by looping through interface implementations
-            services.AddSingleton<IRequestMessageBuilder, CreateRequestMessageBuilder>();
-            services.AddSingleton<IRequestMessageBuilder, UpdateByIdRequestMessageBuilder>();
-            services.AddSingleton<IRequestMessageBuilder, UpdateByKeyRequestMessageBuilder>();
-            services.AddSingleton<IRequestMessageBuilder, GetByIdRequestMessageBuilder>();
-            services.AddSingleton<IRequestMessageBuilder, GetByKeyRequestMessageBuilder>();
-            services.AddSingleton<IRequestMessageBuilder, DeleteByIdRequestMessageBuilder>();
-            services.AddSingleton<IRequestMessageBuilder, DeleteByKeyRequestMessageBuilder>();
+            services.AddSingleton<CreateRequestMessageBuilder>();
+            services.AddSingleton<UpdateByIdRequestMessageBuilder>();
+            services.AddSingleton<UpdateByKeyRequestMessageBuilder>();
+            services.AddSingleton<GetByIdRequestMessageBuilder>();
+            services.AddSingleton<GetByKeyRequestMessageBuilder>();
+            services.AddSingleton<DeleteByIdRequestMessageBuilder>();
+            services.AddSingleton<DeleteByKeyRequestMessageBuilder>();
 
             IDictionary<Type, Type> mapping = new Dictionary<Type, Type>();
             mapping.Add(typeof(GetByIdCommand<>), typeof(GetByIdRequestMessageBuilder));
@@ -65,7 +65,6 @@ namespace commercetools.Sdk.HttpApi.MvcExample
             services.AddSingleton<IDictionary<Type, Type>>(mapping);
 
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
-            services.AddSingleton<IRequestBuilder, RequestBuilder>();
             services.AddSingleton<Func<Type, JsonSerializerSettings>>(JsonSerializerSettingsFactory.Create);
             services.AddSingleton<ISerializerService, SerializerService>();
             services.AddSingleton<IClient, Client>();

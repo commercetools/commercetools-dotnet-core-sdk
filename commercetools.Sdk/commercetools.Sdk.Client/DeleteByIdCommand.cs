@@ -5,7 +5,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Client
 {
-    public class DeleteByIdCommand<T> : ICommand<T>
+    public class DeleteByIdCommand<T> : Command<T>
     {
         public Guid Guid { get; set; }
         public int Version { get; set; }
