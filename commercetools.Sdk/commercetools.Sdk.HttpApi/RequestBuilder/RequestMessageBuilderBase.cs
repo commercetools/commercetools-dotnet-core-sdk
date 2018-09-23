@@ -21,6 +21,7 @@ namespace commercetools.Sdk.HttpApi
             this.clientConfiguration = clientConfiguration;
         }
 
+        // TODO Remove this from the abstract class
         protected abstract HttpMethod HttpMethod { get; }
 
         protected string GetMessageBase<T>()

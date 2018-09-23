@@ -47,8 +47,8 @@ namespace commercetools.Sdk.HttpApi.Tests
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(serializerService, clientConfiguration);
             IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { getByIdRequestMessageBuilder, getByKeyRequestMessageBuilder, createRequestMessageBuilder, updateByIdRequestMessageBuilder, updateByKeyRequestMessageBuilder, deleteByKeyRequestMessageBuilder, deleteByIdRequestMessageBuilder, queryRequestMessageBuilder };
             IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(requestMessageBuilders);
-            IEnumerable<Type> registeredTypes = new List<Type>() { typeof(CreateHttpApiCommand<>) };
-            IHttpApiCommandFactory httpApiCommandFactory = new HttpApiCommandFactory(registeredTypes, requestMessageBuilderFactory);
+            IEnumerable<Type> registeredHttpApiCommandTypes = new List<Type>() { typeof(CreateHttpApiCommand<>), typeof(QueryHttpApiCommand<>), typeof(GetByIdHttpApiCommand<>), typeof(GetByKeyHttpApiCommand<>), typeof(UpdateByKeyHttpApiCommand<>), typeof(UpdateByIdHttpApiCommand<>), typeof(DeleteByKeyHttpApiCommand<>), typeof(DeleteByIdHttpApiCommand<>) };
+            IHttpApiCommandFactory httpApiCommandFactory = new HttpApiCommandFactory(registeredHttpApiCommandTypes, requestMessageBuilderFactory);
 
             IClient commerceToolsClient = new Client(httpClientFactory, httpApiCommandFactory, serializerService);
             return commerceToolsClient;

@@ -5,6 +5,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Client
 {
+    // TODO Merge by key and by id into one for all commands
     public class DeleteByIdCommand<T> : Command<T>
     {
         public Guid Guid { get; set; }

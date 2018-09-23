@@ -45,25 +45,20 @@ namespace commercetools.Sdk.HttpApi.MvcExample
             services.AddHttpClient("auth");
             services.AddHttpClient("api").AddHttpMessageHandler<AuthorizationHandler>();
             // TODO Auto register all message builders by looping through interface implementations
-            services.AddSingleton<CreateRequestMessageBuilder>();
-            services.AddSingleton<UpdateByIdRequestMessageBuilder>();
-            services.AddSingleton<UpdateByKeyRequestMessageBuilder>();
-            services.AddSingleton<GetByIdRequestMessageBuilder>();
-            services.AddSingleton<GetByKeyRequestMessageBuilder>();
-            services.AddSingleton<DeleteByIdRequestMessageBuilder>();
-            services.AddSingleton<DeleteByKeyRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, CreateRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, UpdateByIdRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, UpdateByKeyRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, GetByIdRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, GetByKeyRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, DeleteByIdRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, DeleteByKeyRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, QueryRequestMessageBuilder>();
 
-            IDictionary<Type, Type> mapping = new Dictionary<Type, Type>();
-            mapping.Add(typeof(GetByIdCommand<>), typeof(GetByIdRequestMessageBuilder));
-            mapping.Add(typeof(GetByKeyCommand<>), typeof(GetByKeyRequestMessageBuilder));
-            mapping.Add(typeof(UpdateByIdCommand<>), typeof(UpdateByIdRequestMessageBuilder));
-            mapping.Add(typeof(UpdateByKeyCommand<>), typeof(UpdateByKeyRequestMessageBuilder));
-            mapping.Add(typeof(DeleteByIdCommand<>), typeof(DeleteByIdRequestMessageBuilder));
-            mapping.Add(typeof(DeleteByKeyCommand<>), typeof(DeleteByKeyRequestMessageBuilder));
-            mapping.Add(typeof(CreateCommand<>), typeof(CreateRequestMessageBuilder));
-            // TODO Find a better way of registering this dictionary
-            services.AddSingleton<IDictionary<Type, Type>>(mapping);
-
+            // loop through classes and register this automatically
+            IEnumerable<Type> registeredHttpApiCommandTypes = new List<Type>() { typeof(CreateHttpApiCommand<>), typeof(QueryHttpApiCommand<>), typeof(GetByIdHttpApiCommand<>), typeof(GetByKeyHttpApiCommand<>), typeof(UpdateByKeyHttpApiCommand<>), typeof(UpdateByIdHttpApiCommand<>), typeof(DeleteByKeyHttpApiCommand<>), typeof(DeleteByIdHttpApiCommand<>) };
+            // find a better way to add this to services, ienumerable is too generic
+            services.AddSingleton<IEnumerable<Type>>(registeredHttpApiCommandTypes);
+            services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
             services.AddSingleton<Func<Type, JsonSerializerSettings>>(JsonSerializerSettingsFactory.Create);
             services.AddSingleton<ISerializerService, SerializerService>();
