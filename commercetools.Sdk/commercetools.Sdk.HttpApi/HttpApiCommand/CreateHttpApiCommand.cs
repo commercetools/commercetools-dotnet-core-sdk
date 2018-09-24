@@ -25,7 +25,5 @@ namespace commercetools.Sdk.HttpApi
             this.command = command;
             this.requestBuilder = requestMessageBuilderFactory.GetRequestMessageBuilder<CreateRequestMessageBuilder>();
         }
-
-
     }
 }

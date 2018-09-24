@@ -4,6 +4,7 @@
     using commercetools.Sdk.Domain;
     using commercetools.Sdk.Serialization;
     using System;
+    using System.Net;
     using System.Net.Http;
 
     public class QueryRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
@@ -24,9 +25,10 @@
 
         private Uri GetRequestUri<T>()
         {
-            // TODO add query string from predicate
-            string requestUri = this.GetMessageBase<T>() + "/";
-            return new Uri(requestUri);
+            var parametersToAdd = new System.Collections.Generic.Dictionary<string, string> { { "where", "key = \"newKeyKMI\"" } };
+            string requestUri = this.GetMessageBase<T>();
+            var newUri = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString(requestUri, parametersToAdd);
+            return new Uri(newUri);
         }
     }
 }
