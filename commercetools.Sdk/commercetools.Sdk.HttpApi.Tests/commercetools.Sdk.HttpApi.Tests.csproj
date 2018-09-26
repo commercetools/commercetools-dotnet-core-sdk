@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\commercetools.Sdk.HttpApi\commercetools.Sdk.HttpApi.csproj" />
+    <ProjectReference Include="..\commercetools.Sdk.LinqToQueryPredicate\commercetools.Sdk.LinqToQueryPredicate.csproj" />
   </ItemGroup>
 
 </Project>
