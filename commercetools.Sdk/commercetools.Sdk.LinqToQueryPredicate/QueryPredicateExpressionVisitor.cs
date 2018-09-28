@@ -15,7 +15,8 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             { ExpressionType.LessThan, "<" },
             { ExpressionType.GreaterThan, ">" },
             { ExpressionType.LessThanOrEqual, "<=" },
-            { ExpressionType.GreaterThanOrEqual, ">=" }
+            { ExpressionType.GreaterThanOrEqual, ">=" },
+            { ExpressionType.NotEqual, "!=" }
         };
 
         private Dictionary<string, string> mappingOfMethods = new Dictionary<string, string>()
@@ -35,11 +36,11 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             {
                 return VisitExpression(((LambdaExpression)expression).Body);
             }
-            if (expression.NodeType == ExpressionType.Equal)
+            if (expression.NodeType == ExpressionType.Not)
             {
-                return Visit((BinaryExpression)expression);
+                return Visit((UnaryExpression)expression);
             }
-            if (expression.NodeType == ExpressionType.LessThan)
+            if (this.mappingOfOperators.ContainsKey(expression.NodeType))
             {
                 return Visit((BinaryExpression)expression);
             }
@@ -51,14 +52,20 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             return null;
         }
 
+        private string Visit(UnaryExpression expression)
+        {
+            return $"not({VisitExpression(expression.Operand)})";
+        }
+
         // TODO Refactor this
         private string Visit(BinaryExpression expression)
         {
             string left = null;
-            List<string> parentList = GetParentMemberList(expression.Left);
+            List<string> parentList = new List<string>();
             if (expression.Left.NodeType == ExpressionType.MemberAccess)
             {
                 left = ((MemberExpression)expression.Left).Member.Name;
+                parentList = GetParentMemberList(expression.Left);
             }
             if (expression.Left.NodeType == ExpressionType.Call)
             {
@@ -67,6 +74,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
                 if (((MethodCallExpression)expression.Left).Object.NodeType == ExpressionType.MemberAccess)
                 {
                     parentList.Add(((MemberExpression)((MethodCallExpression)expression.Left).Object).Member.Name);
+                    parentList.AddRange(GetParentMemberList(((MethodCallExpression)expression.Left).Object));                    
                 }
                 if (((MethodCallExpression)expression.Left).Arguments[0].NodeType == ExpressionType.Constant)
                 {

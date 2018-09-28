@@ -29,11 +29,28 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void ExpressionStringEqual()
         {
-            Expression<Func<Category, bool>> expr2 = c => c.Parent.Id == "someId" && c.Parent.TypeId == "someTypeid";
             Expression<Func<Category, bool>> expression = c => c.Key == "c14";
             QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
             string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
             Assert.Equal("key = \"c14\"", result);
+        }
+
+        [Fact]
+        public void ExpressionStringNotEqual()
+        {
+            Expression<Func<Category, bool>> expression = c => c.Key != "c14";
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("key != \"c14\"", result);
+        }
+
+        [Fact]
+        public void ExpressionNotStringEqual()
+        {
+            Expression<Func<Category, bool>> expression = c => !(c.Key == "c14");
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("not(key = \"c14\")", result);
         }
 
         [Fact]
@@ -106,6 +123,15 @@ namespace commercetools.Sdk.HttpApi.Tests
             QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
             string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
             Assert.Equal("name(en = \"men\")", result);
+        }
+
+        [Fact]
+        public void ExpressionPropertyThreeLevelDictionaryEqual()
+        {
+            Expression<Func<Product, bool>> expression = p => p.MasterData.Current.Slug["en"] == "product";
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("masterData(current(slug(en = \"product\")))", result);
         }
 
         [Fact]
