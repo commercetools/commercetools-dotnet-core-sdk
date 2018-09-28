@@ -20,6 +20,11 @@ namespace commercetools.Sdk.Domain
         {
             return values.Contains(source);
         }
+
+        public static bool ContainsAll<T>(this IEnumerable<T> containingList, params T[] lookupList)
+        {
+            return !lookupList.Except(containingList).Any();
+        }
     }
 
 }

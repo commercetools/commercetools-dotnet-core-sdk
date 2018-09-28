@@ -9,6 +9,21 @@ namespace commercetools.Sdk.LinqToQueryPredicate
 {
     public class QueryPredicateExpressionVisitor
     {
+        private Dictionary<ExpressionType, string> mappingOfOperators = new Dictionary<ExpressionType, string>()
+        {
+            { ExpressionType.Equal, "=" },
+            { ExpressionType.LessThan, "<" },
+            { ExpressionType.GreaterThan, ">" },
+            { ExpressionType.LessThanOrEqual, "<=" },
+            { ExpressionType.GreaterThanOrEqual, ">=" }
+        };
+
+        private Dictionary<string, string> mappingOfMethods = new Dictionary<string, string>()
+        {
+            { "In", "in" },
+            { "ContainsAll", "contains all" }
+        };
+
         public string ProcessExpression(Expression expression)
         {
             return VisitExpression(expression);
@@ -22,60 +37,116 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             }
             if (expression.NodeType == ExpressionType.Equal)
             {
-                return Visit((BinaryExpression)expression, "=");
+                return Visit((BinaryExpression)expression);
             }
             if (expression.NodeType == ExpressionType.LessThan)
             {
-                return Visit((BinaryExpression)expression, "<");
+                return Visit((BinaryExpression)expression);
             }
+            if (expression.NodeType == ExpressionType.Call)
+            {
+                return Visit((MethodCallExpression)expression);
+            }
+            // TODO throw exception is unsupported expression
             return null;
         }
 
         // TODO Refactor this
-        private string Visit(BinaryExpression expression, string operatorSign)
+        private string Visit(BinaryExpression expression)
         {
             string left = null;
-            List<string> parentList = new List<string>();
+            List<string> parentList = GetParentMemberList(expression.Left);            
             if (expression.Left.NodeType == ExpressionType.MemberAccess)
             {
-                var parent = ((MemberExpression)expression.Left).Expression;
-                while (parent is MemberExpression)
-                {
-                    parentList.Add(((MemberExpression)parent).Member.Name);
-                    parent = ((MemberExpression)parent).Expression;
-                }
                 left = ((MemberExpression)expression.Left).Member.Name;
             }
             string right = null;
             if (expression.Right.NodeType == ExpressionType.Constant)
             {
-                Type typeOfLeft = ((MemberExpression)expression.Left).Type;
-                object result = Convert.ChangeType(((ConstantExpression)expression.Right).Value, typeOfLeft);
-                if (typeOfLeft == typeof(string))
+                right = ConvertRight(expression.Right);
+            }
+
+            string operatorSign = this.mappingOfOperators[expression.NodeType];
+
+            // TODO Add check if left or right happen to be null            
+            return Visit(left, operatorSign, right, parentList);
+        }
+
+        private string ConvertRight(Expression rightExpression)
+        {
+            string right = null;
+            Type typeOfRight = ((ConstantExpression)rightExpression).Value.GetType();
+            object result = ((ConstantExpression)rightExpression).Value;
+            if (typeOfRight == typeof(string))
+            {
+                right = $"\"{result.ToString()}\"";
+            }
+            else
+            {
+                right = $"{result.ToString()}";
+            }
+            return right;
+        }
+
+        private List<string> GetParentMemberList(Expression expression)
+        {
+            List<string> parentList = new List<string>();
+            if (expression.NodeType == ExpressionType.MemberAccess)
+            {
+                var parent = ((MemberExpression)expression).Expression;
+                while (parent is MemberExpression)
                 {
-                    right = $"\"{result.ToString()}\"";
-                }
-                else
-                {
-                    right = $"{result.ToString()}";
+                    parentList.Add(((MemberExpression)parent).Member.Name);
+                    parent = ((MemberExpression)parent).Expression;
                 }
             }
-            
+            return parentList;
+        }
+
+        private string Visit(MethodCallExpression expression)
+        {
+            string left = null;
+            string right = null;
+            string operatorSign = this.mappingOfMethods[expression.Method.Name];
+
+            List<string> parentList = GetParentMemberList(expression.Arguments[0]);
+            if (expression.Arguments[0].NodeType == ExpressionType.MemberAccess)
+            {
+                left = ((MemberExpression)expression.Arguments[0]).Member.Name;
+            }
+
+            List<string> rightList = new List<string>();
+            if (expression.Arguments[1].NodeType == ExpressionType.NewArrayInit)
+            {
+                foreach(Expression part in ((NewArrayExpression)expression.Arguments[1]).Expressions)
+                {
+                    if (part.NodeType == ExpressionType.Constant)
+                    {
+                        rightList.Add(ConvertRight(part));
+                    }
+                }
+            }
+
+            if (rightList.Count() > 0)
+            { 
+                right = $"({string.Join(", ", rightList)})";
+            }
+
+            return Visit(left, operatorSign, right, parentList);
+        }
+
+        private string Visit(string left, string operatorSign, string right, List<string> parentList)
+        {
+            string result = $"{left.ToCamelCase()} {operatorSign.ToCamelCase()} {right}";
             if (parentList.Count() > 0)
             {
-                string result = Visit(left, operatorSign, right);
-                foreach(string parent in parentList)
+                foreach (string parent in parentList)
                 {
                     result = $"{parent.ToCamelCase()}({result})";
                 }
                 return result;
             }
-            return Visit(left, operatorSign, right);
-        }
-
-        private string Visit(string left, string operatorSign, string right)
-        {
-            return $"{left.ToCamelCase()} {operatorSign} {right}";
+            return result;
         }
     }
 

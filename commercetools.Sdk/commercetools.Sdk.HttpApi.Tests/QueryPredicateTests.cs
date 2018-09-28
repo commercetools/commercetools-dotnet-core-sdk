@@ -24,9 +24,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         // key in ("c14", "c15")
         //QueryPredicate<Category> queryPredicate3 = new QueryPredicate<Category>(c => c.Name["en"] == "categoryName");
         //QueryPredicate<Category> queryPredicate2 = new QueryPredicate<Category>(c => c.Key.In("c14", "c15"));
-        //QueryPredicate<Category> queryPredicate4 = new QueryPredicate<Category>(c => !c.Key.In("c14", "c15"));
-
-        
+        //QueryPredicate<Category> queryPredicate4 = new QueryPredicate<Category>(c => !c.Key.In("c14", "c15"));        
 
         [Fact]
         public void ExpressionStringEqual()
@@ -81,6 +79,24 @@ namespace commercetools.Sdk.HttpApi.Tests
             QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
             string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
             Assert.Equal("masterVariant(id < 30)", result);
+        }
+
+        [Fact]
+        public void ExpressionPropertyInString()
+        {
+            Expression<Func<Category, bool>> expression = c => c.Key.In("c14", "c15");
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("key in (\"c14\", \"c15\")", result);
+        }
+
+        [Fact]
+        public void ExpressionPropertyContainsAllString()
+        {
+            Expression<Func<Customer, bool>> expression = c => c.ShippingAddressIds.ContainsAll("c14", "c15");
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("shippingAddressIds contains all (\"c14\", \"c15\")", result);
         }
     }      
 }
