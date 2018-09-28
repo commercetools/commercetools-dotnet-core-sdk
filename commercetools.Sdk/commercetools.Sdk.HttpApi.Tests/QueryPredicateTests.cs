@@ -98,5 +98,22 @@ namespace commercetools.Sdk.HttpApi.Tests
             string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
             Assert.Equal("shippingAddressIds contains all (\"c14\", \"c15\")", result);
         }
+
+        [Fact]
+        public void ExpressionPropertyDictionaryEqual()
+        {
+            Expression<Func<Category, bool>> expression = c => c.Name["en"] == "men";
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("name(en = \"men\")", result);
+        }
+
+        [Fact]
+        public void ContainsAll()
+        {
+            List<string> list = new List<string>() { "a", "b", "c" };
+            bool result = list.ContainsAll("a", "b", "c");
+            Assert.True(result);
+        }
     }      
 }

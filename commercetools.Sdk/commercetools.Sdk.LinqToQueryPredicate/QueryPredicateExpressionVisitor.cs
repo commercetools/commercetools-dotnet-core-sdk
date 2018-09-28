@@ -55,37 +55,34 @@ namespace commercetools.Sdk.LinqToQueryPredicate
         private string Visit(BinaryExpression expression)
         {
             string left = null;
-            List<string> parentList = GetParentMemberList(expression.Left);            
+            List<string> parentList = GetParentMemberList(expression.Left);
             if (expression.Left.NodeType == ExpressionType.MemberAccess)
             {
                 left = ((MemberExpression)expression.Left).Member.Name;
             }
+            if (expression.Left.NodeType == ExpressionType.Call)
+            {
+                // TODO See if a check should be made to see if this is a dictionary<string, string>
+                object name = ((MethodCallExpression)expression.Left).Object;
+                if (((MethodCallExpression)expression.Left).Object.NodeType == ExpressionType.MemberAccess)
+                {
+                    parentList.Add(((MemberExpression)((MethodCallExpression)expression.Left).Object).Member.Name);
+                }
+                if (((MethodCallExpression)expression.Left).Arguments[0].NodeType == ExpressionType.Constant)
+                {
+                    left = ((MethodCallExpression)expression.Left).Arguments[0].ToString().Replace("\"", ""); 
+                }
+            }
             string right = null;
             if (expression.Right.NodeType == ExpressionType.Constant)
             {
-                right = ConvertRight(expression.Right);
+                right = expression.Right.ToString();
             }
 
             string operatorSign = this.mappingOfOperators[expression.NodeType];
 
             // TODO Add check if left or right happen to be null            
             return Visit(left, operatorSign, right, parentList);
-        }
-
-        private string ConvertRight(Expression rightExpression)
-        {
-            string right = null;
-            Type typeOfRight = ((ConstantExpression)rightExpression).Value.GetType();
-            object result = ((ConstantExpression)rightExpression).Value;
-            if (typeOfRight == typeof(string))
-            {
-                right = $"\"{result.ToString()}\"";
-            }
-            else
-            {
-                right = $"{result.ToString()}";
-            }
-            return right;
         }
 
         private List<string> GetParentMemberList(Expression expression)
@@ -122,7 +119,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
                 {
                     if (part.NodeType == ExpressionType.Constant)
                     {
-                        rightList.Add(ConvertRight(part));
+                        rightList.Add(part.ToString());
                     }
                 }
             }
