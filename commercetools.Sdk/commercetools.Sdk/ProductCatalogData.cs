@@ -2,6 +2,7 @@
 {
     public class ProductCatalogData
     {
-        public ProductVariant MasterVariant { get; set; }
+        public ProductData Current { get; set; }
+        public ProductData Staged { get; set; }
     }
 }

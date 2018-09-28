@@ -9,6 +9,7 @@ using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
+    // move this to a different project
     public class QueryPredicateTests
     {
 
@@ -25,9 +26,12 @@ namespace commercetools.Sdk.HttpApi.Tests
         //QueryPredicate<Category> queryPredicate2 = new QueryPredicate<Category>(c => c.Key.In("c14", "c15"));
         //QueryPredicate<Category> queryPredicate4 = new QueryPredicate<Category>(c => !c.Key.In("c14", "c15"));
 
+        
+
         [Fact]
         public void ExpressionStringEqual()
         {
+            Expression<Func<Category, bool>> expr2 = c => c.Parent.Id == "someId" && c.Parent.TypeId == "someTypeid";
             Expression<Func<Category, bool>> expression = c => c.Key == "c14";
             QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
             string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
@@ -46,10 +50,37 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void ExpressionPropertyThreeLevelStringEqual()
         {
-            Expression<Func<Product, bool>> expression = p => p.MasterData.MasterVariant.Id == "13c4ee51-ff35-490f-8e43-349e39c34646";
+            Expression<Func<ProductCatalogData, bool>> expression = p => p.Current.MasterVariant.Key == "p15";
             QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
             string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
-            Assert.Equal("masterData(masterVariant(id = \"13c4ee51-ff35-490f-8e43-349e39c34646\"))", result);
+            Assert.Equal("current(masterVariant(key = \"p15\"))", result);
+        }
+
+        [Fact]
+        public void ExpressionPropertyIntEqual()
+        {
+            Expression<Func<Category, bool>> expression = c => c.Version == 30;
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("version = 30", result);
+        }        
+
+        [Fact]
+        public void ExpressionPropertyIntLessThan()
+        {
+            Expression<Func<Category, bool>> expression = c => c.Version < 30;
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("version < 30", result);
+        }
+
+        [Fact]
+        public void ExpressionPropertyTwoLevelIntLessThan()
+        {
+            Expression<Func<ProductData, bool>> expression = p => p.MasterVariant.Id < 30;
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("masterVariant(id < 30)", result);
         }
     }      
 }

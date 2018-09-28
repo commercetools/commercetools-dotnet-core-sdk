@@ -22,13 +22,17 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             }
             if (expression.NodeType == ExpressionType.Equal)
             {
-                return VisitEqual((BinaryExpression)expression);
+                return Visit((BinaryExpression)expression, "=");
+            }
+            if (expression.NodeType == ExpressionType.LessThan)
+            {
+                return Visit((BinaryExpression)expression, "<");
             }
             return null;
         }
 
         // TODO Refactor this
-        private string VisitEqual(BinaryExpression expression)
+        private string Visit(BinaryExpression expression, string operatorSign)
         {
             string left = null;
             List<string> parentList = new List<string>();
@@ -43,27 +47,35 @@ namespace commercetools.Sdk.LinqToQueryPredicate
                 left = ((MemberExpression)expression.Left).Member.Name;
             }
             string right = null;
-            // TODO See if conversion from object to type is needed
-            if (expression.Right.NodeType == ExpressionType.Constant && ((MemberExpression)expression.Left).Type == typeof(string))
+            if (expression.Right.NodeType == ExpressionType.Constant)
             {
-                right = (string)((ConstantExpression)expression.Right).Value;
+                Type typeOfLeft = ((MemberExpression)expression.Left).Type;
+                object result = Convert.ChangeType(((ConstantExpression)expression.Right).Value, typeOfLeft);
+                if (typeOfLeft == typeof(string))
+                {
+                    right = $"\"{result.ToString()}\"";
+                }
+                else
+                {
+                    right = $"{result.ToString()}";
+                }
             }
             
             if (parentList.Count() > 0)
             {
-                string result = VisitEqual(left, right);
+                string result = Visit(left, operatorSign, right);
                 foreach(string parent in parentList)
                 {
                     result = $"{parent.ToCamelCase()}({result})";
                 }
                 return result;
             }
-            return VisitEqual(left, right);
+            return Visit(left, operatorSign, right);
         }
-        
-        private string VisitEqual(string left, string right)
+
+        private string Visit(string left, string operatorSign, string right)
         {
-            return $"{left.ToCamelCase()} = \"{right}\"";
+            return $"{left.ToCamelCase()} {operatorSign} {right}";
         }
     }
 
