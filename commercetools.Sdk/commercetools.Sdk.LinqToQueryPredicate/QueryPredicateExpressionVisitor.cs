@@ -40,6 +40,14 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             {
                 return Visit((UnaryExpression)expression);
             }
+            if (expression.NodeType == ExpressionType.And || expression.NodeType == ExpressionType.AndAlso)
+            {
+                return VisitAnd((BinaryExpression)expression);
+            }
+            if (expression.NodeType == ExpressionType.Or || expression.NodeType == ExpressionType.OrElse)
+            {
+                return VisitOr((BinaryExpression)expression);
+            }
             if (this.mappingOfOperators.ContainsKey(expression.NodeType))
             {
                 return Visit((BinaryExpression)expression);
@@ -50,6 +58,16 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             }
             // TODO throw exception is unsupported expression
             return null;
+        }
+
+        private string VisitAnd(BinaryExpression expression)
+        {
+            return $"{VisitExpression(expression.Left)} and {VisitExpression(expression.Right)}";
+        }
+
+        private string VisitOr(BinaryExpression expression)
+        {
+            return $"{VisitExpression(expression.Left)} or {VisitExpression(expression.Right)}";
         }
 
         private string Visit(UnaryExpression expression)

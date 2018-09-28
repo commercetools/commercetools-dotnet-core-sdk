@@ -45,12 +45,39 @@ namespace commercetools.Sdk.HttpApi.Tests
         }
 
         [Fact]
+        public void ExpressionStringAnd()
+        {
+            Expression<Func<Category, bool>> expression = c => c.Key != "c14" && c.Version == 30;
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("key != \"c14\" and version = 30", result);
+        }
+
+        [Fact]
+        public void ExpressionStringOr()
+        {
+            Expression<Func<Category, bool>> expression = c => c.Key != "c14" || c.Version == 30;
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("key != \"c14\" or version = 30", result);
+        }
+
+        [Fact]
         public void ExpressionNotStringEqual()
         {
             Expression<Func<Category, bool>> expression = c => !(c.Key == "c14");
             QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
             string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
             Assert.Equal("not(key = \"c14\")", result);
+        }
+
+        [Fact]
+        public void ExpressionNotStringAnd()
+        {
+            Expression<Func<Category, bool>> expression = c => !(c.Key == "c14" && c.Version == 30);
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("not(key = \"c14\" and version = 30)", result);
         }
 
         [Fact]
