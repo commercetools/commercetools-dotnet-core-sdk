@@ -1,8 +1,8 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    public class ProductVariant
+    public class EnumAttributeValue
     {
-        public int Id { get; set; }
         public string Key { get; set; }
+        public string Label { get; set; }
     }
 }

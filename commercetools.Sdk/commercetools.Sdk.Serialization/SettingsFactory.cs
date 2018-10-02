@@ -7,6 +7,7 @@ namespace commercetools.Sdk.Serialization
 {
     public class JsonSerializerSettingsFactory
     {
+        // TODO See if caching of settings is needed per type
         public static JsonSerializerSettings Create(Type type)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings();
@@ -17,6 +18,10 @@ namespace commercetools.Sdk.Serialization
                     NamingStrategy = new SnakeCaseNamingStrategy()
                 };
                 settings.ContractResolver = contractResolver;
+            }
+            else
+            {
+                settings.ContractResolver = CustomContractResolver.Instance;
             }
 
             return settings;

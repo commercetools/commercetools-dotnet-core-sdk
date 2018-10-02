@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.HttpApi.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.LinqToQueryPredicate", "commercetools.Sdk.LinqToQueryPredicate\commercetools.Sdk.LinqToQueryPredicate.csproj", "{FAAA2589-678B-4AEB-91FF-6745731A91C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.LinqToQueryPredicate.Tests", "commercetools.Sdk.LinqToQueryPredicate.Tests\commercetools.Sdk.LinqToQueryPredicate.Tests.csproj", "{41C21841-4E80-4533-8C2A-01F677F335B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.Serialization.Tests", "commercetools.Sdk.Serialization.Tests\commercetools.Sdk.Serialization.Tests.csproj", "{FD1732C9-6D02-49B9-A7EA-6F38BF12E508}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,14 @@ Global
 		{FAAA2589-678B-4AEB-91FF-6745731A91C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAAA2589-678B-4AEB-91FF-6745731A91C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAAA2589-678B-4AEB-91FF-6745731A91C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41C21841-4E80-4533-8C2A-01F677F335B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41C21841-4E80-4533-8C2A-01F677F335B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41C21841-4E80-4533-8C2A-01F677F335B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41C21841-4E80-4533-8C2A-01F677F335B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD1732C9-6D02-49B9-A7EA-6F38BF12E508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD1732C9-6D02-49B9-A7EA-6F38BF12E508}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD1732C9-6D02-49B9-A7EA-6F38BF12E508}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD1732C9-6D02-49B9-A7EA-6F38BF12E508}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

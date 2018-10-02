@@ -7,25 +7,10 @@ using System.Linq.Expressions;
 using System.Text;
 using Xunit;
 
-namespace commercetools.Sdk.HttpApi.Tests
+namespace commercetools.Sdk.LinqToQueryPredicate.Tests
 {
-    // move this to a different project
     public class QueryPredicateTests
     {
-
-        // key = "c14"
-        // key != "c14"
-        // not(key = "c14")
-        // parent(id = "13c4ee51-ff35-490f-8e43-349e39c34646") and parent(typeId = "category")
-        // parent(id = "13c4ee51-ff35-490f-8e43-349e39c34646" and typeId = "category")
-        // version < 30 or key = "c14"
-        // version < 30 and key = "c14"
-        // not(version < 30 and key = "c14")
-        // key in ("c14", "c15")
-        //QueryPredicate<Category> queryPredicate3 = new QueryPredicate<Category>(c => c.Name["en"] == "categoryName");
-        //QueryPredicate<Category> queryPredicate2 = new QueryPredicate<Category>(c => c.Key.In("c14", "c15"));
-        //QueryPredicate<Category> queryPredicate4 = new QueryPredicate<Category>(c => !c.Key.In("c14", "c15"));        
-
         [Fact]
         public void ExpressionStringEqual()
         {
@@ -60,6 +45,15 @@ namespace commercetools.Sdk.HttpApi.Tests
             QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
             string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
             Assert.Equal("key != \"c14\" or version = 30", result);
+        }
+
+        [Fact]
+        public void ExpressionStringAndOr()
+        {
+            Expression<Func<Category, bool>> expression = c => c.Key != "c14" && c.Name["en"] == "men" || c.Version == 30;
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("key != \"c14\" and name(en = \"men\") or version = 30", result);
         }
 
         [Fact]
@@ -135,6 +129,24 @@ namespace commercetools.Sdk.HttpApi.Tests
         }
 
         [Fact]
+        public void ExpressionNotPropertyInString()
+        {
+            Expression<Func<Category, bool>> expression = c => !c.Key.In("c14", "c15");
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("not(key in (\"c14\", \"c15\"))", result);
+        }
+
+        [Fact]
+        public void ExpressionPropertyNotInString()
+        {
+            Expression<Func<Category, bool>> expression = c => c.Key.NotIn("c14", "c15");
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("key not in (\"c14\", \"c15\")", result);
+        }
+
+        [Fact]
         public void ExpressionPropertyContainsAllString()
         {
             Expression<Func<Customer, bool>> expression = c => c.ShippingAddressIds.ContainsAll("c14", "c15");
@@ -168,5 +180,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             bool result = list.ContainsAll("a", "b", "c");
             Assert.True(result);
         }
+
+
     }      
 }

@@ -21,6 +21,11 @@ namespace commercetools.Sdk.Domain
             return values.Contains(source);
         }
 
+        public static bool NotIn<T>(this T source, params T[] values)
+        {
+            return !values.Contains(source);
+        }
+
         public static bool ContainsAll<T>(this IEnumerable<T> containingList, params T[] lookupList)
         {
             return !lookupList.Except(containingList).Any();

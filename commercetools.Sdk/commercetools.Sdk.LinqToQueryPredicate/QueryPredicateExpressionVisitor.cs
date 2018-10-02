@@ -22,6 +22,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
         private Dictionary<string, string> mappingOfMethods = new Dictionary<string, string>()
         {
             { "In", "in" },
+            { "NotIn", "not in" },
             { "ContainsAll", "contains all" }
         };
 
