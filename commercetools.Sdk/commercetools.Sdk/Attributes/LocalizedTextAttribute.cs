@@ -4,7 +4,8 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class LocalizedStringAttribute : Attribute<LocalizedString>
+    public class LocalizedTextAttribute : Attribute<LocalizedString>
     {
+
     }
 }
