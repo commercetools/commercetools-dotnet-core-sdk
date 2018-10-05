@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace commercetools.Sdk.LinqToQueryPredicate
 {
-    public class NestedLambdaExpressionVisitor
+    public class NestedLambdaExpressionVisitor : Visitor
     {
         private string left;
-        private string innerResult;
+        private Visitor innerResult;
         private List<string> parentList = new List<string>();
 
         public NestedLambdaExpressionVisitor(MethodCallExpression expression)
@@ -28,7 +28,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
 
         public override string ToString()
         {
-            string result = $"{left.ToCamelCase()}({innerResult})";
+            string result = $"{left.ToCamelCase()}({innerResult.ToString()})";
             return QueryPredicateExpressionVisitor.Visit(result, parentList);
         }
     }

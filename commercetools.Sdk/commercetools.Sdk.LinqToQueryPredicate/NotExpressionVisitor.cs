@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace commercetools.Sdk.LinqToQueryPredicate
 {
-    public class NotExpressionVisitor
+    public class NotExpressionVisitor : Visitor
     {
-        private string operand;
+        private Visitor operand;
 
         public NotExpressionVisitor(UnaryExpression expression)
         {
@@ -20,7 +20,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
         public override string ToString()
         {
             // TODO Combine parents
-            return $"not({operand})";
+            return $"not({operand.ToString()})";
         }
     }
 }

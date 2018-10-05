@@ -50,6 +50,7 @@
     <Compile Include="MethodCallExpressionVisitor.cs" />
     <Compile Include="QueryPredicateExpressionVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Visitor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

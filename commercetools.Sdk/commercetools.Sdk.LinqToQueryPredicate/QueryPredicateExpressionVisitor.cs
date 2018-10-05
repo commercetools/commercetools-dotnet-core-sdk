@@ -22,10 +22,11 @@ namespace commercetools.Sdk.LinqToQueryPredicate
 
         public string ProcessExpression(Expression expression)
         {
-            return VisitExpression(expression);
+            Visitor visitor = VisitExpression(expression);
+            return visitor.ToString();
         }
 
-        public string VisitExpression(Expression expression)
+        public Visitor VisitExpression(Expression expression)
         {
             if (expression.NodeType == ExpressionType.Lambda)
             {
@@ -46,7 +47,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             if (MappingOfOperators.ContainsKey(expression.NodeType))
             {
                 OperatorExpressionVisitor binaryExpressionVisitor = new OperatorExpressionVisitor((BinaryExpression)expression);
-                return binaryExpressionVisitor.ToString();
+                return binaryExpressionVisitor;
             }
             if (expression.NodeType == ExpressionType.Call)
             {
@@ -56,22 +57,22 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             return null;
         }
 
-        private string VisitAnd(BinaryExpression expression)
+        private Visitor VisitAnd(BinaryExpression expression)
         {
             AndExpressionVisitor andExpressionVisitor = new AndExpressionVisitor(expression);
-            return andExpressionVisitor.ToString();
+            return andExpressionVisitor;
         }
 
-        private string VisitOr(BinaryExpression expression)
+        private Visitor VisitOr(BinaryExpression expression)
         {
             OrExpressionVisitor orExpressionVisitor = new OrExpressionVisitor(expression);
-            return orExpressionVisitor.ToString();
+            return orExpressionVisitor;
         }
 
-        private string Visit(UnaryExpression expression)
+        private Visitor Visit(UnaryExpression expression)
         {
             NotExpressionVisitor notExpressionVisitor = new NotExpressionVisitor(expression);
-            return notExpressionVisitor.ToString();
+            return notExpressionVisitor;
         }
 
         public static List<string> GetParentMemberList(Expression expression)
@@ -89,17 +90,17 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             return parentList;
         }
 
-        private string Visit(MethodCallExpression expression)
+        private Visitor Visit(MethodCallExpression expression)
         {
             if (expression.Arguments[1].NodeType == ExpressionType.NewArrayInit)
             {
                 MethodCallExpressionVisitor methodCallExpressionVisitor = new MethodCallExpressionVisitor(expression);
-                return methodCallExpressionVisitor.ToString();
+                return methodCallExpressionVisitor;
             }
             if (expression.Arguments[1].NodeType == ExpressionType.Lambda)
             {
                 NestedLambdaExpressionVisitor nestedLambdaExpressionVisitor = new NestedLambdaExpressionVisitor(expression);
-                return nestedLambdaExpressionVisitor.ToString();
+                return nestedLambdaExpressionVisitor;
             }
             return null;
         }

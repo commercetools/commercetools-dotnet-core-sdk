@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace commercetools.Sdk.LinqToQueryPredicate
 {
-    public class AndExpressionVisitor
+    public class AndExpressionVisitor : Visitor
     {
-        private string left;
-        private string right;
+        private Visitor left;
+        private Visitor right;
 
         public AndExpressionVisitor(BinaryExpression expression)
         {
@@ -21,13 +21,23 @@ namespace commercetools.Sdk.LinqToQueryPredicate
 
         public override string ToString()
         {
-            // TODO Combine parents
-            // var expression 1 
-            // var expression 2
-            // if can combine 
-            // var combined expression to string (parentslist(prop and prop)
-            // else var express1 and express2
-            return $"{left} and {right}";
+            if (CanBeCombined())
+            {
+                List<string> parentList = ((BinaryExpressionVisitor)left).parentList;
+                // TODO dirty hack, find a better way to combined objects
+                ((BinaryExpressionVisitor)left).parentList = new List<string>();
+                ((BinaryExpressionVisitor)right).parentList = new List<string>();
+                var result = $"{left.ToString()} and {right.ToString()}";
+                return QueryPredicateExpressionVisitor.Visit(result, parentList);
+            }
+            return $"{left.ToString()} and {right.ToString()}";
+        }
+
+        private bool CanBeCombined()
+        {
+            bool isCorrectType = left.GetType().IsSubclassOf(typeof(BinaryExpressionVisitor)) && right.GetType().IsSubclassOf(typeof(BinaryExpressionVisitor));
+            bool hasSameParents = isCorrectType && ((BinaryExpressionVisitor)left).parentList.SequenceEqual(((BinaryExpressionVisitor)right).parentList);
+            return  hasSameParents;
         }
     }
 }

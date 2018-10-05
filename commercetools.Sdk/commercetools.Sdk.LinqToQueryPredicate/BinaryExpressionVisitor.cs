@@ -3,7 +3,7 @@
 namespace commercetools.Sdk.LinqToQueryPredicate
 {
     // TODO Change name
-    public class BinaryExpressionVisitor
+    public class BinaryExpressionVisitor : Visitor
     {
         public string left;
         public string right;
