@@ -32,6 +32,7 @@ namespace commercetools.Sdk.HttpApi
                 }
             }
 
+            // TODO Replace with compiled lamba expression
             return Activator.CreateInstance(typeOfHttApiCommand.MakeGenericType(typeOfGeneric), command, requestMessageBuilderFactory) as IHttpApiCommand;
         }
     }

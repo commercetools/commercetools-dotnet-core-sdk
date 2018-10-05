@@ -208,6 +208,22 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
             Assert.True(result);
         }
 
+        [Fact]
+        public void ExpressionPropertyPropertyGrouping()
+        {
+            Expression<Func<Category, bool>> expression = c => c.Parent.Id == "some id" && c.Parent.TypeId == "some type id";
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("parent(id = \"some id\" and typeId = \"some type id\")", result);
+        }
 
+        [Fact]
+        public void ExpressionPropertyLocalizedTextAttributeValueEqualGrouped()
+        {
+            Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => ((LocalizedTextAttribute)a).Name == "text-name" && (((LocalizedTextAttribute)a).Value["en"] == "text-value-en" || ((LocalizedTextAttribute)a).Value["de"] == "text-value-de"));
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("attributes(name = \"text-name\" and value(en = \"text-value-en\" or de = \"text-value-de\"))", result);
+        }
     }      
 }

@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace commercetools.Sdk.LinqToQueryPredicate
 {
+    // TODO Refactor
     public class QueryPredicateExpressionVisitor
     {
-        private Dictionary<ExpressionType, string> mappingOfOperators = new Dictionary<ExpressionType, string>()
+        public static Dictionary<ExpressionType, string> MappingOfOperators = new Dictionary<ExpressionType, string>()
         {
             { ExpressionType.Equal, "=" },
             { ExpressionType.LessThan, "<" },
@@ -19,19 +20,12 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             { ExpressionType.NotEqual, "!=" }
         };
 
-        private Dictionary<string, string> mappingOfMethods = new Dictionary<string, string>()
-        {
-            { "In", "in" },
-            { "NotIn", "not in" },
-            { "ContainsAll", "contains all" }
-        };
-
         public string ProcessExpression(Expression expression)
         {
             return VisitExpression(expression);
         }
 
-        private string VisitExpression(Expression expression)
+        public string VisitExpression(Expression expression)
         {
             if (expression.NodeType == ExpressionType.Lambda)
             {
@@ -49,9 +43,10 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             {
                 return VisitOr((BinaryExpression)expression);
             }
-            if (this.mappingOfOperators.ContainsKey(expression.NodeType))
+            if (MappingOfOperators.ContainsKey(expression.NodeType))
             {
-                return Visit((BinaryExpression)expression);
+                OperatorExpressionVisitor binaryExpressionVisitor = new OperatorExpressionVisitor((BinaryExpression)expression);
+                return binaryExpressionVisitor.ToString();
             }
             if (expression.NodeType == ExpressionType.Call)
             {
@@ -63,56 +58,23 @@ namespace commercetools.Sdk.LinqToQueryPredicate
 
         private string VisitAnd(BinaryExpression expression)
         {
-            return $"{VisitExpression(expression.Left)} and {VisitExpression(expression.Right)}";
+            AndExpressionVisitor andExpressionVisitor = new AndExpressionVisitor(expression);
+            return andExpressionVisitor.ToString();
         }
 
         private string VisitOr(BinaryExpression expression)
         {
-            return $"{VisitExpression(expression.Left)} or {VisitExpression(expression.Right)}";
+            OrExpressionVisitor orExpressionVisitor = new OrExpressionVisitor(expression);
+            return orExpressionVisitor.ToString();
         }
 
         private string Visit(UnaryExpression expression)
         {
-            return $"not({VisitExpression(expression.Operand)})";
+            NotExpressionVisitor notExpressionVisitor = new NotExpressionVisitor(expression);
+            return notExpressionVisitor.ToString();
         }
 
-        // TODO Refactor this
-        private string Visit(BinaryExpression expression)
-        {
-            string left = null;
-            List<string> parentList = new List<string>();
-            if (expression.Left.NodeType == ExpressionType.MemberAccess)
-            {
-                left = ((MemberExpression)expression.Left).Member.Name;
-                parentList = GetParentMemberList(expression.Left);
-            }
-            if (expression.Left.NodeType == ExpressionType.Call)
-            {
-                // TODO See if a check should be made to see if this is a dictionary<string, string>
-                object name = ((MethodCallExpression)expression.Left).Object;
-                if (((MethodCallExpression)expression.Left).Object.NodeType == ExpressionType.MemberAccess)
-                {
-                    parentList.Add(((MemberExpression)((MethodCallExpression)expression.Left).Object).Member.Name);
-                    parentList.AddRange(GetParentMemberList(((MethodCallExpression)expression.Left).Object));                    
-                }
-                if (((MethodCallExpression)expression.Left).Arguments[0].NodeType == ExpressionType.Constant)
-                {
-                    left = ((MethodCallExpression)expression.Left).Arguments[0].ToString().Replace("\"", ""); 
-                }
-            }
-            string right = null;
-            if (expression.Right.NodeType == ExpressionType.Constant)
-            {
-                right = expression.Right.ToString();
-            }
-
-            string operatorSign = this.mappingOfOperators[expression.NodeType];
-
-            // TODO Add check if left or right happen to be null            
-            return Visit(left, operatorSign, right, parentList);
-        }
-
-        private List<string> GetParentMemberList(Expression expression)
+        public static List<string> GetParentMemberList(Expression expression)
         {
             List<string> parentList = new List<string>();
             if (expression.NodeType == ExpressionType.MemberAccess)
@@ -131,77 +93,18 @@ namespace commercetools.Sdk.LinqToQueryPredicate
         {
             if (expression.Arguments[1].NodeType == ExpressionType.NewArrayInit)
             {
-                return VisitMethodCall(expression);
+                MethodCallExpressionVisitor methodCallExpressionVisitor = new MethodCallExpressionVisitor(expression);
+                return methodCallExpressionVisitor.ToString();
             }
             if (expression.Arguments[1].NodeType == ExpressionType.Lambda)
             {
-                return VisitNestedLambda(expression);
+                NestedLambdaExpressionVisitor nestedLambdaExpressionVisitor = new NestedLambdaExpressionVisitor(expression);
+                return nestedLambdaExpressionVisitor.ToString();
             }
             return null;
         }
 
-        private string VisitNestedLambda(MethodCallExpression expression)
-        {
-            // TODO Check if method call is Any (which does not have to be written in the query)
-            var body = ((LambdaExpression)expression.Arguments[1]).Body;
-            var innerResult = VisitExpression(body);
-            string left = null;
-            List<string> parentList = GetParentMemberList(expression.Arguments[0]);
-            if (expression.Arguments[0].NodeType == ExpressionType.MemberAccess)
-            {
-                left = ((MemberExpression)expression.Arguments[0]).Member.Name;
-            }
-            string result = $"{left.ToCamelCase()}({innerResult})";
-            return Visit(result, parentList);
-        }
-
-        private string VisitMethodCall(MethodCallExpression expression)
-        {
-            string left = null;
-            string right = null;
-            string operatorSign = this.mappingOfMethods[expression.Method.Name];
-
-            List<string> parentList = GetParentMemberList(expression.Arguments[0]);
-            if (expression.Arguments[0].NodeType == ExpressionType.MemberAccess)
-            {
-                left = ((MemberExpression)expression.Arguments[0]).Member.Name;
-            }
-
-            List<string> rightList = new List<string>();
-            if (expression.Arguments[1].NodeType == ExpressionType.NewArrayInit)
-            {
-                foreach (Expression part in ((NewArrayExpression)expression.Arguments[1]).Expressions)
-                {
-                    if (part.NodeType == ExpressionType.Constant)
-                    {
-                        rightList.Add(part.ToString());
-                    }
-                }
-            }
-
-            if (rightList.Count() > 0)
-            {
-                right = $"({string.Join(", ", rightList)})";
-            }
-
-            return Visit(left, operatorSign, right, parentList);
-        }
-
-        private string Visit(string left, string operatorSign, string right, List<string> parentList)
-        {
-            string result = $"{left.ToCamelCase()} {operatorSign.ToCamelCase()} {right}";
-            if (parentList.Count() > 0)
-            {
-                foreach (string parent in parentList)
-                {
-                    result = $"{parent.ToCamelCase()}({result})";
-                }
-                return result;
-            }
-            return result;
-        }
-
-        private string Visit(string result, List<string> parentList)
+        public static string Visit(string result, List<string> parentList)
         {
             if (parentList.Count() > 0)
             {

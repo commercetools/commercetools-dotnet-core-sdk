@@ -41,6 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NotExpressionVisitor.cs" />
+    <Compile Include="OrExpressionVisitor.cs" />
+    <Compile Include="AndExpressionVisitor.cs" />
+    <Compile Include="NestedLambdaExpressionVisitor.cs" />
+    <Compile Include="OperatorExpressionVisitor.cs" />
+    <Compile Include="BinaryExpressionVisitor.cs" />
+    <Compile Include="MethodCallExpressionVisitor.cs" />
     <Compile Include="QueryPredicateExpressionVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

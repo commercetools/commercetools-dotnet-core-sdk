@@ -30,6 +30,11 @@ namespace commercetools.Sdk.Domain
         {
             return !lookupList.Except(containingList).Any();
         }
+
+        public static bool Equals<T>(this T something, Func<T, T> p)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }
