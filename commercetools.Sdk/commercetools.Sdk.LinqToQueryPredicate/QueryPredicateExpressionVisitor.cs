@@ -129,6 +129,34 @@ namespace commercetools.Sdk.LinqToQueryPredicate
 
         private string Visit(MethodCallExpression expression)
         {
+            if (expression.Arguments[1].NodeType == ExpressionType.NewArrayInit)
+            {
+                return VisitMethodCall(expression);
+            }
+            if (expression.Arguments[1].NodeType == ExpressionType.Lambda)
+            {
+                return VisitNestedLambda(expression);
+            }
+            return null;
+        }
+
+        private string VisitNestedLambda(MethodCallExpression expression)
+        {
+            // TODO Check if method call is Any (which does not have to be written in the query)
+            var body = ((LambdaExpression)expression.Arguments[1]).Body;
+            var innerResult = VisitExpression(body);
+            string left = null;
+            List<string> parentList = GetParentMemberList(expression.Arguments[0]);
+            if (expression.Arguments[0].NodeType == ExpressionType.MemberAccess)
+            {
+                left = ((MemberExpression)expression.Arguments[0]).Member.Name;
+            }
+            string result = $"{left.ToCamelCase()}({innerResult})";
+            return Visit(result, parentList);
+        }
+
+        private string VisitMethodCall(MethodCallExpression expression)
+        {
             string left = null;
             string right = null;
             string operatorSign = this.mappingOfMethods[expression.Method.Name];
@@ -142,7 +170,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             List<string> rightList = new List<string>();
             if (expression.Arguments[1].NodeType == ExpressionType.NewArrayInit)
             {
-                foreach(Expression part in ((NewArrayExpression)expression.Arguments[1]).Expressions)
+                foreach (Expression part in ((NewArrayExpression)expression.Arguments[1]).Expressions)
                 {
                     if (part.NodeType == ExpressionType.Constant)
                     {
@@ -152,7 +180,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             }
 
             if (rightList.Count() > 0)
-            { 
+            {
                 right = $"({string.Join(", ", rightList)})";
             }
 
@@ -162,6 +190,19 @@ namespace commercetools.Sdk.LinqToQueryPredicate
         private string Visit(string left, string operatorSign, string right, List<string> parentList)
         {
             string result = $"{left.ToCamelCase()} {operatorSign.ToCamelCase()} {right}";
+            if (parentList.Count() > 0)
+            {
+                foreach (string parent in parentList)
+                {
+                    result = $"{parent.ToCamelCase()}({result})";
+                }
+                return result;
+            }
+            return result;
+        }
+
+        private string Visit(string result, List<string> parentList)
+        {
             if (parentList.Count() > 0)
             {
                 foreach (string parent in parentList)
