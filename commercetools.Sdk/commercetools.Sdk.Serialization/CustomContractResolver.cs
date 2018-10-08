@@ -15,14 +15,13 @@
             this.moneyConverter = moneyConverter;
         }
 
-        //public static readonly CustomContractResolver Instance = new CustomContractResolver();
-
         protected override JsonContract CreateContract(Type objectType)
         {
             // This method will be run only once per type and the return type will be cached
             // https://www.newtonsoft.com/json/help/html/Performance.htm
             JsonContract contract = base.CreateContract(objectType);
 
+            // If the number of custom converters becomes too big, register the converters elsewhere and loop through them instead
             if (objectType == typeof(Domain.Attribute))
             {
                 contract.Converter = this.attributeConverter;

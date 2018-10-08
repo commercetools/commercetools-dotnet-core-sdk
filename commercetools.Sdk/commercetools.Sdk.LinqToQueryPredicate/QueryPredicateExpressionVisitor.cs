@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace commercetools.Sdk.LinqToQueryPredicate
 {
     // TODO Refactor
-    public class QueryPredicateExpressionVisitor
+    public class QueryPredicateExpressionVisitor : IQueryPredicateExpressionVisitor
     {
         public static Dictionary<ExpressionType, string> MappingOfOperators = new Dictionary<ExpressionType, string>()
         {

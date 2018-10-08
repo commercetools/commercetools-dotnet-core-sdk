@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IQueryPredicateExpressionVisitor.cs" />
     <Compile Include="NotExpressionVisitor.cs" />
     <Compile Include="OrExpressionVisitor.cs" />
     <Compile Include="AndExpressionVisitor.cs" />

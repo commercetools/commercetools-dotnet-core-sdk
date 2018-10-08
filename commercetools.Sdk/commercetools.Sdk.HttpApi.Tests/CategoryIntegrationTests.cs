@@ -3,6 +3,7 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using Xunit;
@@ -104,10 +105,11 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void QueryCategory()
         {
             IClient commerceToolsClient = TestUtils.SetupClient();
-            QueryPredicate<Category> queryPredicate = null;
+            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Key == "c14");
             Sort<Category> sort = null;
             Expansion expand = null;
-            PagedQueryResult<Category> results = commerceToolsClient.Execute(new QueryCommand<Category>(queryPredicate, sort, expand, 1, 1)).Result;
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.Execute(new QueryCommand<Category>(queryPredicate, sort, expand, 1, 1)).Result;
+            Assert.Contains(returnedSet.Results, c => c.Key == "c14"); 
         }
     }
 }

@@ -8,9 +8,11 @@ namespace commercetools.Sdk.Domain
 {
     public class QueryPredicate<T>
     {
-        public QueryPredicate(Expression<Func<T, bool>> func)
-        {
+        public Expression<Func<T, bool>> Expression { get; set; }
 
+        public QueryPredicate(Expression<Func<T, bool>> expression)
+        {
+            this.Expression = expression;
         }
     }
 
