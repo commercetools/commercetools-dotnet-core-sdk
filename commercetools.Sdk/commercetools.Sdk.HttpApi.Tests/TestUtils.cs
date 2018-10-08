@@ -1,6 +1,8 @@
 ﻿using commercetools.Sdk.Client;
+using commercetools.Sdk.Domain;
 using commercetools.Sdk.Serialization;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +29,7 @@ namespace commercetools.Sdk.HttpApi.Tests
 
         public static IClient SetupClient()
         {
-            ISerializerService serializerService = new SerializerService(JsonSerializerSettingsFactory.Create);
+            ISerializerService serializerService = TestUtils.GetSerializerService();
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
             ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
             IHttpClientFactory httpClientFactoryAuth = new MockHttpClientFactory(null);
@@ -52,6 +54,35 @@ namespace commercetools.Sdk.HttpApi.Tests
 
             IClient commerceToolsClient = new Client(httpClientFactory, httpApiCommandFactory, serializerService);
             return commerceToolsClient;
+        }
+
+        public static ISerializerService GetSerializerService()
+        {
+            IEnumerable<ICustomConverter<Sdk.Domain.Attribute>> customAttributeConverters = new List<ICustomConverter<Sdk.Domain.Attribute>>()
+            {
+                new MoneyAttributeConverter(),
+                new TextAttributeConverter(),
+                new LocalizedTextAttributeConverter(),
+                new BooleanAttributeConverter(),
+                new NumberAttributeConverter(),
+                new DateTimeAttributeConverter(),
+                new TimeAttributeConverter(),
+                new DateAttributeConverter(),
+                new EnumAttributeConverter(),
+                new LocalizedEnumAttributeConverter()
+            };
+            IEnumerable<ICustomConverter<Money>> customMoneyConverters = new List<ICustomConverter<Money>>()
+            {
+                new CentPrecisionMoneyConverter(),
+                new HighPrecisionMoneyConverter()
+            };
+            MoneyConverter moneyConverter = new MoneyConverter(customMoneyConverters);
+            AttributeConverter attributeConverter = new AttributeConverter(customAttributeConverters, moneyConverter);
+            
+            CustomContractResolver customContractResolver = new CustomContractResolver(attributeConverter, moneyConverter);
+            JsonSerializerSettingsFactory jsonSerializerSettingsFactory = new JsonSerializerSettingsFactory(customContractResolver);
+            ISerializerService serializerService = new SerializerService(jsonSerializerSettingsFactory);
+            return serializerService;
         }
     }
 }

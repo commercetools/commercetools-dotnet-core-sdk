@@ -1,11 +1,21 @@
 ﻿namespace commercetools.Sdk.Serialization
 {
+    using commercetools.Sdk.Domain;
     using Newtonsoft.Json.Serialization;
     using System;
 
     public class CustomContractResolver : DefaultContractResolver
     {
-        public static readonly CustomContractResolver Instance = new CustomContractResolver();
+        private AttributeConverter attributeConverter;
+        private MoneyConverter moneyConverter;
+
+        public CustomContractResolver(AttributeConverter attributeConverter, MoneyConverter moneyConverter)
+        {
+            this.attributeConverter = attributeConverter;
+            this.moneyConverter = moneyConverter;
+        }
+
+        //public static readonly CustomContractResolver Instance = new CustomContractResolver();
 
         protected override JsonContract CreateContract(Type objectType)
         {
@@ -15,7 +25,12 @@
 
             if (objectType == typeof(Domain.Attribute))
             {
-                contract.Converter = new AttributeConverter();
+                contract.Converter = this.attributeConverter;
+            }
+
+            if (objectType == typeof(Money))
+            {
+                contract.Converter = this.moneyConverter;
             }
 
             return contract;

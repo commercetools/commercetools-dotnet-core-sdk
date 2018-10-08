@@ -3,14 +3,26 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace commercetools.Sdk.Serialization
 {
     public class AttributeConverter : JsonConverter
     {
+        private readonly IEnumerable<ICustomConverter<Domain.Attribute>> customConverters;
+        private JsonSerializer moneySerializer;
+
         public override bool CanConvert(Type objectType)
         {
             throw new NotImplementedException();
+        }
+
+        public AttributeConverter(IEnumerable<ICustomConverter<Domain.Attribute>> customConverters, MoneyConverter moneyConverter)
+        {
+            this.customConverters = customConverters;
+            JsonSerializer moneySerializer = new JsonSerializer();
+            moneySerializer.Converters.Add(moneyConverter);
+            this.moneySerializer = moneySerializer;
         }
 
         // TODO Refactor; try to reduce branches
@@ -18,11 +30,6 @@ namespace commercetools.Sdk.Serialization
         {
             JObject jsonObject = JObject.Load(reader);
             JToken valueProperty = jsonObject["value"];
-            if (valueProperty == null)
-            {
-                // TODO Move this message to a localizable resource and add more information to the exception
-                throw new JsonSerializationException("Property value is not present in the attribute object.");
-            }
             Type attributeType;
             if (IsSetAttribute(valueProperty))
             {
@@ -33,13 +40,13 @@ namespace commercetools.Sdk.Serialization
                 attributeType = GetTypeByValueProperty(valueProperty);
             }
 
-            // TODO Attribute is never null, exceptions are always thrown, refactor perhaps
             if (attributeType == null)
             {
                 // TODO Move this message to a localizable resource and add more information to the exception
                 throw new JsonSerializationException("Attribute type cannot be determined.");
             }
-            return jsonObject.ToObject(attributeType);
+
+            return jsonObject.ToObject(attributeType, this.moneySerializer);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -72,69 +79,23 @@ namespace commercetools.Sdk.Serialization
 
         private Type GetTypeByValueProperty(JToken valueProperty)
         {
-            if (valueProperty.HasValues)
+            foreach (var customConvert in this.customConverters.OrderBy(c => c.Priority))
             {
-                var keyProperty = valueProperty["key"];
-                if (keyProperty != null)
+                if (customConvert.CanConvert(valueProperty))
                 {
-                    var labelProperty = valueProperty["label"];
-                    if (labelProperty == null)
-                    {
-                        // TODO Move this message to a localizable resource and add more information to the exception
-                        throw new JsonSerializationException("There is no label property next to the key property.");
-                    }
-                    if (labelProperty.HasValues)
-                    {
-                        return typeof(LocalizedEnumAttribute);
-                    }
-                    return typeof(EnumAttribute);
+                    return customConvert.Type;
                 }
-                // TODO Add support for Money derived classes
-                var currencyCodeProperty = valueProperty["currencyCode"];
-                if (currencyCodeProperty != null)
-                {
-                    return typeof(MoneyAttribute);
-                }
-                return typeof(LocalizedTextAttribute);
             }
-            else
-            {
-                if (valueProperty.Type == JTokenType.String)
-                {
-                    DateTime time;
-                    if (DateTime.TryParse(valueProperty.Value<string>(), out time))
-                    {
-                        if (time.TimeOfDay.Ticks == 0)
-                        {
-                            return typeof(DateAttribute);
-                        }
-                        else
-                        {
-                            return typeof(TimeAttribute);
-                        }
-                    }
-                    return typeof(TextAttribute);
-                }
-                if (valueProperty.Type == JTokenType.Date)
-                {
-                    return typeof(DateTimeAttribute);
-                }
-                if (valueProperty.Type == JTokenType.Integer)
-                {
-                    return typeof(NumberAttribute);
-                }
-                if (valueProperty.Type == JTokenType.Boolean)
-                {
-                    return typeof(BooleanAttribute);
-                }
-                // TODO Move this message to a localizable resource and add more information to the exception
-                throw new JsonSerializationException("The structure does not match any of the attribute subtypes.");
-            }
+            return null;
         }
 
         private bool IsSetAttribute(JToken valueProperty)
         {
-            return valueProperty.HasValues && valueProperty.Type == JTokenType.Array;
+            if (valueProperty != null)
+            { 
+                return valueProperty.HasValues && valueProperty.Type == JTokenType.Array;
+            }
+            return false;
         }
     }
 }

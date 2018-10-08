@@ -1,0 +1,29 @@
+﻿using commercetools.Sdk.Domain;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace commercetools.Sdk.Serialization
+{
+    public class HighPrecisionMoneyConverter : ICustomConverter<Money>
+    {
+        public int Priority => 3;
+
+        public Type Type => typeof(HighPrecisionMoney);
+
+        public bool CanConvert(JToken property)
+        {
+            if (property != null && property.HasValues)
+            {
+                var currencyCodeProperty = property["currencyCode"];
+                var typeProperty = property["type"];
+                if (currencyCodeProperty != null && typeProperty != null && typeProperty.Value<string>() == "highPrecision")
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+}

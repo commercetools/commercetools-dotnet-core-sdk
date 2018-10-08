@@ -13,7 +13,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetRequestMessageBuilderFromFactory()
         {
-            ISerializerService serializerService = new SerializerService(JsonSerializerSettingsFactory.Create);
+            ISerializerService serializerService = TestUtils.GetSerializerService();
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
             GetByIdRequestMessageBuilder getByIdRequestMessageBuilder = new GetByIdRequestMessageBuilder(clientConfiguration);
             GetByKeyRequestMessageBuilder getByKeyRequestMessageBuilder = new GetByKeyRequestMessageBuilder(clientConfiguration);
@@ -33,7 +33,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             CreateCommand<Category> createCommand = new CreateCommand<Category>(new CategoryDraft());
             IEnumerable<Type> registeredTypes = new List<Type>() { typeof(CreateHttpApiCommand<>) };
-            ISerializerService serializerService = new SerializerService(JsonSerializerSettingsFactory.Create);
+            ISerializerService serializerService = TestUtils.GetSerializerService();
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
             CreateRequestMessageBuilder createRequestMessageBuilder = new CreateRequestMessageBuilder(serializerService, clientConfiguration);
             IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { createRequestMessageBuilder };

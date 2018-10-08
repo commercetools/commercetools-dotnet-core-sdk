@@ -6,16 +6,16 @@
 
     public class SerializerService : ISerializerService
     {
-        private Func<Type, JsonSerializerSettings> settingsFactory;
+        private JsonSerializerSettingsFactory jsonSerializerSettingsFactory;
 
-        public SerializerService(Func<Type, JsonSerializerSettings> settingsFactory)
+        public SerializerService(JsonSerializerSettingsFactory jsonSerializerSettingsFactory)
         {
-            this.settingsFactory = settingsFactory;
+            this.jsonSerializerSettingsFactory = jsonSerializerSettingsFactory;
         }
 
         public T Deserialize<T>(string input)
         {
-            var settings = this.settingsFactory(typeof(T));
+            var settings = this.jsonSerializerSettingsFactory.Create(typeof(T));
 
             return JsonConvert.DeserializeObject<T>(input, settings);
         }

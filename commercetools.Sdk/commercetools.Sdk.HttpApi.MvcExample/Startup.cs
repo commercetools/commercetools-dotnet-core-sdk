@@ -54,13 +54,32 @@ namespace commercetools.Sdk.HttpApi.MvcExample
             services.AddSingleton<IRequestMessageBuilder, DeleteByKeyRequestMessageBuilder>();
             services.AddSingleton<IRequestMessageBuilder, QueryRequestMessageBuilder>();
 
-            // loop through classes and register this automatically
+            // TODO loop through classes and register this automatically
             IEnumerable<Type> registeredHttpApiCommandTypes = new List<Type>() { typeof(CreateHttpApiCommand<>), typeof(QueryHttpApiCommand<>), typeof(GetByIdHttpApiCommand<>), typeof(GetByKeyHttpApiCommand<>), typeof(UpdateByKeyHttpApiCommand<>), typeof(UpdateByIdHttpApiCommand<>), typeof(DeleteByKeyHttpApiCommand<>), typeof(DeleteByIdHttpApiCommand<>) };
-            // find a better way to add this to services, ienumerable is too generic
+            // TODO find a better way to add this to services, ienumerable is too generic
             services.AddSingleton<IEnumerable<Type>>(registeredHttpApiCommandTypes);
             services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
-            services.AddSingleton<Func<Type, JsonSerializerSettings>>(JsonSerializerSettingsFactory.Create);
+
+            //TODO Find a neater way to register all the converters
+            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, BooleanAttributeConverter>();
+            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, DateAttributeConverter>();
+            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, DateTimeAttributeConverter>();
+            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, TimeAttributeConverter>();
+            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, NumberAttributeConverter>();
+            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, TextAttributeConverter>();
+            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, EnumAttributeConverter>();
+            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, LocalizedTextAttributeConverter>();
+            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, LocalizedEnumAttributeConverter>();
+            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, MoneyAttributeConverter>();
+
+            services.AddSingleton<ICustomConverter<Sdk.Domain.Money>, HighPrecisionMoneyConverter>();
+            services.AddSingleton<ICustomConverter<Sdk.Domain.Money>, CentPrecisionMoneyConverter>();
+
+            services.AddSingleton<MoneyConverter>();
+            services.AddSingleton<AttributeConverter>();
+            services.AddSingleton<CustomContractResolver>();
+            services.AddSingleton<JsonSerializerSettingsFactory>();
             services.AddSingleton<ISerializerService, SerializerService>();
             services.AddSingleton<IClient, Client>();
 

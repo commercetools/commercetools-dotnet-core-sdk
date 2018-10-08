@@ -4,8 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    // TODO This should actually be of derived Money types
-    public class Money
+    public abstract class Money
     {
         public string Type { get; set; }
         public string CurrencyCode { get; set; }
