@@ -16,7 +16,6 @@
         public T Deserialize<T>(string input)
         {
             var settings = this.jsonSerializerSettingsFactory.Create(typeof(T));
-
             return JsonConvert.DeserializeObject<T>(input, settings);
         }
 

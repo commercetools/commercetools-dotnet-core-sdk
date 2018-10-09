@@ -36,7 +36,7 @@ namespace commercetools.Sdk.Serialization
                 throw new JsonSerializationException("Money type cannot be determined.");
             }
 
-            return jsonObject.ToObject(moneyType);
+            return jsonObject.ToObject(moneyType, serializer);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

@@ -79,9 +79,11 @@ namespace commercetools.Sdk.HttpApi.Tests
                 new HighPrecisionMoneyConverter()
             };
             MoneyConverter moneyConverter = new MoneyConverter(customMoneyConverters);
+            ErrorConverter errorConverter = new ErrorConverter();
             AttributeConverter attributeConverter = new AttributeConverter(customAttributeConverters, moneyConverter);
+            IEnumerable<JsonConverter> registeredConverters = new List<JsonConverter>() { moneyConverter, attributeConverter, errorConverter };
             
-            CustomContractResolver customContractResolver = new CustomContractResolver(attributeConverter, moneyConverter);
+            CustomContractResolver customContractResolver = new CustomContractResolver(registeredConverters);
             JsonSerializerSettingsFactory jsonSerializerSettingsFactory = new JsonSerializerSettingsFactory(customContractResolver);
             ISerializerService serializerService = new SerializerService(jsonSerializerSettingsFactory);
             return serializerService;

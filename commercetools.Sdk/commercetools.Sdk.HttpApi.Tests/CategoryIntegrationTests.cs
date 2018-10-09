@@ -1,5 +1,6 @@
 ﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.HttpApi.Domain;
 using commercetools.Sdk.Serialization;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,6 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClient commerceToolsClient = TestUtils.SetupClient();
             string categoryId = "2bafc816-4223-4ff0-ac8a-0f08a8f29fd6";
             Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(categoryId))).Result;
-            //Category category2 = commerceToolsClient.Get<Category>(new Guid(categoryId)).Result;
             Assert.Equal(categoryId, category.Id.ToString());
         }
 
@@ -48,7 +48,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             Category category = commerceToolsClient.Execute<Category>(new CreateCommand<Category>(categoryDraft)).Result;
             Assert.Equal(categoryName, category.Name["en"]);
             Category deletedCategory = commerceToolsClient.Execute<Category>(new DeleteByIdCommand<Category>(new Guid(category.Id), category.Version)).Result;
-            Assert.ThrowsAsync<ResourceNotFoundException>(() => commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(deletedCategory.Id))));
+            Assert.ThrowsAsync<HttpApiClientException>(() => commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(deletedCategory.Id))));
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             //Category category2 = commerceToolsClient.CreateAsync(categoryDraft).Result;
             Assert.Equal(categoryName, category.Name["en"]);
             Category deletedCategory = commerceToolsClient.Execute<Category>(new DeleteByKeyCommand<Category>(category.Key, category.Version)).Result;
-            Assert.ThrowsAsync<ResourceNotFoundException>(() => commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(deletedCategory.Id))));
+            Assert.ThrowsAsync<HttpApiClientException>(() => commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(deletedCategory.Id))));
         }
 
         [Fact]

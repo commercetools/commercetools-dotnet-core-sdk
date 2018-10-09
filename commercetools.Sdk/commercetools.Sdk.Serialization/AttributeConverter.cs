@@ -10,19 +10,19 @@ namespace commercetools.Sdk.Serialization
     public class AttributeConverter : JsonConverter
     {
         private readonly IEnumerable<ICustomConverter<Domain.Attribute>> customConverters;
-        private readonly JsonSerializer moneySerializer;
 
         public AttributeConverter(IEnumerable<ICustomConverter<Domain.Attribute>> customConverters, MoneyConverter moneyConverter)
         {
             this.customConverters = customConverters;
-            JsonSerializer moneySerializer = new JsonSerializer();
-            moneySerializer.Converters.Add(moneyConverter);
-            this.moneySerializer = moneySerializer;
         }
 
         public override bool CanConvert(Type objectType)
         {
-            throw new NotImplementedException();
+            if (objectType == typeof(Domain.Attribute))
+            {
+                return true;
+            }
+            return false;
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -45,8 +45,7 @@ namespace commercetools.Sdk.Serialization
                 throw new JsonSerializationException("Attribute type cannot be determined.");
             }
 
-            // Money serializer is needed here since Attribute contains property of type Money which is abstract
-            return jsonObject.ToObject(attributeType, this.moneySerializer);
+            return jsonObject.ToObject(attributeType, serializer);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

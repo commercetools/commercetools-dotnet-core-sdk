@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.Client;
+using commercetools.Sdk.LinqToQueryPredicate;
 using commercetools.Sdk.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,6 +45,8 @@ namespace commercetools.Sdk.HttpApi.MvcExample
 
             services.AddHttpClient("auth");
             services.AddHttpClient("api").AddHttpMessageHandler<AuthorizationHandler>();
+
+            services.AddSingleton<IQueryPredicateExpressionVisitor, QueryPredicateExpressionVisitor>();
             // TODO Auto register all message builders by looping through interface implementations
             services.AddSingleton<IRequestMessageBuilder, CreateRequestMessageBuilder>();
             services.AddSingleton<IRequestMessageBuilder, UpdateByIdRequestMessageBuilder>();

@@ -1,18 +1,19 @@
 ﻿namespace commercetools.Sdk.Serialization
 {
     using commercetools.Sdk.Domain;
+    using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class CustomContractResolver : DefaultContractResolver
     {
-        private AttributeConverter attributeConverter;
-        private MoneyConverter moneyConverter;
+        private readonly IEnumerable<JsonConverter> registeredConverters;
 
-        public CustomContractResolver(AttributeConverter attributeConverter, MoneyConverter moneyConverter)
+        public CustomContractResolver(IEnumerable<JsonConverter> registeredConverters)
         {
-            this.attributeConverter = attributeConverter;
-            this.moneyConverter = moneyConverter;
+            this.registeredConverters = registeredConverters;
         }
 
         protected override JsonContract CreateContract(Type objectType)
@@ -21,16 +22,11 @@
             // https://www.newtonsoft.com/json/help/html/Performance.htm
             JsonContract contract = base.CreateContract(objectType);
 
-            // If the number of custom converters becomes too big, register the converters elsewhere and loop through them instead
-            if (objectType == typeof(Domain.Attribute))
+            JsonConverter jsonConverter = registeredConverters.Where(c => c.CanConvert(objectType)).FirstOrDefault();
+            if (jsonConverter != null)
             {
-                contract.Converter = this.attributeConverter;
-            }
-
-            if (objectType == typeof(Money))
-            {
-                contract.Converter = this.moneyConverter;
-            }
+                contract.Converter = jsonConverter;
+            }            
 
             return contract;
         }

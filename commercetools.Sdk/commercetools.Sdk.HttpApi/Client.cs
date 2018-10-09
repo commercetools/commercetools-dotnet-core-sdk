@@ -2,6 +2,7 @@
 {
     using commercetools.Sdk.Client;
     using commercetools.Sdk.Domain;
+    using commercetools.Sdk.HttpApi.Domain;
     using commercetools.Sdk.Serialization;
     using System;
     using System.Net.Http;
@@ -39,9 +40,10 @@
             { 
                 return this.serializerService.Deserialize<T>(content);
             }
-            if (result.StatusCode == System.Net.HttpStatusCode.NotFound)
+            if (content != null)
             {
-                throw new ResourceNotFoundException();
+                HttpApiClientException httpApiClientException = this.serializerService.Deserialize<HttpApiClientException>(content);
+                throw httpApiClientException;
             }
             // TODO see what to do in else case
             return default(T);
