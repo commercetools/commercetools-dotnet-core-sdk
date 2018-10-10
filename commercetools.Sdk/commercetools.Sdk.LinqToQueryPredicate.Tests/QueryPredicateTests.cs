@@ -1,10 +1,8 @@
 ﻿using commercetools.Sdk.Domain;
-using commercetools.Sdk.LinqToQueryPredicate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using Xunit;
 
 namespace commercetools.Sdk.LinqToQueryPredicate.Tests

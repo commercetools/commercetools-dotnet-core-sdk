@@ -17,7 +17,7 @@ namespace commercetools.Sdk.HttpApi
             this.requestMessageBuilderFactory = requestMessageBuilderFactory;
         }
 
-        public IHttpApiCommand Create(ICommand command)
+        public IHttpApiCommand Create<T>(Command<T> command)
         {
             Type typeOfCommand = command.GetType().GetGenericTypeDefinition();
             Type typeOfGeneric = command.GetType().GetGenericArguments().FirstOrDefault();
@@ -25,11 +25,19 @@ namespace commercetools.Sdk.HttpApi
 
             foreach (Type type in this.registeredTypes)
             {
-                Type typeOfInteface = type.GetInterfaces().Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IRequestable<>)).FirstOrDefault();
-                if (typeOfInteface.GetGenericArguments().Any(x => x.GetGenericTypeDefinition() == typeOfCommand))
-                { 
+                //Type typeOfInteface = type.GetInterfaces().Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IRequestable<>)).FirstOrDefault();
+                //if (typeOfInteface.GetGenericArguments().Any(x => x.GetGenericTypeDefinition() == typeOfCommand))
+                //{ 
+                //    typeOfHttApiCommand = type;
+                //}
+                
+                var t = type.GetInterfaces().First().GetGenericArguments().First();
+                if (EqualityComparer<Type>.Default.Equals(t.GetGenericTypeDefinition(), typeOfCommand))
+                {
                     typeOfHttApiCommand = type;
+                    break;
                 }
+
             }
 
             // TODO Replace with compiled lamba expression

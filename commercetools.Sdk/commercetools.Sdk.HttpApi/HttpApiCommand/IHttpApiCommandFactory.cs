@@ -4,6 +4,6 @@ namespace commercetools.Sdk.HttpApi
 {
     public interface IHttpApiCommandFactory
     {
-        IHttpApiCommand Create(ICommand command);
+        IHttpApiCommand Create<T>(Command<T> command);
     }
 }

@@ -1,7 +1,7 @@
-﻿namespace commercetools.Sdk.HttpApi
-{
-    // TODO Change name
-    public interface IRequestable<T>
-    {
-    }
-}
+﻿//namespace commercetools.Sdk.HttpApi
+//{
+//    // TODO Change name
+//    public interface IRequestable<T>
+//    {
+//    }
+//}

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace commercetools.Sdk.HttpApi
 {
-    public class GetByKeyHttpApiCommand<T>: IHttpApiCommand, IRequestable<GetByKeyCommand<T>>
+    public class GetByKeyHttpApiCommand<T>: IHttpApiCommand<GetByKeyCommand<T>, T> //, IRequestable<GetByKeyCommand<T>>
     {
         private GetByKeyCommand<T> command;
         private readonly GetByKeyRequestMessageBuilder requestBuilder;

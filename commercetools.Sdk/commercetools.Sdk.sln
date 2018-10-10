@@ -17,11 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Serializa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.HttpApi.Domain", "commercetools.Sdk.HttpApi.Domain\commercetools.Sdk.HttpApi.Domain.csproj", "{5B22680B-EAFD-4B26-8025-AF8ADDA9E392}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.LinqToQueryPredicate", "commercetools.Sdk.LinqToQueryPredicate\commercetools.Sdk.LinqToQueryPredicate.csproj", "{FAAA2589-678B-4AEB-91FF-6745731A91C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.LinqToQueryPredicate.Tests", "commercetools.Sdk.LinqToQueryPredicate.Tests\commercetools.Sdk.LinqToQueryPredicate.Tests.csproj", "{41C21841-4E80-4533-8C2A-01F677F335B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.LinqToQueryPredicate.Tests", "commercetools.Sdk.LinqToQueryPredicate.Tests\commercetools.Sdk.LinqToQueryPredicate.Tests.csproj", "{41C21841-4E80-4533-8C2A-01F677F335B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Serialization.Tests", "commercetools.Sdk.Serialization.Tests\commercetools.Sdk.Serialization.Tests.csproj", "{FD1732C9-6D02-49B9-A7EA-6F38BF12E508}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.Serialization.Tests", "commercetools.Sdk.Serialization.Tests\commercetools.Sdk.Serialization.Tests.csproj", "{FD1732C9-6D02-49B9-A7EA-6F38BF12E508}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.LinqToQueryPredicate", "commercetools.Sdk.LinqToQueryPredicate\commercetools.Sdk.LinqToQueryPredicate.csproj", "{AAD76EBF-6567-4D18-BF75-05B2B31A01E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,10 +57,6 @@ Global
 		{5B22680B-EAFD-4B26-8025-AF8ADDA9E392}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B22680B-EAFD-4B26-8025-AF8ADDA9E392}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B22680B-EAFD-4B26-8025-AF8ADDA9E392}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FAAA2589-678B-4AEB-91FF-6745731A91C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FAAA2589-678B-4AEB-91FF-6745731A91C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FAAA2589-678B-4AEB-91FF-6745731A91C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FAAA2589-678B-4AEB-91FF-6745731A91C9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{41C21841-4E80-4533-8C2A-01F677F335B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{41C21841-4E80-4533-8C2A-01F677F335B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41C21841-4E80-4533-8C2A-01F677F335B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,6 +65,10 @@ Global
 		{FD1732C9-6D02-49B9-A7EA-6F38BF12E508}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD1732C9-6D02-49B9-A7EA-6F38BF12E508}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD1732C9-6D02-49B9-A7EA-6F38BF12E508}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAD76EBF-6567-4D18-BF75-05B2B31A01E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAD76EBF-6567-4D18-BF75-05B2B31A01E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAD76EBF-6567-4D18-BF75-05B2B31A01E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAD76EBF-6567-4D18-BF75-05B2B31A01E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

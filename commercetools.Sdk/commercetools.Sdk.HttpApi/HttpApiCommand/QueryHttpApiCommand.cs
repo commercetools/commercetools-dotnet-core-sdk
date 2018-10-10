@@ -6,7 +6,7 @@ using System.Text;
 
 namespace commercetools.Sdk.HttpApi
 {
-    public class QueryHttpApiCommand<T>: IHttpApiCommand, IRequestable<QueryCommand<T>>
+    public class QueryHttpApiCommand<T>: IHttpApiCommand<QueryCommand<T>,T> //, IRequestable<QueryCommand<T>>
     {
         private QueryCommand<T> command;
         private readonly QueryRequestMessageBuilder requestBuilder;

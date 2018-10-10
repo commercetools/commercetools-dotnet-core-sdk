@@ -6,4 +6,9 @@ namespace commercetools.Sdk.HttpApi
     {
         HttpRequestMessage HttpRequestMessage { get; }
     }
+
+    public interface IHttpApiCommand<TU, T> : IHttpApiCommand
+    {
+      
+    }
 }

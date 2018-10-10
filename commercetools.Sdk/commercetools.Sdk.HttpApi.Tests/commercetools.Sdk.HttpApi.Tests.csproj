@@ -30,7 +30,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\commercetools.Sdk.HttpApi\commercetools.Sdk.HttpApi.csproj" />
-    <ProjectReference Include="..\commercetools.Sdk.LinqToQueryPredicate\commercetools.Sdk.LinqToQueryPredicate.csproj" />
     <ProjectReference Include="..\commercetools.Sdk.Serialization\commercetools.Sdk.Serialization.csproj" />
     <ProjectReference Include="..\commercetools.Sdk\commercetools.Sdk.Domain.csproj" />
   </ItemGroup>

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace commercetools.Sdk.Client
+namespace commercetools.Sdk.Domain
 {
-    public class Command<T>  //: ICommand
+    public class Cart
     {
     }
 }

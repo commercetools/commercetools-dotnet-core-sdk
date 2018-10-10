@@ -6,7 +6,7 @@ using System.Text;
 
 namespace commercetools.Sdk.HttpApi
 {
-    public class DeleteByIdHttpApiCommand<T>: IHttpApiCommand, IRequestable<DeleteByIdCommand<T>>
+    public class DeleteByIdHttpApiCommand<T>: IHttpApiCommand<DeleteByIdCommand<T>, T> //, IRequestable<DeleteByIdCommand<T>>
     {
         private DeleteByIdCommand<T> command;
         private readonly DeleteByIdRequestMessageBuilder requestBuilder;
