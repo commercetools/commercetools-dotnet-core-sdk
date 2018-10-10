@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Client
 {
-    public class Command<T>  //: ICommand
+    public class Command<T>
     {
     }
 }

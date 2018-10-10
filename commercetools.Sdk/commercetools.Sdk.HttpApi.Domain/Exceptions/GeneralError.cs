@@ -4,7 +4,10 @@ using System.Text;
 
 namespace commercetools.Sdk.HttpApi.Domain
 {
-    // TODO See what to do with this class, this is only needed for preventing circular reference in deserializtion
+    /// <remarks>
+    /// This class is only needed because of circular reference problems in deserialization. 
+    /// Most errors have the general error structure defined in the <see cref="Error"/> class and are represented by this class.
+    /// </remarks>
     public class GeneralError : Error
     {
     }

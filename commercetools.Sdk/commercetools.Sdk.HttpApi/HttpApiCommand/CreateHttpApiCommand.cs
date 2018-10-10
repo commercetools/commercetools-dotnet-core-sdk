@@ -7,7 +7,7 @@ using System.Text;
 namespace commercetools.Sdk.HttpApi
 {
     // TODO See if the code can be simplified and if common pieces can be combined
-    public class CreateHttpApiCommand<T>: IHttpApiCommand<CreateCommand<T>, T> //, IRequestable<CreateCommand<T>>
+    public class CreateHttpApiCommand<T>: IHttpApiCommand<CreateCommand<T>, T>
     {
         private CreateCommand<T> command;
         private readonly CreateRequestMessageBuilder requestBuilder;

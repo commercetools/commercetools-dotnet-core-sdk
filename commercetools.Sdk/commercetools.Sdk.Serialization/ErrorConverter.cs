@@ -46,6 +46,7 @@ namespace commercetools.Sdk.Serialization
 
         private Type GetTypeByCodeProperty(JToken codeProperty)
         {
+            // TODO Take this out of here and inject
             var derivedErrors = (from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
                             from assemblyType in domainAssembly.GetTypes()
                             where typeof(HttpApi.Domain.Error).IsAssignableFrom(assemblyType)

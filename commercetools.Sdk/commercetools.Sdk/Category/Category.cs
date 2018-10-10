@@ -21,9 +21,9 @@
 
         public LocalizedString Description { get; set; }
 
-        public List<Reference> Ancestors { get; set; }
+        public List<Reference<Category>> Ancestors { get; set; }
 
-        public Reference Parent { get; set; }
+        public Reference<Category> Parent { get; set; }
 
         public string OrderHint { get; set; }
 

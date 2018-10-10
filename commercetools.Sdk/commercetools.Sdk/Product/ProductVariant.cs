@@ -7,5 +7,7 @@ namespace commercetools.Sdk.Domain
         public int Id { get; set; }
         public string Key { get; set; }
         public List<Attribute> Attributes { get; set; }
+        public List<Price> Prices { get; set; }
+        public Price Price { get; set; }
     }
 }
