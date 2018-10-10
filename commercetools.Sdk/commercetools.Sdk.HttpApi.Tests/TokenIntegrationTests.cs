@@ -17,7 +17,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
             // Resetting scope to an empty string for testing purposes
             clientConfiguration.Scope = "";
-            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
+            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null, null, null);
             ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
             ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(httpClientFactory, clientConfiguration, tokenStoreManager, serializerService);
             Token token = tokenProvider.Token;
@@ -29,7 +29,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             ISerializerService serializerService = TestUtils.GetSerializerService();
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("ClientWithSmallerScope");
-            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
+            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null, null, null);
             ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
             ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(httpClientFactory, clientConfiguration, tokenStoreManager, serializerService);
             Token token = tokenProvider.Token;
@@ -42,7 +42,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             ISerializerService serializerService = TestUtils.GetSerializerService();
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("ClientWithSmallerScope");
-            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
+            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null, null, null);
             IUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
             userCredentialsStoreManager.Username = "mick.jagger@commercetools.com";
             userCredentialsStoreManager.Password = "st54e9m4";
@@ -56,7 +56,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             ISerializerService serializerService = TestUtils.GetSerializerService();
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("ClientWithAnonymousScope");
-            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
+            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null, null, null);
             IAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(httpClientFactory, clientConfiguration, anonymousStoreManager, serializerService);
             Token token = tokenProvider.Token;
@@ -68,7 +68,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             ISerializerService serializerService = TestUtils.GetSerializerService();
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("ClientWithAnonymousScope");
-            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
+            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null, null, null);
             IAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
             anonymousStoreManager.AnonymousId = TestUtils.RandomString(10);
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(httpClientFactory, clientConfiguration, anonymousStoreManager, serializerService);
@@ -81,7 +81,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             ISerializerService serializerService = TestUtils.GetSerializerService();
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("ClientWithSmallerScope");
-            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null);
+            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null, null, null);
             IUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
             userCredentialsStoreManager.Username = "mick.jagger@commercetools.com";
             userCredentialsStoreManager.Password = "st54e9m4";

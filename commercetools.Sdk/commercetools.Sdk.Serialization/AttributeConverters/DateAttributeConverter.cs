@@ -17,6 +17,7 @@ namespace commercetools.Sdk.Serialization
             if (property?.Type == JTokenType.String)
             {
                 DateTime date;
+                // TODO See in which format the date is saved and if there are localizations
                 if (DateTime.TryParse(property.Value<string>(), out date))
                 {
                     if (date.TimeOfDay.Ticks == 0)
