@@ -27,11 +27,18 @@ namespace commercetools.Sdk.Domain
         }
     }
 
-    public class Expansion<T, S>
+    public class Expansion<T, S> : Expansion<T>
     {
-        public Expression<Func<T, S>> Expression { get; set; }
+        public Expansion(Expression<Func<T, S>> expression) : base(expression)
+        {
+        }
+    }
 
-        public Expansion(Expression<Func<T, S>> expression)
+    public class Expansion<T>
+    {
+        public Expression Expression { get; set; }
+
+        public Expansion(Expression expression)
         {
             this.Expression = expression;
         }

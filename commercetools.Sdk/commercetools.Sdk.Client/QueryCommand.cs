@@ -9,11 +9,11 @@ namespace commercetools.Sdk.Client
     {
         public QueryPredicate<T> QueryPredicate { get; set; }
         public Sort<T> Sort { get; set; }
-        public List<ReferenceExpansion<T>> Expand { get; set; }
+        public List<Expansion<T>> Expand { get; set; }
         public int limit { get; set; }
         public int offset { get; set; }
 
-        public QueryCommand(QueryPredicate<T> queryPredicate, Sort<T> sort, List<ReferenceExpansion<T>> expand, int limit, int offset)
+        public QueryCommand(QueryPredicate<T> queryPredicate, Sort<T> sort, List<Expansion<T>> expand, int limit, int offset)
         {
             this.QueryPredicate = queryPredicate;
             this.Sort = sort;

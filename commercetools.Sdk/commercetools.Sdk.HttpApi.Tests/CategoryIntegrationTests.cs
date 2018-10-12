@@ -107,9 +107,22 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClient commerceToolsClient = TestUtils.SetupClient();
             QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Key == "c14");
             Sort<Category> sort = null;
-            List<ReferenceExpansion<Category>> expand = null;
+            List<Expansion<Category>> expand = null;
             PagedQueryResult<Category> returnedSet = commerceToolsClient.Execute(new QueryCommand<Category>(queryPredicate, sort, expand, 1, 1)).Result;
             Assert.Contains(returnedSet.Results, c => c.Key == "c14"); 
+        }
+
+        [Fact]
+        public void QueryAndExpandParentCategory()
+        {
+            IClient commerceToolsClient = TestUtils.SetupClient();
+            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Key == "c22");
+            Sort<Category> sort = null;
+            List<Expansion<Category>> expandList = new List<Expansion<Category>>();
+            ReferenceExpansion<Category> expand = new ReferenceExpansion<Category>(c => c.Parent);
+            expandList.Add(expand);
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.Execute(new QueryCommand<Category>(queryPredicate, sort, expandList, 1, 1)).Result;
+            Assert.Contains(returnedSet.Results, c => c.Key == "c22" && c.Parent.Obj != null);
         }
     }
 }

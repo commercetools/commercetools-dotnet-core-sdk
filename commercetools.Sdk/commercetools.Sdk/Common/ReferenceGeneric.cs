@@ -2,6 +2,6 @@
 {
     public class Reference<T> : Reference
     {
-        public T Obj { get; }
+        public T Obj { get; set; }
     }
 }

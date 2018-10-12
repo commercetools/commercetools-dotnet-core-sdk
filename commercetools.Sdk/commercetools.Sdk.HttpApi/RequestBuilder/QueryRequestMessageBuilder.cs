@@ -6,18 +6,19 @@
     using commercetools.Sdk.Serialization;
     using Microsoft.AspNetCore.WebUtilities;
     using System;
+    using System.Collections.Generic;
     using System.Net;
     using System.Net.Http;
 
     public class QueryRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
-        private readonly ISerializerService serializerService;
         private readonly IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor;
+        private readonly IExpansionVisitor expansionVisitor;
 
-        public QueryRequestMessageBuilder(ISerializerService serializerService, IClientConfiguration clientConfiguration, IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor) : base(clientConfiguration)
+        public QueryRequestMessageBuilder(IClientConfiguration clientConfiguration, IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor, IExpansionVisitor expansionVisitor) : base(clientConfiguration)
         {
-            this.serializerService = serializerService;
             this.queryPredicateExpressionVisitor = queryPredicateExpressionVisitor;
+            this.expansionVisitor = expansionVisitor;
         }
 
         protected override HttpMethod HttpMethod => HttpMethod.Get;
@@ -29,9 +30,15 @@
 
         private Uri GetRequestUri<T>(QueryCommand<T> command)
         {
-            string where = queryPredicateExpressionVisitor.ProcessExpression(command.QueryPredicate.Expression);
-            var parametersToAdd = new System.Collections.Generic.Dictionary<string, string> { { "where", where } };
             string requestUri = this.GetMessageBase<T>();
+            string where = queryPredicateExpressionVisitor.ProcessExpression(command.QueryPredicate.Expression);
+            var parametersToAdd = new Dictionary<string, string>();
+            parametersToAdd.Add("where", where);            
+            foreach (var expansion in command.Expand)
+            {
+                string expand = this.expansionVisitor.GetPath(expansion.Expression);
+                parametersToAdd.Add("expand", expand);
+            }
             var newUri = QueryHelpers.AddQueryString(requestUri, parametersToAdd);
             return new Uri(newUri);
         }
