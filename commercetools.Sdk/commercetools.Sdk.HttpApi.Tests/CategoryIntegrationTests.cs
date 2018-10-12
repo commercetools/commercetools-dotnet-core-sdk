@@ -67,7 +67,6 @@ namespace commercetools.Sdk.HttpApi.Tests
             categoryDraft.Slug = localizedStringSlug;
             categoryDraft.Key = TestUtils.RandomString(3);
             Category category = commerceToolsClient.Execute<Category>(new CreateCommand<Category>(categoryDraft)).Result;
-            //Category category2 = commerceToolsClient.CreateAsync(categoryDraft).Result;
             Assert.Equal(categoryName, category.Name["en"]);
             Category deletedCategory = commerceToolsClient.Execute<Category>(new DeleteByKeyCommand<Category>(category.Key, category.Version)).Result;
             Assert.ThrowsAsync<HttpApiClientException>(() => commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(deletedCategory.Id))));

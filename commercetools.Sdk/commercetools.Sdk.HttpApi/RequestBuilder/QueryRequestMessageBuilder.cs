@@ -33,11 +33,14 @@
             string requestUri = this.GetMessageBase<T>();
             string where = queryPredicateExpressionVisitor.ProcessExpression(command.QueryPredicate.Expression);
             var parametersToAdd = new Dictionary<string, string>();
-            parametersToAdd.Add("where", where);            
-            foreach (var expansion in command.Expand)
+            parametersToAdd.Add("where", where);
+            if (command.Expand != null)
             {
-                string expand = this.expansionVisitor.GetPath(expansion.Expression);
-                parametersToAdd.Add("expand", expand);
+                foreach (var expansion in command.Expand)
+                {
+                    string expand = this.expansionVisitor.GetPath(expansion.Expression);
+                    parametersToAdd.Add("expand", expand);
+                }
             }
             var newUri = QueryHelpers.AddQueryString(requestUri, parametersToAdd);
             return new Uri(newUri);
