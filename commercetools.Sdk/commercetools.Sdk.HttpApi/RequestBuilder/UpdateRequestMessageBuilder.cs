@@ -5,23 +5,23 @@ using System.Net.Http;
 
 namespace commercetools.Sdk.HttpApi
 {
-    public class UpdateByIdRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
+    public class UpdateRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
         private readonly ISerializerService serializerService;
 
-        public UpdateByIdRequestMessageBuilder(ISerializerService serializerService, IClientConfiguration clientConfiguration) : base(clientConfiguration)
+        public UpdateRequestMessageBuilder(ISerializerService serializerService, IClientConfiguration clientConfiguration) : base(clientConfiguration)
         {
             this.serializerService = serializerService;
         }
 
         protected override HttpMethod HttpMethod => HttpMethod.Post;
 
-        public HttpRequestMessage GetRequestMessage<T>(UpdateByIdCommand<T> command)
+        public HttpRequestMessage GetRequestMessage<T>(UpdateCommand<T> command)
         {
             return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), this.GetHttpContent<T>(command));
         }
 
-        private HttpContent GetHttpContent<T>(UpdateByIdCommand<T> command)
+        private HttpContent GetHttpContent<T>(UpdateCommand<T> command)
         {
             var requestBody = new
             {
@@ -31,9 +31,18 @@ namespace commercetools.Sdk.HttpApi
             return new StringContent(this.serializerService.Serialize(requestBody));
             
         }
-        private Uri GetRequestUri<T>(UpdateByIdCommand<T> command)
+        private Uri GetRequestUri<T>(UpdateCommand<T> command)
         {
-            string requestUri = this.GetMessageBase<T>() + $"/{command.Guid}";
+            string requestUri = this.GetMessageBase<T>();
+            if (command.ParameterKey == "id")
+            {
+                requestUri += $"/{command.ParameterValue}";
+            }
+            else
+            {
+                requestUri += $"/{command.ParameterKey}={command.ParameterValue}";
+            }
+
             return new Uri(requestUri);
         }
     }

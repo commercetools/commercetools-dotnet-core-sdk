@@ -5,15 +5,12 @@ using System.Text;
 
 namespace commercetools.Sdk.Client
 {
-    // TODO Merge by key and by id into one for all commands
-    public class DeleteByIdCommand<T> : Command<T>
+    public class DeleteByIdCommand<T> : DeleteCommand<T>
     {
-        public Guid Guid { get; set; }
-        public int Version { get; set; }
-
         public DeleteByIdCommand(Guid guid, int version)
         {
-            this.Guid = guid;
+            this.ParameterKey = "id";
+            this.ParameterValue = guid;
             this.Version = version;
         }
     }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace commercetools.Sdk.Client
+﻿namespace commercetools.Sdk.Client
 {
-    public class Command<T>
+    public abstract class Command<T>
     {
     }
 }

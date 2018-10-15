@@ -5,15 +5,12 @@ using System.Text;
 
 namespace commercetools.Sdk.Client
 {
-    public class UpdateByIdCommand<T> : Command<T>
+    public class UpdateByKeyCommand<T> : UpdateCommand<T>
     {
-        public Guid Guid { get; set; }
-        public int Version { get; set; }
-        public IList<UpdateAction> UpdateActions { get; set; }
-
-        public UpdateByIdCommand(Guid guid, int version, IList<UpdateAction> updateActions)
+        public UpdateByKeyCommand(string key, int version, List<UpdateAction> updateActions)
         {
-            this.Guid = guid;
+            this.ParameterKey = "key";
+            this.ParameterValue = key;
             this.Version = version;
             this.UpdateActions = updateActions;
         }

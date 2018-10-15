@@ -2,13 +2,12 @@
 
 namespace commercetools.Sdk.Client
 {
-    public class GetByKeyCommand<T> : Command<T>
+    public class GetByKeyCommand<T> : GetCommand<T>
     {
-        public string Key { get; set; }
-
         public GetByKeyCommand(string key)
         {
-            this.Key = key;
+            this.ParameterKey = "key";
+            this.ParameterValue = key;
         }
     }
 }

@@ -8,40 +8,35 @@ namespace commercetools.Sdk.HttpApi
 {
     public class HttpApiCommandFactory : IHttpApiCommandFactory
     {
-        private IEnumerable<Type> registeredTypes;
+        private IEnumerable<Type> registeredHttpApiCommandTypes;
         private IRequestMessageBuilderFactory requestMessageBuilderFactory;
 
-        public HttpApiCommandFactory(IEnumerable<Type> registeredTypes, IRequestMessageBuilderFactory requestMessageBuilderFactory)
+        public HttpApiCommandFactory(IEnumerable<Type> registeredHttpApiCommandTypes, IRequestMessageBuilderFactory requestMessageBuilderFactory)
         {
-            this.registeredTypes = registeredTypes;
+            this.registeredHttpApiCommandTypes = registeredHttpApiCommandTypes;
             this.requestMessageBuilderFactory = requestMessageBuilderFactory;
         }
 
         public IHttpApiCommand Create<T>(Command<T> command)
         {
-            Type typeOfCommand = command.GetType().GetGenericTypeDefinition();
+            // retrieve the type of T
             Type typeOfGeneric = command.GetType().GetGenericArguments().FirstOrDefault();
-            Type typeOfHttApiCommand = null;
+            Type httApiCommandType = null;
 
-            foreach (Type type in this.registeredTypes)
+            foreach (Type type in this.registeredHttpApiCommandTypes)
             {
-                //Type typeOfInteface = type.GetInterfaces().Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IRequestable<>)).FirstOrDefault();
-                //if (typeOfInteface.GetGenericArguments().Any(x => x.GetGenericTypeDefinition() == typeOfCommand))
-                //{ 
-                //    typeOfHttApiCommand = type;
-                //}
-                
-                var t = type.GetInterfaces().First().GetGenericArguments().First();
-                if (EqualityComparer<Type>.Default.Equals(t.GetGenericTypeDefinition(), typeOfCommand))
+                // retrieving the command type from IHttpApiCommand, e.g. GetHttpApiCommand<T>: IHttpApiCommand<GetCommand<T>, T>
+                var httpApiCommandGenericType = type.GetInterfaces().First().GetGenericArguments().First();
+                // IsAssignableFrom does not work on open generic types <>, which means the type of T needs to be passed first
+                if (httpApiCommandGenericType.GetGenericTypeDefinition().MakeGenericType(typeOfGeneric).IsAssignableFrom(command.GetType()))
                 {
-                    typeOfHttApiCommand = type;
+                    httApiCommandType = type;
                     break;
                 }
-
             }
 
             // TODO Replace with compiled lamba expression
-            return Activator.CreateInstance(typeOfHttApiCommand.MakeGenericType(typeOfGeneric), command, requestMessageBuilderFactory) as IHttpApiCommand;
+            return Activator.CreateInstance(httApiCommandType.MakeGenericType(typeOfGeneric), command, requestMessageBuilderFactory) as IHttpApiCommand;
         }
     }
 }

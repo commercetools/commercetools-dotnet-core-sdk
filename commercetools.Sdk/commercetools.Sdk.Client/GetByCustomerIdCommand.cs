@@ -3,13 +3,12 @@ using System.Net.Http;
 
 namespace commercetools.Sdk.Client
 {
-    public class GetByCustomerIdCommand<T> : Command<T> where T : Cart
+    public class GetByCustomerIdCommand<T> : GetCommand<T> where T : Cart
     {
-        public string Key { get; set; }
-
-        public GetByCustomerIdCommand(string key)
+        public GetByCustomerIdCommand(string customerId)
         {
-            this.Key = key;
+            this.ParameterKey = "customerId";
+            this.ParameterValue = customerId;
         }
     }
 }

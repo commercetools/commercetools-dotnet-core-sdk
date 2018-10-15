@@ -49,16 +49,13 @@ namespace commercetools.Sdk.HttpApi.MvcExample
             services.AddSingleton<IQueryPredicateExpressionVisitor, QueryPredicateExpressionVisitor>();
             // TODO Auto register all message builders by looping through interface implementations
             services.AddSingleton<IRequestMessageBuilder, CreateRequestMessageBuilder>();
-            services.AddSingleton<IRequestMessageBuilder, UpdateByIdRequestMessageBuilder>();
-            services.AddSingleton<IRequestMessageBuilder, UpdateByKeyRequestMessageBuilder>();
-            services.AddSingleton<IRequestMessageBuilder, GetByIdRequestMessageBuilder>();
-            services.AddSingleton<IRequestMessageBuilder, GetByKeyRequestMessageBuilder>();
-            services.AddSingleton<IRequestMessageBuilder, DeleteByIdRequestMessageBuilder>();
-            services.AddSingleton<IRequestMessageBuilder, DeleteByKeyRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, UpdateRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, GetRequestMessageBuilder>();
+            services.AddSingleton<IRequestMessageBuilder, DeleteRequestMessageBuilder>();
             services.AddSingleton<IRequestMessageBuilder, QueryRequestMessageBuilder>();
 
             // TODO loop through classes and register this automatically
-            IEnumerable<Type> registeredHttpApiCommandTypes = new List<Type>() { typeof(CreateHttpApiCommand<>), typeof(QueryHttpApiCommand<>), typeof(GetByIdHttpApiCommand<>), typeof(GetByKeyHttpApiCommand<>), typeof(UpdateByKeyHttpApiCommand<>), typeof(UpdateByIdHttpApiCommand<>), typeof(DeleteByKeyHttpApiCommand<>), typeof(DeleteByIdHttpApiCommand<>) };
+            IEnumerable<Type> registeredHttpApiCommandTypes = new List<Type>() { typeof(CreateHttpApiCommand<>), typeof(QueryHttpApiCommand<>), typeof(GetHttpApiCommand<>), typeof(UpdateHttpApiCommand<>), typeof(DeleteHttpApiCommand<>) };
             // TODO find a better way to add this to services, ienumerable is too generic
             services.AddSingleton<IEnumerable<Type>>(registeredHttpApiCommandTypes);
             services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();

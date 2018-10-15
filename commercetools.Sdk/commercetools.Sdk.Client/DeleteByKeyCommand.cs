@@ -5,14 +5,12 @@ using System.Text;
 
 namespace commercetools.Sdk.Client
 {
-    public class DeleteByKeyCommand<T> : Command<T>
+    public class DeleteByKeyCommand<T> : DeleteCommand<T>
     {
-        public string Key { get; set; }
-        public int Version { get; set; }
-
         public DeleteByKeyCommand(string key, int version)
         {
-            this.Key = key;
+            this.ParameterKey = "key";
+            this.ParameterValue = key;
             this.Version = version;
         }
     }
