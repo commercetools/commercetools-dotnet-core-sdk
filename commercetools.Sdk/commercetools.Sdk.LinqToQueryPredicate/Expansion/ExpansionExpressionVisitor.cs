@@ -6,7 +6,7 @@ using System.Text;
 
 namespace commercetools.Sdk.LinqToQueryPredicate
 {
-    public class ExpansionVisitor : IExpansionVisitor
+    public class ExpansionExpressionVisitor : IExpansionExpressionVisitor
     {
         private IDictionary<string, string> expandMethodMapping = new Dictionary<string, string>()
         {

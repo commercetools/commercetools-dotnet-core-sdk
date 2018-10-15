@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace commercetools.Sdk.LinqToQueryPredicate
 {
     // TODO Refactor
+    // TODO See which attributes have to be limited (on Products)
     public class QueryPredicateExpressionVisitor : IQueryPredicateExpressionVisitor
     {
         public static Dictionary<ExpressionType, string> MappingOfOperators = new Dictionary<ExpressionType, string>()

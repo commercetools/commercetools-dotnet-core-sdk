@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.LinqToQueryPredicate
 {
-    public interface IExpansionVisitor
+    public interface IExpansionExpressionVisitor
     {
         string GetPath(Expression expression);
     }

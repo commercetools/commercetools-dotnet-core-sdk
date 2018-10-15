@@ -6,6 +6,7 @@ namespace commercetools.Sdk.Domain
     {
         public ProductVariant MasterVariant { get; set; }
         public LocalizedString Slug { get; set; }
+        public LocalizedString Name { get; set; }
         public List<Reference> Categories { get; set; }
     }
 }

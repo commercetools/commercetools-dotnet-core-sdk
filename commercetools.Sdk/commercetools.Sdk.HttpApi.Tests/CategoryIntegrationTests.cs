@@ -105,9 +105,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClient commerceToolsClient = TestUtils.SetupClient();
             QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Key == "c14");
-            Sort<Category> sort = null;
-            List<Expansion<Category>> expand = null;
-            PagedQueryResult<Category> returnedSet = commerceToolsClient.Execute(new QueryCommand<Category>(queryPredicate, sort, expand, 1, 1)).Result;
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.Execute(new QueryCommand<Category>(queryPredicate, null, null, 1, 1)).Result;
             Assert.Contains(returnedSet.Results, c => c.Key == "c14"); 
         }
 
@@ -116,12 +114,37 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClient commerceToolsClient = TestUtils.SetupClient();
             QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Key == "c22");
-            Sort<Category> sort = null;
             List<Expansion<Category>> expandList = new List<Expansion<Category>>();
             ReferenceExpansion<Category> expand = new ReferenceExpansion<Category>(c => c.Parent);
             expandList.Add(expand);
-            PagedQueryResult<Category> returnedSet = commerceToolsClient.Execute(new QueryCommand<Category>(queryPredicate, sort, expandList, 1, 1)).Result;
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.Execute(new QueryCommand<Category>(queryPredicate, null, expandList, 1, 1)).Result;
             Assert.Contains(returnedSet.Results, c => c.Key == "c22" && c.Parent.Obj != null);
+        }
+
+        [Fact]
+        public void QueryAndSortCategory()
+        {
+            IClient commerceToolsClient = TestUtils.SetupClient();
+            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == "f40fcd15-b1c2-4279-9cfa-f6083e6a2988");
+            List<Sort<Category>> sortList = new List<Sort<Category>>();
+            Sort<Category> sort = new Sort<Category>(c => c.Name["en"]);
+            sortList.Add(sort);
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.Execute(new QueryCommand<Category>(queryPredicate, sortList, null, 1, 1)).Result;
+            var sortedList = returnedSet.Results.OrderBy(c => c.Name["en"]);
+            Assert.True(sortedList.SequenceEqual(returnedSet.Results));
+        }
+
+        [Fact]
+        public void QueryAndSortCategoryDescending()
+        {
+            IClient commerceToolsClient = TestUtils.SetupClient();
+            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == "f40fcd15-b1c2-4279-9cfa-f6083e6a2988");
+            List<Sort<Category>> sortList = new List<Sort<Category>>();
+            Sort<Category> sort = new Sort<Category>(c => c.Name["en"], SortDirection.Descending);
+            sortList.Add(sort);
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.Execute(new QueryCommand<Category>(queryPredicate, sortList, null, 1, 1)).Result;
+            var sortedList = returnedSet.Results.OrderByDescending(c => c.Name["en"]);
+            Assert.True(sortedList.SequenceEqual(returnedSet.Results));
         }
     }
 }
