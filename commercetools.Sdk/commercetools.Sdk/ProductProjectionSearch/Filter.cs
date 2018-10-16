@@ -10,12 +10,12 @@ namespace commercetools.Sdk.Domain
 
     public static class FilterExtensions
     {
-        public static bool Missing<T>(this List<T> source)
+        public static bool Missing<T>(this IEnumerable<T> source)
         {
             throw new NotImplementedException();
         }
 
-        public static bool Exists<T>(this List<T> source)
+        public static bool Exists<T>(this IEnumerable<T> source)
         {
             throw new NotImplementedException();
         }
@@ -25,7 +25,12 @@ namespace commercetools.Sdk.Domain
             throw new NotImplementedException();
         }
 
-        public static bool Range<T>(this T source, T from, T to)
+        public static bool Range(this int source, int? from, int? to)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool Range(this double source, double? from, double? to)
         {
             throw new NotImplementedException();
         }

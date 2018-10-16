@@ -82,5 +82,95 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.price.centAmount:range (1 to 30)", result);
         }
+
+        [Fact]
+        public void FilterByPriceCentAmountTwoRanges()
+        {
+            Expression<Func<ProductData, bool>> expression = p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 30) && v.Price.Value.CentAmount.Range(40, 100));
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.price.centAmount:range (1 to 30), (40 to 100)", result);
+        }
+
+        [Fact]
+        public void FilterByPriceCentAmountLowerBoundUknownRange()
+        {
+            Expression<Func<ProductData, bool>> expression = p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(null, 30));
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.price.centAmount:range (* to 30)", result);
+        }
+
+        [Fact]
+        public void FilterByPriceCentAmountUpperBoundUknownRange()
+        {
+            Expression<Func<ProductData, bool>> expression = p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, null));
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.price.centAmount:range (1 to *)", result);
+        }
+
+        [Fact]
+        public void FilterByPricesMissing()
+        {
+            Expression<Func<ProductData, bool>> expression = p => p.Variants.Any(v => v.Prices.Missing());
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.prices:missing", result);
+        }
+
+        [Fact]
+        public void FilterByPricesExists()
+        {
+            Expression<Func<ProductData, bool>> expression = p => p.Variants.Any(v => v.Prices.Exists());
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.prices:exists", result);
+        }
+
+        [Fact]
+        public void FilterByTextAttributeValue()
+        {
+            Expression<Func<ProductData, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "color" && ((TextAttribute)a).Value == "red"));
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.attribute.color:\"red\"", result);
+        }
+
+        [Fact]
+        public void FilterByNumberAttributeRange()
+        {
+            Expression<Func<ProductData, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "size" && ((NumberAttribute)a).Value.Range(36, 42)));
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.attribute.size:range (36 to 42)", result);
+        }
+
+        [Fact]
+        public void FilterByNumberAttributeMissing()
+        {
+            Expression<Func<ProductData, bool>> expression = p => p.Variants.Any(v => v.Attributes.Where(a => a.Name == "size").Missing());
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.attribute.size:missing", result);
+        }
+
+        [Fact]
+        public void FilterByNumberAttributeExists()
+        {
+            Expression<Func<ProductData, bool>> expression = p => p.Variants.Any(v => v.Attributes.Where(a => a.Name == "size").Exists());
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.attribute.size:exists", result);
+        }
+
+        [Fact]
+        public void FilterByEnumAttribute()
+        {
+            Expression<Func<ProductData, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "enum" && ((EnumAttribute)a).Value.Key == "value"));
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.attribute.enum.key:\"value\"", result);
+        }
     }
 }
