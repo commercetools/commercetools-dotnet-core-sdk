@@ -8,5 +8,7 @@ namespace commercetools.Sdk.Domain
         public LocalizedString Slug { get; set; }
         public LocalizedString Name { get; set; }
         public List<Reference> Categories { get; set; }
+        public List<ProductVariant> Variants { get; set; }
+        public Price Price { get; set; }
     }
 }

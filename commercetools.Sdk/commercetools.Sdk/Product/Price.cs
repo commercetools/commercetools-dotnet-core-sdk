@@ -8,5 +8,6 @@ namespace commercetools.Sdk.Domain
     {
         public string Id { get; set; }
         public Reference CustomerGroup { get; set; }
+        public Money Value { get; set; }
     }
 }
