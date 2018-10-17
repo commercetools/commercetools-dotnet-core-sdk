@@ -9,5 +9,6 @@ namespace commercetools.Sdk.Domain
         public List<Attribute> Attributes { get; set; }
         public List<Price> Prices { get; set; }
         public Price Price { get; set; }
+        public ProductVariantAvailibility Availibility { get; set; }
     }
 }

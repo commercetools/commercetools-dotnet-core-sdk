@@ -10,5 +10,6 @@ namespace commercetools.Sdk.Domain
         public List<Reference> Categories { get; set; }
         public List<ProductVariant> Variants { get; set; }
         public Price Price { get; set; }
+        public Dictionary<string, List<SearchKeywords>> SearchKeywords { get; set; }
     }
 }

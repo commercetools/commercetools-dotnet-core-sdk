@@ -167,10 +167,46 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
         [Fact]
         public void FilterByEnumAttribute()
         {
-            Expression<Func<ProductData, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "enum" && ((EnumAttribute)a).Value.Key == "value"));
+            Expression<Func<ProductData, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "color" && ((EnumAttribute)a).Value.Key == "grey"));
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             var result = filterExpressionVisitor.Render(expression);
-            Assert.Equal("variants.attribute.enum.key:\"value\"", result);
+            Assert.Equal("variants.attribute.color.key:\"grey\"", result);
+        }
+
+        [Fact]
+        public void FilterByIsOnStock()
+        {
+            Expression<Func<ProductData, bool>> expression = p => p.Variants.Any(v => v.Availibility.IsOnStock == true);
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.availability.isOnStock:true", result);
+        }
+
+        [Fact]
+        public void FilterByIsOnStockPerChannel()
+        {
+            Expression<Func<ProductData, bool>> expression = p => p.Variants.Any(v => v.Availibility.Channels["1a3c451e-792a-43b5-8def-88d0db22eca8"].IsOnStock == true);
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.availability.channels.1a3c451e-792a-43b5-8def-88d0db22eca8.isOnStock:true", result);
+        }
+
+        [Fact]
+        public void FilterByAvailabilityisOnStockInChannels()
+        {
+            Expression<Func<ProductData, bool>> expression = p => p.Variants.Any(v => v.Availibility.isOnStockInChannels("1a3c451e-792a-43b5-8def-88d0db22eca8", "110321ab-8fd7-4d4c-8b7c-4c69761411fc"));
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.availability.isOnStockInChannels:\"1a3c451e-792a-43b5-8def-88d0db22eca8\",\"110321ab-8fd7-4d4c-8b7c-4c69761411fc\"", result);
+        }
+
+        [Fact]
+        public void FilterBySearchKeywords()
+        {
+            Expression<Func<ProductData, bool>> expression = p => p.SearchKeywords["en"].Any(s => s.Text == "jacket");
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("searchKeywords.en.text:jacket", result);
         }
     }
 }
