@@ -2,10 +2,12 @@ language: csharp
 mono: none
 dotnet: 2.1
 
-before_script: 
+before_install: 
  - cd commercetools.Sdk
 
-script:
+install:
  - dotnet restore
+
+script:
  - dotnet build
- - dotnet test
+ - dotnet test commercetools.Sdk.HttpApi.Tests
