@@ -7,6 +7,6 @@ build_script:
   - ps: dotnet build
 
 test_script:
-  - ps: dotnet test commercetools.Sdk.HttpApi.Tests --no-build
-  - ps: dotnet test commercetools.Sdk.LinqToQueryPredicate.Tests --no-build
-  - ps: dotnet test commercetools.Sdk.Serialization.Tests --no-build
+  - ps: dotnet test commercetools.Sdk.HttpApi.Tests/commercetools.Sdk.HttpApi.Tests.csproj --no-build
+  - ps: dotnet test commercetools.Sdk.LinqToQueryPredicate.Tests/commercetools.Sdk.LinqToQueryPredicate.Tests.csproj --no-build
+  - ps: dotnet test commercetools.Sdk.Serialization.Tests/commercetools.Sdk.Serialization.Tests.csproj --no-build
