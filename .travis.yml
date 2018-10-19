@@ -1,12 +1,13 @@
 language: csharp
 mono: none
-dotnet: 2.1
+dotnet: 2.0.0
 
 before_install: 
  - cd commercetools.Sdk
 
 install:
  - dotnet restore
+ - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 
 script:
  - dotnet build
