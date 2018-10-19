@@ -7,7 +7,6 @@ before_install:
 
 install:
  - dotnet restore
- - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 
 script:
  - dotnet build
