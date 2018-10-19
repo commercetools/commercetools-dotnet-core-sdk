@@ -8,6 +8,7 @@ namespace commercetools.Sdk.Domain
     {
     }
 
+    // TODO Move this to another project so that it is not imported everywhere
     public static class FilterExtensions
     {
         public static bool Missing<T>(this IEnumerable<T> source)
@@ -25,12 +26,7 @@ namespace commercetools.Sdk.Domain
             throw new NotImplementedException();
         }
 
-        public static bool Range(this int source, int? from, int? to)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool Range(this double source, double? from, double? to)
+        public static bool Range<T>(this T source, T? from, T? to) where T: struct
         {
             throw new NotImplementedException();
         }

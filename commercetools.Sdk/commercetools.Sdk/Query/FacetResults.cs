@@ -1,6 +1,8 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    public class FacetResults
+    // TODO Add a json convert for this class
+    public abstract class FacetResult
     {
+        public string Type { get; set; }
     }
 }

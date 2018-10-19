@@ -2,5 +2,6 @@
 {
     public class ReviewRatingStatistics
     {
+        public double AverageRating { get; set; }
     }
 }

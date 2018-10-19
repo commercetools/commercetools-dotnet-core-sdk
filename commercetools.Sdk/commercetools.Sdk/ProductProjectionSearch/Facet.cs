@@ -4,7 +4,9 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class Facet
+    public abstract class Facet
     {
+        public bool IsCountingProducts { get; set; }
+        public string Alias { get; set; }
     }
 }
