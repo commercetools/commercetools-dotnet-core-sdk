@@ -15,6 +15,8 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             { "Exists", "exists" }
         };
 
+        private List<ExpressionType> allowedGroupingExpressionTypes = new List<ExpressionType>() { ExpressionType.Or, ExpressionType.OrElse, ExpressionType.And, ExpressionType.AndAlso };
+
         // TODO Add properties if needed (for example Id in case of category) ???
         public string Render(Expression expression)
         {
@@ -39,9 +41,9 @@ namespace commercetools.Sdk.LinqToQueryPredicate
                 return GetMember((MemberExpression)expression);
             }
             // c => c.Id.Subtree("34940e9b-0752-4ffa-8e6e-4f2417995a3e") || c.Id.Subtree("2fd1d652-2533-40f1-97d7-713ac24668b1")
-            if (expression.NodeType == ExpressionType.Or || expression.NodeType == ExpressionType.OrElse)
+            if (allowedGroupingExpressionTypes.Contains(expression.NodeType))
             {
-                return GetOr((BinaryExpression)expression);
+                return GetGroup((BinaryExpression)expression);
             }
             // c
             // lambda expression parameter does not need to be returned
@@ -53,14 +55,18 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             throw new NotSupportedException("The expression type is not supported.");
         }
 
-        private string GetOr(BinaryExpression expression)
+        private string GetGroup(BinaryExpression expression)
         {
-            List<FilterValue> filterValues = FlattenOrFilters(expression);
-            // check if all parents are the same
-            if (filterValues.Any(f => f.Members.SequenceEqual(filterValues[0].Members)))
+            List<FilterVisitor> filterValues = GroupExpressionFlattener.GetFilterVisitors(expression);
+            // check if all parents are the same, otherwise grouping is not possible
+            if (filterValues.Any(f => f.Accessors.SequenceEqual(filterValues[0].Accessors)))
             {
-                // TODO Need to group by range as well
-                return RenderParents(filterValues[0].Members.Select(x => x.ToCamelCase()).ToList()) + ":" + string.Join(",", filterValues.Select(x => x.Value));
+                // TODO See how to treat else case
+                if (filterValues.All(f => f is RangeFilterVisitor))
+                {
+                    return RenderParents(filterValues[0].Accessors.Select(x => x.ToCamelCase()).ToList()) + ":range " + string.Join(", ", filterValues.Select(x => x.Render()));
+                }
+                return RenderParents(filterValues[0].Accessors.Select(x => x.ToCamelCase()).ToList()) + ": " + string.Join(", ", filterValues.Select(x => x.Render()));
             }
             // TODO Move message to a resource file
             throw new NotSupportedException("The expression type is not supported.");
@@ -71,44 +77,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             return string.Join('.', parents);
         }
 
-        private List<FilterValue> FlattenOrFilters(BinaryExpression expression)
-        {
-            List<FilterValue> filterValues = new List<FilterValue>();
-            Expression left = expression.Left;
-            Expression right = expression.Right;
-            if (left.NodeType == ExpressionType.Or || left.NodeType == ExpressionType.OrElse)
-            {
-                filterValues.AddRange(FlattenOrFilters((BinaryExpression)left));
-            }
-            else
-            {
-                filterValues.Add(GetFilterValue(left));
-            }
-            if (right.NodeType == ExpressionType.Or || right.NodeType == ExpressionType.OrElse)
-            {
-                filterValues.AddRange(FlattenOrFilters((BinaryExpression)right));
-            }
-            else
-            {
-                
-                filterValues.Add(GetFilterValue(right));
-            }
-            return filterValues;
-        }
-
-        private FilterValue GetFilterValue(Expression expression)
-        {
-            if (expression.NodeType == ExpressionType.Equal)
-            {
-                return new FilterValue((BinaryExpression)expression);
-            }
-            if (expression.NodeType == ExpressionType.Call)
-            {
-                return new FilterValue((MethodCallExpression)expression);
-            }
-            // TODO Move message to a resource file
-            throw new NotSupportedException("The expression type is not supported.");
-        }
+        
 
         private string GetEqual(BinaryExpression expression)
         {
@@ -149,55 +118,15 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             // c => c.Id.Subtree("34940e9b-0752-4ffa-8e6e-4f2417995a3e")
             if (expression.Method.Name == "Subtree")
             {
-                return Render(expression.Arguments[0]) + ":" + GetSubtree(expression.Arguments[1]);
+                SubtreeFilterVisitor subtreeFilterVisitor = new SubtreeFilterVisitor(expression);
+                return AccessorTraverser.RenderAccessors(subtreeFilterVisitor.Accessors) + ": " + subtreeFilterVisitor.Render();
+                //return Render(expression.Arguments[0]) + ":" + GetSubtree(expression.Arguments[1]);
             }
             // v => v.Price.Value.CentAmount.Range(1, 30)
             if (expression.Method.Name == "Range")
             {
-                return Render(expression.Arguments[0]) + ":" + GetRange(expression.Arguments[1], expression.Arguments[2]);
-            }
-            // TODO Move message to a resource file
-            throw new NotSupportedException("The expression type is not supported.");
-        }
-
-        private string GetRange(Expression from, Expression to)
-        {
-            string fromValue = string.Empty;
-            string toValue = string.Empty;
-            if (from.NodeType == ExpressionType.Constant && ((ConstantExpression)from).Value == null)
-            {
-                fromValue = "*";
-            }
-            else if (from.NodeType == ExpressionType.Convert && ((UnaryExpression)from).Operand.NodeType == ExpressionType.Constant)
-            {
-                fromValue = ((UnaryExpression)from).Operand.ToString();              
-            }
-            else
-            {
-                // TODO Move message to a resource file
-                throw new NotSupportedException("The expression type is not supported.");
-            }
-            if (to.NodeType == ExpressionType.Constant && ((ConstantExpression)to).Value == null)
-            {
-                toValue = "*";
-            }
-            else if (to.NodeType == ExpressionType.Convert && ((UnaryExpression)to).Operand.NodeType == ExpressionType.Constant)
-            {
-                toValue = ((UnaryExpression)to).Operand.ToString();
-            }
-            else
-            {
-                // TODO Move message to a resource file
-                throw new NotSupportedException("The expression type is not supported.");
-            }
-            return $"range ({fromValue} to {toValue})";
-        }
-
-        private string GetSubtree(Expression expression)
-        {
-            if (expression.NodeType == ExpressionType.Constant)
-            {
-                return " subtree(" + expression + ")";
+                RangeFilterVisitor rangeFilterVisitor = new RangeFilterVisitor(expression);
+                return AccessorTraverser.RenderAccessors(rangeFilterVisitor.Accessors) + ":" + "range " + rangeFilterVisitor.Render();
             }
             // TODO Move message to a resource file
             throw new NotSupportedException("The expression type is not supported.");
