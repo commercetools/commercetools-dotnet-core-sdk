@@ -19,11 +19,11 @@
             return new StringContent(this.serializerService.Serialize(command.Entity));
         }
 
-        protected override HttpMethod HttpMethod => HttpMethod.Post;
+        private HttpMethod HttpMethod => HttpMethod.Post;
 
         public HttpRequestMessage GetRequestMessage<T>(CreateCommand<T> command)
         {
-            return this.GetRequestMessage<T>(this.GetRequestUri<T>(), this.GetHttpContent<T>(command));
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(), this.GetHttpContent<T>(command), this.HttpMethod);
         }
 
         private Uri GetRequestUri<T>()
