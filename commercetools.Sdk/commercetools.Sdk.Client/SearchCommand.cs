@@ -10,11 +10,10 @@ namespace commercetools.Sdk.Client
         public TextSearch Text = new TextSearch();
         public bool Fuzzy { get; set; }
         public bool FuzzyLevel { get; set; }
-        public Filter Filter { get; set; }
-        public Filter FilterQuery { get; set; }
-        // TODO See if this should be a list
-        public Filter FilterFacets { get; set; }
-        public List<Facet> Facets { get; set; }
+        public List<Filter<T>> Filter { get; set; }
+        public List<Filter<T>> FilterQuery { get; set; }
+        public List<Filter<T>> FilterFacets { get; set; }
+        public List<Facet<T>> Facets { get; set; }
         public Sort<T> Sort { get; set; }
         public int Limit { get; set; }
         public int Offset { get; set; }

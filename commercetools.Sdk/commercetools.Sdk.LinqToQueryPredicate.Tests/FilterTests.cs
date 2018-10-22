@@ -34,7 +34,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
             Expression<Func<ProductProjection, bool>> expression = p => p.Categories.Exists();
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             var result = filterExpressionVisitor.Render(expression);
-            Assert.Equal("categories:exist", result);
+            Assert.Equal("categories:exists", result);
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
         [Fact]
         public void FilterByPriceCentAmountTwoRanges()
         {
-            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 30) && v.Price.Value.CentAmount.Range(40, 100));
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 30) || v.Price.Value.CentAmount.Range(40, 100));
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.price.centAmount:range (1 to 30), (40 to 100)", result);

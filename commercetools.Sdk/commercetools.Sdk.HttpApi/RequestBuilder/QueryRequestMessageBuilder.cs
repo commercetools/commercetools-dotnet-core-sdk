@@ -33,7 +33,6 @@
         private Uri GetRequestUri<T>(QueryCommand<T> command)
         {
             string requestUri = this.GetMessageBase<T>();
-            //var queryStringParameters = new Dictionary<string, string>();
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
             queryStringParameters.AddRange(AddQueryPredicateParameter(command));
             queryStringParameters.AddRange(AddExpandParameters(command));

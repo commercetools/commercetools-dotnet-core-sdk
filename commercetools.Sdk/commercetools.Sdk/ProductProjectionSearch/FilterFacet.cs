@@ -5,11 +5,11 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class RangeFacet : Facet
+    public class FilterFacet<T> : Facet<T>
     {
-        public Expression<Func<ProductProjection, bool>> Expression { get; private set; }
+        public Expression<Func<T, bool>> Expression { get; private set; }
 
-        public RangeFacet(Expression<Func<ProductProjection, bool>> expression)
+        public FilterFacet(Expression<Func<T, bool>> expression)
         {
             this.Expression = expression;
         }

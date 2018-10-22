@@ -5,11 +5,11 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class TermFacet : Facet
+    public class TermFacet<T> : Facet<T>
     {
-        public Expression<Func<ProductProjection, IComparable>> Expression { get; private set; }
+        public Expression<Func<T, IComparable>> Expression { get; private set; }
 
-        public TermFacet(Expression<Func<ProductProjection, IComparable>> expression)
+        public TermFacet(Expression<Func<T, IComparable>> expression)
         {
             this.Expression = expression;
         }

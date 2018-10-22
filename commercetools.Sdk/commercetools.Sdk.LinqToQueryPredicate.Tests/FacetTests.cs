@@ -30,8 +30,8 @@
         public void RangeFacetCentAmount()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 30));
-            IFacetExpressionVisitor facetExpressionVisitor = new FacetExpressionVisitor();
-            string result = facetExpressionVisitor.Render(expression);
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            string result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.price.centAmount:range (1 to 30)", result);
         }
 
@@ -39,8 +39,8 @@
         public void FilterFacetCategoryId()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Categories.Any(c => c.Id == "34940e9b-0752-4ffa-8e6e-4f2417995a3e");
-            IFacetExpressionVisitor facetExpressionVisitor = new FacetExpressionVisitor();
-            string result = facetExpressionVisitor.Render(expression);
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            string result = filterExpressionVisitor.Render(expression);
             Assert.Equal("categories.id:\"34940e9b-0752-4ffa-8e6e-4f2417995a3e\"", result);
         }
 
@@ -48,8 +48,8 @@
         public void FilterFacetCategoryAllSubtrees()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Categories.Any(c => c.Id.Subtree("*"));
-            IFacetExpressionVisitor facetExpressionVisitor = new FacetExpressionVisitor();
-            string result = facetExpressionVisitor.Render(expression);
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            string result = filterExpressionVisitor.Render(expression);
             Assert.Equal("categories.id: subtree(\"*\")", result);
         }
 
@@ -57,8 +57,8 @@
         public void FilterFacetAttributeIn()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "color" && ((TextAttribute)a).Value.In("red", "green")));
-            IFacetExpressionVisitor facetExpressionVisitor = new FacetExpressionVisitor();
-            string result = facetExpressionVisitor.Render(expression);
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            string result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.attribute.color:\"red\",\"green\"", result);
         }
 
