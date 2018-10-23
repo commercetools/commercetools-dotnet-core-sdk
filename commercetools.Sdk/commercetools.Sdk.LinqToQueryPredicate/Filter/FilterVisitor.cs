@@ -9,6 +9,6 @@ namespace commercetools.Sdk.LinqToQueryPredicate
     {
         public List<string> Accessors { get; protected set; }
         public abstract string Render();
-            
+        public abstract string RenderValue();
     }
 }

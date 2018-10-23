@@ -7,12 +7,11 @@ namespace commercetools.Sdk.LinqToQueryPredicate
 {
     public class EqualFilterVisitor : FilterVisitor
     {
-        public string Value { get; private set; }
-        public string To { get; private set; }
+        private string value;
 
         public EqualFilterVisitor(BinaryExpression expression)
         {
-            this.Value = GetValue(expression.Right);
+            this.value = GetValue(expression.Right);
             this.Accessors = AccessorTraverser.GetAccessors(expression.Left);
         }
 
@@ -31,7 +30,12 @@ namespace commercetools.Sdk.LinqToQueryPredicate
 
         public override string Render()
         {
-            return $"{this.Value}";
+            return $"{AccessorTraverser.RenderAccessors(this.Accessors)}:{this.RenderValue()}";
+        }
+
+        public override string RenderValue()
+        {
+            return $"{this.value}";
         }
     }
 }

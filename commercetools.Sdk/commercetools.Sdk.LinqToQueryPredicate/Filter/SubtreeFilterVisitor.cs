@@ -7,11 +7,11 @@ namespace commercetools.Sdk.LinqToQueryPredicate
 {
     public class SubtreeFilterVisitor : FilterVisitor
     {
-        public string Value { get; private set; }
+        private string value;
 
         public SubtreeFilterVisitor(MethodCallExpression expression)
         {
-            this.Value = GetValue(expression.Arguments[1]);
+            this.value = GetValue(expression.Arguments[1]);
             this.Accessors = AccessorTraverser.GetAccessors(expression.Arguments[0]);
         }
 
@@ -30,7 +30,12 @@ namespace commercetools.Sdk.LinqToQueryPredicate
 
         public override string Render()
         {
-            return "subtree(" + this.Value + ")";
+            return $"{AccessorTraverser.RenderAccessors(this.Accessors)}:{this.RenderValue()}";
+        }
+
+        public override string RenderValue()
+        {
+            return $" subtree({this.value})";
         }
     }
 }

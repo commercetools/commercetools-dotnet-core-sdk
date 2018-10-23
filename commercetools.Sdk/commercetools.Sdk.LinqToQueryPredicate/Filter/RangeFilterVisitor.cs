@@ -5,7 +5,7 @@ using System.Text;
 
 namespace commercetools.Sdk.LinqToQueryPredicate
 {
-    public class RangeFilterVisitor : FilterVisitor
+    public class RangeFilterVisitor
     {
         public string From { get; private set; }
         public string To { get; private set; }        
@@ -14,7 +14,6 @@ namespace commercetools.Sdk.LinqToQueryPredicate
         {
             this.From = GetRange(expression.Arguments[1]);
             this.To = GetRange(expression.Arguments[2]);
-            this.Accessors = AccessorTraverser.GetAccessors(expression.Arguments[0]);
         }
 
         private string GetRange(Expression expression)
@@ -35,7 +34,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             throw new NotSupportedException("The expression type is not supported.");           
         }
 
-        public override string Render()
+        public string Render()
         {
             return $"({this.From} to {this.To})";
         }

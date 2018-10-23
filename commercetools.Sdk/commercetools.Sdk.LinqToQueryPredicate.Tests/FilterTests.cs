@@ -134,7 +134,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "color" && ((TextAttribute)a).Value == "red"));
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             var result = filterExpressionVisitor.Render(expression);
-            Assert.Equal("variants.attribute.color:\"red\"", result);
+            Assert.Equal("variants.attributes.color:\"red\"", result);
         }
 
         [Fact]
@@ -143,7 +143,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "size" && ((NumberAttribute)a).Value.Range(36, 42)));
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             var result = filterExpressionVisitor.Render(expression);
-            Assert.Equal("variants.attribute.size:range (36 to 42)", result);
+            Assert.Equal("variants.attributes.size:range (36 to 42)", result);
         }
 
         [Fact]
@@ -152,7 +152,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Where(a => a.Name == "size").Missing());
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             var result = filterExpressionVisitor.Render(expression);
-            Assert.Equal("variants.attribute.size:missing", result);
+            Assert.Equal("variants.attributes.size:missing", result);
         }
 
         [Fact]
@@ -161,7 +161,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Where(a => a.Name == "size").Exists());
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             var result = filterExpressionVisitor.Render(expression);
-            Assert.Equal("variants.attribute.size:exists", result);
+            Assert.Equal("variants.attributes.size:exists", result);
         }
 
         [Fact]
@@ -170,7 +170,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "color" && ((EnumAttribute)a).Value.Key == "grey"));
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             var result = filterExpressionVisitor.Render(expression);
-            Assert.Equal("variants.attribute.color.key:\"grey\"", result);
+            Assert.Equal("variants.attributes.color.key:\"grey\"", result);
         }
 
         [Fact]
