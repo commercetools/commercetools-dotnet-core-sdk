@@ -33,6 +33,14 @@ namespace commercetools.Sdk.LinqToQueryPredicate
                     AddName(accessors, index);
                     ParseName(accessors, methodCallExpression.Object);
                 }
+                Expression accessorExpression = methodCallExpression.Arguments[0];
+                if (accessorExpression is MemberExpression attributeMemberExpression && attributeMemberExpression.Member.Name == "Attributes")
+                {
+                    AttributeFilterVisitor attributeFilterVisitor = new AttributeFilterVisitor(methodCallExpression);
+                    // TODO Fix this in another way, this needs to be reversed back since the main list will be reversed after
+                    attributeFilterVisitor.Accessors.Reverse();
+                    accessors.AddRange(attributeFilterVisitor.Accessors);
+                }
             }
         }
 

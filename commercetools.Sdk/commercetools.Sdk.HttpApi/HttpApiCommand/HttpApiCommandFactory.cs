@@ -20,7 +20,16 @@ namespace commercetools.Sdk.HttpApi
         public IHttpApiCommand Create<T>(Command<T> command)
         {
             // retrieve the type of T
-            Type typeOfGeneric = command.GetType().GetGenericArguments().FirstOrDefault();
+            // TODO Find a neater way to find the generic type
+            Type typeOfGeneric;
+            if (command.GetType().IsGenericType)
+            {
+                typeOfGeneric = command.GetType().GetGenericArguments().FirstOrDefault();
+            }
+            else
+            {
+                typeOfGeneric = command.GetType().BaseType.GetGenericArguments().FirstOrDefault();
+            }
             Type httApiCommandType = null;
 
             foreach (Type type in this.registeredHttpApiCommandTypes)

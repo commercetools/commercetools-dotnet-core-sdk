@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace commercetools.Sdk.LinqToQueryPredicate
 {
-    public class ComparablePropertyExpressionVisitor : ISortExpressionVisitor, ITermFacetExpressionVisitor
+    public class SortExpressionVisitor : ISortExpressionVisitor
     {
         public string Render(Expression expression)
         {
@@ -42,14 +40,6 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             {
                 var key = expression.Arguments[0].ToString().Replace("\"", "");
                 return Render(expression.Object) + "." + key;
-            }
-            if (expression.Method.Name == "FirstOrDefault")
-            {
-                return Render(expression.Arguments[0]);
-            }
-            if (expression.Method.Name == "Select")
-            {
-                return Render(expression.Arguments[0]) + "." + Render(expression.Arguments[1]);
             }
             // TODO Move message to a resource file
             throw new NotSupportedException("The expression type is not supported.");

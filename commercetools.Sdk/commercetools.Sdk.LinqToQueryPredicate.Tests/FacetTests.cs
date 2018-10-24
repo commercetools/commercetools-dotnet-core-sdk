@@ -12,17 +12,62 @@
         public void TermFacetCategoryId()
         {
             Expression<Func<ProductProjection, string>> expression = p => p.Categories.Select(c => c.Id).FirstOrDefault();
-            ITermFacetExpressionVisitor facetExpressionVisitor = new ComparablePropertyExpressionVisitor();
-            string result = facetExpressionVisitor.Render(expression);
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            string result = filterExpressionVisitor.Render(expression);
             Assert.Equal("categories.id", result);
+        }
+
+        [Fact]
+        public void TermFacetAttributeEnumKey()
+        {
+            Expression<Func<ProductProjection, string>> expression = p => p.Variants.Select(v => v.Attributes.Where(a => a.Name == "color").Select(a => ((EnumAttribute)a).Value.Key).FirstOrDefault()).FirstOrDefault();
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            string result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.attributes.color.key", result);
+        }
+
+        [Fact]
+        public void TermFacetAttributeText()
+        {
+            Expression<Func<ProductProjection, string>> expression = p => p.Variants.Select(v => v.Attributes.Where(a => a.Name == "size").Select(a => ((TextAttribute)a).Value).FirstOrDefault()).FirstOrDefault();
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            string result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.attributes.size", result);
+        }
+
+        [Fact]
+        public void TermFacetAttributeLocalizedText()
+        {
+            Expression<Func<ProductProjection, string>> expression = p => p.Variants.Select(v => v.Attributes.Where(a => a.Name == "color").Select(a => ((LocalizedTextAttribute)a).Value["en"]).FirstOrDefault()).FirstOrDefault();
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            string result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.attributes.color.en", result);
+        }
+
+        [Fact]
+        public void TermFacetAttributeLocalizedEnum()
+        {
+            Expression<Func<ProductProjection, string>> expression = p => p.Variants.Select(v => v.Attributes.Where(a => a.Name == "color").Select(a => ((LocalizedEnumAttribute)a).Value.Label["en"]).FirstOrDefault()).FirstOrDefault();
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            string result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.attributes.color.label.en", result);
+        }
+
+        [Fact]
+        public void TermFacetChannelAvailableQuantity()
+        {
+            Expression<Func<ProductProjection, int>> expression = p => p.Variants.Select(v => v.Availability.Channels["1a3c451e-792a-43b5-8def-88d0db22eca8"].AvailableQuantity).FirstOrDefault();
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            string result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.availability.channels.1a3c451e-792a-43b5-8def-88d0db22eca8.availableQuantity", result);
         }
 
         [Fact]
         public void TermFacetAverageRating()
         {
             Expression<Func<ProductProjection, double>> expression = p => p.ReviewRatingStatistics.AverageRating;
-            ITermFacetExpressionVisitor facetExpressionVisitor = new ComparablePropertyExpressionVisitor();
-            string result = facetExpressionVisitor.Render(expression);
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            string result = filterExpressionVisitor.Render(expression);
             Assert.Equal("reviewRatingStatistics.averageRating", result);
         }
 

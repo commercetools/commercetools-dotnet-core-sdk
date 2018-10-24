@@ -22,7 +22,13 @@ namespace commercetools.Sdk.LinqToQueryPredicate
 
         public override string Render()
         {
-            return $"{AccessorTraverser.RenderAccessors(this.Accessors)}.{this.innerFilterVisitor.Render()}"; 
+            string result = $"{AccessorTraverser.RenderAccessors(this.Accessors)}";
+            string innerValue = this.innerFilterVisitor.Render();
+            if (!string.IsNullOrEmpty(innerValue))
+            {
+                result += $".{innerValue}";
+            }
+            return result;
         }
 
         public override string RenderValue()

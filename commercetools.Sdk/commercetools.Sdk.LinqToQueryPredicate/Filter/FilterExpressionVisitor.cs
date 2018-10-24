@@ -11,7 +11,8 @@ namespace commercetools.Sdk.LinqToQueryPredicate
         public string Render(Expression expression)
         {
             FilterVisitorFactory filterVisitorFactory = new FilterVisitorFactory();
-            return filterVisitorFactory.CreateFilterVisitor(expression).Render();            
+            FilterVisitor filterVisitor = filterVisitorFactory.CreateFilterVisitor(expression);
+            return filterVisitor.Render();            
         }       
     }
 }

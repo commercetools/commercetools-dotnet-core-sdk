@@ -51,7 +51,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             QueryCommand<Category> queryCommand = new QueryCommand<Category>() { Expand = expansions };
             IEnumerable<Type> registeredTypes = new List<Type>() { typeof(QueryHttpApiCommand<>) };
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            ISortExpressionVisitor sortExpressionVisitor = new ComparablePropertyExpressionVisitor();
+            ISortExpressionVisitor sortExpressionVisitor = new SortExpressionVisitor();
             IExpansionExpressionVisitor expansionExpressionVisitor = new ExpansionExpressionVisitor();
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(clientConfiguration, queryPredicateExpressionVisitor, expansionExpressionVisitor, sortExpressionVisitor);
@@ -70,7 +70,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             QueryCommand<Category> queryCommand = new QueryCommand<Category>() { Expand = expansions };
             IEnumerable<Type> registeredTypes = new List<Type>() { typeof(QueryHttpApiCommand<>) };
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            ISortExpressionVisitor sortExpressionVisitor = new ComparablePropertyExpressionVisitor();
+            ISortExpressionVisitor sortExpressionVisitor = new SortExpressionVisitor();
             IExpansionExpressionVisitor expansionExpressionVisitor = new ExpansionExpressionVisitor();
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(clientConfiguration, queryPredicateExpressionVisitor, expansionExpressionVisitor, sortExpressionVisitor);

@@ -22,6 +22,10 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             {
                 return CreateFilterVisitor((BinaryExpression)expression);
             }
+            if (expression.NodeType == ExpressionType.MemberAccess)
+            {
+                return CreateFilterVisitor((MemberExpression)expression);
+            }
             if (expression is BinaryExpression)
             {
                 return CreateGroupFilterVisitor((BinaryExpression)expression);
@@ -32,7 +36,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
 
         private FilterVisitor CreateFilterVisitor(MethodCallExpression expression)
         {
-            if (expression.Method.Name == "Any" || expression.Method.Name == "Where")
+            if (expression.Method.Name == "Any" || expression.Method.Name == "Where" || expression.Method.Name == "Select")
             {
                 Expression accessorExpression = expression.Arguments[0];
                 if (accessorExpression is MemberExpression memberExpression && memberExpression.Member.Name == "Attributes")
@@ -61,10 +65,19 @@ namespace commercetools.Sdk.LinqToQueryPredicate
                 RangeGroupFilterVisitor rangeFilterVisitor = new RangeGroupFilterVisitor(new List<MethodCallExpression>() { expression });
                 return rangeFilterVisitor;
             }
-            if (expression.Arguments[1]?.NodeType == ExpressionType.NewArrayInit)
+            if (expression.Method.Name == "FirstOrDefault")
             {
-                InGroupFilterVisitor stockInChannelsFilterVisitor = new InGroupFilterVisitor(expression);
-                return stockInChannelsFilterVisitor;
+                return CreateFilterVisitor(expression.Arguments[0]);
+            }
+            if (expression.Arguments.Count > 1 && expression.Arguments[1].NodeType == ExpressionType.NewArrayInit)
+            {
+                InGroupFilterVisitor inGroupFilterVisitor = new InGroupFilterVisitor(expression);
+                return inGroupFilterVisitor;
+            }
+            if (expression.Method.Name == "get_Item")
+            {
+                PropertyFilterVisitor propertyFilterVisitor = new PropertyFilterVisitor(expression);
+                return propertyFilterVisitor;
             }
 
             throw new NotSupportedException("The expression type is not supported.");
@@ -74,6 +87,12 @@ namespace commercetools.Sdk.LinqToQueryPredicate
         {
             EqualFilterVisitor equalFilterVisitor = new EqualFilterVisitor(expression);
             return equalFilterVisitor;
+        }
+
+        private FilterVisitor CreateFilterVisitor(MemberExpression expression)
+        {
+            PropertyFilterVisitor propertyFilterVisitor = new PropertyFilterVisitor(expression);
+            return propertyFilterVisitor;
         }
 
         private FilterVisitor CreateGroupFilterVisitor(BinaryExpression expression)

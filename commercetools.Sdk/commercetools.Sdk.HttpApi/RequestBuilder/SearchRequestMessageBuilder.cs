@@ -12,12 +12,10 @@
     public class SearchRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
         private readonly IFilterExpressionVisitor filterExpressionVisitor;
-        private readonly ITermFacetExpressionVisitor facetExpressionVisitor;
 
-        public SearchRequestMessageBuilder(IClientConfiguration clientConfiguration, IFilterExpressionVisitor filterExpressionVisitor, ITermFacetExpressionVisitor facetExpressionVisitor) : base(clientConfiguration)
+        public SearchRequestMessageBuilder(IClientConfiguration clientConfiguration, IFilterExpressionVisitor filterExpressionVisitor) : base(clientConfiguration)
         {
             this.filterExpressionVisitor = filterExpressionVisitor;
-            this.facetExpressionVisitor = facetExpressionVisitor;
         }
 
         private HttpMethod HttpMethod => HttpMethod.Post;
@@ -29,7 +27,7 @@
 
         private Uri GetRequestUri<T>(SearchCommand<T> command)
         {
-            string requestUri = this.GetMessageBase<T>() + "/search/";
+            string requestUri = this.GetMessageBase<T>() + "/search";
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
             queryStringParameters.AddRange(AddTextLanguageParameter(command));
             queryStringParameters.AddRange(AddFilterParameter(command.Filter, "filter"));
@@ -68,11 +66,19 @@
         private List<KeyValuePair<string, string>> AddFacetParameter<T>(SearchCommand<T> command)
         {
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
-            if (command.Filter != null)
+            if (command.Facets != null)
             {
                 foreach (var facet in command.Facets)
                 {
                     string facetPath = GetFacetPath(facet);
+                    if (facet.Alias != null)
+                    {
+                        facetPath += $" as {facet.Alias}";
+                    }
+                    if (facet.IsCountingProducts == true)
+                    {
+                        facetPath += $" counting products";
+                    }
                     queryStringParameters.Add(new KeyValuePair<string, string>("facet", facetPath));
                 }
             }
@@ -81,23 +87,8 @@
 
         private string GetFacetPath<T>(Facet<T> facet)
         {
-            string facetPath = null;
-            if (facet.GetType() == typeof(TermFacet<T>))
-            {
-                return this.facetExpressionVisitor.Render(((TermFacet<T>)facet).Expression);
-            }
-            if (facet.GetType() == typeof(RangeFacet<T>))
-            {
-                // RangeFacet has the same expression syntax as filters
-                return this.filterExpressionVisitor.Render(((RangeFacet<T>)facet).Expression);
-            }
-            if (facet.GetType() == typeof(FilterFacet<T>))
-            {
-                // FilterFacet has the same expression syntax as filters
-                return this.filterExpressionVisitor.Render(((FilterFacet<T>)facet).Expression);
-            }
+            return this.filterExpressionVisitor.Render(facet.Expression);
 
-            return facetPath;
         }
     }
 }

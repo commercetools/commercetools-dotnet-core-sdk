@@ -7,7 +7,7 @@ namespace commercetools.Sdk.Client
 {
     public abstract class SearchCommand<T> : Command<PagedQueryResult<T>>
     {
-        public TextSearch Text = new TextSearch();
+        public TextSearch Text;
         public bool Fuzzy { get; set; }
         public bool FuzzyLevel { get; set; }
         public List<Filter<T>> Filter { get; set; }
