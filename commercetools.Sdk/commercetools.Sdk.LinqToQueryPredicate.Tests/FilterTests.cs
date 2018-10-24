@@ -194,7 +194,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
         [Fact]
         public void FilterByAvailabilityisOnStockInChannels()
         {
-            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Availability.isOnStockInChannels("1a3c451e-792a-43b5-8def-88d0db22eca8", "110321ab-8fd7-4d4c-8b7c-4c69761411fc"));
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Availability.IsOnStockInChannels("1a3c451e-792a-43b5-8def-88d0db22eca8", "110321ab-8fd7-4d4c-8b7c-4c69761411fc"));
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.availability.isOnStockInChannels:\"1a3c451e-792a-43b5-8def-88d0db22eca8\",\"110321ab-8fd7-4d4c-8b7c-4c69761411fc\"", result);

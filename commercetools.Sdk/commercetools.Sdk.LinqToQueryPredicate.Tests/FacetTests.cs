@@ -12,7 +12,7 @@
         public void TermFacetCategoryId()
         {
             Expression<Func<ProductProjection, string>> expression = p => p.Categories.Select(c => c.Id).FirstOrDefault();
-            IFacetExpressionVisitor facetExpressionVisitor = new FacetExpressionVisitor();
+            ITermFacetExpressionVisitor facetExpressionVisitor = new ComparablePropertyExpressionVisitor();
             string result = facetExpressionVisitor.Render(expression);
             Assert.Equal("categories.id", result);
         }
@@ -21,7 +21,7 @@
         public void TermFacetAverageRating()
         {
             Expression<Func<ProductProjection, double>> expression = p => p.ReviewRatingStatistics.AverageRating;
-            IFacetExpressionVisitor facetExpressionVisitor = new FacetExpressionVisitor();
+            ITermFacetExpressionVisitor facetExpressionVisitor = new ComparablePropertyExpressionVisitor();
             string result = facetExpressionVisitor.Render(expression);
             Assert.Equal("reviewRatingStatistics.averageRating", result);
         }
@@ -59,8 +59,7 @@
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "color" && ((TextAttribute)a).Value.In("red", "green")));
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             string result = filterExpressionVisitor.Render(expression);
-            Assert.Equal("variants.attribute.color:\"red\",\"green\"", result);
+            Assert.Equal("variants.attributes.color:\"red\",\"green\"", result);
         }
-
     }
 }

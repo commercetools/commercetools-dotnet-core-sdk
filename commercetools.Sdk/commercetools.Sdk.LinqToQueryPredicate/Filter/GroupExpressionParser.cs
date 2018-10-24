@@ -30,26 +30,5 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             }
             return expressions;
         }
-
-        //private bool IsAllowedExpression(Expression expression)
-        //{
-        //    if (expression is BinaryExpression binaryExpression)
-        //    {
-        //        return true;
-        //    }
-        //    if (expression is MethodCallExpression methodCallExpression)
-        //    {
-        //        if (methodCallExpression.Method.Name == "Range")
-        //        {
-        //            return true;
-        //        }
-        //        if (methodCallExpression.Method.Name == "Subtree")
-        //        {
-        //            return true;
-        //        }
-        //        throw new NotSupportedException("The expression type is not supported.");
-        //    }
-        //    throw new NotSupportedException("The expression type is not supported.");
-        //}
     }
 }

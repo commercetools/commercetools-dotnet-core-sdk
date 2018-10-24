@@ -12,9 +12,9 @@
     public class SearchRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
         private readonly IFilterExpressionVisitor filterExpressionVisitor;
-        private readonly IFacetExpressionVisitor facetExpressionVisitor;
+        private readonly ITermFacetExpressionVisitor facetExpressionVisitor;
 
-        public SearchRequestMessageBuilder(IClientConfiguration clientConfiguration, IFilterExpressionVisitor filterExpressionVisitor, IFacetExpressionVisitor facetExpressionVisitor) : base(clientConfiguration)
+        public SearchRequestMessageBuilder(IClientConfiguration clientConfiguration, IFilterExpressionVisitor filterExpressionVisitor, ITermFacetExpressionVisitor facetExpressionVisitor) : base(clientConfiguration)
         {
             this.filterExpressionVisitor = filterExpressionVisitor;
             this.facetExpressionVisitor = facetExpressionVisitor;

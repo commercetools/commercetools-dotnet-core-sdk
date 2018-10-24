@@ -2,8 +2,7 @@
 
 namespace commercetools.Sdk.LinqToQueryPredicate
 {
-    public interface IFacetExpressionVisitor
+    public interface ITermFacetExpressionVisitor : IComparablePropertyExpressionVisitor
     {
-        string Render(Expression expression);
     }
 }

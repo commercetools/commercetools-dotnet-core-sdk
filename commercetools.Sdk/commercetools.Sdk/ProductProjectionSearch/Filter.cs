@@ -38,7 +38,7 @@ namespace commercetools.Sdk.Domain
             throw new NotImplementedException();
         }
 
-        public static bool isOnStockInChannels<T>(this T source, params string[] values)
+        public static bool IsOnStockInChannels<T>(this T source, params string[] values)
         {
             throw new NotImplementedException();
         }

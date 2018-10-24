@@ -46,7 +46,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(authorizationHandler, timestampHandler, correlationIdHandler);
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
             IExpansionExpressionVisitor expansionExpressionVisitor = new ExpansionExpressionVisitor();
-            ISortExpressionVisitor sortExpressionVisitor = new SortExpressionVisitor();
+            ISortExpressionVisitor sortExpressionVisitor = new ComparablePropertyExpressionVisitor();
             GetRequestMessageBuilder getByIdRequestMessageBuilder = new GetRequestMessageBuilder(clientConfiguration);
             CreateRequestMessageBuilder createRequestMessageBuilder = new CreateRequestMessageBuilder(serializerService, clientConfiguration);
             UpdateRequestMessageBuilder updateByIdRequestMessageBuilder = new UpdateRequestMessageBuilder(serializerService, clientConfiguration);

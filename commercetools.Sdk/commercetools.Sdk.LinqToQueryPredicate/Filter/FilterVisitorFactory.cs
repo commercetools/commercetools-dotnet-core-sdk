@@ -61,9 +61,9 @@ namespace commercetools.Sdk.LinqToQueryPredicate
                 RangeGroupFilterVisitor rangeFilterVisitor = new RangeGroupFilterVisitor(new List<MethodCallExpression>() { expression });
                 return rangeFilterVisitor;
             }
-            if (expression.Method.Name == "isOnStockInChannels")
+            if (expression.Arguments[1]?.NodeType == ExpressionType.NewArrayInit)
             {
-                StockInChannelsFilterVisitor stockInChannelsFilterVisitor = new StockInChannelsFilterVisitor(expression);
+                InGroupFilterVisitor stockInChannelsFilterVisitor = new InGroupFilterVisitor(expression);
                 return stockInChannelsFilterVisitor;
             }
 

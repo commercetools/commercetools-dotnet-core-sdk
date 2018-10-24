@@ -2,8 +2,7 @@
 
 namespace commercetools.Sdk.LinqToQueryPredicate
 {
-    public interface ISortExpressionVisitor
+    public interface ISortExpressionVisitor : IComparablePropertyExpressionVisitor
     {
-        string GetPath(Expression expression);
     }
 }

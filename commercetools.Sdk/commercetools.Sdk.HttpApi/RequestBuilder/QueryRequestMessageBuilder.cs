@@ -74,7 +74,7 @@
             {
                 foreach (var sort in command.Sort)
                 {
-                    string sortPath = this.sortExpressionVisitor.GetPath(sort.Expression);
+                    string sortPath = this.sortExpressionVisitor.Render(sort.Expression);
                     sortPath += GetSortDirectionPath(sort.SortDirection);
                     queryStringParameters.Add(new KeyValuePair<string, string>("sort", sortPath));
                 }

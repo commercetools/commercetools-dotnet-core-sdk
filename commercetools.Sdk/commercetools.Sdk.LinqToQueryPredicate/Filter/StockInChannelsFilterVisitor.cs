@@ -5,18 +5,22 @@ using System.Text;
 
 namespace commercetools.Sdk.LinqToQueryPredicate
 {
-    public class StockInChannelsFilterVisitor : FilterVisitor
+    public class InGroupFilterVisitor : FilterVisitor
     {
         private List<string> channels = new List<string>();
+        private List<string> allowedMethodNames = new List<string>() { "IsOnStockInChannels" };
 
-        public StockInChannelsFilterVisitor(MethodCallExpression expression)
+        public InGroupFilterVisitor(MethodCallExpression expression)
         {
             if (expression == null)
             {
                 throw new ArgumentNullException();
             }
             this.Accessors = AccessorTraverser.GetAccessors(expression.Arguments[0]);
-            this.Accessors.Add(expression.Method.Name);
+            if (allowedMethodNames.Contains(expression.Method.Name))
+            { 
+                this.Accessors.Add(expression.Method.Name.ToCamelCase());
+            }
             if (expression.Arguments[1].NodeType == ExpressionType.NewArrayInit)
             {
                 foreach (Expression part in ((NewArrayExpression)expression.Arguments[1]).Expressions)
