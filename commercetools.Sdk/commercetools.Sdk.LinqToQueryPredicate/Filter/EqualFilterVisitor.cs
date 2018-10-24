@@ -23,7 +23,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             }
             if (expression.NodeType == ExpressionType.Constant)
             {
-                return expression.ToString();
+                return expression.ToString().ToCamelCase();
             }
             throw new NotSupportedException("The expression type is not supported.");
         }

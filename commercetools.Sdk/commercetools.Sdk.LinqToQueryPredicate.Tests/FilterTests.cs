@@ -176,7 +176,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
         [Fact]
         public void FilterByIsOnStock()
         {
-            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Availibility.IsOnStock == true);
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Availability.IsOnStock == true);
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.availability.isOnStock:true", result);
@@ -185,7 +185,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
         [Fact]
         public void FilterByIsOnStockPerChannel()
         {
-            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Availibility.Channels["1a3c451e-792a-43b5-8def-88d0db22eca8"].IsOnStock == true);
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Availability.Channels["1a3c451e-792a-43b5-8def-88d0db22eca8"].IsOnStock == true);
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.availability.channels.1a3c451e-792a-43b5-8def-88d0db22eca8.isOnStock:true", result);
@@ -194,7 +194,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
         [Fact]
         public void FilterByAvailabilityisOnStockInChannels()
         {
-            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Availibility.isOnStockInChannels("1a3c451e-792a-43b5-8def-88d0db22eca8", "110321ab-8fd7-4d4c-8b7c-4c69761411fc"));
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Availability.isOnStockInChannels("1a3c451e-792a-43b5-8def-88d0db22eca8", "110321ab-8fd7-4d4c-8b7c-4c69761411fc"));
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.availability.isOnStockInChannels:\"1a3c451e-792a-43b5-8def-88d0db22eca8\",\"110321ab-8fd7-4d4c-8b7c-4c69761411fc\"", result);

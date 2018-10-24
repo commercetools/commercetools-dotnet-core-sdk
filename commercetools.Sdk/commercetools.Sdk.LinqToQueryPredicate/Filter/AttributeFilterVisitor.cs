@@ -27,7 +27,6 @@ namespace commercetools.Sdk.LinqToQueryPredicate
                     SetValue(((BinaryExpression)attributeExpression).Right);
                 }
             }
-            this.Accessors.Add(this.Name);
         }
 
         private void SetName(Expression expression)
@@ -37,6 +36,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
                 if (nameExpression.Left is MemberExpression memberExpression && memberExpression.Member.Name == "Name")
                 { 
                     this.Name = nameExpression.Right.ToString().Replace("\"", "");
+                    this.Accessors.Add(this.Name);
                 }
             }
         }
@@ -44,7 +44,9 @@ namespace commercetools.Sdk.LinqToQueryPredicate
         private void SetValue(Expression expression)
         {
             FilterVisitorFactory filterVisitorFactory = new FilterVisitorFactory();
-            this.Value = filterVisitorFactory.CreateFilterVisitor(expression).RenderValue();
+            FilterVisitor filterVisitor = filterVisitorFactory.CreateFilterVisitor(expression);
+            this.Value = filterVisitor.RenderValue();
+            this.Accessors.AddRange(filterVisitor.Accessors);
         }
 
         public override string Render()
