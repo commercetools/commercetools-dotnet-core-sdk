@@ -9,7 +9,7 @@ install:
  - dotnet restore
 
 script:
- - dotnet build
- - dotnet test commercetools.Sdk.HttpApi.Tests --no-build
- - dotnet test commercetools.Sdk.LinqToQueryPredicate.Tests --no-build
- - dotnet test commercetools.Sdk.Serialization.Tests --no-build
+ - dotnet build -c Release
+ - dotnet test commercetools.Sdk.HttpApi.Tests --no-build -c release
+ - dotnet test commercetools.Sdk.LinqToQueryPredicate.Tests --no-build -c release
+ - dotnet test commercetools.Sdk.Serialization.Tests --no-build -c release
