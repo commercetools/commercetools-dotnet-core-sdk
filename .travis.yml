@@ -12,6 +12,6 @@ install:
  - dotnet restore
 
 script:
- - dotnet build -c Release
- - dotnet test commercetools.Sdk.LinqToQueryPredicate.Tests -c release
- - dotnet test commercetools.Sdk.Serialization.Tests -c release
+ - dotnet build
+ - dotnet test commercetools.Sdk.LinqToQueryPredicate.Tests
+ - dotnet test commercetools.Sdk.Serialization.Tests
