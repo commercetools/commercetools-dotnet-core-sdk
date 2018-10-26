@@ -2,6 +2,9 @@ language: csharp
 mono: none
 dotnet: 2.1
 
+env:
+  global:
+
 before_install: 
  - cd commercetools.Sdk
 
@@ -10,6 +13,5 @@ install:
 
 script:
  - dotnet build -c Release
- - dotnet test commercetools.Sdk.HttpApi.Tests -c release
- - dotnet test commercetools.Sdk.LinqToQueryPredicate.Tests --no-build -c release
+ - dotnet test commercetools.Sdk.LinqToQueryPredicate.Tests -c release
  - dotnet test commercetools.Sdk.Serialization.Tests --no-build -c release
