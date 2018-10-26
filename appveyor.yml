@@ -1,11 +1,20 @@
 image: Visual Studio 2017
 
 
-build_script:
+before_build:
   - ps: cd commercetools.Sdk
   - ps: dotnet restore
+
+build_script:
   - ps: dotnet build -c Release
+
+before_package:
+  - ps: dotnet pack -c Release 
 
 test_script:
   - ps: dotnet test commercetools.Sdk.LinqToQueryPredicate.Tests/commercetools.Sdk.LinqToQueryPredicate.Tests.csproj --no-build -c Release
   - ps: dotnet test commercetools.Sdk.Serialization.Tests/commercetools.Sdk.Serialization.Tests.csproj --no-build -c Release
+
+artifacts:
+- path: /**/*.nupkg
+  name: NuGet Package
