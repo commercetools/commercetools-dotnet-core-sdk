@@ -9,12 +9,12 @@ build_script:
   - ps: dotnet build -c Release
 
 after_build:
-  - ps: dotnet pack -c Release 
+  - ps: dotnet pack -c Release -o /pack/
 
 test_script:
   - ps: dotnet test commercetools.Sdk.LinqToQueryPredicate.Tests/commercetools.Sdk.LinqToQueryPredicate.Tests.csproj --no-build -c Release
   - ps: dotnet test commercetools.Sdk.Serialization.Tests/commercetools.Sdk.Serialization.Tests.csproj --no-build -c Release
 
 artifacts:
-- path: /**/*.nupkg
+- path: /pack/**/*.nupkg
   name: NuGet Package
