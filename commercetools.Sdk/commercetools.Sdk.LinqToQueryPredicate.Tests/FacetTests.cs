@@ -2,6 +2,7 @@
 {
     using commercetools.Sdk.Domain;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
     using Xunit;
@@ -11,7 +12,9 @@
         [Fact]
         public void TermFacetCategoryId()
         {
+            // TODO Find a more intuitive way to define the expression (check the one below)
             Expression<Func<ProductProjection, string>> expression = p => p.Categories.Select(c => c.Id).FirstOrDefault();
+            Expression<Func<ProductProjection, IEnumerable<string>>> expressionEnumerable = p => p.Categories.Select(c => c.Id);
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             string result = filterExpressionVisitor.Render(expression);
             Assert.Equal("categories.id", result);
@@ -21,6 +24,7 @@
         public void TermFacetAttributeEnumKey()
         {
             Expression<Func<ProductProjection, string>> expression = p => p.Variants.Select(v => v.Attributes.Where(a => a.Name == "color").Select(a => ((EnumAttribute)a).Value.Key).FirstOrDefault()).FirstOrDefault();
+            Expression<Func<ProductProjection, IEnumerable<IEnumerable<string>>>> expressionEnumerable = p => p.Variants.Select(v => v.Attributes.Where(a => a.Name == "color").Select(a => ((EnumAttribute)a).Value.Key));
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             string result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.attributes.color.key", result);

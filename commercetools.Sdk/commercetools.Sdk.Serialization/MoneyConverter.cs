@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {

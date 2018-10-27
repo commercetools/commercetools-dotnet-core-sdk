@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
@@ -53,7 +54,7 @@ namespace commercetools.Sdk.Serialization
             throw new NotImplementedException();
         }
 
-        private Type GetSetTypeBySimpleType(Type simpleType)
+        private System.Type GetSetTypeBySimpleType(System.Type simpleType)
         {
             // TODO Move this to different class and add all types
             Dictionary<Type, Type> setMapping = new Dictionary<Type, Type>();
@@ -66,10 +67,10 @@ namespace commercetools.Sdk.Serialization
             throw new JsonSerializationException("There is not set attribute defined for the given structure.");
         }
 
-        private Type GetSetTypeByValueProperty(JToken valueProperty)
+        private System.Type GetSetTypeByValueProperty(JToken valueProperty)
         {
             // It is assumed that all of the values in the array are of the same attribute type
-            Type simpleType = GetTypeByValueProperty(valueProperty[0]);
+            System.Type simpleType = GetTypeByValueProperty(valueProperty[0]);
             if (simpleType != null)
             {
                 return GetSetTypeBySimpleType(simpleType);
@@ -77,7 +78,7 @@ namespace commercetools.Sdk.Serialization
             return null;
         }
 
-        private Type GetTypeByValueProperty(JToken valueProperty)
+        private System.Type GetTypeByValueProperty(JToken valueProperty)
         {
             foreach (var customConvert in this.customConverters.OrderBy(c => c.Priority))
             {

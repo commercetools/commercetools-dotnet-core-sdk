@@ -11,7 +11,7 @@ namespace commercetools.Sdk.HttpApi
         private IClientConfiguration clientConfiguration;
 
         // TODO See if this should be moved to a different class
-        private IDictionary<Type, string> mapping = new Dictionary<Type, string>()
+        private IDictionary<System.Type, string> mapping = new Dictionary<System.Type, string>()
         {
             {  typeof(Category), "categories" },
             {  typeof(ProductProjection), "product-projections" }

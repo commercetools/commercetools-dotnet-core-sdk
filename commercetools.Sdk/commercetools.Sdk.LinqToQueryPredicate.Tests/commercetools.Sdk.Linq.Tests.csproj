@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\commercetools.Sdk.LinqToQueryPredicate\commercetools.Sdk.LinqToQueryPredicate.csproj" />
+    <ProjectReference Include="..\commercetools.Sdk.LinqToQueryPredicate\commercetools.Sdk.Linq.csproj" />
     <ProjectReference Include="..\commercetools.Sdk\commercetools.Sdk.Domain.csproj" />
   </ItemGroup>
 

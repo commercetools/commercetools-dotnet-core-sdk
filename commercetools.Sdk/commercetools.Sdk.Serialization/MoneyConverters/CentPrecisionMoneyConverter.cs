@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
