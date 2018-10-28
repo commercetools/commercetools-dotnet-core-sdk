@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using Xunit;
+using Type = System.Type;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
@@ -31,7 +32,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void GetHttpApiCommand()
         {
             CreateCommand<Category> createCommand = new CreateCommand<Category>(new CategoryDraft());
-            IEnumerable<System.Type> registeredTypes = new List<System.Type>() { typeof(CreateHttpApiCommand<>) };
+            IEnumerable<Type> registeredTypes = new List<Type>() { typeof(CreateHttpApiCommand<>) };
             ISerializerService serializerService = TestUtils.GetSerializerService();
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
             CreateRequestMessageBuilder createRequestMessageBuilder = new CreateRequestMessageBuilder(serializerService, clientConfiguration);
@@ -49,7 +50,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             ReferenceExpansion<Category> parentExpansion = new ReferenceExpansion<Category>(c => c.Parent);
             expansions.Add(parentExpansion);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>() { Expand = expansions };
-            IEnumerable<System.Type> registeredTypes = new List<System.Type>() { typeof(QueryHttpApiCommand<>) };
+            IEnumerable<Type> registeredTypes = new List<Type>() { typeof(QueryHttpApiCommand<>) };
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
             ISortExpressionVisitor sortExpressionVisitor = new SortExpressionVisitor();
             IExpansionExpressionVisitor expansionExpressionVisitor = new ExpansionExpressionVisitor();
@@ -68,7 +69,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             expansions.Add(parentExpansion);
             expansions.Add(firstAncestorExpansion);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>() { Expand = expansions };
-            IEnumerable<System.Type> registeredTypes = new List<System.Type>() { typeof(QueryHttpApiCommand<>) };
+            IEnumerable<Type> registeredTypes = new List<Type>() { typeof(QueryHttpApiCommand<>) };
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
             ISortExpressionVisitor sortExpressionVisitor = new SortExpressionVisitor();
             IExpansionExpressionVisitor expansionExpressionVisitor = new ExpansionExpressionVisitor();

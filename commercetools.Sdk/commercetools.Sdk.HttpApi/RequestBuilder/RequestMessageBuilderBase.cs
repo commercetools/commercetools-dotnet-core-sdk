@@ -3,6 +3,7 @@ using commercetools.Sdk.Domain;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using Type = System.Type;
 
 namespace commercetools.Sdk.HttpApi
 {
@@ -11,7 +12,7 @@ namespace commercetools.Sdk.HttpApi
         private IClientConfiguration clientConfiguration;
 
         // TODO See if this should be moved to a different class
-        private IDictionary<System.Type, string> mapping = new Dictionary<System.Type, string>()
+        private IDictionary<Type, string> mapping = new Dictionary<Type, string>()
         {
             {  typeof(Category), "categories" },
             {  typeof(ProductProjection), "product-projections" }

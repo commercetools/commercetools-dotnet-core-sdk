@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using Type = System.Type;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
@@ -56,7 +57,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             SearchRequestMessageBuilder searchRequestMessageBuilder = new SearchRequestMessageBuilder(clientConfiguration, filterExpressionVisitor);
             IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { getByIdRequestMessageBuilder, createRequestMessageBuilder, updateByIdRequestMessageBuilder, deleteByIdRequestMessageBuilder, queryRequestMessageBuilder, searchRequestMessageBuilder };
             IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(requestMessageBuilders);
-            IEnumerable<System.Type> registeredHttpApiCommandTypes = new List<System.Type>() { typeof(SearchHttpApiCommand<>), typeof(CreateHttpApiCommand<>), typeof(QueryHttpApiCommand<>), typeof(GetHttpApiCommand<>), typeof(UpdateHttpApiCommand<>), typeof(DeleteHttpApiCommand<>) };
+            IEnumerable<Type> registeredHttpApiCommandTypes = new List<Type>() { typeof(SearchHttpApiCommand<>), typeof(CreateHttpApiCommand<>), typeof(QueryHttpApiCommand<>), typeof(GetHttpApiCommand<>), typeof(UpdateHttpApiCommand<>), typeof(DeleteHttpApiCommand<>) };
             IHttpApiCommandFactory httpApiCommandFactory = new HttpApiCommandFactory(registeredHttpApiCommandTypes, requestMessageBuilderFactory);
 
             IClient commerceToolsClient = new Client(httpClientFactory, httpApiCommandFactory, serializerService);
