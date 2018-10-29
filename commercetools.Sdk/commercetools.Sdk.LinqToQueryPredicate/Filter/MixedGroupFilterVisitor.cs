@@ -17,7 +17,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             foreach(var expression in expressions)
             {
                 FilterVisitorFactory filterVisitorFactory = new FilterVisitorFactory();
-                this.innerFilters.Add(filterVisitorFactory.CreateFilterVisitor(expression));
+                this.innerFilters.Add(filterVisitorFactory.Create(expression));
             }
             this.Accessors = this.innerFilters[0].Accessors;
         }

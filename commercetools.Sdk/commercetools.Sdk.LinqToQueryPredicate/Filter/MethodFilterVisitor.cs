@@ -19,7 +19,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             if (expression.Arguments[0] is MethodCallExpression methodCallExpression)
             {
                 FilterVisitorFactory filterVisitorFactory = new FilterVisitorFactory();
-                this.Accessors = filterVisitorFactory.CreateFilterVisitor(methodCallExpression).Accessors;
+                this.Accessors = filterVisitorFactory.Create(methodCallExpression).Accessors;
             }
             else
             { 

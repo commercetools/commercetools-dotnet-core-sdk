@@ -10,8 +10,9 @@ namespace commercetools.Sdk.LinqToQueryPredicate
     {
         public string Render(Expression expression)
         {
+            // TODO Inject this instead
             FilterVisitorFactory filterVisitorFactory = new FilterVisitorFactory();
-            FilterVisitor filterVisitor = filterVisitorFactory.CreateFilterVisitor(expression);
+            FilterVisitor filterVisitor = filterVisitorFactory.Create(expression);
             return filterVisitor.Render();            
         }       
     }

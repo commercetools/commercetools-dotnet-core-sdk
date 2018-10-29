@@ -16,7 +16,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
                 throw new ArgumentNullException("The expression does not have all expected properties set.");
             }
             FilterVisitorFactory filterVisitorFactory = new FilterVisitorFactory();
-            innerFilterVisitor = filterVisitorFactory.CreateFilterVisitor(expression.Arguments[1]);
+            innerFilterVisitor = filterVisitorFactory.Create(expression.Arguments[1]);
             this.Accessors = AccessorTraverser.GetAccessors(expression.Arguments[0]);
         }
 

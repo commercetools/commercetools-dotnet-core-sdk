@@ -44,7 +44,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
         private void SetValue(Expression expression)
         {
             FilterVisitorFactory filterVisitorFactory = new FilterVisitorFactory();
-            FilterVisitor filterVisitor = filterVisitorFactory.CreateFilterVisitor(expression);
+            FilterVisitor filterVisitor = filterVisitorFactory.Create(expression);
             this.Value = filterVisitor.RenderValue();
             this.Accessors.AddRange(filterVisitor.Accessors);
         }

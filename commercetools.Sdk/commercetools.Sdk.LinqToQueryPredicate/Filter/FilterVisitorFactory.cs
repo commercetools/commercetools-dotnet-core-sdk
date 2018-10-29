@@ -8,11 +8,11 @@ namespace commercetools.Sdk.LinqToQueryPredicate
     {
         private List<string> allowedExtensionMethods = new List<string>() { { "Missing" }, { "Exists" } };
 
-        public FilterVisitor CreateFilterVisitor(Expression expression)
+        public FilterVisitor Create(Expression expression)
         {
             if (expression.NodeType == ExpressionType.Lambda)
             {
-                return CreateFilterVisitor(((LambdaExpression)expression).Body);
+                return Create(((LambdaExpression)expression).Body);
             }
             if (expression is MethodCallExpression methodCallExpression)
             {
@@ -67,7 +67,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             }
             if (expression.Method.Name == "FirstOrDefault")
             {
-                return CreateFilterVisitor(expression.Arguments[0]);
+                return Create(expression.Arguments[0]);
             }
             if (expression.Arguments.Count > 1 && expression.Arguments[1].NodeType == ExpressionType.NewArrayInit)
             {

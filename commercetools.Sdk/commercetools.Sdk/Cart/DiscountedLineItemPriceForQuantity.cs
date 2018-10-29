@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.Domain.Carts
+﻿namespace commercetools.Sdk.Domain
 {
     public class DiscountedLineItemPriceForQuantity
     {
