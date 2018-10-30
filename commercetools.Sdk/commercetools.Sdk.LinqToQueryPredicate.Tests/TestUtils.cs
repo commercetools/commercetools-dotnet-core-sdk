@@ -8,7 +8,14 @@ namespace commercetools.Sdk.Linq.Tests
     {
         public static ICartPredicateExpressionVisitor CreateCartPredicateExpressionVisitor()
         {
-            ICartPredicateVisitorFactory cartPredicateVisitorFactory = new CartPredicateVisitorFactory(null);
+            IAccessorTraverser accessorTraverser = new AccessorTraverser();
+            ICartPredicateVisitorConverter memberPredicateVisitorConverter = new MemberPredicateVisitorConverter(accessorTraverser);
+            ICartPredicateVisitorConverter binaryLogicalPredicateVisitorConverter = new BinaryLogicalPredicateVisitorConverter();
+            ICartPredicateVisitorConverter comparisonPredicateVisitorConverter = new ComparisonPredicateVisitorConverter();
+            ICartPredicateVisitorConverter constantPredicateVisitorConverter = new ConstantPredicateVisitorConverter();
+            ICartPredicateVisitorConverter customMethodPredicateVisitorConverter = new CustomMethodPredicateVisitorConverter();
+            ICartPredicateVisitorConverter methodMemberPredicateVisitorConverter = new MethodMemberPredicateVisitorConverter(accessorTraverser);
+            ICartPredicateVisitorFactory cartPredicateVisitorFactory = new CartPredicateVisitorFactory(new List<ICartPredicateVisitorConverter>() { binaryLogicalPredicateVisitorConverter, comparisonPredicateVisitorConverter, constantPredicateVisitorConverter, memberPredicateVisitorConverter, customMethodPredicateVisitorConverter, methodMemberPredicateVisitorConverter });
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = new CartPredicateExpressionVisitor(cartPredicateVisitorFactory);
             return cartPredicateExpressionVisitor;
         }

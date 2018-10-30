@@ -4,14 +4,14 @@ using System.Text;
 
 namespace commercetools.Sdk.Linq
 {
-    public class LogicalPredicateVisitor : ICartPredicateVisitor
+    public class BinaryLogicalPredicateVisitor : ICartPredicateVisitor
     {
         private readonly ICartPredicateVisitor left;
         private readonly ICartPredicateVisitor right;
 
         public string OperatorSign { get; }
 
-        public LogicalPredicateVisitor(ICartPredicateVisitor left, string operatorSign, ICartPredicateVisitor right)
+        public BinaryLogicalPredicateVisitor(ICartPredicateVisitor left, string operatorSign, ICartPredicateVisitor right)
         {
             this.left = left;
             this.OperatorSign = operatorSign;
@@ -36,7 +36,7 @@ namespace commercetools.Sdk.Linq
 
         private bool HasLowerPrecedenceOperator(ICartPredicateVisitor side, string operatorSign)
         {
-            if (side is LogicalPredicateVisitor logicalPredicateVisitor)
+            if (side is BinaryLogicalPredicateVisitor logicalPredicateVisitor)
             {
                 if (logicalPredicateVisitor.OperatorSign == LogicalOperators.OR && operatorSign == LogicalOperators.AND)
                 {

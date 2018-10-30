@@ -119,7 +119,7 @@ namespace commercetools.Sdk.Linq.Extensions.Carts
             throw new NotImplementedException();
         }
 
-        public static string CustomerGroupKey(this Cart source)
+        public static string CustomerGroupKey(this Customer source)
         {
             throw new NotImplementedException();
         }
@@ -170,6 +170,11 @@ namespace commercetools.Sdk.Linq.Extensions.Carts
         }
 
         public static string CatalogId(this LineItem source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static int VariantId(this LineItem source)
         {
             throw new NotImplementedException();
         }

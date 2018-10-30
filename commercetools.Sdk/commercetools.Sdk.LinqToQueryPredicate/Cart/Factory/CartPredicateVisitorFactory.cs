@@ -8,11 +8,11 @@ namespace commercetools.Sdk.Linq
 {
     public class CartPredicateVisitorFactory : ICartPredicateVisitorFactory
     {
-        private readonly ILogicalPredicateVisitorFactory logicalPredicateVisitorFactory;
+        private readonly IEnumerable<ICartPredicateVisitorConverter> registeredConverters;
 
-        public CartPredicateVisitorFactory(ILogicalPredicateVisitorFactory logicalPredicateVisitorFactory)
+        public CartPredicateVisitorFactory(IEnumerable<ICartPredicateVisitorConverter> registeredConverters)
         {
-            this.logicalPredicateVisitorFactory = logicalPredicateVisitorFactory;
+            this.registeredConverters = registeredConverters;
         }
 
         public ICartPredicateVisitor Create(Expression expression)
@@ -21,12 +21,23 @@ namespace commercetools.Sdk.Linq
             {
                 return this.Create(((LambdaExpression)expression).Body);
             }
-            var allowedLogicalOperators = new List<ExpressionType>() { ExpressionType.And, ExpressionType.AndAlso, ExpressionType.Or, ExpressionType.OrElse };
-            if (allowedLogicalOperators.Contains(expression.NodeType))
+            if (expression.NodeType == ExpressionType.Quote)
             {
-                return this.logicalPredicateVisitorFactory.Create((BinaryExpression)expression, this);
+                return this.Create(((UnaryExpression)expression).Operand);
             }
-            var allowedOperators = new List<ExpressionType>() { ExpressionType.Equal, ExpressionType.GreaterThan, ExpressionType.GreaterThanOrEqual, ExpressionType.LessThan, ExpressionType.LessThanOrEqual };
+            var converter = this.GetConverterForExpression(expression);
+            return converter.Convert(expression, this);
+        }
+
+        private ICartPredicateVisitorConverter GetConverterForExpression(Expression expression)
+        {
+            foreach(var converter in this.registeredConverters)
+            {
+                if (converter.CanConvert(expression))
+                {
+                    return converter;
+                }
+            }
             throw new NotSupportedException();
         }
     }

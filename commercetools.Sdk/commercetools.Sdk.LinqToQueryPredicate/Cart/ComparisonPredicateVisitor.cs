@@ -5,13 +5,13 @@ using System.Text;
 
 namespace commercetools.Sdk.Linq
 {
-    public class SimplePredicateVisitor : ICartPredicateVisitor
+    public class ComparisonPredicateVisitor : ICartPredicateVisitor
     {
-        private string left;
-        private string right;
+        private ICartPredicateVisitor left;
+        private ICartPredicateVisitor right;
         private string operatorSign; 
 
-        public SimplePredicateVisitor(string left, string right, string operatorSign)
+        public ComparisonPredicateVisitor(ICartPredicateVisitor left, string operatorSign, ICartPredicateVisitor right)
         {
             this.left = left;
             this.right = right;
@@ -20,7 +20,7 @@ namespace commercetools.Sdk.Linq
 
         public string Render()
         {
-            return $"{left} {right} {operatorSign}";
+            return $"{left.Render()} {operatorSign} {right.Render()}";
         }
     }
 }

@@ -69,7 +69,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void CartPredicateCustomerGroupKey()
         {
-            Expression<Func<Cart, bool>> expression = c => c.CustomerGroupKey() == "key12";
+            Expression<Func<Cart, bool>> expression = c => c.Customer().CustomerGroupKey() == "key12";
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("customer.customerGroup.key = \"key12\"", result);
@@ -124,8 +124,8 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void CartPredicateCustomerEmail()
         {
-            Expression<Func<Cart, bool>> expression = c => c.CustomerEmail == "email@domain.com";
-            Expression<Func<Cart, bool>> expressionSimilar = c => c.Customer().Email == "email@domain.com";
+            //Expression<Func<Cart, bool>> expression = c => c.CustomerEmail == "email@domain.com";
+            Expression<Func<Cart, bool>> expression = c => c.Customer().Email == "email@domain.com";
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("customer.email = \"email@domain.com\"", result);
@@ -134,8 +134,8 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void CartPredicateCustomerGroupId()
         {
-            Expression<Func<Cart, bool>> expression = c => c.CustomerGroup.Id == "45224437-12bd-4742-830c-3a36b52541d3";
-            Expression<Func<Cart, bool>> expressionSimilar = c => c.Customer().CustomerGroup.Id == "45224437-12bd-4742-830c-3a36b52541d3";
+            //Expression<Func<Cart, bool>> expression = c => c.CustomerGroup.Id == "45224437-12bd-4742-830c-3a36b52541d3";
+            Expression<Func<Cart, bool>> expression = c => c.Customer().CustomerGroup.Id == "45224437-12bd-4742-830c-3a36b52541d3";
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("customer.customerGroup.id = \"45224437-12bd-4742-830c-3a36b52541d3\"", result);
@@ -171,7 +171,8 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void LineItemPredicateVariantId()
         {
-            Expression<Func<LineItem, bool>> expression = l => l.Variant.Id == 123;
+            //Expression<Func<LineItem, bool>> expression = l => l.Variant.Id == 123;
+            Expression<Func<LineItem, bool>> expression = l => l.VariantId() == 123;
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("variantId = 123", result);
@@ -183,7 +184,7 @@ namespace commercetools.Sdk.Linq.Tests
             Expression<Func<LineItem, bool>> expression = l => l.CatalogId() == "45224437-12bd-4742-830c-3a36b52541d3";
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
-            Assert.Equal("catalog.id =  \"45224437-12bd-4742-830c-3a36b52541d3\"", result);
+            Assert.Equal("catalog.id = \"45224437-12bd-4742-830c-3a36b52541d3\"", result);
         }
 
         [Fact]
@@ -194,6 +195,16 @@ namespace commercetools.Sdk.Linq.Tests
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes.money > \"18.00 EUR\"", result);
+        }
+
+        [Fact]
+        public void LineItemPredicateTextAttribute()
+        {
+            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "color" && ((TextAttribute)a).Value == "green");
+            // TODO Create converters for attributes
+            ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("attributes.color = \"green\"", result);
         }
 
         [Fact]

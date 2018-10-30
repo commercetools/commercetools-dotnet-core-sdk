@@ -15,7 +15,7 @@ namespace commercetools.Sdk.Linq
 
         public string Render()
         {
-            return this.constant;
+            return this.constant.ToCamelCase();
         }
     }
 }
