@@ -36,7 +36,7 @@ namespace commercetools.Sdk.Linq.Tests
             Expression<Func<Cart, bool>> expression = c => c.LineItemCount(true) > 10;
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
-            Assert.Equal("lineItemCount(product.id = \"45224437-12bd-4742-830c-3a36b52541d3\") > 10", result);
+            Assert.Equal("lineItemCount(true) > 10", result);
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void CartPredicateTotalPrice()
         {
-            Expression<Func<Cart, bool>> expression = c => c.TotalPrice.Equal("10 USD");
+            Expression<Func<Cart, bool>> expression = c => c.TotalPrice == Money.Parse("10 USD");
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("totalPrice = \"10 USD\"", result);
@@ -96,7 +96,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void CartPredicateTotalNet()
         {
-            Expression<Func<Cart, bool>> expression = c => c.TaxedPrice.TotalNet.GreaterThan("10 USD");
+            Expression<Func<Cart, bool>> expression = c => c.TaxedPrice.TotalNet > Money.Parse("10 USD");
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("taxedPrice.net > \"10 USD\"", result);
@@ -105,7 +105,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void CartPredicateTotalGross()
         {
-            Expression<Func<Cart, bool>> expression = c => c.TaxedPrice.TotalGross.LessThanOrEqual("10 USD");
+            Expression<Func<Cart, bool>> expression = c => c.TaxedPrice.TotalGross <= Money.Parse("10 USD");
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("taxedPrice.gross <= \"10 USD\"", result);
@@ -190,17 +190,36 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void LineItemPredicateMoneyAttribute()
         {
-            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "money" && ((MoneyAttribute)a).Value.GreaterThan("18.00 EUR"));
+            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "money" && ((MoneyAttribute)a).Value >= Money.Parse("18.00 EUR"));
             // TODO Create converters for attributes
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
-            Assert.Equal("attributes.money > \"18.00 EUR\"", result);
+            Assert.Equal("attributes.money >= \"18.00 EUR\"", result);
+        }
+
+        [Fact]
+        public void LineItemPredicateMoneyCentAmountAttribute()
+        {
+            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "money" && ((MoneyAttribute)a).Value.CentAmount == 1800);
+            // TODO Create converters for attributes
+            ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("attributes.money.centAmount = 1800", result);
         }
 
         [Fact]
         public void LineItemPredicateTextAttribute()
         {
             Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "color" && ((TextAttribute)a).Value == "green");
+            ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("attributes.color = \"green\"", result);
+        }
+
+        [Fact]
+        public void LineItemPredicateEnumAttribute()
+        {
+            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "color" && ((EnumAttribute)a).Value.Key == "green");
             // TODO Create converters for attributes
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
@@ -208,9 +227,47 @@ namespace commercetools.Sdk.Linq.Tests
         }
 
         [Fact]
+        public void LineItemPredicateTextSetAttribute()
+        {
+            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "colors" && ((SetTextAttribute)a).Value.IsEmpty());
+            // TODO Create converters for attributes
+            ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("attributes.colors is empty", result);
+        }
+
+        [Fact]
+        public void CartPredicateCountryIsDefined()
+        {
+            Expression<Func<Cart, bool>> expression = c => c.Country.IsDefined();
+            ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("country is defined", result);
+        }
+
+        [Fact]
+        public void LineItemPredicateTextSetContainsAnyAttribute()
+        {
+            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "colors" && ((SetTextAttribute)a).Value.ContainsAny("green", "blue"));
+            // TODO Create converters for attributes
+            ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("attributes.colors contains any (\"green\", \"blue\")", result);
+        }
+
+        [Fact]
+        public void LineItemPredicateEnumSetContainsAnyAttribute()
+        {
+            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "colors" && ((SetEnumAttribute)a).Value.Select(e => e.Value.Key).ContainsAny("green", "blue"));
+            ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("attributes.colors contains any (\"green\", \"blue\")", result);
+        }
+
+        [Fact]
         public void LineItemPredicatePrice()
         {
-            Expression<Func<LineItem, bool>> expression = l => l.Price.Value.Equal("10.00 EUR");
+            Expression<Func<LineItem, bool>> expression = l => l.Price.Value == Money.Parse("10.00 EUR");
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("price = \"10.00 EUR\"", result);
@@ -231,7 +288,7 @@ namespace commercetools.Sdk.Linq.Tests
             Expression<Func<LineItem, bool>> expression = l => l.Price.DiscountId() == "45224437-12bd-4742-830c-3a36b52541d3";
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
-            Assert.Equal("price.discount.id =  \"45224437-12bd-4742-830c-3a36b52541d3\"", result);
+            Assert.Equal("price.discount.id = \"45224437-12bd-4742-830c-3a36b52541d3\"", result);
         }
 
         [Fact]
@@ -273,7 +330,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void CustomLineItemPredicateMoneyAndTaxRate()
         {
-            Expression<Func<CustomLineItem, bool>> expression = c => c.Money.GreaterThan("10.50 EUR") && c.TaxRate.IncludedInPrice == false;
+            Expression<Func<CustomLineItem, bool>> expression = c => c.Money > Money.Parse("10.50 EUR") && c.TaxRate.IncludedInPrice == false;
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("money > \"10.50 EUR\" and taxRate.includedInPrice = false", result);
@@ -289,6 +346,8 @@ namespace commercetools.Sdk.Linq.Tests
         }
 
         // TODO custom.<field> 
+
+        // TODO not()
 
 
     }

@@ -11,38 +11,58 @@ namespace commercetools.Sdk.Linq
         private readonly Dictionary<string, string> mappingOfAccessors = new Dictionary<string, string>()
         {
             { "ProductId", "product.id" },
-            { "CustomerId", "customer.id" }
+            { "CustomerId", "customer.id" },
+            { "TotalNet", "net" },
+            { "TotalGross", "gross" }
         };
 
-        public string Render(Expression expression)
+        private readonly IEnumerable<string> accessorsToSkip = new List<string>()
         {
-            IEnumerable<string> accessors = this.GetAccessors(expression);
-            return string.Join(".", accessors.Reverse().Select(a => a.ToCamelCase()));
-        }
+            "Value", 
+            "Key"
+        };
 
-        private IEnumerable<string> GetAccessors(Expression expression)
+        public List<string> GetAccessorsForExpression(Expression expression)
         {
             List<string> accessors = new List<string>();
             accessors.AddRange(ParseExpression(expression));
             return accessors;
+        } 
+
+        public List<string> GetAccessorsForExpression(Expression expression, List<string> additions)
+        {
+            List<string> accessors = new List<string>();
+            accessors.AddRange(additions);
+            accessors.AddRange(GetAccessorsForExpression(expression));
+            return accessors;
         }
 
-        private IEnumerable<string> ParseExpression(Expression expression)
+        private List<string> ParseExpression(Expression expression)
         {
             List<string> accessors = new List<string>();
             if (expression is MemberExpression memberExpression)
             {
                 string currentName = memberExpression.Member.Name;
-                accessors.Add(ParseAccessorName(currentName));
+                accessors.AddRange(AddName(ParseAccessorName(currentName)));
                 accessors.AddRange(ParseExpression(memberExpression.Expression));
             }
             if (expression is MethodCallExpression methodCallExpression)
             {
                 string currentName = methodCallExpression.Method.Name;
-                accessors.Add(ParseMethodAccessorName(currentName));
+                accessors.AddRange(AddName(ParseMethodAccessorName(currentName)));
                 accessors.AddRange(ParseExpression(methodCallExpression.Arguments[0]));
             }
             return accessors;
+        }
+
+        private List<string> AddName(string currentName)
+        {
+            List<string> names = new List<string>();
+            if (!this.accessorsToSkip.Contains(currentName))
+            {
+                names.Add(currentName);
+            }
+            return names;
         }
 
         private string ParseAccessorName(string name)

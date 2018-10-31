@@ -213,5 +213,35 @@ namespace commercetools.Sdk.Linq.Extensions.Carts
         {
             throw new NotImplementedException();
         }
+
+        public static bool IsEmpty<T>(this List<T> source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool IsNotEmpty<T>(this List<T> source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool IsDefined<T>(this T source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool IsNotDefined<T>(this T source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool ContainsAny<T>(this IEnumerable<T> source, params T[] values)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool ContainsAll<T>(this IEnumerable<T> source, params T[] values)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

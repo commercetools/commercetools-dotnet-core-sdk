@@ -7,6 +7,13 @@ namespace commercetools.Sdk.Linq
 {
     public class AttributePredicateVisitorConverter : ICartPredicateVisitorConverter
     {
+        private readonly IAccessorTraverser accessorTraverser;
+
+        public AttributePredicateVisitorConverter(IAccessorTraverser accessorTraverser)
+        {
+            this.accessorTraverser = accessorTraverser;
+        }
+
         public bool CanConvert(Expression expression)
         {
             if (expression is MethodCallExpression methodCallExpression)
@@ -39,34 +46,38 @@ namespace commercetools.Sdk.Linq
 
         public ICartPredicateVisitor Convert(Expression expression, ICartPredicateVisitorFactory cartPredicateVisitorFactory)
         {
-            if (expression is MethodCallExpression methodCallExpression)
+            MethodCallExpression methodCallExpression = expression as MethodCallExpression;
+            if (expression == null)
             {
-
+                throw new ArgumentException();
             }
-            ICartPredicateVisitor left = this.GetLeft(expression);
-            ICartPredicateVisitor right = this.GetRight(expression);
-            string operatorSign = this.GetOperatorSign(expression);
-            ComparisonPredicateVisitor comparisonPredicateVisitor = new ComparisonPredicateVisitor(left, operatorSign, right);
-            return comparisonPredicateVisitor;
+            var innerExpression = methodCallExpression.Arguments[1];
+            if (innerExpression is LambdaExpression lambdaExpression)
+            {
+                var attributeExpression = lambdaExpression.Body;
+                if (attributeExpression.NodeType == ExpressionType.And || attributeExpression.NodeType == ExpressionType.AndAlso)
+                {
+                    ICartPredicateVisitor attributeValuePredicateVisitor = cartPredicateVisitorFactory.Create(((BinaryExpression)attributeExpression).Right);
+                    string attributeName = GetAttributeName(((BinaryExpression)attributeExpression).Left);
+                    List<string> accessors = this.accessorTraverser.GetAccessorsForExpression(methodCallExpression.Arguments[0], new List<string>() { attributeName });
+                    AttributePredicateVisitor attributePredicateVisitor = new AttributePredicateVisitor(accessors, attributeValuePredicateVisitor);
+                    return attributePredicateVisitor;
+                }
+            }      
+
+            throw new NotSupportedException();
         }
 
-        private ICartPredicateVisitor GetLeft(Expression expression)
+        private string GetAttributeName(Expression expression)
         {
-            string left = string.Empty;
-            StringPredicateVisitor stringPredicateVisitor = new StringPredicateVisitor(left);
-            return stringPredicateVisitor;
-        }
-
-        private ICartPredicateVisitor GetRight(Expression expression)
-        {
-            string right = string.Empty;
-            StringPredicateVisitor stringPredicateVisitor = new StringPredicateVisitor(right);
-            return stringPredicateVisitor;
-        }
-
-        private string GetOperatorSign(Expression expression)
-        {
-            return null;
+            if (expression is BinaryExpression nameExpression)
+            {
+                if (nameExpression.Left is MemberExpression memberExpression && memberExpression.Member.Name == "Name")
+                {
+                    return nameExpression.Right.ToString().Replace("\"", "");
+                }
+            }
+            throw new NotSupportedException();
         }
     }
 }

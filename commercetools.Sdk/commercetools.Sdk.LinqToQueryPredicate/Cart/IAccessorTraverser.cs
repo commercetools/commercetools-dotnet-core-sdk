@@ -7,6 +7,7 @@ namespace commercetools.Sdk.Linq
 {
     public interface IAccessorTraverser
     {
-        string Render(Expression expression);
+        List<string> GetAccessorsForExpression(Expression expression, List<string> additions);
+        List<string> GetAccessorsForExpression(Expression expression);
     }
 }

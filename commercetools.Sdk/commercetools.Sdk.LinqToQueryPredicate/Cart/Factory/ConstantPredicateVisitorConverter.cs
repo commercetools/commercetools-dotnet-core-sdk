@@ -14,8 +14,7 @@ namespace commercetools.Sdk.Linq
 
         public ICartPredicateVisitor Convert(Expression expression, ICartPredicateVisitorFactory cartPredicateVisitorFactory)
         {
-            StringPredicateVisitor stringPredicateVisitor = new StringPredicateVisitor(expression.ToString());
-            return stringPredicateVisitor;
+            return new ConstantPredicateVisitor(expression.ToString());
         }
     }
 }

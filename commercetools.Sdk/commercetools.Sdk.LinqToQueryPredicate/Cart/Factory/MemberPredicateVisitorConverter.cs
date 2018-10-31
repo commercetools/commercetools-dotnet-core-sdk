@@ -21,8 +21,8 @@ namespace commercetools.Sdk.Linq
 
         public ICartPredicateVisitor Convert(Expression expression, ICartPredicateVisitorFactory cartPredicateVisitorFactory)
         {
-            string accessor = this.accessorTraverser.Render(expression);
-            StringPredicateVisitor stringPredicateVisitor = new StringPredicateVisitor(accessor);
+            List<string> accessors = this.accessorTraverser.GetAccessorsForExpression(expression);
+            AccessorPredicateVisitor stringPredicateVisitor = new AccessorPredicateVisitor(accessors);
             return stringPredicateVisitor;
         }
     }

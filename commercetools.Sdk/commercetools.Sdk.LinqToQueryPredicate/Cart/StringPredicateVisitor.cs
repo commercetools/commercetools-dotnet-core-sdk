@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace commercetools.Sdk.Linq
 {
-    public class StringPredicateVisitor : ICartPredicateVisitor
+    public class AccessorPredicateVisitor : ICartPredicateVisitor
     {
-        private string value;
+        private readonly IEnumerable<string> accessors;
 
-        public StringPredicateVisitor(string value)
+        public AccessorPredicateVisitor(IEnumerable<string> accessors)
         {
-            this.value = value;
+            this.accessors = accessors;
         }
 
         public string Render()
         {
-            return value.ToCamelCase();
+            return string.Join(".", this.accessors.Reverse().Select(a => a.ToCamelCase()));
         }
     }
 }
