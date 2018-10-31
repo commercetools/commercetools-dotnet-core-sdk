@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class EnumAttribute : Attribute<EnumAttributeValue>
+    public class EnumAttribute : Attribute<EnumValue>
     {
     }
 }

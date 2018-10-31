@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain.Common.Field
 {
-    public class StringField : PrimitiveTypeField<string>
+    public class DateField : PrimitiveTypeField<DateTime>
     {
     }
 }

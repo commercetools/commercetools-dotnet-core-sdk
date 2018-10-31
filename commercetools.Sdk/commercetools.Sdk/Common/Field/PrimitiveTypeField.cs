@@ -4,7 +4,8 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class LocalizedEnumAttribute : Attribute<LocalizedEnumValue>
+    public class PrimitiveTypeField<T> : IField
     {
+        public T Value { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class Field
+    public class MoneyField : Money, IField
     {
     }
 }

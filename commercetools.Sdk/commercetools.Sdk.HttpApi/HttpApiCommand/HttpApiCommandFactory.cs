@@ -21,6 +21,7 @@ namespace commercetools.Sdk.HttpApi
         {
             // retrieve the type of T
             // TODO Find a neater way to find the generic type
+            // Add a get type property to commands
             Type typeOfGeneric;
             if (command.GetType().IsGenericType)
             {
