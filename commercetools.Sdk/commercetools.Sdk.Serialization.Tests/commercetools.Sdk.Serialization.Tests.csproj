@@ -18,46 +18,49 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Resources\List.json">
+    <None Update="Resources\Attributes\List.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\InvalidEnum.json">
+    <None Update="Resources\Attributes\InvalidEnum.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\LocalizedEnum.json">
+    <None Update="Resources\Attributes\LocalizedEnum.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\LocalizedText.json">
+    <None Update="Resources\Attributes\LocalizedText.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Money.json">
+    <None Update="Resources\Attributes\Money.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Enum.json">
+    <None Update="Resources\Attributes\Enum.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\NoValue.json">
+    <None Update="Resources\Attributes\NoValue.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\SetText.json">
+    <None Update="Resources\Attributes\SetText.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Text.json">
+    <None Update="Resources\Attributes\Text.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Boolean.json">
+    <None Update="Resources\Attributes\Boolean.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Number.json">
+    <None Update="Resources\Attributes\Number.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Date.json">
+    <None Update="Resources\Attributes\Date.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Time.json">
+    <None Update="Resources\Attributes\Time.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\DateTime.json">
+    <None Update="Resources\Attributes\DateTime.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\CustomFields\AllCustomFieldTypes.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

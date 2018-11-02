@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public interface IField
+    public class SetDateField : SetField<DateTime>
     {
     }
 }

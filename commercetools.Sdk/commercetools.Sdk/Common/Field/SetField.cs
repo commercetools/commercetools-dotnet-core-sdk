@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class SetTextAttribute : SetAttribute<string>
+    public abstract class SetField<T> : Field<HashSet<T>>
     {
     }
 }

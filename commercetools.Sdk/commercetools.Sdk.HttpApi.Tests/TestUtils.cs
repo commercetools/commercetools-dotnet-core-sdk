@@ -87,7 +87,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             MoneyConverter moneyConverter = new MoneyConverter(customMoneyConverters);
             ErrorConverter errorConverter = new ErrorConverter();
             FacetResultConverter facetResultConverter = new FacetResultConverter();
-            AttributeConverter attributeConverter = new AttributeConverter(customAttributeConverters, moneyConverter);
+            AttributeConverter attributeConverter = new AttributeConverter(customAttributeConverters);
             IEnumerable<JsonConverter> registeredConverters = new List<JsonConverter>() { moneyConverter, attributeConverter, errorConverter, facetResultConverter };
             
             CustomContractResolver customContractResolver = new CustomContractResolver(registeredConverters);

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class LocalizedStringField : LocalizedString, IField
+    public class LocalizedStringField : Field<LocalizedString>
     {
     }
 }

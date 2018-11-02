@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class SetNumberAttribute : Attribute<List<int>>
+    public class SetNumberAttribute : SetAttribute<double>
     {
     }
 }

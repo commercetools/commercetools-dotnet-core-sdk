@@ -214,7 +214,7 @@ namespace commercetools.Sdk.Linq.Extensions.Carts
             throw new NotImplementedException();
         }
 
-        public static bool IsEmpty<T>(this List<T> source)
+        public static bool IsEmpty<T>(this ICollection<T> source)
         {
             throw new NotImplementedException();
         }

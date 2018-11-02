@@ -1,11 +1,11 @@
-﻿using commercetools.Sdk.Domain.Attributes;
+﻿using commercetools.Sdk.Domain.Fields;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class LocalizedEnumAttribute : Attribute<LocalizedEnumValue>
+    public class SetLocalizedEnumField : SetField<LocalizedEnumValue>
     {
     }
 }

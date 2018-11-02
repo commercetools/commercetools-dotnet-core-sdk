@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class SetLocalizedStringAttribute : Attribute<List<LocalizedString>>
+    public class SetLocalizedStringAttribute : SetAttribute<LocalizedString>
     {
     }
 }

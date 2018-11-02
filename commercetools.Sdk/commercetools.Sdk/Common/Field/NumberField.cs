@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace commercetools.Sdk.Domain.Common.Field
+namespace commercetools.Sdk.Domain
 {
-    public class NumberField : PrimitiveTypeField<double>
+    public class NumberField : Field<double>
     {
     }
 }

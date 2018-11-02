@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace commercetools.Sdk.Domain.Common.Field
+namespace commercetools.Sdk.Domain
 {
-    public class BooleanField : PrimitiveTypeField<bool>
+    public class BooleanField : Field<bool>
     {
     }
 }

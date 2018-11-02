@@ -12,7 +12,7 @@ namespace commercetools.Sdk.Serialization
     {
         private readonly IEnumerable<ICustomConverter<Domain.Attribute>> customConverters;
 
-        public AttributeConverter(IEnumerable<ICustomConverter<Domain.Attribute>> customConverters, MoneyConverter moneyConverter)
+        public AttributeConverter(IEnumerable<ICustomConverter<Domain.Attribute>> customConverters)
         {
             this.customConverters = customConverters;
         }

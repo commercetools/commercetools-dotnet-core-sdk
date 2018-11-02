@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace commercetools.Sdk.Domain.Common.Field
+namespace commercetools.Sdk.Domain
 {
-    public class TimeField : PrimitiveTypeField<DateTime>
+    public class DateTimeField : Field<DateTime>
     {
     }
 }

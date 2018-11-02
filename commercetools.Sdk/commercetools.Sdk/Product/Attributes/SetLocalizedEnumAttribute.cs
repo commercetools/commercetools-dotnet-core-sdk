@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class SetLocalizedEnumAttribute : Attribute<List<LocalizedEnumAttribute>>
+    public class SetLocalizedEnumAttribute : SetAttribute<LocalizedEnumAttribute>
     {
     }
 }

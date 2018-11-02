@@ -4,8 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class PrimitiveTypeField<T> : IField
+    public class SetLocalizedStringField : SetField<LocalizedString>
     {
-        public T Value { get; set; }
     }
 }
