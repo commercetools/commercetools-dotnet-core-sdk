@@ -15,7 +15,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = TestUtils.GetSerializerService();
             string serialized = File.ReadAllText("Resources/CustomFields/AllCustomFieldTypes.json");
             Category deserialized = serializerService.Deserialize<Category>(serialized);
-            Assert.IsType<StringField>(deserialized.Custom.Fields[0]);
+            Assert.IsType<string>(deserialized.Custom.Fields["string"]);
         }
     }
 }

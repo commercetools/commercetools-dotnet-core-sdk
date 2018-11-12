@@ -23,18 +23,18 @@ namespace commercetools.Sdk.Serialization.Tests
                 new EnumConverter<Domain.Attribute, EnumAttribute>(),
                 new LocalizedEnumConverter<Domain.Attribute, LocalizedEnumAttribute>()
             };
-            IEnumerable<ICustomConverter<Field>> customFieldConverters = new List<ICustomConverter<Field>>()
+            IEnumerable<ICustomConverter<CustomFields>> customFieldConverters = new List<ICustomConverter<CustomFields>>()
             {
-                new MoneyConverter<Field, MoneyField>(),
-                new StringConverter<Field, StringField>(),
-                new LocalizedStringConverter<Field, LocalizedStringField>(),
-                new BooleanConverter<Field, BooleanField>(),
-                new NumberConverter<Field, NumberField>(),
-                new DateTimeConverter<Field, DateTimeField>(),
-                new TimeConverter<Field, TimeField>(),
-                new DateConverter<Field, DateField>(),
-                new EnumConverter<Field, EnumField>(),
-                new LocalizedEnumConverter<Field, LocalizedEnumField>()
+                new MoneyConverter<CustomFields, Money>(),
+                new StringConverter<CustomFields, string>(),
+                new LocalizedStringConverter<CustomFields, LocalizedString>(),
+                new BooleanConverter<CustomFields, bool>(),
+                new NumberConverter<CustomFields, double>(),
+                new DateTimeConverter<CustomFields, DateTime>(),
+                new TimeConverter<CustomFields, TimeSpan>(),
+                new DateConverter<CustomFields, DateTime>(),
+                new EnumConverter<CustomFields, EnumValue>(),
+                new LocalizedEnumConverter<CustomFields, LocalizedEnumValue>()
             };
             IEnumerable<ICustomConverter<Money>> customMoneyConverters = new List<ICustomConverter<Money>>()
             {
@@ -43,7 +43,7 @@ namespace commercetools.Sdk.Serialization.Tests
             };
             MoneyConverter moneyConverter = new MoneyConverter(customMoneyConverters);
             AttributeConverter attributeConverter = new AttributeConverter(customAttributeConverters);
-            FieldCollectionConverter fieldCollectionConverter = new FieldCollectionConverter();
+            FieldsConverter fieldCollectionConverter = new FieldsConverter(customFieldConverters);
             IEnumerable<JsonConverter> registeredConverters = new List<JsonConverter>() { moneyConverter, attributeConverter, fieldCollectionConverter };
             CustomContractResolver customContractResolver = new CustomContractResolver(registeredConverters);
             JsonSerializerSettingsFactory jsonSerializerSettingsFactory = new JsonSerializerSettingsFactory(customContractResolver);

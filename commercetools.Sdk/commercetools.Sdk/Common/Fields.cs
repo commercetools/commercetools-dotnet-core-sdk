@@ -4,7 +4,11 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class SetLocalizedStringField : SetField<LocalizedString>
+    public class Fields : Dictionary<string, object>
     {
+        public Fields(): base()
+        {
+
+        }
     }
 }

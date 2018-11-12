@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.Domain.Fields
+﻿namespace commercetools.Sdk.Domain
 {
     public class LocalizedEnumValue
     {
