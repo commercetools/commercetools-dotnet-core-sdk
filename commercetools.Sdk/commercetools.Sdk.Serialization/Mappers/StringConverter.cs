@@ -7,15 +7,15 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class DateTimeAttributeConverter : ICustomConverter<Domain.Attribute>
+    public class StringConverter<T, S> : ICustomJsonMapper<T>
     {
         public int Priority => 4;
 
-        public Type Type => typeof(DateTimeAttribute);
+        public Type Type => typeof(S);
 
         public bool CanConvert(JToken property)
         {
-            if (property?.Type == JTokenType.Date)
+            if (property?.Type == JTokenType.String)
             {
                 return true;
             }

@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\commercetools.Sdk.Reflection\commercetools.Sdk.Reflection.csproj" />
     <ProjectReference Include="..\commercetools.Sdk.Serialization\commercetools.Sdk.Serialization.csproj" />
     <ProjectReference Include="..\commercetools.Sdk\commercetools.Sdk.Domain.csproj" />
   </ItemGroup>
@@ -60,7 +61,10 @@
     <None Update="Resources\Attributes\DateTime.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\CustomFields\AllCustomFieldTypes.json">
+    <None Update="Resources\CustomFields\List.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\CustomFields\String.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

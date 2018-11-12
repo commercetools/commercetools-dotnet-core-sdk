@@ -7,17 +7,20 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class BooleanAttributeConverter : ICustomConverter<Domain.Attribute>
+    public class TimeConverter<T, S> : ICustomJsonMapper<T>
     {
-        public int Priority => 4;
+        public int Priority => 3;
 
-        public Type Type => typeof(BooleanAttribute);
+        public Type Type => typeof(S);
 
         public bool CanConvert(JToken property)
         {
-            if (property?.Type == JTokenType.Boolean)
+            if (property?.Type == JTokenType.String)
             {
-                return true;
+                if (TimeSpan.TryParse(property.Value<string>(), out TimeSpan time))
+                {
+                    return true;
+                }
             }
             return false;
         }

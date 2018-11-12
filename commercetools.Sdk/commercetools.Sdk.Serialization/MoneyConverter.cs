@@ -10,7 +10,7 @@ namespace commercetools.Sdk.Serialization
 {
     public class MoneyConverter : JsonConverter
     {
-        private readonly IEnumerable<ICustomConverter<Money>> customConverters;
+        private readonly IEnumerable<ICustomJsonMapper<Money>> customConverters;
 
         public override bool CanConvert(Type objectType)
         {
@@ -21,7 +21,7 @@ namespace commercetools.Sdk.Serialization
             return false;
         }
 
-        public MoneyConverter(IEnumerable<ICustomConverter<Money>> customConverters)
+        public MoneyConverter(IEnumerable<ICustomJsonMapper<Money>> customConverters)
         {
             this.customConverters = customConverters;
         }

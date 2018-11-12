@@ -66,7 +66,7 @@ namespace commercetools.Sdk.HttpApi.Tests
 
         public static ISerializerService GetSerializerService()
         {
-            IEnumerable<ICustomConverter<Sdk.Domain.Attribute>> customAttributeConverters = new List<ICustomConverter<Sdk.Domain.Attribute>>()
+            IEnumerable<ICustomJsonMapper<Sdk.Domain.Attribute>> customAttributeConverters = new List<ICustomJsonMapper<Sdk.Domain.Attribute>>()
             {
                 new MoneyAttributeConverter(),
                 new TextAttributeConverter(),
@@ -79,7 +79,7 @@ namespace commercetools.Sdk.HttpApi.Tests
                 new EnumAttributeConverter(),
                 new LocalizedEnumAttributeConverter()
             };
-            IEnumerable<ICustomConverter<Money>> customMoneyConverters = new List<ICustomConverter<Money>>()
+            IEnumerable<ICustomJsonMapper<Money>> customMoneyConverters = new List<ICustomJsonMapper<Money>>()
             {
                 new CentPrecisionMoneyConverter(),
                 new HighPrecisionMoneyConverter()

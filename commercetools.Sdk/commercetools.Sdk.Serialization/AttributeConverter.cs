@@ -10,9 +10,9 @@ namespace commercetools.Sdk.Serialization
 {
     public class AttributeConverter : JsonConverter
     {
-        private readonly IEnumerable<ICustomConverter<Domain.Attribute>> customConverters;
+        private readonly IEnumerable<ICustomJsonMapper<Domain.Attribute>> customConverters;
 
-        public AttributeConverter(IEnumerable<ICustomConverter<Domain.Attribute>> customConverters)
+        public AttributeConverter(IEnumerable<ICustomJsonMapper<Domain.Attribute>> customConverters)
         {
             this.customConverters = customConverters;
         }

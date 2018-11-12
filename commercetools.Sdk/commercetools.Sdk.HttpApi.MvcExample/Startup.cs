@@ -62,19 +62,19 @@ namespace commercetools.Sdk.HttpApi.MvcExample
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
 
             //TODO Find a neater way to register all the converters
-            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, BooleanAttributeConverter>();
-            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, DateAttributeConverter>();
-            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, DateTimeAttributeConverter>();
-            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, TimeAttributeConverter>();
-            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, NumberAttributeConverter>();
-            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, TextAttributeConverter>();
-            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, EnumAttributeConverter>();
-            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, LocalizedTextAttributeConverter>();
-            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, LocalizedEnumAttributeConverter>();
-            services.AddSingleton<ICustomConverter<Sdk.Domain.Attribute>, MoneyAttributeConverter>();
+            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, BooleanAttributeConverter>();
+            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, DateAttributeConverter>();
+            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, DateTimeAttributeConverter>();
+            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, TimeAttributeConverter>();
+            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, NumberAttributeConverter>();
+            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, TextAttributeConverter>();
+            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, EnumAttributeConverter>();
+            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, LocalizedTextAttributeConverter>();
+            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, LocalizedEnumAttributeConverter>();
+            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, MoneyAttributeConverter>();
 
-            services.AddSingleton<ICustomConverter<Sdk.Domain.Money>, HighPrecisionMoneyConverter>();
-            services.AddSingleton<ICustomConverter<Sdk.Domain.Money>, CentPrecisionMoneyConverter>();
+            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Money>, HighPrecisionMoneyConverter>();
+            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Money>, CentPrecisionMoneyConverter>();
 
             services.AddSingleton<MoneyConverter>();
             services.AddSingleton<AttributeConverter>();

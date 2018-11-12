@@ -7,11 +7,11 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class LocalizedEnumAttributeConverter : ICustomConverter<Domain.Attribute>
+    public class LocalizedEnumConverter<T, S> : ICustomJsonMapper<T>
     {
         public int Priority => 2;
 
-        public Type Type => typeof(LocalizedEnumAttribute);
+        public Type Type => typeof(S);
 
         public bool CanConvert(JToken property)
         {
@@ -23,7 +23,7 @@ namespace commercetools.Sdk.Serialization
                     var labelProperty = property["label"];
                     if (labelProperty != null && labelProperty.HasValues)
                     {
-                        // Checks only the first key value pair so that we can exclude this type from deserialization
+                        // Checks only the first key value pair; the assumption is all of them are of the same type
                         var firstValue = labelProperty.First as JProperty;
                         var name = firstValue?.Name;
                         if (name != null && name.IsValidLanguageTag())

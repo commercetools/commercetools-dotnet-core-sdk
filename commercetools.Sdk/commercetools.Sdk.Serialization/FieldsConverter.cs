@@ -4,18 +4,17 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
     public class FieldsConverter : JsonConverter
     {
-        private readonly IEnumerable<ICustomConverter<CustomFields>> customConverters;
+        private readonly IMapperTypeRetriever<Fields> typeRetriever;
 
-        public FieldsConverter(IEnumerable<ICustomConverter<CustomFields>> customConverters)
+        public FieldsConverter(IMapperTypeRetriever<Fields> typeRetriever)
         {
-            this.customConverters = customConverters;
+            this.typeRetriever = typeRetriever;
         }
 
         public override bool CanConvert(Type objectType)
@@ -40,7 +39,7 @@ namespace commercetools.Sdk.Serialization
             {
                 string key = property.Name;
                 JToken value = property.Value;
-                Type valueType = this.GetTypeByValueProperty(value);
+                Type valueType = this.typeRetriever.GetTypeForToken(value);
                 object o = value.ToObject(valueType, serializer);
                 customFields.Add(key, o);
             }
@@ -51,18 +50,6 @@ namespace commercetools.Sdk.Serialization
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
-        }
-
-        private Type GetTypeByValueProperty(JToken valueProperty)
-        {
-            foreach (var customConvert in this.customConverters.OrderBy(c => c.Priority))
-            {
-                if (customConvert.CanConvert(valueProperty))
-                {
-                    return customConvert.Type;
-                }
-            }
-            return null;
         }
     }
 }

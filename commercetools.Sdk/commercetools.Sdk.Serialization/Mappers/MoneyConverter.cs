@@ -1,13 +1,13 @@
-﻿using System;
+﻿using commercetools.Sdk.Domain;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using commercetools.Sdk.Domain;
-using Newtonsoft.Json.Linq;
 using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class TimeConverter<T, S> : ICustomConverter<T>
+    public class MoneyConverter<T, S> : ICustomJsonMapper<T>
     {
         public int Priority => 3;
 
@@ -15,9 +15,10 @@ namespace commercetools.Sdk.Serialization
 
         public bool CanConvert(JToken property)
         {
-            if (property?.Type == JTokenType.String)
+            if (property != null && property.HasValues)
             {
-                if (TimeSpan.TryParse(property.Value<string>(), out TimeSpan time))
+                var currencyCodeProperty = property["currencyCode"];
+                if (currencyCodeProperty != null)
                 {
                     return true;
                 }
