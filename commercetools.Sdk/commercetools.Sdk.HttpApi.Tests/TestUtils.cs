@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using Type = System.Type;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
@@ -47,14 +48,16 @@ namespace commercetools.Sdk.HttpApi.Tests
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
             IExpansionExpressionVisitor expansionExpressionVisitor = new ExpansionExpressionVisitor();
             ISortExpressionVisitor sortExpressionVisitor = new SortExpressionVisitor();
+            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             GetRequestMessageBuilder getByIdRequestMessageBuilder = new GetRequestMessageBuilder(clientConfiguration);
             CreateRequestMessageBuilder createRequestMessageBuilder = new CreateRequestMessageBuilder(serializerService, clientConfiguration);
             UpdateRequestMessageBuilder updateByIdRequestMessageBuilder = new UpdateRequestMessageBuilder(serializerService, clientConfiguration);
             DeleteRequestMessageBuilder deleteByIdRequestMessageBuilder = new DeleteRequestMessageBuilder(clientConfiguration);
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(clientConfiguration, queryPredicateExpressionVisitor, expansionExpressionVisitor, sortExpressionVisitor);
-            IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { getByIdRequestMessageBuilder, createRequestMessageBuilder, updateByIdRequestMessageBuilder, deleteByIdRequestMessageBuilder, queryRequestMessageBuilder };
+            SearchRequestMessageBuilder searchRequestMessageBuilder = new SearchRequestMessageBuilder(clientConfiguration, filterExpressionVisitor);
+            IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { getByIdRequestMessageBuilder, createRequestMessageBuilder, updateByIdRequestMessageBuilder, deleteByIdRequestMessageBuilder, queryRequestMessageBuilder, searchRequestMessageBuilder };
             IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(requestMessageBuilders);
-            IEnumerable<Type> registeredHttpApiCommandTypes = new List<Type>() { typeof(CreateHttpApiCommand<>), typeof(QueryHttpApiCommand<>), typeof(GetHttpApiCommand<>), typeof(UpdateHttpApiCommand<>), typeof(DeleteHttpApiCommand<>) };
+            IEnumerable<Type> registeredHttpApiCommandTypes = new List<Type>() { typeof(SearchHttpApiCommand<>), typeof(CreateHttpApiCommand<>), typeof(QueryHttpApiCommand<>), typeof(GetHttpApiCommand<>), typeof(UpdateHttpApiCommand<>), typeof(DeleteHttpApiCommand<>) };
             IHttpApiCommandFactory httpApiCommandFactory = new HttpApiCommandFactory(registeredHttpApiCommandTypes, requestMessageBuilderFactory);
 
             IClient commerceToolsClient = new Client(httpClientFactory, httpApiCommandFactory, serializerService);
@@ -63,7 +66,7 @@ namespace commercetools.Sdk.HttpApi.Tests
 
         public static ISerializerService GetSerializerService()
         {
-            IEnumerable<ICustomConverter<Sdk.Domain.Attribute>> customAttributeConverters = new List<ICustomConverter<Sdk.Domain.Attribute>>()
+            IEnumerable<ICustomJsonMapper<Sdk.Domain.Attribute>> customAttributeConverters = new List<ICustomJsonMapper<Sdk.Domain.Attribute>>()
             {
                 new MoneyAttributeConverter(),
                 new TextAttributeConverter(),
@@ -76,15 +79,16 @@ namespace commercetools.Sdk.HttpApi.Tests
                 new EnumAttributeConverter(),
                 new LocalizedEnumAttributeConverter()
             };
-            IEnumerable<ICustomConverter<Money>> customMoneyConverters = new List<ICustomConverter<Money>>()
+            IEnumerable<ICustomJsonMapper<Money>> customMoneyConverters = new List<ICustomJsonMapper<Money>>()
             {
                 new CentPrecisionMoneyConverter(),
                 new HighPrecisionMoneyConverter()
             };
             MoneyConverter moneyConverter = new MoneyConverter(customMoneyConverters);
             ErrorConverter errorConverter = new ErrorConverter();
-            AttributeConverter attributeConverter = new AttributeConverter(customAttributeConverters, moneyConverter);
-            IEnumerable<JsonConverter> registeredConverters = new List<JsonConverter>() { moneyConverter, attributeConverter, errorConverter };
+            FacetResultConverter facetResultConverter = new FacetResultConverter();
+            AttributeConverter attributeConverter = new AttributeConverter(customAttributeConverters);
+            IEnumerable<JsonConverter> registeredConverters = new List<JsonConverter>() { moneyConverter, attributeConverter, errorConverter, facetResultConverter };
             
             CustomContractResolver customContractResolver = new CustomContractResolver(registeredConverters);
             JsonSerializerSettingsFactory jsonSerializerSettingsFactory = new JsonSerializerSettingsFactory(customContractResolver);

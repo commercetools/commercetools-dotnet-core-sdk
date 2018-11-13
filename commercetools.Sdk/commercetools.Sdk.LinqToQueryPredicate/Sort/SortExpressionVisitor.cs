@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace commercetools.Sdk.LinqToQueryPredicate
 {
     public class SortExpressionVisitor : ISortExpressionVisitor
     {
-        public string GetPath(Expression expression)
+        public string Render(Expression expression)
         {
             // c => c.Parent
             if (expression.NodeType == ExpressionType.Lambda)
             {
-                return GetPath(((LambdaExpression)expression).Body);
+                return Render(((LambdaExpression)expression).Body);
             }
             // c.Parent.TypeId
             if (expression.NodeType == ExpressionType.MemberAccess)
@@ -41,7 +39,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
             if (expression.Method.Name == "get_Item")
             {
                 var key = expression.Arguments[0].ToString().Replace("\"", "");
-                return GetPath(expression.Object) + "." + key;
+                return Render(expression.Object) + "." + key;
             }
             // TODO Move message to a resource file
             throw new NotSupportedException("The expression type is not supported.");
@@ -50,7 +48,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
         private string GetMember(MemberExpression expression)
         {
             var parent = expression.Expression;
-            var parentPath = GetPath(parent);
+            var parentPath = Render(parent);
             if (string.IsNullOrEmpty(parentPath))
             {
                 return expression.Member.Name.ToCamelCase();

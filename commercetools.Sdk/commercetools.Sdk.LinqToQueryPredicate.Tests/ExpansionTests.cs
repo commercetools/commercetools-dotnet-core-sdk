@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.ShoppingLists;
 using System;
 using System.Collections.Generic;
 using System.Linq;

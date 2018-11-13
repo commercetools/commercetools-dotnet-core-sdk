@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.ShoppingLists
 {
     public class LineItem
     {

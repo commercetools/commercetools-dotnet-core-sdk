@@ -15,11 +15,11 @@
             return null;
         }
 
-        protected override HttpMethod HttpMethod => HttpMethod.Delete;
+        private HttpMethod HttpMethod => HttpMethod.Delete;
 
         public HttpRequestMessage GetRequestMessage<T>(DeleteCommand<T> command)
         {
-            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), null);
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), null, this.HttpMethod);
         }
 
         private Uri GetRequestUri<T>(DeleteCommand<T> command)

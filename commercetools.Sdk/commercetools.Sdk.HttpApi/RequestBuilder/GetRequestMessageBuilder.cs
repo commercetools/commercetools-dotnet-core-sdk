@@ -10,11 +10,11 @@
         {
         }
 
-        protected override HttpMethod HttpMethod => HttpMethod.Get;
+        private HttpMethod HttpMethod => HttpMethod.Get;
 
         public HttpRequestMessage GetRequestMessage<T>(GetCommand<T> command)
         {
-            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), null);
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), null, this.HttpMethod);
         }
 
         private Uri GetRequestUri<T>(GetCommand<T> command)

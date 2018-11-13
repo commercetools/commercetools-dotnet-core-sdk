@@ -2,12 +2,12 @@
 
 namespace commercetools.Sdk.Domain
 {
-    public class ProductVariantAvailibility
+    public class ProductVariantAvailability
     {
         public bool IsOnStock { get; set;  }
         public int RestockableInDays { get; set; }
         public int AvailableQuantity { get; set; }
-        public Dictionary<string, ProductVariantAvailibility> Channels { get; set; }
+        public Dictionary<string, ProductVariantAvailability> Channels { get; set; }
     }
 
     // TODO See if t his class should be used instead in channels

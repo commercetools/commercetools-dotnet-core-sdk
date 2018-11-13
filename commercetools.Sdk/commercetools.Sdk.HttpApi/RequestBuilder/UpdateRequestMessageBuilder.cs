@@ -14,11 +14,11 @@ namespace commercetools.Sdk.HttpApi
             this.serializerService = serializerService;
         }
 
-        protected override HttpMethod HttpMethod => HttpMethod.Post;
+        private HttpMethod HttpMethod => HttpMethod.Post;
 
         public HttpRequestMessage GetRequestMessage<T>(UpdateCommand<T> command)
         {
-            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), this.GetHttpContent<T>(command));
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), this.GetHttpContent<T>(command), this.HttpMethod);
         }
 
         private HttpContent GetHttpContent<T>(UpdateCommand<T> command)
@@ -31,6 +31,7 @@ namespace commercetools.Sdk.HttpApi
             return new StringContent(this.serializerService.Serialize(requestBody));
             
         }
+
         private Uri GetRequestUri<T>(UpdateCommand<T> command)
         {
             string requestUri = this.GetMessageBase<T>();

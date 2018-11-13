@@ -3,10 +3,11 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class HighPrecisionMoneyConverter : ICustomConverter<Money>
+    public class HighPrecisionMoneyConverter : ICustomJsonMapper<Money>
     {
         public int Priority => 3;
 

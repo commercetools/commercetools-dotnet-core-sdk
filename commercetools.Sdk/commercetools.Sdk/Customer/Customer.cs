@@ -16,6 +16,7 @@ namespace commercetools.Sdk.Domain
         public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string MiddleName { get; set; }
         public string Title { get; set; }
         public string Salutation { get; set; }
         public string DateOfBirth { get; set; }

@@ -3,6 +3,7 @@ using commercetools.Sdk.Domain;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using Type = System.Type;
 
 namespace commercetools.Sdk.HttpApi
 {
@@ -13,7 +14,8 @@ namespace commercetools.Sdk.HttpApi
         // TODO See if this should be moved to a different class
         private IDictionary<Type, string> mapping = new Dictionary<Type, string>()
         {
-            {  typeof(Category), "categories" }
+            {  typeof(Category), "categories" },
+            {  typeof(ProductProjection), "product-projections" }
         };
 
         public RequestMessageBuilderBase(IClientConfiguration clientConfiguration)
@@ -21,19 +23,16 @@ namespace commercetools.Sdk.HttpApi
             this.clientConfiguration = clientConfiguration;
         }
 
-        // TODO Remove this from the abstract class
-        protected abstract HttpMethod HttpMethod { get; }
-
         protected string GetMessageBase<T>()
         {
             return this.clientConfiguration.ApiBaseAddress + $"{this.clientConfiguration.ProjectKey}/{this.mapping[typeof(T)]}";
         }
 
-        protected HttpRequestMessage GetRequestMessage<T>(Uri requestUri, HttpContent httpContent)
+        protected HttpRequestMessage GetRequestMessage<T>(Uri requestUri, HttpContent httpContent, HttpMethod httpMethod)
         {
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = requestUri;
-            request.Method = this.HttpMethod;
+            request.Method = httpMethod;
             if (httpContent != null)
             {
                 request.Content = httpContent;

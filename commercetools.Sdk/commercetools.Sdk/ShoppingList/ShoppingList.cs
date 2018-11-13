@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace commercetools.Sdk.Domain
+﻿namespace commercetools.Sdk.Domain
 {
+    using commercetools.Sdk.Domain.ShoppingLists;
+    using System;
+    using System.Collections.Generic;
+
     public class ShoppingList
     {
         public string Id { get; set; }

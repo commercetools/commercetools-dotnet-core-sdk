@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class SetTimeAttribute : Attribute<List<DateTime>>
+    public class SetTimeAttribute : SetAttribute<DateTime>
     {
     }
 }

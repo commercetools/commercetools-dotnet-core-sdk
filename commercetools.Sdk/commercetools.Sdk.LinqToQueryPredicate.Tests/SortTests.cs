@@ -13,8 +13,8 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
         public void SortCategoryParentTypeId()
         {
             Expression<Func<Category, string>> expression = c => c.Parent.TypeId;
-            SortExpressionVisitor sortVisitor = new SortExpressionVisitor();
-            string result = sortVisitor.GetPath(expression);
+            ISortExpressionVisitor sortVisitor = new SortExpressionVisitor();
+            string result = sortVisitor.Render(expression);
             Assert.Equal("parent.typeId", result);
         }
 
@@ -22,8 +22,8 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
         public void SortCategorySlug()
         {
             Expression<Func<Category, string>> expression = c => c.Slug["en"];
-            SortExpressionVisitor sortVisitor = new SortExpressionVisitor();
-            string result = sortVisitor.GetPath(expression);
+            ISortExpressionVisitor sortVisitor = new SortExpressionVisitor();
+            string result = sortVisitor.Render(expression);
             Assert.Equal("slug.en", result);
         }
 
@@ -31,8 +31,8 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
         public void SortProductName()
         {
             Expression<Func<Product, string>> expression = p => p.MasterData.Current.Name["en"];
-            SortExpressionVisitor sortVisitor = new SortExpressionVisitor();
-            string result = sortVisitor.GetPath(expression);
+            ISortExpressionVisitor sortVisitor = new SortExpressionVisitor();
+            string result = sortVisitor.Render(expression);
             Assert.Equal("masterData.current.name.en", result);
         }
     }

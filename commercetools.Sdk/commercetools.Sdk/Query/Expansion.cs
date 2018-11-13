@@ -1,28 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-
-namespace commercetools.Sdk.Domain
+﻿namespace commercetools.Sdk.Domain
 {
-    public class ReferenceExpansion<T> : Expansion<T, Reference>
+    using commercetools.Sdk.Domain.ShoppingLists;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Linq.Expressions;
+
+    public static class ExpansionExtensions
     {
-        public ReferenceExpansion(Expression<Func<T, Reference>> expression) : base(expression)
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="referenceList"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Only used in expansion expressions in order to expand by nested properties of arrays (lists).
+        /// </remarks>
+        public static T ExpandAll<T>(this List<T> list)
         {
+            return list.FirstOrDefault();
+        }
+
+        public static LineItem ExpandProductSlugs(this List<LineItem> list)
+        {
+            return list.FirstOrDefault();
+        }
+
+        public static Attribute ExpandValues(this List<Attribute> list)
+        {
+            return list.FirstOrDefault();
+        }
+
+        public static LineItem ExpandVariants(this List<LineItem> list)
+        {
+            return list.FirstOrDefault();
         }
     }
 
-    public class AttributeExpansion<T> : Expansion<T, Attribute> where T: Product
+    public class AttributeExpansion<T> : Expansion<T, Attribute> where T : Product
     {
         public AttributeExpansion(Expression<Func<T, Attribute>> expression) : base(expression)
-        {
-        }
-    }
-
-    public class LineItemExpansion<T> : Expansion<T, LineItem> where T : ShoppingList
-    {
-        public LineItemExpansion(Expression<Func<T, LineItem>> expression) : base(expression)
         {
         }
     }
@@ -36,42 +53,25 @@ namespace commercetools.Sdk.Domain
 
     public class Expansion<T>
     {
-        public Expression Expression { get; set; }
-
         public Expansion(Expression expression)
         {
             this.Expression = expression;
         }
+
+        public Expression Expression { get; set; }
     }
 
-    public static class ExpansionExtensions
+    public class LineItemExpansion<T> : Expansion<T, LineItem> where T : ShoppingList
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="referenceList"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Only used in expansion expressions in order to expand by nested properties of arrays (lists). 
-        /// </remarks>
-        public static T ExpandAll<T>(this List<T> list)
+        public LineItemExpansion(Expression<Func<T, LineItem>> expression) : base(expression)
         {
-            return list.FirstOrDefault();
         }
+    }
 
-        public static Attribute ExpandValues(this List<Attribute> list)
+    public class ReferenceExpansion<T> : Expansion<T, Reference>
+    {
+        public ReferenceExpansion(Expression<Func<T, Reference>> expression) : base(expression)
         {
-            return list.FirstOrDefault();
-        }
-
-        public static LineItem ExpandProductSlugs(this List<LineItem> list)
-        {
-            return list.FirstOrDefault();
-        }
-
-        public static LineItem ExpandVariants(this List<LineItem> list)
-        {
-            return list.FirstOrDefault();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace commercetools.Sdk.Domain
         public int Limit { get; set; }
         public int Count { get; set; }
         public int Total { get; set; }
-        public FacetResults FacetResults { get; set; }
+        public Dictionary<string, FacetResult> Facets { get; set; }
         public List<T> Results { get; set; }
     }
 }
