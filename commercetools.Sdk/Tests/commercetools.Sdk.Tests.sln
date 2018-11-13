@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.HttpApi.Tests", "commercetools.Sdk.HttpApi.Tests\commercetools.Sdk.HttpApi.Tests.csproj", "{29094B84-4459-486E-973E-2828284C8EF3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.Linq.Tests", "commercetools.Sdk.Linq.Tests\commercetools.Sdk.Linq.Tests.csproj", "{86B4B31D-F3AA-4D0F-A564-F06C2485AAE2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.Serialization.Tests", "commercetools.Sdk.Serialization.Tests\commercetools.Sdk.Serialization.Tests.csproj", "{6D0B17AF-A7D6-4927-B046-0065E813E625}"
