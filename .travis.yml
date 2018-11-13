@@ -13,5 +13,4 @@ install:
 
 script:
  - dotnet build -c Release
- - dotnet test commercetools.Sdk.LinqToQueryPredicate.Tests --no-build -c Release
- - dotnet test commercetools.Sdk.Serialization.Tests --no-build -c Release
+ - dotnet test Tests --no-build -c Release

@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\commercetools.Sdk\commercetools.Sdk.Domain.csproj" />
+    <ProjectReference Include="..\commercetools.Sdk.Domain\commercetools.Sdk.Domain.csproj" />
   </ItemGroup>
 
 </Project>
