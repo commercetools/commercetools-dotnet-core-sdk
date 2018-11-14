@@ -345,6 +345,15 @@ namespace commercetools.Sdk.Linq.Tests
             Assert.Equal("slug = \"adidas\"", result);
         }
 
+        [Fact]
+        public void CustomLineItemPredicateCustomField()
+        {
+            Expression<Func<CustomLineItem, bool>> expression = c => c.Custom.Fields["brand"].ToString() == "adidas";
+            ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("custom.brand = \"adidas\"", result);
+        }
+
         // TODO custom.<field> 
 
         // TODO not()

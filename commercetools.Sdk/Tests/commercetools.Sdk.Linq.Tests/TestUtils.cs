@@ -18,8 +18,10 @@ namespace commercetools.Sdk.Linq.Tests
             ICartPredicateVisitorConverter attributePredicateVisitorConverter = new AttributePredicateVisitorConverter(accessorTraverser);
             ICartPredicateVisitorConverter methodPredicateVisitorConverter = new MethodPredicateVisitorConverter();
             ICartPredicateVisitorConverter moneyParsePredicateVisitorConverter = new MoneyParsePredicateConverter();
+            ICartPredicateVisitorConverter converterMethodsPredicateVisitorConverter = new ConverterMethodsPredicateVisitorConverter();
+            ICartPredicateVisitorConverter customFieldsConverter = new CustomFieldsConverter();
             ICartPredicateVisitorConverter selectMethodPredicateVisitorConverter = new SelectMethodPredicateConverter(accessorTraverser);
-            ICartPredicateVisitorFactory cartPredicateVisitorFactory = new CartPredicateVisitorFactory(new List<ICartPredicateVisitorConverter>() { binaryLogicalPredicateVisitorConverter, comparisonPredicateVisitorConverter, constantPredicateVisitorConverter, memberPredicateVisitorConverter, customMethodPredicateVisitorConverter, methodMemberPredicateVisitorConverter, attributePredicateVisitorConverter, methodPredicateVisitorConverter, moneyParsePredicateVisitorConverter, selectMethodPredicateVisitorConverter });
+            ICartPredicateVisitorFactory cartPredicateVisitorFactory = new CartPredicateVisitorFactory(new List<ICartPredicateVisitorConverter>() { binaryLogicalPredicateVisitorConverter, comparisonPredicateVisitorConverter, constantPredicateVisitorConverter, memberPredicateVisitorConverter, customMethodPredicateVisitorConverter, methodMemberPredicateVisitorConverter, attributePredicateVisitorConverter, methodPredicateVisitorConverter, moneyParsePredicateVisitorConverter, selectMethodPredicateVisitorConverter, converterMethodsPredicateVisitorConverter, customFieldsConverter });
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = new CartPredicateExpressionVisitor(cartPredicateVisitorFactory);
             return cartPredicateExpressionVisitor;
         }
