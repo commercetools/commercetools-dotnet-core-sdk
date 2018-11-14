@@ -7,7 +7,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class TextAttributeConverter : StringConverter<Domain.Attribute, TextAttribute>, ICustomJsonMapper<Domain.Attribute>
+    public class StringFieldMapper : StringConverter<Fields, string>, ICustomJsonMapper<Fields>
     {
     }
 }

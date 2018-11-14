@@ -24,4 +24,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Remove="Resources\Attributes\SetEnum.json" />
+    <None Remove="Resources\CustomFields\Enum.json" />
+    <None Remove="Resources\CustomFields\Number.json" />
+    <None Remove="Resources\CustomFields\SetEnum.json" />
+  </ItemGroup>
 </Project>

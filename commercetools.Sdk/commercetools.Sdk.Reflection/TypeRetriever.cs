@@ -8,7 +8,7 @@ namespace commercetools.Sdk.Reflection
 {
     public class TypeRetriever
     {
-        private static IEnumerable<Type> GetAllClassTypesForInterface(Type interfaceType)
+        public static IEnumerable<Type> GetAllClassTypesForInterface(Type interfaceType)
         {
             List<Type> classTypes = new List<Type>();
             IEnumerable<Type> types =

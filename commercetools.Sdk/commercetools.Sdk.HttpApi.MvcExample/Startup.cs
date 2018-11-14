@@ -1,5 +1,6 @@
 ﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.LinqToQueryPredicate;
+using commercetools.Sdk.Reflection;
 using commercetools.Sdk.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -61,17 +62,12 @@ namespace commercetools.Sdk.HttpApi.MvcExample
             services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
 
-            //TODO Find a neater way to register all the converters
-            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, BooleanAttributeConverter>();
-            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, DateAttributeConverter>();
-            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, DateTimeAttributeConverter>();
-            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, TimeAttributeConverter>();
-            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, NumberAttributeConverter>();
-            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, TextAttributeConverter>();
-            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, EnumAttributeConverter>();
-            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, LocalizedTextAttributeConverter>();
-            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, LocalizedEnumAttributeConverter>();
-            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>, MoneyAttributeConverter>();
+            //TODO See if this works
+            IEnumerable<ICustomJsonMapper<Sdk.Domain.Attribute>> attributeMappers = TypeRetriever.GetInstancesForInterface<ICustomJsonMapper<Sdk.Domain.Attribute>>();
+            foreach(var mapper in attributeMappers)
+            {
+                services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Attribute>>(mapper);
+            }
 
             services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Money>, HighPrecisionMoneyConverter>();
             services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Money>, CentPrecisionMoneyConverter>();

@@ -7,7 +7,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class EnumAttributeConverter : EnumConverter<Domain.Attribute, EnumAttribute>,  ICustomJsonMapper<Domain.Attribute>
+    public class BooleanAttributeMapper: BooleanConverter<Domain.Attribute, bool>,  ICustomJsonMapper<Domain.Attribute>
     {
     }
 }

@@ -258,7 +258,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void LineItemPredicateEnumSetContainsAnyAttribute()
         {
-            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "colors" && ((SetEnumAttribute)a).Value.Select(e => e.Value.Key).ContainsAny("green", "blue"));
+            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "colors" && ((SetEnumAttribute)a).Value.Select(e => e.Key).ContainsAny("green", "blue"));
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes.colors contains any (\"green\", \"blue\")", result);

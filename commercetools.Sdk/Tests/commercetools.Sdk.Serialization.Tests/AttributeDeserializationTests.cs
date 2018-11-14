@@ -1,5 +1,7 @@
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Attributes;
 using Newtonsoft.Json;
+using System;
 using System.IO;
 using Xunit;
 
@@ -13,7 +15,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = TestUtils.GetSerializerService();
             string serialized = File.ReadAllText("Resources/Attributes/Text.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<TextAttribute>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<string>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -22,7 +24,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = TestUtils.GetSerializerService();
             string serialized = File.ReadAllText("Resources/Attributes/LocalizedText.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<LocalizedTextAttribute>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<LocalizedString>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -31,7 +33,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = TestUtils.GetSerializerService();
             string serialized = File.ReadAllText("Resources/Attributes/DateTime.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<DateTimeAttribute>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<DateTime>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -40,7 +42,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = TestUtils.GetSerializerService();
             string serialized = File.ReadAllText("Resources/Attributes/Time.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<TimeAttribute>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<TimeSpan>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -49,7 +51,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = TestUtils.GetSerializerService();
             string serialized = File.ReadAllText("Resources/Attributes/Date.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<DateAttribute>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<DateTime>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -58,7 +60,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = TestUtils.GetSerializerService();
             string serialized = File.ReadAllText("Resources/Attributes/Number.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<NumberAttribute>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<double>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -67,7 +69,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = TestUtils.GetSerializerService();
             string serialized = File.ReadAllText("Resources/Attributes/Boolean.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<BooleanAttribute>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<bool>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -76,7 +78,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = TestUtils.GetSerializerService();
             string serialized = File.ReadAllText("Resources/Attributes/Enum.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<EnumAttribute>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<PlainEnumValue>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -85,7 +87,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = TestUtils.GetSerializerService();
             string serialized = File.ReadAllText("Resources/Attributes/LocalizedEnum.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<LocalizedEnumAttribute>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<Domain.Attributes.LocalizedEnumValue>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -94,7 +96,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = TestUtils.GetSerializerService();
             string serialized = File.ReadAllText("Resources/Attributes/Money.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<MoneyAttribute>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<Money>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -103,7 +105,16 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = TestUtils.GetSerializerService();
             string serialized = File.ReadAllText("Resources/Attributes/SetText.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<SetAttribute<string>>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<Domain.Attributes.Set<string>>>(deserialized.Attributes[0]);
+        }
+
+        [Fact]
+        public void DeserializeSetEnumAttribute()
+        {
+            ISerializerService serializerService = TestUtils.GetSerializerService();
+            string serialized = File.ReadAllText("Resources/Attributes/SetEnum.json");
+            ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
+            Assert.IsType<Attribute<Domain.Attributes.Set<PlainEnumValue>>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -128,8 +139,8 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = TestUtils.GetSerializerService();
             string serialized = File.ReadAllText("Resources/Attributes/List.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<TextAttribute>(deserialized.Attributes[0]);
-            Assert.IsType<EnumAttribute>(deserialized.Attributes[1]);
+            Assert.IsType<Attribute<string>>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<PlainEnumValue>>(deserialized.Attributes[1]);
         }
     }
 }

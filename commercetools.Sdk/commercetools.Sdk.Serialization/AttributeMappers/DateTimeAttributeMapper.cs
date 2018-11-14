@@ -7,7 +7,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class DateAttributeConverter : DateConverter<Domain.Attribute, DateAttribute>, ICustomJsonMapper<Domain.Attribute>
+    public class DateTimeAttributeMapper: DateTimeConverter<Domain.Attribute, DateTime>, ICustomJsonMapper<Domain.Attribute>
     {
     }
 }

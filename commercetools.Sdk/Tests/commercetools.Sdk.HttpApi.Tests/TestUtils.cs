@@ -1,6 +1,7 @@
 ﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.LinqToQueryPredicate;
+using commercetools.Sdk.Reflection;
 using commercetools.Sdk.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -66,19 +67,7 @@ namespace commercetools.Sdk.HttpApi.Tests
 
         public static ISerializerService GetSerializerService()
         {
-            IEnumerable<ICustomJsonMapper<Sdk.Domain.Attribute>> customAttributeConverters = new List<ICustomJsonMapper<Sdk.Domain.Attribute>>()
-            {
-                new MoneyAttributeConverter(),
-                new TextAttributeConverter(),
-                new LocalizedTextAttributeConverter(),
-                new BooleanAttributeConverter(),
-                new NumberAttributeConverter(),
-                new DateTimeAttributeConverter(),
-                new TimeAttributeConverter(),
-                new DateAttributeConverter(),
-                new EnumAttributeConverter(),
-                new LocalizedEnumAttributeConverter()
-            };
+            IEnumerable<ICustomJsonMapper<Sdk.Domain.Attribute>> attributeMappers = TypeRetriever.GetInstancesForInterface<ICustomJsonMapper<Sdk.Domain.Attribute>>();
             IEnumerable<ICustomJsonMapper<Money>> customMoneyConverters = new List<ICustomJsonMapper<Money>>()
             {
                 new CentPrecisionMoneyConverter(),
@@ -87,7 +76,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             MoneyConverter moneyConverter = new MoneyConverter(customMoneyConverters);
             ErrorConverter errorConverter = new ErrorConverter();
             FacetResultConverter facetResultConverter = new FacetResultConverter();
-            IMapperTypeRetriever<Sdk.Domain.Attribute> attributeMapperTypeRetriever = new MapperTypeRetriever<Sdk.Domain.Attribute>(customAttributeConverters);
+            IMapperTypeRetriever<Sdk.Domain.Attribute> attributeMapperTypeRetriever = new MapperTypeRetriever<Sdk.Domain.Attribute>(attributeMappers);
             AttributeConverter attributeConverter = new AttributeConverter(attributeMapperTypeRetriever);
             IEnumerable<JsonConverter> registeredConverters = new List<JsonConverter>() { moneyConverter, attributeConverter, errorConverter, facetResultConverter };
             

@@ -15,7 +15,12 @@ namespace commercetools.Sdk.Serialization
             this.customJsonMappers = customJsonMappers;
         }    
 
-        public Type GetTypeForToken(JToken token)
+        public virtual Type GetTypeForToken(JToken token)
+        {
+            return this.GetTypeForTokenFromMapper(token);   
+        }
+
+        protected Type GetTypeForTokenFromMapper(JToken token)
         {
             foreach (var customJsonMapper in this.customJsonMappers.OrderBy(c => c.Priority))
             {
