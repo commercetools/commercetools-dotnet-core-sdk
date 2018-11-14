@@ -54,7 +54,7 @@ namespace commercetools.Sdk.LinqToQueryPredicate
 
         public static string RenderAccessors(List<string> accessors)
         {
-            return string.Join('.', accessors);
+            return string.Join(".", accessors);
         }
     }
 }

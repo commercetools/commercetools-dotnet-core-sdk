@@ -1,0 +1,19 @@
+image: Visual Studio 2017
+
+
+before_build:
+  - ps: cd commercetools.Sdk
+  - ps: dotnet restore
+
+build_script:
+  - ps: dotnet build -c Release
+
+after_build:
+  - ps: dotnet pack -c Release -o ../pack/
+
+test_script:
+  - ps: dotnet test Tests --no-build -c Release
+  
+artifacts:
+- path: /**/*.nupkg
+  name: NuGet Package

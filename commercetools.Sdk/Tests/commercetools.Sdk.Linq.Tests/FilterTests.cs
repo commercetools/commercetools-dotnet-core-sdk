@@ -219,3 +219,4 @@ namespace commercetools.Sdk.LinqToQueryPredicate.Tests
         }
     }
 }
+

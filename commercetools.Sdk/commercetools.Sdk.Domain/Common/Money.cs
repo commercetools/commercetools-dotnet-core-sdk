@@ -32,7 +32,7 @@ namespace commercetools.Sdk.Domain
             {
                 throw new ArgumentNullException();
             }
-            string[] splitInput = input.Split(" ");
+            string[] splitInput = input.Split(' ');
             if (splitInput.Length != 2)
             {
                 throw new ArgumentException();

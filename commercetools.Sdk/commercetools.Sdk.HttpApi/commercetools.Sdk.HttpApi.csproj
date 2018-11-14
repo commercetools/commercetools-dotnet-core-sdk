@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\commercetools.Sdk.Client\commercetools.Sdk.Client.csproj" />
-    <ProjectReference Include="..\commercetools.Sdk.LinqToQueryPredicate\commercetools.Sdk.Linq.csproj" />
+    <ProjectReference Include="..\commercetools.Sdk.Linq\commercetools.Sdk.Linq.csproj" />
     <ProjectReference Include="..\commercetools.Sdk.Serialization\commercetools.Sdk.Serialization.csproj" />
   </ItemGroup>
 
