@@ -10,11 +10,11 @@ namespace commercetools.Sdk.Serialization
 {
     public class FieldsConverter : JsonConverter
     {
-        private readonly IMapperTypeRetriever<Fields> typeRetriever;
+        private readonly IMapperTypeRetriever<Fields> mapperTypeRetriever;
 
-        public FieldsConverter(IMapperTypeRetriever<Fields> typeRetriever)
+        public FieldsConverter(IMapperTypeRetriever<Fields> mapperTypeRetriever)
         {
-            this.typeRetriever = typeRetriever;
+            this.mapperTypeRetriever = mapperTypeRetriever;
         }
 
         public override bool CanConvert(Type objectType)
@@ -39,7 +39,7 @@ namespace commercetools.Sdk.Serialization
             {
                 string key = property.Name;
                 JToken value = property.Value;
-                Type valueType = this.typeRetriever.GetTypeForToken(value);
+                Type valueType = this.mapperTypeRetriever.GetTypeForToken(value);
                 object o = value.ToObject(valueType, serializer);
                 customFields.Add(key, o);
             }

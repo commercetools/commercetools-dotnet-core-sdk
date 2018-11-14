@@ -8,18 +8,18 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class AttributeConverter : JsonConverter
+    public class SetAttributeConverter : JsonConverter
     {
         private readonly IMapperTypeRetriever<Domain.Attribute> mapperTypeRetriever;
 
-        public AttributeConverter(IMapperTypeRetriever<Domain.Attribute> mapperTypeRetriever)
+        public SetAttributeConverter(IMapperTypeRetriever<Domain.Attribute> mapperTypeRetriever)
         {
             this.mapperTypeRetriever = mapperTypeRetriever;
         }
 
         public override bool CanConvert(Type objectType)
         {
-            if (objectType == typeof(Domain.Attribute))
+            if (objectType == typeof(SetAttribute<>))
             {
                 return true;
             }
@@ -29,20 +29,9 @@ namespace commercetools.Sdk.Serialization
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JObject jsonObject = JObject.Load(reader);
-            JToken valueProperty = jsonObject["value"];
-            Type attributeType;
-            if (IsSetAttribute(valueProperty))
-            {
-                Type firstAttributeType = this.mapperTypeRetriever.GetTypeForToken(valueProperty[0]);
-                Type genericType = firstAttributeType.BaseType.GenericTypeArguments[0];
-                Type setType = typeof(SetAttribute<>);
-                // TODO Maybe find the non generic type inheriting from the generic type, e.g. SetTextAtrribute instead of SetAttribute<string>
-                attributeType = setType.MakeGenericType(genericType);
-            }
-            else
-            { 
-                attributeType = this.mapperTypeRetriever.GetTypeForToken(valueProperty);
-            }
+            JToken valueProperty = jsonObject[0];
+
+            Type attributeType;  attributeType = this.mapperTypeRetriever.GetTypeForToken(valueProperty);            
 
             if (attributeType == null)
             {
@@ -50,7 +39,10 @@ namespace commercetools.Sdk.Serialization
                 throw new JsonSerializationException("Attribute type cannot be determined.");
             }
 
-            return jsonObject.ToObject(attributeType, serializer);
+            Type setType = typeof(SetAttribute<>);
+            setType.MakeGenericType(attributeType);
+
+            return jsonObject.ToObject(setType, serializer);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

@@ -1,7 +1,5 @@
 using commercetools.Sdk.Domain;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using Xunit;
 
@@ -105,7 +103,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = TestUtils.GetSerializerService();
             string serialized = File.ReadAllText("Resources/Attributes/SetText.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<SetTextAttribute>(deserialized.Attributes[0]);
+            Assert.IsType<SetAttribute<string>>(deserialized.Attributes[0]);
         }
 
         [Fact]

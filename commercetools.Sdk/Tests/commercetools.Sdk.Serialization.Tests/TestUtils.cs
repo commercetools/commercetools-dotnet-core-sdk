@@ -45,8 +45,9 @@ namespace commercetools.Sdk.Serialization.Tests
                 new HighPrecisionMoneyConverter()
             };
             IMapperTypeRetriever<Fields> fieldsMapperTypeRetriever = new MapperTypeRetriever<Fields>(customFieldConverters);
+            IMapperTypeRetriever<Domain.Attribute> attributeMapperTypeRetriever = new MapperTypeRetriever<Domain.Attribute>(attributeMappers);
             MoneyConverter moneyConverter = new MoneyConverter(customMoneyConverters);
-            AttributeConverter attributeConverter = new AttributeConverter(attributeMappers);
+            AttributeConverter attributeConverter = new AttributeConverter(attributeMapperTypeRetriever);
             FieldsConverter fieldCollectionConverter = new FieldsConverter(fieldsMapperTypeRetriever);
             IEnumerable<JsonConverter> registeredConverters = new List<JsonConverter>() { moneyConverter, attributeConverter, fieldCollectionConverter };
             CustomContractResolver customContractResolver = new CustomContractResolver(registeredConverters);
