@@ -364,10 +364,14 @@ namespace commercetools.Sdk.Linq.Tests
         }
 
 
-        // TODO custom.<field> 
-
-        // TODO not()
-
+        [Fact]
+        public void LineItemPredicatePriceNot()
+        {
+            Expression<Func<LineItem, bool>> expression = l => !(l.Price.Value == Money.Parse("10.00 EUR"));
+            ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("not(price = \"10.00 EUR\")", result);
+        }
 
     }
 }

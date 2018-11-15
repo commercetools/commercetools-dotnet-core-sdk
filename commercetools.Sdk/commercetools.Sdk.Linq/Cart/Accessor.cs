@@ -38,7 +38,7 @@
             }
             if (parentAccessor != null && this.currentAccessor == null)
             {
-                return $"{parentAccessor.Render()}";
+                return parentAccessor.Render();
             }
             return string.Empty;
         }

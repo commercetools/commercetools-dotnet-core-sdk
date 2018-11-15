@@ -20,7 +20,8 @@ namespace commercetools.Sdk.Linq.Tests
             ICartPredicateVisitorConverter converterMethodsPredicateVisitorConverter = new ConverterMethodsPredicateVisitorConverter();
             ICartPredicateVisitorConverter customFieldsConverter = new CustomFieldsConverter();
             ICartPredicateVisitorConverter selectMethodPredicateVisitorConverter = new SelectMethodPredicateConverter();
-            ICartPredicateVisitorFactory cartPredicateVisitorFactory = new CartPredicateVisitorFactory(new List<ICartPredicateVisitorConverter>() { binaryLogicalPredicateVisitorConverter, comparisonPredicateVisitorConverter, constantPredicateVisitorConverter, memberPredicateVisitorConverter, customMethodPredicateVisitorConverter, methodMemberPredicateVisitorConverter, attributePredicateVisitorConverter, methodPredicateVisitorConverter, moneyParsePredicateVisitorConverter, selectMethodPredicateVisitorConverter, converterMethodsPredicateVisitorConverter, customFieldsConverter });
+            ICartPredicateVisitorConverter notLogicalPredicateVisitorConverter = new NotLogicalPredicateVisitorConverter();
+            ICartPredicateVisitorFactory cartPredicateVisitorFactory = new CartPredicateVisitorFactory(new List<ICartPredicateVisitorConverter>() { binaryLogicalPredicateVisitorConverter, comparisonPredicateVisitorConverter, constantPredicateVisitorConverter, memberPredicateVisitorConverter, customMethodPredicateVisitorConverter, methodMemberPredicateVisitorConverter, attributePredicateVisitorConverter, methodPredicateVisitorConverter, moneyParsePredicateVisitorConverter, selectMethodPredicateVisitorConverter, converterMethodsPredicateVisitorConverter, customFieldsConverter, notLogicalPredicateVisitorConverter });
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = new CartPredicateExpressionVisitor(cartPredicateVisitorFactory);
             return cartPredicateExpressionVisitor;
         }
