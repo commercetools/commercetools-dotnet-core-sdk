@@ -33,8 +33,9 @@ namespace commercetools.Sdk.Linq
 
                 if (methodCallExpression.Object is MemberExpression memberExpression)
                 {
-                    ICartPredicateVisitor parentAccessors = cartPredicateVisitorFactory.Create(memberExpression.Expression);
-                    return new Accessor(key, parentAccessors);
+                    Accessor parentAccessor = cartPredicateVisitorFactory.Create(memberExpression.Expression) as Accessor;
+                    ConstantPredicateVisitor constantPredicateVisitor = new ConstantPredicateVisitor(key);
+                    return new Accessor(constantPredicateVisitor, parentAccessor);
                 }
             }
             throw new NotSupportedException();

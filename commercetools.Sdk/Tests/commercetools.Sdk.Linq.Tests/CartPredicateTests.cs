@@ -354,6 +354,16 @@ namespace commercetools.Sdk.Linq.Tests
             Assert.Equal("custom.brand = \"adidas\"", result);
         }
 
+        [Fact]
+        public void CustomLineItemPredicateCustomFieldMoney()
+        {
+            Expression<Func<CustomLineItem, bool>> expression = c => c.Custom.Fields["price"].ToMoney().CurrencyCode == "EUR";
+            ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = TestUtils.CreateCartPredicateExpressionVisitor();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("custom.price.currencyCode = \"EUR\"", result);
+        }
+
+
         // TODO custom.<field> 
 
         // TODO not()

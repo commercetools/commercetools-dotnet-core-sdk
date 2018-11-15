@@ -1,24 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace commercetools.Sdk.Linq
+﻿namespace commercetools.Sdk.Linq
 {
     public class Accessor : ICartPredicateVisitor
     {
-        private readonly ICartPredicateVisitor parentAccessors;
-        private readonly string currentAccessor;
+        private ICartPredicateVisitor parentAccessor;
+        private readonly ICartPredicateVisitor currentAccessor;
 
-        public Accessor(string currentAccessor, ICartPredicateVisitor parentAccessors)
+        public Accessor(ICartPredicateVisitor currentAccessor, ICartPredicateVisitor parentAccessor)
         {
             this.currentAccessor = currentAccessor;
-            this.parentAccessors = parentAccessors;
+            this.parentAccessor = parentAccessor;
+        }
+
+        public void AppendAccessor(Accessor accessor)
+        {
+            if (this.parentAccessor == null)
+            {
+                this.parentAccessor = accessor;
+            }
+            else
+            {
+                this.parentAccessor.AppendAccessor(accessor);
+            }
         }
 
         public string Render()
         {
-            return $"{parentAccessors.Render()}.{this.currentAccessor}";
+            if (parentAccessor == null && this.currentAccessor != null)
+            {
+                return this.currentAccessor.Render();
+            }
+            if (parentAccessor != null && this.currentAccessor != null)
+            { 
+                return $"{parentAccessor.Render()}.{this.currentAccessor.Render()}";
+            }
+            if (parentAccessor != null && this.currentAccessor == null)
+            {
+                return $"{parentAccessor.Render()}";
+            }
+            return string.Empty;
         }
     }
 }

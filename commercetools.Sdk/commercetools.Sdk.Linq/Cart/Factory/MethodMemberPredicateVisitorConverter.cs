@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -7,13 +8,6 @@ namespace commercetools.Sdk.Linq
 {
     public class MethodMemberPredicateVisitorConverter : ICartPredicateVisitorConverter
     {
-        private readonly IAccessorTraverser accessorTraverser;
-
-        public MethodMemberPredicateVisitorConverter(IAccessorTraverser accessorTraverser)
-        {
-            this.accessorTraverser = accessorTraverser;
-        }
-
         public bool CanConvert(Expression expression)
         {
             if (expression is MethodCallExpression methodCallExpression)
@@ -28,9 +22,31 @@ namespace commercetools.Sdk.Linq
 
         public ICartPredicateVisitor Convert(Expression expression, ICartPredicateVisitorFactory cartPredicateVisitorFactory)
         {
-            List<string> accessors = this.accessorTraverser.GetAccessorsForExpression(expression);
-            AccessorPredicateVisitor stringPredicateVisitor = new AccessorPredicateVisitor(accessors);
-            return stringPredicateVisitor;
+            if (expression is MethodCallExpression methodCallExpression)
+            {
+                string currentName = methodCallExpression.Method.Name;
+                string currentAccessor = ParseMethodAccessorName(currentName);
+                if (string.IsNullOrEmpty(currentAccessor))
+                {
+                    return cartPredicateVisitorFactory.Create(methodCallExpression.Arguments[0]);
+                }
+                else
+                {
+                    Accessor parentAccessor = cartPredicateVisitorFactory.Create(methodCallExpression.Arguments[0]) as Accessor;
+                    ConstantPredicateVisitor constantPredicateVisitor = new ConstantPredicateVisitor(currentAccessor);
+                    return new Accessor(constantPredicateVisitor, parentAccessor);
+                }
+            }
+            throw new NotSupportedException();
+        }
+
+        private string ParseMethodAccessorName(string name)
+        {
+            if (Mappings.MethodAccessors.ContainsKey(name))
+            {
+                return Mappings.MethodAccessors[name];
+            }
+            return name;
         }
     }
 }

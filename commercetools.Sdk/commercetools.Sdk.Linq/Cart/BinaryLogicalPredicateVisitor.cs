@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace commercetools.Sdk.Linq
+﻿namespace commercetools.Sdk.Linq
 {
     public class BinaryLogicalPredicateVisitor : ICartPredicateVisitor
     {
@@ -44,6 +40,10 @@ namespace commercetools.Sdk.Linq
                 }
             }
             return false;
+        }
+
+        public void AppendAccessor(Accessor accessor)
+        {
         }
     }
 }

@@ -18,9 +18,21 @@ namespace commercetools.Sdk.Linq
             this.operatorSign = operatorSign;
         }
 
+        public void AppendAccessor(Accessor accessor)
+        {
+            if (left != null)
+            {
+                left.AppendAccessor(accessor);
+            }
+            else
+            {
+                left = accessor;
+            }
+        }
+
         public string Render()
         {
-            return $"{left.Render()} {operatorSign} {right.Render()}";
+            return $"{left?.Render()} {operatorSign} {right?.Render()}";
         }
     }
 }

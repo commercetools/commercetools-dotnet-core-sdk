@@ -16,9 +16,23 @@ namespace commercetools.Sdk.Linq
             this.operatorName = operatorName;
         }
 
+        public void AppendAccessor(Accessor accessor)
+        {
+            if (operand != null)
+            {
+                operand.AppendAccessor(accessor);
+            }
+            else
+            {
+                operand = accessor;
+            }
+        }
+
         public string Render()
         {
-            return $"{this.operand.Render()} {operatorName}";
+            return $"{this.operand?.Render()} {operatorName}";
         }
+
+
     }
 }

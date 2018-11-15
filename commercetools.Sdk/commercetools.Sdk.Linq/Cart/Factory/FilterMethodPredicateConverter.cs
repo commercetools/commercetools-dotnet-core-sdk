@@ -7,13 +7,7 @@ namespace commercetools.Sdk.Linq
 {
     public class SelectMethodPredicateConverter : ICartPredicateVisitorConverter
     {
-        private readonly IAccessorTraverser accessorTraverser;
         private readonly List<string> allowedMethodNames = new List<string>() { "Select" };
-
-        public SelectMethodPredicateConverter(IAccessorTraverser accessorTraverser)
-        {
-            this.accessorTraverser = accessorTraverser;
-        }
 
         public bool CanConvert(Expression expression)
         {
@@ -35,10 +29,10 @@ namespace commercetools.Sdk.Linq
                 throw new ArgumentException();
             }
             if (methodCallExpression.Arguments.Count >= 2)
-            { 
-                List<string> accessors = this.accessorTraverser.GetAccessorsForExpression(methodCallExpression.Arguments[1]);
-                accessors.AddRange(this.accessorTraverser.GetAccessorsForExpression(methodCallExpression.Arguments[0]));
-                AccessorPredicateVisitor stringPredicateVisitor = new AccessorPredicateVisitor(accessors);
+            {
+                ICartPredicateVisitor inside = cartPredicateVisitorFactory.Create(methodCallExpression.Arguments[1]);
+                ICartPredicateVisitor parent = cartPredicateVisitorFactory.Create(methodCallExpression.Arguments[0]);
+                Accessor stringPredicateVisitor = new Accessor(inside, parent);
                 return stringPredicateVisitor;
             }
             throw new NotSupportedException();

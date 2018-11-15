@@ -7,13 +7,6 @@ namespace commercetools.Sdk.Linq
 {
     public class AttributePredicateVisitorConverter : ICartPredicateVisitorConverter
     {
-        private readonly IAccessorTraverser accessorTraverser;
-
-        public AttributePredicateVisitorConverter(IAccessorTraverser accessorTraverser)
-        {
-            this.accessorTraverser = accessorTraverser;
-        }
-
         public bool CanConvert(Expression expression)
         {
             if (expression is MethodCallExpression methodCallExpression)
@@ -59,9 +52,11 @@ namespace commercetools.Sdk.Linq
                 {
                     ICartPredicateVisitor attributeValuePredicateVisitor = cartPredicateVisitorFactory.Create(((BinaryExpression)attributeExpression).Right);
                     string attributeName = GetAttributeName(((BinaryExpression)attributeExpression).Left);
-                    List<string> accessors = this.accessorTraverser.GetAccessorsForExpression(methodCallExpression.Arguments[0], new List<string>() { attributeName });
-                    AttributePredicateVisitor attributePredicateVisitor = new AttributePredicateVisitor(accessors, attributeValuePredicateVisitor);
-                    return attributePredicateVisitor;
+                    Accessor parentAccessor = cartPredicateVisitorFactory.Create(methodCallExpression.Arguments[0]) as Accessor;
+                    ConstantPredicateVisitor constantPredicateVisitor = new ConstantPredicateVisitor(attributeName);
+                    Accessor accessor = new Accessor(constantPredicateVisitor, parentAccessor);
+                    attributeValuePredicateVisitor.AppendAccessor(accessor);
+                    return attributeValuePredicateVisitor;
                 }
             }      
 

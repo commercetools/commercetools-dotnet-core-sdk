@@ -25,6 +25,10 @@ namespace commercetools.Sdk.Linq
             {
                 return this.Create(((UnaryExpression)expression).Operand);
             }
+            if (expression.NodeType == ExpressionType.Parameter)
+            {
+                return null;
+            }
             var converter = this.GetConverterForExpression(expression);
             return converter.Convert(expression, this);
         }

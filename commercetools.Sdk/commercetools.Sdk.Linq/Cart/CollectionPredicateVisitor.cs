@@ -13,6 +13,11 @@ namespace commercetools.Sdk.Linq
             this.collection = collection;
         }
 
+        public void AppendAccessor(Accessor accessor)
+        {
+
+        }
+
         public string Render()
         {
             return $"({string.Join(", ", this.collection)})";

@@ -17,10 +17,6 @@ namespace commercetools.Sdk.Linq
             { ExpressionType.NotEqual, "!=" }
         };
 
-        public ComparisonPredicateVisitorConverter()
-        {
-        }
-
         public bool CanConvert(Expression expression)
         {
             return this.mappingOfOperators.ContainsKey(expression.NodeType);

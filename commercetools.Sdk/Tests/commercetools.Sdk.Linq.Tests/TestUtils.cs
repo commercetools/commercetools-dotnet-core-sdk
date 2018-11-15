@@ -8,19 +8,18 @@ namespace commercetools.Sdk.Linq.Tests
     {
         public static ICartPredicateExpressionVisitor CreateCartPredicateExpressionVisitor()
         {
-            IAccessorTraverser accessorTraverser = new AccessorTraverser();
-            ICartPredicateVisitorConverter memberPredicateVisitorConverter = new MemberPredicateVisitorConverter(accessorTraverser);
+            ICartPredicateVisitorConverter memberPredicateVisitorConverter = new MemberPredicateVisitorConverter();
             ICartPredicateVisitorConverter binaryLogicalPredicateVisitorConverter = new BinaryLogicalPredicateVisitorConverter();
             ICartPredicateVisitorConverter comparisonPredicateVisitorConverter = new ComparisonPredicateVisitorConverter();
             ICartPredicateVisitorConverter constantPredicateVisitorConverter = new ConstantPredicateVisitorConverter();
             ICartPredicateVisitorConverter customMethodPredicateVisitorConverter = new CustomMethodPredicateVisitorConverter();
-            ICartPredicateVisitorConverter methodMemberPredicateVisitorConverter = new MethodMemberPredicateVisitorConverter(accessorTraverser);
-            ICartPredicateVisitorConverter attributePredicateVisitorConverter = new AttributePredicateVisitorConverter(accessorTraverser);
+            ICartPredicateVisitorConverter methodMemberPredicateVisitorConverter = new MethodMemberPredicateVisitorConverter();
+            ICartPredicateVisitorConverter attributePredicateVisitorConverter = new AttributePredicateVisitorConverter();
             ICartPredicateVisitorConverter methodPredicateVisitorConverter = new MethodPredicateVisitorConverter();
             ICartPredicateVisitorConverter moneyParsePredicateVisitorConverter = new MoneyParsePredicateConverter();
             ICartPredicateVisitorConverter converterMethodsPredicateVisitorConverter = new ConverterMethodsPredicateVisitorConverter();
             ICartPredicateVisitorConverter customFieldsConverter = new CustomFieldsConverter();
-            ICartPredicateVisitorConverter selectMethodPredicateVisitorConverter = new SelectMethodPredicateConverter(accessorTraverser);
+            ICartPredicateVisitorConverter selectMethodPredicateVisitorConverter = new SelectMethodPredicateConverter();
             ICartPredicateVisitorFactory cartPredicateVisitorFactory = new CartPredicateVisitorFactory(new List<ICartPredicateVisitorConverter>() { binaryLogicalPredicateVisitorConverter, comparisonPredicateVisitorConverter, constantPredicateVisitorConverter, memberPredicateVisitorConverter, customMethodPredicateVisitorConverter, methodMemberPredicateVisitorConverter, attributePredicateVisitorConverter, methodPredicateVisitorConverter, moneyParsePredicateVisitorConverter, selectMethodPredicateVisitorConverter, converterMethodsPredicateVisitorConverter, customFieldsConverter });
             ICartPredicateExpressionVisitor cartPredicateExpressionVisitor = new CartPredicateExpressionVisitor(cartPredicateVisitorFactory);
             return cartPredicateExpressionVisitor;
