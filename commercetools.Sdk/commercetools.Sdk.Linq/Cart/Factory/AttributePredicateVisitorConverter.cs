@@ -55,7 +55,10 @@ namespace commercetools.Sdk.Linq
                     Accessor parentAccessor = cartPredicateVisitorFactory.Create(methodCallExpression.Arguments[0]) as Accessor;
                     ConstantPredicateVisitor constantPredicateVisitor = new ConstantPredicateVisitor(attributeName);
                     Accessor accessor = new Accessor(constantPredicateVisitor, parentAccessor);
-                    attributeValuePredicateVisitor.AppendAccessor(accessor);
+                    if (attributeValuePredicateVisitor is IAccessorAppendable accessorAppendablePredicate)
+                    {
+                        accessorAppendablePredicate.AppendAccessor(accessor);
+                    }
                     return attributeValuePredicateVisitor;
                 }
             }      

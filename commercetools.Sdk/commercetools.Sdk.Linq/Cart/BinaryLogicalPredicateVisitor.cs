@@ -41,9 +41,5 @@
             }
             return false;
         }
-
-        public void AppendAccessor(Accessor accessor)
-        {
-        }
     }
 }

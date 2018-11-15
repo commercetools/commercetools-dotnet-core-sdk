@@ -5,7 +5,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Linq
 {
-    public class UnaryPredicateVisitor : ICartPredicateVisitor
+    public class UnaryPredicateVisitor : ICartPredicateVisitor, IAccessorAppendable
     {
         private ICartPredicateVisitor operand;
         private string operatorName; 
@@ -20,7 +20,10 @@ namespace commercetools.Sdk.Linq
         {
             if (operand != null)
             {
-                operand.AppendAccessor(accessor);
+                if (this.operand is IAccessorAppendable accessorAppendablePredicate)
+                {
+                    accessorAppendablePredicate.AppendAccessor(accessor);
+                }
             }
             else
             {

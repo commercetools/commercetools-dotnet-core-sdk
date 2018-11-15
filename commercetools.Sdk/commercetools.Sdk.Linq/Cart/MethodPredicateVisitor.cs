@@ -15,11 +15,6 @@ namespace commercetools.Sdk.Linq
             this.innerPredicate = innerPredicate;
         }
 
-        public void AppendAccessor(Accessor accessor)
-        {
-
-        }
-
         public string Render()
         {
             return $"{this.method.ToCamelCase()}({this.innerPredicate.Render()})";

@@ -17,10 +17,5 @@ namespace commercetools.Sdk.Linq
         {
             return $"{LogicalOperators.NOT}({this.innerPredicate.Render()})";
         }
-
-        public void AppendAccessor(Accessor accessor)
-        {
-
-        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Linq
 {
-    public class Accessor : ICartPredicateVisitor
+    public class Accessor : ICartPredicateVisitor, IAccessorAppendable
     {
         private ICartPredicateVisitor parentAccessor;
         private readonly ICartPredicateVisitor currentAccessor;
@@ -19,7 +19,10 @@
             }
             else
             {
-                this.parentAccessor.AppendAccessor(accessor);
+                if (this.parentAccessor is IAccessorAppendable accessorAppendablePredicate)
+                { 
+                    accessorAppendablePredicate.AppendAccessor(accessor);
+                }
             }
         }
 
