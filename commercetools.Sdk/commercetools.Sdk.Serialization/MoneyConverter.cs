@@ -10,7 +10,7 @@ namespace commercetools.Sdk.Serialization
 {
     public class MoneyConverter : JsonConverter
     {
-        private readonly IEnumerable<ICustomJsonMapper<Money>> customConverters;
+        private readonly IMapperTypeRetriever<Money> mapperTypeRetriever;
 
         public override bool CanConvert(Type objectType)
         {
@@ -21,16 +21,16 @@ namespace commercetools.Sdk.Serialization
             return false;
         }
 
-        public MoneyConverter(IEnumerable<ICustomJsonMapper<Money>> customConverters)
+        public MoneyConverter(IMapperTypeRetriever<Money> mapperTypeRetriever)
         {
-            this.customConverters = customConverters;
+            this.mapperTypeRetriever = mapperTypeRetriever;
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JObject jsonObject = JObject.Load(reader);
-            Type moneyType;
-            moneyType = GetTypeByValueProperty(jsonObject);
+            Type moneyType = this.mapperTypeRetriever.GetTypeForToken(jsonObject);
+            
             if (moneyType == null)
             {
                 // TODO Move this message to a localizable resource and add more information to the exception
@@ -43,18 +43,6 @@ namespace commercetools.Sdk.Serialization
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
-        }
-
-        private Type GetTypeByValueProperty(JToken valueProperty)
-        {
-            foreach (var customConvert in this.customConverters.OrderBy(c => c.Priority))
-            {
-                if (customConvert.CanConvert(valueProperty))
-                {
-                    return customConvert.Type;
-                }
-            }
-            return null;
         }
     }
 }

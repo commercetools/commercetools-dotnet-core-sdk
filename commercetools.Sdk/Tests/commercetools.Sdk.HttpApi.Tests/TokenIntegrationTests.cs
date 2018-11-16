@@ -3,6 +3,7 @@ namespace commercetools.Sdk.HttpApi.Tests
     using commercetools.Sdk.HttpApi;
     using commercetools.Sdk.HttpApi.Domain;
     using commercetools.Sdk.Serialization;
+    using commercetools.Sdk.Test.Helpers;
     using System.Net.Http;
     using Xunit;
 
@@ -13,7 +14,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetClientCredentialsToken()
         {
-            ISerializerService serializerService = TestUtils.GetSerializerService();
+            ISerializerService serializerService = SerializationHelper.SerializerService;
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
             // Resetting scope to an empty string for testing purposes
             clientConfiguration.Scope = "";
@@ -27,7 +28,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetClientCredentialsTokenWithScope()
         {
-            ISerializerService serializerService = TestUtils.GetSerializerService();
+            ISerializerService serializerService = SerializationHelper.SerializerService;
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("ClientWithSmallerScope");
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null, null, null);
             ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
@@ -40,7 +41,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetPasswordToken()
         {
-            ISerializerService serializerService = TestUtils.GetSerializerService();
+            ISerializerService serializerService = SerializationHelper.SerializerService;
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("ClientWithSmallerScope");
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null, null, null);
             IUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
@@ -54,7 +55,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetAnonymousTokenNoIdProvided()
         {
-            ISerializerService serializerService = TestUtils.GetSerializerService();
+            ISerializerService serializerService = SerializationHelper.SerializerService;
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("ClientWithAnonymousScope");
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null, null, null);
             IAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
@@ -66,7 +67,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetAnonymousTokenIdProvided()
         {
-            ISerializerService serializerService = TestUtils.GetSerializerService();
+            ISerializerService serializerService = SerializationHelper.SerializerService;
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("ClientWithAnonymousScope");
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null, null, null);
             IAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
@@ -79,7 +80,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void RefreshTokenPasswordFlow()
         {
-            ISerializerService serializerService = TestUtils.GetSerializerService();
+            ISerializerService serializerService = SerializationHelper.SerializerService;
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("ClientWithSmallerScope");
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null, null, null);
             IUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();

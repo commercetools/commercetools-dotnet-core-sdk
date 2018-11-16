@@ -62,7 +62,7 @@ namespace commercetools.Sdk.HttpApi.MvcExample
             services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
 
-            services.RegisterAllInterfaceTypes<ICustomJsonMapper<Sdk.Domain.Attribute>>(ServiceLifetime.Singleton);
+            //services.RegisterAllInterfaceTypes<ICustomJsonMapper<Sdk.Domain.Attribute>>(ServiceLifetime.Singleton);
 
             services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Money>, HighPrecisionMoneyConverter>();
             services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Money>, CentPrecisionMoneyConverter>();

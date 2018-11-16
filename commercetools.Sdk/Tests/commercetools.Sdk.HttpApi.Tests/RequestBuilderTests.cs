@@ -2,6 +2,7 @@
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Linq;
 using commercetools.Sdk.Serialization;
+using commercetools.Sdk.Test.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -16,7 +17,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetRequestMessageBuilderFromFactory()
         {
-            ISerializerService serializerService = TestUtils.GetSerializerService();
+            ISerializerService serializerService = SerializationHelper.SerializerService;
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
             GetRequestMessageBuilder getByIdRequestMessageBuilder = new GetRequestMessageBuilder(clientConfiguration);
             CreateRequestMessageBuilder createRequestMessageBuilder = new CreateRequestMessageBuilder(serializerService, clientConfiguration);
@@ -33,7 +34,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             CreateCommand<Category> createCommand = new CreateCommand<Category>(new CategoryDraft());
             IEnumerable<Type> registeredTypes = new List<Type>() { typeof(CreateHttpApiCommand<>) };
-            ISerializerService serializerService = TestUtils.GetSerializerService();
+            ISerializerService serializerService = SerializationHelper.SerializerService;
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
             CreateRequestMessageBuilder createRequestMessageBuilder = new CreateRequestMessageBuilder(serializerService, clientConfiguration);
             IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { createRequestMessageBuilder };
@@ -50,7 +51,6 @@ namespace commercetools.Sdk.HttpApi.Tests
             ReferenceExpansion<Category> parentExpansion = new ReferenceExpansion<Category>(c => c.Parent);
             expansions.Add(parentExpansion);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>() { Expand = expansions };
-            IEnumerable<Type> registeredTypes = new List<Type>() { typeof(QueryHttpApiCommand<>) };
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
             ISortExpressionVisitor sortExpressionVisitor = new SortExpressionVisitor();
             IExpansionExpressionVisitor expansionExpressionVisitor = new ExpansionExpressionVisitor();

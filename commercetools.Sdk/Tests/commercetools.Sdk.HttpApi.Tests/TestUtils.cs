@@ -33,7 +33,7 @@ namespace commercetools.Sdk.HttpApi.Tests
 
         public static IClient SetupClient()
         {
-            ISerializerService serializerService = TestUtils.GetSerializerService();
+            ISerializerService serializerService = SerializationHelper.SerializerService;
             IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
             ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
             IHttpClientFactory httpClientFactoryAuth = new MockHttpClientFactory(null, null, null);
@@ -63,27 +63,6 @@ namespace commercetools.Sdk.HttpApi.Tests
 
             IClient commerceToolsClient = new Client(httpClientFactory, httpApiCommandFactory, serializerService);
             return commerceToolsClient;
-        }
-
-        public static ISerializerService GetSerializerService()
-        {
-            IEnumerable<ICustomJsonMapper<Sdk.Domain.Attribute>> attributeMappers = ReflectionHelper.GetInstancesForInterface<ICustomJsonMapper<Sdk.Domain.Attribute>>();
-            IEnumerable<ICustomJsonMapper<Money>> customMoneyConverters = new List<ICustomJsonMapper<Money>>()
-            {
-                new CentPrecisionMoneyConverter(),
-                new HighPrecisionMoneyConverter()
-            };
-            MoneyConverter moneyConverter = new MoneyConverter(customMoneyConverters);
-            ErrorConverter errorConverter = new ErrorConverter();
-            FacetResultConverter facetResultConverter = new FacetResultConverter();
-            IMapperTypeRetriever<Sdk.Domain.Attribute> attributeMapperTypeRetriever = new MapperTypeRetriever<Sdk.Domain.Attribute>(attributeMappers);
-            AttributeConverter attributeConverter = new AttributeConverter(attributeMapperTypeRetriever);
-            IEnumerable<JsonConverter> registeredConverters = new List<JsonConverter>() { moneyConverter, attributeConverter, errorConverter, facetResultConverter };
-            
-            CustomContractResolver customContractResolver = new CustomContractResolver(registeredConverters);
-            JsonSerializerSettingsFactory jsonSerializerSettingsFactory = new JsonSerializerSettingsFactory(customContractResolver);
-            ISerializerService serializerService = new SerializerService(jsonSerializerSettingsFactory);
-            return serializerService;
         }
     }
 }
