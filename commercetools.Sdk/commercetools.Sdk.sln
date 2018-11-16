@@ -17,15 +17,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.HttpApi.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Linq", "commercetools.Sdk.Linq\commercetools.Sdk.Linq.csproj", "{AAD76EBF-6567-4D18-BF75-05B2B31A01E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.Reflection", "commercetools.Sdk.Reflection\commercetools.Sdk.Reflection.csproj", "{B3802BFF-E732-409A-AB63-AC58D3846BB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.Extensions", "commercetools.Sdk.Reflection\commercetools.Sdk.Extensions.csproj", "{B3802BFF-E732-409A-AB63-AC58D3846BB0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{91B408BB-8BAA-4856-8FE6-F014F1098AC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.HttpApi.Tests", "Tests\commercetools.Sdk.HttpApi.Tests\commercetools.Sdk.HttpApi.Tests.csproj", "{EA48CFDE-6FFC-4B1F-8A4E-7A81241CAB2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.HttpApi.Tests", "Tests\commercetools.Sdk.HttpApi.Tests\commercetools.Sdk.HttpApi.Tests.csproj", "{EA48CFDE-6FFC-4B1F-8A4E-7A81241CAB2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.Linq.Tests", "Tests\commercetools.Sdk.Linq.Tests\commercetools.Sdk.Linq.Tests.csproj", "{E72FAFE2-5E7E-4AD4-B3ED-D53F1C2640C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Linq.Tests", "Tests\commercetools.Sdk.Linq.Tests\commercetools.Sdk.Linq.Tests.csproj", "{E72FAFE2-5E7E-4AD4-B3ED-D53F1C2640C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.Serialization.Tests", "Tests\commercetools.Sdk.Serialization.Tests\commercetools.Sdk.Serialization.Tests.csproj", "{C6576CAB-8C8C-4C73-9EF8-8E12F9027D4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Serialization.Tests", "Tests\commercetools.Sdk.Serialization.Tests\commercetools.Sdk.Serialization.Tests.csproj", "{C6576CAB-8C8C-4C73-9EF8-8E12F9027D4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.Test.Helpers", "commercetools.Sdk.Test.Helpers\commercetools.Sdk.Test.Helpers.csproj", "{1481F5BE-67B5-4621-939D-5B13F67AB975}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,16 +79,21 @@ Global
 		{C6576CAB-8C8C-4C73-9EF8-8E12F9027D4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6576CAB-8C8C-4C73-9EF8-8E12F9027D4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6576CAB-8C8C-4C73-9EF8-8E12F9027D4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1481F5BE-67B5-4621-939D-5B13F67AB975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1481F5BE-67B5-4621-939D-5B13F67AB975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1481F5BE-67B5-4621-939D-5B13F67AB975}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1481F5BE-67B5-4621-939D-5B13F67AB975}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {38B2497B-A494-43A7-A44D-88131CE16D12}
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{EA48CFDE-6FFC-4B1F-8A4E-7A81241CAB2A} = {91B408BB-8BAA-4856-8FE6-F014F1098AC5}
 		{E72FAFE2-5E7E-4AD4-B3ED-D53F1C2640C5} = {91B408BB-8BAA-4856-8FE6-F014F1098AC5}
 		{C6576CAB-8C8C-4C73-9EF8-8E12F9027D4D} = {91B408BB-8BAA-4856-8FE6-F014F1098AC5}
+		{1481F5BE-67B5-4621-939D-5B13F67AB975} = {91B408BB-8BAA-4856-8FE6-F014F1098AC5}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {38B2497B-A494-43A7-A44D-88131CE16D12}
 	EndGlobalSection
 EndGlobal

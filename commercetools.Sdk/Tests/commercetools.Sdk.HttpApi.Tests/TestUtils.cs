@@ -67,7 +67,7 @@ namespace commercetools.Sdk.HttpApi.Tests
 
         public static ISerializerService GetSerializerService()
         {
-            IEnumerable<ICustomJsonMapper<Sdk.Domain.Attribute>> attributeMappers = TypeRetriever.GetInstancesForInterface<ICustomJsonMapper<Sdk.Domain.Attribute>>();
+            IEnumerable<ICustomJsonMapper<Sdk.Domain.Attribute>> attributeMappers = TypeExtensions.GetInstancesForInterface<ICustomJsonMapper<Sdk.Domain.Attribute>>();
             IEnumerable<ICustomJsonMapper<Money>> customMoneyConverters = new List<ICustomJsonMapper<Money>>()
             {
                 new CentPrecisionMoneyConverter(),

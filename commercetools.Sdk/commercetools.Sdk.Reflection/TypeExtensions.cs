@@ -4,11 +4,11 @@ using System.Linq;
 using System.Reflection;
 
 // TODO Not happy with project name; I did not want to name it Util either
-namespace commercetools.Sdk.Reflection
+namespace commercetools.Sdk.Extensions
 {
-    public class TypeRetriever
+    public static class TypeExtensions
     {
-        public static IEnumerable<Type> GetAllClassTypesForInterface(Type interfaceType)
+        public static IEnumerable<Type> GetAllClassTypesForInterface(this Type interfaceType)
         {
             List<Type> classTypes = new List<Type>();
             IEnumerable<Type> types =
@@ -23,19 +23,6 @@ namespace commercetools.Sdk.Reflection
                 }
             }
             return classTypes;
-        }
-
-        public static IEnumerable<T> GetInstancesForInterface<T>()
-        {
-            Type interfaceType = typeof(T);
-            IEnumerable<Type> types = GetAllClassTypesForInterface(interfaceType);
-            List<T> instances = new List<T>();
-            foreach(Type type in types)
-            {
-                object instance = Activator.CreateInstance(type);
-                instances.Add((T)instance);                
-            }
-            return instances;
         }
     }
 }

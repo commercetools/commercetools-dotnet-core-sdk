@@ -1,5 +1,5 @@
 ﻿using commercetools.Sdk.Domain;
-using commercetools.Sdk.Reflection;
+using commercetools.Sdk.Test.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,8 @@ namespace commercetools.Sdk.Serialization.Tests
     {
         public static ISerializerService GetSerializerService()
         {
-            IEnumerable<ICustomJsonMapper<Domain.Attribute>> attributeMappers = TypeRetriever.GetInstancesForInterface<ICustomJsonMapper<Domain.Attribute>>();
-            IEnumerable<ICustomJsonMapper<Fields>> customFieldMappers = TypeRetriever.GetInstancesForInterface<ICustomJsonMapper<Fields>>();
+            IEnumerable<ICustomJsonMapper<Domain.Attribute>> attributeMappers = ReflectionHelper.GetInstancesForInterface<ICustomJsonMapper<Domain.Attribute>>();
+            IEnumerable<ICustomJsonMapper<Fields>> customFieldMappers = ReflectionHelper.GetInstancesForInterface<ICustomJsonMapper<Fields>>();
             IEnumerable<ICustomJsonMapper<Money>> customMoneyConverters = new List<ICustomJsonMapper<Money>>()
             {
                 new CentPrecisionMoneyConverter(),
