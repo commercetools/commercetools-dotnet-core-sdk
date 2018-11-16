@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Xunit;
 
-namespace commercetools.Sdk.LinqToQueryPredicate.Tests
+namespace commercetools.Sdk.Linq.Tests
 {
     public class QueryPredicateTests
     {

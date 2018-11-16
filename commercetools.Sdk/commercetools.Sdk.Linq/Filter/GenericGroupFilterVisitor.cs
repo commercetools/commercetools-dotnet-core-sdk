@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace commercetools.Sdk.LinqToQueryPredicate
+namespace commercetools.Sdk.Linq
 {
     public abstract class GroupFilterVisitor<T> : GroupFilterVisitor
     {

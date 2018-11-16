@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.LinqToQueryPredicate
+﻿namespace commercetools.Sdk.Linq
 {
     public class Visitor
     {

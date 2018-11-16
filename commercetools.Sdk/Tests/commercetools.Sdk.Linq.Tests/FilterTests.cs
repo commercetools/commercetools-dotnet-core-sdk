@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using Xunit;
 
-namespace commercetools.Sdk.LinqToQueryPredicate.Tests
+namespace commercetools.Sdk.Linq.Tests
 {
     public class FilterTests
     {

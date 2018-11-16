@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.LinqToQueryPredicate.Tests
+﻿namespace commercetools.Sdk.Linq.Tests
 {
     using commercetools.Sdk.Domain;
     using System;

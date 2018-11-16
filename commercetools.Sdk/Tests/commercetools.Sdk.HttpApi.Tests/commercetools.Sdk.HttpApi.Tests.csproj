@@ -33,6 +33,7 @@
     <ProjectReference Include="..\..\commercetools.Sdk.Reflection\commercetools.Sdk.Extensions.csproj" />
     <ProjectReference Include="..\..\commercetools.Sdk.Serialization\commercetools.Sdk.Serialization.csproj" />
     <ProjectReference Include="..\..\commercetools.Sdk.Domain\commercetools.Sdk.Domain.csproj" />
+    <ProjectReference Include="..\..\commercetools.Sdk.Test.Helpers\commercetools.Sdk.Test.Helpers.csproj" />
   </ItemGroup>
 
 </Project>

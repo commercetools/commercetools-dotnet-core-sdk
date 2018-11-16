@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace commercetools.Sdk.LinqToQueryPredicate
+namespace commercetools.Sdk.Linq
 {
     public class SortExpressionVisitor : ISortExpressionVisitor
     {

@@ -1,6 +1,6 @@
 ﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
-using commercetools.Sdk.LinqToQueryPredicate;
+using commercetools.Sdk.Linq;
 using commercetools.Sdk.Serialization;
 using System;
 using System.Collections.Generic;

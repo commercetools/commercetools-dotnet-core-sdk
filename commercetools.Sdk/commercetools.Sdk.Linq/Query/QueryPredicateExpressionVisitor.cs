@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace commercetools.Sdk.LinqToQueryPredicate
+namespace commercetools.Sdk.Linq
 {
     // TODO Refactor
     // TODO See which attributes have to be limited (on Products)
@@ -117,18 +117,6 @@ namespace commercetools.Sdk.LinqToQueryPredicate
                 return result;
             }
             return result;
-        }
-    }
-
-    public static class StringExtension
-    {
-        public static string ToCamelCase(this string str)
-        {
-            if (!string.IsNullOrEmpty(str) && str.Length > 1)
-            {
-                return Char.ToLowerInvariant(str[0]) + str.Substring(1);
-            }
-            return str;
         }
     }
 }

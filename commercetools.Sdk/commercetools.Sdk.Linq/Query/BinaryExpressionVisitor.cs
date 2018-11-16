@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace commercetools.Sdk.LinqToQueryPredicate
+namespace commercetools.Sdk.Linq
 {
     // TODO Change name
     public class BinaryExpressionVisitor : Visitor

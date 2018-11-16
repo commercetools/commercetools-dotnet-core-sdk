@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace commercetools.Sdk.LinqToQueryPredicate
+namespace commercetools.Sdk.Linq
 {
     public interface ISortExpressionVisitor
     {
