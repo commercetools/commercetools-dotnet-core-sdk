@@ -39,6 +39,16 @@ namespace commercetools.Sdk.HttpApi.Tests
         }
 
         [Fact]
+        public void CreateCategory()
+        {
+            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
+            CategoryDraft categoryDraft = this.categoryFixture.GetCategoryDraft();
+            Category category = commerceToolsClient.ExecuteAsync(new CreateCommand<Category>(categoryDraft)).Result;
+            this.categoryFixture.CategoriesToDelete.Add(category);
+            Assert.Equal(categoryDraft.Key, category.Key.ToString());
+        }
+
+        [Fact]
         public void DeleteCategoryById()
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
@@ -49,23 +59,12 @@ namespace commercetools.Sdk.HttpApi.Tests
         }
 
         [Fact]
-        public void CreateAndDeleteByKeyCategory()
+        public void DeleteCategoryByKey()
         {
-            // create and delete are in the same method so that the repository does not get filled up with test categories
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
-            CategoryDraft categoryDraft = new CategoryDraft();
-            string categoryName = TestUtils.RandomString(4);
-            LocalizedString localizedStringName = new LocalizedString();
-            localizedStringName.Add("en", categoryName);
-            categoryDraft.Name = localizedStringName;
-            string slug = TestUtils.RandomString(5);
-            LocalizedString localizedStringSlug = new LocalizedString();
-            localizedStringSlug.Add("en", slug);
-            categoryDraft.Slug = localizedStringSlug;
-            categoryDraft.Key = TestUtils.RandomString(3);
-            Category category = commerceToolsClient.ExecuteAsync<Category>(new CreateCommand<Category>(categoryDraft)).Result;
-            Assert.Equal(categoryName, category.Name["en"]);
-            Category deletedCategory = commerceToolsClient.ExecuteAsync<Category>(new DeleteByKeyCommand<Category>(category.Key, category.Version)).Result;
+            CategoryDraft categoryDraft = this.categoryFixture.GetCategoryDraft();
+            Category category = commerceToolsClient.ExecuteAsync(new CreateCommand<Category>(categoryDraft)).Result;
+            Category deletedCategory = commerceToolsClient.ExecuteAsync(new DeleteByKeyCommand<Category>(category.Key, category.Version)).Result;
             Assert.ThrowsAsync<HttpApiClientException>(() => commerceToolsClient.ExecuteAsync<Category>(new GetByIdCommand<Category>(new Guid(deletedCategory.Id))));
         }
 

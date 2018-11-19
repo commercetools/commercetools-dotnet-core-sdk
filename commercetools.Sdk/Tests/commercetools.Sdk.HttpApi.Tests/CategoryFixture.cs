@@ -7,22 +7,22 @@ namespace commercetools.Sdk.HttpApi.Tests
 {
     public class CategoryFixture : ClientFixture, IDisposable
     {
-        private List<Category> categoriesToDelete = new List<Category>();
-
         public CategoryFixture() : base()
         {
+            this.CategoriesToDelete = new List<Category>();
             this.Client = this.GetService<IClient>();
             Category category = this.Client.ExecuteAsync(new CreateCommand<Category>(this.GetCategoryDraft())).Result;
             this.CreatedCategory = category;
-            this.categoriesToDelete.Add(category);
+            this.CategoriesToDelete.Add(category);
         }
 
+        public List<Category> CategoriesToDelete { get; private set; }
         public IClient Client { get; private set; }
         public Category CreatedCategory { get; private set; }
 
         public void Dispose()
         {
-            foreach (Category category in categoriesToDelete)
+            foreach (Category category in CategoriesToDelete)
             {
                 Category deletedCategory = this.Client.ExecuteAsync(new DeleteByIdCommand<Category>(new Guid(category.Id), category.Version)).Result;
             }
