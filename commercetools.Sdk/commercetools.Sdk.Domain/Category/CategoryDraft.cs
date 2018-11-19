@@ -1,18 +1,20 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     public class CategoryDraft : IDraft<Category>
     {
         public string Key { get; set; }
 
+        [Required]
         public LocalizedString Name { get; set; }
 
         public LocalizedString Description { get; set; }
 
         public Reference Parent { get; set; }
 
+        [Required]
         public LocalizedString Slug { get; set; }
 
         public string OrderHint { get; set; }

@@ -26,7 +26,7 @@
 
         public string Name { get; set; } = "api";
 
-        public async Task<T> Execute<T>(Command<T> command)
+        public async Task<T> ExecuteAsync<T>(Command<T> command)
         {
             IHttpApiCommand httpApiCommand = this.httpApiCommandFactory.Create(command);
             return await SendRequest<T>(httpApiCommand.HttpRequestMessage);
