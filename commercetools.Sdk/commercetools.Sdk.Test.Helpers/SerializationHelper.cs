@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.Domain;
+﻿using commercetools.Sdk.Client;
+using commercetools.Sdk.Domain;
 using commercetools.Sdk.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;

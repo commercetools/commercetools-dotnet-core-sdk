@@ -11,7 +11,7 @@ namespace commercetools.Sdk.HttpApi.Tests
 {
     public class CategoryClientTests
     {
-        [Fact]
+        [Fact(Skip = "Not implemented fully yet")]
         public void GetCategoryById()
         {
             ISerializerService serializerService = SerializationHelper.SerializerService;

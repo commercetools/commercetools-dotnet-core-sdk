@@ -8,12 +8,19 @@ using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
-    public class ExceptionTests
+    public class ExceptionTests : IClassFixture<ClientFixture>
     {
+        private readonly ClientFixture clientFixture;
+
+        public ExceptionTests(ClientFixture clientFixture)
+        {
+            this.clientFixture = clientFixture;
+        }
+
         [Fact]
         public void GetCategoryByIdThrowsNotFoundException()
         {
-            IClient commerceToolsClient = TestUtils.SetupClient();
+            IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             string categoryId = "2bafc816-4223-4ff0-ac8a-0f08a8f29fd7";
             HttpApiClientException exception = Assert.ThrowsAsync<HttpApiClientException>(() => commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(categoryId)))).Result;
             Assert.Equal(404, exception.StatusCode);
@@ -22,7 +29,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void UpdateCategoryByIdThrowsConcurrentModificationException()
         {
-            IClient commerceToolsClient = TestUtils.SetupClient();
+            IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             string categoryId = "8994e5d7-d81f-4480-af60-286dc96c1fe8";
             Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(categoryId))).Result;
             string currentKey = category.Key;

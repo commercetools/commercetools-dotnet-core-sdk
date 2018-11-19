@@ -1,45 +1,27 @@
 ﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Linq;
-using commercetools.Sdk.Serialization;
-using commercetools.Sdk.Test.Helpers;
-using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using Xunit;
 using Type = System.Type;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
-    public class RequestBuilderTests
+    public class RequestBuilderTests : IClassFixture<ClientFixture>
     {
-        [Fact]
-        public void GetRequestMessageBuilderFromFactory()
+        private readonly ClientFixture clientFixture;
+
+        public RequestBuilderTests(ClientFixture clientFixture)
         {
-            ISerializerService serializerService = SerializationHelper.SerializerService;
-            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
-            GetRequestMessageBuilder getByIdRequestMessageBuilder = new GetRequestMessageBuilder(clientConfiguration);
-            CreateRequestMessageBuilder createRequestMessageBuilder = new CreateRequestMessageBuilder(serializerService, clientConfiguration);
-            UpdateRequestMessageBuilder updateByIdRequestMessageBuilder = new UpdateRequestMessageBuilder(serializerService, clientConfiguration);
-            DeleteRequestMessageBuilder deleteByIdRequestMessageBuilder = new DeleteRequestMessageBuilder(clientConfiguration);
-            IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { getByIdRequestMessageBuilder, createRequestMessageBuilder, updateByIdRequestMessageBuilder, deleteByIdRequestMessageBuilder };
-            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(requestMessageBuilders);
-            IRequestMessageBuilder requestMessageBuilder = requestMessageBuilderFactory.GetRequestMessageBuilder<GetRequestMessageBuilder>();
-            Assert.Equal(typeof(GetRequestMessageBuilder), requestMessageBuilder.GetType());
+            this.clientFixture = clientFixture;
         }
 
         [Fact]
         public void GetHttpApiCommand()
         {
             CreateCommand<Category> createCommand = new CreateCommand<Category>(new CategoryDraft());
-            IEnumerable<Type> registeredTypes = new List<Type>() { typeof(CreateHttpApiCommand<>) };
-            ISerializerService serializerService = SerializationHelper.SerializerService;
-            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
-            CreateRequestMessageBuilder createRequestMessageBuilder = new CreateRequestMessageBuilder(serializerService, clientConfiguration);
-            IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { createRequestMessageBuilder };
-            IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(requestMessageBuilders);
-            IHttpApiCommandFactory httpApiCommandFactory = new HttpApiCommandFactory(registeredTypes, requestMessageBuilderFactory);
+            IHttpApiCommandFactory httpApiCommandFactory = this.clientFixture.GetService<IHttpApiCommandFactory>();
             IHttpApiCommand httpApiCommand = httpApiCommandFactory.Create(createCommand);
             Assert.Equal(typeof(CreateHttpApiCommand<Category>), httpApiCommand.GetType());
         }
@@ -51,11 +33,11 @@ namespace commercetools.Sdk.HttpApi.Tests
             ReferenceExpansion<Category> parentExpansion = new ReferenceExpansion<Category>(c => c.Parent);
             expansions.Add(parentExpansion);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>() { Expand = expansions };
-            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            ISortExpressionVisitor sortExpressionVisitor = new SortExpressionVisitor();
-            IExpansionExpressionVisitor expansionExpressionVisitor = new ExpansionExpressionVisitor();
-            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
-            QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(clientConfiguration, queryPredicateExpressionVisitor, expansionExpressionVisitor, sortExpressionVisitor);
+            QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
+                this.clientFixture.GetService<IClientConfiguration>(),
+                this.clientFixture.GetService<IQueryPredicateExpressionVisitor>(),
+                this.clientFixture.GetService<IExpansionExpressionVisitor>(),
+                this.clientFixture.GetService<ISortExpressionVisitor>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
             Assert.Equal("https://api.sphere.io/portablevendor/categories?expand=parent", httpRequestMessage.RequestUri.ToString());
         }
@@ -69,14 +51,21 @@ namespace commercetools.Sdk.HttpApi.Tests
             expansions.Add(parentExpansion);
             expansions.Add(firstAncestorExpansion);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>() { Expand = expansions };
-            IEnumerable<Type> registeredTypes = new List<Type>() { typeof(QueryHttpApiCommand<>) };
-            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            ISortExpressionVisitor sortExpressionVisitor = new SortExpressionVisitor();
-            IExpansionExpressionVisitor expansionExpressionVisitor = new ExpansionExpressionVisitor();
-            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
-            QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(clientConfiguration, queryPredicateExpressionVisitor, expansionExpressionVisitor, sortExpressionVisitor);
+            QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
+                this.clientFixture.GetService<IClientConfiguration>(),
+                this.clientFixture.GetService<IQueryPredicateExpressionVisitor>(),
+                this.clientFixture.GetService<IExpansionExpressionVisitor>(),
+                this.clientFixture.GetService<ISortExpressionVisitor>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
             Assert.Equal("https://api.sphere.io/portablevendor/categories?expand=parent&expand=ancestors%5B0%5D", httpRequestMessage.RequestUri.ToString());
+        }
+
+        [Fact]
+        public void GetRequestMessageBuilderFromFactory()
+        {
+            IRequestMessageBuilderFactory requestMessageBuilderFactory = this.clientFixture.GetService<IRequestMessageBuilderFactory>();
+            IRequestMessageBuilder requestMessageBuilder = requestMessageBuilderFactory.GetRequestMessageBuilder<GetRequestMessageBuilder>();
+            Assert.Equal(typeof(GetRequestMessageBuilder), requestMessageBuilder.GetType());
         }
     }
 }

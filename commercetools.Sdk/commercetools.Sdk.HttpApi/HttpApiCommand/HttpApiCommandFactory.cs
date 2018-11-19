@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using commercetools.Sdk.Client;
+using commercetools.Sdk.Extensions;
 
 namespace commercetools.Sdk.HttpApi
 {
@@ -11,8 +13,10 @@ namespace commercetools.Sdk.HttpApi
         private IEnumerable<Type> registeredHttpApiCommandTypes;
         private IRequestMessageBuilderFactory requestMessageBuilderFactory;
 
-        public HttpApiCommandFactory(IEnumerable<Type> registeredHttpApiCommandTypes, IRequestMessageBuilderFactory requestMessageBuilderFactory)
+        public HttpApiCommandFactory(IRegisteredTypeRetriever registeredTypeRetriever, IRequestMessageBuilderFactory requestMessageBuilderFactory)
         {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            IEnumerable<Type> registeredHttpApiCommandTypes = registeredTypeRetriever.GetRegisteredTypes<IHttpApiCommand>();
             this.registeredHttpApiCommandTypes = registeredHttpApiCommandTypes;
             this.requestMessageBuilderFactory = requestMessageBuilderFactory;
         }

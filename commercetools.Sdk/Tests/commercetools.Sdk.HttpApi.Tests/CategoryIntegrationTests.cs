@@ -11,12 +11,19 @@ using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
-    public class CategoryIntegrationTests
+    public class CategoryIntegrationTests : IClassFixture<ClientFixture>
     {
+        private readonly ClientFixture clientFixture;
+
+        public CategoryIntegrationTests(ClientFixture clientFixture)
+        {
+            this.clientFixture = clientFixture;
+        }
+
         [Fact]
         public void GetCategoryById()
         {
-            IClient commerceToolsClient = TestUtils.SetupClient();
+            IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             string categoryId = "2bafc816-4223-4ff0-ac8a-0f08a8f29fd6";
             Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(categoryId))).Result;
             Assert.Equal(categoryId, category.Id.ToString());
@@ -25,7 +32,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetCategoryByKey()
         {
-            IClient commerceToolsClient = TestUtils.SetupClient();
+            IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             string categoryKey = "c2";
             Category category = commerceToolsClient.Execute<Category>(new GetByKeyCommand<Category>(categoryKey)).Result;
             Assert.Equal(categoryKey, category.Key.ToString());
@@ -35,7 +42,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void CreateAndDeleteByIdCategory()
         {
             // create and delete are in the same method so that the repository does not get filled up with test categories
-            IClient commerceToolsClient = TestUtils.SetupClient();
+            IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             CategoryDraft categoryDraft = new CategoryDraft();
             string categoryName = TestUtils.RandomString(4);
             LocalizedString localizedStringName = new LocalizedString();
@@ -55,7 +62,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void CreateAndDeleteByKeyCategory()
         {
             // create and delete are in the same method so that the repository does not get filled up with test categories
-            IClient commerceToolsClient = TestUtils.SetupClient();
+            IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             CategoryDraft categoryDraft = new CategoryDraft();
             string categoryName = TestUtils.RandomString(4);
             LocalizedString localizedStringName = new LocalizedString();
@@ -75,7 +82,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void UpdateCategoryById()
         {
-            IClient commerceToolsClient = TestUtils.SetupClient();
+            IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             string categoryId = "8994e5d7-d81f-4480-af60-286dc96c1fe8";
             Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(categoryId))).Result;
             string currentKey = category.Key;
@@ -88,7 +95,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void UpdateCategoryByKey()
         {
-            IClient commerceToolsClient = TestUtils.SetupClient();
+            IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             string categoryId = "8994e5d7-d81f-4480-af60-286dc96c1fe8";
             Category category = commerceToolsClient.Execute<Category>(new GetByIdCommand<Category>(new Guid(categoryId))).Result;
             ChangeOrderHint changeOrderHint = new ChangeOrderHint();
@@ -103,7 +110,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void QueryCategory()
         {
-            IClient commerceToolsClient = TestUtils.SetupClient();
+            IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Key == "c14");
             PagedQueryResult<Category> returnedSet = commerceToolsClient.Execute(new QueryCommand<Category>() { QueryPredicate = queryPredicate }).Result;
             Assert.Contains(returnedSet.Results, c => c.Key == "c14"); 
@@ -112,7 +119,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void QueryAndExpandParentCategory()
         {
-            IClient commerceToolsClient = TestUtils.SetupClient();
+            IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Key == "c22");
             List<Expansion<Category>> expandList = new List<Expansion<Category>>();
             ReferenceExpansion<Category> expand = new ReferenceExpansion<Category>(c => c.Parent);
@@ -124,7 +131,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void QueryAndSortCategory()
         {
-            IClient commerceToolsClient = TestUtils.SetupClient();
+            IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == "f40fcd15-b1c2-4279-9cfa-f6083e6a2988");
             List<Sort<Category>> sortList = new List<Sort<Category>>();
             Sort<Category> sort = new Sort<Category>(c => c.Name["en"]);
@@ -137,7 +144,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void QueryAndSortCategoryDescending()
         {
-            IClient commerceToolsClient = TestUtils.SetupClient();
+            IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == "f40fcd15-b1c2-4279-9cfa-f6083e6a2988");
             List<Sort<Category>> sortList = new List<Sort<Category>>();
             Sort<Category> sort = new Sort<Category>(c => c.Name["en"], SortDirection.Descending);

@@ -33,5 +33,35 @@ namespace commercetools.Sdk.Extensions
             }
             return classTypes;
         }
+
+        // TODO Remove, seems not to be needed
+        public static IEnumerable<Type> GetParentTypes(this Type type)
+        {
+            // is there any base type?
+            if (type == null)
+            {
+                yield break;
+            }
+
+            // return all implemented or inherited interfaces
+            foreach (var i in type.GetInterfaces())
+            {
+                yield return i;
+                var currentInterfaceBaseType = i.BaseType;
+                while (currentInterfaceBaseType != null)
+                {
+                    yield return currentInterfaceBaseType;
+                    currentInterfaceBaseType = currentInterfaceBaseType.BaseType;
+                }
+            }
+
+            // return all inherited types
+            var currentBaseType = type.BaseType;
+            while (currentBaseType != null)
+            {
+                yield return currentBaseType;
+                currentBaseType = currentBaseType.BaseType;
+            }
+        }
     }
 }

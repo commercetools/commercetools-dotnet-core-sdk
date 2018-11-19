@@ -62,16 +62,8 @@ namespace commercetools.Sdk.HttpApi.MvcExample
             services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
 
-            //services.RegisterAllInterfaceTypes<ICustomJsonMapper<Sdk.Domain.Attribute>>(ServiceLifetime.Singleton);
+            services.UseSerialization();
 
-            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Money>, HighPrecisionMoneyConverter>();
-            services.AddSingleton<ICustomJsonMapper<Sdk.Domain.Money>, CentPrecisionMoneyConverter>();
-
-            services.AddSingleton<MoneyConverter>();
-            services.AddSingleton<AttributeConverter>();
-            services.AddSingleton<CustomContractResolver>();
-            services.AddSingleton<JsonSerializerSettingsFactory>();
-            services.AddSingleton<ISerializerService, SerializerService>();
             services.AddSingleton<IClient, Client>();
 
             services.AddMvc();

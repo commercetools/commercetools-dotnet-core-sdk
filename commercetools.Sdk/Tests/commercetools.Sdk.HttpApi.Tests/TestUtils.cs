@@ -59,7 +59,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             IEnumerable<IRequestMessageBuilder> requestMessageBuilders = new List<IRequestMessageBuilder>() { getByIdRequestMessageBuilder, createRequestMessageBuilder, updateByIdRequestMessageBuilder, deleteByIdRequestMessageBuilder, queryRequestMessageBuilder, searchRequestMessageBuilder };
             IRequestMessageBuilderFactory requestMessageBuilderFactory = new RequestMessageBuilderFactory(requestMessageBuilders);
             IEnumerable<Type> registeredHttpApiCommandTypes = new List<Type>() { typeof(SearchHttpApiCommand<>), typeof(CreateHttpApiCommand<>), typeof(QueryHttpApiCommand<>), typeof(GetHttpApiCommand<>), typeof(UpdateHttpApiCommand<>), typeof(DeleteHttpApiCommand<>) };
-            IHttpApiCommandFactory httpApiCommandFactory = new HttpApiCommandFactory(registeredHttpApiCommandTypes, requestMessageBuilderFactory);
+            IHttpApiCommandFactory httpApiCommandFactory = new HttpApiCommandFactory(null, requestMessageBuilderFactory);
 
             IClient commerceToolsClient = new Client(httpClientFactory, httpApiCommandFactory, serializerService);
             return commerceToolsClient;

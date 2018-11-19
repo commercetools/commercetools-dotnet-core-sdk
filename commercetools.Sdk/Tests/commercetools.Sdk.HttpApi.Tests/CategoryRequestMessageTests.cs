@@ -7,15 +7,20 @@ using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
-    public class CategoryRequestMessageTests
+    public class CategoryRequestMessageTests : IClassFixture<ClientFixture>
     {
+        private readonly ClientFixture clientFixture;
+
+        public CategoryRequestMessageTests(ClientFixture clientFixture)
+        {
+            this.clientFixture = clientFixture;
+        }
+
         [Fact]
         public void CategoryGetByIdRequestMessage()
         {
-            GetByIdCommand<Category> command = new GetByIdCommand<Category>(new Guid("2bafc816-4223-4ff0-ac8a-0f08a8f29fd6"));
-            var clientConfiguration = new Mock<IClientConfiguration>();
-            clientConfiguration.Setup(x => x.ApiBaseAddress).Returns("https://api.sphere.io/portablevendor");
-            GetRequestMessageBuilder requestMessageBuilder = new GetRequestMessageBuilder(clientConfiguration.Object);
+            GetByIdCommand<Category> command = new GetByIdCommand<Category>(new Guid("2bafc816-4223-4ff0-ac8a-0f08a8f29fd6"));            
+            GetRequestMessageBuilder requestMessageBuilder = new GetRequestMessageBuilder(clientFixture.GetService<IClientConfiguration>());
             HttpRequestMessage httpRequestMessage = requestMessageBuilder.GetRequestMessage(command);
             Assert.Equal(HttpMethod.Get, httpRequestMessage.Method);
             Assert.Equal("https://api.sphere.io/portablevendor/categories/2bafc816-4223-4ff0-ac8a-0f08a8f29fd6", httpRequestMessage.RequestUri.ToString());
