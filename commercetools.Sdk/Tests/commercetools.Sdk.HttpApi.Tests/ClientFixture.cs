@@ -1,21 +1,22 @@
-﻿using commercetools.Sdk.Client;
-using commercetools.Sdk.Serialization;
+﻿using commercetools.Sdk.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
     public class ClientFixture
     {
         private ServiceProvider serviceProvider;
+        private IConfiguration configuration;
 
         public ClientFixture()
         {
             var services = new ServiceCollection();
-            IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            this.configuration = new ConfigurationBuilder().
+                AddJsonFile("appsettings.test.json").
+                AddJsonFile("appsettings.test.Development.json").
+                AddEnvironmentVariables().
+                Build();
             services.UseSerialization();
             services.UseHttpApiWithClientCredentials(configuration);
             serviceProvider = services.BuildServiceProvider();
@@ -24,6 +25,11 @@ namespace commercetools.Sdk.HttpApi.Tests
         public T GetService<T>()
         {
             return this.serviceProvider.GetService<T>();
+        }
+
+        public IClientConfiguration GetClientConfiguration(string name)
+        {
+            return this.configuration.GetSection("Client").Get<ClientConfiguration>();
         }
     }
 }

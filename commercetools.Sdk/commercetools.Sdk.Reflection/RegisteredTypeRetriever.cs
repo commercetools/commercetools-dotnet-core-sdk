@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace commercetools.Sdk.Extensions
+namespace commercetools.Sdk.Util
 {
     public class RegisteredTypeRetriever : IRegisteredTypeRetriever
     {

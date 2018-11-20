@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace commercetools.Sdk.Extensions
+namespace commercetools.Sdk.Util
 {
     public interface IRegisteredTypeRetriever
     {

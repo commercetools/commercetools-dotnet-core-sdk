@@ -7,12 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="appsettings.json" />
+    <None Remove="appsettings.test.Development.json" />
+    <None Remove="appsettings.test.json" />
     <None Remove="Resources\Responses\GetCategoryById.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.json">
+    <Content Include="appsettings.test.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="appsettings.test.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -23,6 +28,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="Moq" Version="4.10.0" />
@@ -35,7 +41,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\commercetools.Sdk.HttpApi\commercetools.Sdk.HttpApi.csproj" />
-    <ProjectReference Include="..\..\commercetools.Sdk.Reflection\commercetools.Sdk.Extensions.csproj" />
+    <ProjectReference Include="..\..\commercetools.Sdk.Reflection\commercetools.Sdk.Util.csproj" />
     <ProjectReference Include="..\..\commercetools.Sdk.Serialization\commercetools.Sdk.Serialization.csproj" />
     <ProjectReference Include="..\..\commercetools.Sdk.Domain\commercetools.Sdk.Domain.csproj" />
     <ProjectReference Include="..\..\commercetools.Sdk.Test.Helpers\commercetools.Sdk.Test.Helpers.csproj" />

@@ -1,6 +1,5 @@
 ﻿namespace commercetools.Sdk.Serialization
 {
-    using commercetools.Sdk.Extensions;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
     using System.Reflection;

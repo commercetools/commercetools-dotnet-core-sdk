@@ -24,9 +24,11 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void GetCategoryById()
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
-            string categoryId = this.categoryFixture.CreatedCategory.Id;
-            Category category = commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(new Guid(categoryId))).Result;
-            Assert.Equal(categoryId, category.Id.ToString());
+            CategoryDraft categoryDraft = this.categoryFixture.GetCategoryDraft();
+            Category createdCategory = commerceToolsClient.ExecuteAsync(new CreateCommand<Category>(categoryDraft)).Result;
+
+            Category category = commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(new Guid(createdCategory.Id))).Result;
+            Assert.Equal(createdCategory.Id, category.Id.ToString());
         }
 
         [Fact]

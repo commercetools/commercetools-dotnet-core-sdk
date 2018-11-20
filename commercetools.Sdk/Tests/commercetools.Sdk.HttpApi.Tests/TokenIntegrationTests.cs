@@ -3,7 +3,6 @@ namespace commercetools.Sdk.HttpApi.Tests
     using commercetools.Sdk.HttpApi;
     using commercetools.Sdk.HttpApi.Domain;
     using commercetools.Sdk.Serialization;
-    using commercetools.Sdk.Test.Helpers;
     using System.Net.Http;
     using Xunit;
 
@@ -21,7 +20,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetClientCredentialsToken()
         {
-            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("Client");
+            IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClient");
             // Resetting scope to an empty string for testing purposes
             clientConfiguration.Scope = "";
             ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
@@ -37,7 +36,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetClientCredentialsTokenWithScope()
         {
-            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("ClientWithSmallerScope");
+            IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithSmallerScope");
             IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null, null, null);
             ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
             ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(
@@ -53,7 +52,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetPasswordToken()
         {
-            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("ClientWithSmallerScope");
+            IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithSmallerScope");
             IUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
             userCredentialsStoreManager.Username = "mick.jagger@commercetools.com";
             userCredentialsStoreManager.Password = "st54e9m4";
@@ -69,7 +68,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetAnonymousTokenNoIdProvided()
         {
-            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("ClientWithAnonymousScope");
+            IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithAnonymousScope");
             IAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(
                 this.clientFixture.GetService<IHttpClientFactory>(), 
@@ -83,7 +82,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetAnonymousTokenIdProvided()
         {
-            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("ClientWithAnonymousScope");
+            IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithAnonymousScope");
             IAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
             anonymousStoreManager.AnonymousId = TestUtils.RandomString(10);
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(
@@ -98,7 +97,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void RefreshTokenPasswordFlow()
         {
-            IClientConfiguration clientConfiguration = TestUtils.GetClientConfiguration("ClientWithSmallerScope");
+            IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithSmallerScope");
             IUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
             userCredentialsStoreManager.Username = "mick.jagger@commercetools.com";
             userCredentialsStoreManager.Password = "st54e9m4";

@@ -1,12 +1,8 @@
 ﻿using commercetools.Sdk.Client;
-using commercetools.Sdk.Extensions;
 using commercetools.Sdk.Linq;
+using commercetools.Sdk.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 
 namespace commercetools.Sdk.HttpApi
 {

@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.HttpApi.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Linq", "commercetools.Sdk.Linq\commercetools.Sdk.Linq.csproj", "{AAD76EBF-6567-4D18-BF75-05B2B31A01E4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Extensions", "commercetools.Sdk.Reflection\commercetools.Sdk.Extensions.csproj", "{B3802BFF-E732-409A-AB63-AC58D3846BB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Util", "commercetools.Sdk.Reflection\commercetools.Sdk.Util.csproj", "{B3802BFF-E732-409A-AB63-AC58D3846BB0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{91B408BB-8BAA-4856-8FE6-F014F1098AC5}"
 EndProject
