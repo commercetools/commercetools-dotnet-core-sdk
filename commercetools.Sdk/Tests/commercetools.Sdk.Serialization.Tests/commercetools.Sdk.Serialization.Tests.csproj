@@ -31,5 +31,6 @@
     <None Remove="Resources\CustomFields\Enum.json" />
     <None Remove="Resources\CustomFields\Number.json" />
     <None Remove="Resources\CustomFields\SetEnum.json" />
+    <None Remove="Resources\FieldTypes\string.json" />
   </ItemGroup>
 </Project>

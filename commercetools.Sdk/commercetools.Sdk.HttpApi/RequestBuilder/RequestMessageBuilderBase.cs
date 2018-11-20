@@ -15,7 +15,8 @@ namespace commercetools.Sdk.HttpApi
         private IDictionary<Type, string> mapping = new Dictionary<Type, string>()
         {
             {  typeof(Category), "categories" },
-            {  typeof(ProductProjection), "product-projections" }
+            {  typeof(ProductProjection), "product-projections" },
+            {  typeof(Sdk.Domain.Type), "types" }
         };
 
         public RequestMessageBuilderBase(IClientConfiguration clientConfiguration)

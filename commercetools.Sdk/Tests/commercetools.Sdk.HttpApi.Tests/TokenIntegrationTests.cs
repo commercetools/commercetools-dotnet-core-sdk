@@ -37,7 +37,6 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void GetClientCredentialsTokenWithScope()
         {
             IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithSmallerScope");
-            IHttpClientFactory httpClientFactory = new MockHttpClientFactory(null, null, null);
             ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
             ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(
                 this.clientFixture.GetService<IHttpClientFactory>(), 
@@ -84,7 +83,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithAnonymousScope");
             IAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
-            anonymousStoreManager.AnonymousId = TestUtils.RandomString(10);
+            anonymousStoreManager.AnonymousId = this.clientFixture.RandomString(10);
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(
                 this.clientFixture.GetService<IHttpClientFactory>(),
                 clientConfiguration, 

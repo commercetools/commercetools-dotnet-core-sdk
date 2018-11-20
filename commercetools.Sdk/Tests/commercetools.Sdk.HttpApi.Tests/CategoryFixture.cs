@@ -31,15 +31,15 @@ namespace commercetools.Sdk.HttpApi.Tests
         public CategoryDraft GetCategoryDraft()
         {
             CategoryDraft categoryDraft = new CategoryDraft();
-            string categoryName = TestUtils.RandomString(4);
+            string categoryName = this.RandomString(4);
             LocalizedString localizedStringName = new LocalizedString();
             localizedStringName.Add("en", categoryName);
             categoryDraft.Name = localizedStringName;
-            string slug = TestUtils.RandomString(5);
+            string slug = this.RandomString(5);
             LocalizedString localizedStringSlug = new LocalizedString();
             localizedStringSlug.Add("en", slug);
             categoryDraft.Slug = localizedStringSlug;
-            categoryDraft.Key = TestUtils.RandomString(3);
+            categoryDraft.Key = this.RandomString(3);
             return categoryDraft;
         }
     }

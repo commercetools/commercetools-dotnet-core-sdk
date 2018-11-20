@@ -1,8 +1,7 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    public class FieldType
+    public abstract class FieldType
     {
-        // TODO See if child classes should be created
-        public string Name { get; set; }
+        public abstract string Name { get; set; }
     }
 }

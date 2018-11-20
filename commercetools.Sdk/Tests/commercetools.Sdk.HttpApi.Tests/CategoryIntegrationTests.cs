@@ -78,7 +78,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             Category category = commerceToolsClient.ExecuteAsync<Category>(new GetByIdCommand<Category>(new Guid(categoryId))).Result;
             string currentKey = category.Key;
             SetKey setKeyAction = new SetKey();
-            setKeyAction.Key = "newKey" + TestUtils.RandomString(3);
+            setKeyAction.Key = "newKey" + this.categoryFixture.RandomString(3);
             Category updatedCategory = commerceToolsClient.ExecuteAsync<Category>(new UpdateByIdCommand<Category>(new Guid(category.Id), category.Version, new List<UpdateAction>() { setKeyAction })).Result;
             Assert.Equal(updatedCategory.Key, setKeyAction.Key);
         }
@@ -90,9 +90,9 @@ namespace commercetools.Sdk.HttpApi.Tests
             string categoryId = "8994e5d7-d81f-4480-af60-286dc96c1fe8";
             Category category = commerceToolsClient.ExecuteAsync<Category>(new GetByIdCommand<Category>(new Guid(categoryId))).Result;
             ChangeOrderHint changeOrderHint = new ChangeOrderHint();
-            changeOrderHint.OrderHint = TestUtils.RandomString(6);
+            changeOrderHint.OrderHint = this.categoryFixture.RandomString(6);
             SetExternalId setExternalId = new SetExternalId();
-            setExternalId.ExternalId = TestUtils.RandomString(5);
+            setExternalId.ExternalId = this.categoryFixture.RandomString(5);
             Category updatedCategory = commerceToolsClient.ExecuteAsync<Category>(new UpdateByKeyCommand<Category>(category.Key, category.Version, new List<UpdateAction>() { changeOrderHint, setExternalId })).Result;
             Assert.Equal(updatedCategory.OrderHint, changeOrderHint.OrderHint);
             Assert.Equal(updatedCategory.ExternalId, setExternalId.ExternalId);
