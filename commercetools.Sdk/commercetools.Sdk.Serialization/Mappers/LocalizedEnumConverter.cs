@@ -7,7 +7,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class LocalizedEnumConverter<T, S> : ICustomJsonMapper<T>
+    public abstract class LocalizedEnumConverter<T, S> : ICustomJsonMapper<T>
     {
         public int Priority => 2;
 

@@ -8,11 +8,11 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class SetAttributeMapperTypeRetriever : SetMapperTypeRetriever<Domain.Attribute>
+    public class AttributeMapperTypeRetriever : SetMapperTypeRetriever<Domain.Attribute>
     {
         protected override Type SetType => typeof(Domain.Attributes.Set<>);
         
-        public SetAttributeMapperTypeRetriever(IEnumerable<ICustomJsonMapper<Domain.Attribute>> customJsonMappers) : base(customJsonMappers)
+        public AttributeMapperTypeRetriever(IEnumerable<ICustomJsonMapper<Domain.Attribute>> customJsonMappers) : base(customJsonMappers)
         {
         }
     }

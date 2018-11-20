@@ -5,7 +5,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class DateConverter<T, S> : ICustomJsonMapper<T>
+    public abstract class DateConverter<T, S> : ICustomJsonMapper<T>
     {
         public int Priority => 2;
 

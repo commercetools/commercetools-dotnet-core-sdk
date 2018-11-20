@@ -9,7 +9,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class LocalizedStringConverter<T, S> : ICustomJsonMapper<T>
+    public abstract class LocalizedStringConverter<T, S> : ICustomJsonMapper<T>
     {
         public int Priority => 4;
 

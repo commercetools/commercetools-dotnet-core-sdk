@@ -7,11 +7,11 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class SetFieldMapperTypeRetriever : SetMapperTypeRetriever<Fields>
+    public class FieldMapperTypeRetriever : SetMapperTypeRetriever<Fields>
     {
         protected override Type SetType => typeof(Set<>);
         
-        public SetFieldMapperTypeRetriever(IEnumerable<ICustomJsonMapper<Fields>> customJsonMappers) : base(customJsonMappers)
+        public FieldMapperTypeRetriever(IEnumerable<ICustomJsonMapper<Fields>> customJsonMappers) : base(customJsonMappers)
         {
         }
     }

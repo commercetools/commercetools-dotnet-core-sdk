@@ -7,7 +7,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class NumberConverter<T, S> : ICustomJsonMapper<T>
+    public abstract class NumberConverter<T, S> : ICustomJsonMapper<T>
     {
         public int Priority => 4;
 

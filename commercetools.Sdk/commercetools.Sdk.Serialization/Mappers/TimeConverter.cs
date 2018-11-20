@@ -7,7 +7,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class TimeConverter<T, S> : ICustomJsonMapper<T>
+    public abstract class TimeConverter<T, S> : ICustomJsonMapper<T>
     {
         public int Priority => 3;
 

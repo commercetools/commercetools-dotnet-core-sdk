@@ -5,7 +5,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class BooleanConverter<T, S> : ICustomJsonMapper<T>
+    public abstract class BooleanConverter<T, S> : ICustomJsonMapper<T>
     {
         public int Priority => 4;
 

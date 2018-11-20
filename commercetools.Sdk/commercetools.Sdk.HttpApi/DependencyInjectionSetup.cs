@@ -14,8 +14,7 @@ namespace commercetools.Sdk.HttpApi
     {
         public static void UseHttpApiWithClientCredentials(this IServiceCollection services, IConfiguration configuration)
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-
+            // TODO Change name of Client to something more specific
             IClientConfiguration clientConfiguration = configuration.GetSection("Client").Get<ClientConfiguration>();
             services.AddSingleton(clientConfiguration);
             services.AddSingleton<ITokenStoreManager, InMemoryTokenStoreManager>();
@@ -35,9 +34,8 @@ namespace commercetools.Sdk.HttpApi
             services.AddSingleton<ISortExpressionVisitor, SortExpressionVisitor>();
             services.AddSingleton<IFilterExpressionVisitor, FilterExpressionVisitor>();
 
-            IRegisteredTypeRetriever registeredTypeRetriever = new RegisteredTypeRetriever(assembly);
-            services.AddSingleton(registeredTypeRetriever);
-            services.RegisterAllInterfaceTypes<IRequestMessageBuilder>(ServiceLifetime.Singleton, assembly);            
+            services.AddSingleton<IRegisteredTypeRetriever, RegisteredTypeRetriever>();
+            services.RegisterAllInterfaceTypes<IRequestMessageBuilder>(ServiceLifetime.Singleton);            
 
             services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();

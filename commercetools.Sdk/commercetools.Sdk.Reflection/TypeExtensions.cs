@@ -8,14 +8,25 @@ namespace commercetools.Sdk.Extensions
 {
     public static class TypeExtensions
     {
+        // TODO Refactor
         public static IEnumerable<Type> GetAllClassTypesForInterface(this Type interfaceType, Assembly assembly)
         {
             List<Type> classTypes = new List<Type>();
             foreach (Type type in assembly.GetTypes())
             {
-                if (type.IsClass && type.GetInterfaces().Contains(interfaceType))
+                if (interfaceType.IsGenericType)
                 {
-                    classTypes.Add(type);
+                    if (type.IsClass && !type.IsAbstract && type.GetInterfaces().Where(i => i.IsGenericType).Select(i => i.GetGenericTypeDefinition()).Contains(interfaceType))
+                    {
+                        classTypes.Add(type);
+                    }
+                }
+                else
+                { 
+                    if (type.IsClass && !type.IsAbstract && type.GetInterfaces().Contains(interfaceType))
+                    {
+                        classTypes.Add(type);
+                    }
                 }
             }
             return classTypes;

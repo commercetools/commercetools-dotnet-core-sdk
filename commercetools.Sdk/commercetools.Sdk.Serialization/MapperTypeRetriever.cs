@@ -6,7 +6,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class MapperTypeRetriever<T> : IMapperTypeRetriever<T>
+    public abstract class MapperTypeRetriever<T> : IMapperTypeRetriever<T>
     {
         private readonly IEnumerable<ICustomJsonMapper<T>> customJsonMappers;
 
