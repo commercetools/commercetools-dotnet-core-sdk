@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    [FacetType("terms")]
+    [FacetResultType("terms")]
     public class TermFacetResult : FacetResult
     {
         public string DateType { get; set; }

@@ -3,21 +3,11 @@
 namespace commercetools.Sdk.Domain
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class FacetTypeAttribute : System.Attribute
+    public class FacetResultTypeAttribute : TypeMarkerAttribute
     {
-        private string facetType;
-
-        public FacetTypeAttribute(string facetType)
+        public FacetResultTypeAttribute(string facetType)
         {
-            this.facetType = facetType;
-        }
-
-        public string FacetType
-        {
-            get
-            {
-                return this.facetType;
-            }
+            this.Value = facetType;
         }
     }
 }

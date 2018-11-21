@@ -32,7 +32,20 @@ namespace System
             return classTypes;
         }
 
-        public static IEnumerable<Type> GetAllDerivedClassTypesForClass(this Type classType, Assembly assembly)
+        public static IEnumerable<Type> GetAllRegisteredTypes(this Type type, Assembly assembly)
+        {
+            if (type.IsInterface)
+            {
+                return type.GetAllClassTypesForInterface(assembly);
+            }
+            if (type.IsClass)
+            {
+                return type.GetAllDerivedClassTypesForClass(assembly);
+            }
+            return new List<Type>();
+        }
+
+            public static IEnumerable<Type> GetAllDerivedClassTypesForClass(this Type classType, Assembly assembly)
         {
             List<Type> classTypes = new List<Type>();
             foreach (Type type in assembly.GetTypes())

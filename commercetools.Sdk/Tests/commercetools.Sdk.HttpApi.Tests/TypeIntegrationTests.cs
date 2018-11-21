@@ -32,7 +32,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             fieldDefinition.Required = true;
             fieldDefinition.Label.Add("en", "string description");
             fieldDefinition.InputHint = TextInputHint.SingleLine;
-            fieldDefinition.Type = new StringType();
+            fieldDefinition.Type = new StringFieldType();
             Type createdCategory = commerceToolsClient.ExecuteAsync(new CreateCommand<Type>(typeDraft)).Result;
 
         }

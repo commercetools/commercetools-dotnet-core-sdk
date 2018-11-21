@@ -20,7 +20,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/FieldTypes/String.json");
             Type deserialized = serializerService.Deserialize<Type>(serialized);
-            Assert.IsType<StringType>(deserialized.FieldDefinitions[0].Type);
+            Assert.IsType<StringFieldType>(deserialized.FieldDefinitions[0].Type);
         }
     }
 }

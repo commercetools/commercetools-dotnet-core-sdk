@@ -9,7 +9,7 @@ namespace commercetools.Sdk.Util
         public IEnumerable<Type> GetRegisteredTypes<T>()
         {
             Assembly assembly = Assembly.GetAssembly(typeof(T));
-            IEnumerable<Type> registeredHttpApiCommandTypes = typeof(T).GetAllClassTypesForInterface(assembly);
+            IEnumerable<Type> registeredHttpApiCommandTypes = typeof(T).GetAllRegisteredTypes(assembly);
             return registeredHttpApiCommandTypes;
         }
     }

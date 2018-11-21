@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    [FacetType("filter")]
+    [FacetResultType("filter")]
     public class FilteredFacetResult : FacetResult
     {
         public int Count { get; set; }

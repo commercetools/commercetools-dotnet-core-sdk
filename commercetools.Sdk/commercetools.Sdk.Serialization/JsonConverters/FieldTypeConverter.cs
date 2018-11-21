@@ -9,6 +9,13 @@ namespace commercetools.Sdk.Serialization
 {
     public class FieldTypeConverter : JsonConverter
     {
+        private readonly IDecoratorTypeRetriever<FieldType> decoratorTypeRetriever;
+
+        public FieldTypeConverter(IDecoratorTypeRetriever<FieldType> decoratorTypeRetriever)
+        {
+            this.decoratorTypeRetriever = decoratorTypeRetriever;
+        }
+
         public override bool CanConvert(Type objectType)
         {
             if (objectType == typeof(FieldType))
@@ -23,7 +30,7 @@ namespace commercetools.Sdk.Serialization
             JObject jsonObject = JObject.Load(reader);
             JToken nameProperty = jsonObject["name"];
             
-            Type fieldType = GetTypeByCodeProperty(nameProperty);
+            Type fieldType = this.decoratorTypeRetriever.GetTypeForToken(nameProperty);
 
             if (fieldType == null)
             {
@@ -36,27 +43,6 @@ namespace commercetools.Sdk.Serialization
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
-        }   
-
-        private Type GetTypeByCodeProperty(JToken nameProperty)
-        {
-            var derivedFieldTypes = typeof(FieldType).GetAllDerivedClassTypesForClass(Assembly.GetAssembly(typeof(FieldType)));
-            foreach(Type type in derivedFieldTypes)
-            {
-                FieldInfo field = type.GetField("NAME", BindingFlags.Public | BindingFlags.Static);
-                string name = (string)field.GetValue(null);
-                if (!string.IsNullOrEmpty(name))
-                {
-                    if (name == nameProperty.Value<string>())
-                    {
-                        return type;
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        
+        }           
     }
 }

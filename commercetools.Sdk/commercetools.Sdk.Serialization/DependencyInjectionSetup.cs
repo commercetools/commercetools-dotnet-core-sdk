@@ -1,5 +1,6 @@
 ﻿namespace commercetools.Sdk.Serialization
 {
+    using commercetools.Sdk.Util;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
     using System.Reflection;
@@ -13,6 +14,9 @@
 
             Assembly assembly = Assembly.GetExecutingAssembly();
             services.RegisterAllDerivedTypes<JsonConverter>(ServiceLifetime.Singleton, assembly);
+
+            services.AddSingleton<IRegisteredTypeRetriever, RegisteredTypeRetriever>();
+            services.RegisterAllInterfaceTypes(typeof(IDecoratorTypeRetriever<>), ServiceLifetime.Singleton);
 
             services.AddSingleton<CustomContractResolver>();
             services.AddSingleton<JsonSerializerSettingsFactory>();

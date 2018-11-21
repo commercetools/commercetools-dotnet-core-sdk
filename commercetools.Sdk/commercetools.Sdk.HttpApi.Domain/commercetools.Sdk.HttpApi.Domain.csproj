@@ -4,4 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\commercetools.Sdk.Domain\commercetools.Sdk.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
