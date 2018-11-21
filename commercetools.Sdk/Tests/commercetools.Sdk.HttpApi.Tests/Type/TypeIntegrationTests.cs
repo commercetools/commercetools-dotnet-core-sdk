@@ -8,34 +8,36 @@ using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
-    public class TypeIntegrationTests : IClassFixture<ClientFixture>
+    public class TypeIntegrationTests : IClassFixture<TypeFixture>
     {
-        private readonly ClientFixture clientFixture;
+        private readonly TypeFixture typeFixture;
 
-        public TypeIntegrationTests(ClientFixture clientFixture)
+        public TypeIntegrationTests(TypeFixture typeFixture)
         {
-            this.clientFixture = clientFixture;
+            this.typeFixture = typeFixture;
         }
 
         [Fact]
         public void CreateType()
         {
-            IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
+            IClient commerceToolsClient = this.typeFixture.GetService<IClient>();
             TypeDraft typeDraft = new TypeDraft();
             typeDraft.Key = "my-category";
+            typeDraft.Name = new LocalizedString();
             typeDraft.Name.Add("en", "customized fields");
+            typeDraft.Description = new LocalizedString();
             typeDraft.Description.Add("en", "customized fields definition");
             typeDraft.ResourceTypeIds = new List<string>() { "category" };
             typeDraft.FieldDefinitions = new List<FieldDefinition>();
             FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.Name = "string-field";
             fieldDefinition.Required = true;
+            fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "string description");
             fieldDefinition.InputHint = TextInputHint.SingleLine;
-            fieldDefinition.Type = new StringFieldType();
-            Type createdCategory = commerceToolsClient.ExecuteAsync(new CreateCommand<Type>(typeDraft)).Result;
-
+            fieldDefinition.Type = new StringType();
+            typeDraft.FieldDefinitions.Add(fieldDefinition);
+            Type createdType = commerceToolsClient.ExecuteAsync(new CreateCommand<Type>(typeDraft)).Result;
         }
-
     }
 }

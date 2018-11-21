@@ -3,6 +3,7 @@
     using commercetools.Sdk.Util;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
     using System.Reflection;
 
     public static class DependencyInjectionSetup
@@ -14,6 +15,7 @@
 
             Assembly assembly = Assembly.GetExecutingAssembly();
             services.RegisterAllDerivedTypes<JsonConverter>(ServiceLifetime.Singleton, assembly);
+            services.AddSingleton<JsonConverter, StringEnumConverter>();
 
             services.AddSingleton<IRegisteredTypeRetriever, RegisteredTypeRetriever>();
             services.RegisterAllInterfaceTypes(typeof(IDecoratorTypeRetriever<>), ServiceLifetime.Singleton);
