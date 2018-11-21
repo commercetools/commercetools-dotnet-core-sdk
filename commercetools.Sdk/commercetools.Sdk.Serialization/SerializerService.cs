@@ -1,6 +1,7 @@
 ﻿namespace commercetools.Sdk.Serialization
 {
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
     using Newtonsoft.Json.Serialization;
     using System;
 
@@ -22,6 +23,7 @@
         public string Serialize<T>(T input)
         {
             var serializerSettings = new JsonSerializerSettings();
+            serializerSettings.Converters.Add(new StringEnumConverter());
             serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             return JsonConvert.SerializeObject(input, serializerSettings);
         }

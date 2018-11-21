@@ -15,7 +15,6 @@
 
             Assembly assembly = Assembly.GetExecutingAssembly();
             services.RegisterAllDerivedTypes<JsonConverter>(ServiceLifetime.Singleton, assembly);
-            services.AddSingleton<JsonConverter, StringEnumConverter>();
 
             services.AddSingleton<IRegisteredTypeRetriever, RegisteredTypeRetriever>();
             services.RegisterAllInterfaceTypes(typeof(IDecoratorTypeRetriever<>), ServiceLifetime.Singleton);
