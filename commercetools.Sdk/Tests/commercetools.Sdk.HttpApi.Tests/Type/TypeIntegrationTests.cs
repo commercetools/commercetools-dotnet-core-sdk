@@ -62,5 +62,34 @@ namespace commercetools.Sdk.HttpApi.Tests
             Type retrievedType = commerceToolsClient.ExecuteAsync(new DeleteByKeyCommand<Type>(type.Key, type.Version)).Result;
             Assert.Equal(type.Key, retrievedType.Key);
         }
+
+        [Fact]
+        public void UpdateTypeByKeyChangeName()
+        {
+            IClient commerceToolsClient = this.typeFixture.GetService<IClient>();
+            Type type = this.typeFixture.CreateType();
+            List<UpdateAction<Type>> updateActions = new List<UpdateAction<Type>>();
+            string newName = this.typeFixture.RandomString(7);
+            ChangeNameUpdateAction changeNameUpdateAction = new ChangeNameUpdateAction() { Name = new LocalizedString() { { "en", newName } } };
+            updateActions.Add(changeNameUpdateAction);
+            Type retrievedType = commerceToolsClient.ExecuteAsync(new UpdateByKeyCommand<Type>(type.Key, type.Version, updateActions)).Result;
+            this.typeFixture.TypesToDelete.Remove(type);
+            this.typeFixture.TypesToDelete.Add(retrievedType);
+            Assert.Equal(newName, retrievedType.Name["en"]);
+        }
+
+        [Fact]
+        public void UpdateTypeByIdChangeKey()
+        {
+            IClient commerceToolsClient = this.typeFixture.GetService<IClient>();
+            Type type = this.typeFixture.CreateType();
+            List<UpdateAction<Type>> updateActions = new List<UpdateAction<Type>>();
+            string newKey = this.typeFixture.RandomString(7);
+            ChangeKeyUpdateAction changeKeyUpdateAction = new ChangeKeyUpdateAction() { Key = newKey };
+            updateActions.Add(changeKeyUpdateAction);
+            Type retrievedType = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Type>(new Guid(type.Id), type.Version, updateActions)).Result;
+            this.typeFixture.TypesToDelete.Remove(type);
+            this.typeFixture.TypesToDelete.Add(retrievedType);
+        }
     }
 }
