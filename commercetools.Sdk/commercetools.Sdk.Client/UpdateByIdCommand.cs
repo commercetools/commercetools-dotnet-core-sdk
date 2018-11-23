@@ -7,7 +7,7 @@ namespace commercetools.Sdk.Client
 {
     public class UpdateByIdCommand<T> : UpdateCommand<T>
     {
-        public UpdateByIdCommand(Guid guid, int version, List<UpdateAction> updateActions)
+        public UpdateByIdCommand(Guid guid, int version, List<UpdateAction<T>> updateActions)
         {
             this.ParameterKey = "id";
             this.ParameterValue = guid;

@@ -7,6 +7,6 @@ namespace commercetools.Sdk.Domain
     [FieldType("Reference")]
     public class ReferenceType : FieldType
     {
-        public string ResourceTypeId { get; set; }
+        public ReferenceTypeId ReferenceTypeId { get; set; }
     }
 }

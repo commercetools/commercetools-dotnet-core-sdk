@@ -4,9 +4,9 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class SetKey : UpdateAction
+    public class ChangeKeyUpdateAction : UpdateAction<Type>
     {
-        public string Action => "setKey";
+        public string Action => "changeKey"; 
         public string Key { get; set; }
     }
 }

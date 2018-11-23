@@ -35,7 +35,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             string currentKey = category.Key;
             SetKey setKeyAction = new SetKey();
             setKeyAction.Key = "newKey" + this.clientFixture.RandomString(3);
-            HttpApiClientException exception = Assert.ThrowsAsync<HttpApiClientException>(() => commerceToolsClient.ExecuteAsync<Category>(new UpdateByIdCommand<Category>(new Guid(category.Id), category.Version - 1, new List<UpdateAction>() { setKeyAction }))).Result;
+            HttpApiClientException exception = Assert.ThrowsAsync<HttpApiClientException>(() => commerceToolsClient.ExecuteAsync<Category>(new UpdateByIdCommand<Category>(new Guid(category.Id), category.Version - 1, new List<UpdateAction<Category>>() { setKeyAction }))).Result;
             Assert.Equal(409, exception.StatusCode);
             Assert.Equal(typeof(ConcurrentModificationError), exception.Errors[0].GetType());
         }

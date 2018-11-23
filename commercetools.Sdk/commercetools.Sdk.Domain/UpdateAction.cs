@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class UpdateAction
+    public class UpdateAction<T>
     {
 
     }

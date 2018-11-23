@@ -24,7 +24,6 @@
         {
             var serializerSettings = new JsonSerializerSettings();            
             serializerSettings.Converters.Add(new EnumConverter());
-            //serializerSettings.Converters.Add(new StringEnumConverter());
             serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             return JsonConvert.SerializeObject(input, serializerSettings);
         }
