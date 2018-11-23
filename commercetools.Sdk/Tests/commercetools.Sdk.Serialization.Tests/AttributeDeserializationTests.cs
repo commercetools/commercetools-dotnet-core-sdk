@@ -1,6 +1,5 @@
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Attributes;
-using commercetools.Sdk.Test.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.IO;

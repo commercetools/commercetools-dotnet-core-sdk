@@ -50,7 +50,7 @@ namespace System
             List<Type> classTypes = new List<Type>();
             foreach (Type type in assembly.GetTypes())
             {
-                if (type != classType && classType.IsAssignableFrom(type))
+                if (type != classType && !type.IsAbstract && classType.IsAssignableFrom(type))
                 {
                     classTypes.Add(type);
                 }

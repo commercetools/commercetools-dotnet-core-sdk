@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,6 +32,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="Moq" Version="4.10.0" />
     <PackageReference Include="xunit" Version="2.4.0" />
@@ -44,7 +47,6 @@
     <ProjectReference Include="..\..\commercetools.Sdk.Reflection\commercetools.Sdk.Util.csproj" />
     <ProjectReference Include="..\..\commercetools.Sdk.Serialization\commercetools.Sdk.Serialization.csproj" />
     <ProjectReference Include="..\..\commercetools.Sdk.Domain\commercetools.Sdk.Domain.csproj" />
-    <ProjectReference Include="..\..\commercetools.Sdk.Test.Helpers\commercetools.Sdk.Test.Helpers.csproj" />
   </ItemGroup>
 
 </Project>

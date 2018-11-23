@@ -21,22 +21,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void CreateType()
         {
             IClient commerceToolsClient = this.typeFixture.GetService<IClient>();
-            TypeDraft typeDraft = new TypeDraft();
-            typeDraft.Key = "my-category";
-            typeDraft.Name = new LocalizedString();
-            typeDraft.Name.Add("en", "customized fields");
-            typeDraft.Description = new LocalizedString();
-            typeDraft.Description.Add("en", "customized fields definition");
-            typeDraft.ResourceTypeIds = new List<string>() { "category" };
-            typeDraft.FieldDefinitions = new List<FieldDefinition>();
-            FieldDefinition fieldDefinition = new FieldDefinition();
-            fieldDefinition.Name = "string-field";
-            fieldDefinition.Required = true;
-            fieldDefinition.Label = new LocalizedString();
-            fieldDefinition.Label.Add("en", "string description");
-            fieldDefinition.InputHint = TextInputHint.SingleLine;
-            fieldDefinition.Type = new StringType();
-            typeDraft.FieldDefinitions.Add(fieldDefinition);
+            TypeDraft typeDraft = this.typeFixture.CreateTypeDraft();
             Type createdType = commerceToolsClient.ExecuteAsync(new CreateCommand<Type>(typeDraft)).Result;
         }
     }

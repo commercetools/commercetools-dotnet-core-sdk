@@ -6,8 +6,6 @@ namespace commercetools.Sdk.HttpApi.Tests
     using System.Net.Http;
     using Xunit;
 
-    // TODO Thing of better names for tests
-    // These are not real unit tests, but something like "integration tests" and a way to test code in a simple way
     public class TokenIntegrationTests : IClassFixture<ClientFixture>
     {
         private readonly ClientFixture clientFixture;

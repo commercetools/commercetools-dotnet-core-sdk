@@ -1,5 +1,4 @@
 ﻿using commercetools.Sdk.Domain;
-using commercetools.Sdk.Test.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;

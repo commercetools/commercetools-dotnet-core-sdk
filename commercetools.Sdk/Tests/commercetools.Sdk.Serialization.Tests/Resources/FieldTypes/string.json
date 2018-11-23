@@ -2,7 +2,7 @@
   "key": "my-category",
   "name": { "en": "customized fields" },
   "description": { "en": "customized fields definition" },
-  "resourceTypeIds": [ "category" ],
+  "resourceTypeIds": [ "category", "custom-line-item" ],
   "fieldDefinitions": [
     {
       "name": "description",
