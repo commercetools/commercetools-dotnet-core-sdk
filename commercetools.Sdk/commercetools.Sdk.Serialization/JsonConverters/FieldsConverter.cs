@@ -8,7 +8,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class FieldsConverter : JsonConverter
+    public class FieldsConverter : JsonConverterBase
     {
         private readonly IMapperTypeRetriever<Fields> mapperTypeRetriever;
 
@@ -16,6 +16,8 @@ namespace commercetools.Sdk.Serialization
         {
             this.mapperTypeRetriever = mapperTypeRetriever;
         }
+
+        public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization };
 
         public override bool CanConvert(Type objectType)
         {

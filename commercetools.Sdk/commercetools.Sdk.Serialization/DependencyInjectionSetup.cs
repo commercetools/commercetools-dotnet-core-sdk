@@ -13,13 +13,13 @@
             services.RegisterAllInterfaceTypes(typeof(ICustomJsonMapper<>), ServiceLifetime.Singleton);
             services.RegisterAllInterfaceTypes(typeof(IMapperTypeRetriever<>), ServiceLifetime.Singleton);
 
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            services.RegisterAllDerivedTypes<JsonConverter>(ServiceLifetime.Singleton, assembly);
+            services.RegisterAllDerivedTypes<JsonConverterBase>(ServiceLifetime.Singleton);
 
             services.AddSingleton<IRegisteredTypeRetriever, RegisteredTypeRetriever>();
             services.RegisterAllInterfaceTypes(typeof(IDecoratorTypeRetriever<>), ServiceLifetime.Singleton);
 
-            services.AddSingleton<CustomContractResolver>();
+            services.AddSingleton<DeserializationContractResolver>();
+            services.AddSingleton<SerializationContractResolver>();
             services.AddSingleton<JsonSerializerSettingsFactory>();
             services.AddSingleton<ISerializerService, SerializerService>();
         }

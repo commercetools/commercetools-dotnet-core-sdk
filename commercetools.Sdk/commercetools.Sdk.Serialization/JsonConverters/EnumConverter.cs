@@ -9,7 +9,7 @@ using commercetools.Sdk.Util;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class EnumConverter : JsonConverter
+    public class EnumConverter : JsonConverterBase
     {
         public override bool CanConvert(Type objectType)
         {
@@ -19,6 +19,8 @@ namespace commercetools.Sdk.Serialization
             }
             return false;
         }
+
+        public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization, SerializerType.Serialization };
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {

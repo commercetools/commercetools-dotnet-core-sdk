@@ -27,7 +27,7 @@
 
         public LocalizedString MetaKeywords { get; set; }
 
-        public CustomFields Custom { get; set; }
+        public CustomFieldsDraft Custom { get; set; }
 
         public List<Asset> Assets { get; set; }
     }

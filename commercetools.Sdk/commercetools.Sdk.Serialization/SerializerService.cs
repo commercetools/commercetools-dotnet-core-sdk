@@ -16,16 +16,14 @@
 
         public T Deserialize<T>(string input)
         {
-            var settings = this.jsonSerializerSettingsFactory.Create(typeof(T));
+            var settings = this.jsonSerializerSettingsFactory.CreateDeserilizationSettings(typeof(T));
             return JsonConvert.DeserializeObject<T>(input, settings);
         }
 
         public string Serialize<T>(T input)
         {
-            var serializerSettings = new JsonSerializerSettings();            
-            serializerSettings.Converters.Add(new EnumConverter());
-            serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            return JsonConvert.SerializeObject(input, serializerSettings);
+            var settings = this.jsonSerializerSettingsFactory.CreateSerilizationSettings(typeof(T));
+            return JsonConvert.SerializeObject(input, settings);
         }
     }
 }

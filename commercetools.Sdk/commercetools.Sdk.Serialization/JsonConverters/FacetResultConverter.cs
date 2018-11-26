@@ -9,7 +9,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class FacetResultConverter : JsonConverter
+    public class FacetResultConverter : JsonConverterBase
     {
         private readonly IDecoratorTypeRetriever<FacetResult> decoratorTypeRetriever;
 
@@ -17,6 +17,8 @@ namespace commercetools.Sdk.Serialization
         {
             this.decoratorTypeRetriever = decoratorTypeRetriever;
         }
+
+        public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization };
 
         public override bool CanConvert(Type objectType)
         {

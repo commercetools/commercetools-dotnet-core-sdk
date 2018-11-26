@@ -2,12 +2,13 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class FieldTypeConverter : JsonConverter
+    public class FieldTypeConverter : JsonConverterBase
     {
         private readonly IDecoratorTypeRetriever<FieldType> decoratorTypeRetriever;
 
@@ -24,6 +25,8 @@ namespace commercetools.Sdk.Serialization
             }
             return false;
         }
+
+        public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization };
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {

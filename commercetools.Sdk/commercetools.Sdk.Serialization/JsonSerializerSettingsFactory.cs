@@ -8,15 +8,17 @@
 
     public class JsonSerializerSettingsFactory
     {
-        private CustomContractResolver customContractResolver;
+        private readonly DeserializationContractResolver deserializationContractResolver;
+        private readonly SerializationContractResolver serializationContractResolver;
         private IDictionary<Type, JsonSerializerSettings> mapping = new Dictionary<Type, JsonSerializerSettings>();
 
-        public JsonSerializerSettingsFactory(CustomContractResolver customContractResolver)
+        public JsonSerializerSettingsFactory(DeserializationContractResolver deserializationContractResolver, SerializationContractResolver serializationContractResolver)
         {
-            this.customContractResolver = customContractResolver;
+            this.deserializationContractResolver = deserializationContractResolver;
+            this.serializationContractResolver = serializationContractResolver;
         }
 
-        public JsonSerializerSettings Create(Type type)
+        public JsonSerializerSettings CreateDeserilizationSettings(Type type)
         {
             if (!mapping.ContainsKey(type))
             {
@@ -31,13 +33,20 @@
                 }
                 else
                 {
-                    settings.ContractResolver = this.customContractResolver;
+                    settings.ContractResolver = this.deserializationContractResolver;
                 }
 
                 mapping[type] = settings;
             }
 
             return mapping[type];
+        }
+
+        public JsonSerializerSettings CreateSerilizationSettings(Type type)
+        {
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.ContractResolver = this.serializationContractResolver;
+            return settings;
         }
     }
 }

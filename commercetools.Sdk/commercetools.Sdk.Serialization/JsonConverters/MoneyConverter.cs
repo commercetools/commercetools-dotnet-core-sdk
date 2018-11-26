@@ -8,7 +8,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class MoneyConverter : JsonConverter
+    public class MoneyConverter : JsonConverterBase
     {
         private readonly IMapperTypeRetriever<Money> mapperTypeRetriever;
 
@@ -20,6 +20,8 @@ namespace commercetools.Sdk.Serialization
             }
             return false;
         }
+
+        public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization };
 
         public MoneyConverter(IMapperTypeRetriever<Money> mapperTypeRetriever)
         {

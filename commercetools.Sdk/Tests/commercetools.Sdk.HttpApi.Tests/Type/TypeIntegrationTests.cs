@@ -23,6 +23,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClient commerceToolsClient = this.typeFixture.GetService<IClient>();
             TypeDraft typeDraft = this.typeFixture.CreateTypeDraft();
             Type createdType = commerceToolsClient.ExecuteAsync(new CreateCommand<Type>(typeDraft)).Result;
+            // This can also be done in a proxy class wrapping Client that adds types to delete inside
             this.typeFixture.TypesToDelete.Add(createdType);
             Assert.Equal(typeDraft.Key, createdType.Key);
         }
@@ -115,7 +116,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             Type type = this.typeFixture.CreateType();
             List<UpdateAction<Type>> updateActions = new List<UpdateAction<Type>>();
             string newKey = this.typeFixture.RandomString(7);
-            AddFieldDefinitionUpdateAction addFieldDefinitionUpdateAction = new AddFieldDefinitionUpdateAction() { FieldDefinition = this.typeFixture.CreateStringField() };
+            AddFieldDefinitionUpdateAction addFieldDefinitionUpdateAction = new AddFieldDefinitionUpdateAction() { FieldDefinition = this.typeFixture.CreateNewStringField() };
             updateActions.Add(addFieldDefinitionUpdateAction);
             Type retrievedType = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Type>(new Guid(type.Id), type.Version, updateActions)).Result;
             this.typeFixture.TypesToDelete.Remove(type);

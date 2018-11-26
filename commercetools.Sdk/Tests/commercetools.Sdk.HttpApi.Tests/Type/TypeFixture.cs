@@ -71,10 +71,20 @@ namespace commercetools.Sdk.HttpApi.Tests
             return typeDraft;
         }
 
-        public FieldDefinition CreateStringField()
+        public FieldDefinition CreateNewStringField()
+        {
+            return this.CreateStringField("new-string-field");
+        }
+
+        private FieldDefinition CreateStringField()
+        {
+            return this.CreateStringField("string-field");
+        }
+
+        private FieldDefinition CreateStringField(string name)
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
-            fieldDefinition.Name = "string-field-" + this.RandomString(2);
+            fieldDefinition.Name = name;
             fieldDefinition.Required = true;
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "string description");

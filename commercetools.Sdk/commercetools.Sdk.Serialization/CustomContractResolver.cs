@@ -8,11 +8,13 @@
     using System.Linq;
     using Type = System.Type;
 
-    public class CustomContractResolver : DefaultContractResolver
+    public abstract class CustomContractResolver : CamelCasePropertyNamesContractResolver
     {
-        private readonly IEnumerable<JsonConverter> registeredConverters;
+        private readonly IEnumerable<JsonConverterBase> registeredConverters;
 
-        public CustomContractResolver(IEnumerable<JsonConverter> registeredConverters)
+        protected abstract SerializerType SerializerType { get; }
+
+        public CustomContractResolver(IEnumerable<JsonConverterBase> registeredConverters)
         {
             this.registeredConverters = registeredConverters;
         }
@@ -23,7 +25,7 @@
             // https://www.newtonsoft.com/json/help/html/Performance.htm
             JsonContract contract = base.CreateContract(objectType);
 
-            JsonConverter jsonConverter = registeredConverters.Where(c => c.CanConvert(objectType)).FirstOrDefault();
+            JsonConverter jsonConverter = registeredConverters.Where(c => c.CanConvert(objectType) && c.SerializerTypes.Contains(this.SerializerType)).FirstOrDefault();
             if (jsonConverter != null)
             {
                 contract.Converter = jsonConverter;
