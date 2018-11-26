@@ -55,6 +55,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             FieldDefinition timeFieldDefinition = this.CreateTimeField();
             FieldDefinition dateTimeFieldDefinition = this.CreateDateTimeField();
             FieldDefinition referenceFieldDefinition = this.CreateReferenceField();
+            FieldDefinition setFieldDefinition = this.CreateSetField();
             typeDraft.FieldDefinitions.Add(stringFieldDefinition);
             typeDraft.FieldDefinitions.Add(localizedStringFieldDefinition);
             typeDraft.FieldDefinitions.Add(numberFieldDefinition);
@@ -66,13 +67,14 @@ namespace commercetools.Sdk.HttpApi.Tests
             typeDraft.FieldDefinitions.Add(timeFieldDefinition);
             typeDraft.FieldDefinitions.Add(dateTimeFieldDefinition);
             typeDraft.FieldDefinitions.Add(referenceFieldDefinition);
+            typeDraft.FieldDefinitions.Add(setFieldDefinition);
             return typeDraft;
         }
 
-        private FieldDefinition CreateStringField()
+        public FieldDefinition CreateStringField()
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
-            fieldDefinition.Name = "string-field";
+            fieldDefinition.Name = "string-field-" + this.RandomString(2);
             fieldDefinition.Required = true;
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "string description");
@@ -209,12 +211,12 @@ namespace commercetools.Sdk.HttpApi.Tests
         private FieldDefinition CreateSetField()
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
-            fieldDefinition.Name = "reference-field";
+            fieldDefinition.Name = "set-field";
             fieldDefinition.Required = true;
             fieldDefinition.Label = new LocalizedString();
-            fieldDefinition.Label.Add("en", "reference description");
+            fieldDefinition.Label.Add("en", "set description");
             SetType fieldType = new SetType();
-            //fieldType.ElementType = ReferenceTypeId.Category;
+            fieldType.ElementType = new StringType();
             fieldDefinition.Type = fieldType;
             return fieldDefinition;
         }

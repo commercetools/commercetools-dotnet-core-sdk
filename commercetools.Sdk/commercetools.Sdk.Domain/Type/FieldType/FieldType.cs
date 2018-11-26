@@ -18,5 +18,10 @@ namespace commercetools.Sdk.Domain
             }
             return null;
         }
+
+        public EnumType ToEnumType()
+        {
+            return this as EnumType;
+        }
     }
 }

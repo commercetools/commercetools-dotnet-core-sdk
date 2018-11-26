@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace commercetools.Sdk.Domain
 {
@@ -14,5 +15,10 @@ namespace commercetools.Sdk.Domain
         public LocalizedString Description { get; set; }
         public List<ResourceTypeId> ResourceTypeIds { get; set; }
         public List<FieldDefinition> FieldDefinitions { get; set; }
+
+        public FieldDefinition GetFieldDefinition(string index)
+        {
+            return this.FieldDefinitions.Where(f => f.Name == index).FirstOrDefault();
+        }
     }
 }

@@ -90,6 +90,37 @@ namespace commercetools.Sdk.HttpApi.Tests
             Type retrievedType = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Type>(new Guid(type.Id), type.Version, updateActions)).Result;
             this.typeFixture.TypesToDelete.Remove(type);
             this.typeFixture.TypesToDelete.Add(retrievedType);
+            Assert.Equal(newKey, retrievedType.Key);
+        }
+
+        [Fact]
+        public void UpdateTypeByIdAddEnumToFieldDefinition()
+        { 
+            IClient commerceToolsClient = this.typeFixture.GetService<IClient>();
+            Type type = this.typeFixture.CreateType();
+            List<UpdateAction<Type>> updateActions = new List<UpdateAction<Type>>();
+            string newKey = this.typeFixture.RandomString(7);
+            AddEnumToFieldDefinitionUpdateAction addEnumToFieldDefinitionUpdateAction = new AddEnumToFieldDefinitionUpdateAction() { FieldName = "enum-field", Value = new EnumValue() { Key = "new-enum-key", Label = "new-enum-label" } };
+            updateActions.Add(addEnumToFieldDefinitionUpdateAction);
+            Type retrievedType = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Type>(new Guid(type.Id), type.Version, updateActions)).Result;
+            this.typeFixture.TypesToDelete.Remove(type);
+            this.typeFixture.TypesToDelete.Add(retrievedType);
+            Assert.Equal(type.GetFieldDefinition("enum-field").Type.ToEnumType().Values.Count + 1, retrievedType.GetFieldDefinition("enum-field").Type.ToEnumType().Values.Count);
+        }
+
+        [Fact]
+        public void UpdateTypeByIdAddFieldDefinition()
+        {
+            IClient commerceToolsClient = this.typeFixture.GetService<IClient>();
+            Type type = this.typeFixture.CreateType();
+            List<UpdateAction<Type>> updateActions = new List<UpdateAction<Type>>();
+            string newKey = this.typeFixture.RandomString(7);
+            AddFieldDefinitionUpdateAction addFieldDefinitionUpdateAction = new AddFieldDefinitionUpdateAction() { FieldDefinition = this.typeFixture.CreateStringField() };
+            updateActions.Add(addFieldDefinitionUpdateAction);
+            Type retrievedType = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Type>(new Guid(type.Id), type.Version, updateActions)).Result;
+            this.typeFixture.TypesToDelete.Remove(type);
+            this.typeFixture.TypesToDelete.Add(retrievedType);
+            Assert.Equal(type.FieldDefinitions.Count + 1, retrievedType.FieldDefinitions.Count);
         }
     }
 }
