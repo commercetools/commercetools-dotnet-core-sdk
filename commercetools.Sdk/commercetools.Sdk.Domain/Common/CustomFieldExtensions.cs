@@ -26,7 +26,5 @@ namespace commercetools.Sdk.Domain
         {
             return o as Money;
         }
-
-
     }
 }

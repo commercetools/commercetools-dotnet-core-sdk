@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class MoneyAttribute : Attribute<Money>
+    public class MoneyAttribute : Attribute<CentPrecisionMoney>
     {
     }
 }

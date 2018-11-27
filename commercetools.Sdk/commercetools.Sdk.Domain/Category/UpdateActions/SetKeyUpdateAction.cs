@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.Categories
 {
     public class SetKeyUpdateAction : UpdateAction<Category>
     {

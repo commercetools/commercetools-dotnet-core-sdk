@@ -1,5 +1,6 @@
 ﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.HttpApi.Domain;
 using System;
 using System.Collections.Generic;

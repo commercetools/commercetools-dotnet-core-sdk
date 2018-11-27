@@ -13,7 +13,7 @@
         public string AnonymousId { get; set; }
         public List<LineItem> LineItems { get; set; }
         public List<CustomLineItem> CustomLineItems { get; set; }
-        public Money TotalPrice { get; set; }
+        public CentPrecisionMoney TotalPrice { get; set; }
         public TaxedPrice TaxedPrice { get; set; }
         public CartState CartState { get; set; }
         public Address ShippingAddress { get; set; }
