@@ -5,8 +5,8 @@ using System.Text;
 namespace commercetools.Sdk.Domain
 {
     [FieldType("Reference")]
-    public class ReferenceType : FieldType
+    public class ReferenceFieldType : FieldType
     {
-        public ReferenceTypeId ReferenceTypeId { get; set; }
+        public ReferenceFieldTypeId ReferenceTypeId { get; set; }
     }
 }

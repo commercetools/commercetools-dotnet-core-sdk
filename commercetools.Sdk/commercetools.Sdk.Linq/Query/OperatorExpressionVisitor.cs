@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,8 +35,20 @@ namespace commercetools.Sdk.Linq
             {
                 this.right = expression.Right.ToString();
             }
+            if (expression.Right.NodeType == ExpressionType.MemberAccess)
+            {
+                MemberExpression memberExpression = expression.Right as MemberExpression;
+                var x = Expression.Lambda(expression.Right, null).Compile().DynamicInvoke(null);
+                if (memberExpression.Type == typeof(string))
+                {
+                    x = string.Format("\"{0}\"", x);
+                }
+                this.right = x.ToString();
+            }
 
             this.operatorSign = QueryPredicateExpressionVisitor.MappingOfOperators[expression.NodeType];
         }
+
+        
     }
 }

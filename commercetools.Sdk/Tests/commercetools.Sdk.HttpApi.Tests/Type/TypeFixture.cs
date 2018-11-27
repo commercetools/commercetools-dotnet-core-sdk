@@ -19,6 +19,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void Dispose()
         {
             IClient commerceToolsClient = this.GetService<IClient>();
+            this.TypesToDelete.Reverse();
             foreach(Type type in this.TypesToDelete)
             {
                 Type deletedType = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<Type>(new Guid(type.Id), type.Version)).Result;
@@ -30,7 +31,6 @@ namespace commercetools.Sdk.HttpApi.Tests
             TypeDraft typeDraft = this.CreateTypeDraft();
             IClient commerceToolsClient = this.GetService<IClient>();
             Type createdType = commerceToolsClient.ExecuteAsync(new CreateCommand<Type>(typeDraft)).Result;
-            this.TypesToDelete.Add(createdType);
             return createdType;
         }
 
@@ -212,8 +212,8 @@ namespace commercetools.Sdk.HttpApi.Tests
             fieldDefinition.Required = true;
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "reference description");
-            ReferenceType fieldType = new ReferenceType();
-            fieldType.ReferenceTypeId = ReferenceTypeId.Category; 
+            ReferenceFieldType fieldType = new ReferenceFieldType();
+            fieldType.ReferenceTypeId = ReferenceFieldTypeId.Category; 
             fieldDefinition.Type = fieldType;
             return fieldDefinition;
         }

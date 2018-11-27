@@ -19,6 +19,28 @@ namespace commercetools.Sdk.Linq.Tests
         }
 
         [Fact]
+        public void ExpressionStringEqualVar()
+        {
+            string key = "c14";
+            Expression<Func<Category, bool>> expression = c => c.Key == key;
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("key = \"c14\"", result);
+        }
+
+        [Fact]
+        public void ExpressionStringEqualVarProperty()
+        {
+            string key = "c14";
+            Category category = new Category();
+            category.Key = key;
+            Expression<Func<Category, bool>> expression = c => c.Key == category.Key;
+            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
+            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Assert.Equal("key = \"c14\"", result);
+        }
+
+        [Fact]
         public void ExpressionStringNotEqual()
         {
             Expression<Func<Category, bool>> expression = c => c.Key != "c14";
@@ -209,10 +231,10 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void ExpressionPropertyPropertyGrouping()
         {
-            Expression<Func<Category, bool>> expression = c => c.Parent.Id == "some id" && c.Parent.TypeId == "some type id";
+            Expression<Func<Category, bool>> expression = c => c.Parent.Id == "some id" || c.Parent.Id == "some other id";
             QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
             string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
-            Assert.Equal("parent(id = \"some id\" and typeId = \"some type id\")", result);
+            Assert.Equal("parent(id = \"some id\" or id = \"some other id\")", result);
         }
 
         [Fact]

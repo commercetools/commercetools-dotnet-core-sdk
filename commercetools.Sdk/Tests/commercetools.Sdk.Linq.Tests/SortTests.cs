@@ -12,10 +12,10 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void SortCategoryParentTypeId()
         {
-            Expression<Func<Category, string>> expression = c => c.Parent.TypeId;
+            Expression<Func<Category, string>> expression = c => c.Parent.Id;
             ISortExpressionVisitor sortVisitor = new SortExpressionVisitor();
             string result = sortVisitor.Render(expression);
-            Assert.Equal("parent.typeId", result);
+            Assert.Equal("parent.id", result);
         }
 
         [Fact]

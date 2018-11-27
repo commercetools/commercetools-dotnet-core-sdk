@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public class SetExternalId : UpdateAction<Category>
+    public class SetExternalIdUpdateAction : UpdateAction<Category>
     {
         public string Action => "setExternalId";
         public string ExternalId { get; set; }

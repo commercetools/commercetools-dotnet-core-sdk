@@ -13,22 +13,18 @@ namespace commercetools.Sdk.HttpApi.Tests
         public CategoryFixture() : base()
         {
             this.CategoriesToDelete = new List<Category>();
-            this.Client = this.GetService<IClient>();
-            Category category = this.Client.ExecuteAsync(new CreateCommand<Category>(this.GetCategoryDraft())).Result;
-            this.CreatedCategory = category;
-            this.CategoriesToDelete.Add(category);
             this.typeFixture = new TypeFixture();
         }
 
         public List<Category> CategoriesToDelete { get; private set; }
-        public IClient Client { get; private set; }
-        public Category CreatedCategory { get; private set; }
 
         public void Dispose()
-        {           
+        {
+            IClient commerceToolsClient = this.GetService<IClient>();
+            this.CategoriesToDelete.Reverse();
             foreach (Category category in this.CategoriesToDelete)
             {
-                Category deletedCategory = this.Client.ExecuteAsync(new DeleteByIdCommand<Category>(new Guid(category.Id), category.Version)).Result;
+                Category deletedCategory = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<Category>(new Guid(category.Id), category.Version)).Result;
             }
             this.typeFixture.Dispose();
         }
@@ -50,17 +46,25 @@ namespace commercetools.Sdk.HttpApi.Tests
 
         public Category CreateCategory()
         {
-            Category category = this.Client.ExecuteAsync(new CreateCommand<Category>(this.GetCategoryDraft())).Result;
-            this.CategoriesToDelete.Add(category);
+            return this.CreateCategory(this.GetCategoryDraft());
+        }
+
+
+            public Category CreateCategory(CategoryDraft categoryDraft)
+        {
+            IClient commerceToolsClient = this.GetService<IClient>();
+            Category category = commerceToolsClient.ExecuteAsync(new CreateCommand<Category>(categoryDraft)).Result;
             return category;
         }
 
         public CategoryDraft GetCategoryDraftWithCustomFields()
         {
-            Category relatedCategory = this.CreateCategory();
+            Category relatedCategory = this.CreateCategory(this.GetCategoryDraft());
+            this.CategoriesToDelete.Add(relatedCategory);
             CategoryDraft categoryDraft = this.GetCategoryDraft();
             CustomFieldsDraft customFieldsDraft = new CustomFieldsDraft();
             Type type = this.typeFixture.CreateType();
+            this.typeFixture.TypesToDelete.Add(type);
             customFieldsDraft.Type = new ResourceIdentifier() { Key = type.Key };
             customFieldsDraft.Fields = new Fields();
             customFieldsDraft.Fields.Add("string-field", "test");
@@ -74,8 +78,22 @@ namespace commercetools.Sdk.HttpApi.Tests
             customFieldsDraft.Fields.Add("time-field", new TimeSpan(11, 01, 00));
             customFieldsDraft.Fields.Add("money-field", new CentPrecisionMoney() { CentAmount = 1800, CurrencyCode = "EUR" });
             customFieldsDraft.Fields.Add("set-field", new Set<string>() { "test1", "test2" });
-            customFieldsDraft.Fields.Add("reference-field", new Reference<Category>() { Id = relatedCategory.Id, TypeId = "category" });
+            customFieldsDraft.Fields.Add("reference-field", new Reference<Category>() { Id = relatedCategory.Id, TypeId = ReferenceTypeId.Category });
             categoryDraft.Custom = customFieldsDraft; 
+            return categoryDraft;
+        }
+
+        public CategoryDraft GetCategoryDraftWithParent()
+        {
+            Category parentCategory = this.CreateCategory(this.GetCategoryDraft());
+            this.CategoriesToDelete.Add(parentCategory);
+            return this.GetCategoryDraftWithParent(parentCategory);
+        }
+
+        public CategoryDraft GetCategoryDraftWithParent(Category parentCategory)
+        {
+            CategoryDraft categoryDraft = this.GetCategoryDraft();
+            categoryDraft.Parent = new Reference<Category>() { Id = parentCategory.Id, TypeId = ReferenceTypeId.Category };
             return categoryDraft;
         }
     }

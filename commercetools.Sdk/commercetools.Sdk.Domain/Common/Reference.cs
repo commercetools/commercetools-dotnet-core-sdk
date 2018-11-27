@@ -2,7 +2,7 @@
 {
     public class Reference
     {
-        public string TypeId { get; set; }
+        public ReferenceTypeId TypeId { get; set; }
 
         public string Id { get; set; }
     }
