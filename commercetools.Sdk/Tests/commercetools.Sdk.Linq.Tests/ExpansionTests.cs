@@ -1,8 +1,6 @@
 ﻿using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.ShoppingLists;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using Xunit;
 
@@ -90,5 +88,5 @@ namespace commercetools.Sdk.Linq.Tests
             string result = expansionVisitor.GetPath(expression);
             Assert.Equal("lineItems[*].variant", result);
         }
-    }      
+    }
 }

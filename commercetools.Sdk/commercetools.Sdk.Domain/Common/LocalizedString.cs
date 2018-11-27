@@ -4,6 +4,8 @@
 
     public class LocalizedString : Dictionary<string, string>
     {
-        public LocalizedString() : base() { }
+        public LocalizedString() : base()
+        {
+        }
     }
 }

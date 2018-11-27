@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace commercetools.Sdk.Linq
 {
@@ -9,7 +7,7 @@ namespace commercetools.Sdk.Linq
     {
         private static List<string> namesToSkip = new List<string>() { "value" };
 
-        public static List<string> GetAccessors(Expression expression) 
+        public static List<string> GetAccessors(Expression expression)
         {
             List<string> accessors = new List<string>();
             ParseName(accessors, expression);

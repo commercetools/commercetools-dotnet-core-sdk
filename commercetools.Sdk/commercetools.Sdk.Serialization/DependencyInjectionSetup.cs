@@ -2,9 +2,6 @@
 {
     using commercetools.Sdk.Util;
     using Microsoft.Extensions.DependencyInjection;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
-    using System.Reflection;
 
     public static class DependencyInjectionSetup
     {

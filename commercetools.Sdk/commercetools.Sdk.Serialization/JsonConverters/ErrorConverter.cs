@@ -1,10 +1,8 @@
-﻿using commercetools.Sdk.Domain;
-using commercetools.Sdk.HttpApi.Domain;
+﻿using commercetools.Sdk.HttpApi.Domain;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
@@ -48,6 +46,6 @@ namespace commercetools.Sdk.Serialization
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
-        }       
+        }
     }
 }

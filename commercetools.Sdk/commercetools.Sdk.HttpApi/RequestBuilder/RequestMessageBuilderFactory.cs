@@ -1,9 +1,5 @@
-﻿using commercetools.Sdk.Client;
-using commercetools.Sdk.Serialization;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace commercetools.Sdk.HttpApi
 {

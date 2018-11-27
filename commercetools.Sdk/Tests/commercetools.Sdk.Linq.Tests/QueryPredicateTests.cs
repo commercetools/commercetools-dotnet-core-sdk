@@ -119,7 +119,7 @@ namespace commercetools.Sdk.Linq.Tests
             QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
             string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
             Assert.Equal("version = 30", result);
-        }        
+        }
 
         [Fact]
         public void ExpressionPropertyIntLessThan()
@@ -245,5 +245,5 @@ namespace commercetools.Sdk.Linq.Tests
             string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
             Assert.Equal("attributes(name = \"text-name\" and value(en = \"text-value-en\" or de = \"text-value-de\"))", result);
         }
-    }      
+    }
 }

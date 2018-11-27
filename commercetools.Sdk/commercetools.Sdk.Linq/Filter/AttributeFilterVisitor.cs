@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
+﻿using System.Linq.Expressions;
 
 namespace commercetools.Sdk.Linq
 {
@@ -34,7 +31,7 @@ namespace commercetools.Sdk.Linq
             if (expression is BinaryExpression nameExpression)
             {
                 if (nameExpression.Left is MemberExpression memberExpression && memberExpression.Member.Name == "Name")
-                { 
+                {
                     this.Name = nameExpression.Right.ToString().Replace("\"", "");
                     this.Accessors.Add(this.Name);
                 }

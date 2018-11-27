@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace commercetools.Sdk.Linq
 {
     public class ContainerFilterVisitor : FilterVisitor
     {
-        private FilterVisitor innerFilterVisitor; 
+        private FilterVisitor innerFilterVisitor;
 
         public ContainerFilterVisitor(MethodCallExpression expression)
         {

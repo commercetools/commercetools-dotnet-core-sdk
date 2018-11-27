@@ -1,9 +1,7 @@
 ﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests

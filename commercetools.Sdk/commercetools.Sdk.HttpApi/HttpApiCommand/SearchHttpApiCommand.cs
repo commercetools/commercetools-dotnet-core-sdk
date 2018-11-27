@@ -3,7 +3,7 @@
     using commercetools.Sdk.Client;
     using System.Net.Http;
 
-    public class SearchHttpApiCommand<T>: IHttpApiCommand<SearchCommand<T>, T>
+    public class SearchHttpApiCommand<T> : IHttpApiCommand<SearchCommand<T>, T>
     {
         private SearchCommand<T> command;
         private readonly SearchRequestMessageBuilder requestBuilder;

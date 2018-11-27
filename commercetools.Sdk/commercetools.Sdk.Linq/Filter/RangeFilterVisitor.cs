@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace commercetools.Sdk.Linq
 {
     public class RangeFilterVisitor
     {
         public string From { get; private set; }
-        public string To { get; private set; }        
+        public string To { get; private set; }
 
         public RangeFilterVisitor(MethodCallExpression expression)
         {
@@ -19,7 +17,7 @@ namespace commercetools.Sdk.Linq
         private string GetRange(Expression expression)
         {
             if (expression == null)
-            { 
+            {
                 throw new ArgumentNullException("The expression does not have all expected properties set.");
             }
             // Range(null, 30); null is a constant
@@ -45,7 +43,7 @@ namespace commercetools.Sdk.Linq
                 return unaryExpression.Operand.ToString();
             }
 
-            throw new NotSupportedException("The expression type is not supported.");           
+            throw new NotSupportedException("The expression type is not supported.");
         }
 
         public string Render()

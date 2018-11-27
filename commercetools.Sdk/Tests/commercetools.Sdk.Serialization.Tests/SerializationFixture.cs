@@ -8,7 +8,7 @@ namespace commercetools.Sdk.Serialization.Tests
         {
             var services = new ServiceCollection();
             services.UseSerialization();
-            var serviceProvider = services.BuildServiceProvider();            
+            var serviceProvider = services.BuildServiceProvider();
             SerializerService = serviceProvider.GetService<ISerializerService>();
         }
 

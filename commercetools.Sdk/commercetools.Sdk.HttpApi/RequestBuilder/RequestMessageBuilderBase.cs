@@ -1,5 +1,4 @@
-﻿using commercetools.Sdk.Client;
-using commercetools.Sdk.Domain;
+﻿using commercetools.Sdk.Domain;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;

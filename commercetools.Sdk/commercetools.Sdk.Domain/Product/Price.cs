@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
@@ -8,8 +7,10 @@ namespace commercetools.Sdk.Domain
     {
         public string Id { get; set; }
         public Money Value { get; set; }
+
         // TODO Add validation
         public string Country { get; set; }
+
         public Reference CustomerGroup { get; set; }
         public Reference<Channel> Channel { get; set; }
         public DateTime ValidFrom { get; set; }

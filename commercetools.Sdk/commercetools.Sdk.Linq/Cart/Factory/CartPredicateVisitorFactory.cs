@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace commercetools.Sdk.Linq
 {
@@ -35,7 +33,7 @@ namespace commercetools.Sdk.Linq
 
         private ICartPredicateVisitorConverter GetConverterForExpression(Expression expression)
         {
-            foreach(var converter in this.registeredConverters)
+            foreach (var converter in this.registeredConverters)
             {
                 if (converter.CanConvert(expression))
                 {

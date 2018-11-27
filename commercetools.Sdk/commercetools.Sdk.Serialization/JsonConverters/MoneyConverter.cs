@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
@@ -32,7 +31,7 @@ namespace commercetools.Sdk.Serialization
         {
             JObject jsonObject = JObject.Load(reader);
             Type moneyType = this.mapperTypeRetriever.GetTypeForToken(jsonObject);
-            
+
             if (moneyType == null)
             {
                 // TODO Move this message to a localizable resource and add more information to the exception

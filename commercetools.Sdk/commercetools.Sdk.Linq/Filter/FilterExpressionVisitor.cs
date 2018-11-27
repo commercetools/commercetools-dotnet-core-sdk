@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
+﻿using System.Linq.Expressions;
 
 namespace commercetools.Sdk.Linq
 {
@@ -13,7 +9,7 @@ namespace commercetools.Sdk.Linq
             // TODO Inject this instead
             FilterVisitorFactory filterVisitorFactory = new FilterVisitorFactory();
             FilterVisitor filterVisitor = filterVisitorFactory.Create(expression);
-            return filterVisitor.Render();            
-        }       
+            return filterVisitor.Render();
+        }
     }
 }

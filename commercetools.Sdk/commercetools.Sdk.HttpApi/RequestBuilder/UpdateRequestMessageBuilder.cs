@@ -29,7 +29,6 @@ namespace commercetools.Sdk.HttpApi
                 Actions = command.UpdateActions
             };
             return new StringContent(this.serializerService.Serialize(requestBody));
-            
         }
 
         private Uri GetRequestUri<T>(UpdateCommand<T> command)

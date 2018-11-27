@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace commercetools.Sdk.Linq
 {
@@ -37,7 +34,7 @@ namespace commercetools.Sdk.Linq
         {
             bool isCorrectType = left.GetType().IsSubclassOf(typeof(BinaryExpressionVisitor)) && right.GetType().IsSubclassOf(typeof(BinaryExpressionVisitor));
             bool hasSameParents = isCorrectType && ((BinaryExpressionVisitor)left).parentList.SequenceEqual(((BinaryExpressionVisitor)right).parentList);
-            return  hasSameParents;
+            return hasSameParents;
         }
     }
 }

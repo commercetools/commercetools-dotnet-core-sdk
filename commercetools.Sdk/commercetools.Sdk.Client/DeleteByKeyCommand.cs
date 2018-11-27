@@ -1,9 +1,4 @@
-﻿using commercetools.Sdk.Domain;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace commercetools.Sdk.Client
+﻿namespace commercetools.Sdk.Client
 {
     public class DeleteByKeyCommand<T> : DeleteCommand<T>
     {

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace commercetools.Sdk.Linq
 {
@@ -32,7 +30,7 @@ namespace commercetools.Sdk.Linq
             if (expression is MethodCallExpression methodCallExpression)
             {
                 if (methodCallExpression.Object != null)
-                { 
+                {
                     return cartPredicateVisitorFactory.Create(methodCallExpression.Object);
                 }
                 else

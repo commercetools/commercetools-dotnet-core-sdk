@@ -49,8 +49,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             return this.CreateCategory(this.GetCategoryDraft());
         }
 
-
-            public Category CreateCategory(CategoryDraft categoryDraft)
+        public Category CreateCategory(CategoryDraft categoryDraft)
         {
             IClient commerceToolsClient = this.GetService<IClient>();
             Category category = commerceToolsClient.ExecuteAsync(new CreateCommand<Category>(categoryDraft)).Result;
@@ -79,7 +78,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             customFieldsDraft.Fields.Add("money-field", new CentPrecisionMoney() { CentAmount = 1800, CurrencyCode = "EUR" });
             customFieldsDraft.Fields.Add("set-field", new Set<string>() { "test1", "test2" });
             customFieldsDraft.Fields.Add("reference-field", new Reference<Category>() { Id = relatedCategory.Id, TypeId = ReferenceTypeId.Category });
-            categoryDraft.Custom = customFieldsDraft; 
+            categoryDraft.Custom = customFieldsDraft;
             return categoryDraft;
         }
 

@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace commercetools.Sdk.Linq
 {
     public class MoneyParsePredicateConverter : ICartPredicateVisitorConverter
     {
         private readonly string methodName = "Parse";
+
         // TODO Find a better way how to match Type
         private readonly string methodCallerType = "commercetools.Sdk.Domain.Money";
 

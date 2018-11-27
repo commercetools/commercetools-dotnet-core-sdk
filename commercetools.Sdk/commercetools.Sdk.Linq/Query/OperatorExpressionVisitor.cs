@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 
 namespace commercetools.Sdk.Linq
 {
@@ -48,7 +42,5 @@ namespace commercetools.Sdk.Linq
 
             this.operatorSign = QueryPredicateExpressionVisitor.MappingOfOperators[expression.NodeType];
         }
-
-        
     }
 }

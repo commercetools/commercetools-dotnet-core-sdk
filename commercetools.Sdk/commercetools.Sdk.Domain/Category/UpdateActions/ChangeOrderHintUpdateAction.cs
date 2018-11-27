@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace commercetools.Sdk.Domain.Categories
+﻿namespace commercetools.Sdk.Domain.Categories
 {
     public class ChangeOrderHintUpdateAction : UpdateAction<Category>
     {

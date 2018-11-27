@@ -1,6 +1,5 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
-    using commercetools.Sdk.HttpApi.Domain;
     using Microsoft.Extensions.Logging;
     using System.Linq;
     using System.Net.Http;
@@ -21,7 +20,7 @@
             var response = await base.SendAsync(request, cancellationToken);
             if (response != null)
             {
-                var correlationId = response.Headers.GetValues("X-Correlation-ID").FirstOrDefault(); 
+                var correlationId = response.Headers.GetValues("X-Correlation-ID").FirstOrDefault();
                 this.logger.LogInformation(correlationId);
             }
             return response;

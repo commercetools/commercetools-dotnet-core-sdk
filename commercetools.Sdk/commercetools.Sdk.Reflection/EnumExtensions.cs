@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 
 namespace commercetools.Sdk.Util
 {
@@ -23,7 +21,7 @@ namespace commercetools.Sdk.Util
         }
 
         public static object GetEnum(this string value, Type enumType)
-        { 
+        {
             string[] names = Enum.GetNames(enumType);
             foreach (string name in names)
             {

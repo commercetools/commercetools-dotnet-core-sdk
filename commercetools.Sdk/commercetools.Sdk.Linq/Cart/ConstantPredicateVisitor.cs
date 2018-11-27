@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace commercetools.Sdk.Linq
+﻿namespace commercetools.Sdk.Linq
 {
     public class ConstantPredicateVisitor : ICartPredicateVisitor
     {
-        private string constant; 
+        private string constant;
 
         public ConstantPredicateVisitor(string constant)
         {

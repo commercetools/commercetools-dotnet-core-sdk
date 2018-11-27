@@ -23,15 +23,19 @@
         public RoundingMode TaxRoundingMode { get; set; }
         public TaxCalculationMode TaxCalculationMode { get; set; }
         public Reference<CustomerGroup> CustomerGroup { get; set; }
+
         // TODO See if there should be a constraing on the country code ISO 3166-1 alpha-2 .
         public string Country { get; set; }
+
         public ShippingInfo ShippingInfo { get; set; }
         public List<DiscountCodeInfo> DiscountCodes { get; set; }
         public List<Reference<CartDiscount>> RefusedGifts { get; set; }
         public CustomFields Custom { get; set; }
         public PaymentInfo PaymentInfo { get; set; }
+
         // TODO IETF language tag  check
         public string Locale { get; set; }
+
         public int DeleteDaysAfterLastModification { get; set; }
         public ShippingRateInput ShippingRateInput { get; set; }
         public CartOrigin Origin { get; set; }
@@ -39,6 +43,5 @@
         public DateTime LastModifiedAt { get; set; }
         public List<Address> ItemShippingAddresses { get; set; }
         public ItemShippingDetails ShippingDetails { get; set; }
-
     }
 }

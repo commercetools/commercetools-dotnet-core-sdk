@@ -2,12 +2,9 @@
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.HttpApi.Domain;
-using commercetools.Sdk.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
@@ -105,7 +102,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             this.categoryFixture.CategoriesToDelete.Add(category);
             QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Key == category.Key);
             PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(new QueryCommand<Category>() { QueryPredicate = queryPredicate }).Result;
-            Assert.Contains(returnedSet.Results, c => c.Key == category.Key); 
+            Assert.Contains(returnedSet.Results, c => c.Key == category.Key);
         }
 
         [Fact]
@@ -128,7 +125,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
             Category parentCategory = this.categoryFixture.CreateCategory();
             this.categoryFixture.CategoriesToDelete.Add(parentCategory);
-            for(int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent(parentCategory));
                 this.categoryFixture.CategoriesToDelete.Add(category);
@@ -167,7 +164,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
             CategoryDraft categoryDraft = this.categoryFixture.GetCategoryDraftWithCustomFields();
-            Category category = this.categoryFixture.CreateCategory(categoryDraft);            
+            Category category = this.categoryFixture.CreateCategory(categoryDraft);
             this.categoryFixture.CategoriesToDelete.Add(category);
             Assert.Equal(categoryDraft.Custom.Fields.Count, category.Custom.Fields.Count);
         }

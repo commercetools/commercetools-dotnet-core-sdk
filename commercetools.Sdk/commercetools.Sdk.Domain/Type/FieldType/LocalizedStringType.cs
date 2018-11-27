@@ -2,6 +2,6 @@
 {
     [FieldType("LocalizedString")]
     public class LocalizedStringType : FieldType
-    {    
+    {
     }
 }

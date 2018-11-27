@@ -2,10 +2,8 @@
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Linq.Extensions.Carts;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using Xunit;
 
 namespace commercetools.Sdk.Linq.Tests
@@ -363,7 +361,6 @@ namespace commercetools.Sdk.Linq.Tests
             Assert.Equal("custom.price.currencyCode = \"EUR\"", result);
         }
 
-
         [Fact]
         public void LineItemPredicatePriceNot()
         {
@@ -372,6 +369,5 @@ namespace commercetools.Sdk.Linq.Tests
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("not(price = \"10.00 EUR\")", result);
         }
-
     }
 }

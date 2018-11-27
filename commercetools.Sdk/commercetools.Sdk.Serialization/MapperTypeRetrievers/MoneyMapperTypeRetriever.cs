@@ -1,7 +1,5 @@
 ﻿using commercetools.Sdk.Domain;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace commercetools.Sdk.Serialization
 {
@@ -9,7 +7,6 @@ namespace commercetools.Sdk.Serialization
     {
         public MoneyMapperTypeRetriever(IEnumerable<ICustomJsonMapper<Money>> customJsonMappers) : base(customJsonMappers)
         {
-
         }
     }
 }

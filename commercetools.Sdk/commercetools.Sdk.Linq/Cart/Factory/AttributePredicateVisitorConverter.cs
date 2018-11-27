@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace commercetools.Sdk.Linq
 {
@@ -10,7 +8,7 @@ namespace commercetools.Sdk.Linq
         public bool CanConvert(Expression expression)
         {
             if (expression is MethodCallExpression methodCallExpression)
-            {             
+            {
                 if (IsMethodNameAllowed(methodCallExpression) && IsValidMethodCaller(methodCallExpression))
                 {
                     return true;
@@ -61,7 +59,7 @@ namespace commercetools.Sdk.Linq
                     }
                     return attributeValuePredicateVisitor;
                 }
-            }      
+            }
 
             throw new NotSupportedException();
         }

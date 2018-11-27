@@ -3,8 +3,10 @@
     public class Address
     {
         public string Id { get; set; }
+
         // TODO Add validation
         public string Key { get; set; }
+
         public string Title { get; set; }
         public string Salutation { get; set; }
         public string FirstName { get; set; }
@@ -16,8 +18,10 @@
         public string City { get; set; }
         public string Region { get; set; }
         public string State { get; set; }
+
         // Add validation
         public string Country { get; set; }
+
         public string Company { get; set; }
         public string Department { get; set; }
         public string Building { get; set; }

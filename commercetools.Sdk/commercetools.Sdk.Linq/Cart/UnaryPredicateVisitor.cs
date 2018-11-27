@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
-
-namespace commercetools.Sdk.Linq
+﻿namespace commercetools.Sdk.Linq
 {
     public class UnaryPredicateVisitor : ICartPredicateVisitor, IAccessorAppendable
     {
         private ICartPredicateVisitor operand;
-        private string operatorName; 
+        private string operatorName;
 
         public UnaryPredicateVisitor(ICartPredicateVisitor operand, string operatorName)
         {
@@ -35,7 +30,5 @@ namespace commercetools.Sdk.Linq
         {
             return $"{this.operand?.Render()} {operatorName}";
         }
-
-
     }
 }

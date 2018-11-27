@@ -1,7 +1,4 @@
-﻿using commercetools.Sdk.Domain;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace commercetools.Sdk.Client
 {

@@ -2,7 +2,6 @@
 using commercetools.Sdk.Domain;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 using Type = commercetools.Sdk.Domain.Type;
 
@@ -96,7 +95,7 @@ namespace commercetools.Sdk.HttpApi.Tests
 
         [Fact]
         public void UpdateTypeByIdAddEnumToFieldDefinition()
-        { 
+        {
             IClient commerceToolsClient = this.typeFixture.GetService<IClient>();
             Type type = this.typeFixture.CreateType();
             List<UpdateAction<Type>> updateActions = new List<UpdateAction<Type>>();

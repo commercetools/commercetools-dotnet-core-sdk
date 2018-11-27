@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
@@ -33,7 +32,7 @@ namespace commercetools.Sdk.Domain
             throw new NotImplementedException();
         }
 
-        public static bool Range<T>(this T source, T? from, T? to) where T: struct
+        public static bool Range<T>(this T source, T? from, T? to) where T : struct
         {
             throw new NotImplementedException();
         }

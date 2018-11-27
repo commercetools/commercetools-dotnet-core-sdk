@@ -88,7 +88,6 @@
         private string GetFacetPath<T>(Facet<T> facet)
         {
             return this.filterExpressionVisitor.Render(facet.Expression);
-
         }
     }
 }

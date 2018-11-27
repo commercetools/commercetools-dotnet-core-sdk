@@ -1,7 +1,6 @@
 ﻿using commercetools.Sdk.Domain;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace commercetools.Sdk.Client
 {
@@ -19,19 +18,23 @@ namespace commercetools.Sdk.Client
         public int Offset { get; set; }
         public bool Staged { get; set; }
         public bool MarkMatchingVariants { get; set; }
+
         // TODO Perhaps add an enum for all price currency codes
         public string PriceCurrency { get; set; }
+
         // TODO See if a check should be added for object validity (next three properties can only be used in conjunction with price currency)
         // Or combine these 4 properties into a single object
         public string PriceCountry { get; set; }
+
         public Guid PriceCustomerGroup { get; set; }
-        public Guid PriceChannel { get; set;  }      
+        public Guid PriceChannel { get; set; }
     }
 
     public class TextSearch
     {
         // TODO Perhaps add an enum for all language codes
-        public string Language { get; set;  }
+        public string Language { get; set; }
+
         public string Term { get; set; }
     }
 }

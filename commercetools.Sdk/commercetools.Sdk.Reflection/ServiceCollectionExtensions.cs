@@ -44,7 +44,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static Type GetGenericInterface(Type interfaceType, Type classType)
         {
-            foreach(Type it in classType.GetInterfaces())
+            foreach (Type it in classType.GetInterfaces())
             {
                 if (it.IsGenericType)
                 {

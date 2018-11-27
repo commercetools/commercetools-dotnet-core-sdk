@@ -1,8 +1,6 @@
 ﻿using commercetools.Sdk.Domain;
 using commercetools.Sdk.Linq;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace commercetools.Sdk.HttpApi
 {
@@ -15,7 +13,7 @@ namespace commercetools.Sdk.HttpApi
             {
                 string expandPath = expansionExpressionVisitor.GetPath(expansion.Expression);
                 queryStringParameters.Add(new KeyValuePair<string, string>("expand", expandPath));
-            }            
+            }
             return queryStringParameters;
         }
     }

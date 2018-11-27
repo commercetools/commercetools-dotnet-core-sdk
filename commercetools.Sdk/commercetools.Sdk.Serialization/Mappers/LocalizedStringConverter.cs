@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using commercetools.Sdk.Domain;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
@@ -23,7 +17,7 @@ namespace commercetools.Sdk.Serialization
                 var firstValue = property.First as JProperty;
                 var name = firstValue?.Name;
                 if (name != null && name.IsValidLanguageTag())
-                { 
+                {
                     return true;
                 }
             }

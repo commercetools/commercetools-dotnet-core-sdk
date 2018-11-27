@@ -1,8 +1,5 @@
 ﻿using commercetools.Sdk.Domain;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Xunit;
 
 namespace commercetools.Sdk.Serialization.Tests

@@ -3,11 +3,9 @@
     using commercetools.Sdk.Client;
     using commercetools.Sdk.Domain;
     using commercetools.Sdk.Linq;
-    using commercetools.Sdk.Serialization;
     using Microsoft.AspNetCore.WebUtilities;
     using System;
     using System.Collections.Generic;
-    using System.Net;
     using System.Net.Http;
 
     public class QueryRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
@@ -23,7 +21,7 @@
             this.sortExpressionVisitor = sortExpressionVisitor;
         }
 
-        private  HttpMethod HttpMethod => HttpMethod.Get;
+        private HttpMethod HttpMethod => HttpMethod.Get;
 
         public HttpRequestMessage GetRequestMessage<T>(QueryCommand<T> command)
         {
@@ -38,7 +36,7 @@
             if (command.Expand != null)
             {
                 queryStringParameters.AddRange(command.Expand.GetQueryStringParameters(this.expansionExpressionVisitor));
-            }            
+            }
             queryStringParameters.AddRange(AddSortParameters(command));
             queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
             return new Uri(requestUri);

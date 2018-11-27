@@ -4,7 +4,7 @@ namespace commercetools.Sdk.Domain
 {
     public class ProductVariantAvailability
     {
-        public bool IsOnStock { get; set;  }
+        public bool IsOnStock { get; set; }
         public int RestockableInDays { get; set; }
         public int AvailableQuantity { get; set; }
         public Dictionary<string, ProductVariantAvailability> Channels { get; set; }

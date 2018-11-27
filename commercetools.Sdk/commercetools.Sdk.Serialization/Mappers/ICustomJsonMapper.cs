@@ -6,6 +6,7 @@ namespace commercetools.Sdk.Serialization
     public interface ICustomJsonMapper<T>
     {
         bool CanConvert(JToken property);
+
         int Priority { get; }
         Type Type { get; }
     }

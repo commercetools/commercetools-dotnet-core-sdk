@@ -45,7 +45,7 @@ namespace commercetools.Sdk.Linq
                     return attributeFilterVisitor;
                 }
                 else
-                { 
+                {
                     ContainerFilterVisitor containerFilterVisitor = new ContainerFilterVisitor(expression);
                     return containerFilterVisitor;
                 }

@@ -22,7 +22,7 @@ namespace System
                     }
                 }
                 else
-                { 
+                {
                     if (type.IsClass && !type.IsAbstract && type.GetInterfaces().Contains(interfaceType))
                     {
                         classTypes.Add(type);
@@ -45,7 +45,7 @@ namespace System
             return new List<Type>();
         }
 
-            public static IEnumerable<Type> GetAllDerivedClassTypesForClass(this Type classType, Assembly assembly)
+        public static IEnumerable<Type> GetAllDerivedClassTypesForClass(this Type classType, Assembly assembly)
         {
             List<Type> classTypes = new List<Type>();
             foreach (Type type in assembly.GetTypes())

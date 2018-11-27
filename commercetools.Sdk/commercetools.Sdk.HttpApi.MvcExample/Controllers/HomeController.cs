@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using commercetools.Sdk.Client;
+﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace commercetools.Sdk.HttpApi.MvcExample.Controllers
 {
@@ -14,7 +11,7 @@ namespace commercetools.Sdk.HttpApi.MvcExample.Controllers
 
         public HomeController(IClient client)
         {
-            this.client = client;                    
+            this.client = client;
         }
 
         public IActionResult Index()

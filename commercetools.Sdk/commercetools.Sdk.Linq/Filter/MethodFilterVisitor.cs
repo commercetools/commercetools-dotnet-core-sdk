@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace commercetools.Sdk.Linq
 {
@@ -22,7 +20,7 @@ namespace commercetools.Sdk.Linq
                 this.Accessors = filterVisitorFactory.Create(methodCallExpression).Accessors;
             }
             else
-            { 
+            {
                 this.Accessors = AccessorTraverser.GetAccessors(expression.Arguments[0]);
             }
         }

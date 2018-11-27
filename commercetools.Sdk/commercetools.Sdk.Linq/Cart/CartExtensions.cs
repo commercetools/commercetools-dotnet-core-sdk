@@ -3,7 +3,6 @@ using commercetools.Sdk.Domain.Carts;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace commercetools.Sdk.Linq.Extensions.Carts
 {

@@ -1,9 +1,7 @@
 ﻿namespace commercetools.Sdk.Serialization
 {
-    using commercetools.Sdk.Domain;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Type = System.Type;
@@ -29,7 +27,7 @@
             if (jsonConverter != null)
             {
                 contract.Converter = jsonConverter;
-            }            
+            }
 
             return contract;
         }

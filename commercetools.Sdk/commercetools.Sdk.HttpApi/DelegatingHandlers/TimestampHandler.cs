@@ -1,6 +1,5 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
-    using commercetools.Sdk.HttpApi.Domain;
     using Microsoft.Extensions.Logging;
     using System;
     using System.Net.Http;

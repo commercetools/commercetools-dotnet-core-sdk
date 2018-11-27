@@ -1,8 +1,6 @@
 ﻿using commercetools.Sdk.Domain;
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 using Xunit;
 
 namespace commercetools.Sdk.Linq.Tests

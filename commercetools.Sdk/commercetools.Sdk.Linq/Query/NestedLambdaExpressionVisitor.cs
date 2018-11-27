@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace commercetools.Sdk.Linq
 {
@@ -23,7 +19,7 @@ namespace commercetools.Sdk.Linq
             if (expression.Arguments[0].NodeType == ExpressionType.MemberAccess)
             {
                 left = ((MemberExpression)expression.Arguments[0]).Member.Name;
-            }           
+            }
         }
 
         public override string ToString()

@@ -2,6 +2,6 @@
 {
     [FieldType("String")]
     public class StringType : FieldType
-    {    
+    {
     }
 }

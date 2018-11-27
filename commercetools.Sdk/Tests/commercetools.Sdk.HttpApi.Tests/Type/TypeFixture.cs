@@ -2,7 +2,6 @@
 using commercetools.Sdk.Domain;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.Tests
@@ -20,7 +19,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClient commerceToolsClient = this.GetService<IClient>();
             this.TypesToDelete.Reverse();
-            foreach(Type type in this.TypesToDelete)
+            foreach (Type type in this.TypesToDelete)
             {
                 Type deletedType = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<Type>(new Guid(type.Id), type.Version)).Result;
             }
@@ -213,7 +212,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "reference description");
             ReferenceFieldType fieldType = new ReferenceFieldType();
-            fieldType.ReferenceTypeId = ReferenceFieldTypeId.Category; 
+            fieldType.ReferenceTypeId = ReferenceFieldTypeId.Category;
             fieldDefinition.Type = fieldType;
             return fieldDefinition;
         }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace commercetools.Sdk.Linq
 {
@@ -14,7 +13,7 @@ namespace commercetools.Sdk.Linq
             {
                 throw new ArgumentNullException();
             }
-            foreach(var expression in expressions)
+            foreach (var expression in expressions)
             {
                 FilterVisitorFactory filterVisitorFactory = new FilterVisitorFactory();
                 this.innerFilters.Add(filterVisitorFactory.Create(expression));

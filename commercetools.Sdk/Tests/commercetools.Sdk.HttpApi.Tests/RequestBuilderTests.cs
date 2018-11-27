@@ -4,7 +4,6 @@ using commercetools.Sdk.Linq;
 using System.Collections.Generic;
 using System.Net.Http;
 using Xunit;
-using Type = System.Type;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {

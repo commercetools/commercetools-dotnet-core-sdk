@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using commercetools.Sdk.Domain;
-using Newtonsoft.Json.Linq;
-using Type = System.Type;
+﻿using commercetools.Sdk.Domain;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class BooleanFieldMapper : BooleanConverter<Fields, bool>,  ICustomJsonMapper<Fields>
+    public class BooleanFieldMapper : BooleanConverter<Fields, bool>, ICustomJsonMapper<Fields>
     {
     }
 }

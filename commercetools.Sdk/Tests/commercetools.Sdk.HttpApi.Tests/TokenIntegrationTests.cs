@@ -23,8 +23,8 @@ namespace commercetools.Sdk.HttpApi.Tests
             clientConfiguration.Scope = "";
             ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
             ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(
-                this.clientFixture.GetService<IHttpClientFactory>(), 
-                clientConfiguration, 
+                this.clientFixture.GetService<IHttpClientFactory>(),
+                clientConfiguration,
                 tokenStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
             Token token = tokenProvider.Token;
@@ -37,8 +37,8 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithSmallerScope");
             ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
             ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(
-                this.clientFixture.GetService<IHttpClientFactory>(), 
-                clientConfiguration, 
+                this.clientFixture.GetService<IHttpClientFactory>(),
+                clientConfiguration,
                 tokenStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
             Token token = tokenProvider.Token;
@@ -54,9 +54,9 @@ namespace commercetools.Sdk.HttpApi.Tests
             userCredentialsStoreManager.Username = "mick.jagger@commercetools.com";
             userCredentialsStoreManager.Password = "st54e9m4";
             ITokenProvider tokenProvider = new PasswordTokenProvider(
-                this.clientFixture.GetService<IHttpClientFactory>(), 
-                clientConfiguration, 
-                userCredentialsStoreManager, 
+                this.clientFixture.GetService<IHttpClientFactory>(),
+                clientConfiguration,
+                userCredentialsStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
@@ -68,8 +68,8 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithAnonymousScope");
             IAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(
-                this.clientFixture.GetService<IHttpClientFactory>(), 
-                clientConfiguration, 
+                this.clientFixture.GetService<IHttpClientFactory>(),
+                clientConfiguration,
                 anonymousStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
             Token token = tokenProvider.Token;
@@ -84,8 +84,8 @@ namespace commercetools.Sdk.HttpApi.Tests
             anonymousStoreManager.AnonymousId = this.clientFixture.RandomString(10);
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(
                 this.clientFixture.GetService<IHttpClientFactory>(),
-                clientConfiguration, 
-                anonymousStoreManager, 
+                clientConfiguration,
+                anonymousStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
@@ -99,9 +99,9 @@ namespace commercetools.Sdk.HttpApi.Tests
             userCredentialsStoreManager.Username = "mick.jagger@commercetools.com";
             userCredentialsStoreManager.Password = "st54e9m4";
             ITokenProvider tokenProvider = new PasswordTokenProvider(
-                this.clientFixture.GetService<IHttpClientFactory>(), 
-                clientConfiguration, 
-                userCredentialsStoreManager, 
+                this.clientFixture.GetService<IHttpClientFactory>(),
+                clientConfiguration,
+                userCredentialsStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
             Token token = tokenProvider.Token;
             string initialAccessToken = token.AccessToken;

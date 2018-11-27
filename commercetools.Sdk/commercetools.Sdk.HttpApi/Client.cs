@@ -1,10 +1,8 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
     using commercetools.Sdk.Client;
-    using commercetools.Sdk.Domain;
     using commercetools.Sdk.HttpApi.Domain;
     using commercetools.Sdk.Serialization;
-    using System;
     using System.Net.Http;
     using System.Threading.Tasks;
 
@@ -37,7 +35,7 @@
             var result = await this.client.SendAsync(requestMessage);
             string content = await result.Content.ReadAsStringAsync();
             if (result.IsSuccessStatusCode)
-            { 
+            {
                 return this.serializerService.Deserialize<T>(content);
             }
             if (content != null)

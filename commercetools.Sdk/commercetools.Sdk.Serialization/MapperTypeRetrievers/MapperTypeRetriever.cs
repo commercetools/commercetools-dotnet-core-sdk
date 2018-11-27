@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace commercetools.Sdk.Serialization
 {
@@ -13,11 +12,11 @@ namespace commercetools.Sdk.Serialization
         public MapperTypeRetriever(IEnumerable<ICustomJsonMapper<T>> customJsonMappers)
         {
             this.customJsonMappers = customJsonMappers;
-        }    
+        }
 
         public virtual Type GetTypeForToken(JToken token)
         {
-            return this.GetTypeForTokenFromMapper(token);   
+            return this.GetTypeForTokenFromMapper(token);
         }
 
         protected Type GetTypeForTokenFromMapper(JToken token)

@@ -1,7 +1,5 @@
 ﻿using commercetools.Sdk.Domain;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace commercetools.Sdk.Client
 {
@@ -12,8 +10,10 @@ namespace commercetools.Sdk.Client
         public QueryPredicate<T> QueryPredicate { get; set; }
         public List<Sort<T>> Sort { get; set; }
         public List<Expansion<T>> Expand { get; set; }
+
         // TODO Implement limit and offset in QB
         public int limit { get; set; }
+
         public int offset { get; set; }
 
         public QueryCommand()

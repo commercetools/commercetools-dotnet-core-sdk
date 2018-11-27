@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace commercetools.Sdk.Serialization
 {
@@ -24,8 +23,8 @@ namespace commercetools.Sdk.Serialization
         {
             DateTime dateTime = (DateTime)value;
             IsoDateTimeConverter isoDateTimeConverter = new IsoDateTimeConverter();
-            if (dateTime.TimeOfDay == new TimeSpan(0,0,0))
-            { 
+            if (dateTime.TimeOfDay == new TimeSpan(0, 0, 0))
+            {
                 isoDateTimeConverter.DateTimeFormat = "yyyy-MM-dd";
             }
             isoDateTimeConverter.WriteJson(writer, value, serializer);

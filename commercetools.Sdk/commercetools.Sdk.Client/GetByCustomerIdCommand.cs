@@ -1,5 +1,4 @@
 ﻿using commercetools.Sdk.Domain;
-using System.Net.Http;
 
 namespace commercetools.Sdk.Client
 {

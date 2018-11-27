@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
@@ -32,7 +31,7 @@ namespace commercetools.Sdk.Serialization
         {
             JObject jsonObject = JObject.Load(reader);
             JToken nameProperty = jsonObject["name"];
-            
+
             Type fieldType = this.decoratorTypeRetriever.GetTypeForToken(nameProperty);
 
             if (fieldType == null)
@@ -46,6 +45,6 @@ namespace commercetools.Sdk.Serialization
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
-        }           
+        }
     }
 }

@@ -5,7 +5,7 @@
 
     public abstract class GetCommand<T> : Command<T>
     {
-        // An empty constructor is needed for the derived classes 
+        // An empty constructor is needed for the derived classes
         public GetCommand()
         {
         }

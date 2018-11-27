@@ -21,6 +21,5 @@ namespace commercetools.Sdk.Domain.Carts
         public List<DiscountedLineItemPriceForQuantity> DiscountedLineItemPriceForQuantity { get; set; }
         public LineItemPriceMode PriceMode { get; set; }
         public CustomFields Custom { get; set; }
-
     }
 }

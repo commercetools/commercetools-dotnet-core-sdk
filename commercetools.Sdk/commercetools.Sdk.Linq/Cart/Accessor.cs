@@ -20,7 +20,7 @@
             else
             {
                 if (this.parentAccessor is IAccessorAppendable accessorAppendablePredicate)
-                { 
+                {
                     accessorAppendablePredicate.AppendAccessor(accessor);
                 }
             }
@@ -33,7 +33,7 @@
                 return this.currentAccessor.Render();
             }
             if (parentAccessor != null && this.currentAccessor != null)
-            { 
+            {
                 return $"{parentAccessor.Render()}.{this.currentAccessor.Render()}";
             }
             if (parentAccessor != null && this.currentAccessor == null)

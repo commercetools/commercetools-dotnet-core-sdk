@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace commercetools.Sdk.Domain
 {
     public class Fields : Dictionary<string, object>
     {
-        public Fields(): base()
+        public Fields() : base()
         {
-
         }
     }
 }

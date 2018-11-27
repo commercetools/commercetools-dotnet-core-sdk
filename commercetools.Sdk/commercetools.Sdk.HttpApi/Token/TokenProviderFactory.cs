@@ -11,10 +11,10 @@ namespace commercetools.Sdk.HttpApi
         {
             this.tokenProviders = tokenProviders;
         }
-       
+
         public ITokenProvider GetTokenProviderByFlow(TokenFlow tokenFlow)
         {
             return tokenProviders.Where(x => x.TokenFlow == tokenFlow).FirstOrDefault();
-        }        
+        }
     }
 }
