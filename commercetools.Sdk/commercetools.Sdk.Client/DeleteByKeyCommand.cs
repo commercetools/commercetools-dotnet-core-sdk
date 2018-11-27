@@ -9,7 +9,7 @@ namespace commercetools.Sdk.Client
     {
         public DeleteByKeyCommand(string key, int version)
         {
-            this.ParameterKey = "key";
+            this.ParameterKey = Parameters.KEY;
             this.ParameterValue = key;
             this.Version = version;
         }

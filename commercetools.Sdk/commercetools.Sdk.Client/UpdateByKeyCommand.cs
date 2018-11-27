@@ -9,7 +9,7 @@ namespace commercetools.Sdk.Client
     {
         public UpdateByKeyCommand(string key, int version, List<UpdateAction<T>> updateActions)
         {
-            this.ParameterKey = "key";
+            this.ParameterKey = Parameters.KEY;
             this.ParameterValue = key;
             this.Version = version;
             this.UpdateActions = updateActions;

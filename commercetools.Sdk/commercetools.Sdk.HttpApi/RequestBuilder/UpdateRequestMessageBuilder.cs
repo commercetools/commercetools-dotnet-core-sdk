@@ -35,7 +35,7 @@ namespace commercetools.Sdk.HttpApi
         private Uri GetRequestUri<T>(UpdateCommand<T> command)
         {
             string requestUri = this.GetMessageBase<T>();
-            if (command.ParameterKey == "id")
+            if (command.ParameterKey == Parameters.ID)
             {
                 requestUri += $"/{command.ParameterValue}";
             }

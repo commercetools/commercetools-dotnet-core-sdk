@@ -35,11 +35,13 @@
             string requestUri = this.GetMessageBase<T>();
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
             queryStringParameters.AddRange(AddQueryPredicateParameter(command));
-            queryStringParameters.AddRange(AddExpandParameters(command));
+            if (command.Expand != null)
+            {
+                queryStringParameters.AddRange(command.Expand.GetQueryStringParameters(this.expansionExpressionVisitor));
+            }            
             queryStringParameters.AddRange(AddSortParameters(command));
-            string newUri = requestUri;
-            queryStringParameters.ForEach(x => { newUri = QueryHelpers.AddQueryString(newUri, x.Key, x.Value); });
-            return new Uri(newUri);
+            queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
+            return new Uri(requestUri);
         }
 
         private List<KeyValuePair<string, string>> AddQueryPredicateParameter<T>(QueryCommand<T> command)
@@ -49,20 +51,6 @@
             {
                 string where = queryPredicateExpressionVisitor.ProcessExpression(command.QueryPredicate.Expression);
                 queryStringParameters.Add(new KeyValuePair<string, string>("where", where));
-            }
-            return queryStringParameters;
-        }
-
-        private List<KeyValuePair<string, string>> AddExpandParameters<T>(QueryCommand<T> command)
-        {
-            List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
-            if (command.Expand != null)
-            {
-                foreach (var expansion in command.Expand)
-                {
-                    string expandPath = this.expansionExpressionVisitor.GetPath(expansion.Expression);
-                    queryStringParameters.Add(new KeyValuePair<string, string>("expand", expandPath));
-                }
             }
             return queryStringParameters;
         }

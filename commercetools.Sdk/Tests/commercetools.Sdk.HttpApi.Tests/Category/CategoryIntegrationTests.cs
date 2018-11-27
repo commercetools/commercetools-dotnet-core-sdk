@@ -170,5 +170,33 @@ namespace commercetools.Sdk.HttpApi.Tests
             this.categoryFixture.CategoriesToDelete.Add(category);
             Assert.Equal(categoryDraft.Custom.Fields.Count, category.Custom.Fields.Count);
         }
+
+        [Fact]
+        public void GetCategoryByIdExpandParent()
+        {
+            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
+            Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent());
+            this.categoryFixture.CategoriesToDelete.Add(category);
+            List<Expansion<Category>> expansions = new List<Expansion<Category>>();
+            ReferenceExpansion<Category> expand = new ReferenceExpansion<Category>(c => c.Parent);
+            expansions.Add(expand);
+            Category retrievedCategory = commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(new Guid(category.Id), expansions)).Result;
+            Assert.NotNull(retrievedCategory.Parent);
+            Assert.NotNull(retrievedCategory.Parent.Obj);
+        }
+
+        [Fact]
+        public void GetCategoryByKeyExpandParent()
+        {
+            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
+            Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent());
+            this.categoryFixture.CategoriesToDelete.Add(category);
+            List<Expansion<Category>> expansions = new List<Expansion<Category>>();
+            ReferenceExpansion<Category> expand = new ReferenceExpansion<Category>(c => c.Parent);
+            expansions.Add(expand);
+            Category retrievedCategory = commerceToolsClient.ExecuteAsync(new GetByKeyCommand<Category>(category.Key, expansions)).Result;
+            Assert.NotNull(retrievedCategory.Parent);
+            Assert.NotNull(retrievedCategory.Parent.Obj);
+        }
     }
 }
