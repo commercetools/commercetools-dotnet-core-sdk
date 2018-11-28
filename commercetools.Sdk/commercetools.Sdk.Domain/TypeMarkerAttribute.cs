@@ -2,6 +2,11 @@
 {
     public class TypeMarkerAttribute : System.Attribute
     {
-        public string Value { get; protected set; }
+        public TypeMarkerAttribute(string value)
+        {
+            this.Value = value;
+        }
+
+        public string Value { get; private set; }
     }
 }

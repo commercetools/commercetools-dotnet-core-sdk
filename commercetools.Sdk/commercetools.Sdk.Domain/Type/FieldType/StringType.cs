@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    [FieldType("String")]
+    [TypeMarker("String")]
     public class StringType : FieldType
     {
     }

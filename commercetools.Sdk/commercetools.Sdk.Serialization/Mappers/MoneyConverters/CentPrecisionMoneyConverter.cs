@@ -4,11 +4,11 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class CentPrecisionMoneyConverter : ICustomJsonMapper<Money>
+    public class CentPrecisionMoneyConverter : ICustomJsonMapper<BaseMoney>
     {
         public int Priority => 4;
 
-        public Type Type => typeof(CentPrecisionMoney);
+        public Type Type => typeof(Money);
 
         public bool CanConvert(JToken property)
         {

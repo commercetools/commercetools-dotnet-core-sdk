@@ -28,62 +28,62 @@ namespace commercetools.Sdk.Linq.Extensions.Carts
             throw new NotImplementedException();
         }
 
-        public static CentPrecisionMoney LineItemTotal(this Cart source, Expression<Func<LineItem, bool>> parameter)
+        public static Money LineItemTotal(this Cart source, Expression<Func<LineItem, bool>> parameter)
         {
             throw new NotImplementedException();
         }
 
-        public static CentPrecisionMoney LineItemTotal(this Cart source, bool parameter)
+        public static Money LineItemTotal(this Cart source, bool parameter)
         {
             throw new NotImplementedException();
         }
 
-        public static CentPrecisionMoney CustomLineItemTotal(this Cart source, Expression<Func<CustomLineItem, bool>> parameter)
+        public static Money CustomLineItemTotal(this Cart source, Expression<Func<CustomLineItem, bool>> parameter)
         {
             throw new NotImplementedException();
         }
 
-        public static CentPrecisionMoney CustomLineItemTotal(this Cart source, bool parameter)
+        public static Money CustomLineItemTotal(this Cart source, bool parameter)
         {
             throw new NotImplementedException();
         }
 
-        public static CentPrecisionMoney LineItemNetTotal(this Cart source, Expression<Func<LineItem, bool>> parameter)
+        public static Money LineItemNetTotal(this Cart source, Expression<Func<LineItem, bool>> parameter)
         {
             throw new NotImplementedException();
         }
 
-        public static CentPrecisionMoney LineItemNetTotal(this Cart source, bool parameter)
+        public static Money LineItemNetTotal(this Cart source, bool parameter)
         {
             throw new NotImplementedException();
         }
 
-        public static CentPrecisionMoney CustomLineItemNetTotal(this Cart source, Expression<Func<CustomLineItem, bool>> parameter)
+        public static Money CustomLineItemNetTotal(this Cart source, Expression<Func<CustomLineItem, bool>> parameter)
         {
             throw new NotImplementedException();
         }
 
-        public static CentPrecisionMoney CustomLineItemNetTotal(this Cart source, bool parameter)
+        public static Money CustomLineItemNetTotal(this Cart source, bool parameter)
         {
             throw new NotImplementedException();
         }
 
-        public static CentPrecisionMoney LineItemGrossTotal(this Cart source, Expression<Func<LineItem, bool>> parameter)
+        public static Money LineItemGrossTotal(this Cart source, Expression<Func<LineItem, bool>> parameter)
         {
             throw new NotImplementedException();
         }
 
-        public static CentPrecisionMoney LineItemGrossTotal(this Cart source, bool parameter)
+        public static Money LineItemGrossTotal(this Cart source, bool parameter)
         {
             throw new NotImplementedException();
         }
 
-        public static CentPrecisionMoney CustomLineItemGrossTotal(this Cart source, Expression<Func<CustomLineItem, bool>> parameter)
+        public static Money CustomLineItemGrossTotal(this Cart source, Expression<Func<CustomLineItem, bool>> parameter)
         {
             throw new NotImplementedException();
         }
 
-        public static CentPrecisionMoney CustomLineItemGrossTotal(this Cart source, bool parameter)
+        public static Money CustomLineItemGrossTotal(this Cart source, bool parameter)
         {
             throw new NotImplementedException();
         }
@@ -138,27 +138,27 @@ namespace commercetools.Sdk.Linq.Extensions.Carts
             throw new NotImplementedException();
         }
 
-        public static bool Equal(this Money source, string parameter)
+        public static bool Equal(this BaseMoney source, string parameter)
         {
             throw new NotImplementedException();
         }
 
-        public static bool LessThan(this Money source, string parameter)
+        public static bool LessThan(this BaseMoney source, string parameter)
         {
             throw new NotImplementedException();
         }
 
-        public static bool LessThanOrEqual(this Money source, string parameter)
+        public static bool LessThanOrEqual(this BaseMoney source, string parameter)
         {
             throw new NotImplementedException();
         }
 
-        public static bool GreaterThan(this Money source, string parameter)
+        public static bool GreaterThan(this BaseMoney source, string parameter)
         {
             throw new NotImplementedException();
         }
 
-        public static bool GreaterThanOrEqual(this Money source, string parameter)
+        public static bool GreaterThanOrEqual(this BaseMoney source, string parameter)
         {
             throw new NotImplementedException();
         }

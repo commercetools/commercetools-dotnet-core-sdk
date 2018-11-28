@@ -9,11 +9,11 @@ namespace commercetools.Sdk.Serialization
 {
     public class MoneyConverter : JsonConverterBase
     {
-        private readonly IMapperTypeRetriever<Money> mapperTypeRetriever;
+        private readonly IMapperTypeRetriever<BaseMoney> mapperTypeRetriever;
 
         public override bool CanConvert(Type objectType)
         {
-            if (objectType == typeof(Money))
+            if (objectType == typeof(BaseMoney))
             {
                 return true;
             }
@@ -22,7 +22,7 @@ namespace commercetools.Sdk.Serialization
 
         public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization };
 
-        public MoneyConverter(IMapperTypeRetriever<Money> mapperTypeRetriever)
+        public MoneyConverter(IMapperTypeRetriever<BaseMoney> mapperTypeRetriever)
         {
             this.mapperTypeRetriever = mapperTypeRetriever;
         }

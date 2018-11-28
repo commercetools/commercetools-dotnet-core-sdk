@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class MoneyMapperTypeRetriever : MapperTypeRetriever<Money>
+    public class MoneyMapperTypeRetriever : MapperTypeRetriever<BaseMoney>
     {
-        public MoneyMapperTypeRetriever(IEnumerable<ICustomJsonMapper<Money>> customJsonMappers) : base(customJsonMappers)
+        public MoneyMapperTypeRetriever(IEnumerable<ICustomJsonMapper<BaseMoney>> customJsonMappers) : base(customJsonMappers)
         {
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    public class MoneyAttribute : Attribute<Money>
+    public class AttributeDefinitionDraft
     {
     }
 }

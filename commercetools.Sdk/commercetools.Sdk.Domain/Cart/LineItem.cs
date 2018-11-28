@@ -12,7 +12,7 @@ namespace commercetools.Sdk.Domain.Carts
         public ProductVariant Variant { get; set; }
         public Price Price { get; set; }
         public TaxedItemPrice TaxedPrice { get; set; }
-        public CentPrecisionMoney TotalMoney { get; set; }
+        public Money TotalMoney { get; set; }
         public int Quantity { get; set; }
         public List<ItemState> State { get; set; }
         public TaxRate TaxRate { get; set; }

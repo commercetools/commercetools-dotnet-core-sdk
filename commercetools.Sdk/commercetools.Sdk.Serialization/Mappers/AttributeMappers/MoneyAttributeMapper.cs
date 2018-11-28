@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Serialization
 {
-    public class MoneyAttributeMapper : MoneyConverter<Domain.Attribute, Money>, ICustomJsonMapper<Domain.Attribute>
+    public class MoneyAttributeMapper : MoneyConverter<Domain.Attribute, BaseMoney>, ICustomJsonMapper<Domain.Attribute>
     {
     }
 }

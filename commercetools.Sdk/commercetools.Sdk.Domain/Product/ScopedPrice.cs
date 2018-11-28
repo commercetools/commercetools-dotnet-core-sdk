@@ -5,8 +5,8 @@ namespace commercetools.Sdk.Domain
     public class ScopedPrice
     {
         public string Id { get; set; }
-        public Money Value { get; set; }
-        public Money CurrentValue { get; set; }
+        public BaseMoney Value { get; set; }
+        public BaseMoney CurrentValue { get; set; }
         public string Country { get; set; }
         public Reference<CustomerGroup> CustomerGroup { get; set; }
         public Reference<Channel> Channel { get; set; }

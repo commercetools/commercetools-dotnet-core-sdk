@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Domain
 {
-    [FacetResultType("terms")]
+    [TypeMarker("terms")]
     public class TermFacetResult : FacetResult
     {
         public string DateType { get; set; }

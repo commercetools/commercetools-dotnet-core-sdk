@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\commercetools.Sdk.Domain\commercetools.Sdk.Domain.csproj" />
+    <ProjectReference Include="..\commercetools.Sdk.Linq\commercetools.Sdk.Linq.csproj" />
   </ItemGroup>
 
 </Project>

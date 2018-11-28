@@ -7,7 +7,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public abstract class DecoratorTypeRetriever<T, S> : IDecoratorTypeRetriever<T> where S : TypeMarkerAttribute
+    public abstract class DecoratorTypeRetriever<T> : IDecoratorTypeRetriever<T>
     {
         private readonly IEnumerable<Type> derivedTypes;
 
@@ -20,7 +20,7 @@ namespace commercetools.Sdk.Serialization
         {
             foreach (Type type in this.derivedTypes)
             {
-                var attribute = type.CustomAttributes.Where(a => a.AttributeType == typeof(S)).FirstOrDefault();
+                var attribute = type.CustomAttributes.Where(a => a.AttributeType == typeof(TypeMarkerAttribute)).FirstOrDefault();
                 if (attribute != null)
                 {
                     if (attribute.ConstructorArguments[0].Value.ToString() == token.Value<string>())

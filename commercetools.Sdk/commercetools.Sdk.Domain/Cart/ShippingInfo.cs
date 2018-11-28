@@ -5,7 +5,7 @@ namespace commercetools.Sdk.Domain
     public class ShippingInfo
     {
         public string ShippingMethodName { get; set; }
-        public CentPrecisionMoney Price { get; set; }
+        public Money Price { get; set; }
         public ShippingRate ShippingRate { get; set; }
         public TaxedItemPrice TaxedPrice { get; set; }
         public TaxRate TaxRate { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    [FieldType("LocalizedString")]
+    [TypeMarker("LocalizedString")]
     public class LocalizedStringType : FieldType
     {
     }

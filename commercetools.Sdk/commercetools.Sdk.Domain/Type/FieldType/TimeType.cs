@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    [FieldType("Time")]
+    [TypeMarker("Time")]
     public class TimeType : FieldType
     {
     }

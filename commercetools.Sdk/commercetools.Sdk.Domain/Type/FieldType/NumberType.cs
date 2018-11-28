@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    [FieldType("Number")]
+    [TypeMarker("Number")]
     public class NumberType : FieldType
     {
     }

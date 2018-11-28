@@ -12,7 +12,7 @@ namespace commercetools.Sdk.Domain
         public Price Price { get; set; }
         public List<Image> Images { get; set; }
         public List<Asset> Assets { get; set; }
-        public ProductVariantAvailabilityChannel Availability { get; set; }
+        public ProductVariantAvailability Availability { get; set; }
         public bool IsMatchingVariant { get; set; }
         public ScopedPrice ScopedPrice { get; set; }
         public bool ScopedPriceDiscounted { get; set; }

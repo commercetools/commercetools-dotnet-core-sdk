@@ -2,15 +2,8 @@
 
 namespace commercetools.Sdk.Domain
 {
-    public class ProductVariantAvailabilityChannel : ProductVariantAvailability
+    public class ProductVariantAvailability : ProductVariantAvailabilityBase
     {
-        public Dictionary<string, ProductVariantAvailability> Channels { get; set; }
-    }
-
-    public class ProductVariantAvailability
-    {
-        public bool IsOnStock { get; set; }
-        public int RestockableInDays { get; set; }
-        public int AvailableQuantity { get; set; }
-    }
+        public Dictionary<string, ProductVariantAvailabilityBase> Channels { get; set; }
+    }   
 }

@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    [FacetResultType("filter")]
+    [TypeMarker("filter")]
     public class FilteredFacetResult : FacetResult
     {
         public int Count { get; set; }

@@ -103,7 +103,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/Money.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<Money>>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<BaseMoney>>(deserialized.Attributes[0]);
         }
 
         [Fact]

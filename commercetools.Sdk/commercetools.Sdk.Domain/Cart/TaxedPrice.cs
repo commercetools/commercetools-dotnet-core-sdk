@@ -4,8 +4,8 @@ namespace commercetools.Sdk.Domain
 {
     public class TaxedPrice
     {
-        public CentPrecisionMoney TotalNet { get; set; }
-        public CentPrecisionMoney TotalGross { get; set; }
+        public Money TotalNet { get; set; }
+        public Money TotalGross { get; set; }
         public List<TaxPortion> TaxPortions { get; set; }
     }
 }

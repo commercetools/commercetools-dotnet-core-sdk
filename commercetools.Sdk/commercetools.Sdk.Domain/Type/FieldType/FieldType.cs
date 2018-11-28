@@ -1,27 +1,70 @@
-﻿using System.Linq;
-
-namespace commercetools.Sdk.Domain
+﻿namespace commercetools.Sdk.Domain
 {
     public abstract class FieldType
     {
         public string Name
         {
-            get => this.GetName();
+            get => this.GetType().GetTypeMarkerAttributeValue();
         }
 
-        private string GetName()
+        public BooleanType ToBooleanType()
         {
-            FieldTypeAttribute fieldTypeAttribute = this.GetType().GetCustomAttributes(typeof(FieldTypeAttribute), true).FirstOrDefault() as FieldTypeAttribute;
-            if (fieldTypeAttribute != null)
-            {
-                return fieldTypeAttribute.Value;
-            }
-            return null;
+            return this as BooleanType;
+        }
+
+        public DateTimeType ToDateTimeType()
+        {
+            return this as DateTimeType;
+        }
+
+        public DateType ToDateType()
+        {
+            return this as DateType;
         }
 
         public EnumType ToEnumType()
         {
             return this as EnumType;
+        }
+
+        public LocalizedEnumType ToLocalizedEnumType()
+        {
+            return this as LocalizedEnumType;
+        }
+
+        public LocalizedStringType ToLocalizedStringType()
+        {
+            return this as LocalizedStringType;
+        }
+
+        public MoneyType ToMoneyType()
+        {
+            return this as MoneyType;
+        }
+
+        public NumberType ToNumberType()
+        {
+            return this as NumberType;
+        }
+
+        public ReferenceFieldType ToReferenceFieldType()
+        {
+            return this as ReferenceFieldType;
+        }
+
+        public SetType ToSetType()
+        {
+            return this as SetType;
+        }
+
+        public StringType ToStringType()
+        {
+            return this as StringType;
+        }
+
+        public TimeType ToTimeType()
+        {
+            return this as TimeType;
         }
     }
 }

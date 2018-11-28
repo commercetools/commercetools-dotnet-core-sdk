@@ -18,9 +18,9 @@
             return o as LocalizedString;
         }
 
-        public static Money ToMoney(this object o)
+        public static BaseMoney ToMoney(this object o)
         {
-            return o as Money;
+            return o as BaseMoney;
         }
     }
 }
