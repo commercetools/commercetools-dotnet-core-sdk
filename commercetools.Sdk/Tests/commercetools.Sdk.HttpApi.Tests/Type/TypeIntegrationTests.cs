@@ -114,7 +114,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             Type type = this.typeFixture.CreateType();
             List<UpdateAction<Type>> updateActions = new List<UpdateAction<Type>>();
             string newKey = this.typeFixture.RandomString(7);
-            AddFieldDefinitionUpdateAction addFieldDefinitionUpdateAction = new AddFieldDefinitionUpdateAction() { FieldDefinition = this.typeFixture.CreateNewStringField() };
+            AddFieldDefinitionUpdateAction addFieldDefinitionUpdateAction = new AddFieldDefinitionUpdateAction() { FieldDefinition = this.typeFixture.CreateNewStringFieldDefinition() };
             updateActions.Add(addFieldDefinitionUpdateAction);
             Type retrievedType = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Type>(new Guid(type.Id), type.Version, updateActions)).Result;
             this.typeFixture.TypesToDelete.Add(retrievedType);

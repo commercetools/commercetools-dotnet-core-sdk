@@ -43,44 +43,32 @@ namespace commercetools.Sdk.HttpApi.Tests
             typeDraft.Description.Add("en", this.RandomString(10));
             typeDraft.ResourceTypeIds = new List<ResourceTypeId>() { ResourceTypeId.Category };
             typeDraft.FieldDefinitions = new List<FieldDefinition>();
-            FieldDefinition stringFieldDefinition = this.CreateStringField();
-            FieldDefinition localizedStringFieldDefinition = this.CreateLocalizedStringField();
-            FieldDefinition numberFieldDefinition = this.CreateNumberField();
-            FieldDefinition booleanFieldDefinition = this.CreateBooleanField();
-            FieldDefinition enumFieldDefinition = this.CreateEnumField();
-            FieldDefinition localizedEnumFieldDefinition = this.CreateLocalizedEnumField();
-            FieldDefinition moneyFieldDefinition = this.CreateMoneyField();
-            FieldDefinition dateFieldDefinition = this.CreateDateField();
-            FieldDefinition timeFieldDefinition = this.CreateTimeField();
-            FieldDefinition dateTimeFieldDefinition = this.CreateDateTimeField();
-            FieldDefinition referenceFieldDefinition = this.CreateReferenceField();
-            FieldDefinition setFieldDefinition = this.CreateSetField();
-            typeDraft.FieldDefinitions.Add(stringFieldDefinition);
-            typeDraft.FieldDefinitions.Add(localizedStringFieldDefinition);
-            typeDraft.FieldDefinitions.Add(numberFieldDefinition);
-            typeDraft.FieldDefinitions.Add(booleanFieldDefinition);
-            typeDraft.FieldDefinitions.Add(enumFieldDefinition);
-            typeDraft.FieldDefinitions.Add(localizedEnumFieldDefinition);
-            typeDraft.FieldDefinitions.Add(moneyFieldDefinition);
-            typeDraft.FieldDefinitions.Add(dateFieldDefinition);
-            typeDraft.FieldDefinitions.Add(timeFieldDefinition);
-            typeDraft.FieldDefinitions.Add(dateTimeFieldDefinition);
-            typeDraft.FieldDefinitions.Add(referenceFieldDefinition);
-            typeDraft.FieldDefinitions.Add(setFieldDefinition);
+            typeDraft.FieldDefinitions.Add(this.CreateStringFieldDefinition());
+            typeDraft.FieldDefinitions.Add(this.CreateLocalizedStringFieldDefinition());
+            typeDraft.FieldDefinitions.Add(this.CreateNumberFieldDefinition());
+            typeDraft.FieldDefinitions.Add(this.CreateBooleanFieldDefinition());
+            typeDraft.FieldDefinitions.Add(this.CreateEnumFieldDefinition());
+            typeDraft.FieldDefinitions.Add(this.CreateLocalizedEnumFieldDefinition());
+            typeDraft.FieldDefinitions.Add(this.CreateMoneyFieldDefinition());
+            typeDraft.FieldDefinitions.Add(this.CreateDateFieldDefinition());
+            typeDraft.FieldDefinitions.Add(this.CreateTimeFieldDefinition());
+            typeDraft.FieldDefinitions.Add(this.CreateDateTimeFieldDefinition());
+            typeDraft.FieldDefinitions.Add(this.CreateReferenceFieldDefinition());
+            typeDraft.FieldDefinitions.Add(this.CreateSetFieldDefinition());
             return typeDraft;
         }
 
-        public FieldDefinition CreateNewStringField()
+        public FieldDefinition CreateNewStringFieldDefinition()
         {
-            return this.CreateStringField("new-string-field");
+            return this.CreateStringFieldDefinition("new-string-field");
         }
 
-        private FieldDefinition CreateStringField()
+        private FieldDefinition CreateStringFieldDefinition()
         {
-            return this.CreateStringField("string-field");
+            return this.CreateStringFieldDefinition("string-field");
         }
 
-        private FieldDefinition CreateStringField(string name)
+        private FieldDefinition CreateStringFieldDefinition(string name)
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.Name = name;
@@ -92,7 +80,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             return fieldDefinition;
         }
 
-        private FieldDefinition CreateLocalizedStringField()
+        private FieldDefinition CreateLocalizedStringFieldDefinition()
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.Name = "localized-string-field";
@@ -104,7 +92,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             return fieldDefinition;
         }
 
-        private FieldDefinition CreateNumberField()
+        private FieldDefinition CreateNumberFieldDefinition()
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.Name = "number-field";
@@ -115,7 +103,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             return fieldDefinition;
         }
 
-        private FieldDefinition CreateBooleanField()
+        private FieldDefinition CreateBooleanFieldDefinition()
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.Name = "boolean-field";
@@ -126,7 +114,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             return fieldDefinition;
         }
 
-        private FieldDefinition CreateEnumField()
+        private FieldDefinition CreateEnumFieldDefinition()
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.Name = "enum-field";
@@ -141,7 +129,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             return fieldDefinition;
         }
 
-        private FieldDefinition CreateLocalizedEnumField()
+        private FieldDefinition CreateLocalizedEnumFieldDefinition()
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.Name = "localized-enum-field";
@@ -156,7 +144,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             return fieldDefinition;
         }
 
-        private FieldDefinition CreateMoneyField()
+        private FieldDefinition CreateMoneyFieldDefinition()
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.Name = "money-field";
@@ -168,7 +156,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             return fieldDefinition;
         }
 
-        private FieldDefinition CreateDateTimeField()
+        private FieldDefinition CreateDateTimeFieldDefinition()
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.Name = "date-time-field";
@@ -180,7 +168,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             return fieldDefinition;
         }
 
-        private FieldDefinition CreateDateField()
+        private FieldDefinition CreateDateFieldDefinition()
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.Name = "date-field";
@@ -192,7 +180,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             return fieldDefinition;
         }
 
-        private FieldDefinition CreateTimeField()
+        private FieldDefinition CreateTimeFieldDefinition()
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.Name = "time-field";
@@ -204,7 +192,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             return fieldDefinition;
         }
 
-        private FieldDefinition CreateReferenceField()
+        private FieldDefinition CreateReferenceFieldDefinition()
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.Name = "reference-field";
@@ -217,7 +205,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             return fieldDefinition;
         }
 
-        private FieldDefinition CreateSetField()
+        private FieldDefinition CreateSetFieldDefinition()
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.Name = "set-field";
