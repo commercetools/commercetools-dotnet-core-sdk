@@ -6,7 +6,7 @@
 
     public class DeleteRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
-        public DeleteRequestMessageBuilder(IClientConfiguration clientConfiguration) : base(clientConfiguration)
+        public DeleteRequestMessageBuilder(IClientConfiguration clientConfiguration, IEndpointRetriever endpointRetriever) : base(clientConfiguration, endpointRetriever)
         {
         }
 

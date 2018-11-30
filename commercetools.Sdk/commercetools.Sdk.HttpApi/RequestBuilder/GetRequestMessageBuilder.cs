@@ -11,7 +11,7 @@
     {
         private readonly IExpansionExpressionVisitor expansionExpressionVisitor;
 
-        public GetRequestMessageBuilder(IClientConfiguration clientConfiguration, IExpansionExpressionVisitor expansionExpressionVisitor) : base(clientConfiguration)
+        public GetRequestMessageBuilder(IClientConfiguration clientConfiguration, IExpansionExpressionVisitor expansionExpressionVisitor, IEndpointRetriever endpointRetriever) : base(clientConfiguration, endpointRetriever)
         {
             this.expansionExpressionVisitor = expansionExpressionVisitor;
         }

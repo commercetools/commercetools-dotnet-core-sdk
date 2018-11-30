@@ -36,7 +36,8 @@ namespace commercetools.Sdk.HttpApi.Tests
                 this.clientFixture.GetService<IClientConfiguration>(),
                 this.clientFixture.GetService<IQueryPredicateExpressionVisitor>(),
                 this.clientFixture.GetService<IExpansionExpressionVisitor>(),
-                this.clientFixture.GetService<ISortExpressionVisitor>());
+                this.clientFixture.GetService<ISortExpressionVisitor>(),
+                this.clientFixture.GetService<IEndpointRetriever>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
             Assert.Equal("https://api.sphere.io/portablevendor/categories?expand=parent", httpRequestMessage.RequestUri.ToString());
         }
@@ -54,7 +55,8 @@ namespace commercetools.Sdk.HttpApi.Tests
                 this.clientFixture.GetService<IClientConfiguration>(),
                 this.clientFixture.GetService<IQueryPredicateExpressionVisitor>(),
                 this.clientFixture.GetService<IExpansionExpressionVisitor>(),
-                this.clientFixture.GetService<ISortExpressionVisitor>());
+                this.clientFixture.GetService<ISortExpressionVisitor>(),
+                this.clientFixture.GetService<IEndpointRetriever>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
             Assert.Equal("https://api.sphere.io/portablevendor/categories?expand=parent&expand=ancestors%5B0%5D", httpRequestMessage.RequestUri.ToString());
         }

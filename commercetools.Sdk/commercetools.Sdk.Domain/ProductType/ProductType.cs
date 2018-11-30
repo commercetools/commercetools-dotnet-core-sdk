@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace commercetools.Sdk.Domain
 {
+    [Endpoint("product-types")]
     public class ProductType
     {
         public string Id { get; set; }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace commercetools.Sdk.Domain
 {
+    [Endpoint("customers")]
     public class Customer
     {
         public string Id { get; set; }

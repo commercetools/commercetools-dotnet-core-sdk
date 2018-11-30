@@ -9,7 +9,7 @@ namespace commercetools.Sdk.HttpApi
     {
         private readonly ISerializerService serializerService;
 
-        public UpdateRequestMessageBuilder(ISerializerService serializerService, IClientConfiguration clientConfiguration) : base(clientConfiguration)
+        public UpdateRequestMessageBuilder(ISerializerService serializerService, IClientConfiguration clientConfiguration, IEndpointRetriever endpointRetriever) : base(clientConfiguration, endpointRetriever)
         {
             this.serializerService = serializerService;
         }

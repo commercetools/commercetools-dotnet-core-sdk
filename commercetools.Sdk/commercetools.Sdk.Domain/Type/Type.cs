@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace commercetools.Sdk.Domain
 {
+    [Endpoint("types")]
     public class Type
     {
         public string Id { get; set; }

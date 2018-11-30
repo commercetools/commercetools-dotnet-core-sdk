@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    [Endpoint("categories")]
     public class Category
     {
         public string Id { get; set; }

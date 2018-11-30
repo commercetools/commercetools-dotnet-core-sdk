@@ -9,7 +9,7 @@
     {
         private readonly ISerializerService serializerService;
 
-        public CreateRequestMessageBuilder(ISerializerService serializerService, IClientConfiguration clientConfiguration) : base(clientConfiguration)
+        public CreateRequestMessageBuilder(ISerializerService serializerService, IClientConfiguration clientConfiguration, IEndpointRetriever endpointRetriever) : base(clientConfiguration, endpointRetriever)
         {
             this.serializerService = serializerService;
         }

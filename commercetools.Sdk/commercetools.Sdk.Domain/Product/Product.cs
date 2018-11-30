@@ -2,6 +2,7 @@
 
 namespace commercetools.Sdk.Domain
 {
+    [Endpoint("products")]
     public class Product
     {
         public string Id { get; set; }

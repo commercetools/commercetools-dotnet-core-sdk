@@ -13,7 +13,7 @@
     {
         private readonly IFilterExpressionVisitor filterExpressionVisitor;
 
-        public SearchRequestMessageBuilder(IClientConfiguration clientConfiguration, IFilterExpressionVisitor filterExpressionVisitor) : base(clientConfiguration)
+        public SearchRequestMessageBuilder(IClientConfiguration clientConfiguration, IFilterExpressionVisitor filterExpressionVisitor, IEndpointRetriever endpointRetriever) : base(clientConfiguration, endpointRetriever)
         {
             this.filterExpressionVisitor = filterExpressionVisitor;
         }

@@ -4,6 +4,7 @@
     using System;
     using System.Collections.Generic;
 
+    [Endpoint("shopping-lists")]
     public class ShoppingList
     {
         public string Id { get; set; }

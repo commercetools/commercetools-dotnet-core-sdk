@@ -8,24 +8,18 @@ namespace commercetools.Sdk.HttpApi
 {
     public abstract class RequestMessageBuilderBase
     {
-        private IClientConfiguration clientConfiguration;
+        private readonly IClientConfiguration clientConfiguration;
+        private readonly IEndpointRetriever endpointRetriever;
 
-        // TODO See if this should be moved to a different class
-        private IDictionary<Type, string> mapping = new Dictionary<Type, string>()
-        {
-            {  typeof(Category), "categories" },
-            {  typeof(ProductProjection), "product-projections" },
-            {  typeof(Sdk.Domain.Type), "types" }
-        };
-
-        public RequestMessageBuilderBase(IClientConfiguration clientConfiguration)
+        public RequestMessageBuilderBase(IClientConfiguration clientConfiguration, IEndpointRetriever endpointRetriever)
         {
             this.clientConfiguration = clientConfiguration;
+            this.endpointRetriever = endpointRetriever;
         }
 
         protected string GetMessageBase<T>()
         {
-            return this.clientConfiguration.ApiBaseAddress + $"{this.clientConfiguration.ProjectKey}/{this.mapping[typeof(T)]}";
+            return this.clientConfiguration.ApiBaseAddress + $"{this.clientConfiguration.ProjectKey}/{this.endpointRetriever.GetEndpoint<T>()}";
         }
 
         protected HttpRequestMessage GetRequestMessage<T>(Uri requestUri, HttpContent httpContent, HttpMethod httpMethod)

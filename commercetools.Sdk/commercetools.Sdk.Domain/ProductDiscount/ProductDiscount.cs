@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace commercetools.Sdk.Domain
 {
+    [Endpoint("product-discounts")]
     public class ProductDiscount
     {
         public string Id { get; set; }

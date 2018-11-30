@@ -25,6 +25,7 @@ namespace commercetools.Sdk.HttpApi
             services.AddHttpClient("auth");
             services.AddHttpClient("api").AddHttpMessageHandler<AuthorizationHandler>();
 
+            services.AddSingleton<IEndpointRetriever, EndpointRetriever>();
             services.AddSingleton<IQueryPredicateExpressionVisitor, QueryPredicateExpressionVisitor>();
             services.AddSingleton<IExpansionExpressionVisitor, ExpansionExpressionVisitor>();
             services.AddSingleton<ISortExpressionVisitor, SortExpressionVisitor>();

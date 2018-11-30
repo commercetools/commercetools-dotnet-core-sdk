@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace commercetools.Sdk.Domain
 {
+    [Endpoint("product-projections")]
     public class ProductProjection
     {
         public string Id { get; set; }
