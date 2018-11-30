@@ -3,7 +3,7 @@
 namespace commercetools.Sdk.Domain
 {
     [TypeMarker("LocalizedEnum")]
-    public class LocalizedEnumType : FieldType
+    public class LocalizedEnumFieldType : FieldType
     {
         public List<LocalizedEnumValue> Values { get; set; }
     }

@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    public class SetAttribute<T> : Attribute<Attributes.Set<T>>
+    public class SetAttribute<T> : Attribute<Attributes.AttributeSet<T>>
     {
     }
 }

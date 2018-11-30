@@ -1,7 +1,7 @@
 ﻿namespace commercetools.Sdk.Domain
 {
     [TypeMarker("Boolean")]
-    public class BooleanType : FieldType
+    public class BooleanFieldType : FieldType
     {
     }
 }

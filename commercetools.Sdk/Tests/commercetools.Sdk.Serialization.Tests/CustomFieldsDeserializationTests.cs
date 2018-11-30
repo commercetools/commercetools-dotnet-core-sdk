@@ -46,7 +46,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/CustomFields/SetEnum.json");
             Category deserialized = serializerService.Deserialize<Category>(serialized);
-            Assert.IsType<Set<EnumValue>>(deserialized.Custom.Fields["enum"]);
+            Assert.IsType<FieldSet<EnumValue>>(deserialized.Custom.Fields["enum"]);
         }
 
         [Fact]

@@ -104,7 +104,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             updateActions.Add(addEnumToFieldDefinitionUpdateAction);
             Type retrievedType = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Type>(new Guid(type.Id), type.Version, updateActions)).Result;
             this.typeFixture.TypesToDelete.Add(retrievedType);
-            Assert.Equal(type.GetFieldDefinition("enum-field").Type.ToEnumType().Values.Count + 1, retrievedType.GetFieldDefinition("enum-field").Type.ToEnumType().Values.Count);
+            Assert.Equal(type.GetFieldDefinition("enum-field").Type.ToEnumFieldType().Values.Count + 1, retrievedType.GetFieldDefinition("enum-field").Type.ToEnumFieldType().Values.Count);
         }
 
         [Fact]

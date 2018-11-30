@@ -23,7 +23,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/FieldTypes/String.json");
             Type deserialized = serializerService.Deserialize<Type>(serialized);
-            Assert.IsType<StringType>(deserialized.FieldDefinitions[0].Type);
+            Assert.IsType<StringFieldType>(deserialized.FieldDefinitions[0].Type);
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace commercetools.Sdk.Serialization.Tests
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "string description");
             fieldDefinition.InputHint = TextInputHint.SingleLine;
-            fieldDefinition.Type = new StringType();
+            fieldDefinition.Type = new StringFieldType();
             typeDraft.FieldDefinitions = new List<FieldDefinition>();
             typeDraft.FieldDefinitions.Add(fieldDefinition);
             string result = serializerService.Serialize(typeDraft);

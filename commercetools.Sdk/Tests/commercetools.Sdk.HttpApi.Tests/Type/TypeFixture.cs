@@ -88,7 +88,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "string description");
             fieldDefinition.InputHint = TextInputHint.SingleLine;
-            fieldDefinition.Type = new StringType();
+            fieldDefinition.Type = new StringFieldType();
             return fieldDefinition;
         }
 
@@ -100,7 +100,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "localized string description");
             fieldDefinition.InputHint = TextInputHint.MultiLine;
-            fieldDefinition.Type = new LocalizedStringType();
+            fieldDefinition.Type = new LocalizedStringFieldType();
             return fieldDefinition;
         }
 
@@ -111,7 +111,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             fieldDefinition.Required = true;
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "number description");
-            fieldDefinition.Type = new NumberType();
+            fieldDefinition.Type = new NumberFieldType();
             return fieldDefinition;
         }
 
@@ -122,7 +122,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             fieldDefinition.Required = true;
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "boolean description");
-            fieldDefinition.Type = new BooleanType();
+            fieldDefinition.Type = new BooleanFieldType();
             return fieldDefinition;
         }
 
@@ -133,7 +133,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             fieldDefinition.Required = true;
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "enum description");
-            EnumType enumType = new EnumType();
+            EnumFieldType enumType = new EnumFieldType();
             enumType.Values = new List<EnumValue>();
             enumType.Values.Add(new EnumValue() { Key = "enum-key-1", Label = "enum-label-1" });
             enumType.Values.Add(new EnumValue() { Key = "enum-key-2", Label = "enum-label-2" });
@@ -148,7 +148,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             fieldDefinition.Required = true;
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "localized enum description");
-            LocalizedEnumType localizedEnumType = new LocalizedEnumType();
+            LocalizedEnumFieldType localizedEnumType = new LocalizedEnumFieldType();
             localizedEnumType.Values = new List<LocalizedEnumValue>();
             localizedEnumType.Values.Add(new LocalizedEnumValue() { Key = "enum-key-1", Label = new LocalizedString() { { "en", "enum-label-1" } } });
             localizedEnumType.Values.Add(new LocalizedEnumValue() { Key = "enum-key-2", Label = new LocalizedString() { { "en", "enum-label-2" } } });
@@ -163,7 +163,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             fieldDefinition.Required = true;
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "money description");
-            MoneyType moneyType = new MoneyType();
+            MoneyFieldType moneyType = new MoneyFieldType();
             fieldDefinition.Type = moneyType;
             return fieldDefinition;
         }
@@ -175,7 +175,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             fieldDefinition.Required = true;
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "date time description");
-            DateTimeType dateTimeType = new DateTimeType();
+            DateTimeFieldType dateTimeType = new DateTimeFieldType();
             fieldDefinition.Type = dateTimeType;
             return fieldDefinition;
         }
@@ -187,7 +187,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             fieldDefinition.Required = true;
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "date description");
-            DateType dateType = new DateType();
+            DateFieldType dateType = new DateFieldType();
             fieldDefinition.Type = dateType;
             return fieldDefinition;
         }
@@ -199,7 +199,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             fieldDefinition.Required = true;
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "time description");
-            TimeType timeType = new TimeType();
+            TimeFieldType timeType = new TimeFieldType();
             fieldDefinition.Type = timeType;
             return fieldDefinition;
         }
@@ -224,8 +224,8 @@ namespace commercetools.Sdk.HttpApi.Tests
             fieldDefinition.Required = true;
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "set description");
-            SetType fieldType = new SetType();
-            fieldType.ElementType = new StringType();
+            SetFieldType fieldType = new SetFieldType();
+            fieldType.ElementType = new StringFieldType();
             fieldDefinition.Type = fieldType;
             return fieldDefinition;
         }

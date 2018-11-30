@@ -76,7 +76,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             customFieldsDraft.Fields.Add("date-time-field", new DateTime(2018, 11, 28, 11, 01, 00));
             customFieldsDraft.Fields.Add("time-field", new TimeSpan(11, 01, 00));
             customFieldsDraft.Fields.Add("money-field", new Money() { CentAmount = 1800, CurrencyCode = "EUR" });
-            customFieldsDraft.Fields.Add("set-field", new Set<string>() { "test1", "test2" });
+            customFieldsDraft.Fields.Add("set-field", new FieldSet<string>() { "test1", "test2" });
             customFieldsDraft.Fields.Add("reference-field", new Reference<Category>() { Id = relatedCategory.Id, TypeId = ReferenceTypeId.Category });
             categoryDraft.Custom = customFieldsDraft;
             return categoryDraft;

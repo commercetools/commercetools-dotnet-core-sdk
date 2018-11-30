@@ -7,44 +7,44 @@
             get => this.GetType().GetTypeMarkerAttributeValue();
         }
 
-        public BooleanType ToBooleanType()
+        public BooleanFieldType ToBooleanFieldType()
         {
-            return this as BooleanType;
+            return this as BooleanFieldType;
         }
 
-        public DateTimeType ToDateTimeType()
+        public DateTimeFieldType ToDateTimeFieldType()
         {
-            return this as DateTimeType;
+            return this as DateTimeFieldType;
         }
 
-        public DateType ToDateType()
+        public DateFieldType ToDateFieldType()
         {
-            return this as DateType;
+            return this as DateFieldType;
         }
 
-        public EnumType ToEnumType()
+        public EnumFieldType ToEnumFieldType()
         {
-            return this as EnumType;
+            return this as EnumFieldType;
         }
 
-        public LocalizedEnumType ToLocalizedEnumType()
+        public LocalizedEnumFieldType ToLocalizedEnumFieldType()
         {
-            return this as LocalizedEnumType;
+            return this as LocalizedEnumFieldType;
         }
 
-        public LocalizedStringType ToLocalizedStringType()
+        public LocalizedStringFieldType ToLocalizedStringFieldType()
         {
-            return this as LocalizedStringType;
+            return this as LocalizedStringFieldType;
         }
 
-        public MoneyType ToMoneyType()
+        public MoneyFieldType ToMoneyFieldType()
         {
-            return this as MoneyType;
+            return this as MoneyFieldType;
         }
 
-        public NumberType ToNumberType()
+        public NumberFieldType ToNumberFieldType()
         {
-            return this as NumberType;
+            return this as NumberFieldType;
         }
 
         public ReferenceFieldType ToReferenceFieldType()
@@ -52,19 +52,19 @@
             return this as ReferenceFieldType;
         }
 
-        public SetType ToSetType()
+        public SetFieldType ToSetFieldType()
         {
-            return this as SetType;
+            return this as SetFieldType;
         }
 
-        public StringType ToStringType()
+        public StringFieldType ToStringFieldType()
         {
-            return this as StringType;
+            return this as StringFieldType;
         }
 
-        public TimeType ToTimeType()
+        public TimeFieldType ToTimeFieldType()
         {
-            return this as TimeType;
+            return this as TimeFieldType;
         }
     }
 }

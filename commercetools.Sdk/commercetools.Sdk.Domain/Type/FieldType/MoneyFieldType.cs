@@ -1,7 +1,7 @@
 ﻿namespace commercetools.Sdk.Domain
 {
     [TypeMarker("Money")]
-    public class MoneyType : FieldType
+    public class MoneyFieldType : FieldType
     {
     }
 }

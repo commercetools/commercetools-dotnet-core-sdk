@@ -1,7 +1,7 @@
 ﻿namespace commercetools.Sdk.Domain
 {
     [TypeMarker("Set")]
-    public class SetType : FieldType
+    public class SetFieldType : FieldType
     {
         public FieldType ElementType { get; set; }
     }

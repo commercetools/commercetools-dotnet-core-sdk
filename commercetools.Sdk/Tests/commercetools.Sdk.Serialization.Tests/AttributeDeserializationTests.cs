@@ -112,7 +112,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/SetText.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<Domain.Attributes.Set<string>>>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<Domain.Attributes.AttributeSet<string>>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -121,7 +121,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/SetEnum.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<Domain.Attributes.Set<PlainEnumValue>>>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<Domain.Attributes.AttributeSet<PlainEnumValue>>>(deserialized.Attributes[0]);
         }
 
         [Fact]

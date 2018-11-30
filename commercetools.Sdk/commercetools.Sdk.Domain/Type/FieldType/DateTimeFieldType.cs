@@ -1,7 +1,7 @@
 ﻿namespace commercetools.Sdk.Domain
 {
     [TypeMarker("DateTime")]
-    public class DateTimeType : FieldType
+    public class DateTimeFieldType : FieldType
     {
     }
 }

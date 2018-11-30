@@ -1,6 +1,10 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    public class AttributeConstraint
+    public enum AttributeConstraint
     {
+        None,
+        Unique,
+        CombinationUnique,
+        SameForAll
     }
 }
