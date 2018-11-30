@@ -1,6 +1,10 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    public class AttributeType
+    public abstract class AttributeType
     {
+        public string Name
+        {
+            get => this.GetType().GetTypeMarkerAttributeValue();
+        }
     }
 }

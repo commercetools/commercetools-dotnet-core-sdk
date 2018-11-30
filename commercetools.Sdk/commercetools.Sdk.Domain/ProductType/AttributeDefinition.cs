@@ -3,7 +3,6 @@
     public class AttributeDefinition
     {
         public AttributeType Type { get; set; }
-        [AttributeName]
         public string Name { get; set; }
         public LocalizedString Label { get; set; }
         public bool IsRequired { get; set; }
