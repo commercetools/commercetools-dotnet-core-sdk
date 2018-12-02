@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Client
 {
-    public class GetByCustomerIdCommand<T> : GetCommand<T> where T : Cart
+    public class GetByCustomerIdCommand<T> : GetCommand<Cart>
     {
         public GetByCustomerIdCommand(string customerId)
         {

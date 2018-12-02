@@ -2,9 +2,9 @@
 
 namespace commercetools.Sdk.Domain
 {
-    public class CustomTokenizer
+    [TypeMarker("custom")]
+    public class CustomTokenizer : SuggestTokenizer
     {
-        public string Type { get; set; }
         public List<string> Inputs { get; set; }
     }
 }

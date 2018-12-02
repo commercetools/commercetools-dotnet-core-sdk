@@ -1,7 +1,10 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    public class WhitespaceTokenizer
+    public abstract class SuggestTokenizer
     {
-        public string Type { get; set; }
+        public string Type
+        {
+            get => this.GetType().GetTypeMarkerAttributeValue();
+        }
     }
 }
