@@ -6,6 +6,8 @@
 
     public class GetByIdCommand<T> : GetCommand<T>
     {
+        public override System.Type ResourceType => typeof(T);
+
         public GetByIdCommand(Guid guid)
         {
             Init(guid);

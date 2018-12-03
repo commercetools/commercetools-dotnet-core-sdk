@@ -6,6 +6,8 @@ namespace commercetools.Sdk.Client
 {
     public class UpdateByIdCommand<T> : UpdateCommand<T>
     {
+        public override System.Type ResourceType => typeof(T);
+
         public UpdateByIdCommand(Guid guid, int version, List<UpdateAction<T>> updateActions)
         {
             this.ParameterKey = Parameters.ID;

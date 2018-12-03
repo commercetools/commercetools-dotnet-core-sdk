@@ -10,9 +10,8 @@ namespace commercetools.Sdk.HttpApi
 {
     public class HttpApiCommandFactory : IHttpApiCommandFactory
     {
-        private IEnumerable<Type> registeredHttpApiCommandTypes;
         private readonly Dictionary<Type, ObjectActivator> activators;
-
+        private IEnumerable<Type> registeredHttpApiCommandTypes;
         private IRequestMessageBuilderFactory requestMessageBuilderFactory;
 
         public HttpApiCommandFactory(IRegisteredTypeRetriever registeredTypeRetriever, IRequestMessageBuilderFactory requestMessageBuilderFactory)
@@ -25,6 +24,42 @@ namespace commercetools.Sdk.HttpApi
 
         private delegate object ObjectActivator(params object[] args);
 
+        public IHttpApiCommand Create<T>(Command<T> command)
+        {
+            // Retrieve the type of T; for CreateCommand<Category>, Category is retrieved
+            Type typeOfGeneric = command.ResourceType;
+            Type httApiCommandType = null;
+
+            foreach (Type type in this.registeredHttpApiCommandTypes)
+            {
+                // retrieving the command type from IHttpApiCommand, e.g. GetHttpApiCommand<T>: IHttpApiCommand<GetCommand<T>, T>
+                var httpApiCommandGenericType = type.GetInterfaces().First().GetGenericArguments().First();
+                // IsAssignableFrom does not work on open generic types <>, which means the type of T needs to be passed first
+                if (httpApiCommandGenericType.GetGenericTypeDefinition().MakeGenericType(typeOfGeneric).IsAssignableFrom(command.GetType()))
+                {
+                    httApiCommandType = type;
+                    break;
+                }
+            }
+
+            Type requestedType = httApiCommandType.MakeGenericType(typeOfGeneric);
+            ObjectActivator createdActivator;
+            if (activators.ContainsKey(requestedType))
+            {
+                createdActivator = activators[requestedType];
+            }
+            else
+            {
+                ConstructorInfo ctor = requestedType.GetConstructors().First();
+                createdActivator = GetActivator(ctor);
+                activators[requestedType] = createdActivator;
+            }
+
+            object instance = createdActivator(command, requestMessageBuilderFactory);
+            return instance as IHttpApiCommand;
+        }
+
+        // TODO Move this to a different class perhaps
         private ObjectActivator GetActivator(ConstructorInfo ctor)
         {
             Type type = ctor.DeclaringType;
@@ -66,52 +101,5 @@ namespace commercetools.Sdk.HttpApi
             ObjectActivator compiled = (ObjectActivator)lambda.Compile();
             return compiled;
         }
-
-        public IHttpApiCommand Create<T>(Command<T> command)
-        {
-            // retrieve the type of T
-            // TODO Find a neater way to find the generic type
-            // Add a get type property to commands
-            Type typeOfGeneric;
-            if (command.GetType().IsGenericType)
-            {
-                typeOfGeneric = command.GetType().GetGenericArguments().FirstOrDefault();
-            }
-            else
-            {
-                typeOfGeneric = command.GetType().BaseType.GetGenericArguments().FirstOrDefault();
-            }
-            Type httApiCommandType = null;
-
-            foreach (Type type in this.registeredHttpApiCommandTypes)
-            {
-                // retrieving the command type from IHttpApiCommand, e.g. GetHttpApiCommand<T>: IHttpApiCommand<GetCommand<T>, T>
-                var httpApiCommandGenericType = type.GetInterfaces().First().GetGenericArguments().First();
-                // IsAssignableFrom does not work on open generic types <>, which means the type of T needs to be passed first
-                if (httpApiCommandGenericType.GetGenericTypeDefinition().MakeGenericType(typeOfGeneric).IsAssignableFrom(command.GetType()))
-                {
-                    httApiCommandType = type;
-                    break;
-                }
-            }
-
-            Type requestedType = httApiCommandType.MakeGenericType(typeOfGeneric);
-            ObjectActivator createdActivator;
-            if (activators.ContainsKey(requestedType))
-            {
-                createdActivator = activators[requestedType];
-            }
-            else
-            {
-                ConstructorInfo ctor = requestedType.GetConstructors().First();
-                createdActivator = GetActivator(ctor);
-                activators[requestedType] = createdActivator;
-            }
-
-            object instance = createdActivator(command, requestMessageBuilderFactory);
-            return instance as IHttpApiCommand;
-        }
-
-
     }
 }
