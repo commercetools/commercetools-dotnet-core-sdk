@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.Serialization;
+using commercetools.Sdk.Util;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -31,6 +32,7 @@ namespace commercetools.Sdk.HttpApi.MvcExample
             services.UseHttpApiWithClientCredentials(this.configuration);
 
             services.AddMvc();
+            ServiceLocator.SetLocatorProvider(services.BuildServiceProvider());
         }
     }
 }

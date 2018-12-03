@@ -16,6 +16,7 @@ namespace commercetools.Sdk.Serialization
             {
                 var currencyCodeProperty = property["currencyCode"];
                 var typeProperty = property["type"];
+                // TODO Take highPrecision string from annotation attribute from HighPrecisionMoney
                 if (currencyCodeProperty != null && typeProperty != null && typeProperty.Value<string>() == "highPrecision")
                 {
                     return true;

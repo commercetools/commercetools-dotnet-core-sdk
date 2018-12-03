@@ -42,6 +42,7 @@ namespace commercetools.Sdk.HttpApi
                 }
             }
 
+            // CreateHttpApiCommand<T> => CreateHttpApiCommand<Category>
             Type requestedType = httApiCommandType.MakeGenericType(typeOfGeneric);
             ObjectActivator createdActivator;
             if (activators.ContainsKey(requestedType))

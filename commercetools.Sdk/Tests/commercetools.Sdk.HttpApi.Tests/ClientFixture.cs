@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.Serialization;
+using commercetools.Sdk.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -19,9 +20,11 @@ namespace commercetools.Sdk.HttpApi.Tests
                 AddJsonFile("appsettings.test.Development.json", true).
                 AddEnvironmentVariables().
                 Build();
+            // TODO Combine this in all in one DI setup
             services.UseSerialization();
             services.UseHttpApiWithClientCredentials(configuration);
             serviceProvider = services.BuildServiceProvider();
+            ServiceLocator.SetLocatorProvider(serviceProvider);
         }
 
         public T GetService<T>()
