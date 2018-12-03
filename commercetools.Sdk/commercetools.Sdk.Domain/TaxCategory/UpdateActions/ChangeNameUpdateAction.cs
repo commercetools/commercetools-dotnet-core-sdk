@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace commercetools.Sdk.Domain.Categories
+namespace commercetools.Sdk.Domain.TaxRates
 {
-    public class ChangeNameUpdateAction : UpdateAction<Category>
+    public class ChangeNameUpdateAction : UpdateAction<TaxRate>
     {
         public string Action => "changeName";
         [Required]
