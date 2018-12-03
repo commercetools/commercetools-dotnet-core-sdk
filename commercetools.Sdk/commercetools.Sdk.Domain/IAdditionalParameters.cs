@@ -4,7 +4,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    public interface IQueryParameters<T>
+    public interface IAdditionalParameters<T>
     {
     }
 }

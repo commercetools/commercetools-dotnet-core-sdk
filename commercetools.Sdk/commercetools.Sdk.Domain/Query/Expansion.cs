@@ -1,11 +1,14 @@
 ﻿namespace commercetools.Sdk.Domain
 {
     using commercetools.Sdk.Domain.ShoppingLists;
+    using commercetools.Sdk.Linq;
+    using commercetools.Sdk.Util;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
 
+    // TODO Refactor and split
     public static class ExpansionExtensions
     {
         /// <summary>
@@ -59,6 +62,11 @@
         }
 
         public Expression Expression { get; set; }
+
+        public override string ToString()
+        {
+            return ServiceLocator.Current.GetService<IExpansionExpressionVisitor>().GetPath(this.Expression);
+        }
     }
 
     public class LineItemExpansion<T> : Expansion<T, LineItem> where T : ShoppingList

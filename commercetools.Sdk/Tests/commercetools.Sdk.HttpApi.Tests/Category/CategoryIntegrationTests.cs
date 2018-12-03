@@ -160,6 +160,40 @@ namespace commercetools.Sdk.HttpApi.Tests
         }
 
         [Fact]
+        public void QueryAndLimitCategory()
+        {
+            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
+            Category parentCategory = this.categoryFixture.CreateCategory();
+            this.categoryFixture.CategoriesToDelete.Add(parentCategory);
+            for (int i = 0; i < 3; i++)
+            {
+                Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent(parentCategory));
+                this.categoryFixture.CategoriesToDelete.Add(category);
+            }
+            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == parentCategory.Id);           
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(new QueryCommand<Category>() { QueryPredicate = queryPredicate, Limit = 2 }).Result;
+            Assert.Equal(2, returnedSet.Results.Count);
+            Assert.Equal(3, returnedSet.Total);
+        }
+
+        [Fact]
+        public void QueryAndOffsetCategory()
+        {
+            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
+            Category parentCategory = this.categoryFixture.CreateCategory();
+            this.categoryFixture.CategoriesToDelete.Add(parentCategory);
+            for (int i = 0; i < 3; i++)
+            {
+                Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent(parentCategory));
+                this.categoryFixture.CategoriesToDelete.Add(category);
+            }
+            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == parentCategory.Id);
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(new QueryCommand<Category>() { QueryPredicate = queryPredicate, Offset = 2 }).Result;
+            Assert.Single(returnedSet.Results);
+            Assert.Equal(3, returnedSet.Total);
+        }
+
+        [Fact]
         public void CreateCategoryWithCustomFields()
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using commercetools.Sdk.Linq;
+using commercetools.Sdk.Util;
+using System;
 using System.Linq.Expressions;
 
 namespace commercetools.Sdk.Domain
@@ -17,6 +19,11 @@ namespace commercetools.Sdk.Domain
         {
             this.Expression = expression;
             this.SortDirection = sortDirection;
+        }
+
+        public override string ToString()
+        {
+            return ServiceLocator.Current.GetService<ISortExpressionVisitor>().Render(this.Expression);
         }
     }
 

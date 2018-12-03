@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    public class ProductQueryParameters : IQueryParameters<Product>
+    public class ProductAdditionalParameters : IAdditionalParameters<Product>
     {
         [Currency]
         public string PriceCurrency { get; set; }

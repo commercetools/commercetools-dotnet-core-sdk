@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    public class ProductProjectionQueryParameters : IQueryParameters<ProductProjection>
+    public class ProductProjectionAdditionalParameters : IAdditionalParameters<ProductProjection>
     {
         public bool Staged { get; set; }
         [Currency]

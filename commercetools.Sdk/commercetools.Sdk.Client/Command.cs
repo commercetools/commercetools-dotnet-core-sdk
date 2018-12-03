@@ -5,7 +5,7 @@
     // TODO Implement QueryParameters in request builder
     public abstract class Command<T>
     {
-        public IQueryParameters<T> QueryParameters { get; set; }
+        public IAdditionalParameters<T> AdditionalParameters { get; set; }
         public abstract System.Type ResourceType { get; } 
     }
 }

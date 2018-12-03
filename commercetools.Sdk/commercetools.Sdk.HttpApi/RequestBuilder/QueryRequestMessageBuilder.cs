@@ -38,7 +38,15 @@
                 queryStringParameters.AddRange(command.Expand.GetQueryStringParameters(this.expansionExpressionVisitor));
             }
             queryStringParameters.AddRange(AddSortParameters(command));
-            queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
+            if (command.Limit != null)
+            {
+                queryStringParameters.Add(new KeyValuePair<string, string>("limit", command.Limit.ToString()));
+            }
+            if (command.Offset != null)
+            {
+                queryStringParameters.Add(new KeyValuePair<string, string>("offset", command.Offset.ToString()));
+            }
+            queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });            
             return new Uri(requestUri);
         }
 
