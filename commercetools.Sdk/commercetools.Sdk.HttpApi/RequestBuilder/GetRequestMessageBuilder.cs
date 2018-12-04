@@ -1,6 +1,7 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
     using commercetools.Sdk.Client;
+    using commercetools.Sdk.HttpApi.RequestBuilders;
     using commercetools.Sdk.Linq;
     using Microsoft.AspNetCore.WebUtilities;
     using System;

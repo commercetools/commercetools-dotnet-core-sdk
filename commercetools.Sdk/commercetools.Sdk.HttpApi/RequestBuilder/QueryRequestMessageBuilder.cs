@@ -2,6 +2,7 @@
 {
     using commercetools.Sdk.Client;
     using commercetools.Sdk.Domain;
+    using commercetools.Sdk.HttpApi.RequestBuilders;
     using commercetools.Sdk.Linq;
     using Microsoft.AspNetCore.WebUtilities;
     using System;
@@ -32,65 +33,33 @@
         {
             string requestUri = this.GetMessageBase<T>();
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
-            queryStringParameters.AddRange(AddQueryPredicateParameter(command));
+            if (command.QueryPredicate != null)
+            {
+                queryStringParameters.AddRange(command.QueryPredicate.GetQueryStringParameters(queryPredicateExpressionVisitor));
+            }
+                
             if (command.Expand != null)
             {
                 queryStringParameters.AddRange(command.Expand.GetQueryStringParameters(this.expansionExpressionVisitor));
             }
-            queryStringParameters.AddRange(AddSortParameters(command));
+
+            if (command.Sort != null)
+            {
+                queryStringParameters.AddRange(command.Sort.GetQueryStringParameters(this.sortExpressionVisitor));
+            }
+
             if (command.Limit != null)
             {
                 queryStringParameters.Add(new KeyValuePair<string, string>("limit", command.Limit.ToString()));
             }
+
             if (command.Offset != null)
             {
                 queryStringParameters.Add(new KeyValuePair<string, string>("offset", command.Offset.ToString()));
             }
+
             queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });            
             return new Uri(requestUri);
-        }
-
-        private List<KeyValuePair<string, string>> AddQueryPredicateParameter<T>(QueryCommand<T> command)
-        {
-            List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
-            if (command.QueryPredicate != null)
-            {
-                string where = queryPredicateExpressionVisitor.ProcessExpression(command.QueryPredicate.Expression);
-                queryStringParameters.Add(new KeyValuePair<string, string>("where", where));
-            }
-            return queryStringParameters;
-        }
-
-        private List<KeyValuePair<string, string>> AddSortParameters<T>(QueryCommand<T> command)
-        {
-            List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
-            if (command.Sort != null)
-            {
-                foreach (var sort in command.Sort)
-                {
-                    string sortPath = this.sortExpressionVisitor.Render(sort.Expression);
-                    sortPath += GetSortDirectionPath(sort.SortDirection);
-                    queryStringParameters.Add(new KeyValuePair<string, string>("sort", sortPath));
-                }
-            }
-            return queryStringParameters;
-        }
-
-        private string GetSortDirectionPath(SortDirection? sortDirection)
-        {
-            string sortPath = string.Empty;
-            if (sortDirection != null)
-            {
-                if (sortDirection == SortDirection.Descending)
-                {
-                    sortPath = " desc";
-                }
-                else
-                {
-                    sortPath = " asc";
-                }
-            }
-            return sortPath;
         }
     }
 }
