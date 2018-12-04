@@ -52,15 +52,14 @@
             return queryStringParameters;
         }
 
-        private List<KeyValuePair<string, string>> AddFilterParameter<T>(List<Filter<T>> filters, string parameterName)
+        private List<KeyValuePair<string, string>> AddFilterParameter(List<string> filters, string parameterName)
         {
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
             if (filters != null)
             {
                 foreach (var filter in filters)
                 {
-                    string filterPath = this.filterExpressionVisitor.Render(filter.Expression);
-                    queryStringParameters.Add(new KeyValuePair<string, string>(parameterName, filterPath));
+                    queryStringParameters.Add(new KeyValuePair<string, string>(parameterName, filter));
                 }
             }
             return queryStringParameters;

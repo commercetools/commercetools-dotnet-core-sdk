@@ -20,7 +20,9 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             Filter<ProductProjection> centAmountFilter = new Filter<ProductProjection>(p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 3000)));
-            PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(new SearchProductProjectionsCommand() { Filter = new List<Filter<ProductProjection>>() { centAmountFilter } }).Result;
+            SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand();
+            searchProductProjectionsCommand.SetFilter(new List<Filter<ProductProjection>>() { centAmountFilter });
+            PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             Assert.Equal(19, results.Count);
         }
 
@@ -29,7 +31,9 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             Filter<ProductProjection> centAmountFilter = new Filter<ProductProjection>(p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 3000)));
-            PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(new SearchProductProjectionsCommand() { FilterQuery = new List<Filter<ProductProjection>>() { centAmountFilter } }).Result;
+            SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand();
+            searchProductProjectionsCommand.SetFilterQuery(new List<Filter<ProductProjection>>() { centAmountFilter });
+            PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             Assert.Equal(19, results.Count);
         }
 
@@ -38,7 +42,9 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             Filter<ProductProjection> centAmountFilter = new Filter<ProductProjection>(p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 3000)));
-            PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(new SearchProductProjectionsCommand() { FilterFacets = new List<Filter<ProductProjection>>() { centAmountFilter } }).Result;
+            SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand();
+            searchProductProjectionsCommand.SetFilterFacets(new List<Filter<ProductProjection>>() { centAmountFilter });
+            PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             Assert.Equal(20, results.Count);
         }
 
