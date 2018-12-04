@@ -1,0 +1,10 @@
+{
+  "statusCode": 404,
+  "message": "The Resource with ID '2b327437-702e-4ab2-96fc-a98afa860b36' was not found.",
+  "errors": [
+    {
+      "code": "ResourceNotFound",
+      "message": "The Resource with ID '2b327437-702e-4ab2-96fc-a98afa860b36' was not found."
+    }
+  ]
+}

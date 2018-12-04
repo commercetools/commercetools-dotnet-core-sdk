@@ -38,13 +38,15 @@
             {
                 return this.serializerService.Deserialize<T>(content);
             }
-            if (content != null)
+            if (!string.IsNullOrEmpty(content))
             {
                 HttpApiClientException httpApiClientException = this.serializerService.Deserialize<HttpApiClientException>(content);
                 throw httpApiClientException;
             }
-            // TODO see what to do in else case
-            return default(T);
+            HttpApiClientException generalClientException = new HttpApiClientException();
+            generalClientException.StatusCode = (int)result.StatusCode;
+            generalClientException.Message = result.ReasonPhrase;
+            throw generalClientException;
         }
     }
 }

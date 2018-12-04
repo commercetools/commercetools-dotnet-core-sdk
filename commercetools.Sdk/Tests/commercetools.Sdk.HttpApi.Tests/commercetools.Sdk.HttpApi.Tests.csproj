@@ -8,7 +8,9 @@
   <ItemGroup>
     <None Remove="appsettings.test.Development.json" />
     <None Remove="appsettings.test.json" />
+    <None Remove="Resources\Responses\ConcurrentModification.json" />
     <None Remove="Resources\Responses\GetCategoryById.json" />
+    <None Remove="Resources\Responses\ResourceNotFound.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +20,12 @@
     </Content>
     <Content Include="appsettings.test.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Responses\ConcurrentModification.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Responses\ResourceNotFound.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Responses\GetCategoryById.json">
