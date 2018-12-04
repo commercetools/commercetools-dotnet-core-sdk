@@ -7,7 +7,7 @@ namespace commercetools.Sdk.Domain
     {
         public string Id { get; set; }
         public string Key { get; set; }
-        public string Version { get; set; }
+        public int Version { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastModifiedAt { get; set; }
         public Reference<ProductType> ProductType { get; set; }

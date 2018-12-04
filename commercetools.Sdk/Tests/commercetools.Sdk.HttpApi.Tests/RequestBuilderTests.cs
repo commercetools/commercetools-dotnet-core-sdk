@@ -37,7 +37,8 @@ namespace commercetools.Sdk.HttpApi.Tests
                 this.clientFixture.GetService<IQueryPredicateExpressionVisitor>(),
                 this.clientFixture.GetService<IExpansionExpressionVisitor>(),
                 this.clientFixture.GetService<ISortExpressionVisitor>(),
-                this.clientFixture.GetService<IEndpointRetriever>());
+                this.clientFixture.GetService<IEndpointRetriever>(),
+                this.clientFixture.GetService<IQueryStringRequestBuilderFactory>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
             Assert.Equal("https://api.sphere.io/portablevendor/categories?expand=parent", httpRequestMessage.RequestUri.ToString());
         }
@@ -56,7 +57,8 @@ namespace commercetools.Sdk.HttpApi.Tests
                 this.clientFixture.GetService<IQueryPredicateExpressionVisitor>(),
                 this.clientFixture.GetService<IExpansionExpressionVisitor>(),
                 this.clientFixture.GetService<ISortExpressionVisitor>(),
-                this.clientFixture.GetService<IEndpointRetriever>());
+                this.clientFixture.GetService<IEndpointRetriever>(),
+                this.clientFixture.GetService<IQueryStringRequestBuilderFactory>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
             Assert.Equal("https://api.sphere.io/portablevendor/categories?expand=parent&expand=ancestors%5B0%5D", httpRequestMessage.RequestUri.ToString());
         }
@@ -67,6 +69,14 @@ namespace commercetools.Sdk.HttpApi.Tests
             IRequestMessageBuilderFactory requestMessageBuilderFactory = this.clientFixture.GetService<IRequestMessageBuilderFactory>();
             IRequestMessageBuilder requestMessageBuilder = requestMessageBuilderFactory.GetRequestMessageBuilder<GetRequestMessageBuilder>();
             Assert.Equal(typeof(GetRequestMessageBuilder), requestMessageBuilder.GetType());
+        }
+
+        [Fact]
+        public void GetQueryStringRequestMessageBuilderFromFactory()
+        {
+            IQueryStringRequestBuilderFactory queryStringRequestMessageBuilderFactory = this.clientFixture.GetService<IQueryStringRequestBuilderFactory>();
+            IQueryStringRequestBuilder queryStringRequestMessageBuilder = queryStringRequestMessageBuilderFactory.GetQueryStringRequestBuilder<Product>();
+            Assert.Equal(typeof(ProductQueryStringBuilder), queryStringRequestMessageBuilder.GetType());
         }
     }
 }

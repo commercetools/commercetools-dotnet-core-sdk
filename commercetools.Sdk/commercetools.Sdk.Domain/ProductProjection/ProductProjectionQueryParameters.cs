@@ -2,7 +2,7 @@
 {
     public class ProductProjectionAdditionalParameters : IAdditionalParameters<ProductProjection>
     {
-        public bool Staged { get; set; }
+        public bool? Staged { get; set; }
         [Currency]
         public string PriceCurrency { get; set; }
         [Country]

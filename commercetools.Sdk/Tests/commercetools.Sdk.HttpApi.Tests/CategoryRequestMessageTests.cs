@@ -20,7 +20,11 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void CategoryGetByIdRequestMessage()
         {
             GetByIdCommand<Category> command = new GetByIdCommand<Category>(new Guid("2bafc816-4223-4ff0-ac8a-0f08a8f29fd6"));
-            GetRequestMessageBuilder requestMessageBuilder = new GetRequestMessageBuilder(clientFixture.GetService<IClientConfiguration>(), clientFixture.GetService<IExpansionExpressionVisitor>(), this.clientFixture.GetService<IEndpointRetriever>());
+            GetRequestMessageBuilder requestMessageBuilder = new GetRequestMessageBuilder(
+                this.clientFixture.GetService<IClientConfiguration>(), 
+                this.clientFixture.GetService<IExpansionExpressionVisitor>(), 
+                this.clientFixture.GetService<IEndpointRetriever>(), 
+                this.clientFixture.GetService<IQueryStringRequestBuilderFactory>());
             HttpRequestMessage httpRequestMessage = requestMessageBuilder.GetRequestMessage(command);
             Assert.Equal(HttpMethod.Get, httpRequestMessage.Method);
             Assert.Equal("https://api.sphere.io/portablevendor/categories/2bafc816-4223-4ff0-ac8a-0f08a8f29fd6", httpRequestMessage.RequestUri.ToString());

@@ -1,12 +1,16 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
     using commercetools.Sdk.Client;
+    using Microsoft.AspNetCore.WebUtilities;
     using System;
+    using System.Collections.Generic;
     using System.Net.Http;
 
     public class DeleteRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
-        public DeleteRequestMessageBuilder(IClientConfiguration clientConfiguration, IEndpointRetriever endpointRetriever) : base(clientConfiguration, endpointRetriever)
+        public DeleteRequestMessageBuilder(IClientConfiguration clientConfiguration, 
+            IEndpointRetriever endpointRetriever, 
+            IQueryStringRequestBuilderFactory queryStringRequestBuilderFactory) : base(clientConfiguration, endpointRetriever, queryStringRequestBuilderFactory)
         {
         }
 
@@ -34,6 +38,9 @@
                 requestUri += $"/{command.ParameterKey}={command.ParameterValue}";
             }
             requestUri += $"?version={command.Version}";
+            List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
+            queryStringParameters.AddRange(this.GetAdditionalQueryStringParameters(command.AdditionalParameters));
+            queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
             return new Uri(requestUri);
         }
     }

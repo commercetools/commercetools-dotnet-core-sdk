@@ -1,6 +1,8 @@
 ﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Serialization;
+using Microsoft.AspNetCore.WebUtilities;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 
 namespace commercetools.Sdk.HttpApi
@@ -9,7 +11,10 @@ namespace commercetools.Sdk.HttpApi
     {
         private readonly ISerializerService serializerService;
 
-        public UpdateRequestMessageBuilder(ISerializerService serializerService, IClientConfiguration clientConfiguration, IEndpointRetriever endpointRetriever) : base(clientConfiguration, endpointRetriever)
+        public UpdateRequestMessageBuilder(ISerializerService serializerService, 
+            IClientConfiguration clientConfiguration, 
+            IEndpointRetriever endpointRetriever,
+            IQueryStringRequestBuilderFactory queryStringRequestBuilderFactory) : base(clientConfiguration, endpointRetriever, queryStringRequestBuilderFactory)
         {
             this.serializerService = serializerService;
         }
@@ -43,6 +48,9 @@ namespace commercetools.Sdk.HttpApi
                 requestUri += $"/{command.ParameterKey}={command.ParameterValue}";
             }
 
+            List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
+            queryStringParameters.AddRange(this.GetAdditionalQueryStringParameters(command.AdditionalParameters));
+            queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
             return new Uri(requestUri);
         }
     }

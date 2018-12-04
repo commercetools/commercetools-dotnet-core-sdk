@@ -13,7 +13,10 @@
     {
         private readonly IFilterExpressionVisitor filterExpressionVisitor;
 
-        public SearchRequestMessageBuilder(IClientConfiguration clientConfiguration, IFilterExpressionVisitor filterExpressionVisitor, IEndpointRetriever endpointRetriever) : base(clientConfiguration, endpointRetriever)
+        public SearchRequestMessageBuilder(IClientConfiguration clientConfiguration, 
+            IFilterExpressionVisitor filterExpressionVisitor, 
+            IEndpointRetriever endpointRetriever,
+            IQueryStringRequestBuilderFactory queryStringRequestBuilderFactory) : base(clientConfiguration, endpointRetriever, queryStringRequestBuilderFactory)
         {
             this.filterExpressionVisitor = filterExpressionVisitor;
         }
@@ -34,9 +37,9 @@
             queryStringParameters.AddRange(AddFilterParameter(command.FilterQuery, "filter.query"));
             queryStringParameters.AddRange(AddFilterParameter(command.FilterFacets, "filter.facets"));
             queryStringParameters.AddRange(AddFacetParameter(command));
-            string newUri = requestUri;
-            queryStringParameters.ForEach(x => { newUri = QueryHelpers.AddQueryString(newUri, x.Key, x.Value); });
-            return new Uri(newUri);
+            queryStringParameters.AddRange(this.GetAdditionalQueryStringParameters(command.AdditionalParameters));
+            queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
+            return new Uri(requestUri);
         }
 
         private List<KeyValuePair<string, string>> AddTextLanguageParameter<T>(SearchCommand<T> command)

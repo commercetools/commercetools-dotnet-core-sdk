@@ -12,7 +12,9 @@
     {
         private readonly IExpansionExpressionVisitor expansionExpressionVisitor;
 
-        public GetRequestMessageBuilder(IClientConfiguration clientConfiguration, IExpansionExpressionVisitor expansionExpressionVisitor, IEndpointRetriever endpointRetriever) : base(clientConfiguration, endpointRetriever)
+        public GetRequestMessageBuilder(IClientConfiguration clientConfiguration, IExpansionExpressionVisitor expansionExpressionVisitor, 
+            IEndpointRetriever endpointRetriever,
+            IQueryStringRequestBuilderFactory queryStringRequestBuilderFactory) : base(clientConfiguration, endpointRetriever, queryStringRequestBuilderFactory)
         {
             this.expansionExpressionVisitor = expansionExpressionVisitor;
         }
@@ -42,6 +44,7 @@
                 queryStringParameters.AddRange(command.Expand.GetQueryStringParameters(this.expansionExpressionVisitor));
             }
 
+            queryStringParameters.AddRange(this.GetAdditionalQueryStringParameters(command.AdditionalParameters));
             queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
             return new Uri(requestUri);
         }

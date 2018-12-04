@@ -15,7 +15,12 @@
         private readonly IExpansionExpressionVisitor expansionExpressionVisitor;
         private readonly ISortExpressionVisitor sortExpressionVisitor;
 
-        public QueryRequestMessageBuilder(IClientConfiguration clientConfiguration, IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor, IExpansionExpressionVisitor expansionExpressionVisitor, ISortExpressionVisitor sortExpressionVisitor, IEndpointRetriever endpointRetriever) : base(clientConfiguration, endpointRetriever)
+        public QueryRequestMessageBuilder(IClientConfiguration clientConfiguration, 
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor, 
+            IExpansionExpressionVisitor expansionExpressionVisitor, 
+            ISortExpressionVisitor sortExpressionVisitor, 
+            IEndpointRetriever endpointRetriever,
+            IQueryStringRequestBuilderFactory queryStringRequestBuilderFactory) : base(clientConfiguration, endpointRetriever, queryStringRequestBuilderFactory)
         {
             this.queryPredicateExpressionVisitor = queryPredicateExpressionVisitor;
             this.expansionExpressionVisitor = expansionExpressionVisitor;

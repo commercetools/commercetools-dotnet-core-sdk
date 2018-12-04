@@ -33,6 +33,9 @@ namespace commercetools.Sdk.HttpApi
 
             services.AddSingleton<IRegisteredTypeRetriever, RegisteredTypeRetriever>();
             services.RegisterAllInterfaceTypes<IRequestMessageBuilder>(ServiceLifetime.Singleton);
+            services.RegisterAllInterfaceTypes<IQueryStringRequestBuilder>(ServiceLifetime.Singleton);
+
+            services.AddSingleton<IQueryStringRequestBuilderFactory, QueryStringRequestBuilderFactory>();
 
             services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
