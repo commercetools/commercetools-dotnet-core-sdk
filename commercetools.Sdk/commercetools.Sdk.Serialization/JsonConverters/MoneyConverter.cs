@@ -34,8 +34,7 @@ namespace commercetools.Sdk.Serialization
 
             if (moneyType == null)
             {
-                // TODO Move this message to a localizable resource and add more information to the exception
-                throw new JsonSerializationException("Money type cannot be determined.");
+                throw new JsonSerializationException();
             }
 
             return jsonObject.ToObject(moneyType, serializer);

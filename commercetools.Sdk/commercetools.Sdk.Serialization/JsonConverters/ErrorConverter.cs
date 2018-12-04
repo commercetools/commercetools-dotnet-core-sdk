@@ -7,45 +7,13 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class ErrorConverter : JsonConverterBase
+    public class ErrorConverter : JsonConverterDecoratorTypeRetrieverBase<Error>
     {
-        private readonly IDecoratorTypeRetriever<Error> decoratorTypeRetriever;
+        public override string PropertyName => "code";
+        public override Type DefaultType => typeof(GeneralError);
 
-        public ErrorConverter(IDecoratorTypeRetriever<Error> decoratorTypeRetriever)
+        public ErrorConverter(IDecoratorTypeRetriever<Error> decoratorTypeRetriever) : base(decoratorTypeRetriever)
         {
-            this.decoratorTypeRetriever = decoratorTypeRetriever;
-        }
-
-        public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization };
-
-        public override bool CanConvert(Type objectType)
-        {
-            if (objectType == typeof(Error))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            JObject jsonObject = JObject.Load(reader);
-            JToken codeProperty = jsonObject["code"];
-
-            Type errorType = this.decoratorTypeRetriever.GetTypeForToken(codeProperty);
-
-            // The default type is General Error in case a more specific one is not found.
-            if (errorType == null)
-            {
-                errorType = typeof(GeneralError);
-            }
-
-            return jsonObject.ToObject(errorType, serializer);
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
         }
     }
 }

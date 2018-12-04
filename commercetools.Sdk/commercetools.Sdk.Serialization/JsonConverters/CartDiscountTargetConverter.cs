@@ -7,11 +7,11 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class ProductDiscountValueConverter : JsonConverterDecoratorTypeRetrieverBase<ProductDiscountValue>
+    public class CartDiscountTargetConverter : JsonConverterDecoratorTypeRetrieverBase<CartDiscountTarget>
     {
         public override string PropertyName => "type";
 
-        public ProductDiscountValueConverter(IDecoratorTypeRetriever<ProductDiscountValue> decoratorTypeRetriever) : base(decoratorTypeRetriever)
+        public CartDiscountTargetConverter(IDecoratorTypeRetriever<CartDiscountTarget> decoratorTypeRetriever) : base(decoratorTypeRetriever)
         {
         }
     }

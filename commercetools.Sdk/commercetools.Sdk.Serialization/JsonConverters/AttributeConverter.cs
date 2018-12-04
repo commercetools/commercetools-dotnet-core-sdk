@@ -34,9 +34,8 @@ namespace commercetools.Sdk.Serialization
             Type genericType = this.mapperTypeRetriever.GetTypeForToken(valueProperty);
 
             if (genericType == null)
-            {
-                // TODO Move this message to a localizable resource and add more information to the exception
-                throw new JsonSerializationException("Attribute type cannot be determined.");
+            {    
+                throw new JsonSerializationException();
             }
 
             Type attributeType = typeof(Attribute<>).MakeGenericType(genericType);

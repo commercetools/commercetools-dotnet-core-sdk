@@ -1,15 +1,14 @@
-﻿using System;
+﻿using commercetools.Sdk.Linq;
+using commercetools.Sdk.Util;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace commercetools.Sdk.Domain
 {
     [Endpoint("cart-discounts")]
-    public class CartDiscount
+    public class CartDiscountDraft
     {
-        public string Id { get; set; }
-        public int Version { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime LastModifiedAt { get; set; }
         public LocalizedString Name { get; set; }
         public LocalizedString Description { get; set; }
         public CartDiscountValue Value { get; set; }
@@ -23,5 +22,11 @@ namespace commercetools.Sdk.Domain
         public List<Reference> References { get; set; }
         public StackingMode StackingMode { get; set; }
         public CustomFields Custom { get; set; }
+
+        // TODO See if this should be cart discount or cart
+        public void SetCartPredicate(Expression<Func<Cart, bool>> expression)
+        {
+            this.CartPredicate = ServiceLocator.Current.GetService<ICartPredicateExpressionVisitor>().Render(expression);
+        }
     }
 }

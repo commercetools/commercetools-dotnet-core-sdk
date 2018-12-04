@@ -7,45 +7,12 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class FacetResultConverter : JsonConverterBase
+    public class FacetResultConverter : JsonConverterDecoratorTypeRetrieverBase<FacetResult>
     {
-        private readonly IDecoratorTypeRetriever<FacetResult> decoratorTypeRetriever;
+        public override string PropertyName => "type";
 
-        public FacetResultConverter(IDecoratorTypeRetriever<FacetResult> decoratorTypeRetriever)
+        public FacetResultConverter(IDecoratorTypeRetriever<FacetResult> decoratorTypeRetriever) : base(decoratorTypeRetriever)
         {
-            this.decoratorTypeRetriever = decoratorTypeRetriever;
-        }
-
-        public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization };
-
-        public override bool CanConvert(Type objectType)
-        {
-            if (objectType == typeof(FacetResult))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            JObject jsonObject = JObject.Load(reader);
-            JToken codeProperty = jsonObject["type"];
-
-            Type facetResultType = this.decoratorTypeRetriever.GetTypeForToken(codeProperty);
-
-            if (facetResultType == null)
-            {
-                // TODO Move this message to a localizable resource and add more information to the exception
-                throw new JsonSerializationException("FacetResult type cannot be determined.");
-            }
-
-            return jsonObject.ToObject(facetResultType, serializer);
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
         }
     }
 }
