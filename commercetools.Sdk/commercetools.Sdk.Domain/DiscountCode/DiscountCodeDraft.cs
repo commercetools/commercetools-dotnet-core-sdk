@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace commercetools.Sdk.Domain
 {
-    [Endpoint("discount-codes")]
-    public class DiscountCode
+    public class DiscountCodeDraft
     {
-        public string Id { get; set; }
-        public int Version { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime LastModifiedAt { get; set; }
         public LocalizedString Name { get; set; }
         public LocalizedString Description { get; set; }
+        [Required]
         public string Code { get; set; }
+        [Required]
         public List<Reference<CartDiscount>> CartDiscounts { get; set; }
         public string CartPredicate { get; set; }
         public List<string> Groups { get; set; }
@@ -24,6 +22,5 @@ namespace commercetools.Sdk.Domain
         public double MaxApplications { get; set; }
         public double MaxApplicationsPerCustomer { get; set; }
         public CustomFields Custom { get; set; }
-
     }
 }
