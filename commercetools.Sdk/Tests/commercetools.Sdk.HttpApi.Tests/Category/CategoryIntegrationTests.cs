@@ -101,7 +101,9 @@ namespace commercetools.Sdk.HttpApi.Tests
             Category category = this.categoryFixture.CreateCategory();
             this.categoryFixture.CategoriesToDelete.Add(category);
             QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Key == category.Key);
-            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(new QueryCommand<Category>() { QueryPredicate = queryPredicate }).Result;
+            QueryCommand<Category> queryCommand = new QueryCommand<Category>();
+            queryCommand.SetWhere(queryPredicate);
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.Contains(returnedSet.Results, c => c.Key == category.Key);
         }
 
@@ -115,7 +117,10 @@ namespace commercetools.Sdk.HttpApi.Tests
             List<Expansion<Category>> expansions = new List<Expansion<Category>>();
             ReferenceExpansion<Category> expand = new ReferenceExpansion<Category>(c => c.Parent);
             expansions.Add(expand);
-            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(new QueryCommand<Category>() { QueryPredicate = queryPredicate, Expand = expansions }).Result;
+            QueryCommand<Category> queryCommand = new QueryCommand<Category>();
+            queryCommand.SetWhere(queryPredicate);
+            queryCommand.SetExpand(expansions);
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.Contains(returnedSet.Results, c => c.Key == category.Key && c.Parent.Obj != null);
         }
 
@@ -134,7 +139,10 @@ namespace commercetools.Sdk.HttpApi.Tests
             List<Sort<Category>> sortPredicates = new List<Sort<Category>>();
             Sort<Category> sort = new Sort<Category>(c => c.Name["en"]);
             sortPredicates.Add(sort);
-            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(new QueryCommand<Category>() { QueryPredicate = queryPredicate, Sort = sortPredicates }).Result;
+            QueryCommand<Category> queryCommand = new QueryCommand<Category>();
+            queryCommand.SetSort(sortPredicates);
+            queryCommand.SetWhere(queryPredicate);
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             var sortedList = returnedSet.Results.OrderBy(c => c.Name["en"]);
             Assert.True(sortedList.SequenceEqual(returnedSet.Results));
         }
@@ -154,7 +162,10 @@ namespace commercetools.Sdk.HttpApi.Tests
             List<Sort<Category>> sortPredicates = new List<Sort<Category>>();
             Sort<Category> sort = new Sort<Category>(c => c.Name["en"], SortDirection.Descending);
             sortPredicates.Add(sort);
-            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(new QueryCommand<Category>() { QueryPredicate = queryPredicate, Sort = sortPredicates }).Result;
+            QueryCommand<Category> queryCommand = new QueryCommand<Category>();
+            queryCommand.SetSort(sortPredicates);
+            queryCommand.SetWhere(queryPredicate);
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             var sortedList = returnedSet.Results.OrderByDescending(c => c.Name["en"]);
             Assert.True(sortedList.SequenceEqual(returnedSet.Results));
         }
@@ -170,8 +181,11 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent(parentCategory));
                 this.categoryFixture.CategoriesToDelete.Add(category);
             }
-            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == parentCategory.Id);           
-            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(new QueryCommand<Category>() { QueryPredicate = queryPredicate, Limit = 2 }).Result;
+            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == parentCategory.Id);
+            QueryCommand<Category> queryCommand = new QueryCommand<Category>();
+            queryCommand.SetWhere(queryPredicate);
+            queryCommand.Limit = 2; 
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.Equal(2, returnedSet.Results.Count);
             Assert.Equal(3, returnedSet.Total);
         }
@@ -188,7 +202,10 @@ namespace commercetools.Sdk.HttpApi.Tests
                 this.categoryFixture.CategoriesToDelete.Add(category);
             }
             QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == parentCategory.Id);
-            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(new QueryCommand<Category>() { QueryPredicate = queryPredicate, Offset = 2 }).Result;
+            QueryCommand<Category> queryCommand = new QueryCommand<Category>();
+            queryCommand.SetWhere(queryPredicate);
+            queryCommand.Offset = 2;
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.Single(returnedSet.Results);
             Assert.Equal(3, returnedSet.Total);
         }

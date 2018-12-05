@@ -21,15 +21,16 @@ namespace commercetools.Sdk.Domain
             this.SortDirection = sortDirection;
         }
 
-        // TODO Add direction to tostring
         public override string ToString()
         {
-            return ServiceLocator.Current.GetService<ISortExpressionVisitor>().Render(this.Expression);
+            string sortPath = ServiceLocator.Current.GetService<ISortExpressionVisitor>().Render(this.Expression);
+            if (this.SortDirection != null)
+            {
+                sortPath += $" {this.SortDirection.GetDescription()}";
+            }
+            return sortPath;
         }
     }
 
-    public enum SortDirection
-    {
-        Ascending, Descending
-    }
+    
 }

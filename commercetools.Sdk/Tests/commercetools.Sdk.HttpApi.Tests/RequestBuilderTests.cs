@@ -31,12 +31,10 @@ namespace commercetools.Sdk.HttpApi.Tests
             List<Expansion<Category>> expansions = new List<Expansion<Category>>();
             ReferenceExpansion<Category> parentExpansion = new ReferenceExpansion<Category>(c => c.Parent);
             expansions.Add(parentExpansion);
-            QueryCommand<Category> queryCommand = new QueryCommand<Category>() { Expand = expansions };
+            QueryCommand<Category> queryCommand = new QueryCommand<Category>();
+            queryCommand.SetExpand(expansions);
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
                 this.clientFixture.GetService<IClientConfiguration>(),
-                this.clientFixture.GetService<IQueryPredicateExpressionVisitor>(),
-                this.clientFixture.GetService<IExpansionExpressionVisitor>(),
-                this.clientFixture.GetService<ISortExpressionVisitor>(),
                 this.clientFixture.GetService<IEndpointRetriever>(),
                 this.clientFixture.GetService<IQueryStringRequestBuilderFactory>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
@@ -51,12 +49,10 @@ namespace commercetools.Sdk.HttpApi.Tests
             ReferenceExpansion<Category> firstAncestorExpansion = new ReferenceExpansion<Category>(c => c.Ancestors[0]);
             expansions.Add(parentExpansion);
             expansions.Add(firstAncestorExpansion);
-            QueryCommand<Category> queryCommand = new QueryCommand<Category>() { Expand = expansions };
+            QueryCommand<Category> queryCommand = new QueryCommand<Category>();
+            queryCommand.SetExpand(expansions);
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
                 this.clientFixture.GetService<IClientConfiguration>(),
-                this.clientFixture.GetService<IQueryPredicateExpressionVisitor>(),
-                this.clientFixture.GetService<IExpansionExpressionVisitor>(),
-                this.clientFixture.GetService<ISortExpressionVisitor>(),
                 this.clientFixture.GetService<IEndpointRetriever>(),
                 this.clientFixture.GetService<IQueryStringRequestBuilderFactory>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);

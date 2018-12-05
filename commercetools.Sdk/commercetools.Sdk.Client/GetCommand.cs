@@ -5,17 +5,24 @@
 
     public abstract class GetCommand<T> : Command<T>
     {
-        // An empty constructor is needed for the derived classes
+
         public GetCommand()
         {
         }
 
-        public GetCommand(List<Expansion<T>> expand)
+        public GetCommand(List<Expansion<T>> expandPredicates)
         {
-            this.Expand = expand;
+            if (expandPredicates != null)
+            {
+                this.Expand = new List<string>();
+                foreach (var expand in expandPredicates)
+                {
+                    this.Expand.Add(expand.ToString());
+                }
+            }
         }
 
-        public List<Expansion<T>> Expand { get; private set; }
+        public List<string> Expand { get; private set; }
         public string ParameterKey { get; protected set; }
         public object ParameterValue { get; protected set; }
     }

@@ -22,7 +22,6 @@ namespace commercetools.Sdk.HttpApi.Tests
             GetByIdCommand<Category> command = new GetByIdCommand<Category>(new Guid("2bafc816-4223-4ff0-ac8a-0f08a8f29fd6"));
             GetRequestMessageBuilder requestMessageBuilder = new GetRequestMessageBuilder(
                 this.clientFixture.GetService<IClientConfiguration>(), 
-                this.clientFixture.GetService<IExpansionExpressionVisitor>(), 
                 this.clientFixture.GetService<IEndpointRetriever>(), 
                 this.clientFixture.GetService<IQueryStringRequestBuilderFactory>());
             HttpRequestMessage httpRequestMessage = requestMessageBuilder.GetRequestMessage(command);

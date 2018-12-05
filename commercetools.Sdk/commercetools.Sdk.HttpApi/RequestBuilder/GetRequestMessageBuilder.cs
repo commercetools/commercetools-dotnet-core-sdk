@@ -1,22 +1,20 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
     using commercetools.Sdk.Client;
-    using commercetools.Sdk.HttpApi.RequestBuilders;
     using commercetools.Sdk.Linq;
     using Microsoft.AspNetCore.WebUtilities;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net.Http;
 
     public class GetRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
-        private readonly IExpansionExpressionVisitor expansionExpressionVisitor;
-
-        public GetRequestMessageBuilder(IClientConfiguration clientConfiguration, IExpansionExpressionVisitor expansionExpressionVisitor, 
+        public GetRequestMessageBuilder(
+            IClientConfiguration clientConfiguration, 
             IEndpointRetriever endpointRetriever,
             IQueryStringRequestBuilderFactory queryStringRequestBuilderFactory) : base(clientConfiguration, endpointRetriever, queryStringRequestBuilderFactory)
         {
-            this.expansionExpressionVisitor = expansionExpressionVisitor;
         }
 
         private HttpMethod HttpMethod => HttpMethod.Get;
@@ -41,7 +39,7 @@
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
             if (command.Expand != null)
             {
-                queryStringParameters.AddRange(command.Expand.GetQueryStringParameters(this.expansionExpressionVisitor));
+                queryStringParameters.AddRange(command.Expand.Select(x => new KeyValuePair<string, string>("expand", x)));
             }
 
             queryStringParameters.AddRange(this.GetAdditionalQueryStringParameters(command.AdditionalParameters));

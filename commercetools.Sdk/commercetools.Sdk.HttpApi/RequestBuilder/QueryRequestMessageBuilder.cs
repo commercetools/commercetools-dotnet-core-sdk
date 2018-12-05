@@ -2,29 +2,19 @@
 {
     using commercetools.Sdk.Client;
     using commercetools.Sdk.Domain;
-    using commercetools.Sdk.HttpApi.RequestBuilders;
     using commercetools.Sdk.Linq;
     using Microsoft.AspNetCore.WebUtilities;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net.Http;
 
     public class QueryRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
-        private readonly IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor;
-        private readonly IExpansionExpressionVisitor expansionExpressionVisitor;
-        private readonly ISortExpressionVisitor sortExpressionVisitor;
-
-        public QueryRequestMessageBuilder(IClientConfiguration clientConfiguration, 
-            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor, 
-            IExpansionExpressionVisitor expansionExpressionVisitor, 
-            ISortExpressionVisitor sortExpressionVisitor, 
+        public QueryRequestMessageBuilder(IClientConfiguration clientConfiguration,
             IEndpointRetriever endpointRetriever,
             IQueryStringRequestBuilderFactory queryStringRequestBuilderFactory) : base(clientConfiguration, endpointRetriever, queryStringRequestBuilderFactory)
         {
-            this.queryPredicateExpressionVisitor = queryPredicateExpressionVisitor;
-            this.expansionExpressionVisitor = expansionExpressionVisitor;
-            this.sortExpressionVisitor = sortExpressionVisitor;
         }
 
         private HttpMethod HttpMethod => HttpMethod.Get;
@@ -38,19 +28,19 @@
         {
             string requestUri = this.GetMessageBase<T>();
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
-            if (command.QueryPredicate != null)
+            if (command.Where != null)
             {
-                queryStringParameters.AddRange(command.QueryPredicate.GetQueryStringParameters(queryPredicateExpressionVisitor));
+                queryStringParameters.Add(new KeyValuePair<string, string>("where", command.Where));
             }
                 
             if (command.Expand != null)
             {
-                queryStringParameters.AddRange(command.Expand.GetQueryStringParameters(this.expansionExpressionVisitor));
+                queryStringParameters.AddRange(command.Expand.Select(x => new KeyValuePair<string, string>("expand", x)));
             }
 
             if (command.Sort != null)
             {
-                queryStringParameters.AddRange(command.Sort.GetQueryStringParameters(this.sortExpressionVisitor));
+                queryStringParameters.AddRange(command.Sort.Select(x => new KeyValuePair<string, string>("sort", x)));
             }
 
             if (command.Limit != null)
