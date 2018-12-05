@@ -27,7 +27,7 @@
         private Uri GetRequestUri<T>(GetCommand<T> command)
         {
             string requestUri = this.GetMessageBase<T>();
-            if (command.ParameterKey == Parameters.ID)
+            if (command.ParameterKey == Parameters.Id)
             {
                 requestUri += $"/{command.ParameterValue}";
             }
@@ -42,7 +42,7 @@
                 queryStringParameters.AddRange(command.Expand.Select(x => new KeyValuePair<string, string>("expand", x)));
             }
 
-            queryStringParameters.AddRange(this.GetAdditionalQueryStringParameters(command.AdditionalParameters));
+            queryStringParameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));
             queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
             return new Uri(requestUri);
         }

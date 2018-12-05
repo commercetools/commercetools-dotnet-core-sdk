@@ -1,16 +1,16 @@
-﻿using System;
-
-namespace commercetools.Sdk.Client
+﻿namespace commercetools.Sdk.Client
 {
+    using System;
+
     public class DeleteByIdCommand<T> : DeleteCommand<T>
     {
-        public override System.Type ResourceType => typeof(T);
-
-        public DeleteByIdCommand(Guid guid, int version)
+        public DeleteByIdCommand(Guid id, int version)
         {
-            this.ParameterKey = Parameters.ID;
-            this.ParameterValue = guid;
+            this.ParameterKey = Parameters.Id;
+            this.ParameterValue = id;
             this.Version = version;
         }
+
+        public override Type ResourceType => typeof(T);
     }
 }

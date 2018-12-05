@@ -1,10 +1,8 @@
-﻿using commercetools.Sdk.Domain;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace commercetools.Sdk.Client
+﻿namespace commercetools.Sdk.Client
 {
+    using System;
+    using Domain;
+
     // TODO Create request builder for this
     public class UploadProductImage : Command<Product>
     {
@@ -14,8 +12,11 @@ namespace commercetools.Sdk.Client
 
         // TODO See if this should be moved to domain project
         public int Variant { get; set; }
+
         public string Sku { get; set; }
+
         public string Filename { get; set; }
+
         public bool Staged { get; set; }
     }
 }

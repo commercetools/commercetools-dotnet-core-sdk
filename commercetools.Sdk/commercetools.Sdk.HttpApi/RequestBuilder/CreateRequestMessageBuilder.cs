@@ -35,7 +35,7 @@
         {
             string requestUri = this.GetMessageBase<T>() + "/";
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
-            queryStringParameters.AddRange(this.GetAdditionalQueryStringParameters(command.AdditionalParameters));
+            queryStringParameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));
             queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
             return new Uri(requestUri);
         }

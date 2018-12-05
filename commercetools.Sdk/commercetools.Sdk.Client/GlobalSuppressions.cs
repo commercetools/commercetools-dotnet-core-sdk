@@ -1,0 +1,2 @@
+﻿[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element must begin with upper-case letter", Justification = "The company brand name is spelled that way.", Scope = "namespace", Target = "~N:commercetools.Sdk.Client")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1633:File must have header", Justification = "For now, no file header is needed.", Scope = "namespace", Target = "~N:commercetools.Sdk.Client")]

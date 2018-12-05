@@ -1,19 +1,19 @@
-﻿using commercetools.Sdk.Domain;
-using System;
-using System.Collections.Generic;
-
-namespace commercetools.Sdk.Client
+﻿namespace commercetools.Sdk.Client
 {
+    using System;
+    using System.Collections.Generic;
+    using Domain;
+
     public class UpdateByIdCommand<T> : UpdateCommand<T>
     {
-        public override System.Type ResourceType => typeof(T);
-
-        public UpdateByIdCommand(Guid guid, int version, List<UpdateAction<T>> updateActions)
+        public UpdateByIdCommand(Guid id, int version, List<UpdateAction<T>> updateActions)
         {
-            this.ParameterKey = Parameters.ID;
-            this.ParameterValue = guid;
+            this.ParameterKey = Parameters.Id;
+            this.ParameterValue = id;
             this.Version = version;
-            this.UpdateActions = updateActions;
+            this.UpdateActions.AddRange(updateActions);
         }
+
+        public override System.Type ResourceType => typeof(T);
     }
 }

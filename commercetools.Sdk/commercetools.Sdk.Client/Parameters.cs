@@ -1,8 +1,8 @@
 ﻿namespace commercetools.Sdk.Client
 {
-    public class Parameters
+    public static class Parameters
     {
-        public const string ID = "id";
-        public const string KEY = "key";
+        public const string Id = "id";
+        public const string Key = "key";
     }
 }

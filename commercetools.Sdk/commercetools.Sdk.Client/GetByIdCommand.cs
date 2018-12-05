@@ -1,27 +1,28 @@
 ﻿namespace commercetools.Sdk.Client
 {
-    using commercetools.Sdk.Domain;
     using System;
     using System.Collections.Generic;
+    using Domain;
 
     public class GetByIdCommand<T> : GetCommand<T>
     {
+        public GetByIdCommand(Guid id)
+        {
+            this.Init(id);
+        }
+
+        public GetByIdCommand(Guid id, List<Expansion<T>> expand)
+            : base(expand)
+        {
+            this.Init(id);
+        }
+
         public override System.Type ResourceType => typeof(T);
 
-        public GetByIdCommand(Guid guid)
+        private void Init(Guid id)
         {
-            Init(guid);
-        }
-
-        public GetByIdCommand(Guid guid, List<Expansion<T>> expand) : base(expand)
-        {
-            Init(guid);
-        }
-
-        private void Init(Guid guid)
-        {
-            this.ParameterKey = Parameters.ID;
-            this.ParameterValue = guid;
+            this.ParameterKey = Parameters.Id;
+            this.ParameterValue = id;
         }
     }
 }

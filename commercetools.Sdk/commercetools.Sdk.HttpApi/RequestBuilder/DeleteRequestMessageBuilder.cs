@@ -29,7 +29,7 @@
         private Uri GetRequestUri<T>(DeleteCommand<T> command)
         {
             string requestUri = this.GetMessageBase<T>();
-            if (command.ParameterKey == Parameters.ID)
+            if (command.ParameterKey == Parameters.Id)
             {
                 requestUri += $"/{command.ParameterValue}";
             }
@@ -39,7 +39,7 @@
             }
             requestUri += $"?version={command.Version}";
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
-            queryStringParameters.AddRange(this.GetAdditionalQueryStringParameters(command.AdditionalParameters));
+            queryStringParameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));
             queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
             return new Uri(requestUri);
         }

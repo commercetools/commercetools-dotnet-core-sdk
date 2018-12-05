@@ -24,7 +24,7 @@ namespace commercetools.Sdk.HttpApi
             return this.clientConfiguration.ApiBaseAddress + $"{this.clientConfiguration.ProjectKey}/{this.endpointRetriever.GetEndpoint<T>()}";
         }
 
-        protected List<KeyValuePair<string, string>> GetAdditionalQueryStringParameters<T>(IAdditionalParameters<T> additionalParameters)
+        protected List<KeyValuePair<string, string>> GetAdditionalParameters<T>(IAdditionalParameters<T> additionalParameters)
         {
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
             if (additionalParameters != null)

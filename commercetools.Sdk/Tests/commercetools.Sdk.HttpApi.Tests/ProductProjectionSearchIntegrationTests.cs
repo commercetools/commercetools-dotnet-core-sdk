@@ -53,7 +53,9 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             Facet<ProductProjection> colorFacet = new TermFacet<ProductProjection>(p => p.Variants.Select(v => v.Attributes.Where(a => a.Name == "color").Select(a => ((EnumAttribute)a).Value.Key).FirstOrDefault()).FirstOrDefault());
-            PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(new SearchProductProjectionsCommand() { Facets = new List<Facet<ProductProjection>>() { colorFacet } }).Result;
+            SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand();
+            searchProductProjectionsCommand.SetFacets(new List<Facet<ProductProjection>>() { colorFacet });
+            PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             int facetCount = ((TermFacetResult)results.Facets["variants.attributes.color.key"]).Terms.Count();
             Assert.Equal(18, facetCount);
         }
@@ -64,7 +66,9 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             Facet<ProductProjection> colorFacet = new TermFacet<ProductProjection>(p => p.Variants.Select(v => v.Attributes.Where(a => a.Name == "color").Select(a => ((EnumAttribute)a).Value.Key).FirstOrDefault()).FirstOrDefault());
             colorFacet.Alias = "color";
-            PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(new SearchProductProjectionsCommand() { Facets = new List<Facet<ProductProjection>>() { colorFacet } }).Result;
+            SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand();
+            searchProductProjectionsCommand.SetFacets(new List<Facet<ProductProjection>>() { colorFacet });
+            PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             int facetCount = ((TermFacetResult)results.Facets["color"]).Terms.Count();
             Assert.Equal(18, facetCount);
         }
@@ -75,7 +79,9 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             Facet<ProductProjection> colorFacet = new TermFacet<ProductProjection>(p => p.Variants.Select(v => v.Attributes.Where(a => a.Name == "color").Select(a => ((EnumAttribute)a).Value.Key).FirstOrDefault()).FirstOrDefault());
             colorFacet.IsCountingProducts = true;
-            PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(new SearchProductProjectionsCommand() { Facets = new List<Facet<ProductProjection>>() { colorFacet } }).Result;
+            SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand();
+            searchProductProjectionsCommand.SetFacets(new List<Facet<ProductProjection>>() { colorFacet });
+            PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             var facetCount = ((TermFacetResult)results.Facets["variants.attributes.color.key"]).Terms[0].ProductCount;
             Assert.Equal(572, facetCount);
         }

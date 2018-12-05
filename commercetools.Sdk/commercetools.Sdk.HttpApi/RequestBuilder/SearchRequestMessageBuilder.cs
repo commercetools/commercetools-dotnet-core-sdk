@@ -1,14 +1,12 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
-    using commercetools.Sdk.Client;
-    using commercetools.Sdk.Domain;
-    using commercetools.Sdk.Linq;
-    using Microsoft.AspNetCore.WebUtilities;
     using System;
     using System.Collections.Generic;
     using System.Net.Http;
+    using commercetools.Sdk.Client;
+    using commercetools.Sdk.Linq;
+    using Microsoft.AspNetCore.WebUtilities;
 
-    // TODO See if there is a need to split this class due to the huge number of search command properties
     public class SearchRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
         private readonly IFilterExpressionVisitor filterExpressionVisitor;
@@ -23,73 +21,80 @@
 
         private HttpMethod HttpMethod => HttpMethod.Post;
 
+        private HttpContent GetHttpContent<T>(SearchCommand<T> command)
+        {
+            List<KeyValuePair<string, string>> parameters = new List<KeyValuePair<string, string>>();
+            parameters.AddRange(this.AddTextLanguageParameter(command));
+            parameters.AddRange(this.AddParameters(command.Filter, "filter"));
+            parameters.AddRange(this.AddParameters(command.FilterQuery, "filter.query"));
+            parameters.AddRange(this.AddParameters(command.FilterFacets, "filter.facets"));
+            parameters.AddRange(this.AddParameters(command.Facets, "facet"));
+            parameters.AddRange(this.AddParameters(command.Sort, "sort"));
+            if (command.Fuzzy != null)
+            { 
+                parameters.Add(new KeyValuePair<string, string>("fuzzy", command.Fuzzy.ToString()));
+            }
+
+            if (command.FuzzyLevel != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("fuzzyLevel", command.FuzzyLevel.ToString()));
+            }
+
+            if (command.Limit != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("limit", command.Limit.ToString()));
+            }
+
+            if (command.Offset != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("offset", command.Offset.ToString()));
+            }
+
+            if (command.MarkMatchingVariants != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("markMatchingVariants", command.MarkMatchingVariants.ToString()));
+            }
+
+            parameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));
+            return new FormUrlEncodedContent(parameters);
+        }
+
         public HttpRequestMessage GetRequestMessage<T>(SearchCommand<T> command)
         {
-            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), null, this.HttpMethod);
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), this.GetHttpContent(command), this.HttpMethod);
         }
 
         private Uri GetRequestUri<T>(SearchCommand<T> command)
         {
             string requestUri = this.GetMessageBase<T>() + "/search";
-            List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
-            queryStringParameters.AddRange(AddTextLanguageParameter(command));
-            queryStringParameters.AddRange(AddFilterParameter(command.Filter, "filter"));
-            queryStringParameters.AddRange(AddFilterParameter(command.FilterQuery, "filter.query"));
-            queryStringParameters.AddRange(AddFilterParameter(command.FilterFacets, "filter.facets"));
-            queryStringParameters.AddRange(AddFacetParameter(command));
-            queryStringParameters.AddRange(this.GetAdditionalQueryStringParameters(command.AdditionalParameters));
-            queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
             return new Uri(requestUri);
         }
 
         private List<KeyValuePair<string, string>> AddTextLanguageParameter<T>(SearchCommand<T> command)
         {
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
-            if (command.Text != null)
+            if (command != null && command.Text != null)
             {
                 queryStringParameters.Add(new KeyValuePair<string, string>($"text.{command.Text.Language}", command.Text.Term));
             }
+
             return queryStringParameters;
         }
 
-        private List<KeyValuePair<string, string>> AddFilterParameter(List<string> filters, string parameterName)
+        private List<KeyValuePair<string, string>> AddParameters(List<string> parameters, string parameterName)
         {
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
-            if (filters != null)
+            if (parameters == null)
             {
-                foreach (var filter in filters)
-                {
-                    queryStringParameters.Add(new KeyValuePair<string, string>(parameterName, filter));
-                }
+                return queryStringParameters;
             }
-            return queryStringParameters;
-        }
 
-        private List<KeyValuePair<string, string>> AddFacetParameter<T>(SearchCommand<T> command)
-        {
-            List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
-            if (command.Facets != null)
+            foreach (var filter in parameters)
             {
-                foreach (var facet in command.Facets)
-                {
-                    string facetPath = GetFacetPath(facet);
-                    if (facet.Alias != null)
-                    {
-                        facetPath += $" as {facet.Alias}";
-                    }
-                    if (facet.IsCountingProducts == true)
-                    {
-                        facetPath += $" counting products";
-                    }
-                    queryStringParameters.Add(new KeyValuePair<string, string>("facet", facetPath));
-                }
+                queryStringParameters.Add(new KeyValuePair<string, string>(parameterName, filter));
             }
-            return queryStringParameters;
-        }
 
-        private string GetFacetPath<T>(Facet<T> facet)
-        {
-            return this.filterExpressionVisitor.Render(facet.Expression);
+            return queryStringParameters;
         }
     }
 }
