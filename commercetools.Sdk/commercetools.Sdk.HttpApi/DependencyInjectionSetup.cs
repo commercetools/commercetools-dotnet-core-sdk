@@ -3,6 +3,8 @@ using commercetools.Sdk.Linq;
 using commercetools.Sdk.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace commercetools.Sdk.HttpApi
 {
@@ -19,11 +21,14 @@ namespace commercetools.Sdk.HttpApi
             ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
             tokenFlowRegister.TokenFlow = TokenFlow.ClientCredentials;
             services.AddSingleton(tokenFlowRegister);
+            services.AddSingleton<ILoggerFactory, LoggerFactory>();
+            services.AddSingleton<ICorrelationIdProvider, DefaultCorrelationIdProvider>();
             services.AddSingleton<AuthorizationHandler>();
+            services.AddSingleton<CorrelationIdHandler>();
+            services.AddSingleton<LoggerHandler>();
 
-            // TODO Add other handlers
             services.AddHttpClient("auth");
-            services.AddHttpClient("api").AddHttpMessageHandler<AuthorizationHandler>();
+            services.AddHttpClient("api").AddHttpMessageHandler<AuthorizationHandler>().AddHttpMessageHandler<CorrelationIdHandler>().AddHttpMessageHandler<LoggerHandler>();
 
             services.AddSingleton<IEndpointRetriever, EndpointRetriever>();
             services.AddSingleton<IQueryPredicateExpressionVisitor, QueryPredicateExpressionVisitor>();

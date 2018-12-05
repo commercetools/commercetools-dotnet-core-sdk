@@ -7,8 +7,8 @@
 
     public class AuthorizationHandler : DelegatingHandler
     {
-        private ITokenProviderFactory tokenProviderFactory;
-        private ITokenFlowRegister tokenFlowRegister;
+        private readonly ITokenProviderFactory tokenProviderFactory;
+        private readonly ITokenFlowRegister tokenFlowRegister;
 
         public AuthorizationHandler(ITokenProviderFactory tokenProviderFactory, ITokenFlowRegister tokenFlowRegister)
         {

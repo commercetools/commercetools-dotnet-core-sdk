@@ -6,18 +6,15 @@
     using System.Net.Http;
     using System.Threading.Tasks;
 
-    // commerce tools client, do not mistake for HttpClient
     public class Client : IClient
     {
         private readonly HttpClient client;
-        private readonly IHttpClientFactory httpClientFactory;
         private readonly ISerializerService serializerService;
         private readonly IHttpApiCommandFactory httpApiCommandFactory;
 
         public Client(IHttpClientFactory httpClientFactory, IHttpApiCommandFactory httpApiCommandFactory, ISerializerService serializerService)
         {
-            this.httpClientFactory = httpClientFactory;
-            this.client = this.httpClientFactory.CreateClient(this.Name);
+            this.client = httpClientFactory.CreateClient(this.Name);
             this.serializerService = serializerService;
             this.httpApiCommandFactory = httpApiCommandFactory;
         }

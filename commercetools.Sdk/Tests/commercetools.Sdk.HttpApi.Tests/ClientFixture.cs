@@ -4,13 +4,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
     public class ClientFixture
     {
-        private ServiceProvider serviceProvider;
-        private IConfiguration configuration;
+        private readonly ServiceProvider serviceProvider;
+        private readonly IConfiguration configuration;
 
         public ClientFixture()
         {
@@ -22,9 +23,9 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Build();
             // TODO Combine this in all in one DI setup
             services.UseSerialization();
-            services.UseHttpApiWithClientCredentials(configuration);
-            serviceProvider = services.BuildServiceProvider();
-            ServiceLocator.SetLocatorProvider(serviceProvider);
+            services.UseHttpApiWithClientCredentials(this.configuration);
+            this.serviceProvider = services.BuildServiceProvider();
+            ServiceLocator.SetLocatorProvider(this.serviceProvider);
         }
 
         public T GetService<T>()

@@ -8,22 +8,18 @@
 
     public class CorrelationIdHandler : DelegatingHandler
     {
-        private readonly ILogger logger;
+        private readonly ICorrelationIdProvider correlationIdProvider;
 
-        public CorrelationIdHandler(ILogger logger)
+        public CorrelationIdHandler(ICorrelationIdProvider correlationIdProvider)
         {
-            this.logger = logger;
+            this.correlationIdProvider = correlationIdProvider;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var response = await base.SendAsync(request, cancellationToken);
-            if (response != null)
-            {
-                var correlationId = response.Headers.GetValues("X-Correlation-ID").FirstOrDefault();
-                this.logger.LogInformation(correlationId);
-            }
-            return response;
+            var correlationId = this.correlationIdProvider.CorrelationId;
+            request.Headers.Add("X-Correlation-ID", correlationId);
+            return await base.SendAsync(request, cancellationToken);
         }
     }
 }

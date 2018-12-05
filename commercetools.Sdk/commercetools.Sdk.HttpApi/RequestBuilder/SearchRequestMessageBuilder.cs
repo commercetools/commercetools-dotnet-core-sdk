@@ -9,14 +9,10 @@
 
     public class SearchRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
-        private readonly IFilterExpressionVisitor filterExpressionVisitor;
-
         public SearchRequestMessageBuilder(IClientConfiguration clientConfiguration, 
-            IFilterExpressionVisitor filterExpressionVisitor, 
             IEndpointRetriever endpointRetriever,
             IQueryStringRequestBuilderFactory queryStringRequestBuilderFactory) : base(clientConfiguration, endpointRetriever, queryStringRequestBuilderFactory)
         {
-            this.filterExpressionVisitor = filterExpressionVisitor;
         }
 
         private HttpMethod HttpMethod => HttpMethod.Post;
