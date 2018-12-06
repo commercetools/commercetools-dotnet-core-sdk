@@ -1,9 +1,9 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
-    using commercetools.Sdk.HttpApi.Domain;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
+    using Domain;
 
     public class AuthorizationHandler : DelegatingHandler
     {
@@ -21,7 +21,7 @@
             ITokenProvider tokenProvider = this.tokenProviderFactory.GetTokenProviderByFlow(this.tokenFlowRegister.TokenFlow);
             Token token = tokenProvider.Token;
             request.Headers.Add("Authorization", $"Bearer {token.AccessToken}");
-            return await base.SendAsync(request, cancellationToken);
+            return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
         }
     }
 }
