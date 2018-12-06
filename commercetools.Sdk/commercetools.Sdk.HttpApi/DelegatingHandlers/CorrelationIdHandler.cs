@@ -1,7 +1,5 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
-    using Microsoft.Extensions.Logging;
-    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -19,7 +17,7 @@
         {
             var correlationId = this.correlationIdProvider.CorrelationId;
             request.Headers.Add("X-Correlation-ID", correlationId);
-            return await base.SendAsync(request, cancellationToken);
+            return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
         }
     }
 }

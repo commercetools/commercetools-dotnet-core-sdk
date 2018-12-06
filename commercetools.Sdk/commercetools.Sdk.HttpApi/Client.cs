@@ -24,7 +24,7 @@
         public async Task<T> ExecuteAsync<T>(Command<T> command)
         {
             IHttpApiCommand httpApiCommand = this.httpApiCommandFactory.Create(command);
-            return await SendRequest<T>(httpApiCommand.HttpRequestMessage);
+            return await this.SendRequest<T>(httpApiCommand.HttpRequestMessage);
         }
 
         private async Task<T> SendRequest<T>(HttpRequestMessage requestMessage)
@@ -40,9 +40,11 @@
                 HttpApiClientException httpApiClientException = this.serializerService.Deserialize<HttpApiClientException>(content);
                 throw httpApiClientException;
             }
-            HttpApiClientException generalClientException = new HttpApiClientException();
-            generalClientException.StatusCode = (int)result.StatusCode;
-            generalClientException.Message = result.ReasonPhrase;
+            HttpApiClientException generalClientException = new HttpApiClientException
+            {
+                StatusCode = (int)result.StatusCode,
+                Message = result.ReasonPhrase
+            };
             throw generalClientException;
         }
     }

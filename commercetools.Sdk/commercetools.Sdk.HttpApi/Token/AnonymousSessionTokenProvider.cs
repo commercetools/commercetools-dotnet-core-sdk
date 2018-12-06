@@ -1,18 +1,19 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
-    using commercetools.Sdk.Serialization;
     using System;
     using System.Net.Http;
+    using Serialization;
 
     public class AnonymousSessionTokenProvider : TokenProvider, ITokenProvider
     {
-        private IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager;
-        public TokenFlow TokenFlow => TokenFlow.AnonymousSession;
+        private readonly IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager;
 
         public AnonymousSessionTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager, ISerializerService serializerService) : base(httpClientFactory, clientConfiguration, anonymousCredentialsStoreManager, serializerService)
         {
             this.anonymousCredentialsStoreManager = anonymousCredentialsStoreManager;
         }
+
+        public TokenFlow TokenFlow => TokenFlow.AnonymousSession;
 
         public override HttpRequestMessage GetRequestMessage()
         {
@@ -23,6 +24,7 @@
             {
                 requestUri += $"&anonymous_id={this.anonymousCredentialsStoreManager.AnonymousId}";
             }
+
             request.RequestUri = new Uri(requestUri);
             string credentials = $"{this.ClientConfiguration.ClientId}:{this.ClientConfiguration.ClientSecret}";
             request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(credentials)));

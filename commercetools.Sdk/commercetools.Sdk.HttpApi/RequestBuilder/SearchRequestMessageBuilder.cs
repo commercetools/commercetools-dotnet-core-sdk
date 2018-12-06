@@ -69,7 +69,7 @@
         private List<KeyValuePair<string, string>> AddTextLanguageParameter<T>(SearchCommand<T> command)
         {
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
-            if (command != null && command.Text != null)
+            if (command?.Text != null)
             {
                 queryStringParameters.Add(new KeyValuePair<string, string>($"text.{command.Text.Language}", command.Text.Term));
             }

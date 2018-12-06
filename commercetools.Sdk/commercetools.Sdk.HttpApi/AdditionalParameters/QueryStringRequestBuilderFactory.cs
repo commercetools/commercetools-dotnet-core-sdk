@@ -7,7 +7,7 @@ namespace commercetools.Sdk.HttpApi
 {
     public class QueryStringRequestBuilderFactory : IQueryStringRequestBuilderFactory
     {
-        private IEnumerable<IQueryStringRequestBuilder> queryStringRequestBuilders;
+        private readonly IEnumerable<IQueryStringRequestBuilder> queryStringRequestBuilders;
 
         public QueryStringRequestBuilderFactory(IEnumerable<IQueryStringRequestBuilder> queryStringRequestBuilders)
         {
@@ -16,7 +16,7 @@ namespace commercetools.Sdk.HttpApi
 
         public IQueryStringRequestBuilder<T> GetQueryStringRequestBuilder<T>()
         {
-            foreach(IQueryStringRequestBuilder queryStringRequestBuilder in this.queryStringRequestBuilders)
+            foreach (IQueryStringRequestBuilder queryStringRequestBuilder in this.queryStringRequestBuilders)
             {
                 Type type = queryStringRequestBuilder.GetType();
                 var genericType = type.GetInterfaces().First().GetGenericArguments().First();
@@ -25,6 +25,7 @@ namespace commercetools.Sdk.HttpApi
                     return (IQueryStringRequestBuilder<T>)queryStringRequestBuilder;
                 }
             }
+
             return null;
         }
     }

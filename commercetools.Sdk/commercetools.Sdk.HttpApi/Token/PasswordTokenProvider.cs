@@ -7,13 +7,14 @@
     // TODO Check how to pass username and password without saving them in objects
     public class PasswordTokenProvider : TokenProvider, ITokenProvider
     {
-        public TokenFlow TokenFlow => TokenFlow.Password;
-        private IUserCredentialsStoreManager userCredentialsManager;
+        private readonly IUserCredentialsStoreManager userCredentialsManager;
 
         public PasswordTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, IUserCredentialsStoreManager userCredentialsStoreManager, ISerializerService serializerService) : base(httpClientFactory, clientConfiguration, userCredentialsStoreManager, serializerService)
         {
             this.userCredentialsManager = userCredentialsStoreManager;
         }
+
+        public TokenFlow TokenFlow => TokenFlow.Password;
 
         public override HttpRequestMessage GetRequestMessage()
         {

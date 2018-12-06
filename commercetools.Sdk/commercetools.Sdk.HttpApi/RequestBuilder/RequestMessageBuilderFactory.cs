@@ -14,7 +14,7 @@ namespace commercetools.Sdk.HttpApi
 
         public T GetRequestMessageBuilder<T>()
         {
-            IRequestMessageBuilder requestMessageBuilder = this.registeredRequestMessageBuilders.Where(x => x.GetType() == typeof(T)).FirstOrDefault();
+            IRequestMessageBuilder requestMessageBuilder = this.registeredRequestMessageBuilders.FirstOrDefault(x => x.GetType() == typeof(T));
             if (requestMessageBuilder != null)
             {
                 return (T)requestMessageBuilder;

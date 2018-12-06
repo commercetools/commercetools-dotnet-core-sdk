@@ -9,24 +9,33 @@ namespace commercetools.Sdk.HttpApi
     {
         public List<KeyValuePair<string, string>> GetQueryStringParameters(IAdditionalParameters<Product> additionalParameters)
         {
-            ProductAdditionalParameters productAdditionalParameters = additionalParameters as ProductAdditionalParameters;
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
+            ProductAdditionalParameters productAdditionalParameters = additionalParameters as ProductAdditionalParameters;
+            if (productAdditionalParameters == null)
+            {
+                return queryStringParameters;
+            }
+
             if (productAdditionalParameters.PriceChannel != null)
             { 
                 queryStringParameters.Add(new KeyValuePair<string, string>("priceChannel", productAdditionalParameters.PriceChannel.ToString()));
             }
+
             if (productAdditionalParameters.PriceCountry != null)
             {
                 queryStringParameters.Add(new KeyValuePair<string, string>("priceCountry", productAdditionalParameters.PriceCountry.ToString()));
             }
+
             if (productAdditionalParameters.PriceCurrency != null)
             {
                 queryStringParameters.Add(new KeyValuePair<string, string>("priceCurrency", productAdditionalParameters.PriceCurrency.ToString()));
             }
+
             if (productAdditionalParameters.PriceCustomerGroup != null)
             {
                 queryStringParameters.Add(new KeyValuePair<string, string>("priceCustomerGroup", productAdditionalParameters.PriceCustomerGroup.ToString()));
             }
+
             return queryStringParameters;
         }
     }

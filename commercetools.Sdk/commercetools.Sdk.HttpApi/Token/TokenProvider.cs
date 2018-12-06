@@ -8,13 +8,10 @@
 
     public abstract class TokenProvider
     {
-        private ITokenStoreManager tokenStoreManager;
-        private ISerializerService serializerService;
+        private readonly ISerializerService serializerService;
+        private readonly ITokenStoreManager tokenStoreManager;
 
-        protected IHttpClientFactory HttpClientFactory { get; }
-        protected IClientConfiguration ClientConfiguration { get; }
-
-        public TokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, ITokenStoreManager tokenStoreManager, ISerializerService serializerService)
+        protected TokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, ITokenStoreManager tokenStoreManager, ISerializerService serializerService)
         {
             this.HttpClientFactory = httpClientFactory;
             this.ClientConfiguration = clientConfiguration;
@@ -29,28 +26,27 @@
                 Token token = this.tokenStoreManager.Token;
                 if (token == null)
                 {
-                    token = GetTokenAsync(this.GetRequestMessage()).Result;
+                    token = this.GetTokenAsync(this.GetRequestMessage()).Result;
                     this.tokenStoreManager.Token = token;
                     return token;
                 }
+
                 if (token.Expired && !string.IsNullOrEmpty(token.RefreshToken))
                 {
-                    token = GetTokenAsync(this.GetRefreshTokenRequestMessage()).Result;
+                    token = this.GetTokenAsync(this.GetRefreshTokenRequestMessage()).Result;
                     this.tokenStoreManager.Token = token;
                     return token;
                 }
+
                 return token;
             }
         }
 
-        private async Task<Token> GetTokenAsync(HttpRequestMessage requestMessage)
-        {
-            HttpClient client = this.HttpClientFactory.CreateClient("auth");
-            var result = await client.SendAsync(this.GetRequestMessage());
-            string content = await result.Content.ReadAsStringAsync();
-            // TODO ensure status 200
-            return this.serializerService.Deserialize<Token>(content);
-        }
+        protected IClientConfiguration ClientConfiguration { get; }
+
+        protected IHttpClientFactory HttpClientFactory { get; }
+
+        public abstract HttpRequestMessage GetRequestMessage();
 
         private HttpRequestMessage GetRefreshTokenRequestMessage()
         {
@@ -64,6 +60,13 @@
             return request;
         }
 
-        public abstract HttpRequestMessage GetRequestMessage();
+        private async Task<Token> GetTokenAsync(HttpRequestMessage requestMessage)
+        {
+            HttpClient client = this.HttpClientFactory.CreateClient("auth");
+            var result = await client.SendAsync(this.GetRequestMessage()).ConfigureAwait(false);
+            string content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+            // TODO ensure status 200
+            return this.serializerService.Deserialize<Token>(content);
+        }
     }
 }

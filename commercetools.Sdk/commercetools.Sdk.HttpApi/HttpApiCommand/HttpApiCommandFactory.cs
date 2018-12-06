@@ -11,13 +11,12 @@ namespace commercetools.Sdk.HttpApi
     public class HttpApiCommandFactory : IHttpApiCommandFactory
     {
         private readonly Dictionary<Type, ObjectActivator> activators;
-        private IEnumerable<Type> registeredHttpApiCommandTypes;
-        private IRequestMessageBuilderFactory requestMessageBuilderFactory;
+        private readonly IEnumerable<Type> registeredHttpApiCommandTypes;
+        private readonly IRequestMessageBuilderFactory requestMessageBuilderFactory;
 
         public HttpApiCommandFactory(IRegisteredTypeRetriever registeredTypeRetriever, IRequestMessageBuilderFactory requestMessageBuilderFactory)
         {
-            IEnumerable<Type> registeredHttpApiCommandTypes = registeredTypeRetriever.GetRegisteredTypes<IHttpApiCommand>();
-            this.registeredHttpApiCommandTypes = registeredHttpApiCommandTypes;
+            this.registeredHttpApiCommandTypes = registeredTypeRetriever.GetRegisteredTypes<IHttpApiCommand>();
             this.requestMessageBuilderFactory = requestMessageBuilderFactory;
             this.activators = new Dictionary<Type, ObjectActivator>();
         }
@@ -42,12 +41,17 @@ namespace commercetools.Sdk.HttpApi
                 }
             }
 
+            if (httApiCommandType == null)
+            {
+                throw new ArgumentException();
+            }
+
             // CreateHttpApiCommand<T> => CreateHttpApiCommand<Category>
             Type requestedType = httApiCommandType.MakeGenericType(typeOfGeneric);
             ObjectActivator createdActivator;
-            if (activators.ContainsKey(requestedType))
+            if (this.activators.ContainsKey(requestedType))
             {
-                createdActivator = activators[requestedType];
+                createdActivator = this.activators[requestedType];
             }
             else
             {

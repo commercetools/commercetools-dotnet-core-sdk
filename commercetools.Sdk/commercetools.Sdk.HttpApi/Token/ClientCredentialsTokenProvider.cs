@@ -6,14 +6,11 @@
 
     public class ClientCredentialsTokenProvider : TokenProvider, ITokenProvider
     {
-        private ITokenStoreManager tokenStoreManager;
-        public TokenFlow TokenFlow => TokenFlow.ClientCredentials;
-
         public ClientCredentialsTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, ITokenStoreManager tokenStoreManager, ISerializerService serializerService) : base(httpClientFactory, clientConfiguration, tokenStoreManager, serializerService)
         {
-            this.tokenStoreManager = tokenStoreManager;
         }
 
+        public TokenFlow TokenFlow => TokenFlow.ClientCredentials;
         public override HttpRequestMessage GetRequestMessage()
         {
             HttpRequestMessage request = new HttpRequestMessage();
