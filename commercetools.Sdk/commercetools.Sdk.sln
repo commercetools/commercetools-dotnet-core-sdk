@@ -27,6 +27,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Linq.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Serialization.Tests", "Tests\commercetools.Sdk.Serialization.Tests\commercetools.Sdk.Serialization.Tests.csproj", "{C6576CAB-8C8C-4C73-9EF8-8E12F9027D4D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StyleCop", "StyleCop", "{F8C1B8D7-42D5-456E-80C5-741441B1ECD9}"
+	ProjectSection(SolutionItems) = preProject
+		StyleCop\stylecop.ruleset = StyleCop\stylecop.ruleset
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
