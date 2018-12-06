@@ -11,6 +11,6 @@
             this.clientConfiguration = clientConfiguration;
         }
 
-        public string CorrelationId => this.clientConfiguration.ProjectKey + Guid.NewGuid();
+        public string CorrelationId => $"{this.clientConfiguration.ProjectKey}/{Guid.NewGuid()}";
     }
 }
