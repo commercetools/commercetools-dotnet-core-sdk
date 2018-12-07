@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using commercetools.Sdk.Domain.Validation.Attributes;
 
 namespace commercetools.Sdk.Domain
 {
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
     public class ProductDraft : IDraft<Product>
     {
         public string Key { get; set; }
         [Required]
         public LocalizedString Name { get; set; }
         [Required]
-        // TODO See if resource identifier should be generic and pointing to the type
         public ResourceIdentifier ProductType { get; set; }
         [Required]
         [Slug]
@@ -21,7 +21,6 @@ namespace commercetools.Sdk.Domain
         public LocalizedString MetaTitle { get; set; }
         public LocalizedString MetaDescription { get; set; }
         public LocalizedString MetaKeywords { get; set; }
-        // TODO See if master variant should be validated
         public ProductVariantDraft MasterVariant { get; set; }
         public List<ProductVariantDraft> Variants { get; set; }
         public Reference<TaxCategory> TaxCategory { get; set; }

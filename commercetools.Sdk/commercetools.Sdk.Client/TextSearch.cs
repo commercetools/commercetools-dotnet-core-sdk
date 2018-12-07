@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Client
 {
-    using Domain;
+    using Domain.Validation.Attributes;
 
     public class TextSearch
     {

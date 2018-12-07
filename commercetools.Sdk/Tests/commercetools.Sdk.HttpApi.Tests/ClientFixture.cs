@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using commercetools.Sdk.Domain;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
@@ -21,6 +22,8 @@ namespace commercetools.Sdk.HttpApi.Tests
                 AddEnvironmentVariables().
                 Build();
             // TODO Combine this in all in one DI setup
+            services.UseUtil();
+            services.UseDomain();
             services.UseSerialization();
             services.UseHttpApiWithClientCredentials(this.configuration, "Client");
             this.serviceProvider = services.BuildServiceProvider();

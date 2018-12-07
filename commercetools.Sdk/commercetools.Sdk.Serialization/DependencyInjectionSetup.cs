@@ -12,7 +12,6 @@
 
             services.RegisterAllDerivedTypes<JsonConverterBase>(ServiceLifetime.Singleton);
 
-            services.AddSingleton<IRegisteredTypeRetriever, RegisteredTypeRetriever>();
             services.RegisterAllInterfaceTypes(typeof(IDecoratorTypeRetriever<>), ServiceLifetime.Singleton);
 
             services.AddSingleton<DeserializationContractResolver>();

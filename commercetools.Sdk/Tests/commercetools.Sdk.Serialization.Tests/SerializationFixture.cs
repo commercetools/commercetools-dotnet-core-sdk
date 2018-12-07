@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using commercetools.Sdk.Domain;
+using commercetools.Sdk.Util;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace commercetools.Sdk.Serialization.Tests
 {
@@ -7,9 +9,12 @@ namespace commercetools.Sdk.Serialization.Tests
         public SerializationFixture()
         {
             var services = new ServiceCollection();
+            services.UseUtil();
+            services.UseDomain();
             services.UseSerialization();
             var serviceProvider = services.BuildServiceProvider();
-            SerializerService = serviceProvider.GetService<ISerializerService>();
+            ServiceLocator.SetLocatorProvider(serviceProvider);
+            this.SerializerService = serviceProvider.GetService<ISerializerService>();
         }
 
         public ISerializerService SerializerService { get; private set; }

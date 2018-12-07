@@ -42,7 +42,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             .ReturnsAsync(new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(serialized),
+                Content = new StringContent(serialized)
             })
             .Verifiable();
             IClient commerceToolsClient = new Client(mockHttpClientFactory.Object, this.clientFixture.GetService<IHttpApiCommandFactory>(), this.clientFixture.GetService<ISerializerService>());

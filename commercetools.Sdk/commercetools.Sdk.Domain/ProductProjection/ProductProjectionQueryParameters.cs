@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain
+﻿using commercetools.Sdk.Domain.Validation.Attributes;
+
+namespace commercetools.Sdk.Domain
 {
     public class ProductProjectionAdditionalParameters : IAdditionalParameters<ProductProjection>
     {

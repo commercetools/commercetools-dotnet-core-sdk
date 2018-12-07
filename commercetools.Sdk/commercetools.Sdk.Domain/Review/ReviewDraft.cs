@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace commercetools.Sdk.Domain
+﻿namespace commercetools.Sdk.Domain
 {
+    using commercetools.Sdk.Domain.Validation.Attributes;
+
     public class ReviewDraft : IDraft<Review>
     {
         public string Key { get; set; }
