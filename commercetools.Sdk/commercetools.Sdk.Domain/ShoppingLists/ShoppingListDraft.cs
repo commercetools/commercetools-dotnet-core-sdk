@@ -1,19 +1,18 @@
-﻿namespace commercetools.Sdk.Domain
+﻿namespace commercetools.Sdk.Domain.ShoppingLists
 {
-    using commercetools.Sdk.Domain.ShoppingLists;
-    using System;
-    using System.Collections.Generic;
 
-    [Endpoint("shopping-lists")]
-    public class ShoppingList
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using commercetools.Sdk.Domain.Validation.Attributes;
+
+    public class ShoppingListDraft : IDraft<ShoppingList>
     {
-        public string Id { get; set; }
         public string Key { get; set; }
-        public int Version { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime LastModifiedAt { get; set; }
+        [Slug]
         public LocalizedString Slug { get; set; }
+        [Required]
         public LocalizedString Name { get; set; }
+        public LocalizedString Description { get; set; }
         public Reference<Customer> Customer { get; set; }
         public string AnonymousId { get; set; }
         public List<LineItem> LineItems { get; set; }
