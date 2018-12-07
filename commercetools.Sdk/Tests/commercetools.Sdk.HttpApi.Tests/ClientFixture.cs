@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
-using Microsoft.Extensions.Logging;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
@@ -23,7 +22,7 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Build();
             // TODO Combine this in all in one DI setup
             services.UseSerialization();
-            services.UseHttpApiWithClientCredentials(this.configuration);
+            services.UseHttpApiWithClientCredentials(this.configuration, "Client");
             this.serviceProvider = services.BuildServiceProvider();
             ServiceLocator.SetLocatorProvider(this.serviceProvider);
         }

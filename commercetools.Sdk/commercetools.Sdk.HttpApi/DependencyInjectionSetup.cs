@@ -10,10 +10,9 @@ namespace commercetools.Sdk.HttpApi
 {
     public static class DependencyInjectionSetup
     {
-        public static void UseHttpApiWithClientCredentials(this IServiceCollection services, IConfiguration configuration)
+        public static void UseHttpApiWithClientCredentials(this IServiceCollection services, IConfiguration configuration, string configurationSectionName)
         {
-            // TODO Change name of Client to something more specific
-            IClientConfiguration clientConfiguration = configuration.GetSection("Client").Get<ClientConfiguration>();
+            IClientConfiguration clientConfiguration = configuration.GetSection(configurationSectionName).Get<ClientConfiguration>();
             services.AddSingleton(clientConfiguration);
             services.AddSingleton<ITokenStoreManager, InMemoryTokenStoreManager>();
             services.AddSingleton<ITokenProvider, ClientCredentialsTokenProvider>();

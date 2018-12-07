@@ -1,10 +1,10 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
-    using commercetools.Sdk.Client;
-    using commercetools.Sdk.HttpApi.Domain;
-    using commercetools.Sdk.Serialization;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using commercetools.Sdk.Client;
+    using Domain;
+    using Serialization;
 
     public class Client : IClient
     {
@@ -24,22 +24,24 @@
         public async Task<T> ExecuteAsync<T>(Command<T> command)
         {
             IHttpApiCommand httpApiCommand = this.httpApiCommandFactory.Create(command);
-            return await this.SendRequest<T>(httpApiCommand.HttpRequestMessage);
+            return await this.SendRequest<T>(httpApiCommand.HttpRequestMessage).ConfigureAwait(false);
         }
 
         private async Task<T> SendRequest<T>(HttpRequestMessage requestMessage)
         {
-            var result = await this.client.SendAsync(requestMessage);
-            string content = await result.Content.ReadAsStringAsync();
+            var result = await this.client.SendAsync(requestMessage).ConfigureAwait(false);
+            string content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
             if (result.IsSuccessStatusCode)
             {
                 return this.serializerService.Deserialize<T>(content);
             }
+
             if (!string.IsNullOrEmpty(content))
             {
                 HttpApiClientException httpApiClientException = this.serializerService.Deserialize<HttpApiClientException>(content);
                 throw httpApiClientException;
             }
+
             HttpApiClientException generalClientException = new HttpApiClientException
             {
                 StatusCode = (int)result.StatusCode,

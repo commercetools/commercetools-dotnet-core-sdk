@@ -1,10 +1,10 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
-    using commercetools.Sdk.HttpApi.Domain;
-    using commercetools.Sdk.Serialization;
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using Domain;
+    using Serialization;
 
     public abstract class TokenProvider
     {
@@ -51,7 +51,7 @@
         private HttpRequestMessage GetRefreshTokenRequestMessage()
         {
             HttpRequestMessage request = new HttpRequestMessage();
-            string requestUri = this.ClientConfiguration.AuthorizationBaseAddress + $"oauth/token?grant_type=refresh_token";
+            string requestUri = this.ClientConfiguration.AuthorizationBaseAddress + "oauth/token?grant_type=refresh_token";
             requestUri += $"&refresh_token={this.tokenStoreManager.Token.RefreshToken}";
             request.RequestUri = new Uri(requestUri);
             string credentials = $"{this.ClientConfiguration.ClientId}:{this.ClientConfiguration.ClientSecret}";
@@ -63,10 +63,19 @@
         private async Task<Token> GetTokenAsync(HttpRequestMessage requestMessage)
         {
             HttpClient client = this.HttpClientFactory.CreateClient("auth");
-            var result = await client.SendAsync(this.GetRequestMessage()).ConfigureAwait(false);
+            var result = await client.SendAsync(requestMessage).ConfigureAwait(false);
             string content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
-            // TODO ensure status 200
-            return this.serializerService.Deserialize<Token>(content);
+            if (result.IsSuccessStatusCode)
+            {
+                return this.serializerService.Deserialize<Token>(content);
+            }
+
+            HttpApiClientException generalClientException = new HttpApiClientException
+            {
+                StatusCode = (int)result.StatusCode,
+                Message = result.ReasonPhrase
+            };
+            throw generalClientException;
         }
     }
 }

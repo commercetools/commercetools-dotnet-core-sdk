@@ -29,7 +29,7 @@ namespace commercetools.Sdk.HttpApi.MvcExample
         public void ConfigureServices(IServiceCollection services)
         {
             services.UseSerialization();
-            services.UseHttpApiWithClientCredentials(this.configuration);
+            services.UseHttpApiWithClientCredentials(this.configuration, "Client");
 
             services.AddMvc();
             ServiceLocator.SetLocatorProvider(services.BuildServiceProvider());
