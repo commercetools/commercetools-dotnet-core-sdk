@@ -1,6 +1,7 @@
-﻿namespace commercetools.Sdk.Domain
+﻿namespace commercetools.Sdk.Domain.Carts
 {
-    public class ShippingRateInput
+    public abstract class ShippingRateInput
     {
+        public string Type => this.GetType().GetTypeMarkerAttributeValue();
     }
 }

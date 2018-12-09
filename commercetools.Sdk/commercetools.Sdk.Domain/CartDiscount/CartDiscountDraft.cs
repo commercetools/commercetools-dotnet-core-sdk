@@ -3,6 +3,7 @@ using commercetools.Sdk.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using commercetools.Sdk.Domain.Carts;
 
 namespace commercetools.Sdk.Domain
 {

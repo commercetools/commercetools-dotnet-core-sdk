@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Client
 {
-    using Domain;
+    using Domain.Carts;
 
     public class GetByCustomerIdCommand<T> : GetCommand<Cart>
     {
