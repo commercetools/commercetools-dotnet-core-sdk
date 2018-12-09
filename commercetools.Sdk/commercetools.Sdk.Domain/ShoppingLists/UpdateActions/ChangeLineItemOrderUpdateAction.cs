@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace commercetools.Sdk.Domain.ShoppingLists.UpdateActions
+﻿namespace commercetools.Sdk.Domain.ShoppingLists.UpdateActions
 {
-    using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class ChangeLineItemOrderUpdateAction : UpdateAction<ShoppingList>
