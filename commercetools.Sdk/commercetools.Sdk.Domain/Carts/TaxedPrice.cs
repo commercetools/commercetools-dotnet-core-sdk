@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.Carts
 {
     public class TaxedPrice
     {

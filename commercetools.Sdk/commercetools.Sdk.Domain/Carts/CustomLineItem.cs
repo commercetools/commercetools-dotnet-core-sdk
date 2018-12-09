@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace commercetools.Sdk.Domain
+﻿namespace commercetools.Sdk.Domain.Carts
 {
+    using System.Collections.Generic;
+
     public class CustomLineItem
     {
         public string Id { get; set; }

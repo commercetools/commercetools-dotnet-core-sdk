@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Domain.Carts
 {
-    public class LineItemPriceMode
+    public class ShippingRateInputDraft
     {
     }
 }

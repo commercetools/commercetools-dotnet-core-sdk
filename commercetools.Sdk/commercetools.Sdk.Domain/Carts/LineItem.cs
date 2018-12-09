@@ -20,6 +20,8 @@ namespace commercetools.Sdk.Domain.Carts
         public Reference<Channel> DistributionChannel { get; set; }
         public List<DiscountedLineItemPriceForQuantity> DiscountedLineItemPriceForQuantity { get; set; }
         public LineItemPriceMode PriceMode { get; set; }
+        public LineItemMode LineItemMode { get; set; }
         public CustomFields Custom { get; set; }
+        public ItemShippingDetails ShippingDetails { get; set; }
     }
 }
