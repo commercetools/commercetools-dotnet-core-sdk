@@ -30,7 +30,7 @@
         public PaymentInfo PaymentInfo { get; set; }
         public string Locale { get; set; }
         public int DeleteDaysAfterLastModification { get; set; }
-        public ShippingRateInput ShippingRateInput { get; set; }
+        public IShippingRateInput ShippingRateInput { get; set; }
         public CartOrigin Origin { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastModifiedAt { get; set; }

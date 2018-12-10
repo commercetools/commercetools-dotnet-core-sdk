@@ -50,7 +50,7 @@ namespace commercetools.Sdk.Domain.Carts
 
         public int DeleteDaysAfterLastModification { get; set; }
 
-        public ShippingRateInputDraft ShippingRateInput { get; set; }
+        public IShippingRateInputDraft ShippingRateInput { get; set; }
 
         public CartOrigin Origin { get; set; }
 

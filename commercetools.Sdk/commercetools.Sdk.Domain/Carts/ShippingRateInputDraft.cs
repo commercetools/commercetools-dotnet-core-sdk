@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Domain.Carts
 {
-    public abstract class ShippingRateInputDraft
+    public interface IShippingRateInputDraft
     {
     }
 }

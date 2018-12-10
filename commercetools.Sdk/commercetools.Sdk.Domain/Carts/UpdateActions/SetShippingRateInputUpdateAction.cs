@@ -7,6 +7,6 @@
     public class SetShippingRateInputUpdateAction : UpdateAction<Cart>
     {
         public string Action => "setShippingRateInput";
-        public ShippingRateInputDraft ShippingRateInput { get; set; }
+        public IShippingRateInputDraft ShippingRateInput { get; set; }
     }
 }

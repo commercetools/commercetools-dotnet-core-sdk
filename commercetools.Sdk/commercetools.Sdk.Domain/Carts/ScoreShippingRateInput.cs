@@ -1,8 +1,7 @@
 ﻿namespace commercetools.Sdk.Domain.Carts
 {
     [TypeMarker("Score")]
-    public class ScoreShippingRateInput : ShippingRateInput
+    public class ScoreShippingRateInput : ScoreShippingRateInputBase, IShippingRateInput
     {
-        public double Score { get; set; }
     }
 }

@@ -1,9 +1,7 @@
 ﻿namespace commercetools.Sdk.Domain.Carts
 {
-    [TypeMarker("Classification")]
-    public class ClassificationShippingRateInput : ShippingRateInput
+    public class ClassificationShippingRateInput : ClassificationShippingRateInputBase, IShippingRateInput
     {
-        public string Key { get; set; }
         public LocalizedString Label { get; set; }
     }
 }
