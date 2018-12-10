@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using commercetools.Sdk.Domain.Zones;
 
 namespace commercetools.Sdk.Domain.ShippingMethods
 {
