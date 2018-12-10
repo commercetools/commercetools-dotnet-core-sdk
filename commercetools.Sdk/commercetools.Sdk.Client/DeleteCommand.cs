@@ -7,5 +7,7 @@
         public object ParameterValue { get; protected set; }
 
         public int Version { get; protected set; }
+
+        public override System.Type ResourceType => typeof(T);
     }
 }

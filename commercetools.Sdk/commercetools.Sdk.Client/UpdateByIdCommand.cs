@@ -13,7 +13,5 @@
             this.Version = version;
             this.UpdateActions.AddRange(updateActions);
         }
-
-        public override System.Type ResourceType => typeof(T);
     }
 }

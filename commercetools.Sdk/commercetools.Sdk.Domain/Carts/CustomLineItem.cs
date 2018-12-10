@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain.Carts
+﻿using commercetools.Sdk.Domain.Orders;
+
+namespace commercetools.Sdk.Domain.Carts
 {
     using System.Collections.Generic;
 

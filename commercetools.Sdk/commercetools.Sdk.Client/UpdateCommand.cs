@@ -17,5 +17,7 @@
         public string ParameterKey { get; protected set; }
 
         public object ParameterValue { get; protected set; }
+
+        public override System.Type ResourceType => typeof(T);
     }
 }
