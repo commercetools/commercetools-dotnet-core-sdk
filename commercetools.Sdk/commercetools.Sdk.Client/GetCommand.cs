@@ -1,9 +1,10 @@
 ﻿namespace commercetools.Sdk.Client
 {
+    using System;
     using System.Collections.Generic;
     using Domain;
 
-    public abstract class GetCommand<T> : Command<T>
+    public class GetCommand<T> : Command<T>
     {
         protected GetCommand()
         {
@@ -29,5 +30,7 @@
         public string ParameterKey { get; protected set; }
 
         public object ParameterValue { get; protected set; }
+
+        public override System.Type ResourceType => typeof(T);
     }
 }

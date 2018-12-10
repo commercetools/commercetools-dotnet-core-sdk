@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.ShippingMethods
 {
     public class ShippingRate
     {

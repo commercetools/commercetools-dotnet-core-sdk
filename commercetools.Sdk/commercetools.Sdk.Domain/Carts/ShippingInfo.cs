@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using commercetools.Sdk.Domain.ShippingMethods;
 
 namespace commercetools.Sdk.Domain.Carts
 {

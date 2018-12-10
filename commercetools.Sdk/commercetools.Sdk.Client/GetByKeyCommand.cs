@@ -16,8 +16,6 @@
             this.Init(key);
         }
 
-        public override System.Type ResourceType => typeof(T);
-
         private void Init(string key)
         {
             this.ParameterKey = Parameters.Key;

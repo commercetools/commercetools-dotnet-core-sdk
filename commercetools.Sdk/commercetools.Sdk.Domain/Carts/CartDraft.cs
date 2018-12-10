@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain.Carts
+﻿using commercetools.Sdk.Domain.ShippingMethods;
+
+namespace commercetools.Sdk.Domain.Carts
 {
     using System.ComponentModel.DataAnnotations;
     using System.Collections.Generic;

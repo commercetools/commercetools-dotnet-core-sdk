@@ -17,8 +17,6 @@
             this.Init(id);
         }
 
-        public override System.Type ResourceType => typeof(T);
-
         private void Init(Guid id)
         {
             this.ParameterKey = Parameters.Id;
