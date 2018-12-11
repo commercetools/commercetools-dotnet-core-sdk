@@ -13,11 +13,11 @@ namespace commercetools.Sdk.HttpApi
             this.registeredBuilders = registeredBuilders;
         }
 
-        public TBuilder GetParameterBuilder(IParameters additionalParameters)
+        public TBuilder GetParameterBuilder(IParameters parameters)
         {
             foreach (IParametersBuilder registeredBuilder in this.registeredBuilders)
             {
-                if (registeredBuilder.CanBuild(additionalParameters.GetType()))
+                if (registeredBuilder.CanBuild(parameters.GetType()))
                 {
                     return (TBuilder)registeredBuilder;
                 }

@@ -31,8 +31,12 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
         private HttpContent GetHttpContent<T>(SearchCommand<T> command)
         {
             List<KeyValuePair<string, string>> parameters = new List<KeyValuePair<string, string>>();
-            ISearchParametersBuilder searchParametersBuilder = this.searchParametersBuilderFactory.GetParameterBuilder(command.SearchParameters);
-            parameters.AddRange(searchParametersBuilder.GetSearchParameters(command.SearchParameters));
+            if (command.SearchParameters != null)
+            {
+                ISearchParametersBuilder searchParametersBuilder = this.searchParametersBuilderFactory.GetParameterBuilder(command.SearchParameters);
+                parameters.AddRange(searchParametersBuilder.GetSearchParameters(command.SearchParameters));
+            }
+
             parameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));
             return new FormUrlEncodedContent(parameters);
         }

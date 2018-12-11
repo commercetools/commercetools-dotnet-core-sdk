@@ -3,6 +3,7 @@ using commercetools.Sdk.HttpApi.AdditionalParameters;
 using commercetools.Sdk.HttpApi.HttpApiCommands;
 using commercetools.Sdk.HttpApi.RequestBuilders;
 using commercetools.Sdk.HttpApi.SearchParameters;
+using commercetools.Sdk.HttpApi.UploadImageParameters;
 using commercetools.Sdk.Linq;
 using commercetools.Sdk.Util;
 using Microsoft.Extensions.Configuration;
@@ -42,9 +43,11 @@ namespace commercetools.Sdk.HttpApi
             services.RegisterAllInterfaceTypes<IRequestMessageBuilder>(ServiceLifetime.Singleton);
             services.RegisterAllInterfaceTypes<IAdditionalParametersBuilder>(ServiceLifetime.Singleton);
             services.RegisterAllInterfaceTypes<ISearchParametersBuilder>(ServiceLifetime.Singleton);
+            services.RegisterAllInterfaceTypes<IUploadImageParametersBuilder>(ServiceLifetime.Singleton);
 
             services.AddSingleton<IParametersBuilderFactory<IAdditionalParametersBuilder>, ParametersBuilderFactory<IAdditionalParametersBuilder>>();
             services.AddSingleton<IParametersBuilderFactory<ISearchParametersBuilder>, ParametersBuilderFactory<ISearchParametersBuilder>>();
+            services.AddSingleton<IParametersBuilderFactory<IUploadImageParametersBuilder>, ParametersBuilderFactory<IUploadImageParametersBuilder>>();
 
             services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();

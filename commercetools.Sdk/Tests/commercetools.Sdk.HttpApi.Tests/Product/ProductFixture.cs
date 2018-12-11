@@ -38,5 +38,17 @@ namespace commercetools.Sdk.HttpApi.Tests
             productDraft.ProductType = new ResourceIdentifier() { Id = productType.Id };
             return productDraft;
         }
+
+        public Product CreateProduct()
+        {
+            return this.CreateProduct(this.GetProductDraft());
+        }
+
+        public Product CreateProduct(ProductDraft productDraft)
+        {
+            IClient commerceToolsClient = this.GetService<IClient>();
+            Product product = commerceToolsClient.ExecuteAsync(new CreateCommand<Product>(productDraft)).Result;
+            return product;
+        }
     }
 }
