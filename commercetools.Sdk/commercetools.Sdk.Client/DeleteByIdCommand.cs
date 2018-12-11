@@ -1,7 +1,7 @@
-﻿namespace commercetools.Sdk.Client
-{
-    using System;
+﻿using System;
 
+namespace commercetools.Sdk.Client
+{
     public class DeleteByIdCommand<T> : DeleteCommand<T>
     {
         public DeleteByIdCommand(Guid id, int version)
@@ -10,7 +10,5 @@
             this.ParameterValue = id;
             this.Version = version;
         }
-
-        public override Type ResourceType => typeof(T);
     }
 }

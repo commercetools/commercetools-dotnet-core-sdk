@@ -1,4 +1,8 @@
 ﻿using commercetools.Sdk.Client;
+using commercetools.Sdk.HttpApi.AdditionalParameters;
+using commercetools.Sdk.HttpApi.HttpApiCommands;
+using commercetools.Sdk.HttpApi.RequestBuilders;
+using commercetools.Sdk.HttpApi.SearchParameters;
 using commercetools.Sdk.Linq;
 using commercetools.Sdk.Util;
 using Microsoft.Extensions.Configuration;
@@ -36,9 +40,11 @@ namespace commercetools.Sdk.HttpApi
             services.AddSingleton<IFilterExpressionVisitor, FilterExpressionVisitor>();
 
             services.RegisterAllInterfaceTypes<IRequestMessageBuilder>(ServiceLifetime.Singleton);
-            services.RegisterAllInterfaceTypes<IQueryStringRequestBuilder>(ServiceLifetime.Singleton);
+            services.RegisterAllInterfaceTypes<IAdditionalParametersBuilder>(ServiceLifetime.Singleton);
+            services.RegisterAllInterfaceTypes<ISearchParametersBuilder>(ServiceLifetime.Singleton);
 
-            services.AddSingleton<IQueryStringRequestBuilderFactory, QueryStringRequestBuilderFactory>();
+            services.AddSingleton<IParametersBuilderFactory<IAdditionalParametersBuilder>, ParametersBuilderFactory<IAdditionalParametersBuilder>>();
+            services.AddSingleton<IParametersBuilderFactory<ISearchParametersBuilder>, ParametersBuilderFactory<ISearchParametersBuilder>>();
 
             services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();

@@ -3,6 +3,12 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Linq;
 using System.Collections.Generic;
 using System.Net.Http;
+using commercetools.Sdk.Domain.ProductProjections;
+using commercetools.Sdk.Domain.ShippingMethods;
+using commercetools.Sdk.HttpApi.AdditionalParameters;
+using commercetools.Sdk.HttpApi.HttpApiCommands;
+using commercetools.Sdk.HttpApi.RequestBuilders;
+using commercetools.Sdk.HttpApi.SearchParameters;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
@@ -17,12 +23,21 @@ namespace commercetools.Sdk.HttpApi.Tests
         }
 
         [Fact]
-        public void GetHttpApiCommand()
+        public void CreateHttpApiCommand()
         {
             CreateCommand<Category> createCommand = new CreateCommand<Category>(new CategoryDraft());
             IHttpApiCommandFactory httpApiCommandFactory = this.clientFixture.GetService<IHttpApiCommandFactory>();
             IHttpApiCommand httpApiCommand = httpApiCommandFactory.Create(createCommand);
             Assert.Equal(typeof(CreateHttpApiCommand<Category>), httpApiCommand.GetType());
+        }
+
+        [Fact]
+        public void SearchHttpApiCommand()
+        {
+            SearchProductProjectionsCommand searchCommand = new SearchProductProjectionsCommand();
+            IHttpApiCommandFactory httpApiCommandFactory = this.clientFixture.GetService<IHttpApiCommandFactory>();
+            IHttpApiCommand httpApiCommand = httpApiCommandFactory.Create(searchCommand);
+            Assert.Equal(typeof(SearchHttpApiCommand<ProductProjection>), httpApiCommand.GetType());
         }
 
         [Fact]
@@ -36,7 +51,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
                 this.clientFixture.GetService<IClientConfiguration>(),
                 this.clientFixture.GetService<IEndpointRetriever>(),
-                this.clientFixture.GetService<IQueryStringRequestBuilderFactory>());
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
             Assert.Equal("https://api.sphere.io/portablevendor/categories?expand=parent", httpRequestMessage.RequestUri.ToString());
         }
@@ -54,7 +69,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
                 this.clientFixture.GetService<IClientConfiguration>(),
                 this.clientFixture.GetService<IEndpointRetriever>(),
-                this.clientFixture.GetService<IQueryStringRequestBuilderFactory>());
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
             Assert.Equal("https://api.sphere.io/portablevendor/categories?expand=parent&expand=ancestors%5B0%5D", httpRequestMessage.RequestUri.ToString());
         }
@@ -68,11 +83,31 @@ namespace commercetools.Sdk.HttpApi.Tests
         }
 
         [Fact]
-        public void GetQueryStringRequestMessageBuilderFromFactory()
+        public void GetProductAdditionalParametersBuilderFromFactory()
         {
-            IQueryStringRequestBuilderFactory queryStringRequestMessageBuilderFactory = this.clientFixture.GetService<IQueryStringRequestBuilderFactory>();
-            IQueryStringRequestBuilder queryStringRequestMessageBuilder = queryStringRequestMessageBuilderFactory.GetQueryStringRequestBuilder<Product>();
-            Assert.Equal(typeof(ProductQueryStringBuilder), queryStringRequestMessageBuilder.GetType());
+            ProductAdditionalParameters productAdditionalParameters = new ProductAdditionalParameters();
+            IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory = this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>();
+            IAdditionalParametersBuilder additionalParametersMessageBuilder = parametersBuilderFactory.GetParameterBuilder(productAdditionalParameters);
+            Assert.Equal(typeof(ProductAdditionalParametersBuilder), additionalParametersMessageBuilder.GetType());
+        }
+
+
+        [Fact]
+        public void GetShippingMethodsForCartAdditionalParametersBuilderFromFactory()
+        {
+            ShippingMethodsForCartAdditionalParameters productAdditionalParameters = new ShippingMethodsForCartAdditionalParameters();
+            IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory = this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>();
+            IAdditionalParametersBuilder additionalParametersMessageBuilder = parametersBuilderFactory.GetParameterBuilder(productAdditionalParameters);
+            Assert.Equal(typeof(ShippingMethodsForCartAdditionalParametersBuilder), additionalParametersMessageBuilder.GetType());
+        }
+
+        [Fact]
+        public void GetProductProjectionSearchParametersBuilderFromFactory()
+        {
+            ProductProjectionSearchParameters productAdditionalParameters = new ProductProjectionSearchParameters();
+            IParametersBuilderFactory<ISearchParametersBuilder> parametersBuilderFactory = this.clientFixture.GetService<IParametersBuilderFactory<ISearchParametersBuilder>>();
+            ISearchParametersBuilder parametersBuilder = parametersBuilderFactory.GetParameterBuilder(productAdditionalParameters);
+            Assert.Equal(typeof(ProductProjectionSearchParametersBuilder), parametersBuilder.GetType());
         }
     }
 }

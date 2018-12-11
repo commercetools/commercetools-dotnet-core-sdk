@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace commercetools.Sdk.Domain
+﻿namespace commercetools.Sdk.Domain
 {
-    public interface IAdditionalParameters<T>
+    public interface IAdditionalParameters<T> : IParameters
     {
     }
 }

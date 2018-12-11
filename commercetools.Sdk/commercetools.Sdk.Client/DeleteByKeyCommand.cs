@@ -8,7 +8,5 @@
             this.ParameterValue = key;
             this.Version = version;
         }
-
-        public override System.Type ResourceType => typeof(T);
     }
 }

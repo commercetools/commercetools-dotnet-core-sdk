@@ -1,9 +1,8 @@
-﻿namespace commercetools.Sdk.Client
-{
-    using System;
-    using System.Collections.Generic;
-    using Domain;
+﻿using System.Collections.Generic;
+using commercetools.Sdk.Domain;
 
+namespace commercetools.Sdk.Client
+{
     public class GetCommand<T> : Command<T>
     {
         protected GetCommand()

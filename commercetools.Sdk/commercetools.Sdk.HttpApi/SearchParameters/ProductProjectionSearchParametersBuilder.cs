@@ -1,0 +1,80 @@
+﻿using System.Collections.Generic;
+using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.ProductProjections;
+using Type = System.Type;
+
+namespace commercetools.Sdk.HttpApi.SearchParameters
+{
+    public class ProductProjectionSearchParametersBuilder : ISearchParametersBuilder
+    {
+        public bool CanBuild(Type type)
+        {
+            return type == typeof(ProductProjectionSearchParameters);
+        }
+
+        public List<KeyValuePair<string, string>> GetSearchParameters<T>(ISearchParameters<T> searchParameters)
+        {
+            List<KeyValuePair<string, string>> parameters = new List<KeyValuePair<string, string>>();
+            ProductProjectionSearchParameters productProjectionSearchParameters = searchParameters as ProductProjectionSearchParameters;
+            if (productProjectionSearchParameters == null)
+            {
+                return parameters;
+            }
+
+            parameters.AddRange(this.AddTextLanguageParameter(productProjectionSearchParameters));
+            parameters.AddRange(this.AddParameters(productProjectionSearchParameters.Filter, "filter"));
+            parameters.AddRange(this.AddParameters(productProjectionSearchParameters.FilterQuery, "filter.query"));
+            parameters.AddRange(this.AddParameters(productProjectionSearchParameters.FilterFacets, "filter.facets"));
+            parameters.AddRange(this.AddParameters(productProjectionSearchParameters.Facets, "facet"));
+            parameters.AddRange(this.AddParameters(productProjectionSearchParameters.Sort, "sort"));
+            if (productProjectionSearchParameters.Fuzzy != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("fuzzy", productProjectionSearchParameters.Fuzzy.ToString()));
+            }
+
+            if (productProjectionSearchParameters.FuzzyLevel != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("fuzzyLevel", productProjectionSearchParameters.FuzzyLevel.ToString()));
+            }
+
+            if (productProjectionSearchParameters.Limit != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("limit", productProjectionSearchParameters.Limit.ToString()));
+            }
+
+            if (productProjectionSearchParameters.Offset != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("offset", productProjectionSearchParameters.Offset.ToString()));
+            }
+
+            if (productProjectionSearchParameters.MarkMatchingVariants != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("markMatchingVariants", productProjectionSearchParameters.MarkMatchingVariants.ToString()));
+            }
+
+            return parameters;
+        }
+
+        private List<KeyValuePair<string, string>> AddTextLanguageParameter(ProductProjectionSearchParameters productProjectionSearchParameters)
+        {
+            List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
+            if (productProjectionSearchParameters?.Text != null)
+            {
+                queryStringParameters.Add(new KeyValuePair<string, string>($"text.{productProjectionSearchParameters.Text.Language}", productProjectionSearchParameters.Text.Term));
+            }
+
+            return queryStringParameters;
+        }
+
+        private List<KeyValuePair<string, string>> AddParameters(List<string> parameters, string parameterName)
+        {
+            List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
+            foreach (var filter in parameters)
+            {
+                queryStringParameters.Add(new KeyValuePair<string, string>(parameterName, filter));
+            }
+
+            return queryStringParameters;
+        }
+    }
+}

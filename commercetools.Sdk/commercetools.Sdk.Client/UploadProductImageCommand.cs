@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Client
 {
-    public class SearchProductProjectionsCommand : SearchCommand<ProductProjection>
+    public class UploadProductImageCommand : UploadImageCommand<Product>
     {
     }
 }

@@ -3,6 +3,8 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Linq;
 using System;
 using System.Net.Http;
+using commercetools.Sdk.HttpApi.AdditionalParameters;
+using commercetools.Sdk.HttpApi.RequestBuilders;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
@@ -23,7 +25,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             GetRequestMessageBuilder requestMessageBuilder = new GetRequestMessageBuilder(
                 this.clientFixture.GetService<IClientConfiguration>(), 
                 this.clientFixture.GetService<IEndpointRetriever>(), 
-                this.clientFixture.GetService<IQueryStringRequestBuilderFactory>());
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = requestMessageBuilder.GetRequestMessage(command);
             Assert.Equal(HttpMethod.Get, httpRequestMessage.Method);
             Assert.Equal("https://api.sphere.io/portablevendor/categories/2bafc816-4223-4ff0-ac8a-0f08a8f29fd6", httpRequestMessage.RequestUri.ToString());

@@ -2,6 +2,7 @@
 using commercetools.Sdk.Domain;
 using System.Collections.Generic;
 using System.Linq;
+using commercetools.Sdk.Domain.ProductProjections;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
@@ -21,7 +22,9 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             Filter<ProductProjection> centAmountFilter = new Filter<ProductProjection>(p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 3000)));
             SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand();
-            searchProductProjectionsCommand.SetFilter(new List<Filter<ProductProjection>>() { centAmountFilter });
+            ProductProjectionSearchParameters searchParameters = new ProductProjectionSearchParameters();
+            searchParameters.SetFilter(new List<Filter<ProductProjection>>() { centAmountFilter });
+            searchProductProjectionsCommand.SearchParameters = searchParameters;
             PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             Assert.Equal(19, results.Count);
         }
@@ -32,7 +35,9 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             Filter<ProductProjection> centAmountFilter = new Filter<ProductProjection>(p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 3000)));
             SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand();
-            searchProductProjectionsCommand.SetFilterQuery(new List<Filter<ProductProjection>>() { centAmountFilter });
+            ProductProjectionSearchParameters searchParameters = new ProductProjectionSearchParameters();
+            searchParameters.SetFilterQuery(new List<Filter<ProductProjection>>() { centAmountFilter });
+            searchProductProjectionsCommand.SearchParameters = searchParameters;
             PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             Assert.Equal(19, results.Count);
         }
@@ -43,7 +48,9 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             Filter<ProductProjection> centAmountFilter = new Filter<ProductProjection>(p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 3000)));
             SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand();
-            searchProductProjectionsCommand.SetFilterFacets(new List<Filter<ProductProjection>>() { centAmountFilter });
+            ProductProjectionSearchParameters searchParameters = new ProductProjectionSearchParameters();
+            searchParameters.SetFilterFacets(new List<Filter<ProductProjection>>() { centAmountFilter });
+            searchProductProjectionsCommand.SearchParameters = searchParameters;
             PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             Assert.Equal(20, results.Count);
         }
@@ -54,7 +61,9 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             Facet<ProductProjection> colorFacet = new TermFacet<ProductProjection>(p => p.Variants.Select(v => v.Attributes.Where(a => a.Name == "color").Select(a => ((EnumAttribute)a).Value.Key).FirstOrDefault()).FirstOrDefault());
             SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand();
-            searchProductProjectionsCommand.SetFacets(new List<Facet<ProductProjection>>() { colorFacet });
+            ProductProjectionSearchParameters searchParameters = new ProductProjectionSearchParameters();
+            searchParameters.SetFacets(new List<Facet<ProductProjection>>() { colorFacet });
+            searchProductProjectionsCommand.SearchParameters = searchParameters;
             PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             int facetCount = ((TermFacetResult)results.Facets["variants.attributes.color.key"]).Terms.Count();
             Assert.Equal(18, facetCount);
@@ -67,7 +76,9 @@ namespace commercetools.Sdk.HttpApi.Tests
             Facet<ProductProjection> colorFacet = new TermFacet<ProductProjection>(p => p.Variants.Select(v => v.Attributes.Where(a => a.Name == "color").Select(a => ((EnumAttribute)a).Value.Key).FirstOrDefault()).FirstOrDefault());
             colorFacet.Alias = "color";
             SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand();
-            searchProductProjectionsCommand.SetFacets(new List<Facet<ProductProjection>>() { colorFacet });
+            ProductProjectionSearchParameters searchParameters = new ProductProjectionSearchParameters();
+            searchParameters.SetFacets(new List<Facet<ProductProjection>>() { colorFacet });
+            searchProductProjectionsCommand.SearchParameters = searchParameters;
             PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             int facetCount = ((TermFacetResult)results.Facets["color"]).Terms.Count();
             Assert.Equal(18, facetCount);
@@ -80,7 +91,9 @@ namespace commercetools.Sdk.HttpApi.Tests
             Facet<ProductProjection> colorFacet = new TermFacet<ProductProjection>(p => p.Variants.Select(v => v.Attributes.Where(a => a.Name == "color").Select(a => ((EnumAttribute)a).Value.Key).FirstOrDefault()).FirstOrDefault());
             colorFacet.IsCountingProducts = true;
             SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand();
-            searchProductProjectionsCommand.SetFacets(new List<Facet<ProductProjection>>() { colorFacet });
+            ProductProjectionSearchParameters searchParameters = new ProductProjectionSearchParameters();
+            searchParameters.SetFacets(new List<Facet<ProductProjection>>() { colorFacet });
+            searchProductProjectionsCommand.SearchParameters = searchParameters;
             PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             var facetCount = ((TermFacetResult)results.Facets["variants.attributes.color.key"]).Terms[0].ProductCount;
             Assert.Equal(572, facetCount);

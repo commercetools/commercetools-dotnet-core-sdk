@@ -1,8 +1,9 @@
 ﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
-using commercetools.Sdk.Linq;
 using System;
 using System.Net.Http;
+using commercetools.Sdk.HttpApi.AdditionalParameters;
+using commercetools.Sdk.HttpApi.RequestBuilders;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
@@ -23,7 +24,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             GetRequestMessageBuilder requestMessageBuilder = new GetRequestMessageBuilder(
                 this.clientFixture.GetService<IClientConfiguration>(),
                 this.clientFixture.GetService<IEndpointRetriever>(),
-                this.clientFixture.GetService<IQueryStringRequestBuilderFactory>());
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
             ProductAdditionalParameters productAdditionalParameters = new ProductAdditionalParameters();
             productAdditionalParameters.PriceCurrency = "EUR";
             command.AdditionalParameters = productAdditionalParameters;

@@ -1,7 +1,7 @@
-﻿namespace commercetools.Sdk.Client
-{
-    using Domain;
+﻿using commercetools.Sdk.Domain;
 
+namespace commercetools.Sdk.Client
+{
     public class CreateCommand<T> : Command<T>
     {
         public CreateCommand(IDraft<T> entity)

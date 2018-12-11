@@ -2,10 +2,10 @@
 
 namespace commercetools.Sdk.Client
 {
-    public abstract class SearchCommand<T> : Command<PagedQueryResult<T>>
+    public abstract class UploadImageCommand<T> : Command<T>
     {
-        public ISearchParameters<T> SearchParameters { get; set; }
-
         public override System.Type ResourceType => typeof(T);
+
+        public IUploadImageParameters<T> UploadImageParameters { get; set; }
     }
 }

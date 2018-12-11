@@ -1,8 +1,8 @@
-﻿namespace commercetools.Sdk.Client
-{
-    using System.Collections.Generic;
-    using Domain;
+﻿using System.Collections.Generic;
+using commercetools.Sdk.Domain;
 
+namespace commercetools.Sdk.Client
+{
     public class GetByKeyCommand<T> : GetCommand<T>
     {
         public GetByKeyCommand(string key)
