@@ -95,10 +95,10 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void GetShippingMethodsForCartAdditionalParametersBuilderFromFactory()
         {
-            ShippingMethodsForCartAdditionalParameters productAdditionalParameters = new ShippingMethodsForCartAdditionalParameters();
+            GetShippingMethodsForCartAdditionalParameters productAdditionalParameters = new GetShippingMethodsForCartAdditionalParameters();
             IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory = this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>();
             IAdditionalParametersBuilder additionalParametersMessageBuilder = parametersBuilderFactory.GetParameterBuilder(productAdditionalParameters);
-            Assert.Equal(typeof(ShippingMethodsForCartAdditionalParametersBuilder), additionalParametersMessageBuilder.GetType());
+            Assert.Equal(typeof(GetShippingMethodsForCartAdditionalParametersBuilder), additionalParametersMessageBuilder.GetType());
         }
 
         [Fact]

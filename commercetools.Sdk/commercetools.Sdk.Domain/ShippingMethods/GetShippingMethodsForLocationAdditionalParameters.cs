@@ -6,7 +6,7 @@ using commercetools.Sdk.Domain.Validation.Attributes;
 
 namespace commercetools.Sdk.Domain.ShippingMethods
 {
-    public class ShippingMethodsForLocationAdditionalParameters : IAdditionalParameters<ShippingMethod>
+    public class GetShippingMethodsForLocationAdditionalParameters : IAdditionalParameters<ShippingMethod>
     {
         [Required]
         [Country]

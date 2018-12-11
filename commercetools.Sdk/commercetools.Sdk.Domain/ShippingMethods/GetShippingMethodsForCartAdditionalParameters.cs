@@ -5,7 +5,7 @@ using System.Text;
 
 namespace commercetools.Sdk.Domain.ShippingMethods
 {
-    public class ShippingMethodsForCartAdditionalParameters : IAdditionalParameters<ShippingMethod>
+    public class GetShippingMethodsForCartAdditionalParameters : IAdditionalParameters<ShippingMethod>
     {
         [Required]
         public string CartId { get; set; }
