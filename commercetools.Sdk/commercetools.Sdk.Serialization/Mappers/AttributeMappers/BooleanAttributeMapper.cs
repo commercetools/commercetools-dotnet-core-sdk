@@ -1,6 +1,8 @@
-﻿namespace commercetools.Sdk.Serialization
+﻿using commercetools.Sdk.Domain.Products.Attributes;
+
+namespace commercetools.Sdk.Serialization
 {
-    public class BooleanAttributeMapper : BooleanConverter<Domain.Attribute, bool>, ICustomJsonMapper<Domain.Attribute>
+    public class BooleanAttributeMapper : BooleanConverter<Attribute, bool>, ICustomJsonMapper<Attribute>
     {
     }
 }

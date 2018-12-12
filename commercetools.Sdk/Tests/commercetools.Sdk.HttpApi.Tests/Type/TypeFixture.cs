@@ -2,6 +2,7 @@
 using commercetools.Sdk.Domain;
 using System;
 using System.Collections.Generic;
+using commercetools.Sdk.Domain.Common;
 using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.Tests

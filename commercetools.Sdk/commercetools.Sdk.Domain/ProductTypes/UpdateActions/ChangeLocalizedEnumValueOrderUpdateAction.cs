@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using commercetools.Sdk.Domain.Products.Attributes;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace commercetools.Sdk.Domain.ProductTypes
+namespace commercetools.Sdk.Domain.ProductTypes.UpdateActions
 {
     public class ChangeLocalizedEnumValueOrderUpdateAction : UpdateAction<ProductType>
     {
@@ -9,6 +10,6 @@ namespace commercetools.Sdk.Domain.ProductTypes
         [Required]
         public string AttributeName { get; set; }
         [Required]
-        public List<Attributes.LocalizedEnumValue> Values { get; set; }
+        public List<LocalizedEnumValue> Values { get; set; }
     }
 }

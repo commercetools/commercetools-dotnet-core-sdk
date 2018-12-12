@@ -1,8 +1,8 @@
 using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.Attributes;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using commercetools.Sdk.Domain.Products.Attributes;
 using Xunit;
 
 namespace commercetools.Sdk.Serialization.Tests
@@ -94,7 +94,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/LocalizedEnum.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<Domain.Attributes.LocalizedEnumValue>>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<LocalizedEnumValue>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -112,7 +112,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/SetText.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<Domain.Attributes.AttributeSet<string>>>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<AttributeSet<string>>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -121,7 +121,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/SetEnum.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<Domain.Attributes.AttributeSet<PlainEnumValue>>>(deserialized.Attributes[0]);
+            Assert.IsType<Attribute<AttributeSet<PlainEnumValue>>>(deserialized.Attributes[0]);
         }
 
         [Fact]

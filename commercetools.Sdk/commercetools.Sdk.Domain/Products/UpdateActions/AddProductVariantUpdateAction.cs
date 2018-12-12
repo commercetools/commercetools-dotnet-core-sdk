@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using commercetools.Sdk.Domain.Products.Attributes;
 
-namespace commercetools.Sdk.Domain.Products
+namespace commercetools.Sdk.Domain.Products.UpdateActions
 {
     public class AddProductVariantUpdateAction : UpdateAction<Product>
     {

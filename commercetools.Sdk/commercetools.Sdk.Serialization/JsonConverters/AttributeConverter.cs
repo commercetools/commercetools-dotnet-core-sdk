@@ -4,14 +4,16 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using Type = System.Type;
+using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
+using commercetools.Sdk.Domain.Products.Attributes;
 
 namespace commercetools.Sdk.Serialization
 {
     public class AttributeConverter : JsonConverterBase
     {
-        private readonly IMapperTypeRetriever<Domain.Attribute> mapperTypeRetriever;
+        private readonly IMapperTypeRetriever<Attribute> mapperTypeRetriever;
 
-        public AttributeConverter(IMapperTypeRetriever<Domain.Attribute> mapperTypeRetriever)
+        public AttributeConverter(IMapperTypeRetriever<Attribute> mapperTypeRetriever)
         {
             this.mapperTypeRetriever = mapperTypeRetriever;
         }
@@ -20,7 +22,7 @@ namespace commercetools.Sdk.Serialization
 
         public override bool CanConvert(Type objectType)
         {
-            if (objectType == typeof(Domain.Attribute))
+            if (objectType == typeof(Attribute))
             {
                 return true;
             }

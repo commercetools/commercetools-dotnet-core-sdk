@@ -1,8 +1,7 @@
-﻿using commercetools.Sdk.Domain.Attributes;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using commercetools.Sdk.Domain.Products.Attributes;
 
-namespace commercetools.Sdk.Domain.ProductTypes
+namespace commercetools.Sdk.Domain.ProductTypes.UpdateActions
 {
     public class ChangeLocalizedEnumValueLabelUpdateAction : UpdateAction<ProductType>
     {
@@ -10,6 +9,6 @@ namespace commercetools.Sdk.Domain.ProductTypes
         [Required]
         public string AttributeName { get; set; }
         [Required]
-        public Attributes.LocalizedEnumValue NewValue { get; set; }
+        public LocalizedEnumValue NewValue { get; set; }
     }
 }

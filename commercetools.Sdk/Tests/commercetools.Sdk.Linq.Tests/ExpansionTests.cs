@@ -3,6 +3,7 @@ using commercetools.Sdk.Domain.ShoppingLists;
 using System;
 using System.Linq.Expressions;
 using Xunit;
+using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 
 namespace commercetools.Sdk.Linq.Tests
 {
@@ -65,7 +66,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void ExpandProductAttributeAllValues()
         {
-            Expression<Func<Product, Domain.Attribute>> expression = p => p.MasterData.Current.MasterVariant.Attributes.ExpandValues();
+            Expression<Func<Product, Attribute>> expression = p => p.MasterData.Current.MasterVariant.Attributes.ExpandValues();
             ExpansionExpressionVisitor expansionVisitor = new ExpansionExpressionVisitor();
             string result = expansionVisitor.GetPath(expression);
             Assert.Equal("masterData.current.masterVariant.attributes[*].value", result);

@@ -1,6 +1,7 @@
-﻿namespace commercetools.Sdk.Domain
+﻿using commercetools.Sdk.Domain.Common;
+
+namespace commercetools.Sdk.Domain
 {
-    // TODO Add cast checks
     public static class CustomFieldExtensions
     {
         public static EnumValue ToEnum(this object o)

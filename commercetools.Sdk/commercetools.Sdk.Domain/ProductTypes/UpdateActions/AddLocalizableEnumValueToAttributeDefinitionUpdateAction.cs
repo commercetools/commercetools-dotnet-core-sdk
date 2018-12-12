@@ -1,7 +1,7 @@
-﻿using commercetools.Sdk.Domain.Attributes;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using commercetools.Sdk.Domain.Products.Attributes;
 
-namespace commercetools.Sdk.Domain.ProductTypes
+namespace commercetools.Sdk.Domain.ProductTypes.UpdateActions
 {
     public class AddPlainEnumValueToAttributeDefinitionUpdateAction : UpdateAction<ProductType>
     {

@@ -11,7 +11,7 @@ namespace commercetools.Sdk.Serialization
 
         public bool CanConvert(JToken property)
         {
-            if (property?.Type == JTokenType.Integer)
+            if (property?.Type == JTokenType.Integer || property?.Type == JTokenType.Float)
             {
                 return true;
             }

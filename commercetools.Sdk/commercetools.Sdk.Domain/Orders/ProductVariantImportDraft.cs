@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using commercetools.Sdk.Domain.Products.Attributes;
 
 namespace commercetools.Sdk.Domain.Orders
 {

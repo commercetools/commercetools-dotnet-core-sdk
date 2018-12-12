@@ -1,6 +1,4 @@
-﻿using commercetools.Sdk.Domain.Attributes;
-
-namespace commercetools.Sdk.Domain
+﻿namespace commercetools.Sdk.Domain.Products.Attributes
 {
     public class EnumAttribute : Attribute<PlainEnumValue>
     {

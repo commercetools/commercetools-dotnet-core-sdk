@@ -1,8 +1,7 @@
-﻿using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.Carts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 
 namespace commercetools.Sdk.Domain.Carts
 {
@@ -178,7 +177,7 @@ namespace commercetools.Sdk.Domain.Carts
             throw new NotImplementedException();
         }
 
-        public static List<Domain.Attribute> Attributes(this LineItem source)
+        public static List<Attribute> Attributes(this LineItem source)
         {
             throw new NotImplementedException();
         }

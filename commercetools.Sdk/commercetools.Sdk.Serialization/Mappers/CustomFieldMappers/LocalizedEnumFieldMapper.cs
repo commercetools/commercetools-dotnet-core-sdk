@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Validation;
 
 namespace commercetools.Sdk.Serialization

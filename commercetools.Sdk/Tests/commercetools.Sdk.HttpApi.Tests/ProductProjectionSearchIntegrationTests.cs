@@ -3,6 +3,7 @@ using commercetools.Sdk.Domain;
 using System.Collections.Generic;
 using System.Linq;
 using commercetools.Sdk.Domain.ProductProjections;
+using commercetools.Sdk.Domain.Products.Attributes;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests

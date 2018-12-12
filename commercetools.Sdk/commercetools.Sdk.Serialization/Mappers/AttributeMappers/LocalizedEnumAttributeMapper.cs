@@ -1,8 +1,9 @@
-﻿using commercetools.Sdk.Domain.Validation;
+﻿using commercetools.Sdk.Domain.Products.Attributes;
+using commercetools.Sdk.Domain.Validation;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class LocalizedEnumAttributeMapper : LocalizedEnumConverter<Domain.Attribute, Domain.Attributes.LocalizedEnumValue>, ICustomJsonMapper<Domain.Attribute>
+    public class LocalizedEnumAttributeMapper : LocalizedEnumConverter<Attribute, LocalizedEnumValue>, ICustomJsonMapper<Attribute>
     {
         public LocalizedEnumAttributeMapper(ICultureValidator cultureValidator) : base(cultureValidator)
         {

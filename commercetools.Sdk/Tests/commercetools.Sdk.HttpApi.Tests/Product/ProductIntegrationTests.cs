@@ -10,7 +10,7 @@ namespace commercetools.Sdk.HttpApi.Tests
 {
     public class ProductIntegrationTests : IClassFixture<ProductFixture>
     {
-        private ProductFixture productFixture;
+        private readonly ProductFixture productFixture;
 
         public ProductIntegrationTests(ProductFixture productFixture)
         {
@@ -24,7 +24,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             ProductDraft productDraft = this.productFixture.GetProductDraft();
             Product product = commerceToolsClient.ExecuteAsync(new CreateCommand<Product>(productDraft)).Result;
             this.productFixture.ProductsToDelete.Add(product);
-            Assert.Equal(productDraft.Name["en"], product.MasterData.Current.Name["en"].ToString());
+            Assert.Equal(productDraft.Name["en"], product.MasterData.Current.Name["en"]);
         }
 
         [Fact]

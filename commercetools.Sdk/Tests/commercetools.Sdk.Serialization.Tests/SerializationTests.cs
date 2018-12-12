@@ -1,9 +1,5 @@
 using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.Attributes;
 using commercetools.Sdk.Domain.Validation;
-using Newtonsoft.Json;
-using System;
-using System.IO;
 using Xunit;
 
 namespace commercetools.Sdk.Serialization.Tests

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.Products.Attributes
 {
-    public class TimeAttribute : Attribute<DateTime>
+    public class TimeAttribute : Attribute<TimeSpan>
     {
     }
 }
