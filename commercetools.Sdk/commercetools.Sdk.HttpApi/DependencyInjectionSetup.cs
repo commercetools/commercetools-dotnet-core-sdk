@@ -5,10 +5,8 @@ using commercetools.Sdk.HttpApi.RequestBuilders;
 using commercetools.Sdk.HttpApi.SearchParameters;
 using commercetools.Sdk.HttpApi.UploadImageParameters;
 using commercetools.Sdk.Linq;
-using commercetools.Sdk.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 
 namespace commercetools.Sdk.HttpApi

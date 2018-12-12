@@ -3,12 +3,14 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Linq;
 using System.Collections.Generic;
 using System.Net.Http;
+using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.HttpApi.AdditionalParameters;
 using commercetools.Sdk.HttpApi.HttpApiCommands;
 using commercetools.Sdk.HttpApi.RequestBuilders;
 using commercetools.Sdk.HttpApi.SearchParameters;
+using commercetools.Sdk.Serialization;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
@@ -108,6 +110,21 @@ namespace commercetools.Sdk.HttpApi.Tests
             IParametersBuilderFactory<ISearchParametersBuilder> parametersBuilderFactory = this.clientFixture.GetService<IParametersBuilderFactory<ISearchParametersBuilder>>();
             ISearchParametersBuilder parametersBuilder = parametersBuilderFactory.GetParameterBuilder(productAdditionalParameters);
             Assert.Equal(typeof(ProductProjectionSearchParametersBuilder), parametersBuilder.GetType());
+        }
+
+        [Fact]
+        public void GetMatchingProductDiscountRequestMessage()
+        {
+            GetMatchingProductDiscountParameters parameters = new GetMatchingProductDiscountParameters();
+            parameters.Price = new Price();
+            GetMatchingProductDiscountCommand matchingCommand = new GetMatchingProductDiscountCommand(parameters);
+            GetMatchingRequestMessageBuilder requestMessageBuilder = new GetMatchingRequestMessageBuilder(
+                this.clientFixture.GetService<ISerializerService>(),
+                this.clientFixture.GetService<IClientConfiguration>(),
+                this.clientFixture.GetService<IEndpointRetriever>(),
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
+            HttpRequestMessage httpRequestMessage = requestMessageBuilder.GetRequestMessage(matchingCommand);
+            Assert.Equal("https://api.sphere.io/portablevendor/product-discounts/matching", httpRequestMessage.RequestUri.ToString());
         }
     }
 }

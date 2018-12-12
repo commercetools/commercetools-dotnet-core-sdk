@@ -1,23 +1,12 @@
-﻿using System;
-using commercetools.Sdk.Domain;
+﻿using commercetools.Sdk.Domain;
 
 namespace commercetools.Sdk.Client
 {
-    public class GetMatchingProductDiscountCommand : Command<ProductDiscount>
+    public class GetMatchingProductDiscountCommand : GetMatchingCommand<ProductDiscount>
     {
-        public GetMatchingProductDiscountCommand(Price price)
+        public GetMatchingProductDiscountCommand(IGetMatchingParameters<ProductDiscount> parameters)
+            : base(parameters)
         {
-            this.Price = price;
         }
-
-        public Guid ProductId { get; set; }
-
-        public int VariantId { get; set; }
-
-        public bool Staged { get; set; }
-
-        public Price Price { get; }
-
-        public override System.Type ResourceType => typeof(ProductDiscount);
     }
 }
