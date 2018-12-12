@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using commercetools.Sdk.Domain.ProductProjections;
 using Xunit;
 
 namespace commercetools.Sdk.Linq.Tests
@@ -74,7 +75,6 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void FilterByPriceCentAmountRange()
         {
-            // TODO Check if this should be done in a more native way with < and >, other than custom extension
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 30));
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             var result = filterExpressionVisitor.Render(expression);
@@ -91,7 +91,7 @@ namespace commercetools.Sdk.Linq.Tests
         }
 
         [Fact]
-        public void FilterByPriceCentAmountLowerBoundUknownRange()
+        public void FilterByPriceCentAmountLowerBoundUnknownRange()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(null, 30));
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
@@ -100,7 +100,7 @@ namespace commercetools.Sdk.Linq.Tests
         }
 
         [Fact]
-        public void FilterByPriceCentAmountUpperBoundUknownRange()
+        public void FilterByPriceCentAmountUpperBoundUnknownRange()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, null));
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
@@ -190,7 +190,7 @@ namespace commercetools.Sdk.Linq.Tests
         }
 
         [Fact]
-        public void FilterByAvailabilityisOnStockInChannels()
+        public void FilterByAvailabilityIsOnStockInChannels()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Availability.IsOnStockInChannels("1a3c451e-792a-43b5-8def-88d0db22eca8", "110321ab-8fd7-4d4c-8b7c-4c69761411fc"));
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();

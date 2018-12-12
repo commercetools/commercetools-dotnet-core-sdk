@@ -1,7 +1,7 @@
-﻿namespace commercetools.Sdk.Domain.ProductProjections
-{
-    using Domain.Validation.Attributes;
+﻿using commercetools.Sdk.Domain.Validation.Attributes;
 
+namespace commercetools.Sdk.Domain.ProductProjections
+{
     public class TextSearch
     {
         [Language]

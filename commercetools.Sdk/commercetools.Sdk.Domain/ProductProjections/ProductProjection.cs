@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.ProductProjections
 {
     [Endpoint("product-projections")]
     public class ProductProjection

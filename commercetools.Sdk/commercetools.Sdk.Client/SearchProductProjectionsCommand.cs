@@ -1,4 +1,4 @@
-﻿using commercetools.Sdk.Domain;
+﻿using commercetools.Sdk.Domain.ProductProjections;
 
 namespace commercetools.Sdk.Client
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.ProductProjections
 {
     public class FilterFacet<T> : Facet<T>
     {

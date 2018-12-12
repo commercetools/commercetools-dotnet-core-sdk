@@ -2,7 +2,7 @@
 using commercetools.Sdk.Util;
 using System.Linq.Expressions;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.ProductProjections
 {
     public abstract class Facet<T>
     {

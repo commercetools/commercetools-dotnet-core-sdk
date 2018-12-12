@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using commercetools.Sdk.Domain.Predicates;
 using Xunit;
 
 namespace commercetools.Sdk.Linq.Tests
@@ -218,14 +219,6 @@ namespace commercetools.Sdk.Linq.Tests
             QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
             string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
             Assert.Equal("attributes(name = \"enum-name\" and value(key = \"enum-value\"))", result);
-        }
-
-        [Fact]
-        public void ContainsAll()
-        {
-            List<string> list = new List<string>() { "a", "b", "c" };
-            bool result = list.ContainsAll("a", "b", "c");
-            Assert.True(result);
         }
 
         [Fact]

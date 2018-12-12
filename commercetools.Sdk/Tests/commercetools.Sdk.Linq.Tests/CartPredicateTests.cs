@@ -1,9 +1,9 @@
 ﻿using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Carts;
-using commercetools.Sdk.Domain.Carts.Extensions;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using commercetools.Sdk.Domain.Predicates;
 using Xunit;
 
 namespace commercetools.Sdk.Linq.Tests

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace commercetools.Sdk.Domain.Carts.Extensions
+namespace commercetools.Sdk.Domain.Carts
 {
     public static class CartExtensions
     {
@@ -138,31 +138,6 @@ namespace commercetools.Sdk.Domain.Carts.Extensions
             throw new NotImplementedException();
         }
 
-        public static bool Equal(this BaseMoney source, string parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool LessThan(this BaseMoney source, string parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool LessThanOrEqual(this BaseMoney source, string parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool GreaterThan(this BaseMoney source, string parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool GreaterThanOrEqual(this BaseMoney source, string parameter)
-        {
-            throw new NotImplementedException();
-        }
-
         public static string ProductKey(this LineItem source)
         {
             throw new NotImplementedException();
@@ -209,36 +184,6 @@ namespace commercetools.Sdk.Domain.Carts.Extensions
         }
 
         public static string DiscountId(this Price source)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool IsEmpty<T>(this ICollection<T> source)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool IsNotEmpty<T>(this List<T> source)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool IsDefined<T>(this T source)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool IsNotDefined<T>(this T source)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool ContainsAny<T>(this IEnumerable<T> source, params T[] values)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool ContainsAll<T>(this IEnumerable<T> source, params T[] values)
         {
             throw new NotImplementedException();
         }

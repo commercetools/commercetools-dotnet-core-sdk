@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Client
+﻿using commercetools.Sdk.Domain.Query;
+
+namespace commercetools.Sdk.Client
 {
     using System.Collections.Generic;
     using Domain;

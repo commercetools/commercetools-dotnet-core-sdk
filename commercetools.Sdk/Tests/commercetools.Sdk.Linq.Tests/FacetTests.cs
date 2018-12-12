@@ -1,19 +1,21 @@
-﻿namespace commercetools.Sdk.Linq.Tests
-{
-    using commercetools.Sdk.Domain;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using Xunit;
+﻿using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.ProductProjections;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using commercetools.Sdk.Domain.Predicates;
+using Xunit;
 
+namespace commercetools.Sdk.Linq.Tests
+{
     public class FacetTests
     {
         [Fact]
         public void TermFacetCategoryId()
         {
-            // TODO Find a more intuitive way to define the expression (check the one below)
             Expression<Func<ProductProjection, string>> expression = p => p.Categories.Select(c => c.Id).FirstOrDefault();
+            // This is another way of expressing the filter, but it is not implemented.
             Expression<Func<ProductProjection, IEnumerable<string>>> expressionEnumerable = p => p.Categories.Select(c => c.Id);
             IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
             string result = filterExpressionVisitor.Render(expression);

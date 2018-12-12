@@ -5,6 +5,7 @@ using commercetools.Sdk.HttpApi.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using commercetools.Sdk.Domain.Query;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
