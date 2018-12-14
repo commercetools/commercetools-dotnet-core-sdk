@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using commercetools.Sdk.Linq.Carts;
 
 namespace commercetools.Sdk.Linq
 {

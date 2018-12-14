@@ -5,18 +5,26 @@ using System.Linq;
 using System.Linq.Expressions;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Products.Attributes;
+using commercetools.Sdk.Linq.Query;
 using Xunit;
 
 namespace commercetools.Sdk.Linq.Tests
 {
-    public class QueryPredicateTests
+    public class QueryPredicateTests : IClassFixture<LinqFixture>
     {
+        private readonly LinqFixture linqFixture;
+
+        public QueryPredicateTests(LinqFixture linqFixture)
+        {
+            this.linqFixture = linqFixture;
+        }
+
         [Fact]
         public void ExpressionStringEqual()
         {
             Expression<Func<Category, bool>> expression = c => c.Key == "c14";
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("key = \"c14\"", result);
         }
 
@@ -25,20 +33,24 @@ namespace commercetools.Sdk.Linq.Tests
         {
             string key = "c14";
             Expression<Func<Category, bool>> expression = c => c.Key == key;
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("key = \"c14\"", result);
         }
 
         [Fact]
         public void ExpressionStringEqualVarProperty()
         {
-            string key = "c14";
-            Category category = new Category();
-            category.Key = key;
-            Expression<Func<Category, bool>> expression = c => c.Key == category.Key;
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            Category category = new Category
+            {
+                Key = "c14"
+            };
+            // Only local variables are supported.
+            // In case a comparison to a property or another expression needs to be done, then it has to be put to a local variable.
+            string key = category.Key;
+            Expression<Func<Category, bool>> expression = c => c.Key == key;
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("key = \"c14\"", result);
         }
 
@@ -46,8 +58,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionStringNotEqual()
         {
             Expression<Func<Category, bool>> expression = c => c.Key != "c14";
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("key != \"c14\"", result);
         }
 
@@ -55,8 +67,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionStringAnd()
         {
             Expression<Func<Category, bool>> expression = c => c.Key != "c14" && c.Version == 30;
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("key != \"c14\" and version = 30", result);
         }
 
@@ -64,8 +76,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionStringOr()
         {
             Expression<Func<Category, bool>> expression = c => c.Key != "c14" || c.Version == 30;
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("key != \"c14\" or version = 30", result);
         }
 
@@ -73,8 +85,18 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionStringAndOr()
         {
             Expression<Func<Category, bool>> expression = c => c.Key != "c14" && c.Name["en"] == "men" || c.Version == 30;
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("key != \"c14\" and name(en = \"men\") or version = 30", result);
+        }
+
+        [Fact]
+        public void ExpressionDictionaryVar()
+        {
+            string language = "en";
+            Expression<Func<Category, bool>> expression = c => c.Key != "c14" && c.Name[language] == "men" || c.Version == 30;
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("key != \"c14\" and name(en = \"men\") or version = 30", result);
         }
 
@@ -82,8 +104,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionNotStringEqual()
         {
             Expression<Func<Category, bool>> expression = c => !(c.Key == "c14");
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("not(key = \"c14\")", result);
         }
 
@@ -91,8 +113,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionNotStringAnd()
         {
             Expression<Func<Category, bool>> expression = c => !(c.Key == "c14" && c.Version == 30);
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("not(key = \"c14\" and version = 30)", result);
         }
 
@@ -100,8 +122,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionPropertyTwoLevelStringEqual()
         {
             Expression<Func<Category, bool>> expression = c => c.Parent.Id == "13c4ee51-ff35-490f-8e43-349e39c34646";
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("parent(id = \"13c4ee51-ff35-490f-8e43-349e39c34646\")", result);
         }
 
@@ -109,8 +131,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionPropertyThreeLevelStringEqual()
         {
             Expression<Func<ProductCatalogData, bool>> expression = p => p.Current.MasterVariant.Key == "p15";
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("current(masterVariant(key = \"p15\"))", result);
         }
 
@@ -118,8 +140,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionPropertyIntEqual()
         {
             Expression<Func<Category, bool>> expression = c => c.Version == 30;
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("version = 30", result);
         }
 
@@ -127,8 +149,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionPropertyIntLessThan()
         {
             Expression<Func<Category, bool>> expression = c => c.Version < 30;
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("version < 30", result);
         }
 
@@ -136,8 +158,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionPropertyTwoLevelIntLessThan()
         {
             Expression<Func<ProductData, bool>> expression = p => p.MasterVariant.Id < 30;
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("masterVariant(id < 30)", result);
         }
 
@@ -145,8 +167,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionPropertyInString()
         {
             Expression<Func<Category, bool>> expression = c => c.Key.In("c14", "c15");
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("key in (\"c14\", \"c15\")", result);
         }
 
@@ -154,8 +176,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionNotPropertyInString()
         {
             Expression<Func<Category, bool>> expression = c => !c.Key.In("c14", "c15");
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("not(key in (\"c14\", \"c15\"))", result);
         }
 
@@ -163,8 +185,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionPropertyNotInString()
         {
             Expression<Func<Category, bool>> expression = c => c.Key.NotIn("c14", "c15");
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("key not in (\"c14\", \"c15\")", result);
         }
 
@@ -172,8 +194,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionPropertyContainsAllString()
         {
             Expression<Func<Customer, bool>> expression = c => c.ShippingAddressIds.ContainsAll("c14", "c15");
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("shippingAddressIds contains all (\"c14\", \"c15\")", result);
         }
 
@@ -181,8 +203,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionPropertyDictionaryEqual()
         {
             Expression<Func<Category, bool>> expression = c => c.Name["en"] == "men";
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("name(en = \"men\")", result);
         }
 
@@ -190,8 +212,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionPropertyThreeLevelDictionaryEqual()
         {
             Expression<Func<Product, bool>> expression = p => p.MasterData.Current.Slug["en"] == "product";
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("masterData(current(slug(en = \"product\")))", result);
         }
 
@@ -199,8 +221,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionPropertyTextAttributeValueEqual()
         {
             Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => ((TextAttribute)a).Name == "text-name" && ((TextAttribute)a).Value == "text-value");
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes(name = \"text-name\" and value = \"text-value\")", result);
         }
 
@@ -208,8 +230,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionPropertyLocalizedTextAttributeValueEqual()
         {
             Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => ((LocalizedTextAttribute)a).Name == "text-name" && ((LocalizedTextAttribute)a).Value["en"] == "text-value-en");
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes(name = \"text-name\" and value(en = \"text-value-en\"))", result);
         }
 
@@ -217,8 +239,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionPropertyEnumAttributeValueEqual()
         {
             Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => ((EnumAttribute)a).Name == "enum-name" && ((EnumAttribute)a).Value.Key == "enum-value");
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes(name = \"enum-name\" and value(key = \"enum-value\"))", result);
         }
 
@@ -226,8 +248,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionPropertyPropertyGrouping()
         {
             Expression<Func<Category, bool>> expression = c => c.Parent.Id == "some id" || c.Parent.Id == "some other id";
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("parent(id = \"some id\" or id = \"some other id\")", result);
         }
 
@@ -235,8 +257,8 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionPropertyLocalizedTextAttributeValueEqualGrouped()
         {
             Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => ((LocalizedTextAttribute)a).Name == "text-name" && (((LocalizedTextAttribute)a).Value["en"] == "text-value-en" || ((LocalizedTextAttribute)a).Value["de"] == "text-value-de"));
-            QueryPredicateExpressionVisitor queryPredicateExpressionVisitor = new QueryPredicateExpressionVisitor();
-            string result = queryPredicateExpressionVisitor.ProcessExpression(expression);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes(name = \"text-name\" and value(en = \"text-value-en\" or de = \"text-value-de\"))", result);
         }
     }

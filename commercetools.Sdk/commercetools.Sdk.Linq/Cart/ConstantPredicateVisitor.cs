@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.Linq
+﻿namespace commercetools.Sdk.Linq.Carts
 {
     public class ConstantPredicateVisitor : ICartPredicateVisitor
     {

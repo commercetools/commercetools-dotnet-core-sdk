@@ -1,16 +1,27 @@
-﻿using System;
+﻿using System.Globalization;
 
 namespace commercetools.Sdk.Linq
 {
     public static class StringExtensions
     {
-        public static string ToCamelCase(this string str)
+        public static string ToCamelCase(this string value)
         {
-            if (!string.IsNullOrEmpty(str) && str.Length > 1)
+            if (!string.IsNullOrEmpty(value) && value.Length > 1)
             {
-                return Char.ToLowerInvariant(str[0]) + str.Substring(1);
+                return char.ToLowerInvariant(value[0]) + value.Substring(1);
             }
-            return str;
+
+            return value;
+        }
+
+        public static string WrapInQuotes(this string value)
+        {
+            return string.Format(CultureInfo.InvariantCulture, "\"{0}\"", value);
+        }
+
+        public static string RemoveQuotes(this string value)
+        {
+            return value.Replace("\"", "");
         }
     }
 }

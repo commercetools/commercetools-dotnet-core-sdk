@@ -1,9 +1,7 @@
-﻿using commercetools.Sdk.Linq;
-using commercetools.Sdk.Util;
+﻿using commercetools.Sdk.Util;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
+using commercetools.Sdk.Linq.Query;
 
 namespace commercetools.Sdk.Domain.Query
 {
@@ -19,7 +17,7 @@ namespace commercetools.Sdk.Domain.Query
         public override string ToString()
         {
             return ServiceLocator.Current.GetService<IQueryPredicateExpressionVisitor>()
-                .ProcessExpression(this.Expression);
+                .Render(this.Expression);
         }
     }
 }

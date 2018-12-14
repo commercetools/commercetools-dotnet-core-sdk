@@ -1,44 +1,46 @@
-﻿namespace commercetools.Sdk.Linq
+﻿namespace commercetools.Sdk.Linq.Carts
 {
     public class BinaryLogicalPredicateVisitor : ICartPredicateVisitor
     {
         private readonly ICartPredicateVisitor left;
         private readonly ICartPredicateVisitor right;
 
-        public string OperatorSign { get; }
+        private readonly string operatorSign;
 
         public BinaryLogicalPredicateVisitor(ICartPredicateVisitor left, string operatorSign, ICartPredicateVisitor right)
         {
             this.left = left;
-            this.OperatorSign = operatorSign;
+            this.operatorSign = operatorSign;
             this.right = right;
         }
 
         public string Render()
         {
-            // If one of the side has an operator with lower precedence, it has to be wrapped in brackets
-            return $"{RenderSide(this.left)} {this.OperatorSign} {RenderSide(this.right)}";
+            // If one of the side has an operator with lower precedence, it has to be wrapped in brackets.
+            return $"{this.RenderSide(this.left)} {this.operatorSign} {this.RenderSide(this.right)}";
         }
 
         private string RenderSide(ICartPredicateVisitor side)
         {
             string result = side.Render();
-            if (HasLowerPrecedenceOperator(side, this.OperatorSign))
+            if (this.HasLowerPrecedenceOperator(side))
             {
                 result = $"({result})";
             }
+
             return result;
         }
 
-        private bool HasLowerPrecedenceOperator(ICartPredicateVisitor side, string operatorSign)
+        private bool HasLowerPrecedenceOperator(ICartPredicateVisitor side)
         {
             if (side is BinaryLogicalPredicateVisitor logicalPredicateVisitor)
             {
-                if (logicalPredicateVisitor.OperatorSign == LogicalOperators.OR && operatorSign == LogicalOperators.AND)
+                if (logicalPredicateVisitor.operatorSign == LogicalOperators.OR && this.operatorSign == LogicalOperators.AND)
                 {
                     return true;
                 }
             }
+
             return false;
         }
     }

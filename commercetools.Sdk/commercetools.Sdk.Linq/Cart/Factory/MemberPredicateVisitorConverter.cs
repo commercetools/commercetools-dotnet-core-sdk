@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using commercetools.Sdk.Linq.Carts;
 
 namespace commercetools.Sdk.Linq
 {

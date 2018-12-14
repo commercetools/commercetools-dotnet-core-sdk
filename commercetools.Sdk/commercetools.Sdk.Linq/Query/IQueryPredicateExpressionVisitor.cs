@@ -1,9 +1,6 @@
-﻿using System.Linq.Expressions;
-
-namespace commercetools.Sdk.Linq
+﻿namespace commercetools.Sdk.Linq.Query
 {
-    public interface IQueryPredicateExpressionVisitor
+    public interface IQueryPredicateExpressionVisitor : IPredicateExpressionVisitor
     {
-        string ProcessExpression(Expression expression);
     }
 }
