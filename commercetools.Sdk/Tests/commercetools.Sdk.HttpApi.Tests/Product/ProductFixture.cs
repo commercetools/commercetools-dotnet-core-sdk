@@ -48,8 +48,8 @@ namespace commercetools.Sdk.HttpApi.Tests
             productVariantDraft.Attributes = attributes;
             attributes.Add(new TextAttribute() { Name = "text-attribute-name", Value = this.RandomString(5)});
             attributes.Add(new LocalizedTextAttribute() { Name = "localized-text-attribute-name", Value = new LocalizedString() { { "en", this.RandomString(5) } } });
-            //attributes.Add(new EnumAttribute() { Name = "enum-attribute-name", Value = new PlainEnumValue() { Key = "enum-key-1" } });
-            //attributes.Add(new LocalizedEnumAttribute() { Name = "localized-enum-attribute-name", Value = new LocalizedEnumValue() { Key = "enum-key-1" } });
+            attributes.Add(new EnumAttribute() { Name = "enum-attribute-name", Value = new PlainEnumValue() { Key = "enum-key-1" } });
+            attributes.Add(new LocalizedEnumAttribute() { Name = "localized-enum-attribute-name", Value = new LocalizedEnumValue() { Key = "enum-key-1" } });
             attributes.Add(new BooleanAttribute() { Name = "boolean-attribute-name", Value = true });
             attributes.Add(new NumberAttribute() { Name = "number-attribute-name", Value = 10 });
             attributes.Add(new DateTimeAttribute() { Name = "date-time-attribute-name", Value = new DateTime(2018, 12, 10, 23, 43, 02) });

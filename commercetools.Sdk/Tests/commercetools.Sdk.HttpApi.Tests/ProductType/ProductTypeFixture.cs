@@ -142,7 +142,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             AttributeDefinitionDraft attributeDefinitionDraft = new AttributeDefinitionDraft();
             attributeDefinitionDraft.Name = "enum-attribute-name";
             attributeDefinitionDraft.Label = new LocalizedString() { { "en", "enum-attribute-label" } };
-            attributeDefinitionDraft.IsRequired = false;
+            attributeDefinitionDraft.IsRequired = true;
             EnumAttributeType enumAttributeType = new EnumAttributeType();
             enumAttributeType.Values = new List<PlainEnumValue>();
             enumAttributeType.Values.Add(new PlainEnumValue() { Key = "enum-key-1", Label = "enum-label-1" });
@@ -156,7 +156,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             AttributeDefinitionDraft attributeDefinitionDraft = new AttributeDefinitionDraft();
             attributeDefinitionDraft.Name = "localized-enum-attribute-name";
             attributeDefinitionDraft.Label = new LocalizedString() { { "en", "localized-enum-attribute-label" } };
-            attributeDefinitionDraft.IsRequired = false;
+            attributeDefinitionDraft.IsRequired = true;
             LocalizableEnumAttributeType localizableEnumAttributeType = new LocalizableEnumAttributeType();
             localizableEnumAttributeType.Values = new List<LocalizedEnumValue>();
             localizableEnumAttributeType.Values.Add(new LocalizedEnumValue() { Key = "enum-key-1", Label = new LocalizedString() { { "en", "enum-label-1" } } });
