@@ -173,6 +173,15 @@ namespace commercetools.Sdk.Linq.Tests
         }
 
         [Fact]
+        public void ExpressionPropertyIsDefined()
+        {
+            Expression<Func<Category, bool>> expression = c => c.Key.IsDefined();
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("key is defined", result);
+        }
+
+        [Fact]
         public void ExpressionNotPropertyInString()
         {
             Expression<Func<Category, bool>> expression = c => !c.Key.In("c14", "c15");

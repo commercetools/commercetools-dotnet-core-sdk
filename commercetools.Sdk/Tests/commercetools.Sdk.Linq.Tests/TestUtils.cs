@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using commercetools.Sdk.Linq.Carts;
 
 namespace commercetools.Sdk.Linq.Tests
 {

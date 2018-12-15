@@ -5,6 +5,8 @@ namespace commercetools.Sdk.Linq.Query.Converters
 {
     public class BinaryLogicalPredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
+        public int Priority { get; } = 4;
+
         public bool CanConvert(Expression expression)
         {
             return Mapping.LogicalOperators.ContainsKey(expression.NodeType);
@@ -26,7 +28,7 @@ namespace commercetools.Sdk.Linq.Query.Converters
             }
 
             string operatorSign = Mapping.GetOperator(expression.NodeType, Mapping.LogicalOperators);
-            return new BinaryLogicalPredicateVisitor(predicateVisitorLeft, operatorSign, predicateVisitorRight);
+            return new BinaryPredicateVisitor(predicateVisitorLeft, operatorSign, predicateVisitorRight);
         }
 
         private static bool CanCombinePredicateVisitors(IPredicateVisitor left, IPredicateVisitor right)

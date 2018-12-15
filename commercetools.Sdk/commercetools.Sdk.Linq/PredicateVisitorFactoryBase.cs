@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace commercetools.Sdk.Linq
@@ -33,7 +34,7 @@ namespace commercetools.Sdk.Linq
 
         private IPredicateVisitorConverter GetConverterForExpression(Expression expression)
         {
-            foreach (var converter in this.registeredConverters)
+            foreach (var converter in this.registeredConverters.OrderBy(c => c.Priority))
             {
                 if (converter.CanConvert(expression))
                 {

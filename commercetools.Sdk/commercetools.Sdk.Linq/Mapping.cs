@@ -20,6 +20,19 @@ namespace commercetools.Sdk.Linq
             { ExpressionType.NotEqual, "!=" }
         };
 
+        public static Dictionary<string, string> AllowedMethods { get; } = new Dictionary<string, string>()
+        {
+            { "In", "in" },
+            { "NotIn", "not in" },
+            { "Contains", "contains" },
+            { "ContainsAll", "contains all" },
+            { "ContainsAny", "contains any" },
+            { "IsEmpty", "is empty" },
+            { "IsNotEmpty", "is not empty" },
+            { "IsDefined", "is defined" },
+            { "IsNotDefined", "is not defined" }
+        };
+
         public static Dictionary<ExpressionType, string> LogicalOperators { get; } = new Dictionary<ExpressionType, string>()
         {
             { ExpressionType.And, And },

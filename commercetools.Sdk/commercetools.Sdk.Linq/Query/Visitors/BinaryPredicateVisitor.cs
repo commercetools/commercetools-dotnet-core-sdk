@@ -1,12 +1,12 @@
 ﻿namespace commercetools.Sdk.Linq.Query.Visitors
 {
-    public class BinaryLogicalPredicateVisitor : IPredicateVisitor
+    public class BinaryPredicateVisitor : IPredicateVisitor
     {
         private readonly IPredicateVisitor left;
         private readonly IPredicateVisitor right;
         private readonly string operatorSign;
 
-        public BinaryLogicalPredicateVisitor(IPredicateVisitor left, string operatorSign, IPredicateVisitor right)
+        public BinaryPredicateVisitor(IPredicateVisitor left, string operatorSign, IPredicateVisitor right)
         {
             this.left = left;
             this.right = right;
@@ -15,7 +15,8 @@
 
         public string Render()
         {
-            return $"{this.left.Render()} {this.operatorSign} {this.right.Render()}";
+            // It can happen that the right predicate is an empty string, hence we trim the white space.
+            return $"{this.left.Render()} {this.operatorSign} {this.right.Render()}".TrimEnd();
         }
     }
 }

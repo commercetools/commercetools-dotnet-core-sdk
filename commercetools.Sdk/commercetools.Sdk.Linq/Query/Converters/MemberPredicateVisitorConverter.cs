@@ -5,6 +5,8 @@ namespace commercetools.Sdk.Linq.Query.Converters
 {
     public class MemberPredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
+        public int Priority { get; } = 4;
+
         public bool CanConvert(Expression expression)
         {
             return expression.NodeType == ExpressionType.MemberAccess;
@@ -20,8 +22,8 @@ namespace commercetools.Sdk.Linq.Query.Converters
 
             string currentName = memberExpression.Member.Name;
             ConstantPredicateVisitor constant = new ConstantPredicateVisitor(currentName);
-            IPredicateVisitor inner = predicateVisitorFactory.Create(memberExpression.Expression);
-            return new ContainerPredicateVisitor(constant, inner);
+            IPredicateVisitor parent = predicateVisitorFactory.Create(memberExpression.Expression);
+            return new ContainerPredicateVisitor(constant, parent);
         }
     }
 }

@@ -5,6 +5,8 @@ namespace commercetools.Sdk.Linq.Query.Converters
 {
     public class ConstantPredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
+        public int Priority { get; } = 4;
+
         public bool CanConvert(Expression expression)
         {
             return expression.NodeType == ExpressionType.Constant || IsVariable(expression);

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace commercetools.Sdk.Linq
+namespace commercetools.Sdk.Linq.Carts
 {
     public class NotLogicalPredicateVisitorConverter : ICartPredicateVisitorConverter
     {
