@@ -3,7 +3,7 @@ using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Query.Converters
 {
-    public class LocalizedStringPredicateVisitorConverter : IQueryPredicateVisitorConverter
+    public class DictionaryPredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
         public int Priority { get; } = 4;
 

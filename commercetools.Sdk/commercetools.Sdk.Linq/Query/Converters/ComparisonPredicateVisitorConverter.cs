@@ -33,18 +33,35 @@ namespace commercetools.Sdk.Linq.Query.Converters
         // property(property(property operator value)
         private static IPredicateVisitor CombinePredicates(IPredicateVisitor left, string operatorSign, IPredicateVisitor right)
         {
-            var container = (ContainerPredicateVisitor)left;
-            var parent = (ContainerPredicateVisitor)container.Parent;
-            IPredicateVisitor innerLeft = container.Inner;
+            var containerLeft = (ContainerPredicateVisitor)left;
+            IPredicateVisitor innerLeft = containerLeft.Inner;
             BinaryPredicateVisitor binaryPredicateVisitor = new BinaryPredicateVisitor(innerLeft, operatorSign, right);
-            ContainerPredicateVisitor binaryContainer = new ContainerPredicateVisitor(binaryPredicateVisitor, parent.Inner);
-            ContainerPredicateVisitor combinedContainer = new ContainerPredicateVisitor(binaryContainer, parent.Parent);
+
+            IPredicateVisitor parent = containerLeft.Parent;
+            if (parent == null)
+            {
+                return new ContainerPredicateVisitor(binaryPredicateVisitor, null);
+            }
+
+            IPredicateVisitor innerContainer = binaryPredicateVisitor;
+            ContainerPredicateVisitor combinedContainer = null;
+            while (parent != null)
+            {
+                if (CanBeCombined(parent))
+                {
+                    var container = (ContainerPredicateVisitor)parent;
+                    innerContainer = new ContainerPredicateVisitor(innerContainer, container.Inner);
+                    combinedContainer = new ContainerPredicateVisitor(innerContainer, container.Parent);
+                    parent = container.Parent;
+                }
+            }
+
             return combinedContainer;
         }
 
         private static bool CanBeCombined(IPredicateVisitor left)
         {
-            return left is ContainerPredicateVisitor container && container.Parent is ContainerPredicateVisitor;
+            return left is ContainerPredicateVisitor;
         }
     }
 }
