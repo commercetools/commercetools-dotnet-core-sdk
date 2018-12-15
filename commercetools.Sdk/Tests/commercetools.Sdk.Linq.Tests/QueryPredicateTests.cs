@@ -229,7 +229,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void ExpressionPropertyTextAttributeValueEqual()
         {
-            Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => ((TextAttribute)a).Name == "text-name" && ((TextAttribute)a).Value == "text-value");
+            Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => a.ToTextAttribute().Name == "text-name" && a.ToTextAttribute().Value == "text-value");
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes(name = \"text-name\" and value = \"text-value\")", result);
@@ -238,7 +238,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void ExpressionPropertyLocalizedTextAttributeValueEqual()
         {
-            Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => ((LocalizedTextAttribute)a).Name == "text-name" && ((LocalizedTextAttribute)a).Value["en"] == "text-value-en");
+            Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => a.ToLocalizedTextAttribute().Name == "text-name" && a.ToLocalizedTextAttribute().Value["en"] == "text-value-en");
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes(name = \"text-name\" and value(en = \"text-value-en\"))", result);
@@ -247,7 +247,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void ExpressionPropertyEnumAttributeValueEqual()
         {
-            Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => ((EnumAttribute)a).Name == "enum-name" && ((EnumAttribute)a).Value.Key == "enum-value");
+            Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => a.ToEnumAttribute().Name == "enum-name" && a.ToEnumAttribute().Value.Key == "enum-value");
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes(name = \"enum-name\" and value(key = \"enum-value\"))", result);
@@ -265,7 +265,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void ExpressionPropertyLocalizedTextAttributeValueEqualGrouped()
         {
-            Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => ((LocalizedTextAttribute)a).Name == "text-name" && (((LocalizedTextAttribute)a).Value["en"] == "text-value-en" || ((LocalizedTextAttribute)a).Value["de"] == "text-value-de"));
+            Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => a.ToLocalizedTextAttribute().Name == "text-name" && (a.ToLocalizedTextAttribute().Value["en"] == "text-value-en" || a.ToLocalizedTextAttribute().Value["de"] == "text-value-de"));
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes(name = \"text-name\" and value(en = \"text-value-en\" or de = \"text-value-de\"))", result);
