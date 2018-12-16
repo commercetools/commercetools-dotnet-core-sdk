@@ -41,6 +41,10 @@ namespace commercetools.Sdk.Linq
             { ExpressionType.OrElse, Or }
         };
 
+        public static List<string> ParseMethods { get; } = new List<string>() { "Parse" };
+
+        public static string CastMethodStart { get; } = "To";
+
         public static string GetOperator(ExpressionType expressionType, Dictionary<ExpressionType, string> mapping)
         {
             if (mapping.ContainsKey(expressionType))

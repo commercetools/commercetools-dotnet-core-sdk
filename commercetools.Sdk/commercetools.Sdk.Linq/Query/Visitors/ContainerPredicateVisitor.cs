@@ -14,7 +14,7 @@
 
         public string Render()
         {
-            return this.Parent != null ? $"{this.Parent.Render()}({this.Inner.Render()})" : this.Inner.Render();
+            return this.Parent != null ? $"{this.Parent.Render()}({this.Inner?.Render()})" : this.Inner?.Render();
         }
     }
 }

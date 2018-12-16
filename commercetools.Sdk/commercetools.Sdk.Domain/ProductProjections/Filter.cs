@@ -3,6 +3,7 @@ using commercetools.Sdk.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using commercetools.Sdk.Linq.Filter;
 
 namespace commercetools.Sdk.Domain.ProductProjections
 {
@@ -17,7 +18,7 @@ namespace commercetools.Sdk.Domain.ProductProjections
 
         public override string ToString()
         {
-            return ServiceLocator.Current.GetService<IFilterExpressionVisitor>().Render(this.Expression);
+            return ServiceLocator.Current.GetService<IFilterPredicateExpressionVisitor>().Render(this.Expression);
         }
     }
 }

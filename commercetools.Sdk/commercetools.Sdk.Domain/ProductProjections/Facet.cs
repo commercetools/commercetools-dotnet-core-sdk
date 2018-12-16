@@ -1,6 +1,7 @@
 ﻿using commercetools.Sdk.Linq;
 using commercetools.Sdk.Util;
 using System.Linq.Expressions;
+using commercetools.Sdk.Linq.Filter;
 
 namespace commercetools.Sdk.Domain.ProductProjections
 {
@@ -12,7 +13,7 @@ namespace commercetools.Sdk.Domain.ProductProjections
 
         public override string ToString()
         {
-            string facetPath = ServiceLocator.Current.GetService<IFilterExpressionVisitor>().Render(this.Expression);
+            string facetPath = ServiceLocator.Current.GetService<IFilterPredicateExpressionVisitor>().Render(this.Expression);
             if (this.Alias != null)
             {
                 facetPath += $" as {this.Alias}";

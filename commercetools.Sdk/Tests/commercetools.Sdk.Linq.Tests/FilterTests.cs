@@ -1,20 +1,27 @@
-﻿using commercetools.Sdk.Domain;
-using System;
+﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
 using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Domain.Products.Attributes;
+using commercetools.Sdk.Linq.Filter;
 using Xunit;
 
 namespace commercetools.Sdk.Linq.Tests
 {
-    public class FilterTests
+    public class FilterTests : IClassFixture<LinqFixture>
     {
+        private readonly LinqFixture linqFixture;
+
+        public FilterTests(LinqFixture linqFixture)
+        {
+            this.linqFixture = linqFixture;
+        }
+
         [Fact]
         public void FilterByCategoryId()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Categories.Any(c => c.Id == "34940e9b-0752-4ffa-8e6e-4f2417995a3e");
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("categories.id:\"34940e9b-0752-4ffa-8e6e-4f2417995a3e\"", result);
         }
@@ -23,7 +30,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByCategoryMissing()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Categories.Missing();
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("categories:missing", result);
         }
@@ -32,7 +39,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByCategoryExists()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Categories.Exists();
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("categories:exists", result);
         }
@@ -41,7 +48,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByCategorySubtree()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Categories.Any(c => c.Id.Subtree("34940e9b-0752-4ffa-8e6e-4f2417995a3e"));
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("categories.id: subtree(\"34940e9b-0752-4ffa-8e6e-4f2417995a3e\")", result);
         }
@@ -50,7 +57,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByCategoryTwoSubtrees()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Categories.Any(c => c.Id.Subtree("34940e9b-0752-4ffa-8e6e-4f2417995a3e") || c.Id.Subtree("2fd1d652-2533-40f1-97d7-713ac24668b1"));
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("categories.id: subtree(\"34940e9b-0752-4ffa-8e6e-4f2417995a3e\"), subtree(\"2fd1d652-2533-40f1-97d7-713ac24668b1\")", result);
         }
@@ -59,16 +66,16 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByCategorySubtreeTwoIds()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Categories.Any(c => c.Id.Subtree("34940e9b-0752-4ffa-8e6e-4f2417995a3e") || c.Id == "2fd1d652-2533-40f1-97d7-713ac24668b1" || c.Id == "51e7da39-4946-4c1d-a948-af7b54874891");
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
-            Assert.Equal("categories.id: subtree(\"34940e9b-0752-4ffa-8e6e-4f2417995a3e\"), \"2fd1d652-2533-40f1-97d7-713ac24668b1\", \"51e7da39-4946-4c1d-a948-af7b54874891\"", result);
+            Assert.Equal("categories.id: subtree(\"34940e9b-0752-4ffa-8e6e-4f2417995a3e\"),\"2fd1d652-2533-40f1-97d7-713ac24668b1\",\"51e7da39-4946-4c1d-a948-af7b54874891\"", result);
         }
 
         [Fact]
         public void FilterByPriceCentAmount()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Price.Value.CentAmount == 30);
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.price.centAmount:30", result);
         }
@@ -77,7 +84,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByPriceCentAmountRange()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 30));
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.price.centAmount:range (1 to 30)", result);
         }
@@ -86,7 +93,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByPriceCentAmountTwoRanges()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 30) || v.Price.Value.CentAmount.Range(40, 100));
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.price.centAmount:range (1 to 30), (40 to 100)", result);
         }
@@ -95,7 +102,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByPriceCentAmountLowerBoundUnknownRange()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(null, 30));
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.price.centAmount:range (* to 30)", result);
         }
@@ -104,7 +111,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByPriceCentAmountUpperBoundUnknownRange()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, null));
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.price.centAmount:range (1 to *)", result);
         }
@@ -113,7 +120,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByPricesMissing()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Prices.Missing());
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.prices:missing", result);
         }
@@ -122,7 +129,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByPricesExists()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Prices.Exists());
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.prices:exists", result);
         }
@@ -131,7 +138,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByTextAttributeValue()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "color" && ((TextAttribute)a).Value == "red"));
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.attributes.color:\"red\"", result);
         }
@@ -140,7 +147,17 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByNumberAttributeRange()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "size" && ((NumberAttribute)a).Value.Range(36, 42)));
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.attributes.size:range (36 to 42)", result);
+        }
+
+        [Fact]
+        public void FilterByNumberAttributeRangeVar()
+        {
+            int from = 36;
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "size" && ((NumberAttribute)a).Value.Range(from, 42)));
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.attributes.size:range (36 to 42)", result);
         }
@@ -149,7 +166,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByNumberAttributeMissing()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Where(a => a.Name == "size").Missing());
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.attributes.size:missing", result);
         }
@@ -158,7 +175,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByNumberAttributeExists()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Where(a => a.Name == "size").Exists());
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.attributes.size:exists", result);
         }
@@ -167,7 +184,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByEnumAttribute()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "color" && ((EnumAttribute)a).Value.Key == "grey"));
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.attributes.color.key:\"grey\"", result);
         }
@@ -176,7 +193,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByIsOnStock()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Availability.IsOnStock == true);
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.availability.isOnStock:true", result);
         }
@@ -185,7 +202,17 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByIsOnStockPerChannel()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Availability.Channels["1a3c451e-792a-43b5-8def-88d0db22eca8"].IsOnStock == true);
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.availability.channels.1a3c451e-792a-43b5-8def-88d0db22eca8.isOnStock:true", result);
+        }
+
+        [Fact]
+        public void FilterByIsOnStockPerChannelVar()
+        {
+            string channel = "1a3c451e-792a-43b5-8def-88d0db22eca8";
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Availability.Channels[channel].IsOnStock == true);
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.availability.channels.1a3c451e-792a-43b5-8def-88d0db22eca8.isOnStock:true", result);
         }
@@ -194,7 +221,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByAvailabilityIsOnStockInChannels()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Availability.IsOnStockInChannels("1a3c451e-792a-43b5-8def-88d0db22eca8", "110321ab-8fd7-4d4c-8b7c-4c69761411fc"));
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.availability.isOnStockInChannels:\"1a3c451e-792a-43b5-8def-88d0db22eca8\",\"110321ab-8fd7-4d4c-8b7c-4c69761411fc\"", result);
         }
@@ -203,7 +230,17 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterBySearchKeywords()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.SearchKeywords["en"].Any(s => s.Text == "jeans");
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("searchKeywords.en.text:\"jeans\"", result);
+        }
+
+        [Fact]
+        public void FilterBySearchKeywordsVar()
+        {
+            string language = "en";
+            Expression<Func<ProductProjection, bool>> expression = p => p.SearchKeywords[language].Any(s => s.Text == "jeans");
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("searchKeywords.en.text:\"jeans\"", result);
         }
@@ -212,7 +249,17 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByCreatedAt()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.CreatedAt.Range(DateTime.Parse("2015-06-04T12:27:55.344Z"), DateTime.Parse("2016-06-04T12:27:55.344Z"));
-            IFilterExpressionVisitor filterExpressionVisitor = new FilterExpressionVisitor();
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("createdAt:range (\"2015-06-04T12:27:55.344Z\" to \"2016-06-04T12:27:55.344Z\")", result);
+        }
+
+        [Fact]
+        public void FilterByCreatedAtParseVar()
+        {
+            string date = "2015-06-04T12:27:55.344Z";
+            Expression<Func<ProductProjection, bool>> expression = p => p.CreatedAt.Range(DateTime.Parse(date), DateTime.Parse("2016-06-04T12:27:55.344Z"));
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("createdAt:range (\"2015-06-04T12:27:55.344Z\" to \"2016-06-04T12:27:55.344Z\")", result);
         }

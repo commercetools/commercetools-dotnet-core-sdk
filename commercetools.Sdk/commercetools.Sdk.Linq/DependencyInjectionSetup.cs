@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.Linq.Query;
+﻿using commercetools.Sdk.Linq.Filter;
+using commercetools.Sdk.Linq.Query;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace commercetools.Sdk.Linq
@@ -10,6 +11,10 @@ namespace commercetools.Sdk.Linq
             services.RegisterAllInterfaceTypes<IQueryPredicateVisitorConverter>(ServiceLifetime.Singleton);
             services.AddSingleton<QueryPredicateVisitorFactory>();
             services.AddSingleton<IQueryPredicateExpressionVisitor, QueryPredicateExpressionVisitor>();
+
+            services.RegisterAllInterfaceTypes<IFilterPredicateVisitorConverter>(ServiceLifetime.Singleton);
+            services.AddSingleton<FilterPredicateVisitorFactory>();
+            services.AddSingleton<IFilterPredicateExpressionVisitor, FilterPredicateExpressionVisitor>();
         }
     }
 }

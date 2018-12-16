@@ -1,8 +1,10 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq.Expressions;
+using commercetools.Sdk.Linq.Query.Visitors;
 
-namespace commercetools.Sdk.Linq.Query.Converters
+namespace commercetools.Sdk.Linq.Filter.Converters
 {
-    public class ConvertPredicateVisitorConverter : IQueryPredicateVisitorConverter
+    public class ConvertPredicateVisitorConverter : IFilterPredicateVisitorConverter
     {
         public int Priority { get; } = 4;
 

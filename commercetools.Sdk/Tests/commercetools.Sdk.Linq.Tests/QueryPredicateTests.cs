@@ -236,6 +236,15 @@ namespace commercetools.Sdk.Linq.Tests
         }
 
         [Fact]
+        public void ExpressionPropertyTextAttributeCastValueEqual()
+        {
+            Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => ((TextAttribute)a).Name == "text-name" && ((TextAttribute)a).Value == "text-value");
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("attributes(name = \"text-name\" and value = \"text-value\")", result);
+        }
+
+        [Fact]
         public void ExpressionPropertyLocalizedTextAttributeValueEqual()
         {
             Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => a.ToLocalizedTextAttribute().Name == "text-name" && a.ToLocalizedTextAttribute().Value["en"] == "text-value-en");
