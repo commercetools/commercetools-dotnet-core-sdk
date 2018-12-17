@@ -1,10 +1,11 @@
 ﻿using commercetools.Sdk.Serialization;
-using commercetools.Sdk.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using commercetools.Sdk.Registration;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Linq;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
@@ -21,10 +22,10 @@ namespace commercetools.Sdk.HttpApi.Tests
                 AddJsonFile("appsettings.test.Development.json", true).
                 AddEnvironmentVariables().
                 Build();
-            // TODO Combine this in all in one DI setup
-            services.UseUtil();
+            services.UseRegistration();
             services.UseDomain();
             services.UseSerialization();
+            services.UseLinq();
             services.UseHttpApiWithClientCredentials(this.configuration, "Client");
             this.serviceProvider = services.BuildServiceProvider();
             ServiceLocator.SetLocatorProvider(this.serviceProvider);

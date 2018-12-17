@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Orders;
+using commercetools.Sdk.Domain.Query;
 
 namespace commercetools.Sdk.Client
 {

@@ -1,4 +1,4 @@
-﻿using commercetools.Sdk.Util;
+﻿using commercetools.Sdk.Registration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace commercetools.Sdk.Linq.Tests
@@ -10,7 +10,7 @@ namespace commercetools.Sdk.Linq.Tests
         public LinqFixture()
         {
             var services = new ServiceCollection();
-            services.UseUtil();
+            services.UseRegistration();
             services.UseLinq();
             this.serviceProvider = services.BuildServiceProvider();
             ServiceLocator.SetLocatorProvider(this.serviceProvider);

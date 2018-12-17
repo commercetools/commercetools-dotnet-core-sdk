@@ -15,13 +15,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\commercetools.Sdk.Client\commercetools.Sdk.Client.csproj" />
-    <ProjectReference Include="..\commercetools.Sdk.HttpApi\commercetools.Sdk.HttpApi.csproj" />
-    <ProjectReference Include="..\commercetools.Sdk.Reflection\commercetools.Sdk.Util.csproj" />
+    <ProjectReference Include="..\commercetools.Sdk.DependencyInjection\commercetools.Sdk.DependencyInjection.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

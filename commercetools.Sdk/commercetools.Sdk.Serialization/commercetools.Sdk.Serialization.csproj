@@ -12,7 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\commercetools.Sdk.HttpApi.Domain\commercetools.Sdk.HttpApi.Domain.csproj" />
     <ProjectReference Include="..\commercetools.Sdk.Domain\commercetools.Sdk.Domain.csproj" />
-    <ProjectReference Include="..\commercetools.Sdk.Reflection\commercetools.Sdk.Util.csproj" />
+    <ProjectReference Include="..\commercetools.Sdk.Reflection\commercetools.Sdk.Registration.csproj" />
   </ItemGroup>
 
 </Project>

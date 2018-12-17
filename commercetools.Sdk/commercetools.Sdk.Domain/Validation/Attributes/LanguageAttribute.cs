@@ -1,7 +1,8 @@
-﻿namespace commercetools.Sdk.Domain.Validation.Attributes
+﻿using commercetools.Sdk.Registration;
+
+namespace commercetools.Sdk.Domain.Validation.Attributes
 {
     using Validation;
-    using Util;
     using System.ComponentModel.DataAnnotations;
 
     public class LanguageAttribute : ValidationAttribute

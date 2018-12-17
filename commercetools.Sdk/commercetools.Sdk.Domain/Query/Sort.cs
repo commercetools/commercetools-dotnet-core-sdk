@@ -1,9 +1,9 @@
 ﻿using commercetools.Sdk.Linq;
-using commercetools.Sdk.Util;
 using System;
 using System.Linq.Expressions;
+using commercetools.Sdk.Registration;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.Query
 {
     public class Sort<T>
     {

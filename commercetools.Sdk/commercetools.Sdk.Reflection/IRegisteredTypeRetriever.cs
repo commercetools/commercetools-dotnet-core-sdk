@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace commercetools.Sdk.Util
+namespace commercetools.Sdk.Registration
 {
     public interface IRegisteredTypeRetriever
     {

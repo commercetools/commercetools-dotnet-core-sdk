@@ -1,7 +1,7 @@
 ﻿using commercetools.Sdk.Linq.Discount;
-using commercetools.Sdk.Util;
 using System;
 using System.Linq.Expressions;
+using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Domain.ProductDiscounts
 {

@@ -1,5 +1,5 @@
+using commercetools.Sdk.Registration;
 using commercetools.Sdk.Domain.Validation;
-using commercetools.Sdk.Util;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 

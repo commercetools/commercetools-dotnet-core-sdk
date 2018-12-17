@@ -1,8 +1,7 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace commercetools.Sdk.Util
+namespace System
 {
     public static class EnumExtensions
     {
@@ -14,10 +13,7 @@ namespace commercetools.Sdk.Util
             {
                 return attributes[0].Description;
             }
-            else
-            {
-                return value.ToString();
-            }
+            return value.ToString();
         }
 
         public static object GetEnum(this string value, Type enumType)

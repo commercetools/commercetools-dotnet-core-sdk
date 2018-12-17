@@ -1,5 +1,5 @@
 ﻿using commercetools.Sdk.Domain;
-using commercetools.Sdk.Util;
+using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Serialization
 {

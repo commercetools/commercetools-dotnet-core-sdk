@@ -1,8 +1,6 @@
-﻿using commercetools.Sdk.Linq;
-using commercetools.Sdk.Util;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq.Expressions;
+using commercetools.Sdk.Registration;
 using commercetools.Sdk.Linq.Filter;
 
 namespace commercetools.Sdk.Domain.ProductProjections

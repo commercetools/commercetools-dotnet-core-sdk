@@ -1,6 +1,5 @@
 ﻿namespace commercetools.Sdk.Serialization
 {
-    using commercetools.Sdk.Util;
     using Microsoft.Extensions.DependencyInjection;
 
     public static class DependencyInjectionSetup

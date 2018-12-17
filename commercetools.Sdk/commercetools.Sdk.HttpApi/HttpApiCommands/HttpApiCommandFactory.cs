@@ -1,10 +1,10 @@
 ﻿using commercetools.Sdk.Client;
-using commercetools.Sdk.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using commercetools.Sdk.Registration;
 using commercetools.Sdk.HttpApi.RequestBuilders;
 
 namespace commercetools.Sdk.HttpApi.HttpApiCommands

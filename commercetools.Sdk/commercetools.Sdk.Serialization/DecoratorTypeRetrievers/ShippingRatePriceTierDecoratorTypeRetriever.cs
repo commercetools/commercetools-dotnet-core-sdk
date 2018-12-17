@@ -1,7 +1,5 @@
-﻿using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.Carts;
+﻿using commercetools.Sdk.Registration;
 using commercetools.Sdk.Domain.ShippingMethods;
-using commercetools.Sdk.Util;
 
 namespace commercetools.Sdk.Serialization
 {

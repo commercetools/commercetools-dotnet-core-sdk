@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using commercetools.Sdk.Domain.Query;
 
 namespace commercetools.Sdk.Domain.ProductProjections
 {

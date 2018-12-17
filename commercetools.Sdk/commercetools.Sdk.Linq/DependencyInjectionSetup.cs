@@ -20,6 +20,9 @@ namespace commercetools.Sdk.Linq
             services.RegisterAllInterfaceTypes<IDiscountPredicateVisitorConverter>(ServiceLifetime.Singleton);
             services.AddSingleton<DiscountPredicateVisitorFactory>();
             services.AddSingleton<IDiscountPredicateExpressionVisitor, DiscountPredicateExpressionVisitor>();
+
+            services.AddSingleton<IExpansionExpressionVisitor, ExpansionExpressionVisitor>();
+            services.AddSingleton<ISortExpressionVisitor, SortExpressionVisitor>();
         }
     }
 }

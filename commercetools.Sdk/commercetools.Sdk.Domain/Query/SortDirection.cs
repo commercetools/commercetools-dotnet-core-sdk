@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.Query
 {
     public enum SortDirection
     {

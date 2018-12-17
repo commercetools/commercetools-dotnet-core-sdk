@@ -7,17 +7,17 @@ namespace commercetools.Sdk.HttpApi.MvcExample.Controllers
 {
     public class HomeController : Controller
     {
-        private IClient client;
+        private readonly IClient client;
 
         public HomeController(IClient client)
         {
             this.client = client;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string id)
         {
-            Category category = client.ExecuteAsync<Category>(new GetByIdCommand<Category>(new Guid("f40fcd15-b1c2-4279-9cfa-f6083e6a2988"))).Result;
-            return Content(category.Id);
+            Category category = this.client.ExecuteAsync(new GetByIdCommand<Category>(new Guid(id))).Result;
+            return this.Content(category.Id);
         }
     }
 }

@@ -4,9 +4,6 @@ using commercetools.Sdk.HttpApi.HttpApiCommands;
 using commercetools.Sdk.HttpApi.RequestBuilders;
 using commercetools.Sdk.HttpApi.SearchParameters;
 using commercetools.Sdk.HttpApi.UploadImageParameters;
-using commercetools.Sdk.Linq;
-using commercetools.Sdk.Linq.Filter;
-using commercetools.Sdk.Linq.Query;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -35,11 +32,6 @@ namespace commercetools.Sdk.HttpApi
             services.AddHttpClient("api").AddHttpMessageHandler<AuthorizationHandler>().AddHttpMessageHandler<CorrelationIdHandler>().AddHttpMessageHandler<LoggerHandler>();
 
             services.AddSingleton<IEndpointRetriever, EndpointRetriever>();
-            services.AddSingleton<IQueryPredicateExpressionVisitor, QueryPredicateExpressionVisitor>();
-            services.AddSingleton<IExpansionExpressionVisitor, ExpansionExpressionVisitor>();
-            services.AddSingleton<ISortExpressionVisitor, SortExpressionVisitor>();
-            services.AddSingleton<IFilterPredicateExpressionVisitor, FilterPredicateExpressionVisitor>();
-
             services.RegisterAllInterfaceTypes<IRequestMessageBuilder>(ServiceLifetime.Singleton);
             services.RegisterAllInterfaceTypes<IAdditionalParametersBuilder>(ServiceLifetime.Singleton);
             services.RegisterAllInterfaceTypes<ISearchParametersBuilder>(ServiceLifetime.Singleton);

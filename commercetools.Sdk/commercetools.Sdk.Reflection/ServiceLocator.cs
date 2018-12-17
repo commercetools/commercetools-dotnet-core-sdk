@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace commercetools.Sdk.Util
+namespace commercetools.Sdk.Registration
 {
     // Since some objects are created directly by the implementors of the SDK, dependencies cannot be automatically injected via constructor.
     // Therefore, the service locator pattern is used to retrieve the needed implementations.

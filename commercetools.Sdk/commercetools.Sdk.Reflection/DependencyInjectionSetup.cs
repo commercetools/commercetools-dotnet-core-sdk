@@ -1,11 +1,10 @@
-﻿namespace commercetools.Sdk.Util
-{
-    using commercetools.Sdk.Util;
-    using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
+namespace commercetools.Sdk.Registration
+{
     public static class DependencyInjectionSetup
     {
-        public static void UseUtil(this IServiceCollection services)
+        public static void UseRegistration(this IServiceCollection services)
         {
             services.AddSingleton<IRegisteredTypeRetriever, RegisteredTypeRetriever>();
         }

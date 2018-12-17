@@ -1,5 +1,4 @@
-﻿using commercetools.Sdk.Serialization;
-using commercetools.Sdk.Util;
+﻿using commercetools.Sdk.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +8,7 @@ namespace commercetools.Sdk.HttpApi.MvcExample
 {
     public class Startup
     {
-        private IConfiguration configuration;
+        private readonly IConfiguration configuration;
 
         public Startup(IConfiguration configuration)
         {
@@ -28,11 +27,8 @@ namespace commercetools.Sdk.HttpApi.MvcExample
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.UseSerialization();
-            services.UseHttpApiWithClientCredentials(this.configuration, "Client");
-
+            services.UseCommercetools(this.configuration, "Client");
             services.AddMvc();
-            ServiceLocator.SetLocatorProvider(services.BuildServiceProvider());
         }
     }
 }

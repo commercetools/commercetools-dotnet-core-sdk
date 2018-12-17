@@ -1,5 +1,5 @@
-﻿using commercetools.Sdk.Util;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Domain.Validation.Attributes
 {

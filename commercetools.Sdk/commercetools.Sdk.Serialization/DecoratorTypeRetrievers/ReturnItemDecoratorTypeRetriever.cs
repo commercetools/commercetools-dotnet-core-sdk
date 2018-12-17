@@ -1,6 +1,5 @@
-﻿using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.Orders;
-using commercetools.Sdk.Util;
+﻿using commercetools.Sdk.Domain.Orders;
+using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Serialization
 {

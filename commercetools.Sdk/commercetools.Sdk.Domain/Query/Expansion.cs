@@ -1,8 +1,8 @@
-﻿namespace commercetools.Sdk.Domain
+﻿namespace commercetools.Sdk.Domain.Query
 {
+    using commercetools.Sdk.Registration;
     using commercetools.Sdk.Domain.ShoppingLists;
     using commercetools.Sdk.Linq;
-    using commercetools.Sdk.Util;
     using System;
     using System.Collections.Generic;
     using System.Linq;

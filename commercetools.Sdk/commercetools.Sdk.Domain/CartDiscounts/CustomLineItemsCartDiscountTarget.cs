@@ -1,6 +1,6 @@
-﻿using commercetools.Sdk.Util;
-using System;
+﻿using System;
 using System.Linq.Expressions;
+using commercetools.Sdk.Registration;
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Linq.Discount;
 

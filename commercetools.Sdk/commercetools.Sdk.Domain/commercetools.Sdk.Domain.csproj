@@ -10,6 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\commercetools.Sdk.Linq\commercetools.Sdk.Linq.csproj" />
-    <ProjectReference Include="..\commercetools.Sdk.Reflection\commercetools.Sdk.Util.csproj" />
+    <ProjectReference Include="..\commercetools.Sdk.Reflection\commercetools.Sdk.Registration.csproj" />
   </ItemGroup>
 </Project>

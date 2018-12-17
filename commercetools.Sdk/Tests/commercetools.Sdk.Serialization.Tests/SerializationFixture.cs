@@ -1,5 +1,5 @@
-﻿using commercetools.Sdk.Domain;
-using commercetools.Sdk.Util;
+﻿using commercetools.Sdk.Registration;
+using commercetools.Sdk.Domain;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace commercetools.Sdk.Serialization.Tests
@@ -9,7 +9,7 @@ namespace commercetools.Sdk.Serialization.Tests
         public SerializationFixture()
         {
             var services = new ServiceCollection();
-            services.UseUtil();
+            services.UseRegistration();
             services.UseDomain();
             services.UseSerialization();
             var serviceProvider = services.BuildServiceProvider();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Linq.Discount;
-using commercetools.Sdk.Util;
+using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Domain.ShippingMethods
 {
