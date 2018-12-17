@@ -6,7 +6,6 @@ using System.Linq.Expressions;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.Linq.Discount;
-using commercetools.Sdk.Linq.Filter;
 using Xunit;
 
 namespace commercetools.Sdk.Linq.Tests
