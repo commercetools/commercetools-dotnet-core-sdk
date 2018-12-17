@@ -1,5 +1,6 @@
-﻿using System.Linq.Expressions;
-using commercetools.Sdk.Linq.Filter.Visitors;
+﻿using System;
+using System.Linq.Expressions;
+using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Filter.Converters
 {
@@ -11,8 +12,10 @@ namespace commercetools.Sdk.Linq.Filter.Converters
         {
             if (expression is MethodCallExpression methodCallExpression)
             {
-                return methodCallExpression.Method.Name == "Any" || methodCallExpression.Method.Name == "Where" ||
-                       methodCallExpression.Method.Name == "Select";
+                if (methodCallExpression.Method.Name.StartsWith(Mapping.CastMethodStart, StringComparison.InvariantCulture) || methodCallExpression.Method.Name == "FirstOrDefault")
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -21,14 +24,19 @@ namespace commercetools.Sdk.Linq.Filter.Converters
         public IPredicateVisitor Convert(Expression expression, IPredicateVisitorFactory predicateVisitorFactory)
         {
             MethodCallExpression methodCallExpression = expression as MethodCallExpression;
-            if (methodCallExpression == null)
+
+            if (methodCallExpression?.Object != null)
             {
-                return null;
+                return predicateVisitorFactory.Create(methodCallExpression.Object);
             }
 
-            IPredicateVisitor current = predicateVisitorFactory.Create(methodCallExpression.Arguments[1]);
-            IPredicateVisitor parent = predicateVisitorFactory.Create(methodCallExpression.Arguments[0]);
-            return new Visitors.AccessorPredicateVisitor(current, parent);
+            if (methodCallExpression?.Arguments[0] != null)
+            {
+                return predicateVisitorFactory.Create(methodCallExpression?.Arguments[0]);
+            }
+
+            return null;
+
         }
     }
 }

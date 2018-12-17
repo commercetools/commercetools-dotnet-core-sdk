@@ -101,7 +101,8 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
             Category category = this.categoryFixture.CreateCategory();
             this.categoryFixture.CategoriesToDelete.Add(category);
-            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Key == category.Key);
+            string key = category.Key;
+            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Key == key);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
             queryCommand.SetWhere(queryPredicate);
             PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
@@ -114,7 +115,8 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
             Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent());
             this.categoryFixture.CategoriesToDelete.Add(category);
-            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Key == category.Key);
+            string key = category.Key;
+            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Key == key);
             List<Expansion<Category>> expansions = new List<Expansion<Category>>();
             ReferenceExpansion<Category> expand = new ReferenceExpansion<Category>(c => c.Parent);
             expansions.Add(expand);
@@ -136,7 +138,9 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent(parentCategory));
                 this.categoryFixture.CategoriesToDelete.Add(category);
             }
-            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == parentCategory.Id);
+
+            string id = parentCategory.Id;
+            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == id);
             List<Sort<Category>> sortPredicates = new List<Sort<Category>>();
             Sort<Category> sort = new Sort<Category>(c => c.Name["en"]);
             sortPredicates.Add(sort);
@@ -159,7 +163,9 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent(parentCategory));
                 this.categoryFixture.CategoriesToDelete.Add(category);
             }
-            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == parentCategory.Id);
+
+            string id = parentCategory.Id;
+            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == id);
             List<Sort<Category>> sortPredicates = new List<Sort<Category>>();
             Sort<Category> sort = new Sort<Category>(c => c.Name["en"], SortDirection.Descending);
             sortPredicates.Add(sort);
@@ -182,7 +188,9 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent(parentCategory));
                 this.categoryFixture.CategoriesToDelete.Add(category);
             }
-            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == parentCategory.Id);
+
+            string id = parentCategory.Id;
+            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == id);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
             queryCommand.SetWhere(queryPredicate);
             queryCommand.Limit = 2; 
@@ -202,7 +210,9 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent(parentCategory));
                 this.categoryFixture.CategoriesToDelete.Add(category);
             }
-            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == parentCategory.Id);
+
+            string id = parentCategory.Id;
+            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == id);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
             queryCommand.SetWhere(queryPredicate);
             queryCommand.Offset = 2;
