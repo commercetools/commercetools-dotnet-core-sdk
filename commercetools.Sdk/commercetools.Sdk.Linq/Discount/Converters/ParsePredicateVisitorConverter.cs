@@ -28,13 +28,7 @@ namespace commercetools.Sdk.Linq.Discount.Converters
                 return null;
             }
 
-            Expression argument = methodCallExpression.Arguments[0];
-            if (argument != null && argument.NodeType == ExpressionType.Constant)
-            {
-                return new ConstantPredicateVisitor($"\"{((ConstantExpression)argument).Value}\"");
-            }
-
-            return null;
+            return predicateVisitorFactory.Create(methodCallExpression.Arguments[0]);
         }
 
         private static bool IsMatchingMethodName(MethodCallExpression methodCallExpression)

@@ -30,6 +30,17 @@ namespace commercetools.Sdk.Linq.Tests
         }
 
         [Fact]
+        public void LineItemCountByProductIdGreaterThanTenVar()
+        {
+            string id = "45224437-12bd-4742-830c-3a36b52541d3";
+            int count = 10;
+            Expression<Func<Cart, bool>> expression = c => c.LineItemCount(l => l.ProductId == id) > count;
+            IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("lineItemCount(product.id = \"45224437-12bd-4742-830c-3a36b52541d3\") > 10", result);
+        }
+
+        [Fact]
         public void LineItemCountTrueGreaterThanTen()
         {
             Expression<Func<Cart, bool>> expression = c => c.LineItemCount(true) > 10;
@@ -96,6 +107,16 @@ namespace commercetools.Sdk.Linq.Tests
         public void CartPredicateTotalPrice()
         {
             Expression<Func<Cart, bool>> expression = c => c.TotalPrice == Money.Parse("10 USD");
+            IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("totalPrice = \"10 USD\"", result);
+        }
+
+        [Fact]
+        public void CartPredicateTotalPriceVar()
+        {
+            string money = "10 USD";
+            Expression<Func<Cart, bool>> expression = c => c.TotalPrice == Money.Parse(money);
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("totalPrice = \"10 USD\"", result);
@@ -199,7 +220,25 @@ namespace commercetools.Sdk.Linq.Tests
         public void LineItemPredicateMoneyAttribute()
         {
             Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "money" && ((MoneyAttribute)a).Value >= Money.Parse("18.00 EUR"));
-            // TODO Create converters for attributes
+            IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("attributes.money >= \"18.00 EUR\"", result);
+        }
+
+        [Fact]
+        public void LineItemPredicateMoneyAttributeVar()
+        {
+            string money = "money";
+            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == money && ((MoneyAttribute)a).Value >= Money.Parse("18.00 EUR"));
+            IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("attributes.money >= \"18.00 EUR\"", result);
+        }
+
+        [Fact]
+        public void LineItemPredicateMoneyAttributeCast()
+        {
+            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "money" && a.ToMoneyAttribute().Value >= Money.Parse("18.00 EUR"));
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes.money >= \"18.00 EUR\"", result);
@@ -357,6 +396,16 @@ namespace commercetools.Sdk.Linq.Tests
         public void CustomLineItemPredicateCustomField()
         {
             Expression<Func<CustomLineItem, bool>> expression = c => c.Custom.Fields["brand"].ToString() == "adidas";
+            IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("custom.brand = \"adidas\"", result);
+        }
+
+        [Fact]
+        public void CustomLineItemPredicateCustomFieldVar()
+        {
+            string brand = "brand";
+            Expression<Func<CustomLineItem, bool>> expression = c => c.Custom.Fields[brand].ToString() == "adidas";
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("custom.brand = \"adidas\"", result);

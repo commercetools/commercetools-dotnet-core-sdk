@@ -18,5 +18,10 @@
         {
             return this as TextAttribute;
         }
+
+        public MoneyAttribute ToMoneyAttribute()
+        {
+            return this as MoneyAttribute;
+        }
     }
 }

@@ -31,17 +31,26 @@ namespace commercetools.Sdk.Linq.Discount.Converters
         {
             if (expression is MethodCallExpression methodCallExpression)
             {
-                var key = methodCallExpression.Arguments[0].ToString().Replace("\"", string.Empty);
-
                 if (methodCallExpression.Object is MemberExpression memberExpression)
                 {
                     AccessorPredicateVisitor parentAccessor = predicateVisitorFactory.Create(memberExpression.Expression) as AccessorPredicateVisitor;
-                    ConstantPredicateVisitor constantPredicateVisitor = new ConstantPredicateVisitor(key);
-                    return new AccessorPredicateVisitor(constantPredicateVisitor, parentAccessor);
+                    IPredicateVisitor constantPredicateVisitor = predicateVisitorFactory.Create(methodCallExpression.Arguments[0]);
+                    return new AccessorPredicateVisitor(RemoveQuotes(constantPredicateVisitor), parentAccessor);
                 }
             }
 
             return null;
+        }
+
+        private static IPredicateVisitor RemoveQuotes(IPredicateVisitor inner)
+        {
+            if (inner is ConstantPredicateVisitor constantVisitor)
+            {
+                ConstantPredicateVisitor constantWithoutQuotes = new ConstantPredicateVisitor(constantVisitor.Constant.RemoveQuotes());
+                return constantWithoutQuotes;
+            }
+
+            return inner;
         }
     }
 }

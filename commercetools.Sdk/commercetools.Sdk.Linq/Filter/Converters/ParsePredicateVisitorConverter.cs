@@ -4,7 +4,7 @@ using commercetools.Sdk.Linq.Filter;
 
 namespace commercetools.Sdk.Linq.Filter.Converters
 {
-    public class ParsePredicateCoParsePredicateVisitorConverternverter : IFilterPredicateVisitorConverter
+    public class ParsePredicateVisitorConverter : IFilterPredicateVisitorConverter
     {
         public int Priority => 3;
 
@@ -21,11 +21,6 @@ namespace commercetools.Sdk.Linq.Filter.Converters
             return false;
         }
 
-        private static bool IsMatchingMethodName(MethodCallExpression methodCallExpression)
-        {
-            return Mapping.ParseMethods.Contains(methodCallExpression.Method.Name);
-        }
-
         public IPredicateVisitor Convert(Expression expression, IPredicateVisitorFactory predicateVisitorFactory)
         {
             MethodCallExpression methodCallExpression = expression as MethodCallExpression;
@@ -35,6 +30,11 @@ namespace commercetools.Sdk.Linq.Filter.Converters
             }
 
             return predicateVisitorFactory.Create(methodCallExpression.Arguments[0]);
+        }
+
+        private static bool IsMatchingMethodName(MethodCallExpression methodCallExpression)
+        {
+            return Mapping.ParseMethods.Contains(methodCallExpression.Method.Name);
         }
     }
 }

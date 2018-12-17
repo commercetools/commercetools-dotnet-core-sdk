@@ -36,10 +36,9 @@ namespace commercetools.Sdk.Linq.Discount.Converters
                 if (attributeExpression.NodeType == ExpressionType.And || attributeExpression.NodeType == ExpressionType.AndAlso)
                 {
                     IPredicateVisitor attributeValuePredicateVisitor = predicateVisitorFactory.Create(((BinaryExpression)attributeExpression).Right);
-                    string attributeName = GetAttributeName(((BinaryExpression)attributeExpression).Left);
+                    IPredicateVisitor attributeName = GetAttributeName(((BinaryExpression)attributeExpression).Left, predicateVisitorFactory);
                     AccessorPredicateVisitor parentAccessor = predicateVisitorFactory.Create(methodCallExpression.Arguments[0]) as AccessorPredicateVisitor;
-                    ConstantPredicateVisitor constantPredicateVisitor = new ConstantPredicateVisitor(attributeName);
-                    AccessorPredicateVisitor accessor = new AccessorPredicateVisitor(constantPredicateVisitor, parentAccessor);
+                    AccessorPredicateVisitor accessor = new AccessorPredicateVisitor(attributeName, parentAccessor);
                     if (attributeValuePredicateVisitor is IAccessorAppendable accessorAppendablePredicate)
                     {
                         accessorAppendablePredicate.AppendAccessor(accessor);
@@ -52,16 +51,28 @@ namespace commercetools.Sdk.Linq.Discount.Converters
             throw new NotSupportedException();
         }
 
-        private static string GetAttributeName(Expression expression)
+        private static IPredicateVisitor GetAttributeName(Expression expression, IPredicateVisitorFactory predicateVisitorFactory)
         {
             if (expression is BinaryExpression nameExpression)
             {
                 if (nameExpression.Left is MemberExpression memberExpression && memberExpression.Member.Name == "Name")
                 {
-                    return nameExpression.Right.ToString().Replace("\"", "");
+                    return RemoveQuotes(predicateVisitorFactory.Create(nameExpression.Right));
                 }
             }
-            throw new NotSupportedException();
+
+            return null;
+        }
+
+        private static IPredicateVisitor RemoveQuotes(IPredicateVisitor inner)
+        {
+            if (inner is ConstantPredicateVisitor constantVisitor)
+            {
+                ConstantPredicateVisitor constantWithoutQuotes = new ConstantPredicateVisitor(constantVisitor.Constant.RemoveQuotes());
+                return constantWithoutQuotes;
+            }
+
+            return inner;
         }
 
         private static bool IsMethodNameAllowed(MethodCallExpression expression)

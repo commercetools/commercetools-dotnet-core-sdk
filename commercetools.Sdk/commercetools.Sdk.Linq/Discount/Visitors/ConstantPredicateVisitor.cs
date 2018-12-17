@@ -2,16 +2,16 @@
 {
     public class ConstantPredicateVisitor : IPredicateVisitor
     {
-        private readonly string constant;
-
         public ConstantPredicateVisitor(string constant)
         {
-            this.constant = constant;
+            this.Constant = constant;
         }
+
+        public string Constant { get; }
 
         public string Render()
         {
-            return this.constant.ToCamelCase();
+            return this.Constant.ToCamelCase();
         }
     }
 }
