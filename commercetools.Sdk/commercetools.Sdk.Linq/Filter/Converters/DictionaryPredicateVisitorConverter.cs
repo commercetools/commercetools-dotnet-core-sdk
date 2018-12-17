@@ -23,7 +23,7 @@ namespace commercetools.Sdk.Linq.Filter.Converters
             IPredicateVisitor inner = predicateVisitorFactory.Create(methodCallExpression.Arguments[0]);
             IPredicateVisitor innerWithoutQuotes = RemoveQuotes(inner);
             IPredicateVisitor parent = predicateVisitorFactory.Create(methodCallExpression.Object);
-            return new AccessorPredicateVisitor(innerWithoutQuotes, parent);
+            return new Visitors.AccessorPredicateVisitor(innerWithoutQuotes, parent);
         }
 
         private static IPredicateVisitor RemoveQuotes(IPredicateVisitor inner)

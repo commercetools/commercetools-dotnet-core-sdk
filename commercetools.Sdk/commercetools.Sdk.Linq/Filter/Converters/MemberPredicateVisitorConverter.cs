@@ -28,7 +28,7 @@ namespace commercetools.Sdk.Linq.Filter.Converters
 
             ConstantPredicateVisitor constant = new ConstantPredicateVisitor(currentName);
             IPredicateVisitor parent = predicateVisitorFactory.Create(memberExpression.Expression);
-            return new AccessorPredicateVisitor(constant, parent);
+            return new Visitors.AccessorPredicateVisitor(constant, parent);
         }
     }
 }

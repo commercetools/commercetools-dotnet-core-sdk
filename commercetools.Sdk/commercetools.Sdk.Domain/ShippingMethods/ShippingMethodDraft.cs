@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using commercetools.Sdk.Domain.Carts;
-using commercetools.Sdk.Linq;
+using commercetools.Sdk.Linq.Discount;
 using commercetools.Sdk.Util;
 
 namespace commercetools.Sdk.Domain.ShippingMethods
@@ -19,7 +19,7 @@ namespace commercetools.Sdk.Domain.ShippingMethods
 
         public void SetCartPredicate(Expression<Func<Cart, bool>> expression)
         {
-            this.Predicate = ServiceLocator.Current.GetService<ICartPredicateExpressionVisitor>().Render(expression);
+            this.Predicate = ServiceLocator.Current.GetService<IDiscountPredicateExpressionVisitor>().Render(expression);
         }
     }
 }

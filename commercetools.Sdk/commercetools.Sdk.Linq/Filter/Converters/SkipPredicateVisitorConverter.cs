@@ -28,7 +28,7 @@ namespace commercetools.Sdk.Linq.Filter.Converters
 
             IPredicateVisitor current = predicateVisitorFactory.Create(methodCallExpression.Arguments[1]);
             IPredicateVisitor parent = predicateVisitorFactory.Create(methodCallExpression.Arguments[0]);
-            return new AccessorPredicateVisitor(current, parent);
+            return new Visitors.AccessorPredicateVisitor(current, parent);
         }
     }
 }

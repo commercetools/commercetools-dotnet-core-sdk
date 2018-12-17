@@ -45,7 +45,7 @@ namespace commercetools.Sdk.Linq.Filter.Converters
 
             CollectionPredicateVisitor collection = new CollectionPredicateVisitor(parameters);
             EqualPredicateVisitor equal = new EqualPredicateVisitor(method, collection);
-            AccessorPredicateVisitor accessor = new AccessorPredicateVisitor(equal, parent);
+            Visitors.AccessorPredicateVisitor accessor = new Visitors.AccessorPredicateVisitor(equal, parent);
             return accessor;
         }
     }

@@ -1,10 +1,9 @@
-﻿using commercetools.Sdk.Linq;
+﻿using commercetools.Sdk.Linq.Discount;
 using commercetools.Sdk.Util;
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.ProductDiscounts
 {
     public class ProductDiscountDraft
     {
@@ -20,7 +19,7 @@ namespace commercetools.Sdk.Domain
 
         public void SetPredicate(Expression<Func<ProductDiscount, bool>> expression)
         {
-            this.Predicate = ServiceLocator.Current.GetService<ICartPredicateExpressionVisitor>().Render(expression);
+            this.Predicate = ServiceLocator.Current.GetService<IDiscountPredicateExpressionVisitor>().Render(expression);
         }
     }
 }

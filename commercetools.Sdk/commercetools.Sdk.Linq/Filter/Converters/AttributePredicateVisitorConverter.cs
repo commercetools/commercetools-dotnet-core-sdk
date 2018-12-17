@@ -29,7 +29,7 @@ namespace commercetools.Sdk.Linq.Filter.Converters
 
             IPredicateVisitor attributeName = GetName(binaryExpression.Left, predicateVisitorFactory);
             IPredicateVisitor attributeValue = GetValue(binaryExpression.Right, predicateVisitorFactory);
-            return new AccessorPredicateVisitor(attributeValue, attributeName);
+            return new Visitors.AccessorPredicateVisitor(attributeValue, attributeName);
         }
 
         private static IPredicateVisitor GetName(Expression expression, IPredicateVisitorFactory predicateVisitorFactory)

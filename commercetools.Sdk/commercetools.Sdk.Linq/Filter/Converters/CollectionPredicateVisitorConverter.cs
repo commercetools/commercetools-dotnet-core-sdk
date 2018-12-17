@@ -46,7 +46,7 @@ namespace commercetools.Sdk.Linq.Filter.Converters
             IPredicateVisitor leftProperty = equalLeft?.Left;
             IPredicateVisitor rightProperty = equalRight?.Left;
 
-            while (leftProperty is AccessorPredicateVisitor accessorLeft && rightProperty is AccessorPredicateVisitor accessorRight)
+            while (leftProperty is Visitors.AccessorPredicateVisitor accessorLeft && rightProperty is Visitors.AccessorPredicateVisitor accessorRight)
             {
                 result = ArePropertiesEqual(accessorLeft, accessorRight);
                 leftProperty = accessorLeft.Parent;
@@ -56,7 +56,7 @@ namespace commercetools.Sdk.Linq.Filter.Converters
             return result;
         }
 
-        private static bool ArePropertiesEqual(AccessorPredicateVisitor left, AccessorPredicateVisitor right)
+        private static bool ArePropertiesEqual(Visitors.AccessorPredicateVisitor left, Visitors.AccessorPredicateVisitor right)
         {
             ConstantPredicateVisitor constantLeft = left.Current as ConstantPredicateVisitor;
             ConstantPredicateVisitor constantRight = right.Current as ConstantPredicateVisitor;
@@ -72,8 +72,8 @@ namespace commercetools.Sdk.Linq.Filter.Converters
         {
             EqualPredicateVisitor equalLeft = left as EqualPredicateVisitor;
             EqualPredicateVisitor equalRight = right as EqualPredicateVisitor;
-            AccessorPredicateVisitor accessorLeft = equalLeft?.Left as AccessorPredicateVisitor;
-            AccessorPredicateVisitor accessorRight = equalRight?.Left as AccessorPredicateVisitor;
+            Visitors.AccessorPredicateVisitor accessorLeft = equalLeft?.Left as Visitors.AccessorPredicateVisitor;
+            Visitors.AccessorPredicateVisitor accessorRight = equalRight?.Left as Visitors.AccessorPredicateVisitor;
             IPredicateVisitor collection;
             if (equalLeft?.Right is RangeCollectionPredicateVisitor rangeLeft &&
                 equalRight?.Right is RangeCollectionPredicateVisitor rangeRight)
