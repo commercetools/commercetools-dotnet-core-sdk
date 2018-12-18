@@ -7,6 +7,7 @@ using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
+    [Collection("Integration Tests")]
     public class TypeIntegrationTests : IClassFixture<TypeFixture>
     {
         private readonly TypeFixture typeFixture;

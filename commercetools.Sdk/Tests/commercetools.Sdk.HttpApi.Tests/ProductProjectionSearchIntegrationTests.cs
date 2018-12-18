@@ -18,32 +18,19 @@ namespace commercetools.Sdk.HttpApi.Tests
             this.productFixture = productFixture;
         }
 
-        [Fact]
+        [Fact(Skip = "Depends on the indexed products which might not be there.")]
         public void GetProductProjectionsFilterByCentAmountRange()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
-            Category category = this.productFixture.CategoryFixture.CreateCategory();
-            this.productFixture.CategoryFixture.CategoriesToDelete.Add(category);
-            for (int i = 0; i < 3; i++)
-            {
-                Product product = this.productFixture.CreateProduct(category);
-                this.productFixture.ProductsToDelete.Add(product);
-            }
-
-            string id = category.Id;
-            Filter<ProductProjection> filter = new Filter<ProductProjection>(p => p.Categories.Any(c => c.Id == id));
-            
+            Filter<ProductProjection> centAmountFilter = new Filter<ProductProjection>(p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 3000)));      
             ProductProjectionSearchParameters searchParameters = new ProductProjectionSearchParameters();
-            searchParameters.SetFilter(new List<Filter<ProductProjection>>() { filter });
-            ProductProjectionAdditionalParameters additionalParameters = new ProductProjectionAdditionalParameters();
-            additionalParameters.Staged = true;
-            SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand(searchParameters, additionalParameters);
-            Thread.Sleep(10000);
+            searchParameters.SetFilter(new List<Filter<ProductProjection>>() { centAmountFilter });
+            SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand(searchParameters);
             PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
-            Assert.Equal(3, results.Count);
+            Assert.Equal(19, results.Count);
         }
 
-        [Fact]
+        [Fact(Skip = "Depends on the indexed products which might not be there.")]
         public void GetProductProjectionsFilterQueryByCentAmountRange()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
@@ -55,7 +42,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             Assert.Equal(19, results.Count);
         }
 
-        [Fact]
+        [Fact(Skip = "Depends on the indexed products which might not be there.")]
         public void GetProductProjectionsFilterFacetByCentAmountRange()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
@@ -67,7 +54,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             Assert.Equal(20, results.Count);
         }
 
-        [Fact]
+        [Fact(Skip = "Depends on the indexed products which might not be there.")]
         public void GetProductProjectionsTermFacet()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
@@ -81,7 +68,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             Assert.Equal(18, facetCount);
         }
 
-        [Fact]
+        [Fact(Skip = "Depends on the indexed products which might not be there.")]
         public void GetProductProjectionsTermFacetAlias()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
@@ -95,7 +82,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             Assert.Equal(18, facetCount);
         }
 
-        [Fact]
+        [Fact(Skip = "Depends on the indexed products which might not be there.")]
         public void GetProductProjectionsTermFacetCountingProducts()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();

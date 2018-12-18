@@ -6,6 +6,7 @@ namespace commercetools.Sdk.HttpApi.Tests
     using System.Net.Http;
     using Xunit;
 
+    [Collection("Integration Tests")]
     public class TokenIntegrationTests : IClassFixture<ClientFixture>
     {
         private readonly ClientFixture clientFixture;
@@ -46,7 +47,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             Assert.Equal(clientConfiguration.Scope, token.Scope);
         }
 
-        [Fact]
+        [Fact(Skip = "Depends on the project user which might not be set.")]
         public void GetPasswordToken()
         {
             IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithSmallerScope");
