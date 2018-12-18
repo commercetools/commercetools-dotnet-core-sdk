@@ -6,12 +6,12 @@
     {
         public static void UseSerialization(this IServiceCollection services)
         {
-            services.RegisterAllInterfaceTypes(typeof(ICustomJsonMapper<>), ServiceLifetime.Singleton);
-            services.RegisterAllInterfaceTypes(typeof(IMapperTypeRetriever<>), ServiceLifetime.Singleton);
+            services.RegisterAllTypes(typeof(ICustomJsonMapper<>), ServiceLifetime.Singleton);
+            services.RegisterAllTypes(typeof(IMapperTypeRetriever<>), ServiceLifetime.Singleton);
 
-            services.RegisterAllDerivedTypes<JsonConverterBase>(ServiceLifetime.Singleton);
+            services.RegisterAllTypes<JsonConverterBase>(ServiceLifetime.Singleton);
 
-            services.RegisterAllInterfaceTypes(typeof(IDecoratorTypeRetriever<>), ServiceLifetime.Singleton);
+            services.RegisterAllTypes(typeof(IDecoratorTypeRetriever<>), ServiceLifetime.Singleton);
 
             services.AddSingleton<DeserializationContractResolver>();
             services.AddSingleton<SerializationContractResolver>();

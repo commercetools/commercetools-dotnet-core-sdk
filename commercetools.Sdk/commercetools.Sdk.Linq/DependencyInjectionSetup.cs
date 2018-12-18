@@ -9,15 +9,15 @@ namespace commercetools.Sdk.Linq
     {
         public static void UseLinq(this IServiceCollection services)
         {
-            services.RegisterAllInterfaceTypes<IQueryPredicateVisitorConverter>(ServiceLifetime.Singleton);
+            services.RegisterAllTypes<IQueryPredicateVisitorConverter>(ServiceLifetime.Singleton);
             services.AddSingleton<QueryPredicateVisitorFactory>();
             services.AddSingleton<IQueryPredicateExpressionVisitor, QueryPredicateExpressionVisitor>();
 
-            services.RegisterAllInterfaceTypes<IFilterPredicateVisitorConverter>(ServiceLifetime.Singleton);
+            services.RegisterAllTypes<IFilterPredicateVisitorConverter>(ServiceLifetime.Singleton);
             services.AddSingleton<FilterPredicateVisitorFactory>();
             services.AddSingleton<IFilterPredicateExpressionVisitor, FilterPredicateExpressionVisitor>();
 
-            services.RegisterAllInterfaceTypes<IDiscountPredicateVisitorConverter>(ServiceLifetime.Singleton);
+            services.RegisterAllTypes<IDiscountPredicateVisitorConverter>(ServiceLifetime.Singleton);
             services.AddSingleton<DiscountPredicateVisitorFactory>();
             services.AddSingleton<IDiscountPredicateExpressionVisitor, DiscountPredicateExpressionVisitor>();
 

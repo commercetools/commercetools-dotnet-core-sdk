@@ -5,7 +5,7 @@ namespace commercetools.Sdk.Serialization
 {
     public class FacetResultDecoratorTypeRetriever : DecoratorTypeRetriever<FacetResult>
     {
-        public FacetResultDecoratorTypeRetriever(IRegisteredTypeRetriever registeredTypeRetriever) : base(registeredTypeRetriever)
+        public FacetResultDecoratorTypeRetriever(ITypeRetriever typeRetriever) : base(typeRetriever)
         {
         }
     }

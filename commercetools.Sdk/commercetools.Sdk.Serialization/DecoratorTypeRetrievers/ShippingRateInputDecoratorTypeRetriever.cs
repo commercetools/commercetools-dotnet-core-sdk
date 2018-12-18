@@ -5,7 +5,7 @@ namespace commercetools.Sdk.Serialization
 {
     public class ShippingRateInputDecoratorTypeRetriever : DecoratorTypeRetriever<IShippingRateInput>
     {
-        public ShippingRateInputDecoratorTypeRetriever(IRegisteredTypeRetriever registeredTypeRetriever) : base(registeredTypeRetriever)
+        public ShippingRateInputDecoratorTypeRetriever(ITypeRetriever typeRetriever) : base(typeRetriever)
         {
         }
     }

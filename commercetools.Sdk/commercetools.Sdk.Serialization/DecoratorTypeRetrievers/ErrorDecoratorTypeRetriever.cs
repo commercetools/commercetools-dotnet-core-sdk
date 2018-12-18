@@ -5,7 +5,7 @@ namespace commercetools.Sdk.Serialization
 {
     public class ErrorDecoratorTypeRetriever : DecoratorTypeRetriever<Error>
     {
-        public ErrorDecoratorTypeRetriever(IRegisteredTypeRetriever registeredTypeRetriever) : base(registeredTypeRetriever)
+        public ErrorDecoratorTypeRetriever(ITypeRetriever typeRetriever) : base(typeRetriever)
         {
         }
     }

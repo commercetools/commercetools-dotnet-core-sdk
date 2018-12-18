@@ -11,9 +11,9 @@ namespace commercetools.Sdk.Serialization
     {
         private readonly IEnumerable<Type> derivedTypes;
 
-        public DecoratorTypeRetriever(IRegisteredTypeRetriever registeredTypeRetriever)
+        public DecoratorTypeRetriever(ITypeRetriever typeRetriever)
         {
-            this.derivedTypes = registeredTypeRetriever.GetRegisteredTypes<T>();
+            this.derivedTypes = typeRetriever.GetTypes<T>();
         }
 
         public Type GetTypeForToken(JToken token)

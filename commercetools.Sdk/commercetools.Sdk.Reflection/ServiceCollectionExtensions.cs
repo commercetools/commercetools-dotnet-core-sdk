@@ -5,55 +5,43 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static void RegisterAllDerivedTypes<T>(this IServiceCollection services, ServiceLifetime lifetime)
+        public static void RegisterAllTypes<T>(this IServiceCollection services, ServiceLifetime lifetime)
         {
-            Assembly assembly = Assembly.GetAssembly(typeof(T));
-            services.RegisterAllDerivedTypes<T>(lifetime, assembly);
+            Type type = typeof(T);
+            RegisterAllTypes(services, type, lifetime);
         }
 
-        public static void RegisterAllDerivedTypes<T>(this IServiceCollection services, ServiceLifetime lifetime, Assembly assembly)
+        public static void RegisterAllTypes(this IServiceCollection services, Type type, ServiceLifetime lifetime)
         {
-            Type classType = typeof(T);
-            var typesToRegister = classType.GetAllDerivedClassTypesForClass(assembly);
-            foreach (var type in typesToRegister)
+            Assembly assembly = Assembly.GetAssembly(type);
+            var typesToRegister = type.GetAllRegisteredTypes(assembly);
+            foreach (var implementationType in typesToRegister)
             {
-                services.Add(new ServiceDescriptor(typeof(T), type, lifetime));
-            }
-        }
-
-        public static void RegisterAllInterfaceTypes<T>(this IServiceCollection services, ServiceLifetime lifetime)
-        {
-            Assembly assembly = Assembly.GetAssembly(typeof(T));
-            Type interfaceType = typeof(T);
-            var typesToRegister = interfaceType.GetAllClassTypesForInterface(assembly);
-            foreach (var type in typesToRegister)
-            {
-                services.Add(new ServiceDescriptor(typeof(T), type, lifetime));
-            }
-        }
-
-        public static void RegisterAllInterfaceTypes(this IServiceCollection services, Type interfaceType, ServiceLifetime lifetime)
-        {
-            Assembly assembly = Assembly.GetAssembly(interfaceType);
-            var typesToRegister = interfaceType.GetAllClassTypesForInterface(assembly);
-            foreach (var type in typesToRegister)
-            {
-                services.Add(new ServiceDescriptor(GetGenericInterface(interfaceType, type), type, lifetime));
-            }
-        }
-
-        private static Type GetGenericInterface(Type interfaceType, Type classType)
-        {
-            foreach (Type it in classType.GetInterfaces())
-            {
-                if (it.IsGenericType)
+                Type typeToRegister = type;
+                if (type.IsGenericTypeDefinition)
                 {
-                    if (it.GetGenericTypeDefinition() == interfaceType)
+                    typeToRegister = GetTypeForGenericTypeDefinition(type, implementationType);
+                }
+
+                services.Add(new ServiceDescriptor(typeToRegister, implementationType, lifetime));
+            }
+        }
+
+        // get IDecoratorTypeRetriever<Attribute> for IDecoratorTypeRetriever<>
+        public static Type GetTypeForGenericTypeDefinition(Type genericTypeDefinition, Type implementationType)
+        {
+            // TODO Implement for classes as well
+            foreach (Type type in implementationType.GetInterfaces())
+            {
+                if (type.IsGenericType)
+                {
+                    if (type.GetGenericTypeDefinition() == genericTypeDefinition)
                     {
-                        return it;
+                        return type;
                     }
                 }
             }
+
             return null;
         }
     }

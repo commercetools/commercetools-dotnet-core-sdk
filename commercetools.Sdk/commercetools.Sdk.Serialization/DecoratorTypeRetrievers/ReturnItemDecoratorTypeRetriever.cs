@@ -5,7 +5,7 @@ namespace commercetools.Sdk.Serialization
 {
     public class ReturnItemDecoratorTypeRetriever : DecoratorTypeRetriever<ReturnItem>
     {
-        public ReturnItemDecoratorTypeRetriever(IRegisteredTypeRetriever registeredTypeRetriever) : base(registeredTypeRetriever)
+        public ReturnItemDecoratorTypeRetriever(ITypeRetriever typeRetriever) : base(typeRetriever)
         {
         }
     }

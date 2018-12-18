@@ -5,7 +5,7 @@ namespace commercetools.Sdk.Serialization
 {
     public class AttributeTypeDecoratorTypeRetriever : DecoratorTypeRetriever<AttributeType>
     {
-        public AttributeTypeDecoratorTypeRetriever(IRegisteredTypeRetriever registeredTypeRetriever) : base(registeredTypeRetriever)
+        public AttributeTypeDecoratorTypeRetriever(ITypeRetriever typeRetriever) : base(typeRetriever)
         {
         }
     }

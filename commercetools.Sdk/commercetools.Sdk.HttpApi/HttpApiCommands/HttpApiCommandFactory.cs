@@ -15,9 +15,9 @@ namespace commercetools.Sdk.HttpApi.HttpApiCommands
         private readonly IEnumerable<Type> registeredHttpApiCommandTypes;
         private readonly IRequestMessageBuilderFactory requestMessageBuilderFactory;
 
-        public HttpApiCommandFactory(IRegisteredTypeRetriever registeredTypeRetriever, IRequestMessageBuilderFactory requestMessageBuilderFactory)
+        public HttpApiCommandFactory(ITypeRetriever typeRetriever, IRequestMessageBuilderFactory requestMessageBuilderFactory)
         {
-            this.registeredHttpApiCommandTypes = registeredTypeRetriever.GetRegisteredTypes<IHttpApiCommand>();
+            this.registeredHttpApiCommandTypes = typeRetriever.GetTypes<IHttpApiCommand>();
             this.requestMessageBuilderFactory = requestMessageBuilderFactory;
             this.activators = new Dictionary<Type, ObjectActivator>();
         }

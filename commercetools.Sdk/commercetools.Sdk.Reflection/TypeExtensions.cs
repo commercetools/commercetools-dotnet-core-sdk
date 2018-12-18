@@ -11,7 +11,7 @@ namespace System
             List<Type> classTypes = new List<Type>();
             foreach (Type type in assembly.GetTypes())
             {
-                if (interfaceType.IsGenericType)
+                if (interfaceType.IsGenericTypeDefinition)
                 {
                     if (type.IsClass && !type.IsAbstract && type.GetInterfaces().Where(i => i.IsGenericType).Select(i => i.GetGenericTypeDefinition()).Contains(interfaceType))
                     {
@@ -47,12 +47,51 @@ namespace System
             List<Type> classTypes = new List<Type>();
             foreach (Type type in assembly.GetTypes())
             {
-                if (type != classType && !type.IsAbstract && classType.IsAssignableFrom(type))
+                if (classType.IsGenericTypeDefinition)
                 {
-                    classTypes.Add(type);
+                    if (type != classType && !type.IsAbstract && type.IsGenericType && type.GetGenericTypeDefinition() == classType)
+                    {
+                        classTypes.Add(type);
+                    }
+
+                    if (type.GetParentTypes().Where(t => t.IsGenericType).Select(t => t.GetGenericTypeDefinition()).Contains(classType))
+                    {
+                        classTypes.Add(type);
+                    }
+                }
+                else
+                {
+                    if (type != classType && !type.IsAbstract && classType.IsAssignableFrom(type))
+                    {
+                        classTypes.Add(type);
+                    }
                 }
             }
+
             return classTypes;
+        }
+
+        private static IEnumerable<Type> GetParentTypes(this Type type)
+        {
+            // is there any base type?
+            if (type == null)
+            {
+                yield break;
+            }
+
+            // return all implemented or inherited interfaces
+            foreach (var i in type.GetInterfaces())
+            {
+                yield return i;
+            }
+
+            // return all inherited types
+            var currentBaseType = type.BaseType;
+            while (currentBaseType != null)
+            {
+                yield return currentBaseType;
+                currentBaseType = currentBaseType.BaseType;
+            }
         }
     }
 }

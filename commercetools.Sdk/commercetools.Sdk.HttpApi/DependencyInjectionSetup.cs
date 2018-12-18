@@ -32,10 +32,10 @@ namespace commercetools.Sdk.HttpApi
             services.AddHttpClient("api").AddHttpMessageHandler<AuthorizationHandler>().AddHttpMessageHandler<CorrelationIdHandler>().AddHttpMessageHandler<LoggerHandler>();
 
             services.AddSingleton<IEndpointRetriever, EndpointRetriever>();
-            services.RegisterAllInterfaceTypes<IRequestMessageBuilder>(ServiceLifetime.Singleton);
-            services.RegisterAllInterfaceTypes<IAdditionalParametersBuilder>(ServiceLifetime.Singleton);
-            services.RegisterAllInterfaceTypes<ISearchParametersBuilder>(ServiceLifetime.Singleton);
-            services.RegisterAllInterfaceTypes<IUploadImageParametersBuilder>(ServiceLifetime.Singleton);
+            services.RegisterAllTypes<IRequestMessageBuilder>(ServiceLifetime.Singleton);
+            services.RegisterAllTypes<IAdditionalParametersBuilder>(ServiceLifetime.Singleton);
+            services.RegisterAllTypes<ISearchParametersBuilder>(ServiceLifetime.Singleton);
+            services.RegisterAllTypes<IUploadImageParametersBuilder>(ServiceLifetime.Singleton);
 
             services.AddSingleton<IParametersBuilderFactory<IAdditionalParametersBuilder>, ParametersBuilderFactory<IAdditionalParametersBuilder>>();
             services.AddSingleton<IParametersBuilderFactory<ISearchParametersBuilder>, ParametersBuilderFactory<ISearchParametersBuilder>>();

@@ -5,7 +5,7 @@ namespace commercetools.Sdk.Serialization
 {
     public class SuggestTokenizerDecoratorTypeRetriever : DecoratorTypeRetriever<SuggestTokenizer>
     {
-        public SuggestTokenizerDecoratorTypeRetriever(IRegisteredTypeRetriever registeredTypeRetriever) : base(registeredTypeRetriever)
+        public SuggestTokenizerDecoratorTypeRetriever(ITypeRetriever typeRetriever) : base(typeRetriever)
         {
         }
     }

@@ -5,7 +5,7 @@ namespace commercetools.Sdk.Serialization
 {
     public class ShippingRatePriceTierDecoratorTypeRetriever : DecoratorTypeRetriever<ShippingRatePriceTier>
     {
-        public ShippingRatePriceTierDecoratorTypeRetriever(IRegisteredTypeRetriever registeredTypeRetriever) : base(registeredTypeRetriever)
+        public ShippingRatePriceTierDecoratorTypeRetriever(ITypeRetriever typeRetriever) : base(typeRetriever)
         {
         }
     }
