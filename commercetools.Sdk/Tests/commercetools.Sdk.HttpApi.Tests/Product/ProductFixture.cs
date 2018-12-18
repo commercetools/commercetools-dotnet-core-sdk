@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Products;
 using commercetools.Sdk.Domain.Products.Attributes;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 
@@ -10,32 +11,40 @@ namespace commercetools.Sdk.HttpApi.Tests
     public class ProductFixture : ClientFixture, IDisposable
     {
         private readonly ProductTypeFixture productTypeFixture;
-        private readonly CategoryFixture categoryFixture;
-        public List<Product> ProductsToDelete { get; private set; }
+        public CategoryFixture CategoryFixture { get; }
+        public List<Product> ProductsToDelete { get; }
 
         public ProductFixture()
         {
             this.ProductsToDelete = new List<Product>();
             this.productTypeFixture = new ProductTypeFixture();
-            this.categoryFixture = new CategoryFixture();
+            this.CategoryFixture = new CategoryFixture();
         }
 
         public void Dispose()
         {            
             IClient commerceToolsClient = this.GetService<IClient>();
             this.ProductsToDelete.Reverse();
-            foreach (Product type in this.ProductsToDelete)
+            foreach (Product product in this.ProductsToDelete)
             {
-                Product deletedType = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<Product>(new Guid(type.Id), type.Version)).Result;
+                Product deletedType = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<Product>(new Guid(product.Id), product.Version)).Result;
             }
             this.productTypeFixture.Dispose();
-            this.categoryFixture.Dispose();
+            this.CategoryFixture.Dispose();
         }
 
-        public ProductDraft GetProductDraft()
+        private Product Unpublish(Product product)
         {
-            Category category = this.categoryFixture.CreateCategory();
-            this.categoryFixture.CategoriesToDelete.Add(category);
+            IClient commerceToolsClient = this.GetService<IClient>();
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+            UnpublishUpdateAction unpublish = new UnpublishUpdateAction();
+            updateActions.Add(unpublish);
+            Product retrievedProduct = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions)).Result;
+            return retrievedProduct;
+        }
+
+        public ProductDraft GetProductDraft(Category category)
+        {
             ProductType productType = this.productTypeFixture.CreateProductType();
             this.productTypeFixture.ProductTypesToDelete.Add(productType);
             ProductDraft productDraft = new ProductDraft();
@@ -62,12 +71,30 @@ namespace commercetools.Sdk.HttpApi.Tests
             setAttribute.Value = stringSet;
             setAttribute.Name = "set-text-attribute-name";
             attributes.Add(setAttribute);
+            productDraft.Categories = new List<ResourceIdentifier>
+            {
+                new ResourceIdentifier() { Id = category.Id }
+            };
             return productDraft;
         }
 
         public Product CreateProduct()
         {
-            return this.CreateProduct(this.GetProductDraft());
+            Category category = this.CategoryFixture.CreateCategory();
+            this.CategoryFixture.CategoriesToDelete.Add(category);
+            return this.CreateProduct(this.GetProductDraft(category));
+        }
+
+        public ProductDraft GetProductDraft()
+        {
+            Category category = this.CategoryFixture.CreateCategory();
+            this.CategoryFixture.CategoriesToDelete.Add(category);
+            return this.GetProductDraft(category);
+        }
+
+        public Product CreateProduct(Category category)
+        {
+            return this.CreateProduct(this.GetProductDraft(category));
         }
 
         public Product CreateProduct(ProductDraft productDraft)

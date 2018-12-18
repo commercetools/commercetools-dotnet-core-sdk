@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    public interface IAdditionalParameters<T> : IParameters
+    public interface IAdditionalParameters : IParameters
     {
     }
 }

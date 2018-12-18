@@ -17,6 +17,18 @@ namespace commercetools.Sdk.Client
             this.Init(key);
         }
 
+        public GetByKeyCommand(string key, List<Expansion<T>> expand, IAdditionalParameters<T> additionalParameters)
+            : base(expand, additionalParameters)
+        {
+            this.Init(key);
+        }
+
+        public GetByKeyCommand(string key, IAdditionalParameters<T> additionalParameters)
+            : base(additionalParameters)
+        {
+            this.Init(key);
+        }
+
         private void Init(string key)
         {
             this.ParameterKey = Parameters.Key;

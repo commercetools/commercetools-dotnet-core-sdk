@@ -1,13 +1,19 @@
-﻿namespace commercetools.Sdk.Client
-{
-    using Domain.Carts;
+﻿using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Carts;
 
-    // TODO Implement request builder
+namespace commercetools.Sdk.Client
+{
     public class ReplicateCommand<T> : Command<Cart>
     {
         public ReplicateCommand(ReplicaCartDraft replica)
         {
             this.Replica = replica;
+        }
+
+        public ReplicateCommand(ReplicaCartDraft replica, IAdditionalParameters<Cart> additionalParameters)
+        {
+            this.Replica = replica;
+            this.AdditionalParameters = additionalParameters;
         }
 
         public ReplicaCartDraft Replica { get; }

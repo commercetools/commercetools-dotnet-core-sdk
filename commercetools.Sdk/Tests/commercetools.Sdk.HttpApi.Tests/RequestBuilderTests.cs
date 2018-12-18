@@ -37,7 +37,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void SearchHttpApiCommand()
         {
-            SearchProductProjectionsCommand searchCommand = new SearchProductProjectionsCommand();
+            SearchProductProjectionsCommand searchCommand = new SearchProductProjectionsCommand(new ProductProjectionSearchParameters());
             IHttpApiCommandFactory httpApiCommandFactory = this.clientFixture.GetService<IHttpApiCommandFactory>();
             IHttpApiCommand httpApiCommand = httpApiCommandFactory.Create(searchCommand);
             Assert.Equal(typeof(SearchHttpApiCommand<ProductProjection>), httpApiCommand.GetType());

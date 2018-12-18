@@ -9,6 +9,12 @@ namespace commercetools.Sdk.Client
             this.Parameters = parameters;
         }
 
+        protected GetMatchingCommand(IGetMatchingParameters<T> parameters, IAdditionalParameters<T> additionalParameters)
+        {
+            this.Parameters = parameters;
+            this.AdditionalParameters = additionalParameters;
+        }
+
         public IGetMatchingParameters<T> Parameters { get; }
 
         public override System.Type ResourceType => typeof(T);

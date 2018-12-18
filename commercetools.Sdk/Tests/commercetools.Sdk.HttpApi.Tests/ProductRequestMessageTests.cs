@@ -20,14 +20,13 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void ProductGetByIdRequestMessageWithPriceCurrency()
         {
-            GetByIdCommand<Product> command = new GetByIdCommand<Product>(new Guid("2bafc816-4223-4ff0-ac8a-0f08a8f29fd6"));
+            ProductAdditionalParameters productAdditionalParameters = new ProductAdditionalParameters();
+            productAdditionalParameters.PriceCurrency = "EUR";
+            GetByIdCommand<Product> command = new GetByIdCommand<Product>(new Guid("2bafc816-4223-4ff0-ac8a-0f08a8f29fd6"), productAdditionalParameters);
             GetRequestMessageBuilder requestMessageBuilder = new GetRequestMessageBuilder(
                 this.clientFixture.GetService<IClientConfiguration>(),
                 this.clientFixture.GetService<IEndpointRetriever>(),
                 this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
-            ProductAdditionalParameters productAdditionalParameters = new ProductAdditionalParameters();
-            productAdditionalParameters.PriceCurrency = "EUR";
-            command.AdditionalParameters = productAdditionalParameters;
             HttpRequestMessage httpRequestMessage = requestMessageBuilder.GetRequestMessage(command);
             Assert.Equal(HttpMethod.Get, httpRequestMessage.Method);
             Assert.Equal("https://api.sphere.io/portablevendor/products/2bafc816-4223-4ff0-ac8a-0f08a8f29fd6?priceCurrency=EUR", httpRequestMessage.RequestUri.ToString());

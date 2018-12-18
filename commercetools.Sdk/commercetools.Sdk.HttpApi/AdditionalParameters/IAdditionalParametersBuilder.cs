@@ -6,6 +6,6 @@ namespace commercetools.Sdk.HttpApi.AdditionalParameters
 {
     public interface IAdditionalParametersBuilder : IParametersBuilder
     {
-        List<KeyValuePair<string, string>> GetAdditionalParameters<T>(IAdditionalParameters<T> additionalParameters);
+        List<KeyValuePair<string, string>> GetAdditionalParameters(IAdditionalParameters additionalParameters);
     }
 }

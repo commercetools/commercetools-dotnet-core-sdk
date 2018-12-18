@@ -13,6 +13,13 @@ namespace commercetools.Sdk.Client
             this.Expand = new List<string>();
         }
 
+        public QueryCommand(IAdditionalParameters<T> additionalParameters)
+        {
+            this.Sort = new List<string>();
+            this.Expand = new List<string>();
+            this.AdditionalParameters = additionalParameters;
+        }
+
         public List<string> Expand { get; }
 
         public int? Limit { get; set; }

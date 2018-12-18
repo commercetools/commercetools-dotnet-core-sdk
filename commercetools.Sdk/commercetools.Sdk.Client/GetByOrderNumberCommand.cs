@@ -18,6 +18,18 @@ namespace commercetools.Sdk.Client
             this.Init(orderNumber);
         }
 
+        public GetByOrderNumberCommand(string orderNumber, List<Expansion<Order>> expand, IAdditionalParameters<Order> additionalParameters)
+            : base(expand, additionalParameters)
+        {
+            this.Init(orderNumber);
+        }
+
+        public GetByOrderNumberCommand(string orderNumber, IAdditionalParameters<Order> additionalParameters)
+            : base(additionalParameters)
+        {
+            this.Init(orderNumber);
+        }
+
         private void Init(string orderNumber)
         {
             this.ParameterKey = Parameters.OrderNumber;

@@ -18,6 +18,18 @@ namespace commercetools.Sdk.Client
             this.Init(id);
         }
 
+        public GetByIdCommand(Guid id, IAdditionalParameters<T> additionalParameters)
+            : base(additionalParameters)
+        {
+            this.Init(id);
+        }
+
+        public GetByIdCommand(Guid id, List<Expansion<T>> expand, IAdditionalParameters<T> additionalParameters)
+            : base(expand, additionalParameters)
+        {
+            this.Init(id);
+        }
+
         private void Init(Guid id)
         {
             this.ParameterKey = Parameters.Id;

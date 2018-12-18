@@ -9,6 +9,12 @@ namespace commercetools.Sdk.Client
             this.Entity = entity;
         }
 
+        public CreateCommand(IDraft<T> entity, IAdditionalParameters<T> additionalParameters)
+        {
+            this.Entity = entity;
+            this.AdditionalParameters = additionalParameters;
+        }
+
         public IDraft<T> Entity { get; }
 
         public override System.Type ResourceType => typeof(T);

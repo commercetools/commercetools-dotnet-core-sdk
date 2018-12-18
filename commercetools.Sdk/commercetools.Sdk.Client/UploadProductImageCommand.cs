@@ -10,5 +10,10 @@ namespace commercetools.Sdk.Client
             : base(id, image, contentType)
         {
         }
+
+        public UploadProductImageCommand(Guid id, Stream image, string contentType, IAdditionalParameters<Product> additionalParameters)
+            : base(id, image, contentType, additionalParameters)
+        {
+        }
     }
 }

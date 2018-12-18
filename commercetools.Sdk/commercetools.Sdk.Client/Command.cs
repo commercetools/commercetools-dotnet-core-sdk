@@ -4,7 +4,7 @@ namespace commercetools.Sdk.Client
 {
     public abstract class Command<T>
     {
-        public IAdditionalParameters<T> AdditionalParameters { get; set; }
+        public IAdditionalParameters AdditionalParameters { get; protected set; }
 
         public abstract System.Type ResourceType { get; }
     }

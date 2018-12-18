@@ -11,7 +11,7 @@ namespace commercetools.Sdk.HttpApi.AdditionalParameters
             return type == typeof(ProductAdditionalParameters);
         }
 
-        public List<KeyValuePair<string, string>> GetAdditionalParameters<T>(IAdditionalParameters<T> additionalParameters)
+        public List<KeyValuePair<string, string>> GetAdditionalParameters(IAdditionalParameters additionalParameters)
         {
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
             ProductAdditionalParameters productAdditionalParameters = additionalParameters as ProductAdditionalParameters;

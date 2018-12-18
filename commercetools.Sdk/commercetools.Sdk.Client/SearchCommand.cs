@@ -4,7 +4,18 @@ namespace commercetools.Sdk.Client
 {
     public abstract class SearchCommand<T> : Command<PagedQueryResult<T>>
     {
-        public ISearchParameters<T> SearchParameters { get; set; }
+        protected SearchCommand(ISearchParameters<T> searchParameters)
+        {
+            this.SearchParameters = searchParameters;
+        }
+
+        protected SearchCommand(ISearchParameters<T> searchParameters, IAdditionalParameters<T> additionalParameters)
+        {
+            this.SearchParameters = searchParameters;
+            this.AdditionalParameters = additionalParameters;
+        }
+
+        public ISearchParameters<T> SearchParameters { get; }
 
         public override System.Type ResourceType => typeof(T);
     }

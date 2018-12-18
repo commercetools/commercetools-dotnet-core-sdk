@@ -3,10 +3,15 @@ using commercetools.Sdk.Domain.Orders;
 
 namespace commercetools.Sdk.Client
 {
-    public abstract class ImportOrderCommand : ImportCommand<Order>
+    public class ImportOrderCommand : ImportCommand<Order>
     {
-        protected ImportOrderCommand(IImportDraft<Order> entity)
+        public ImportOrderCommand(IImportDraft<Order> entity)
             : base(entity)
+        {
+        }
+
+        public ImportOrderCommand(IImportDraft<Order> entity, IAdditionalParameters<Order> additionalParameters)
+            : base(entity, additionalParameters)
         {
         }
     }

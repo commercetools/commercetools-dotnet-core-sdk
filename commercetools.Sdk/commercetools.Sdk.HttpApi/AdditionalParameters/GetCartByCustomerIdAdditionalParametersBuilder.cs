@@ -12,7 +12,7 @@ namespace commercetools.Sdk.HttpApi.AdditionalParameters
             return type == typeof(GetCartByCustomerIdAdditionalParameters);
         }
 
-        public List<KeyValuePair<string, string>> GetAdditionalParameters<T>(IAdditionalParameters<T> additionalParameters)
+        public List<KeyValuePair<string, string>> GetAdditionalParameters(IAdditionalParameters additionalParameters)
         {
             List<KeyValuePair<string, string>> parameters = new List<KeyValuePair<string, string>>();
             GetCartByCustomerIdAdditionalParameters cartAdditionalParameters = additionalParameters as GetCartByCustomerIdAdditionalParameters;

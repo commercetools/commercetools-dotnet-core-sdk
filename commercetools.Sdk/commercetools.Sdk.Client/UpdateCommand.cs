@@ -10,6 +10,12 @@
             this.UpdateActions = new List<UpdateAction<T>>();
         }
 
+        protected UpdateCommand(IAdditionalParameters<T> additionalParameters)
+        {
+            this.UpdateActions = new List<UpdateAction<T>>();
+            this.AdditionalParameters = additionalParameters;
+        }
+
         public int Version { get; protected set; }
 
         public List<UpdateAction<T>> UpdateActions { get; }
