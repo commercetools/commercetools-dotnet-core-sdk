@@ -25,6 +25,8 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+[Pp]ackages
+[Ii]mages
 
 # Visual Studio 2015 cache/options directory
 .vs/
@@ -44,7 +46,9 @@ TestResult.xml
 [Rr]eleasePS/
 dlldata.c
 
+
 # DNX
+.dotnet/
 project.lock.json
 project.fragment.lock.json
 artifacts/
@@ -270,6 +274,7 @@ __pycache__/
 
 # Cake - Uncomment if you are using it
 # tools/
+.DS_Store
 
 
 # End of https://www.gitignore.io/api/aspnetcore
