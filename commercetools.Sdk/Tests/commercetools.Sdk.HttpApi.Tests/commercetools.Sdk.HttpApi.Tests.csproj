@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="appsettings.test.Development.json" />
     <None Remove="appsettings.test.json" />
     <None Remove="Resources\commercetools.png" />
     <None Remove="Resources\Responses\ConcurrentModification.json" />
@@ -53,6 +52,12 @@
     <ProjectReference Include="..\..\commercetools.Sdk.Reflection\commercetools.Sdk.Registration.csproj" />
     <ProjectReference Include="..\..\commercetools.Sdk.Serialization\commercetools.Sdk.Serialization.csproj" />
     <ProjectReference Include="..\..\commercetools.Sdk.Domain\commercetools.Sdk.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.test.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

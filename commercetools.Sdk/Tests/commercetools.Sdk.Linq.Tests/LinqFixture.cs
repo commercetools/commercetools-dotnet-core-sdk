@@ -13,7 +13,7 @@ namespace commercetools.Sdk.Linq.Tests
             services.UseRegistration();
             services.UseLinq();
             this.serviceProvider = services.BuildServiceProvider();
-            ServiceLocator.SetLocatorProvider(this.serviceProvider);
+            ServiceLocator.SetServiceLocatorProvider(this.serviceProvider);
         }
 
         public T GetService<T>()

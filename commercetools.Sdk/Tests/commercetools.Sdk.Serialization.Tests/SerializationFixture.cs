@@ -13,7 +13,7 @@ namespace commercetools.Sdk.Serialization.Tests
             services.UseDomain();
             services.UseSerialization();
             var serviceProvider = services.BuildServiceProvider();
-            ServiceLocator.SetLocatorProvider(serviceProvider);
+            ServiceLocator.SetServiceLocatorProvider(serviceProvider);
             this.SerializerService = serviceProvider.GetService<ISerializerService>();
         }
 

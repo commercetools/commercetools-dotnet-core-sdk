@@ -28,7 +28,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             services.UseLinq();
             services.UseHttpApiWithClientCredentials(this.configuration, "Client");
             this.serviceProvider = services.BuildServiceProvider();
-            ServiceLocator.SetLocatorProvider(this.serviceProvider);
+            ServiceLocator.SetServiceLocatorProvider(this.serviceProvider);
         }
 
         public T GetService<T>()

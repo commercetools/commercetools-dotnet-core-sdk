@@ -18,7 +18,7 @@ namespace commercetools.Sdk.DependencyInjection
             services.UseLinq();
             services.UseHttpApiWithClientCredentials(configuration, configurationSection);
             var serviceProvider = services.BuildServiceProvider();
-            ServiceLocator.SetLocatorProvider(serviceProvider);
+            ServiceLocator.SetServiceLocatorProvider(serviceProvider);
         }
     }
 }

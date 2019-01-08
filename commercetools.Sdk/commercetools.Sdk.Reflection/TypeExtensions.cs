@@ -4,88 +4,62 @@ using System.Reflection;
 
 namespace System
 {
+    /// <summary>
+    /// This class contains extensions methods for <see cref="Type"/>.
+    /// </summary>
     public static class TypeExtensions
     {
-        public static IEnumerable<Type> GetAllClassTypesForInterface(this Type interfaceType, Assembly assembly)
+        /// <summary>
+        /// Gets all concrete types that the current type can be assigned from.
+        /// </summary>
+        /// <param name="currentType">The current type.</param>
+        /// <param name="assembly">The assembly.</param>
+        /// <returns>The list of all concrete types that the current type can be assigned from.</returns>
+        /// <remarks>For open generic types, this method loops through all base types and all interfaces and checks if any of them match the open generic type.</remarks>
+        public static IEnumerable<Type> GetAllConcreteAssignableTypes(this Type currentType, Assembly assembly)
         {
-            List<Type> classTypes = new List<Type>();
+            List<Type> types = new List<Type>();
             foreach (Type type in assembly.GetTypes())
             {
-                if (interfaceType.IsGenericTypeDefinition)
+                if (currentType.IsGenericTypeDefinition)
                 {
-                    if (type.IsClass && !type.IsAbstract && type.GetInterfaces().Where(i => i.IsGenericType).Select(i => i.GetGenericTypeDefinition()).Contains(interfaceType))
+                    if (type != currentType && !type.IsAbstract && type.GetAllAssignableTypes().Where(t => t.IsGenericType).Select(t => t.GetGenericTypeDefinition()).Contains(currentType))
                     {
-                        classTypes.Add(type);
+                        types.Add(type);
                     }
                 }
                 else
                 {
-                    if (type.IsClass && !type.IsAbstract && type.GetInterfaces().Contains(interfaceType))
+                    if (type != currentType && !type.IsAbstract && currentType.IsAssignableFrom(type))
                     {
-                        classTypes.Add(type);
-                    }
-                }
-            }
-            return classTypes;
-        }
-
-        public static IEnumerable<Type> GetAllRegisteredTypes(this Type type, Assembly assembly)
-        {
-            if (type.IsInterface)
-            {
-                return type.GetAllClassTypesForInterface(assembly);
-            }
-            if (type.IsClass)
-            {
-                return type.GetAllDerivedClassTypesForClass(assembly);
-            }
-            return new List<Type>();
-        }
-
-        public static IEnumerable<Type> GetAllDerivedClassTypesForClass(this Type classType, Assembly assembly)
-        {
-            List<Type> classTypes = new List<Type>();
-            foreach (Type type in assembly.GetTypes())
-            {
-                if (classType.IsGenericTypeDefinition)
-                {
-                    if (type != classType && !type.IsAbstract && type.IsGenericType && type.GetGenericTypeDefinition() == classType)
-                    {
-                        classTypes.Add(type);
-                    }
-
-                    if (type.GetParentTypes().Where(t => t.IsGenericType).Select(t => t.GetGenericTypeDefinition()).Contains(classType))
-                    {
-                        classTypes.Add(type);
-                    }
-                }
-                else
-                {
-                    if (type != classType && !type.IsAbstract && classType.IsAssignableFrom(type))
-                    {
-                        classTypes.Add(type);
+                        types.Add(type);
                     }
                 }
             }
 
-            return classTypes;
+            return types;
         }
 
-        private static IEnumerable<Type> GetParentTypes(this Type type)
+        /// <summary>
+        /// Gets all types the specified type can be assigned from, including the specified type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>The list of all types the passed type can be assigned from.</returns>
+        /// <remarks>This method returns the specified type, all base types and all interfaces.</remarks>
+        public static IEnumerable<Type> GetAllAssignableTypes(this Type type)
         {
-            // is there any base type?
             if (type == null)
             {
                 yield break;
             }
 
-            // return all implemented or inherited interfaces
+            yield return type;
+
             foreach (var i in type.GetInterfaces())
             {
                 yield return i;
             }
 
-            // return all inherited types
             var currentBaseType = type.BaseType;
             while (currentBaseType != null)
             {

@@ -13,7 +13,7 @@ namespace commercetools.Sdk.Domain.Tests
             var services = new ServiceCollection();
             services.UseDomain();
             ServiceProvider serviceProvider = services.BuildServiceProvider();
-            ServiceLocator.SetLocatorProvider(serviceProvider);
+            ServiceLocator.SetServiceLocatorProvider(serviceProvider);
         }
 
         [Fact]
