@@ -1,5 +1,6 @@
 ﻿namespace commercetools.Sdk.Domain.ShoppingLists
 {
+    using commercetools.Sdk.Domain.Customers;
     using System;
     using System.Collections.Generic;
 

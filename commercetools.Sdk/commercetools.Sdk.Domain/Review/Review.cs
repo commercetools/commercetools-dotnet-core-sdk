@@ -1,4 +1,5 @@
-﻿using System;
+﻿using commercetools.Sdk.Domain.Customers;
+using System;
 
 namespace commercetools.Sdk.Domain
 {

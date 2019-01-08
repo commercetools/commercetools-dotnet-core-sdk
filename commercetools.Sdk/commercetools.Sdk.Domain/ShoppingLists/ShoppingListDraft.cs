@@ -3,6 +3,7 @@
 
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using commercetools.Sdk.Domain.Customers;
     using commercetools.Sdk.Domain.Validation.Attributes;
 
     public class ShoppingListDraft : IDraft<ShoppingList>

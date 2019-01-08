@@ -7,6 +7,7 @@ using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.Linq.Query;
 using Xunit;
+using commercetools.Sdk.Domain.Customers;
 
 namespace commercetools.Sdk.Linq.Tests
 {
