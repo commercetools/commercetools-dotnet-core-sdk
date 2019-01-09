@@ -13,9 +13,11 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
 
     public class QueryRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
-        public QueryRequestMessageBuilder(IClientConfiguration clientConfiguration,
+        public QueryRequestMessageBuilder(
+            IClientConfiguration clientConfiguration,
             IEndpointRetriever endpointRetriever,
-            IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory) : base(clientConfiguration, endpointRetriever, parametersBuilderFactory)
+            IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory)
+            : base(clientConfiguration, endpointRetriever, parametersBuilderFactory)
         {
         }
 

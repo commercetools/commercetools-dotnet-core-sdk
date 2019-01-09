@@ -14,9 +14,9 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
 
         public UpdateRequestMessageBuilder(
             ISerializerService serializerService,
-            IClientConfiguration clientConfiguration, 
+            IClientConfiguration clientConfiguration,
             IEndpointRetriever endpointRetriever,
-            IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory) 
+            IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory)
             : base(clientConfiguration, endpointRetriever, parametersBuilderFactory)
         {
             this.serializerService = serializerService;

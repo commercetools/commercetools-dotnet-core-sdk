@@ -23,5 +23,14 @@ namespace commercetools.Sdk.HttpApi.Tests.Customers
             this.customerFixture.CustomersToDelete.Add(customerSignInResult.Customer);
             Assert.Equal(customerDraft.Email, customerSignInResult.Customer.Email);
         }
+
+        [Fact]
+        public void ChangePasswordCustomer()
+        {
+            IClient commerceToolsClient = this.customerFixture.GetService<IClient>();
+            Customer customer = this.customerFixture.CreateCustomer();
+            Customer updatedCustomer = commerceToolsClient.ExecuteAsync(new ChangeCustomerPasswordCommand(customer.Id, customer.Version, CustomerFixture.Password, "12345")).Result;
+            this.customerFixture.CustomersToDelete.Add(updatedCustomer);
+        }
     }
 }

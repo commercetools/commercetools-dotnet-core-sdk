@@ -9,10 +9,5 @@ namespace commercetools.Sdk.Client
             : base(entity)
         {
         }
-
-        public SignUpCustomerCommand(IDraft<Customer> entity, IAdditionalParameters<Customer> additionalParameters)
-            : base(entity, additionalParameters)
-        {
-        }
     }
 }

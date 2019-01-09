@@ -8,10 +8,5 @@ namespace commercetools.Sdk.Client
             : base(parameters)
         {
         }
-
-        public GetMatchingProductDiscountCommand(IGetMatchingParameters<ProductDiscount> parameters, IAdditionalParameters<ProductDiscount> additionalParameters)
-            : base(parameters, additionalParameters)
-        {
-        }
     }
 }
