@@ -17,6 +17,11 @@
 
         public bool IsCountryValid(string country)
         {
+            if (string.IsNullOrEmpty(country))
+            {
+                return true;
+            }
+
             return this.regionInfos.Any(x => x.Name.Equals(country, StringComparison.InvariantCulture));
         }
     }

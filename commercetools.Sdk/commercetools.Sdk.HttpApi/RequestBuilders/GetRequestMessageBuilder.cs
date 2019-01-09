@@ -28,12 +28,11 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
         private Uri GetRequestUri<T>(GetCommand<T> command)
         {
             string requestUri = this.GetMessageBase<T>();
-            
             if (command.ParameterKey == Parameters.Id)
             {
                 requestUri += $"/{command.ParameterValue}";
             }
-            else if(!string.IsNullOrEmpty(command.ParameterKey) && command.ParameterValue != null)
+            else if (!string.IsNullOrEmpty(command.ParameterKey) && command.ParameterValue != null)
             {
                 requestUri += $"/{command.ParameterKey}={command.ParameterValue}";
             }

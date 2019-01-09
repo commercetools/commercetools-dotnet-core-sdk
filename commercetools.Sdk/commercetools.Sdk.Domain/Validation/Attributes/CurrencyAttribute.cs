@@ -7,6 +7,11 @@ namespace commercetools.Sdk.Domain.Validation.Attributes
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if (value == null)
+            {
+                return ValidationResult.Success;
+            }
+
             ICurrencyValidator validator = ServiceLocator.Current.GetService<ICurrencyValidator>();
             var result = new ValidationResult(this.ErrorMessage);
             if (validator == null)

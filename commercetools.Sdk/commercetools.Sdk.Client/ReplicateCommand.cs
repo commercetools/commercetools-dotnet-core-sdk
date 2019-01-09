@@ -1,22 +1,21 @@
 ﻿using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.Carts;
 
 namespace commercetools.Sdk.Client
 {
-    public class ReplicateCommand<T> : Command<Cart>
+    public abstract class ReplicateCommand<T> : Command<T>
     {
-        public ReplicateCommand(ReplicaCartDraft replica)
+        protected ReplicateCommand(IReplicaDraft<T> replica)
         {
             this.Replica = replica;
         }
 
-        public ReplicateCommand(ReplicaCartDraft replica, IAdditionalParameters<Cart> additionalParameters)
+        protected ReplicateCommand(IReplicaDraft<T> replica, IAdditionalParameters<T> additionalParameters)
         {
             this.Replica = replica;
             this.AdditionalParameters = additionalParameters;
         }
 
-        public ReplicaCartDraft Replica { get; }
+        public IReplicaDraft<T> Replica { get; }
 
         public override System.Type ResourceType => typeof(T);
     }

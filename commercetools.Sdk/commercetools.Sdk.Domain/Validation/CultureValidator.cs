@@ -14,6 +14,11 @@
 
         public bool IsCultureValid(string culture)
         {
+            if (string.IsNullOrEmpty(culture))
+            {
+                return true;
+            }
+
             return this.cultures.Select(c => c.TwoLetterISOLanguageName).Contains(culture) || 
                 this.cultures.Select(c => c.Name).Contains(culture);
         }

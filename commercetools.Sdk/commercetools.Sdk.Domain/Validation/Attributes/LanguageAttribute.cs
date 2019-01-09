@@ -9,6 +9,11 @@ namespace commercetools.Sdk.Domain.Validation.Attributes
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if (value == null)
+            {
+                return ValidationResult.Success;
+            }
+
             ICultureValidator cultureValidator = ServiceLocator.Current.GetService<ICultureValidator>();
             var result = new ValidationResult(this.ErrorMessage);
             if (cultureValidator == null)

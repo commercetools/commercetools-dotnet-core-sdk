@@ -17,6 +17,11 @@
 
         public bool IsCurrencyValid(string currency)
         {
+            if (string.IsNullOrEmpty(currency))
+            {
+                return true;
+            }
+
             return this.regionInfos.Any(x => x.ISOCurrencySymbol.Equals(currency, StringComparison.InvariantCulture));
         }
     }

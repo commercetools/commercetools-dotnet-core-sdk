@@ -23,11 +23,11 @@ namespace commercetools.Sdk.Domain.Customers
         public string CompanyName { get; set; }
         public string VatId { get; set; }
         public List<Address> Addresses { get; set; }
-        public int DefaultShippingAddress { get; set; }
+        public int? DefaultShippingAddress { get; set; }
         public List<int> ShippingAddresses { get; set; }
-        public int DefaultBillingAddress { get; set; }
+        public int? DefaultBillingAddress { get; set; }
         public List<int> BillingAddresses { get; set; }
-        public bool IsEmailVerified { get; set; }
+        public bool? IsEmailVerified { get; set; }
         public string ExternalId { get; set; }
         public ResourceIdentifier CustomerGroup { get; set; }
         public CustomFieldsDraft Custom { get; set; }
