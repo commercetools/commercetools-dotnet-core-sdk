@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace commercetools.Sdk.Domain.Categories
+namespace commercetools.Sdk.Domain.Categories.UpdateActions
 {
     public class ChangeAssetOrderUpdateAction : UpdateAction<Category>
     {

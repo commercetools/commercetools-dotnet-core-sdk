@@ -13,6 +13,7 @@ using commercetools.Sdk.HttpApi.RequestBuilders;
 using commercetools.Sdk.HttpApi.SearchParameters;
 using commercetools.Sdk.Serialization;
 using Xunit;
+using commercetools.Sdk.Domain.Categories;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {

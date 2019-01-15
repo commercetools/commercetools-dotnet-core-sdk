@@ -20,6 +20,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             this.configuration = new ConfigurationBuilder().
                 AddJsonFile("appsettings.test.json").
                 AddJsonFile("appsettings.test.Development.json", true).
+                // https://www.jerriepelser.com/blog/aspnet-core-no-more-worries-about-checking-in-secrets/
                 AddEnvironmentVariables().
                 Build();
             services.UseRegistration();
@@ -43,6 +44,7 @@ namespace commercetools.Sdk.HttpApi.Tests
 
         private static Random random = new Random();
 
+        // TODO Put this in a separate class
         public string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

@@ -6,6 +6,7 @@ using System.Net.Http;
 using commercetools.Sdk.HttpApi.AdditionalParameters;
 using commercetools.Sdk.HttpApi.RequestBuilders;
 using Xunit;
+using commercetools.Sdk.Domain.Categories;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {

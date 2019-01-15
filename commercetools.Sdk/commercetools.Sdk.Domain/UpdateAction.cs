@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    public class UpdateAction<T>
+    public abstract class UpdateAction<T>
     {
     }
 }

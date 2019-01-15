@@ -1,4 +1,5 @@
-﻿using System;
+﻿using commercetools.Sdk.Domain.Categories;
+using System;
 using System.Collections.Generic;
 
 namespace commercetools.Sdk.Domain.ProductProjections

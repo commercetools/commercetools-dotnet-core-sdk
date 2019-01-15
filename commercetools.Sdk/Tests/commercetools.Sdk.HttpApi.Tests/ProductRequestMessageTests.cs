@@ -23,6 +23,8 @@ namespace commercetools.Sdk.HttpApi.Tests
             ProductAdditionalParameters productAdditionalParameters = new ProductAdditionalParameters();
             productAdditionalParameters.PriceCurrency = "EUR";
             GetByIdCommand<Product> command = new GetByIdCommand<Product>(new Guid("2bafc816-4223-4ff0-ac8a-0f08a8f29fd6"), productAdditionalParameters);
+            // This object cannot be retrieved with GetService method directly.
+            // GetRequestMessageBuilder is registered as IRequestMessageBuilder among other request builders.
             GetRequestMessageBuilder requestMessageBuilder = new GetRequestMessageBuilder(
                 this.clientFixture.GetService<IClientConfiguration>(),
                 this.clientFixture.GetService<IEndpointRetriever>(),

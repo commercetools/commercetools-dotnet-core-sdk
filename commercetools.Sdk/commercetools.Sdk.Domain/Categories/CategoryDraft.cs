@@ -1,30 +1,21 @@
-﻿namespace commercetools.Sdk.Domain
+﻿namespace commercetools.Sdk.Domain.Categories
 {
-    using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
-    [Endpoint("categories")]
-    public class Category
+    public class CategoryDraft : IDraft<Category>
     {
-        public string Id { get; set; }
-
         public string Key { get; set; }
 
-        public int Version { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-
-        public DateTime LastModifiedAt { get; set; }
-
+        [Required]
         public LocalizedString Name { get; set; }
-
-        public LocalizedString Slug { get; set; }
 
         public LocalizedString Description { get; set; }
 
-        public List<Reference<Category>> Ancestors { get; set; }
+        public Reference Parent { get; set; }
 
-        public Reference<Category> Parent { get; set; }
+        [Required]
+        public LocalizedString Slug { get; set; }
 
         public string OrderHint { get; set; }
 
@@ -36,7 +27,7 @@
 
         public LocalizedString MetaKeywords { get; set; }
 
-        public CustomFields Custom { get; set; }
+        public CustomFieldsDraft Custom { get; set; }
 
         public List<Asset> Assets { get; set; }
     }

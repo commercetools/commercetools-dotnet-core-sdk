@@ -1,7 +1,7 @@
-﻿namespace commercetools.Sdk.Client
-{
-    using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
+namespace commercetools.Sdk.Client
+{
     public interface IClient
     {
         string Name { get; set; }

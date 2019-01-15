@@ -1,5 +1,6 @@
 ﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Categories;
 using System;
 using System.Collections.Generic;
 using Type = commercetools.Sdk.Domain.Type;
@@ -21,6 +22,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void Dispose()
         {
             IClient commerceToolsClient = this.GetService<IClient>();
+            // In case categories depend on each other, the order of deletion should be from the last to the first one.
             this.CategoriesToDelete.Reverse();
             foreach (Category category in this.CategoriesToDelete)
             {

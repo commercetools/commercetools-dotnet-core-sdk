@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using commercetools.Sdk.Domain.Query;
 using Xunit;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
+using commercetools.Sdk.Domain.Categories;
 
 namespace commercetools.Sdk.Linq.Tests
 {

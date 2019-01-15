@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Categories;
 using System;
 using System.Linq.Expressions;
 using Xunit;

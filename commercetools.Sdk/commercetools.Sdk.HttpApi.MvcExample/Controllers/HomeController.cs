@@ -1,5 +1,6 @@
 ﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Categories;
 using Microsoft.AspNetCore.Mvc;
 using System;
 

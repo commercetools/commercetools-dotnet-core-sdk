@@ -4,7 +4,7 @@
 
     public class Money : BaseMoney
     {
-        // TODO Refactor this, this exists for now only for cart predicates
+        // TODO Check if this is good, this exists for now only for cart predicates
         public static Money Parse(string input)
         {
             if (string.IsNullOrEmpty(input))

@@ -8,6 +8,7 @@ using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.Linq.Query;
 using Xunit;
 using commercetools.Sdk.Domain.Customers;
+using commercetools.Sdk.Domain.Categories;
 
 namespace commercetools.Sdk.Linq.Tests
 {

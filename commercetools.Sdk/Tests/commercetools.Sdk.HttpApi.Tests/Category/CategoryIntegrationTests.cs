@@ -7,9 +7,12 @@ using System.Collections.Generic;
 using System.Linq;
 using commercetools.Sdk.Domain.Query;
 using Xunit;
+using commercetools.Sdk.Domain.Categories.UpdateActions;
+using ChangeNameUpdateAction = commercetools.Sdk.Domain.Categories.UpdateActions.ChangeNameUpdateAction;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
+    // All integration tests need to have the same collection name.
     [Collection("Integration Tests")]
     public class CategoryIntegrationTests : IClassFixture<CategoryFixture>
     {
@@ -78,6 +81,9 @@ namespace commercetools.Sdk.HttpApi.Tests
             SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction() { Key = newKey };
             updateActions.Add(setKeyAction);
             Category retrievedCategory = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Category>(new Guid(category.Id), category.Version, updateActions)).Result;
+            // The retrieved category has to be deleted and not the created category.
+            // The retrieved category will have version 2 and the created category will have version 1.
+            // Only the latest version can be deleted.
             this.categoryFixture.CategoriesToDelete.Add(retrievedCategory);
             Assert.Equal(newKey, retrievedCategory.Key);
         }
@@ -94,6 +100,20 @@ namespace commercetools.Sdk.HttpApi.Tests
             Category retrievedCategory = commerceToolsClient.ExecuteAsync(new UpdateByKeyCommand<Category>(category.Key, category.Version, updateActions)).Result;
             this.categoryFixture.CategoriesToDelete.Add(retrievedCategory);
             Assert.Equal(externalId, retrievedCategory.ExternalId);
+        }
+
+        [Fact]
+        public void UpdateCategoryByKeyChangeName()
+        {
+            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
+            Category category = this.categoryFixture.CreateCategory();
+            string name = this.categoryFixture.RandomString(5);
+            List<UpdateAction<Category>> updateActions = new List<UpdateAction<Category>>();
+            ChangeNameUpdateAction changeNameUpdateAction = new ChangeNameUpdateAction() { Name = new LocalizedString() { { "en", name } } };
+            updateActions.Add(changeNameUpdateAction);
+            Category retrievedCategory = commerceToolsClient.ExecuteAsync(new UpdateByKeyCommand<Category>(category.Key, category.Version, updateActions)).Result;
+            this.categoryFixture.CategoriesToDelete.Add(retrievedCategory);
+            Assert.Equal(name, retrievedCategory.Name["en"]);
         }
 
         [Fact]

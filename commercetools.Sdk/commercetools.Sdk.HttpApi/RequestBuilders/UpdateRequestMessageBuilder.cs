@@ -36,6 +36,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
                 Version = command.Version,
                 Actions = command.UpdateActions
             };
+            // TODO Make sure property validation works for update actions as well
             return new StringContent(this.serializerService.Serialize(requestBody));
         }
 
