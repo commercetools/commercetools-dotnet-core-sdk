@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\source\commercetools\commercetools-dotnet-sdk-new\commercetools.Sdk\commercetools.Sdk.Reflection\commercetools.Sdk.Registration.xml</DocumentationFile>
+    <DocumentationFile>$(SolutionDir)commercetools.Sdk.Reflection\commercetools.Sdk.Registration.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
