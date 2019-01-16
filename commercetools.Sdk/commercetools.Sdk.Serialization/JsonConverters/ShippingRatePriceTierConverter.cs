@@ -9,7 +9,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class ShippingRatePriceTierConverter : JsonConverterDecoratorTypeRetrieverBase<ShippingRatePriceTier>
+    internal class ShippingRatePriceTierConverter : JsonConverterDecoratorTypeRetrieverBase<ShippingRatePriceTier>
     {
         public override string PropertyName => "type";
 

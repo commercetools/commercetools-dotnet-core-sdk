@@ -3,7 +3,7 @@ using commercetools.Sdk.Domain;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class SuggestTokenizerDecoratorTypeRetriever : DecoratorTypeRetriever<SuggestTokenizer>
+    internal class SuggestTokenizerDecoratorTypeRetriever : DecoratorTypeRetriever<SuggestTokenizer>
     {
         public SuggestTokenizerDecoratorTypeRetriever(ITypeRetriever typeRetriever) : base(typeRetriever)
         {

@@ -6,7 +6,7 @@
     using System;
     using System.Collections.Generic;
 
-    public class JsonSerializerSettingsFactory
+    internal class JsonSerializerSettingsFactory
     {
         private readonly DeserializationContractResolver deserializationContractResolver;
         private readonly SerializationContractResolver serializationContractResolver;

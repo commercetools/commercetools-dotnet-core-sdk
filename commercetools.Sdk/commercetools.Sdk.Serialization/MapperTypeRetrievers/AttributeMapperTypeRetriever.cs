@@ -5,7 +5,7 @@ using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class AttributeMapperTypeRetriever : SetMapperTypeRetriever<Attribute>
+    internal class AttributeMapperTypeRetriever : SetMapperTypeRetriever<Attribute>
     {
         protected override Type SetType => typeof(AttributeSet<>);
 

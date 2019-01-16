@@ -7,7 +7,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class SuggestTokenizerConverter : JsonConverterDecoratorTypeRetrieverBase<SuggestTokenizer>
+    internal class SuggestTokenizerConverter : JsonConverterDecoratorTypeRetrieverBase<SuggestTokenizer>
     {
         public override string PropertyName => "type";
 

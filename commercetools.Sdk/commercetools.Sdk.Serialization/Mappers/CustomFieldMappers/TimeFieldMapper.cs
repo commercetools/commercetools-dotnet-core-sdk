@@ -3,7 +3,7 @@ using System;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class TimeFieldMapper : TimeConverter<Fields, TimeSpan>, ICustomJsonMapper<Fields>
+    internal class TimeFieldMapper : TimeConverter<Fields, TimeSpan>, ICustomJsonMapper<Fields>
     {
     }
 }

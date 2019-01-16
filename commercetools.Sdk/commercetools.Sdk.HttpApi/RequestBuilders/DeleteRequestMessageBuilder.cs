@@ -36,6 +36,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
                 requestUri += $"/{command.ParameterKey}={command.ParameterValue}";
             }
 
+            // TODO Add version with QueryHelpers instead
             requestUri += $"?version={command.Version}";
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
             queryStringParameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));

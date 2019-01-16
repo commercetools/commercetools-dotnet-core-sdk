@@ -26,7 +26,8 @@ namespace commercetools.Sdk.HttpApi.HttpApiCommands
 
         public IHttpApiCommand Create<T>(Command<T> command)
         {
-            // Retrieve the type of T; for CreateCommand<Category>, Category is retrieved
+            // Retrieve the type of T; for CreateCommand<Category>, Category is retrieved.
+            // For QueryCommand<Category> it will also return Category.
             Type typeOfGeneric = command.ResourceType;
             Type httApiCommandType = null;
 
@@ -49,6 +50,8 @@ namespace commercetools.Sdk.HttpApi.HttpApiCommands
 
             // CreateHttpApiCommand<T> => CreateHttpApiCommand<Category>
             Type requestedType = httApiCommandType.MakeGenericType(typeOfGeneric);
+
+            // Trying to find the compiled constructor for the HttpApiCommand class.
             ObjectActivator createdActivator;
             if (this.activators.ContainsKey(requestedType))
             {
@@ -66,6 +69,7 @@ namespace commercetools.Sdk.HttpApi.HttpApiCommands
         }
 
         // TODO Move this to a different class perhaps
+        // https://rogerjohansson.blog/2008/02/28/linq-expressions-creating-objects/
         private ObjectActivator GetActivator(ConstructorInfo ctor)
         {
             Type type = ctor.DeclaringType;

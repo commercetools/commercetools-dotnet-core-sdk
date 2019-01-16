@@ -3,7 +3,7 @@ using System;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class DateTimeFieldMapper : DateTimeConverter<Fields, DateTime>, ICustomJsonMapper<Fields>
+    internal class DateTimeFieldMapper : DateTimeConverter<Fields, DateTime>, ICustomJsonMapper<Fields>
     {
     }
 }

@@ -5,7 +5,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class EnumConverter : JsonConverterBase
+    internal class EnumConverter : JsonConverterBase
     {
         public override bool CanConvert(Type objectType)
         {

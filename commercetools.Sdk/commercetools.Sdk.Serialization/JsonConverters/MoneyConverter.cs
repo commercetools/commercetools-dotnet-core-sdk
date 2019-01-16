@@ -7,7 +7,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class MoneyConverter : JsonConverterBase
+    internal class MoneyConverter : JsonConverterBase
     {
         private readonly IMapperTypeRetriever<BaseMoney> mapperTypeRetriever;
 

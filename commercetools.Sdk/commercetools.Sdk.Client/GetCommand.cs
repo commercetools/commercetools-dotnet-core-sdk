@@ -4,7 +4,7 @@ using commercetools.Sdk.Domain.Query;
 
 namespace commercetools.Sdk.Client
 {
-    public class GetCommand<T> : Command<T>
+    public abstract class GetCommand<T> : Command<T>
     {
         protected GetCommand()
         {

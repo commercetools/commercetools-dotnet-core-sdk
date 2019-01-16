@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class DeserializationContractResolver : CustomContractResolver
+    internal class DeserializationContractResolver : CustomContractResolver
     {
         public DeserializationContractResolver(IEnumerable<JsonConverterBase> registeredConverters) : base(registeredConverters)
         { }

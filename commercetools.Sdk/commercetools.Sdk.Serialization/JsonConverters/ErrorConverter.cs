@@ -7,7 +7,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class ErrorConverter : JsonConverterDecoratorTypeRetrieverBase<Error>
+    internal class ErrorConverter : JsonConverterDecoratorTypeRetrieverBase<Error>
     {
         public override string PropertyName => "code";
         public override Type DefaultType => typeof(GeneralError);

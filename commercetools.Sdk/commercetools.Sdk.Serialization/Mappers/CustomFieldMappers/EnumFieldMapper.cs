@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Serialization
 {
-    public class EnumFieldMapper : EnumConverter<Fields, EnumValue>, ICustomJsonMapper<Fields>
+    internal class EnumFieldMapper : EnumConverter<Fields, EnumValue>, ICustomJsonMapper<Fields>
     {
     }
 }

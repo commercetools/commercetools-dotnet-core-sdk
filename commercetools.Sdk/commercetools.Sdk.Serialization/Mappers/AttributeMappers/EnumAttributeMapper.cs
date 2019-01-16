@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Serialization
 {
-    public class EnumAttributeMapper : EnumConverter<Attribute, PlainEnumValue>, ICustomJsonMapper<Attribute>
+    internal class EnumAttributeMapper : EnumConverter<Attribute, PlainEnumValue>, ICustomJsonMapper<Attribute>
     {
     }
 }

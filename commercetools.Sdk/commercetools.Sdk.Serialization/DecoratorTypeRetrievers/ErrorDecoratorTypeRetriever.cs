@@ -3,7 +3,7 @@ using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class ErrorDecoratorTypeRetriever : DecoratorTypeRetriever<Error>
+    internal class ErrorDecoratorTypeRetriever : DecoratorTypeRetriever<Error>
     {
         public ErrorDecoratorTypeRetriever(ITypeRetriever typeRetriever) : base(typeRetriever)
         {

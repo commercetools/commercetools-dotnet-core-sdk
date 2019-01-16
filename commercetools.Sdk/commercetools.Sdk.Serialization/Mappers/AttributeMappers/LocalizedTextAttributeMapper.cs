@@ -4,7 +4,7 @@ using commercetools.Sdk.Domain.Validation;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class LocalizedTextAttributeMapper : LocalizedStringConverter<Attribute, LocalizedString>, ICustomJsonMapper<Attribute>
+    internal class LocalizedTextAttributeMapper : LocalizedStringConverter<Attribute, LocalizedString>, ICustomJsonMapper<Attribute>
     {
         public LocalizedTextAttributeMapper(ICultureValidator cultureValidator) : base(cultureValidator)
         {

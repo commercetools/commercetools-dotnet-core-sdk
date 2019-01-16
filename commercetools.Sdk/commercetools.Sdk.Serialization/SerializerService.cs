@@ -4,7 +4,7 @@
     using Domain.Validation;
     using Newtonsoft.Json;
 
-    public class SerializerService : ISerializerService
+    internal class SerializerService : ISerializerService
     {
         private readonly JsonSerializerSettingsFactory jsonSerializerSettingsFactory;
         private readonly IModelValidator modelValidator;

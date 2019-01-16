@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Serialization
 {
-    public class BooleanAttributeMapper : BooleanConverter<Attribute, bool>, ICustomJsonMapper<Attribute>
+    internal class BooleanAttributeMapper : BooleanConverter<Attribute, bool>, ICustomJsonMapper<Attribute>
     {
     }
 }

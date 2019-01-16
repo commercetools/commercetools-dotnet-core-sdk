@@ -3,7 +3,7 @@ using commercetools.Sdk.Domain;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class ProductDiscountValueDecoratorTypeRetriever : DecoratorTypeRetriever<ProductDiscountValue>
+    internal class ProductDiscountValueDecoratorTypeRetriever : DecoratorTypeRetriever<ProductDiscountValue>
     {
         public ProductDiscountValueDecoratorTypeRetriever(ITypeRetriever typeRetriever) : base(typeRetriever)
         {

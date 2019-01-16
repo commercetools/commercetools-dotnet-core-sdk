@@ -36,7 +36,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             {
                 queryStringParameters.Add(new KeyValuePair<string, string>("where", command.Where));
             }
-                
+
             if (command.Expand != null)
             {
                 queryStringParameters.AddRange(command.Expand.Select(x => new KeyValuePair<string, string>("expand", x)));

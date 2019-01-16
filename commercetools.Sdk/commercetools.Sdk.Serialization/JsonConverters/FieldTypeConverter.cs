@@ -7,7 +7,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class FieldTypeConverter : JsonConverterDecoratorTypeRetrieverBase<FieldType>
+    internal class FieldTypeConverter : JsonConverterDecoratorTypeRetrieverBase<FieldType>
     {
         public override string PropertyName => "name";
 

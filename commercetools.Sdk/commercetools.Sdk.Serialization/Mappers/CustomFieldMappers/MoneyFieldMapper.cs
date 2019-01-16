@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Serialization
 {
-    public class MoneyFieldMapper : MoneyConverter<Fields, BaseMoney>, ICustomJsonMapper<Fields>
+    internal class MoneyFieldMapper : MoneyConverter<Fields, BaseMoney>, ICustomJsonMapper<Fields>
     {
     }
 }

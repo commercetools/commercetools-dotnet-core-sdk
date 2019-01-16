@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Serialization
 {
-    public class TextAttributeMapper : StringConverter<Attribute, string>, ICustomJsonMapper<Attribute>
+    internal class TextAttributeMapper : StringConverter<Attribute, string>, ICustomJsonMapper<Attribute>
     {
     }
 }

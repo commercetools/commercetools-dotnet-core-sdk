@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class CustomDateTimeConverter : JsonConverterBase
+    internal class CustomDateTimeConverter : JsonConverterBase
     {
         public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Serialization };
 

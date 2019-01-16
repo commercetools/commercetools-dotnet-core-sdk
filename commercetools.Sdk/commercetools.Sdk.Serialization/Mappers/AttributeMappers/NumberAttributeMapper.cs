@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Serialization
 {
-    public class NumberAttributeMapper : NumberConverter<Attribute, double>, ICustomJsonMapper<Attribute>
+    internal class NumberAttributeMapper : NumberConverter<Attribute, double>, ICustomJsonMapper<Attribute>
     {
     }
 }

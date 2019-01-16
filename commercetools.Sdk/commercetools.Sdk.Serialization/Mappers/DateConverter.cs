@@ -3,7 +3,7 @@ using System;
 
 namespace commercetools.Sdk.Serialization
 {
-    public abstract class DateConverter<T, S> : ICustomJsonMapper<T>
+    internal abstract class DateConverter<T, S> : ICustomJsonMapper<T>
     {
         public int Priority => 2;
 

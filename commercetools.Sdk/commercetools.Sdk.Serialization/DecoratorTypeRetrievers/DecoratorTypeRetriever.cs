@@ -7,7 +7,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public abstract class DecoratorTypeRetriever<T> : IDecoratorTypeRetriever<T>
+    internal abstract class DecoratorTypeRetriever<T> : IDecoratorTypeRetriever<T>
     {
         private readonly IEnumerable<Type> derivedTypes;
 

@@ -3,7 +3,7 @@ using commercetools.Sdk.Domain.Validation;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class LocalizedStringFieldMapper : LocalizedStringConverter<Fields, LocalizedString>, ICustomJsonMapper<Fields>
+    internal class LocalizedStringFieldMapper : LocalizedStringConverter<Fields, LocalizedString>, ICustomJsonMapper<Fields>
     {
         public LocalizedStringFieldMapper(ICultureValidator cultureValidator) : base(cultureValidator)
         {

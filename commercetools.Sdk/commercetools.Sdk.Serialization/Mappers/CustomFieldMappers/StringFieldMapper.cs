@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Serialization
 {
-    public class StringFieldMapper : StringConverter<Fields, string>, ICustomJsonMapper<Fields>
+    internal class StringFieldMapper : StringConverter<Fields, string>, ICustomJsonMapper<Fields>
     {
     }
 }

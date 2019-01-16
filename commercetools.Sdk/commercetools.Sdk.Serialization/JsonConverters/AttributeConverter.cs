@@ -9,7 +9,7 @@ using commercetools.Sdk.Domain.Products.Attributes;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class AttributeConverter : JsonConverterBase
+    internal class AttributeConverter : JsonConverterBase
     {
         private readonly IMapperTypeRetriever<Attribute> mapperTypeRetriever;
 

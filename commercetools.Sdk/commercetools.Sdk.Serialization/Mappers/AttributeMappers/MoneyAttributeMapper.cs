@@ -3,7 +3,7 @@ using commercetools.Sdk.Domain.Products.Attributes;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class MoneyAttributeMapper : MoneyConverter<Attribute, BaseMoney>, ICustomJsonMapper<Attribute>
+    internal class MoneyAttributeMapper : MoneyConverter<Attribute, BaseMoney>, ICustomJsonMapper<Attribute>
     {
     }
 }

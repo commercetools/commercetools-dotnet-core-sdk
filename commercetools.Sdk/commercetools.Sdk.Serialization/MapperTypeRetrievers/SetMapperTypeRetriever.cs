@@ -4,7 +4,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public abstract class SetMapperTypeRetriever<T> : MapperTypeRetriever<T>
+    internal abstract class SetMapperTypeRetriever<T> : MapperTypeRetriever<T>
     {
         protected abstract Type SetType { get; }
 

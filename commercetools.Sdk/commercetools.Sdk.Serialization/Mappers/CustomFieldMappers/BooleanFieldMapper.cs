@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Serialization
 {
-    public class BooleanFieldMapper : BooleanConverter<Fields, bool>, ICustomJsonMapper<Fields>
+    internal class BooleanFieldMapper : BooleanConverter<Fields, bool>, ICustomJsonMapper<Fields>
     {
     }
 }

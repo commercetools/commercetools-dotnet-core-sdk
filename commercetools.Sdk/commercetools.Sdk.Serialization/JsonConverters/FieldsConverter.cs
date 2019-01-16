@@ -7,7 +7,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class FieldsConverter : JsonConverterBase
+    internal class FieldsConverter : JsonConverterBase
     {
         private readonly IMapperTypeRetriever<Fields> mapperTypeRetriever;
 

@@ -4,7 +4,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public abstract class LocalizedEnumConverter<T, S> : ICustomJsonMapper<T>
+    internal abstract class LocalizedEnumConverter<T, S> : ICustomJsonMapper<T>
     {
         private readonly ICultureValidator cultureValidator;
 

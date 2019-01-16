@@ -8,7 +8,7 @@ using commercetools.Sdk.Domain.Customers;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class SignInResultConverter : JsonConverterBase
+    internal class SignInResultConverter : JsonConverterBase
     {
         public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization };
 

@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.Serialization
 {
-    public enum SerializerType
+    internal enum SerializerType
     {
         Serialization,
         Deserialization

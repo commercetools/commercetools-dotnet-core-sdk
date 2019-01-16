@@ -7,7 +7,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class ProductDiscountValueConverter : JsonConverterDecoratorTypeRetrieverBase<ProductDiscountValue>
+    internal class ProductDiscountValueConverter : JsonConverterDecoratorTypeRetrieverBase<ProductDiscountValue>
     {
         public override string PropertyName => "type";
 

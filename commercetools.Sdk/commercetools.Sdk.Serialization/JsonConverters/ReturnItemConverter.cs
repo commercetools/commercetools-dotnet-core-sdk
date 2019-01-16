@@ -8,7 +8,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class ReturnItemConverter : JsonConverterDecoratorTypeRetrieverBase<ReturnItem>
+    internal class ReturnItemConverter : JsonConverterDecoratorTypeRetrieverBase<ReturnItem>
     {
         public override string PropertyName => "type";
 

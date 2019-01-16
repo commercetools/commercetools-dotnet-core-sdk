@@ -4,7 +4,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class FieldMapperTypeRetriever : SetMapperTypeRetriever<Fields>
+    internal class FieldMapperTypeRetriever : SetMapperTypeRetriever<Fields>
     {
         protected override Type SetType => typeof(FieldSet<>);
 

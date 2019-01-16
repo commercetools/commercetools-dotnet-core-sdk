@@ -7,7 +7,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class FacetResultConverter : JsonConverterDecoratorTypeRetrieverBase<FacetResult>
+    internal class FacetResultConverter : JsonConverterDecoratorTypeRetrieverBase<FacetResult>
     {
         public override string PropertyName => "type";
 

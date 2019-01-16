@@ -3,7 +3,7 @@ using commercetools.Sdk.Domain.Validation;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class LocalizedEnumAttributeMapper : LocalizedEnumConverter<Attribute, LocalizedEnumValue>, ICustomJsonMapper<Attribute>
+    internal class LocalizedEnumAttributeMapper : LocalizedEnumConverter<Attribute, LocalizedEnumValue>, ICustomJsonMapper<Attribute>
     {
         public LocalizedEnumAttributeMapper(ICultureValidator cultureValidator) : base(cultureValidator)
         {

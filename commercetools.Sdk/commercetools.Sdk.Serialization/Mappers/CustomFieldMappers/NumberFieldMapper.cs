@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Serialization
 {
-    public class NumberFieldMapper : NumberConverter<Fields, double>, ICustomJsonMapper<Fields>
+    internal class NumberFieldMapper : NumberConverter<Fields, double>, ICustomJsonMapper<Fields>
     {
     }
 }

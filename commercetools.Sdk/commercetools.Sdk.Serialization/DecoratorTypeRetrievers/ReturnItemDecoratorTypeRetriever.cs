@@ -3,7 +3,7 @@ using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class ReturnItemDecoratorTypeRetriever : DecoratorTypeRetriever<ReturnItem>
+    internal class ReturnItemDecoratorTypeRetriever : DecoratorTypeRetriever<ReturnItem>
     {
         public ReturnItemDecoratorTypeRetriever(ITypeRetriever typeRetriever) : base(typeRetriever)
         {

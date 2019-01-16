@@ -4,7 +4,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class CentPrecisionMoneyConverter : ICustomJsonMapper<BaseMoney>
+    internal class CentPrecisionMoneyConverter : ICustomJsonMapper<BaseMoney>
     {
         public int Priority => 4;
 

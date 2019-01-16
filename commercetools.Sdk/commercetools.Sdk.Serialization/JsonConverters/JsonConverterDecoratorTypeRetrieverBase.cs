@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace commercetools.Sdk.Serialization
 {
-    public abstract class JsonConverterDecoratorTypeRetrieverBase<T> : JsonConverterBase
+    internal abstract class JsonConverterDecoratorTypeRetrieverBase<T> : JsonConverterBase
     {
         private readonly IDecoratorTypeRetriever<T> decoratorTypeRetriever;
         public abstract string PropertyName { get; }

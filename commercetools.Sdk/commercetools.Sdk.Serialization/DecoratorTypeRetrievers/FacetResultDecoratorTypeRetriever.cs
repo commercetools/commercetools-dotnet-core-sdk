@@ -3,7 +3,7 @@ using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Serialization
 {
-    public class FacetResultDecoratorTypeRetriever : DecoratorTypeRetriever<FacetResult>
+    internal class FacetResultDecoratorTypeRetriever : DecoratorTypeRetriever<FacetResult>
     {
         public FacetResultDecoratorTypeRetriever(ITypeRetriever typeRetriever) : base(typeRetriever)
         {

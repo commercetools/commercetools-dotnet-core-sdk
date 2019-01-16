@@ -5,7 +5,7 @@ using commercetools.Sdk.Domain.Products.Attributes;
 
 namespace commercetools.Sdk.Serialization.JsonConverters
 {
-    public class AttributeEnumConverter : JsonConverterBase
+    internal class AttributeEnumConverter : JsonConverterBase
     {
         public override bool CanConvert(Type objectType)
         {

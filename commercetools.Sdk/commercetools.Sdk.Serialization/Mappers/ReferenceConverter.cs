@@ -3,7 +3,7 @@ using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
 {
-    public abstract class ReferenceConverter<T, S> : ICustomJsonMapper<T>
+    internal abstract class ReferenceConverter<T, S> : ICustomJsonMapper<T>
     {
         public int Priority => 3;
 
