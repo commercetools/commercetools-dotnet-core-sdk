@@ -11,6 +11,7 @@
         }
 
         public TokenFlow TokenFlow => TokenFlow.ClientCredentials;
+
         public override HttpRequestMessage GetRequestMessage()
         {
             HttpRequestMessage request = new HttpRequestMessage();

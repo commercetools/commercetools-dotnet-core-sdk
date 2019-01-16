@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.Validation.Attributes;
 
 namespace commercetools.Sdk.Domain.Orders

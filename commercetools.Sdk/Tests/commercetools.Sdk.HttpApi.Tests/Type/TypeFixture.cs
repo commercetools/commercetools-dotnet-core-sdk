@@ -42,7 +42,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             typeDraft.Name.Add("en", this.RandomString(6));
             typeDraft.Description = new LocalizedString();
             typeDraft.Description.Add("en", this.RandomString(10));
-            typeDraft.ResourceTypeIds = new List<ResourceTypeId>() { ResourceTypeId.Category };
+            typeDraft.ResourceTypeIds = new List<ResourceTypeId>() { ResourceTypeId.Category, ResourceTypeId.CustomerGroup };
             typeDraft.FieldDefinitions = new List<FieldDefinition>();
             typeDraft.FieldDefinitions.Add(this.CreateStringFieldDefinition());
             typeDraft.FieldDefinitions.Add(this.CreateLocalizedStringFieldDefinition());
@@ -197,7 +197,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.Name = "reference-field";
-            fieldDefinition.Required = true;
+            fieldDefinition.Required = false;
             fieldDefinition.Label = new LocalizedString();
             fieldDefinition.Label.Add("en", "reference description");
             ReferenceFieldType fieldType = new ReferenceFieldType();

@@ -2,6 +2,7 @@
 
 namespace commercetools.Sdk.Domain.Carts
 {
+    using commercetools.Sdk.Domain.CustomerGroups;
     using System;
     using System.Collections.Generic;
 
