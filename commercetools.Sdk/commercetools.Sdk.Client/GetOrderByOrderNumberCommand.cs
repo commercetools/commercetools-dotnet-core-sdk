@@ -5,14 +5,14 @@ using commercetools.Sdk.Domain.Query;
 
 namespace commercetools.Sdk.Client
 {
-    public class GetByOrderNumberCommand : GetCommand<Order>
+    public class GetOrderByOrderNumberCommand : GetCommand<Order>
     {
-        public GetByOrderNumberCommand(string orderNumber)
+        public GetOrderByOrderNumberCommand(string orderNumber)
         {
             this.Init(orderNumber);
         }
 
-        public GetByOrderNumberCommand(string orderNumber, List<Expansion<Order>> expand)
+        public GetOrderByOrderNumberCommand(string orderNumber, List<Expansion<Order>> expand)
             : base(expand)
         {
             this.Init(orderNumber);

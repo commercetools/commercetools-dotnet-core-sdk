@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Domain.Customers
 {
-    public class CustomerToken
+    public class CustomerToken : Token<Customer>
     {
         public string Id { get; set; }
         public string CustomerId { get; set; }

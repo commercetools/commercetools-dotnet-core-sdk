@@ -21,6 +21,8 @@ namespace commercetools.Sdk.Serialization
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+            // In case value does not contain any time span, we are talking about date attributes or custom fields.
+            // Therefore, we should not send the time span at all.
             DateTime dateTime = (DateTime)value;
             IsoDateTimeConverter isoDateTimeConverter = new IsoDateTimeConverter();
             if (dateTime.TimeOfDay == new TimeSpan(0, 0, 0))

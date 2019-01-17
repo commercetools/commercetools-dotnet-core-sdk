@@ -22,15 +22,16 @@ namespace commercetools.Sdk.Serialization.JsonConverters
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         { 
+            // When Enum and LocalizedEnum attributes are created, only the key should be sent as string and not the whole value.
             var result = new
             {
-                Value = GetKey(value),
+                Value = GetValue(value),
                 Name = GetName(value)
             };
             serializer.Serialize(writer, result);
         }
 
-        private static string GetKey(object value)
+        private static string GetValue(object value)
         {
             return value.GetType() == typeof(EnumAttribute) ? ((EnumAttribute) value).Value.Key : ((LocalizedEnumAttribute)value).Value.Key;
         }
