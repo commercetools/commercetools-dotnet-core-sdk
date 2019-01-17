@@ -46,6 +46,16 @@ namespace commercetools.Sdk.HttpApi.Tests.Customers
         }
 
         [Fact]
+        public void CreateTokenForCustomerEmailVerification()
+        {
+            IClient commerceToolsClient = this.customerFixture.GetService<IClient>();
+            Customer customer = this.customerFixture.CreateCustomer();
+            CustomerToken customerToken = commerceToolsClient.ExecuteAsync(new CreateTokenForCustomerEmailVerificationCommand(customer.Id, 10, customer.Version)).Result as CustomerToken;
+            this.customerFixture.CustomersToDelete.Add(customer);
+            Assert.NotNull(customerToken);
+        }
+
+        [Fact]
         public void GetCustomerByPasswordToken()
         {
             IClient commerceToolsClient = this.customerFixture.GetService<IClient>();
@@ -53,6 +63,28 @@ namespace commercetools.Sdk.HttpApi.Tests.Customers
             CustomerToken customerToken = commerceToolsClient.ExecuteAsync(new CreateTokenForCustomerPasswordResetCommand(customer.Email)).Result as CustomerToken;
             this.customerFixture.CustomersToDelete.Add(customer);
             Customer retrievedCustomer = commerceToolsClient.ExecuteAsync(new GetCustomerByPasswordTokenCommand(customerToken.Value)).Result;
+            Assert.Equal(customer.Email, retrievedCustomer.Email);
+        }
+
+        [Fact]
+        public void GetCustomerByEmailToken()
+        {
+            IClient commerceToolsClient = this.customerFixture.GetService<IClient>();
+            Customer customer = this.customerFixture.CreateCustomer();
+            CustomerToken customerToken = commerceToolsClient.ExecuteAsync(new CreateTokenForCustomerEmailVerificationCommand(customer.Id, 10, customer.Version)).Result as CustomerToken;
+            this.customerFixture.CustomersToDelete.Add(customer);
+            Customer retrievedCustomer = commerceToolsClient.ExecuteAsync(new GetCustomerByEmailTokenCommand(customerToken.Value)).Result;
+            Assert.Equal(customer.Email, retrievedCustomer.Email);
+        }
+
+        [Fact]
+        public void VerifyCustomerEmail()
+        {
+            IClient commerceToolsClient = this.customerFixture.GetService<IClient>();
+            Customer customer = this.customerFixture.CreateCustomer();
+            CustomerToken customerToken = commerceToolsClient.ExecuteAsync(new CreateTokenForCustomerEmailVerificationCommand(customer.Id, 10, customer.Version)).Result as CustomerToken;
+            Customer retrievedCustomer = commerceToolsClient.ExecuteAsync(new VerifyCustomerEmailCommand(customerToken.Value, customer.Version)).Result;
+            this.customerFixture.CustomersToDelete.Add(retrievedCustomer);
             Assert.Equal(customer.Email, retrievedCustomer.Email);
         }
 
