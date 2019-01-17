@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.Domain
+﻿namespace commercetools.Sdk.Domain.Types.UpdateActions
 {
     public class ChangeNameUpdateAction : UpdateAction<Type>
     {

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using Type = commercetools.Sdk.Domain.Type;
+using commercetools.Sdk.Domain.Types.UpdateActions;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {

@@ -46,6 +46,14 @@ namespace commercetools.Sdk.HttpApi.Tests.CustomerGroups
             return draft;
         }
 
+        public CustomerGroup CreateCustomerGroupWithCustomFields()
+        {
+            CustomerGroupDraft draft = this.CreateCustomerGroupDraftWithCustomFields();
+            IClient commerceToolsClient = this.GetService<IClient>();
+            CustomerGroup customerGroup = commerceToolsClient.ExecuteAsync(new CreateCommand<CustomerGroup>(draft)).Result;
+            return customerGroup;
+        }
+
         public CustomerGroupDraft CreateCustomerGroupDraftWithCustomFields()
         {
             CustomerGroupDraft draft = new CustomerGroupDraft();
@@ -55,20 +63,33 @@ namespace commercetools.Sdk.HttpApi.Tests.CustomerGroups
             Type type = this.typeFixture.CreateType();
             this.typeFixture.TypesToDelete.Add(type);
             customFieldsDraft.Type = new ResourceIdentifier() { Key = type.Key };
-            customFieldsDraft.Fields = new Fields();
-            customFieldsDraft.Fields.Add("string-field", "test");
-            customFieldsDraft.Fields.Add("localized-string-field", new LocalizedString() { { "en", "localized-string-field-value" } });
-            customFieldsDraft.Fields.Add("enum-field", "enum-key-1");
-            customFieldsDraft.Fields.Add("localized-enum-field", "enum-key-1");
-            customFieldsDraft.Fields.Add("number-field", 3);
-            customFieldsDraft.Fields.Add("boolean-field", true);
-            customFieldsDraft.Fields.Add("date-field", new DateTime(2018, 11, 28));
-            customFieldsDraft.Fields.Add("date-time-field", new DateTime(2018, 11, 28, 11, 01, 00));
-            customFieldsDraft.Fields.Add("time-field", new TimeSpan(11, 01, 00));
-            customFieldsDraft.Fields.Add("money-field", new Money() { CentAmount = 1800, CurrencyCode = "EUR" });
-            customFieldsDraft.Fields.Add("set-field", new FieldSet<string>() { "test1", "test2" });
+            customFieldsDraft.Fields = this.CreateNewFields();
             draft.Custom = customFieldsDraft;
             return draft;
+        }
+
+        public Fields CreateNewFields()
+        {
+            Fields fields = new Fields();
+            fields.Add("string-field", "test");
+            fields.Add("localized-string-field", new LocalizedString() { { "en", "localized-string-field-value" } });
+            fields.Add("enum-field", "enum-key-1");
+            fields.Add("localized-enum-field", "enum-key-1");
+            fields.Add("number-field", 3);
+            fields.Add("boolean-field", true);
+            fields.Add("date-field", new DateTime(2018, 11, 28));
+            fields.Add("date-time-field", new DateTime(2018, 11, 28, 11, 01, 00));
+            fields.Add("time-field", new TimeSpan(11, 01, 00));
+            fields.Add("money-field", new Money() { CentAmount = 1800, CurrencyCode = "EUR" });
+            fields.Add("set-field", new FieldSet<string>() { "test1", "test2" });
+            return fields;
+        }
+
+        public Type CreateNewType()
+        {
+            Type type = this.typeFixture.CreateType();
+            this.typeFixture.TypesToDelete.Add(type);
+            return type;
         }
     }
 }
