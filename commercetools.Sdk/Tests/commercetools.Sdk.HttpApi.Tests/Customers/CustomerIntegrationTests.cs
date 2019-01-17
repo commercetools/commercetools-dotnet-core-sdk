@@ -25,14 +25,25 @@ namespace commercetools.Sdk.HttpApi.Tests.Customers
         }
 
         [Fact]
+        public void LoginCustomer()
+        {
+            IClient commerceToolsClient = this.customerFixture.GetService<IClient>();
+            Customer customer = this.customerFixture.CreateCustomer();
+            this.customerFixture.CustomersToDelete.Add(customer);
+            CustomerSignInResult customerSignInResult = commerceToolsClient.ExecuteAsync(new LoginCustomerCommand(customer.Email, CustomerFixture.Password)).Result as CustomerSignInResult;
+            Assert.NotNull(customerSignInResult);
+        }
+
+        [Fact]
         public void ChangePasswordCustomer()
         {
             IClient commerceToolsClient = this.customerFixture.GetService<IClient>();
             Customer customer = this.customerFixture.CreateCustomer();
-            Customer updatedCustomer = commerceToolsClient.ExecuteAsync(new ChangeCustomerPasswordCommand(customer.Id, customer.Version, CustomerFixture.Password, "12345")).Result;
+            var password = "12345";
+            Customer updatedCustomer = commerceToolsClient.ExecuteAsync(new ChangeCustomerPasswordCommand(customer.Id, customer.Version, CustomerFixture.Password, password)).Result;
             this.customerFixture.CustomersToDelete.Add(updatedCustomer);
-            Assert.NotNull(updatedCustomer);
-            // TODO Login with new password
+            CustomerSignInResult customerSignInResult = commerceToolsClient.ExecuteAsync(new LoginCustomerCommand(customer.Email, password)).Result as CustomerSignInResult;
+            Assert.NotNull(customerSignInResult);
         }
 
         [Fact]
@@ -94,10 +105,11 @@ namespace commercetools.Sdk.HttpApi.Tests.Customers
             IClient commerceToolsClient = this.customerFixture.GetService<IClient>();
             Customer customer = this.customerFixture.CreateCustomer();
             CustomerToken customerToken = commerceToolsClient.ExecuteAsync(new CreateTokenForCustomerPasswordResetCommand(customer.Email)).Result as CustomerToken;
-            Customer retrievedCustomer = commerceToolsClient.ExecuteAsync(new ResetCustomerPasswordCommand(customerToken.Value, "12345", customer.Version)).Result;
+            var password = "12345";
+            Customer retrievedCustomer = commerceToolsClient.ExecuteAsync(new ResetCustomerPasswordCommand(customerToken.Value, password, customer.Version)).Result;
             this.customerFixture.CustomersToDelete.Add(retrievedCustomer);
-            Assert.NotNull(retrievedCustomer);
-            // TODO Login with new password
+            CustomerSignInResult customerSignInResult = commerceToolsClient.ExecuteAsync(new LoginCustomerCommand(customer.Email, password)).Result as CustomerSignInResult;
+            Assert.NotNull(customerSignInResult);
         }
     }
 }
