@@ -3,6 +3,8 @@ using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Query.Converters
 {
+    // | ||
+    // & &&
     public class BinaryLogicalPredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
         public int Priority { get; } = 4;
@@ -23,6 +25,7 @@ namespace commercetools.Sdk.Linq.Query.Converters
             string operatorSign = Mapping.GetOperator(expression.NodeType, Mapping.LogicalOperators);
             IPredicateVisitor predicateVisitorLeft = predicateVisitorFactory.Create(binaryExpression.Left);
             IPredicateVisitor predicateVisitorRight = predicateVisitorFactory.Create(binaryExpression.Right);
+            // c => c.Parent.Id == "some id" || c.Parent.Id == "some other id"
             if (CanCombinePredicateVisitors(predicateVisitorLeft, predicateVisitorRight))
             {
                 return CombinePredicateVisitors(predicateVisitorLeft, operatorSign, predicateVisitorRight);

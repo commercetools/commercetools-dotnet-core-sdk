@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace commercetools.Sdk.Linq.Query.Visitors
 {
+    // ("a", "b", "c")
     public class CollectionPredicateVisitor : IPredicateVisitor
     {
         private readonly IEnumerable<IPredicateVisitor> predicateVisitors;

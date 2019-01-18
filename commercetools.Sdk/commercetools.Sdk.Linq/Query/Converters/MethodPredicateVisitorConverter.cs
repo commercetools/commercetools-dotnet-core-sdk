@@ -32,12 +32,14 @@ namespace commercetools.Sdk.Linq.Query.Converters
             string methodName = Mapping.AllowedMethods[methodCallExpression.Method.Name];
             IPredicateVisitor methodCaller = predicateVisitorFactory.Create(methodCallExpression.Arguments[0]);
 
+            // c.Key.In("c14", "c15")
             if (methodCallExpression.Arguments.Count > 1)
             {
                 IPredicateVisitor methodArguments = predicateVisitorFactory.Create(methodCallExpression.Arguments[1]);
                 return new BinaryPredicateVisitor(methodCaller, methodName, methodArguments);
             }
 
+            // c.Key.IsDefined()
             return new BinaryPredicateVisitor(methodCaller, methodName, new ConstantPredicateVisitor(string.Empty));
         }
     }

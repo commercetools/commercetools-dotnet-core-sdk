@@ -73,6 +73,7 @@ namespace commercetools.Sdk.Linq.Filter.Converters
             return expression.NodeType == ExpressionType.And || expression.NodeType == ExpressionType.AndAlso;
         }
 
+        // TODO Check if it is actually an attribute
         private static bool IsAttributeWithNameOnly(Expression expression)
         {
             if (expression.NodeType != ExpressionType.Equal)

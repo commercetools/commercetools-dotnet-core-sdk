@@ -1,5 +1,7 @@
 ﻿namespace commercetools.Sdk.Linq.Query.Visitors
 {
+    // name
+    // "Peter"
     public class ConstantPredicateVisitor : IPredicateVisitor
     {
         public ConstantPredicateVisitor(string constant)

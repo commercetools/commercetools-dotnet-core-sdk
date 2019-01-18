@@ -3,6 +3,7 @@ using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Query.Converters
 {
+    // p.Attributes.Any(...)
     public class AttributePredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
         public int Priority { get; } = 3;

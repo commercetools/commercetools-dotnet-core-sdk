@@ -3,6 +3,8 @@ using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Query.Converters
 {
+    // Not((c.Key == "c14"))
+    // !(c.Key == "c14")
     public class NotLogicalPredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
         public int Priority { get; } = 4;
@@ -20,6 +22,7 @@ namespace commercetools.Sdk.Linq.Query.Converters
                 return null;
             }
 
+            // c.Key == "c14"
             IPredicateVisitor inner = predicateVisitorFactory.Create(unaryExpression.Operand);
             ConstantPredicateVisitor not = new ConstantPredicateVisitor(Mapping.Not);
             return new ContainerPredicateVisitor(inner, not);

@@ -4,6 +4,7 @@ using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Query.Converters
 {
+    // "c14", "c15" in c.Key.In("c14", "c15")
     public class CollectionPredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
         public int Priority { get; } = 4;

@@ -2,6 +2,7 @@
 
 namespace commercetools.Sdk.Linq.Query.Converters
 {
+    // ((TextAttribute)a)
     public class ConvertPredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
         public int Priority { get; } = 4;

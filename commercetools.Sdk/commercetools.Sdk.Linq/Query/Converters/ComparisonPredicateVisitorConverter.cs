@@ -4,6 +4,7 @@ using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Query.Converters
 {
+    // c.Key == "c14"
     public class ComparisonPredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
         public int Priority { get; } = 4;
@@ -25,6 +26,8 @@ namespace commercetools.Sdk.Linq.Query.Converters
             IPredicateVisitor right = predicateVisitorFactory.Create(binaryExpression.Right);
             string operatorSign = Mapping.GetOperator(expression.NodeType, Mapping.ComparisonOperators);
 
+            // c.Name["en"] == "men"
+            // name(en) = "men" => name(en = "men")
             // Predicates might need to be rearranged so that the brackets are rendered in a correct way
             return CanBeCombined(left) ? CombinePredicates(left, operatorSign, right) : new BinaryPredicateVisitor(left, operatorSign, right);
         }

@@ -3,12 +3,14 @@ using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Query.Converters
 {
+    // c.Name["en"]
     public class DictionaryPredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
         public int Priority { get; } = 4;
 
         public bool CanConvert(Expression expression)
         {
+            // TODO Add also a check that method name is get_Item
             return expression.NodeType == ExpressionType.Call;
         }
 

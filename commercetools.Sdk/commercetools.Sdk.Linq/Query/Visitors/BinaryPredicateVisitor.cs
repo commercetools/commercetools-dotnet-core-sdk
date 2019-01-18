@@ -1,5 +1,6 @@
 ﻿namespace commercetools.Sdk.Linq.Query.Visitors
 {
+    // name = "Peter"
     public class BinaryPredicateVisitor : IPredicateVisitor
     {
         private readonly IPredicateVisitor left;

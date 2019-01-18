@@ -3,6 +3,7 @@ using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Query.Converters
 {
+    // c.Parent.Id
     public class MemberPredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
         public int Priority { get; } = 4;
@@ -20,8 +21,11 @@ namespace commercetools.Sdk.Linq.Query.Converters
                 return null;
             }
 
+            // Id
             string currentName = memberExpression.Member.Name;
             ConstantPredicateVisitor constant = new ConstantPredicateVisitor(currentName);
+
+            // c.Parent
             IPredicateVisitor parent = predicateVisitorFactory.Create(memberExpression.Expression);
             return new ContainerPredicateVisitor(constant, parent);
         }

@@ -18,10 +18,16 @@ namespace commercetools.Sdk.Linq
         {
             switch (expression.NodeType)
             {
+                // c.Key == "c14" in c => c.Key == "c14"
                 case ExpressionType.Lambda:
                     return this.Create(((LambdaExpression)expression).Body);
+
+                // LineItemCount(this Cart source, Expression<Func<LineItem, bool>> parameter)
+                // Happens when an expression is passed as a method parameter.
                 case ExpressionType.Quote:
                     return this.Create(((UnaryExpression)expression).Operand);
+
+                // c in c.Key
                 case ExpressionType.Parameter:
                     return null;
                 default:

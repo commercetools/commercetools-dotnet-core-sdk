@@ -1,5 +1,6 @@
 ﻿namespace commercetools.Sdk.Linq.Query.Visitors
 {
+    // variants(not(attributes(name="attribute-name")))
     public class ContainerPredicateVisitor : IPredicateVisitor
     {
         public ContainerPredicateVisitor(IPredicateVisitor inner, IPredicateVisitor parent)

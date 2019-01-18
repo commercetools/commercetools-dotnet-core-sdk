@@ -24,6 +24,7 @@ namespace commercetools.Sdk.Linq.Filter.Converters
             IPredicateVisitor left = predicateVisitorFactory.Create(binaryExpression.Left);
             IPredicateVisitor right = predicateVisitorFactory.Create(binaryExpression.Right);
 
+            // variants.price.centAmount:range (1 to 30), (40 to 100)
             if (CanCombinePredicateVisitors(left, right))
             {
                 return CombinePredicateVisitors(left, right);

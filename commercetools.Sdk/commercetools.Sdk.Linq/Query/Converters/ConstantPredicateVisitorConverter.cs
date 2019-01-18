@@ -3,6 +3,11 @@ using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Query.Converters
 {
+    // local variable string key = "c14"
+    // key in c.Key = key
+    // int minutes = 10
+    // hardcoded
+    // "c14" in c.Key = "c14"
     public class ConstantPredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
         public int Priority { get; } = 4;
