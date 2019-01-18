@@ -17,7 +17,8 @@
         public string Render()
         {
             // It can happen that the right predicate is an empty string, hence we trim the white space.
-            return $"{this.left.Render()} {this.operatorSign} {this.right.Render()}".TrimEnd();
+            string result = $"{this.left.Render()} {this.operatorSign} {this.right.Render()}".TrimEnd();
+            return result.Replace("  ", " ");
         }
     }
 }

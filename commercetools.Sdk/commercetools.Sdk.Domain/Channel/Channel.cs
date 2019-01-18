@@ -3,5 +3,6 @@
     [Endpoint("channels")]
     public class Channel
     {
+        public GeoJsonGeometry GeoLocation { get; set; }
     }
 }

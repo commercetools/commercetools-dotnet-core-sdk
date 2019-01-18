@@ -45,5 +45,10 @@ namespace commercetools.Sdk.Domain.Predicates
         {
             throw new NotImplementedException();
         }
+
+        public static bool WithinCircle(this GeoJsonGeometry source, params double[] values)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -281,5 +281,14 @@ namespace commercetools.Sdk.Linq.Tests
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes(name = \"text-name\" and value(en = \"text-value-en\" or de = \"text-value-de\"))", result);
         }
+
+        [Fact]
+        public void WithinCircle()
+        {
+            Expression<Func<Channel, bool>> expression = c => c.GeoLocation.WithinCircle(13, 52, 1000);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("geoLocation within circle(13, 52, 1000)", result);
+        }
     }
 }

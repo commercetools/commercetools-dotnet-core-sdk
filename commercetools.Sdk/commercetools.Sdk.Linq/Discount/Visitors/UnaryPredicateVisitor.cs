@@ -1,5 +1,6 @@
 ﻿namespace commercetools.Sdk.Linq.Discount.Visitors
 {
+    // c.Country.IsDefined
     public class UnaryPredicateVisitor : IPredicateVisitor, IAccessorAppendable
     {
         private readonly string operatorName;
