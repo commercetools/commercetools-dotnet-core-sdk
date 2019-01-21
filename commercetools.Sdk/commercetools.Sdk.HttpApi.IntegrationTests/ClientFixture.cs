@@ -7,24 +7,12 @@ using commercetools.Sdk.Registration;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Linq;
 
-namespace commercetools.Sdk.HttpApi.Tests
+namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     public class ClientFixture
     {
         private readonly ServiceProvider serviceProvider;
         private readonly IConfiguration configuration;
-
-        /// <summary>
-        /// Gets the API Base address with project key as url.
-        /// </summary>
-        /// <value>The API Base address with project key of Client.</value>
-        public string APIBaseAddressWithProjectKey
-        {
-            get
-            {
-                return this.GetAPIBaseAddressWithProjectKey("Client");
-            }
-        }
 
         public ClientFixture()
         {
@@ -55,22 +43,6 @@ namespace commercetools.Sdk.HttpApi.Tests
         }
 
         private static Random random = new Random();
-
-        /// <summary>
-        /// Gets the API Base address with project key.
-        /// </summary>
-        /// <returns>The APIB ase address with project key.</returns>
-        /// <param name="name">Name of Client section in Config</param>
-        public string GetAPIBaseAddressWithProjectKey(string name)
-        {
-            string apiUrl = "";
-            var clientSection = this.configuration.GetSection(name).Get<ClientConfiguration>();
-            if(clientSection != null)
-            {
-                apiUrl = clientSection.ApiBaseAddress + clientSection.ProjectKey;
-            }
-            return apiUrl;
-        }
 
         // TODO Put this in a separate class
         public string RandomString(int length)

@@ -15,7 +15,7 @@ using commercetools.Sdk.Serialization;
 using Xunit;
 using commercetools.Sdk.Domain.Categories;
 
-namespace commercetools.Sdk.HttpApi.Tests
+namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     public class RequestBuilderTests : IClassFixture<ClientFixture>
     {
@@ -57,7 +57,7 @@ namespace commercetools.Sdk.HttpApi.Tests
                 this.clientFixture.GetService<IEndpointRetriever>(),
                 this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
-            Assert.Equal(this.clientFixture.APIBaseAddressWithProjectKey+"/categories?expand=parent", httpRequestMessage.RequestUri.ToString());
+            Assert.Equal("https://api.sphere.io/portablevendor/categories?expand=parent", httpRequestMessage.RequestUri.ToString());
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace commercetools.Sdk.HttpApi.Tests
                 this.clientFixture.GetService<IEndpointRetriever>(),
                 this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
-            Assert.Equal(this.clientFixture.APIBaseAddressWithProjectKey + "/categories?expand=parent&expand=ancestors%5B0%5D", httpRequestMessage.RequestUri.ToString());
+            Assert.Equal("https://api.sphere.io/portablevendor/categories?expand=parent&expand=ancestors%5B0%5D", httpRequestMessage.RequestUri.ToString());
         }
 
         [Fact]
@@ -126,7 +126,7 @@ namespace commercetools.Sdk.HttpApi.Tests
                 this.clientFixture.GetService<IEndpointRetriever>(),
                 this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = requestMessageBuilder.GetRequestMessage(matchingCommand);
-            Assert.Equal(this.clientFixture.APIBaseAddressWithProjectKey + "/product-discounts/matching", httpRequestMessage.RequestUri.ToString());
+            Assert.Equal("https://api.sphere.io/portablevendor/product-discounts/matching", httpRequestMessage.RequestUri.ToString());
         }
     }
 }

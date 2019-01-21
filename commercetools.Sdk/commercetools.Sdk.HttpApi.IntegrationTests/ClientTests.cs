@@ -15,7 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace commercetools.Sdk.HttpApi.Tests
+namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     public class ClientTests : IClassFixture<ClientFixture>
     {
@@ -130,8 +130,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClient commerceToolsClient = this.clientFixture.GetService<IClient>();
             SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction();
             setKeyAction.Key = "newKey" + this.clientFixture.RandomString(3);
-            //string categoryId = "8994e5d7-d81f-4480-af60-286dc96c1fe8";
-            string categoryId = "246708e9-920f-4345-ad96-c8015e600cd7";
+            string categoryId = "8994e5d7-d81f-4480-af60-286dc96c1fe8";
             HttpApiClientException exception = Assert.ThrowsAsync<HttpApiClientException>(() => commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Category>(new Guid(categoryId), 249, new List<UpdateAction<Category>>() { setKeyAction }))).Result;
             Assert.Equal(409, exception.StatusCode);
             Assert.Single(exception.Errors);

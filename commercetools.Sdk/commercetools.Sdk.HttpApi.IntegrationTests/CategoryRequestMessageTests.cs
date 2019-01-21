@@ -1,4 +1,4 @@
-﻿using commercetools.Sdk.Client;
+﻿sing commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Linq;
 using System;
@@ -8,7 +8,7 @@ using commercetools.Sdk.HttpApi.RequestBuilders;
 using Xunit;
 using commercetools.Sdk.Domain.Categories;
 
-namespace commercetools.Sdk.HttpApi.Tests
+namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     public class CategoryRequestMessageTests : IClassFixture<ClientFixture>
     {
@@ -22,7 +22,6 @@ namespace commercetools.Sdk.HttpApi.Tests
         [Fact]
         public void CategoryGetByIdRequestMessage()
         {
-            string apiBaseAddressWithProjectKey = this.clientFixture.GetAPIBaseAddressWithProjectKey("Client");
             GetByIdCommand<Category> command = new GetByIdCommand<Category>(new Guid("2bafc816-4223-4ff0-ac8a-0f08a8f29fd6"));
             GetRequestMessageBuilder requestMessageBuilder = new GetRequestMessageBuilder(
                 this.clientFixture.GetService<IClientConfiguration>(), 
@@ -30,7 +29,7 @@ namespace commercetools.Sdk.HttpApi.Tests
                 this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = requestMessageBuilder.GetRequestMessage(command);
             Assert.Equal(HttpMethod.Get, httpRequestMessage.Method);
-            Assert.Equal(apiBaseAddressWithProjectKey+"/categories/2bafc816-4223-4ff0-ac8a-0f08a8f29fd6", httpRequestMessage.RequestUri.ToString());
+            Assert.Equal("https://api.sphere.io/portablevendor/categories/2bafc816-4223-4ff0-ac8a-0f08a8f29fd6", httpRequestMessage.RequestUri.ToString());
         }
     }
 }

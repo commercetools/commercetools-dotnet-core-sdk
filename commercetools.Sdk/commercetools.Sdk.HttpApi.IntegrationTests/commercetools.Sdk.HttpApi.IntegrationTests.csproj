@@ -1,0 +1,76 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
+    <PackageReference Include="Moq" Version="4.10.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="UnitTest1.cs" />
+    <Compile Remove="CategoryRequestMessageTests.cs" />
+    <Compile Remove="ClientTests.cs" />
+    <Compile Remove="ProductRequestMessageTests.cs" />
+    <Compile Remove="RequestBuilderTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\commercetools.Sdk.Domain\commercetools.Sdk.Domain.csproj" />
+    <ProjectReference Include="..\commercetools.Sdk.HttpApi\commercetools.Sdk.HttpApi.csproj" />
+    <ProjectReference Include="..\commercetools.Sdk.Reflection\commercetools.Sdk.Registration.csproj" />
+    <ProjectReference Include="..\commercetools.Sdk.Serialization\commercetools.Sdk.Serialization.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="appsettings.test.json" />
+    <None Remove="Resources\commercetools.png" />
+    <None Remove="Resources\Responses\ConcurrentModification.json" />
+    <None Remove="Resources\Responses\GetCategoryById.json" />
+    <None Remove="Resources\Responses\ResourceNotFound.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="appsettings.test.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\commercetools.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Responses\ConcurrentModification.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Responses\GetCategoryById.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Responses\ResourceNotFound.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="appsettings.test.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Category\" />
+    <Folder Include="CustomerGroups\" />
+    <Folder Include="Customers\" />
+    <Folder Include="Product\" />
+    <Folder Include="ProductType\" />
+    <Folder Include="Project\" />
+    <Folder Include="Properties\" />
+    <Folder Include="Type\" />
+    <Folder Include="Resources\" />
+  </ItemGroup>
+</Project>

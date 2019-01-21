@@ -1,0 +1,31 @@
+{
+  "id": "2bafc816-4223-4ff0-ac8a-0f08a8f29fd6",
+  "version": 1,
+  "lastMessageSequenceNumber": 1,
+  "createdAt": "2018-08-15T12:57:54.041Z",
+  "lastModifiedAt": "2018-08-15T12:57:54.041Z",
+  "key": "c10",
+  "name": {
+    "de": "Bekleidung",
+    "en": "Clothing",
+    "it": "Abbigliamento"
+  },
+  "slug": {
+    "de": "women-clothing",
+    "en": "women-clothing",
+    "it": "women-clothing"
+  },
+  "ancestors": [
+    {
+      "typeId": "category",
+      "id": "f40fcd15-b1c2-4279-9cfa-f6083e6a2988"
+    }
+  ],
+  "parent": {
+    "typeId": "category",
+    "id": "f40fcd15-b1c2-4279-9cfa-f6083e6a2988"
+  },
+  "orderHint": "0.000015343378740401955446859",
+  "externalId": "10",
+  "assets": []
+}

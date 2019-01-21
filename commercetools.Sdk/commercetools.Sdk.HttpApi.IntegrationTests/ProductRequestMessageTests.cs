@@ -6,7 +6,7 @@ using commercetools.Sdk.HttpApi.AdditionalParameters;
 using commercetools.Sdk.HttpApi.RequestBuilders;
 using Xunit;
 
-namespace commercetools.Sdk.HttpApi.Tests
+namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     public class ProductRequestMessageTests : IClassFixture<ClientFixture>
     {
@@ -31,7 +31,7 @@ namespace commercetools.Sdk.HttpApi.Tests
                 this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = requestMessageBuilder.GetRequestMessage(command);
             Assert.Equal(HttpMethod.Get, httpRequestMessage.Method);
-            Assert.Equal(this.clientFixture.APIBaseAddressWithProjectKey + "/products/2bafc816-4223-4ff0-ac8a-0f08a8f29fd6?priceCurrency=EUR", httpRequestMessage.RequestUri.ToString());
+            Assert.Equal("https://api.sphere.io/portablevendor/products/2bafc816-4223-4ff0-ac8a-0f08a8f29fd6?priceCurrency=EUR", httpRequestMessage.RequestUri.ToString());
         }
     }
 }
