@@ -12,7 +12,7 @@
         {
             this.regionInfos = CultureInfo.GetCultures(CultureTypes.AllCultures)
                 .Where(x => !x.Equals(CultureInfo.InvariantCulture))
-                .Where(x => !x.IsNeutralCulture).Select(x => new RegionInfo(x.LCID)).ToArray();
+                .Where(x => !x.IsNeutralCulture).Select(x => new RegionInfo(x.Name)).ToArray();
         }
 
         public bool IsCurrencyValid(string currency)
