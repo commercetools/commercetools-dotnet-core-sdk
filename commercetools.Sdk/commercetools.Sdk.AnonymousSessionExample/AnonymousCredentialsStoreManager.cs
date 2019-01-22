@@ -8,6 +8,6 @@ namespace commercetools.Sdk.AnonymousSessionExample
 {
     public class AnonymousCredentialsStoreManager : InMemoryTokenStoreManager, IAnonymousCredentialsStoreManager
     {
-        public string AnonymousId => "mvc-example";
+        public string AnonymousId => "mvc-example" + DateTime.Now.ToString("yyyyMMddhhmmss");
     }
 }

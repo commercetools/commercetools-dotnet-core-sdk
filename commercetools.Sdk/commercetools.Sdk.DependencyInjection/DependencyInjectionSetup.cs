@@ -42,5 +42,16 @@ namespace commercetools.Sdk.DependencyInjection
             var serviceProvider = services.BuildServiceProvider();
             ServiceLocator.SetServiceLocatorProvider(serviceProvider);
         }
+
+        public static void UseCommercetools(this IServiceCollection services, IConfiguration configuration, string configurationSection)
+        {
+            services.UseRegistration();
+            services.UseDomain();
+            services.UseSerialization();
+            services.UseLinq();
+            services.UseHttpApi(configuration, configurationSection);
+            var serviceProvider = services.BuildServiceProvider();
+            ServiceLocator.SetServiceLocatorProvider(serviceProvider);
+        }
     }
 }

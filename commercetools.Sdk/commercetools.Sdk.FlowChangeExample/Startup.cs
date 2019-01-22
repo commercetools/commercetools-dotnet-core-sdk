@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace commercetools.Sdk.AnonymousSessionExample
+namespace commercetools.Sdk.FlowChangeExample
 {
     public class Startup
     {
@@ -28,8 +28,10 @@ namespace commercetools.Sdk.AnonymousSessionExample
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
+            services.AddSingleton<IUserCredentialsStoreManager, UserCredentialsStoreManager>();
             services.AddSingleton<IAnonymousCredentialsStoreManager, AnonymousCredentialsStoreManager>();
-            services.UseCommercetoolsWithAnonymousSession(this.configuration, "Client");
+            services.UseCommercetools(this.configuration, "Client");
             services.AddMvc();
         }
     }
