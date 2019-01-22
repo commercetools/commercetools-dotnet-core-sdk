@@ -3,6 +3,7 @@
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
+    using commercetools.Sdk.HttpApi.Tokens;
     using Domain;
 
     public class AuthorizationHandler : DelegatingHandler

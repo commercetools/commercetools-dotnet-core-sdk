@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.HttpApi
+﻿namespace commercetools.Sdk.HttpApi.Tokens
 {
     public interface ITokenProviderFactory
     {

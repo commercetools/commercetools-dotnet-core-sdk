@@ -1,11 +1,10 @@
-﻿namespace commercetools.Sdk.HttpApi
+﻿namespace commercetools.Sdk.HttpApi.Tokens
 {
     using commercetools.Sdk.Serialization;
     using System;
     using System.Net.Http;
 
-    // TODO Check how to pass username and password without saving them in objects
-    public class PasswordTokenProvider : TokenProvider, ITokenProvider
+    internal class PasswordTokenProvider : TokenProvider, ITokenProvider
     {
         private readonly IUserCredentialsStoreManager userCredentialsManager;
 

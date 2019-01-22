@@ -3,6 +3,7 @@ using commercetools.Sdk.HttpApi.AdditionalParameters;
 using commercetools.Sdk.HttpApi.HttpApiCommands;
 using commercetools.Sdk.HttpApi.RequestBuilders;
 using commercetools.Sdk.HttpApi.SearchParameters;
+using commercetools.Sdk.HttpApi.Tokens;
 using commercetools.Sdk.HttpApi.UploadImageParameters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

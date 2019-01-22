@@ -1,9 +1,9 @@
-﻿namespace commercetools.Sdk.HttpApi
-{
-    using System.Collections.Generic;
-    using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
-    public class TokenProviderFactory : ITokenProviderFactory
+namespace commercetools.Sdk.HttpApi.Tokens
+{
+    internal class TokenProviderFactory : ITokenProviderFactory
     {
         private readonly IEnumerable<ITokenProvider> tokenProviders;
 

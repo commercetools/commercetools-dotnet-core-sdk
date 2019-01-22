@@ -1,7 +1,8 @@
-﻿namespace commercetools.Sdk.HttpApi.IntegrationTests
+﻿namespace commercetools.Sdk.HttpApi.IntegrationTests.Tokens
 {
     using commercetools.Sdk.HttpApi;
     using commercetools.Sdk.HttpApi.Domain;
+    using commercetools.Sdk.HttpApi.Tokens;
     using commercetools.Sdk.Serialization;
     using System.Net.Http;
     using Xunit;
@@ -51,7 +52,7 @@
         public void GetPasswordToken()
         {
             IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithSmallerScope");
-            IUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
+            InMemoryUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
             userCredentialsStoreManager.Username = "mick.jagger@commercetools.com";
             userCredentialsStoreManager.Password = "st54e9m4";
             ITokenProvider tokenProvider = new PasswordTokenProvider(
@@ -81,7 +82,7 @@
         public void GetAnonymousTokenIdProvided()
         {
             IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithAnonymousScope");
-            IAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
+            InMemoryAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
             anonymousStoreManager.AnonymousId = this.clientFixture.RandomString(10);
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(
                 this.clientFixture.GetService<IHttpClientFactory>(),
@@ -96,7 +97,7 @@
         public void RefreshTokenPasswordFlow()
         {
             IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithSmallerScope");
-            IUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
+            InMemoryUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
             userCredentialsStoreManager.Username = "mick.jagger@commercetools.com";
             userCredentialsStoreManager.Password = "st54e9m4";
             ITokenProvider tokenProvider = new PasswordTokenProvider(

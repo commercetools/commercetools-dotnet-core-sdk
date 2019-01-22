@@ -51,7 +51,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void GetPasswordToken()
         {
             IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithSmallerScope");
-            IUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
+            InMemoryUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
             userCredentialsStoreManager.Username = "mick.jagger@commercetools.com";
             userCredentialsStoreManager.Password = "st54e9m4";
             ITokenProvider tokenProvider = new PasswordTokenProvider(
@@ -81,7 +81,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void GetAnonymousTokenIdProvided()
         {
             IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithAnonymousScope");
-            IAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
+            InMemoryAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
             anonymousStoreManager.AnonymousId = this.clientFixture.RandomString(10);
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(
                 this.clientFixture.GetService<IHttpClientFactory>(),
@@ -96,7 +96,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void RefreshTokenPasswordFlow()
         {
             IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithSmallerScope");
-            IUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
+            InMemoryUserCredentialsStoreManager userCredentialsStoreManager = new InMemoryUserCredentialsStoreManager();
             userCredentialsStoreManager.Username = "mick.jagger@commercetools.com";
             userCredentialsStoreManager.Password = "st54e9m4";
             ITokenProvider tokenProvider = new PasswordTokenProvider(

@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.HttpApi
+﻿namespace commercetools.Sdk.HttpApi.Tokens
 {
     using System;
     using System.Net.Http;
@@ -6,7 +6,7 @@
     using Domain;
     using Serialization;
 
-    public abstract class TokenProvider
+    internal abstract class TokenProvider
     {
         private readonly ISerializerService serializerService;
         private readonly ITokenStoreManager tokenStoreManager;

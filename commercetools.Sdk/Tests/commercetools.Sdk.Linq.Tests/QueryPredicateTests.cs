@@ -282,7 +282,7 @@ namespace commercetools.Sdk.Linq.Tests
             Assert.Equal("attributes(name = \"text-name\" and value(en = \"text-value-en\" or de = \"text-value-de\"))", result);
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void WithinCircle()
         {
             Expression<Func<Channel, bool>> expression = c => c.GeoLocation.WithinCircle(13, 52, 1000);

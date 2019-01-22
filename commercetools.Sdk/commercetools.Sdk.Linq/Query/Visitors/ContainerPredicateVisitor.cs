@@ -16,7 +16,7 @@
         public string Render()
         {
             string result = this.Parent != null ? $"{this.Parent.Render()}({this.Inner?.Render()})" : this.Inner?.Render();
-            return result.Replace("((", "(").Replace("))", ")");
+            return result/*.Replace("((", "(").Replace("))", ")")*/;
         }
     }
 }
