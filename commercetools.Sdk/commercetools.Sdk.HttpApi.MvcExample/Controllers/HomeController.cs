@@ -1,10 +1,9 @@
 ﻿using commercetools.Sdk.Client;
-using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
-namespace commercetools.Sdk.HttpApi.MvcExample.Controllers
+namespace commercetools.Sdk.ClientCredentialsExample.Controllers
 {
     public class HomeController : Controller
     {

@@ -1,11 +1,11 @@
-﻿namespace commercetools.Sdk.HttpApi.Tokens
-{
-    using System;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-    using Domain;
-    using Serialization;
+﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using commercetools.Sdk.HttpApi.Domain;
+using commercetools.Sdk.Serialization;
 
+namespace commercetools.Sdk.HttpApi.Tokens
+{
     internal abstract class TokenProvider
     {
         private readonly ISerializerService serializerService;
