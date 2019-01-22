@@ -2,9 +2,8 @@
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
-namespace commercetools.Sdk.ClientCredentialsExample.Controllers
+namespace commercetools.Sdk.AnonymousSessionExample.Controllers
 {
     public class HomeController : Controller
     {

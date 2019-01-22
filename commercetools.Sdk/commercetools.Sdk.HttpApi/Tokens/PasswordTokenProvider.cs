@@ -1,9 +1,9 @@
-﻿namespace commercetools.Sdk.HttpApi.Tokens
-{
-    using commercetools.Sdk.Serialization;
-    using System;
-    using System.Net.Http;
+﻿using System;
+using System.Net.Http;
+using commercetools.Sdk.Serialization;
 
+namespace commercetools.Sdk.HttpApi.Tokens
+{ 
     internal class PasswordTokenProvider : TokenProvider, ITokenProvider
     {
         private readonly IUserCredentialsStoreManager userCredentialsManager;

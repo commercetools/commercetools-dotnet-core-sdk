@@ -1,10 +1,11 @@
 ﻿using commercetools.Sdk.DependencyInjection;
+using commercetools.Sdk.HttpApi.Tokens;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace commercetools.Sdk.ClientCredentialsExample
+namespace commercetools.Sdk.AnonymousSessionExample
 {
     public class Startup
     {
@@ -27,7 +28,8 @@ namespace commercetools.Sdk.ClientCredentialsExample
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.UseCommercetoolsWithClientCredentials(this.configuration, "Client");
+            services.AddSingleton<IAnonymousCredentialsStoreManager, AnonymousCredentialsStoreManager>();
+            services.UseCommercetoolsWithAnonymousSession(this.configuration, "Client");
             services.AddMvc();
         }
     }

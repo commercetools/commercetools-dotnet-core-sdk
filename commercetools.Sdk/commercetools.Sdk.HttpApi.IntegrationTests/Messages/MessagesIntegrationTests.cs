@@ -15,13 +15,5 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Messages
             this.messagesFixture = messagesFixture;
         }
         
-        /// <summary>
-        /// Get Message By Id
-        /// </summary>
-        [Fact]
-        public void GetMessageById()
-        {
-           
-        }
     }
 }
