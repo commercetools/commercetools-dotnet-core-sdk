@@ -6,14 +6,14 @@ namespace commercetools.Sdk.Domain.Messages.Orders
     [TypeMarker("LineItemStateTransition")]
     public class LineItemStateTransitionMessage : Message
     {
-        public string LineItemId { get; set; }
+        public string LineItemId { get;}
 
-        public DateTime TransitionDate { get; set; }
+        public DateTime TransitionDate { get;}
 
-        public int Quantity { get; set; }
+        public int Quantity { get;}
         
-        public Reference<State> FromState { get; set; }
+        public Reference<State> FromState { get;}
 
-        public Reference<State> ToState { get; set; }
+        public Reference<State> ToState { get;}
     }
 }
