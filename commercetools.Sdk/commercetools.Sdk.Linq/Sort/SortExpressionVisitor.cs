@@ -22,6 +22,15 @@ namespace commercetools.Sdk.Linq
             {
                 return GetMethod((MethodCallExpression)expression);
             }
+            // Convert(m.CreatedAt, IComparable)
+            if (expression.NodeType == ExpressionType.Convert)
+            {
+                UnaryExpression unaryExpression = expression as UnaryExpression;
+                if (unaryExpression != null)
+                {
+                    return Render(unaryExpression.Operand);
+                }
+            }
             // c
             // lambda expression parameter does not need to be returned
             if (expression.NodeType == ExpressionType.Parameter)

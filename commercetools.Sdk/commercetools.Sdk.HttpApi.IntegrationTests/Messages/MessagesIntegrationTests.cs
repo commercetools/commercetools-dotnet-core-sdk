@@ -29,7 +29,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Messages
             //QueryPredicate<Message> queryPredicate = new QueryPredicate<Message>(m => m.Version >=1);
             
             List<Sort<Message>> sortPredicates = new List<Sort<Message>>();
-            Sort<Message> sort = new Sort<Message>(m=>m.Id, SortDirection.Descending);
+            Sort<Message> sort = new Sort<Message>(m=>m.CreatedAt, SortDirection.Descending);
             sortPredicates.Add(sort);
             
             QueryCommand<Message> queryCommand = new QueryCommand<Message>();

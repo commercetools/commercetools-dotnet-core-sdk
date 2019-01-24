@@ -13,6 +13,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using commercetools.Sdk.Domain.Messages;
 using commercetools.Sdk.Domain.Messages.Categories;
 using Xunit;
 
@@ -49,7 +50,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             .Verifiable();
             IClient commerceToolsClient = new Client(mockHttpClientFactory.Object, this.clientFixture.GetService<IHttpApiCommandFactory>(), this.clientFixture.GetService<ISerializerService>());
             string messageId = "174adf2f-783f-4ce5-a2d5-ee7d3ee7caf4";
-            CategoryCreatedMessage categoryCreatedMessage = commerceToolsClient.ExecuteAsync(new GetByIdCommand<CategoryCreatedMessage>(new Guid(messageId))).Result;
+            CategoryCreatedMessage categoryCreatedMessage = commerceToolsClient.ExecuteAsync(new GetByIdCommand<Message>(new Guid(messageId))).Result as CategoryCreatedMessage;
             Assert.Equal(messageId, categoryCreatedMessage.Id);
         }
     }

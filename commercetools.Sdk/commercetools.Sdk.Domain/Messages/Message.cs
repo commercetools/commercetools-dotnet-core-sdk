@@ -10,21 +10,20 @@ namespace commercetools.Sdk.Domain.Messages
     [Endpoint("messages")]
     public abstract class Message
     {
-        public string Id { get;}
+        public string Id { get; set; }
         
-        public int Version { get;}
+        public int Version { get; set; }
 
-        public int SequenceNumber { get;}
+        public int SequenceNumber { get; set; }
         
-        public int ResourceVersion { get;}
-        
-        public DateTime CreatedAt { get;}
+        public int ResourceVersion { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        public DateTime LastModifiedAt { get;}
+        public DateTime LastModifiedAt { get; set; }
 
-        public ResourceIdentifier Resource { get;}
+        public ResourceIdentifier Resource { get; set; }
 
-        public UserProvidedIdentifiers ResourceUserProvidedIdentifiers { get;}
+        public UserProvidedIdentifiers ResourceUserProvidedIdentifiers { get; set; }
             
         public string Type
         {
