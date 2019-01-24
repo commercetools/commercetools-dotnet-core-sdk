@@ -50,6 +50,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             this.productTypeFixture.ProductTypesToDelete.Add(productType);
             ProductDraft productDraft = new ProductDraft();
             productDraft.Name = new LocalizedString() { { "en", this.RandomString(4) } };
+            productDraft.Key = this.RandomString(3);
             productDraft.Slug = new LocalizedString() { { "en", this.RandomString(3) } };
             productDraft.ProductType = new ResourceIdentifier() { Id = productType.Id };
             ProductVariantDraft productVariantDraft = new ProductVariantDraft();
@@ -91,11 +92,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Category category = this.CategoryFixture.CreateCategory();
             this.CategoryFixture.CategoriesToDelete.Add(category);
             return this.GetProductDraft(category);
-        }
-
-        public Product CreateProduct(Category category)
-        {
-            return this.CreateProduct(this.GetProductDraft(category));
         }
 
         public Product CreateProduct(ProductDraft productDraft)
