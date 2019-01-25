@@ -48,7 +48,7 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Content = new StringContent(serialized)
             })
             .Verifiable();
-            IClient commerceToolsClient = new Client(mockHttpClientFactory.Object, this.clientFixture.GetService<IHttpApiCommandFactory>(), this.clientFixture.GetService<ISerializerService>());
+            IClient commerceToolsClient = new Client(mockHttpClientFactory.Object, this.clientFixture.GetService<IHttpApiCommandFactory>(), this.clientFixture.GetService<ISerializerService>()) { Name = "api" };
             string messageId = "174adf2f-783f-4ce5-a2d5-ee7d3ee7caf4";
             CategoryCreatedMessage categoryCreatedMessage = commerceToolsClient.ExecuteAsync(new GetByIdCommand<Message>(new Guid(messageId))).Result as CategoryCreatedMessage;
             Assert.Equal(messageId, categoryCreatedMessage.Id);

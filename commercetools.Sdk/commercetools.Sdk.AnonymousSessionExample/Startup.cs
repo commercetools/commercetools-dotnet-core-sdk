@@ -28,8 +28,8 @@ namespace commercetools.Sdk.AnonymousSessionExample
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.UseCommercetools(this.configuration, "Client", TokenFlow.AnonymousSession);
             services.AddSingleton<IAnonymousCredentialsStoreManager, AnonymousCredentialsStoreManager>();
-            services.UseCommercetoolsWithAnonymousSession(this.configuration, "Client");
             services.AddMvc();
         }
     }

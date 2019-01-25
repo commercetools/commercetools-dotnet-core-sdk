@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 
-namespace commercetools.Sdk.PasswordExample
+namespace commercetools.Sdk.MultipleClients
 {
     public class Startup
     {
@@ -28,9 +29,15 @@ namespace commercetools.Sdk.PasswordExample
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.UseCommercetools(this.configuration, "Client", TokenFlow.Password);
+            IDictionary<string, TokenFlow> clients = new Dictionary<string, TokenFlow>()
+            {
+                { "client1", TokenFlow.AnonymousSession },
+                { "client2", TokenFlow.ClientCredentials }
+            };
+            services.UseCommercetools(this.configuration, "Client", clients);
             services.AddHttpContextAccessor();
             services.AddSingleton<IUserCredentialsStoreManager, UserCredentialsStoreManager>();
+            services.AddSingleton<IAnonymousCredentialsStoreManager, AnonymousCredentialsStoreManager>();
             services.AddMvc();
         }
     }

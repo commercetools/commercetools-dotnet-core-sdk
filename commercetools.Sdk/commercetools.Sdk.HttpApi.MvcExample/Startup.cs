@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.DependencyInjection;
+using commercetools.Sdk.HttpApi.Tokens;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +28,7 @@ namespace commercetools.Sdk.ClientCredentialsExample
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.UseCommercetoolsWithClientCredentials(this.configuration, "Client");
+            services.UseCommercetools(this.configuration, "Client");
             services.AddMvc();
         }
     }
