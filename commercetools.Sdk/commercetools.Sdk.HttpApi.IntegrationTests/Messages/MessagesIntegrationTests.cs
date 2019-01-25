@@ -19,6 +19,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Messages
             this.messagesFixture = messagesFixture;
         }
         
+        //TODO check if the messages enable in danger zone and add at least one category for example to insert at least one message in the queue
         [Fact]
         public void QueryAndSortMessagesDescending()
         {

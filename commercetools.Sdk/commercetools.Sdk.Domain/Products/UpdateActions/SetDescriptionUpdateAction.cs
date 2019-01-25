@@ -6,7 +6,7 @@ namespace commercetools.Sdk.Domain.Products
     {
         public string Action => "setDescription";
         [Required]
-        public string Description { get; set; }
+        public LocalizedString Description { get; set; }
         public bool Staged { get; set; }
     }
 }

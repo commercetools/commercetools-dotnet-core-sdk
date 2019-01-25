@@ -4,9 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Products;
+using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.Domain.Query;
+using commercetools.Sdk.HttpApi.Domain;
 using Xunit;
+using SetDescriptionUpdateAction = commercetools.Sdk.Domain.Products.SetDescriptionUpdateAction;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
@@ -132,7 +136,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             var sortedList = returnedSet.Results.OrderBy(p => p.Key);
             Assert.True(sortedList.SequenceEqual(returnedSet.Results));
         }
-        
+
         [Fact]
         public void QueryAndSortProductsDescending()
         {
@@ -153,8 +157,31 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             var sortedList = returnedSet.Results.OrderByDescending(p => p.Key);
             Assert.True(sortedList.SequenceEqual(returnedSet.Results));
         }
-        
-        
+
+        [Fact]
+        public void DeleteProductById()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new DeleteByIdCommand<Product>(new Guid(product.Id), product.Version)).Result;
+            Assert.ThrowsAsync<HttpApiClientException>(() =>
+                commerceToolsClient.ExecuteAsync(new GetByIdCommand<Product>(new Guid(retrievedProduct.Id))));
+        }
+
+        [Fact]
+        public void DeleteProductByKey()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new DeleteByKeyCommand<Product>(product.Key, product.Version)).Result;
+            Assert.ThrowsAsync<HttpApiClientException>(() =>
+                commerceToolsClient.ExecuteAsync(new GetByIdCommand<Product>(new Guid(retrievedProduct.Id))));
+        }
+
+        #region  UpdateActions
+
         [Fact]
         public void UpdateProductByIdSetKey()
         {
@@ -162,16 +189,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Product product = this.productFixture.CreateProduct();
             string newKey = this.productFixture.RandomString(5);
             List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
-            SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction() { Key = newKey };
+            SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction() {Key = newKey};
             updateActions.Add(setKeyAction);
-            Product retrievedProduct = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions)).Result;
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
             // The retrieved product has to be deleted and not the created product.
             // The retrieved product will have version 2 and the created product will have version 1.
             // Only the latest version can be deleted.
             this.productFixture.ProductsToDelete.Add(retrievedProduct);
             Assert.Equal(newKey, retrievedProduct.Key);
         }
-        
+
         [Fact]
         public void UpdateProductByKeyChangeName()
         {
@@ -179,13 +208,104 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Product product = this.productFixture.CreateProduct();
             string name = this.productFixture.RandomString(5);
             List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
-            ChangeNameUpdateAction changeNameUpdateAction = new ChangeNameUpdateAction() { Name = new LocalizedString() { { "en", name } } };
+            ChangeNameUpdateAction changeNameUpdateAction = new ChangeNameUpdateAction()
+                {Name = new LocalizedString() {{"en", name}}};
             updateActions.Add(changeNameUpdateAction);
-            Product retrievedProduct = commerceToolsClient.ExecuteAsync(new UpdateByKeyCommand<Product>(product.Key, product.Version, updateActions)).Result;
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByKeyCommand<Product>(product.Key, product.Version, updateActions)).Result;
             this.productFixture.ProductsToDelete.Add(retrievedProduct);
             Assert.Equal(name, retrievedProduct.MasterData.Staged.Name["en"]);
         }
-        
-       
+
+        [Fact]
+        public void UpdateProductByIdSetDescription()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+            string newDescription = this.productFixture.RandomString(20);
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+            SetDescriptionUpdateAction setDescriptionUpdateAction = new SetDescriptionUpdateAction()
+                {Description = new LocalizedString() {{"en", newDescription}}};
+            updateActions.Add(setDescriptionUpdateAction);
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+            Assert.Equal(newDescription, retrievedProduct.MasterData.Staged.Description["en"]);
+        }
+
+        [Fact]
+        public void UpdateProductByKeyChangeSlug()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+            string newSlug = this.productFixture.RandomString(3);
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+            ChangeSlugUpdateAction changeSlugUpdateAction = new ChangeSlugUpdateAction()
+                {Slug = new LocalizedString() {{"en", newSlug}}};
+            updateActions.Add(changeSlugUpdateAction);
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByKeyCommand<Product>(product.Key, product.Version, updateActions)).Result;
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+            Assert.Equal(newSlug, retrievedProduct.MasterData.Staged.Slug["en"]);
+        }
+
+        [Fact]
+        public void UpdateProductByIdAddProductVariant()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+
+            var productCategory = product.MasterData.Staged.Categories[0];
+            AddProductVariantUpdateAction addProductVariantUpdateAction = new AddProductVariantUpdateAction()
+            {
+                Sku = this.productFixture.RandomString(5),
+                Key = this.productFixture.RandomString(5),
+                Attributes = this.productFixture.GetListOfRandomAttributes(productCategory.Id, ReferenceTypeId.Category)
+            };
+
+            updateActions.Add(addProductVariantUpdateAction);
+
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            var productVariants = product.MasterData.Staged.Variants;
+            var retrievedProductVariants = retrievedProduct.MasterData.Staged.Variants;
+
+            Assert.True(retrievedProductVariants.Count > productVariants.Count);
+        }
+
+        [Fact]
+        public void UpdateProductByIdRemoveProductVariant()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct(true);
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+
+            var productVariantId = product.MasterData.Staged.Variants[0].Id;
+            RemoveProductVariantUpdateAction removeProductVariantUpdateAction = new RemoveProductVariantUpdateAction()
+            {
+                Id = productVariantId
+            };
+
+            updateActions.Add(removeProductVariantUpdateAction);
+
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            var productVariants = product.MasterData.Staged.Variants;
+            var retrievedProductVariants = retrievedProduct.MasterData.Staged.Variants;
+
+            Assert.True(retrievedProductVariants.Count < productVariants.Count);
+        }
+
+        #endregion
     }
 }

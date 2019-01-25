@@ -93,7 +93,7 @@
             Assert.NotNull(token.AccessToken);
         }
 
-        [Fact]
+        [Fact(Skip = "run only when fully enable appveyor and travis builds against the dedicated project of this build")]
         public void RefreshTokenPasswordFlow()
         {
             IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithSmallerScope");
