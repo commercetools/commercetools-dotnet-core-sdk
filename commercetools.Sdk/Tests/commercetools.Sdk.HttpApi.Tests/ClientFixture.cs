@@ -6,6 +6,8 @@ using System.Linq;
 using commercetools.Sdk.Registration;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Linq;
+using commercetools.Sdk.HttpApi.Tokens;
+using commercetools.Sdk.DependencyInjection;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
@@ -35,13 +37,8 @@ namespace commercetools.Sdk.HttpApi.Tests
                 // https://www.jerriepelser.com/blog/aspnet-core-no-more-worries-about-checking-in-secrets/
                 AddEnvironmentVariables().
                 Build();
-            services.UseRegistration();
-            services.UseDomain();
-            services.UseSerialization();
-            services.UseLinq();
-            services.UseHttpApiWithClientCredentials(this.configuration, "Client");
+            services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials);
             this.serviceProvider = services.BuildServiceProvider();
-            ServiceLocator.SetServiceLocatorProvider(this.serviceProvider);
         }
 
         public T GetService<T>()

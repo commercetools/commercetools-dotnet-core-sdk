@@ -9,28 +9,28 @@ namespace commercetools.Sdk.AnonymousSessionExample.Controllers
     public class HomeController : Controller
     {
         private readonly IClient client;
-        private readonly ITokenFlowRegister tokenFlowRegister;
+        private readonly ITokenFlowMapper tokenFlowMapper;
 
-        public HomeController(IClient client, ITokenFlowRegister tokenFlowRegister)
+        public HomeController(IClient client, ITokenFlowMapper tokenFlowMapper)
         {
             this.client = client;
-            this.tokenFlowRegister = tokenFlowRegister;
+            this.tokenFlowMapper = tokenFlowMapper;
         }
 
         public IActionResult Index()
         {
             PagedQueryResult<Category> category = this.client.ExecuteAsync(new QueryCommand<Category>()).Result;
             int count = category.Results.Count;
-            return View(new { CategoryCount = count, TokenFlowRegister = tokenFlowRegister.TokenFlow });
+            return View(new { CategoryCount = count, TokenFlowRegister = tokenFlowMapper.TokenFlowRegister.TokenFlow });
         }
 
         [HttpPost]
         public IActionResult Index(string username, string password)
         {
-            tokenFlowRegister.TokenFlow = TokenFlow.Password;
+            tokenFlowMapper.TokenFlowRegister.TokenFlow = TokenFlow.Password;
             PagedQueryResult<Category> category = this.client.ExecuteAsync(new QueryCommand<Category>()).Result;
             int count = category.Results.Count;
-            return View(new { CategoryCount = count, TokenFlowRegister = tokenFlowRegister.TokenFlow });
+            return View(new { CategoryCount = count, TokenFlowRegister = tokenFlowMapper.TokenFlowRegister.TokenFlow });
         }
     }
 }

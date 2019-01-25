@@ -1,55 +1,29 @@
 ﻿using commercetools.Sdk.Domain;
 using commercetools.Sdk.HttpApi;
+using commercetools.Sdk.HttpApi.Tokens;
 using commercetools.Sdk.Linq;
 using commercetools.Sdk.Registration;
 using commercetools.Sdk.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 
 namespace commercetools.Sdk.DependencyInjection
 {
     public static class DependencyInjectionSetup
     {
-        public static void UseCommercetoolsWithClientCredentials(this IServiceCollection services, IConfiguration configuration, string configurationSection)
+        public static void UseCommercetools(this IServiceCollection services, IConfiguration configuration, string configurationSection, TokenFlow tokenFlow = TokenFlow.ClientCredentials)
         {
-            services.UseRegistration();
-            services.UseDomain();
-            services.UseSerialization();
-            services.UseLinq();
-            services.UseHttpApiWithClientCredentials(configuration, configurationSection);
-            var serviceProvider = services.BuildServiceProvider();
-            ServiceLocator.SetServiceLocatorProvider(serviceProvider);
+            services.UseCommercetools(configuration, configurationSection, new Dictionary<string, TokenFlow>() { { "api", tokenFlow } });
         }
 
-        public static void UseCommercetoolsWithPassword(this IServiceCollection services, IConfiguration configuration, string configurationSection)
+        public static void UseCommercetools(this IServiceCollection services, IConfiguration configuration, string configurationSection, IDictionary<string, TokenFlow> clients)
         {
             services.UseRegistration();
             services.UseDomain();
             services.UseSerialization();
             services.UseLinq();
-            services.UseHttpApiWithPassword(configuration, configurationSection);
-            var serviceProvider = services.BuildServiceProvider();
-            ServiceLocator.SetServiceLocatorProvider(serviceProvider);
-        }
-
-        public static void UseCommercetoolsWithAnonymousSession(this IServiceCollection services, IConfiguration configuration, string configurationSection)
-        {
-            services.UseRegistration();
-            services.UseDomain();
-            services.UseSerialization();
-            services.UseLinq();
-            services.UseHttpApiWithAnonymousSession(configuration, configurationSection);
-            var serviceProvider = services.BuildServiceProvider();
-            ServiceLocator.SetServiceLocatorProvider(serviceProvider);
-        }
-
-        public static void UseCommercetools(this IServiceCollection services, IConfiguration configuration, string configurationSection)
-        {
-            services.UseRegistration();
-            services.UseDomain();
-            services.UseSerialization();
-            services.UseLinq();
-            services.UseHttpApi(configuration, configurationSection);
+            services.UseHttpApi(configuration, configurationSection, clients);
             var serviceProvider = services.BuildServiceProvider();
             ServiceLocator.SetServiceLocatorProvider(serviceProvider);
         }

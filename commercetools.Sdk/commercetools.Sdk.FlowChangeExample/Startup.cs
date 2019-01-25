@@ -28,10 +28,10 @@ namespace commercetools.Sdk.FlowChangeExample
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.UseCommercetools(this.configuration, "Client", TokenFlow.AnonymousSession);
             services.AddHttpContextAccessor();
             services.AddSingleton<IUserCredentialsStoreManager, UserCredentialsStoreManager>();
             services.AddSingleton<IAnonymousCredentialsStoreManager, AnonymousCredentialsStoreManager>();
-            services.UseCommercetools(this.configuration, "Client");
             services.AddMvc();
         }
     }

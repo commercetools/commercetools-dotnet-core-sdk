@@ -1,25 +1,39 @@
-﻿namespace commercetools.Sdk.HttpApi
-{
-    using System.Net.Http;
-    using System.Threading.Tasks;
-    using commercetools.Sdk.Client;
-    using Domain;
-    using Serialization;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
+using commercetools.Sdk.Client;
+using commercetools.Sdk.HttpApi.Domain;
+using commercetools.Sdk.Serialization;
 
+namespace commercetools.Sdk.HttpApi
+{
     public class Client : IClient
     {
-        private readonly HttpClient client;
-        private readonly ISerializerService serializerService;
         private readonly IHttpApiCommandFactory httpApiCommandFactory;
+        private readonly IHttpClientFactory httpClientFactory;
+        private readonly ISerializerService serializerService;
+        private HttpClient httpClient;
 
         public Client(IHttpClientFactory httpClientFactory, IHttpApiCommandFactory httpApiCommandFactory, ISerializerService serializerService)
         {
-            this.client = httpClientFactory.CreateClient(this.Name);
+            this.httpClientFactory = httpClientFactory;
             this.serializerService = serializerService;
             this.httpApiCommandFactory = httpApiCommandFactory;
         }
 
-        public string Name { get; set; } = "api";
+        public string Name { get; set; }
+
+        private HttpClient HttpClient
+        {
+            get
+            {
+                if (this.httpClient == null)
+                {
+                    this.httpClient = this.httpClientFactory.CreateClient(this.Name);
+                }
+
+                return this.httpClient;
+            }
+        }
 
         public async Task<T> ExecuteAsync<T>(Command<T> command)
         {
@@ -29,7 +43,7 @@
 
         private async Task<T> SendRequest<T>(HttpRequestMessage requestMessage)
         {
-            var result = await this.client.SendAsync(requestMessage).ConfigureAwait(false);
+            var result = await this.HttpClient.SendAsync(requestMessage).ConfigureAwait(false);
             string content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
             if (result.IsSuccessStatusCode)
             {
