@@ -165,11 +165,25 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction() { Key = newKey };
             updateActions.Add(setKeyAction);
             Product retrievedProduct = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions)).Result;
-            // The retrieved product has to be deleted and not the created category.
-            // The retrieved product will have version 2 and the created category will have version 1.
+            // The retrieved product has to be deleted and not the created product.
+            // The retrieved product will have version 2 and the created product will have version 1.
             // Only the latest version can be deleted.
             this.productFixture.ProductsToDelete.Add(retrievedProduct);
             Assert.Equal(newKey, retrievedProduct.Key);
+        }
+        
+        [Fact]
+        public void UpdateProductByKeyChangeName()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+            string name = this.productFixture.RandomString(5);
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+            ChangeNameUpdateAction changeNameUpdateAction = new ChangeNameUpdateAction() { Name = new LocalizedString() { { "en", name } } };
+            updateActions.Add(changeNameUpdateAction);
+            Product retrievedProduct = commerceToolsClient.ExecuteAsync(new UpdateByKeyCommand<Product>(product.Key, product.Version, updateActions)).Result;
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+            Assert.Equal(name, retrievedProduct.MasterData.Staged.Name["en"]);
         }
         
        
