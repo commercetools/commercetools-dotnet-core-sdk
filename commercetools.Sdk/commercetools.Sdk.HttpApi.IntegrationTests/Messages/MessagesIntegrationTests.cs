@@ -20,7 +20,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Messages
         }
         
         //TODO check if the messages enable in danger zone and add at least one category for example to insert at least one message in the queue
-        [Fact]
+        [Fact(Skip = "Need to create test data first")]
         public void QueryAndSortMessagesDescending()
         {
             IClient commerceToolsClient = this.messagesFixture.GetService<IClient>();
