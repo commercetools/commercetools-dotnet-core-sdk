@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.HttpApi.AdditionalParameters;
@@ -16,32 +17,38 @@ namespace commercetools.Sdk.HttpApi
 {
     public static class DependencyInjectionSetup
     {
-        public static void UseHttpApi(this IServiceCollection services, IConfiguration configuration, string configurationSectionName, IDictionary<string, TokenFlow> clients)
+        public static void UseHttpApi(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
-            services.UseHttpApiDefaults(configuration, configurationSectionName);
+            services.UseHttpApiDefaults();
             TokenFlowMapper tokenFlowMapper = new TokenFlowMapper();
             foreach (KeyValuePair<string, TokenFlow> client in clients)
             {
-                services.AddClient(client.Key, client.Value, tokenFlowMapper);
+                services.AddClient(configuration, client.Key, client.Value, tokenFlowMapper);
             }
 
             services.AddSingleton<ITokenFlowMapper>(tokenFlowMapper);
         }
 
-        private static void AddClient(this IServiceCollection services, string clientName, TokenFlow tokenFlow, TokenFlowMapper tokenFlowMapper)
+        private static void AddClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow, TokenFlowMapper tokenFlowMapper)
         {
+            var clientConfigurationToRemove = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(IClientConfiguration));
+            services.Remove(clientConfigurationToRemove);
+            IClientConfiguration clientConfiguration = configuration.GetSection(clientName).Get<ClientConfiguration>();
+            services.AddSingleton(clientConfiguration);
+            var tokenFlowRegisterToRemove = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(ITokenFlowRegister));
+            services.Remove(tokenFlowRegisterToRemove);
             ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
             tokenFlowRegister.TokenFlow = tokenFlow;
+            services.AddSingleton(tokenFlowRegister);
             tokenFlowMapper.Clients.Add(clientName, tokenFlowRegister);
-            services.AddHttpClient(clientName).AddHttpMessageHandler(c => new AuthorizationHandler(c.GetService<ITokenProviderFactory>(), tokenFlowRegister));
-            services.AddSingleton<IClient>(c => new Client(c.GetService<IHttpClientFactory>(), c.GetService<IHttpApiCommandFactory>(), c.GetService<ISerializerService>()) { Name = clientName });
+            services.AddHttpClient(clientName).AddHttpMessageHandler<AuthorizationHandler>().AddHttpMessageHandler<CorrelationIdHandler>().AddHttpMessageHandler<LoggerHandler>();
+            ServiceProvider serviceProvider = services.BuildServiceProvider();
+            IClient client = new Client(serviceProvider.GetService<IHttpClientFactory>(), serviceProvider.GetService<IHttpApiCommandFactory>(), serviceProvider.GetService<ISerializerService>()) { Name = clientName };
+            services.AddSingleton(client);
         }
 
-        private static void UseHttpApiDefaults(this IServiceCollection services, IConfiguration configuration, string configurationSectionName)
+        private static void UseHttpApiDefaults(this IServiceCollection services)
         {
-            IClientConfiguration clientConfiguration = configuration.GetSection(configurationSectionName).Get<ClientConfiguration>();
-            services.AddSingleton(clientConfiguration);
-
             services.AddSingleton<ITokenStoreManager, InMemoryTokenStoreManager>();
             services.AddSingleton<IUserCredentialsStoreManager, InMemoryUserCredentialsStoreManager>();
             services.AddSingleton<IAnonymousCredentialsStoreManager, InMemoryAnonymousCredentialsStoreManager>();
@@ -54,6 +61,7 @@ namespace commercetools.Sdk.HttpApi
             services.AddSingleton<ICorrelationIdProvider, DefaultCorrelationIdProvider>();
             services.AddSingleton<CorrelationIdHandler>();
             services.AddSingleton<LoggerHandler>();
+            services.AddSingleton<AuthorizationHandler>();
 
             services.AddHttpClient(DefaultClientNames.Authorization);
 

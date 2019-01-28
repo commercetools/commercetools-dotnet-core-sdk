@@ -12,18 +12,18 @@ namespace commercetools.Sdk.DependencyInjection
 {
     public static class DependencyInjectionSetup
     {
-        public static void UseCommercetools(this IServiceCollection services, IConfiguration configuration, string configurationSection, TokenFlow tokenFlow = TokenFlow.ClientCredentials)
+        public static void UseCommercetools(this IServiceCollection services, IConfiguration configuration, string clientName = DefaultClientNames.Api, TokenFlow tokenFlow = TokenFlow.ClientCredentials)
         {
-            services.UseCommercetools(configuration, configurationSection, new Dictionary<string, TokenFlow>() { { DefaultClientNames.Api, tokenFlow } });
+            services.UseCommercetools(configuration, new Dictionary<string, TokenFlow>() { { clientName, tokenFlow } });
         }
 
-        public static void UseCommercetools(this IServiceCollection services, IConfiguration configuration, string configurationSection, IDictionary<string, TokenFlow> clients)
+        public static void UseCommercetools(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
             services.UseRegistration();
             services.UseDomain();
             services.UseSerialization();
             services.UseLinq();
-            services.UseHttpApi(configuration, configurationSection, clients);
+            services.UseHttpApi(configuration, clients);
             var serviceProvider = services.BuildServiceProvider();
             ServiceLocator.SetServiceLocatorProvider(serviceProvider);
         }
