@@ -32,7 +32,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             string serialized = File.ReadAllText("Resources/Responses/GetCategoryById.json");
             var mockHttpClientFactory = new Mock<IHttpClientFactory>();
             var mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            mockHttpClientFactory.Setup(x => x.CreateClient("api")).Returns(new HttpClient(mockHandler.Object));
+            mockHttpClientFactory.Setup(x => x.CreateClient(DefaultClientNames.Api)).Returns(new HttpClient(mockHandler.Object));
             mockHandler
             .Protected()
             .Setup<Task<HttpResponseMessage>>(
@@ -57,7 +57,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         { 
             var mockHttpClientFactory = new Mock<IHttpClientFactory>();
             var mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            mockHttpClientFactory.Setup(x => x.CreateClient("api")).Returns(new HttpClient(mockHandler.Object));
+            mockHttpClientFactory.Setup(x => x.CreateClient(DefaultClientNames.Api)).Returns(new HttpClient(mockHandler.Object));
             mockHandler
             .Protected()
             .Setup<Task<HttpResponseMessage>>(
@@ -86,7 +86,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             string serialized = File.ReadAllText("Resources/Responses/ResourceNotFound.json");
             var mockHttpClientFactory = new Mock<IHttpClientFactory>();
             var mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            mockHttpClientFactory.Setup(x => x.CreateClient("api")).Returns(new HttpClient(mockHandler.Object));
+            mockHttpClientFactory.Setup(x => x.CreateClient(DefaultClientNames.Api)).Returns(new HttpClient(mockHandler.Object));
             mockHandler
             .Protected()
             .Setup<Task<HttpResponseMessage>>(
@@ -113,7 +113,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             string serialized = File.ReadAllText("Resources/Responses/ConcurrentModification.json");
             var mockHttpClientFactory = new Mock<IHttpClientFactory>();
             var mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            mockHttpClientFactory.Setup(x => x.CreateClient("api")).Returns(new HttpClient(mockHandler.Object));
+            mockHttpClientFactory.Setup(x => x.CreateClient(DefaultClientNames.Api)).Returns(new HttpClient(mockHandler.Object));
             mockHandler
             .Protected()
             .Setup<Task<HttpResponseMessage>>(
