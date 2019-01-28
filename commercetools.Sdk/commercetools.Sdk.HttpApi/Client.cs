@@ -20,7 +20,7 @@ namespace commercetools.Sdk.HttpApi
             this.httpApiCommandFactory = httpApiCommandFactory;
         }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = DefaultClientNames.Api;
 
         private HttpClient HttpClient
         {

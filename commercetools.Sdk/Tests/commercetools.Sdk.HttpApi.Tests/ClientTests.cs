@@ -46,7 +46,7 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Content = new StringContent(serialized)
             })
             .Verifiable();
-            IClient commerceToolsClient = new Client(mockHttpClientFactory.Object, this.clientFixture.GetService<IHttpApiCommandFactory>(), this.clientFixture.GetService<ISerializerService>()) { Name = "api" };
+            IClient commerceToolsClient = new Client(mockHttpClientFactory.Object, this.clientFixture.GetService<IHttpApiCommandFactory>(), this.clientFixture.GetService<ISerializerService>());
             string categoryId = "2bafc816-4223-4ff0-ac8a-0f08a8f29fd6";
             Category category = commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(new Guid(categoryId))).Result;
             Assert.Equal(categoryId, category.Id.ToString());
@@ -71,7 +71,7 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Content = new StringContent(string.Empty)
             })
             .Verifiable();
-            IClient commerceToolsClient = new Client(mockHttpClientFactory.Object, this.clientFixture.GetService<IHttpApiCommandFactory>(), this.clientFixture.GetService<ISerializerService>()) { Name = "api" };
+            IClient commerceToolsClient = new Client(mockHttpClientFactory.Object, this.clientFixture.GetService<IHttpApiCommandFactory>(), this.clientFixture.GetService<ISerializerService>());
             // Empty response body with 404 happens in case of an invalid guid.
             // However, since we can't pass an invalid guid here, the response body is mocked instead.
             string categoryId = "2b327437-702e-4ab2-96fc-a98afa860b36";
@@ -100,7 +100,7 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Content = new StringContent(serialized)
             })
             .Verifiable();
-            IClient commerceToolsClient = new Client(mockHttpClientFactory.Object, this.clientFixture.GetService<IHttpApiCommandFactory>(), this.clientFixture.GetService<ISerializerService>()) { Name = "api" };
+            IClient commerceToolsClient = new Client(mockHttpClientFactory.Object, this.clientFixture.GetService<IHttpApiCommandFactory>(), this.clientFixture.GetService<ISerializerService>());
             string categoryId = "2b327437-702e-4ab2-96fc-a98afa860b36";
             HttpApiClientException exception = Assert.ThrowsAsync<HttpApiClientException>(() => commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(new Guid(categoryId)))).Result;
             Assert.Equal(404, exception.StatusCode);
@@ -127,7 +127,7 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Content = new StringContent(serialized)
             })
             .Verifiable();
-            IClient commerceToolsClient = new Client(mockHttpClientFactory.Object, this.clientFixture.GetService<IHttpApiCommandFactory>(), this.clientFixture.GetService<ISerializerService>()) { Name = "api" };
+            IClient commerceToolsClient = new Client(mockHttpClientFactory.Object, this.clientFixture.GetService<IHttpApiCommandFactory>(), this.clientFixture.GetService<ISerializerService>());
             SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction();
             setKeyAction.Key = "newKey" + this.clientFixture.RandomString(3);
             string categoryId = "8994e5d7-d81f-4480-af60-286dc96c1fe8";

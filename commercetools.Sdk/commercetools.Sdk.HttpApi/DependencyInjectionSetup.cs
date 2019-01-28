@@ -55,7 +55,7 @@ namespace commercetools.Sdk.HttpApi
             services.AddSingleton<CorrelationIdHandler>();
             services.AddSingleton<LoggerHandler>();
 
-            services.AddHttpClient("auth");
+            services.AddHttpClient(DefaultClientNames.Authorization);
 
             services.AddSingleton<IEndpointRetriever, EndpointRetriever>();
             services.RegisterAllTypes<IRequestMessageBuilder>(ServiceLifetime.Singleton);
