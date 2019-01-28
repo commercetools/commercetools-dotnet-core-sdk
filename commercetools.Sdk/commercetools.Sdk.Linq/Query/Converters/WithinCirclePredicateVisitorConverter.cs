@@ -40,8 +40,9 @@ namespace commercetools.Sdk.Linq.Query.Converters
             IPredicateVisitor methodCaller = predicateVisitorFactory.Create(methodCallExpression.Arguments[0]);
             IPredicateVisitor methodArguments = predicateVisitorFactory.Create(methodCallExpression.Arguments[1]);
 
-            ContainerPredicateVisitor container = new ContainerPredicateVisitor(methodArguments, methodNameConstant);
-            return new BinaryPredicateVisitor(methodCaller, string.Empty, container);
+            ContainerPredicateVisitor container = new ContainerPredicateVisitor(methodArguments, methodNameConstant, true);
+            BinaryPredicateVisitor binary = new BinaryPredicateVisitor(methodCaller, string.Empty, container);
+            return binary;
         }
     }
 }

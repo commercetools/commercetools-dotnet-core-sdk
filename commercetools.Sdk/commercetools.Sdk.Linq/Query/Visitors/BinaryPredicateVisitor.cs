@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Linq.Query.Visitors
+﻿using System.IO;
+
+namespace commercetools.Sdk.Linq.Query.Visitors
 {
     // name = "Peter"
     public class BinaryPredicateVisitor : IPredicateVisitor
@@ -16,9 +18,21 @@
 
         public string Render()
         {
+            string result;
+
+            // if the operator is empty or null, then remove it to avoid double spaces
+            if (string.IsNullOrEmpty(this.operatorSign))
+            {
+                result = $"{this.left.Render()} {this.right.Render()}";
+            }
+            else
+            {
+                result = $"{this.left.Render()} {this.operatorSign} {this.right.Render()}";
+            }
+
             // It can happen that the right predicate is an empty string, hence we trim the white space.
-            string result = $"{this.left.Render()} {this.operatorSign} {this.right.Render()}".TrimEnd();
-            return result/*.Replace("  ", " ")*/;
+            result = result.TrimEnd();
+            return result;
         }
     }
 }
