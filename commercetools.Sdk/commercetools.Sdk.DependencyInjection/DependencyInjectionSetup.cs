@@ -14,7 +14,7 @@ namespace commercetools.Sdk.DependencyInjection
     {
         public static void UseCommercetools(this IServiceCollection services, IConfiguration configuration, string configurationSection, TokenFlow tokenFlow = TokenFlow.ClientCredentials)
         {
-            services.UseCommercetools(configuration, configurationSection, new Dictionary<string, TokenFlow>() { { "api", tokenFlow } });
+            services.UseCommercetools(configuration, configurationSection, new Dictionary<string, TokenFlow>() { { DefaultClientNames.Api, tokenFlow } });
         }
 
         public static void UseCommercetools(this IServiceCollection services, IConfiguration configuration, string configurationSection, IDictionary<string, TokenFlow> clients)
