@@ -160,3 +160,26 @@ The interface IAnonymousCredentialsStoreManager should normally be implemented i
     services.UseCommercetools(this.configuration, "Client", TokenFlow.AnonymousSession);
     services.AddSingleton<IAnonymousCredentialsStoreManager, AnonymousCredentialsStoreManager>();
 
+## Predicates
+
+There are numerous commands and objects that accept predicates. In order to facilitate the developers, allow auto-completion and reduces the amount of errors, these predicates can be defined as lambda expressions. In case a predicate definition is not supported (that is, a NotSupportedException is thrown), a manually constructed string can be passed as well. The following example shows how a query predicate can be created using lambda expressions.
+
+    string key = category.Key;
+    QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Key == key);
+    QueryCommand<Category> queryCommand = new QueryCommand<Category>();
+    queryCommand.SetWhere(queryPredicate);
+
+Right now only local variables are supported in comparisons. For example, the following lambda expression would not work:
+
+    c => c.Key == category.Key
+
+Setting the "where" query string parameter as a string can be done in the following way:
+
+    queryCommand.Where = "key = \"c14\"";
+    
+> Note! For more examples of predicates using lambda expressions, take a look at the unit tests.
+
+There are numerous extension methods created for domain specific operations. They can also be found by importing the commercetools.Sdk.Domain.Predicates namespace. The extension WithinCircle is one of them, for example: 
+
+    c => c.GeoLocation.WithinCircle(13.37774, 52.51627, 1000)
+

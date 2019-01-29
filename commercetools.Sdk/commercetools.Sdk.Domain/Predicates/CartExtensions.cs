@@ -1,10 +1,11 @@
-﻿using commercetools.Sdk.Domain.Customers;
+﻿using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.Customers;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 
-namespace commercetools.Sdk.Domain.Carts
+namespace commercetools.Sdk.Domain.Predicates
 {
     public static class CartExtensions
     {
