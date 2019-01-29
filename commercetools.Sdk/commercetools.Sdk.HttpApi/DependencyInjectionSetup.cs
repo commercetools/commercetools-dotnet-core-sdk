@@ -19,30 +19,56 @@ namespace commercetools.Sdk.HttpApi
     {
         public static void UseHttpApi(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
+            if (clients.Count() == 1)
+            {
+                services.UseSingleClient(configuration, clients.First().Key, clients.First().Value);
+            }
+            else
+            {
+                services.UseMultipleClients(configuration, clients);
+            }
+        }
+
+        private static void UseMultipleClients(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
+        {
             services.UseHttpApiDefaults();
             TokenFlowMapper tokenFlowMapper = new TokenFlowMapper();
             foreach (KeyValuePair<string, TokenFlow> client in clients)
             {
-                services.AddClient(configuration, client.Key, client.Value, tokenFlowMapper);
+                string clientName = client.Key;
+                TokenFlow tokenFlow = client.Value;
+                var clientConfigurationToRemove = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(IClientConfiguration));
+                services.Remove(clientConfigurationToRemove);
+                var tokenFlowRegisterToRemove = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(ITokenFlowRegister));
+                services.Remove(tokenFlowRegisterToRemove);
+                services.SetupClient(configuration, clientName, tokenFlow);
+                services.AddClient(clientName, tokenFlowMapper);
             }
 
             services.AddSingleton<ITokenFlowMapper>(tokenFlowMapper);
         }
 
-        private static void AddClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow, TokenFlowMapper tokenFlowMapper)
+        private static void UseSingleClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
         {
-            var clientConfigurationToRemove = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(IClientConfiguration));
-            services.Remove(clientConfigurationToRemove);
+            services.UseHttpApiDefaults();
+            services.SetupClient(configuration, clientName, tokenFlow);
+            services.AddSingleton<IClient>(c => new Client(c.GetService<IHttpClientFactory>(), c.GetService<IHttpApiCommandFactory>(), c.GetService<ISerializerService>()) { Name = clientName });
+        }
+
+        private static void SetupClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
+        {
             IClientConfiguration clientConfiguration = configuration.GetSection(clientName).Get<ClientConfiguration>();
             services.AddSingleton(clientConfiguration);
-            var tokenFlowRegisterToRemove = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(ITokenFlowRegister));
-            services.Remove(tokenFlowRegisterToRemove);
             ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
             tokenFlowRegister.TokenFlow = tokenFlow;
             services.AddSingleton(tokenFlowRegister);
-            tokenFlowMapper.Clients.Add(clientName, tokenFlowRegister);
             services.AddHttpClient(clientName).AddHttpMessageHandler<AuthorizationHandler>().AddHttpMessageHandler<CorrelationIdHandler>().AddHttpMessageHandler<LoggerHandler>();
+        }
+
+        private static void AddClient(this IServiceCollection services, string clientName, TokenFlowMapper tokenFlowMapper)
+        {
             ServiceProvider serviceProvider = services.BuildServiceProvider();
+            tokenFlowMapper.Clients.Add(clientName, serviceProvider.GetService<ITokenFlowRegister>());
             IClient client = new Client(serviceProvider.GetService<IHttpClientFactory>(), serviceProvider.GetService<IHttpApiCommandFactory>(), serviceProvider.GetService<ISerializerService>()) { Name = clientName };
             services.AddSingleton(client);
         }
@@ -52,7 +78,6 @@ namespace commercetools.Sdk.HttpApi
             services.AddSingleton<ITokenStoreManager, InMemoryTokenStoreManager>();
             services.AddSingleton<IUserCredentialsStoreManager, InMemoryUserCredentialsStoreManager>();
             services.AddSingleton<IAnonymousCredentialsStoreManager, InMemoryAnonymousCredentialsStoreManager>();
-
             services.AddSingleton<ITokenProvider, ClientCredentialsTokenProvider>();
             services.AddSingleton<ITokenProvider, PasswordTokenProvider>();
             services.AddSingleton<ITokenProvider, AnonymousSessionTokenProvider>();
@@ -62,19 +87,15 @@ namespace commercetools.Sdk.HttpApi
             services.AddSingleton<CorrelationIdHandler>();
             services.AddSingleton<LoggerHandler>();
             services.AddSingleton<AuthorizationHandler>();
-
             services.AddHttpClient(DefaultClientNames.Authorization);
-
             services.AddSingleton<IEndpointRetriever, EndpointRetriever>();
             services.RegisterAllTypes<IRequestMessageBuilder>(ServiceLifetime.Singleton);
             services.RegisterAllTypes<IAdditionalParametersBuilder>(ServiceLifetime.Singleton);
             services.RegisterAllTypes<ISearchParametersBuilder>(ServiceLifetime.Singleton);
             services.RegisterAllTypes<IUploadImageParametersBuilder>(ServiceLifetime.Singleton);
-
             services.AddSingleton<IParametersBuilderFactory<IAdditionalParametersBuilder>, ParametersBuilderFactory<IAdditionalParametersBuilder>>();
             services.AddSingleton<IParametersBuilderFactory<ISearchParametersBuilder>, ParametersBuilderFactory<ISearchParametersBuilder>>();
             services.AddSingleton<IParametersBuilderFactory<IUploadImageParametersBuilder>, ParametersBuilderFactory<IUploadImageParametersBuilder>>();
-
             services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
         }

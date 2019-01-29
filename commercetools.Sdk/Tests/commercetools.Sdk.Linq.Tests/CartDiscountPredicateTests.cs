@@ -10,11 +10,11 @@ using Xunit;
 
 namespace commercetools.Sdk.Linq.Tests
 {
-    public class CartPredicateTests : IClassFixture<LinqFixture>
+    public class CartDiscountPredicateTests : IClassFixture<LinqFixture>
     {
         private readonly LinqFixture linqFixture;
 
-        public CartPredicateTests(LinqFixture linqFixture)
+        public CartDiscountPredicateTests(LinqFixture linqFixture)
         {
             this.linqFixture = linqFixture;
         }

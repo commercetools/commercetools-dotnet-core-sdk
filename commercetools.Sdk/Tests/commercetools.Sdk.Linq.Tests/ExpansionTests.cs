@@ -2,7 +2,7 @@
 using commercetools.Sdk.Domain.ShoppingLists;
 using System;
 using System.Linq.Expressions;
-using commercetools.Sdk.Domain.Query;
+using commercetools.Sdk.Domain.Predicates;
 using Xunit;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 using commercetools.Sdk.Domain.Categories;
