@@ -34,7 +34,7 @@ namespace commercetools.Sdk.MultipleClients
                 { "client1", TokenFlow.AnonymousSession },
                 { "client2", TokenFlow.ClientCredentials }
             };
-            services.UseCommercetools(this.configuration, "Client", clients);
+            services.UseCommercetools(this.configuration, clients);
             services.AddHttpContextAccessor();
             services.AddSingleton<IUserCredentialsStoreManager, UserCredentialsStoreManager>();
             services.AddSingleton<IAnonymousCredentialsStoreManager, AnonymousCredentialsStoreManager>();

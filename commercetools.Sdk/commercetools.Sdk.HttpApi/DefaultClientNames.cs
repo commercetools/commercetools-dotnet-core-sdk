@@ -2,7 +2,7 @@
 {
     public static class DefaultClientNames
     {
-        public const string Authorization = "commercetools-auth";
-        public const string Api = "commercetools-api";
+        public const string Authorization = "CommercetoolsAuth";
+        public const string Api = "CommercetoolsClient";
     }
 }
