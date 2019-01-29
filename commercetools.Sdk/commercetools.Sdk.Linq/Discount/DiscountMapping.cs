@@ -19,7 +19,11 @@ namespace commercetools.Sdk.Linq.Discount
             { "CategoriesKey", "categories.key" },
             { "CategoriesWithAncestorsId", "categoriesWithAncestors.id" },
             { "CategoriesWithAncestorsKey", "categoriesWithAncestors.key" },
-            { "Attributes", "attributes" }
+            { "Attributes", "attributes" },
+            { "ProductId", "product.id" },
+            { "Price", "price" },
+            { "Amount", "amount" },
+            { "CentAmount", "centAmount" }
         };
 
         public static readonly Dictionary<string, string> PropertyAccessors = new Dictionary<string, string>()
