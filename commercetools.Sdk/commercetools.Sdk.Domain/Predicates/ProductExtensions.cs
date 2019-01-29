@@ -29,22 +29,22 @@ namespace commercetools.Sdk.Domain.Predicates
             throw new NotImplementedException();
         }
 
-        public static Money Price(this Price source)
+        public static Money Price(this Product source)
         {
             throw new NotImplementedException();
         }
 
-        public static double Amount(this Price source)
+        public static double Amount(this Product source)
         {
             throw new NotImplementedException();
         }
 
-        public static double CentAmount(this Price source)
+        public static double CentAmount(this Product source)
         {
             throw new NotImplementedException();
         }
 
-        public static string Currency(this Price source)
+        public static string Currency(this Product source)
         {
             throw new NotImplementedException();
         }
