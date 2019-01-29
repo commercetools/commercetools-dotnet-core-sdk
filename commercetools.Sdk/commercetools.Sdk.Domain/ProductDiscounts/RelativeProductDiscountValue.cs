@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace commercetools.Sdk.Domain
+﻿namespace commercetools.Sdk.Domain.ProductDiscounts
 {
     [TypeMarker("relative")]
     public class RelativeProductDiscountValue : ProductDiscountValue

@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain
+﻿using commercetools.Sdk.Domain.ProductDiscounts;
+
+namespace commercetools.Sdk.Domain
 {
     public class DiscountedPrice
     {

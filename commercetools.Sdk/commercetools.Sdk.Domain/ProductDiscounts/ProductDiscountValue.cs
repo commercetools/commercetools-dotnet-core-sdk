@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace commercetools.Sdk.Domain
+﻿namespace commercetools.Sdk.Domain.ProductDiscounts
 {
     public abstract class ProductDiscountValue
     {

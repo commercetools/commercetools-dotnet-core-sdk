@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using commercetools.Sdk.Domain.ProductDiscounts;
 using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization

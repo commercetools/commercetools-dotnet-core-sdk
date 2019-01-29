@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace commercetools.Sdk.Domain.ProductDiscounts
+namespace commercetools.Sdk.Domain.ProductDiscounts.UpdateActions
 {
     public class ChangePredicateUpdateAction : UpdateAction<ProductDiscount>
     {

@@ -5,9 +5,8 @@ using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Domain.ProductDiscounts
 {
-    public class ProductDiscountDraft
+    public class ProductDiscountDraft : IDraft<ProductDiscount>
     {
-        public int Number { get; set; }
         public LocalizedString Name { get; set; }
         public LocalizedString Description { get; set; }
         public ProductDiscountValue Value { get; set; }

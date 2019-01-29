@@ -1,7 +1,7 @@
-﻿namespace commercetools.Sdk.Domain
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace commercetools.Sdk.Domain.ProductDiscounts
+{
     [TypeMarker("absolute")]
     public class AbsoluteProductDiscountValue : ProductDiscountValue
     {

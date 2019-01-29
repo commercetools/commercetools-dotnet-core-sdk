@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.ProductDiscounts
 {
     [Endpoint("product-discounts")]
     public class ProductDiscount
     {
         public string Id { get; set; }
-        public int Number { get; set; }
+        public int Version { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastModifiedAt { get; set; }
         public LocalizedString Name { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.Domain.ProductDiscounts
+﻿namespace commercetools.Sdk.Domain.ProductDiscounts.UpdateActions
 {
     public class SetDescriptionUpdateAction : UpdateAction<ProductDiscount>
     {
