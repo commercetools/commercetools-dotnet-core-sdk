@@ -1,3 +1,4 @@
+
 # commercetools .NET Core SDK
 
 <img src="http://dev.commercetools.com/assets/img/CT-logo.svg" width="550px" alt="CT-logo"></img>
@@ -20,11 +21,10 @@ All operations (get, query, create, update, delete and others) are available as 
  In the ConfigureServices method of Startup.cs add the following:
  
     services.UseCommercetools(
-	    this.configuration, // replace with your instance of IConfiguration
-	    "Client"); // replace with your name of the commercetools configuration section
+	    this.configuration); // replace with your instance of IConfiguration
 
-This code sets the Client Credentials as the initial token flow.
-If another token flow should be set, the following method overload can be used:
+This code sets "CommercetoolsClient" as the default configuration section name and the Client Credentials as the initial token flow.
+If other values should be set, the following method overload can be used:
 
     services.UseCommercetools(
 	    this.configuration, // replace with your instance of IConfiguration
@@ -39,14 +39,27 @@ The previous coding examples set one client only. More information about multipl
 
 The HttpClient is added by using the built-in AddHttpClient extension. In case the name of the client is not provided, the default client names are used:
 
- - commercetools-api
- - commercetools-auth
+ - CommercetoolsClient
+ - CommercetoolsAuth
 
 This means that no other HttpClient cannot have these names.  
 
 ### Multiple Clients
 
-More to follow.
+It is possible to use more than one client in the same application. The following code can be used to set it up:
+
+    IDictionary<string, TokenFlow> clients = new Dictionary<string, TokenFlow>()
+    {
+        { "client1", TokenFlow.AnonymousSession },
+        { "client2", TokenFlow.ClientCredentials }
+    };
+    services.UseCommercetools(this.configuration, clients);
+
+The appsettings.json then needs to contain the configuration sections named the same. 
+The clients can then be injected by using IEnumerable.
+
+    public MyController(IEnumerable<IClient> clients)
+     
 
 ### Configuration
 The client configuration needs to be added to appsettings.json in order for the client to work. The structure is as follows:
@@ -101,14 +114,14 @@ The initial flow is set at the start of the application but it can be changed wh
 
 ### Changing the Flow
 
-The token flow can be changed by using the ITokenFlowMapper. This interface is used for the mapping of the clients to their token flows. It can be injected in the same way as the IClient interface. The following code changes the token flow in applications that use a single client only: 
+The token flow can be changed by using the ITokenFlowRegister. This interface is used for the mapping of the clients to their token flows. It can be injected in the same way as the IClient interface. The following code changes the token flow in applications that use a single client only: 
 
-    private readonly ITokenFlowMapper tokenFlowMapper;
+    private readonly ITokenFlowRegister tokenFlowRegister;
     private readonly IClient client;
 	...
-	this.tokenFlowMapper.TokenFlowRegister.TokenFlow = TokenFlow.Password;
+	this.tokenFlowRegister.TokenFlow = TokenFlow.Password;
 	
-In case there are more clients, the following code sets the TokenFlow for a specific client.
+In case there are more clients, the following code sets the TokenFlow for a specific client, by using the ITokenFlowRegister through ITokenFlowMapper. 
 
     this.tokenFlowMapper.GetTokenFlowRegisterForClient(this.client.Name).TokenFlow = TokenFlow.Password;
 
