@@ -7,7 +7,7 @@ using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 
 namespace commercetools.Sdk.Domain.Predicates
 {
-    public static class CartExtensions
+    public static class CartDiscountExtensions
     {
         public static int LineItemCount(this Cart source, Expression<Func<LineItem, bool>> parameter)
         {

@@ -7,7 +7,7 @@ using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 
 namespace commercetools.Sdk.Domain.Predicates
 {
-    public static class ProductExtensions
+    public static class ProductDiscountExtensions
     {
         public static string ProductId(this Product source)
         {
@@ -55,6 +55,11 @@ namespace commercetools.Sdk.Domain.Predicates
         }
 
         public static string CategoriesWithAncestorsId(this Product source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static int VariantId(this Product source)
         {
             throw new NotImplementedException();
         }
