@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Globalization;
+using System.Linq.Expressions;
 using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Query.Converters
@@ -21,7 +22,8 @@ namespace commercetools.Sdk.Linq.Query.Converters
         {
             if (expression.NodeType == ExpressionType.Constant)
             {
-                return new ConstantPredicateVisitor(expression.ToString());
+                string constantExpression = this.FormatConstantString(expression);
+                return new ConstantPredicateVisitor(constantExpression);
             }
 
             MemberExpression memberExpression = expression as MemberExpression;
@@ -48,7 +50,22 @@ namespace commercetools.Sdk.Linq.Query.Converters
             }
 
             return false;
+        }
 
+        /// <summary>
+        /// Check if the constant is double then format it with Invariant culture else return expression string
+        /// </summary>
+        /// <param name="expression">constant expression</param>
+        /// <returns>formatted constant as string</returns>
+        private string FormatConstantString(Expression expression)
+        {
+            string expressionString = expression.ToString();
+            if (double.TryParse(expressionString, out var doubleConstant))
+            {
+                expressionString = string.Format(CultureInfo.InvariantCulture, "{0}", doubleConstant);
+            }
+
+            return expressionString;
         }
     }
 }
