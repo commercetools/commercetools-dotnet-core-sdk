@@ -1,5 +1,7 @@
 ﻿using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.Customers;
+using commercetools.Sdk.Domain.Products.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -49,17 +51,42 @@ namespace commercetools.Sdk.Domain.Predicates
             throw new NotImplementedException();
         }
 
-        public static string CategoriesId(this Product source)
+        public static string Country(this Product source)
         {
             throw new NotImplementedException();
         }
 
-        public static string CategoriesWithAncestorsId(this Product source)
+        public static CustomerGroup CustomerGroup(this Product source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static string CategoryId(this Product source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static IEnumerable<string> CategoriesId(this Product source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool IsIn(this IEnumerable<string> source, params string[] values)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static IEnumerable<string> CategoriesWithAncestorsId(this Product source)
         {
             throw new NotImplementedException();
         }
 
         public static int VariantId(this Product source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool ContainsAll<T>(this SetAttribute<T> source, params string[] values)
         {
             throw new NotImplementedException();
         }

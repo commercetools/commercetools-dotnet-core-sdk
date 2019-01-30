@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using commercetools.Sdk.Linq.Discount.Visitors;
 
@@ -41,26 +42,36 @@ namespace commercetools.Sdk.Linq.Discount.Converters
             {
                 string operatorName = Mapping.AllowedMethods[methodCallExpression.Method.Name];
                 IPredicateVisitor cartPredicateVisitor = predicateVisitorFactory.Create(methodCallExpression.Arguments[0]);
-                List<string> arguments = GetArguments(methodCallExpression.Arguments[1]);
-                CollectionPredicateVisitor collectionPredicateVisitor = new CollectionPredicateVisitor(arguments);
-                return new ComparisonPredicateVisitor(cartPredicateVisitor, operatorName, collectionPredicateVisitor);
+                IEnumerable<IPredicateVisitor> arguments = GetArguments(methodCallExpression.Arguments[1], predicateVisitorFactory);
+                if (arguments.ToList().Count > 1)
+                {
+                    CollectionPredicateVisitor collectionPredicateVisitor = new CollectionPredicateVisitor(arguments);
+                    return new ComparisonPredicateVisitor(cartPredicateVisitor, operatorName, collectionPredicateVisitor);
+                }
+                else
+                {
+                    return new ComparisonPredicateVisitor(cartPredicateVisitor, operatorName, arguments.First());
+                }
             }
 
             return null;
         }
 
-        private static List<string> GetArguments(Expression expression)
+        private static IEnumerable<IPredicateVisitor> GetArguments(Expression expression, IPredicateVisitorFactory predicateVisitorFactory)
         {
-            List<string> arguments = new List<string>();
+            List<IPredicateVisitor> arguments = new List<IPredicateVisitor>();
             if (expression.NodeType == ExpressionType.NewArrayInit)
             {
                 foreach (Expression part in ((NewArrayExpression)expression).Expressions)
                 {
-                    if (part.NodeType == ExpressionType.Constant)
-                    {
-                        arguments.Add(part.ToString());
-                    }
+                    IPredicateVisitor predicateVisitor = predicateVisitorFactory.Create(part);
+                    arguments.Add(predicateVisitor);
                 }
+            }
+            else
+            {
+                IPredicateVisitor predicateVisitor = predicateVisitorFactory.Create(expression);
+                arguments.Add(predicateVisitor);
             }
 
             return arguments;

@@ -24,6 +24,7 @@ namespace commercetools.Sdk.DependencyInjection
             services.UseSerialization();
             services.UseLinq();
             services.UseHttpApi(configuration, clients);
+            // TODO In case service locator pattern is completely remove, remove these two lines as well
             var serviceProvider = services.BuildServiceProvider();
             ServiceLocator.SetServiceLocatorProvider(serviceProvider);
         }
