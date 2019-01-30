@@ -19,6 +19,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             {
                 return (T)requestMessageBuilder;
             }
+
             return default(T);
         }
     }

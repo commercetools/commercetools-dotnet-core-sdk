@@ -1,12 +1,11 @@
-﻿using commercetools.Sdk.HttpApi.AdditionalParameters;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using commercetools.Sdk.Domain;
+using commercetools.Sdk.HttpApi.AdditionalParameters;
 
 namespace commercetools.Sdk.HttpApi.RequestBuilders
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Net.Http;
-    using commercetools.Sdk.Domain;
-
     public abstract class RequestMessageBuilderBase
     {
         private readonly IClientConfiguration clientConfiguration;

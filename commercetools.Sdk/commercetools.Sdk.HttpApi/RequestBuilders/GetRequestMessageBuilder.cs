@@ -8,8 +8,19 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace commercetools.Sdk.HttpApi.RequestBuilders
 {
+    /// <summary>
+    /// This class builds request messages for <see cref="commercetools.Sdk.Client.GetCommand{T}"/>
+    /// </summary>
+    /// <seealso cref="commercetools.Sdk.HttpApi.RequestBuilders.RequestMessageBuilderBase" />
+    /// <seealso cref="commercetools.Sdk.HttpApi.RequestBuilders.IRequestMessageBuilder" />
     public class GetRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetRequestMessageBuilder"/> class.
+        /// </summary>
+        /// <param name="clientConfiguration">The client configuration.</param>
+        /// <param name="endpointRetriever">The endpoint retriever.</param>
+        /// <param name="parametersBuilderFactory">The parameters builder factory.</param>
         public GetRequestMessageBuilder(
             IClientConfiguration clientConfiguration,
             IEndpointRetriever endpointRetriever,
@@ -18,11 +29,17 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
         {
         }
 
-        private HttpMethod HttpMethod => HttpMethod.Get;
+        private static HttpMethod HttpMethod => HttpMethod.Get;
 
+        /// <summary>
+        /// Gets the request message.
+        /// </summary>
+        /// <typeparam name="T">The domain specific type.</typeparam>
+        /// <param name="command">The command.</param>
+        /// <returns>The request message.</returns>
         public HttpRequestMessage GetRequestMessage<T>(GetCommand<T> command)
         {
-            return this.GetRequestMessage<T>(this.GetRequestUri(command), null, this.HttpMethod);
+            return this.GetRequestMessage<T>(this.GetRequestUri(command), null, HttpMethod);
         }
 
         private Uri GetRequestUri<T>(GetCommand<T> command)
