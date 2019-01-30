@@ -10,12 +10,14 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
     public class ProductDiscountsFixture: ClientFixture, IDisposable
     {
         private readonly ProductTypeFixture productTypeFixture;
+        private readonly ProductFixture productFixture;
         public List<ProductDiscount> ProductDiscountsToDelete { get; }
         
         public ProductDiscountsFixture()
         {
             this.ProductDiscountsToDelete = new List<ProductDiscount>();
             this.productTypeFixture = new ProductTypeFixture();
+            this.productFixture = new ProductFixture();
         }
         public void Dispose()
         {
