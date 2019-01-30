@@ -36,12 +36,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             ProductType productType = this.productTypeFixture.CreateProductType();
             this.productTypeFixture.ProductTypesToDelete.Add(productType);
             string predicate = $"productType.id = \"{productType.Id}\"";
+            var sortOrder = random.NextDouble(0.1, 0.9);
             
             ProductDiscountDraft productDiscountDraft = new ProductDiscountDraft();
             productDiscountDraft.Name = new LocalizedString() {{"en", this.RandomString(4)}};
             productDiscountDraft.Value = GetProductDiscountValue();
             productDiscountDraft.Predicate = predicate;
-            productDiscountDraft.SortOrder = "0.5";
+            productDiscountDraft.SortOrder = sortOrder.ToString("0.###");
             productDiscountDraft.ValidFrom = DateTime.Today.AddMonths(random.Next(-5,-1));
             productDiscountDraft.ValidUntil = DateTime.Today.AddMonths(random.Next(1,5));
             

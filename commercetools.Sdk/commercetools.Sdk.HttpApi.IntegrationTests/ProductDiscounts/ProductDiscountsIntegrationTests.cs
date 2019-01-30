@@ -18,7 +18,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             this.productDiscountFixture = productDiscountsFixture;
         }
         
-        [Fact(Skip = "Temp Skip")]
+        [Fact]
         public void CreateProductDiscount()
         {
             IClient commerceToolsClient = this.productDiscountFixture.GetService<IClient>();
@@ -28,7 +28,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             Assert.Equal(productDiscountDraft.Name["en"], productDiscount.Name["en"]);
         }
         
-        [Fact(Skip = "Temp Skip")]
+        [Fact]
         public void GetProductDiscountById()
         {
             IClient commerceToolsClient = this.productDiscountFixture.GetService<IClient>();
@@ -37,8 +37,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             ProductDiscount retrievedProductDiscount = commerceToolsClient.ExecuteAsync(new GetByIdCommand<ProductDiscount>(new Guid(productDiscount.Id))).Result;
             Assert.Equal(productDiscount.Id, retrievedProductDiscount.Id);
         }
-        
-        [Fact(Skip = "Temp Skip")]
+        [Fact]
         public void QueryProductDiscount()
         {
             IClient commerceToolsClient = this.productDiscountFixture.GetService<IClient>();
@@ -51,7 +50,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             PagedQueryResult<ProductDiscount> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.Contains(returnedSet.Results, pd => pd.Id == productDiscount.Id);
         }
-        [Fact(Skip = "Temp Skip")]
+        [Fact]
         public void DeleteProductDiscountById()
         {
             IClient commerceToolsClient = this.productDiscountFixture.GetService<IClient>();
