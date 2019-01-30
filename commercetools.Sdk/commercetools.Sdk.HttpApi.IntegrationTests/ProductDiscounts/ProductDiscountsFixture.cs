@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.ProductDiscounts;
@@ -42,7 +43,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             productDiscountDraft.Name = new LocalizedString() {{"en", this.RandomString(4)}};
             productDiscountDraft.Value = GetProductDiscountValue();
             productDiscountDraft.Predicate = predicate;
-            productDiscountDraft.SortOrder = sortOrder.ToString("0.###");
+            productDiscountDraft.SortOrder = string.Format(CultureInfo.InvariantCulture, "{0:0.00}", sortOrder);
             productDiscountDraft.ValidFrom = DateTime.Today.AddMonths(random.Next(-5,-1));
             productDiscountDraft.ValidUntil = DateTime.Today.AddMonths(random.Next(1,5));
             
