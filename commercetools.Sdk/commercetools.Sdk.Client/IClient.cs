@@ -3,24 +3,24 @@
 namespace commercetools.Sdk.Client
 {
     /// <summary>
-    /// 
+    /// This interface defines the way to communicate with commercetools API.
     /// </summary>
     public interface IClient
     {
         /// <summary>
-        /// Gets or sets the name.
+        /// Gets or sets the name of the client.
         /// </summary>
         /// <value>
-        /// The name.
+        /// The name of the client.
         /// </value>
         string Name { get; set; }
 
         /// <summary>
-        /// Executes the asynchronous.
+        /// Executes the specified command asynchronously.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The domain specific type.</typeparam>
         /// <param name="command">The command.</param>
-        /// <returns></returns>
+        /// <returns>The object of the domain specific type.</returns>
         Task<T> ExecuteAsync<T>(Command<T> command);
     }
 }
