@@ -3,6 +3,7 @@ using commercetools.Sdk.Domain;
 using System;
 using System.Collections.Generic;
 using commercetools.Sdk.Domain.Common;
+using Xunit.Abstractions;
 using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
@@ -11,7 +12,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
     {
         public List<Type> TypesToDelete;
 
-        public TypeFixture()
+        public TypeFixture():base()
         {
             this.TypesToDelete = new List<Type>();
         }

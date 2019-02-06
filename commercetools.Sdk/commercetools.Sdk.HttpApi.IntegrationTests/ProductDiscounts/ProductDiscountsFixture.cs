@@ -1,25 +1,25 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.ProductDiscounts;
-using commercetools.Sdk.HttpApi.IntegrationTests;
+using Xunit.Abstractions;
 
-namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
+namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
-    public class ProductDiscountsFixture: ClientFixture, IDisposable
+    public class ProductDiscountsFixture : ClientFixture, IDisposable
     {
         private readonly ProductTypeFixture productTypeFixture;
         private readonly ProductFixture productFixture;
         public List<ProductDiscount> ProductDiscountsToDelete { get; }
-        
-        public ProductDiscountsFixture()
+
+        public ProductDiscountsFixture() : base()
         {
             this.ProductDiscountsToDelete = new List<ProductDiscount>();
             this.productTypeFixture = new ProductTypeFixture();
             this.productFixture = new ProductFixture();
         }
+
         public void Dispose()
         {
             IClient commerceToolsClient = this.GetService<IClient>();
@@ -27,37 +27,61 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             foreach (ProductDiscount productDiscount in this.ProductDiscountsToDelete)
             {
                 ProductDiscount deletedType = commerceToolsClient
-                    .ExecuteAsync(new DeleteByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version)).Result;
+                    .ExecuteAsync(new DeleteByIdCommand<ProductDiscount>(new Guid(productDiscount.Id),
+                        productDiscount.Version)).Result;
             }
+            this.productFixture.Dispose();
+
             this.productTypeFixture.Dispose();
         }
-        public ProductDiscountDraft GetProductDiscountDraft()
+
+        /// <summary>
+        /// Create Product Discount for specific product - put the product Id inside predicate of the product discount
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        public ProductDiscountDraft GetProductDiscountDraft(string productId)
         {
-            var random = new Random();
-            ProductType productType = this.productTypeFixture.CreateProductType();
-            this.productTypeFixture.ProductTypesToDelete.Add(productType);
-            string predicate = $"productType.id = \"{productType.Id}\"";
-            var sortOrder = random.NextDouble(0.1, 0.9);
-            
+            string predicate = this.GetProductDiscountPredicateBasedonProduct(productId);
             ProductDiscountDraft productDiscountDraft = new ProductDiscountDraft();
             productDiscountDraft.Name = new LocalizedString() {{"en", this.RandomString(4)}};
-            productDiscountDraft.Value = GetProductDiscountValue();
+            productDiscountDraft.Description = new LocalizedString() {{"en", this.RandomString(20)}};
+            productDiscountDraft.Value = GetProductDiscountValueAsAbsolute();
             productDiscountDraft.Predicate = predicate;
-            productDiscountDraft.SortOrder = string.Format(CultureInfo.InvariantCulture, "{0:0.00}", sortOrder);
-            productDiscountDraft.ValidFrom = DateTime.Today.AddMonths(random.Next(-5,-1));
-            productDiscountDraft.ValidUntil = DateTime.Today.AddMonths(random.Next(1,5));
-            
+            productDiscountDraft.SortOrder = this.RandomSortOrder();
+            productDiscountDraft.ValidFrom = DateTime.Today.AddMonths(this.RandomInt(-5, -1));
+            productDiscountDraft.ValidUntil = DateTime.Today.AddMonths(this.RandomInt(1, 5));
+            productDiscountDraft.IsActive = true;
+
             return productDiscountDraft;
         }
+
+        /// <summary>
+        /// Create Product Discount for specific Product, so Create Product first and Create Product Discount based on this product
+        /// </summary>
+        /// <returns>Product Discount</returns>
         public ProductDiscount CreateProductDiscount()
         {
-            return this.CreateProductDiscount(this.GetProductDiscountDraft());
+            Product product = this.productFixture.CreateProduct();
+            this.productFixture.ProductsToDelete.Add(product);
+            return this.CreateProductDiscount(this.GetProductDiscountDraft(product.Id));
+        }
+
+        /// <summary>
+        /// Create Product Discount for the passed product
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
+        public ProductDiscount CreateProductDiscount(Product product)
+        {
+            return this.CreateProductDiscount(this.GetProductDiscountDraft(product.Id));
         }
 
         public ProductDiscount CreateProductDiscount(ProductDiscountDraft productDiscountDraft)
         {
             IClient commerceToolsClient = this.GetService<IClient>();
-            ProductDiscount productDiscount = commerceToolsClient.ExecuteAsync(new CreateCommand<ProductDiscount>(productDiscountDraft)).Result;
+            ProductDiscount productDiscount = commerceToolsClient
+                .ExecuteAsync(new CreateCommand<ProductDiscount>(productDiscountDraft)).Result;
             return productDiscount;
         }
 
@@ -65,14 +89,52 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
         /// Return Relative Product Discount
         /// </summary>
         /// <returns></returns>
-        public ProductDiscountValue GetProductDiscountValue()
+        public RelativeProductDiscountValue GetProductDiscountValueAsRelative()
         {
-            var random = new Random();
             var productDiscountValue = new RelativeProductDiscountValue()
             {
-                Permyriad = random.Next(1,10)
+                Permyriad = this.RandomInt(1, 30)
             };
             return productDiscountValue;
+        }
+
+        /// <summary>
+        /// Return Absolute Product Discount
+        /// </summary>
+        /// <returns></returns>
+        public AbsoluteProductDiscountValue GetProductDiscountValueAsAbsolute()
+        {
+            var money = new Money()
+            {
+                CurrencyCode = "EUR",
+                CentAmount = this.RandomInt(1, 10)
+            };
+            var productDiscountValue = new AbsoluteProductDiscountValue()
+            {
+                Money = new List<Money>() {money}
+            };
+            return productDiscountValue;
+        }
+
+        /// <summary>
+        /// Create predicate string based on product
+        /// </summary>
+        /// <returns></returns>
+        public string GetProductDiscountPredicateBasedonProduct(string productId)
+        {
+            string predicate = $"product.id = \"{productId}\"";
+            return predicate;
+        }
+
+        /// <summary>
+        /// Create Product with a product variant
+        /// </summary>
+        /// <returns></returns>
+        public Product CreateProductWithVariant()
+        {
+            Product product = this.productFixture.CreateProduct(true);
+            this.productFixture.ProductsToDelete.Add(product);
+            return product;
         }
     }
 }

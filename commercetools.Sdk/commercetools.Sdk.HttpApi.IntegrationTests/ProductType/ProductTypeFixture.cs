@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using commercetools.Sdk.Domain.Products.Attributes;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
@@ -11,7 +12,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
     {
         public List<ProductType> ProductTypesToDelete;
 
-        public ProductTypeFixture()
+        public ProductTypeFixture() : base()
         {
             this.ProductTypesToDelete = new List<ProductType>();
         }

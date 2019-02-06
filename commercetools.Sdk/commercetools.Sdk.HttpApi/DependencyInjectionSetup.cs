@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using commercetools.Sdk.Client;
@@ -62,7 +63,16 @@ namespace commercetools.Sdk.HttpApi
             ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
             tokenFlowRegister.TokenFlow = tokenFlow;
             services.AddSingleton(tokenFlowRegister);
-            services.AddHttpClient(clientName).AddHttpMessageHandler<AuthorizationHandler>().AddHttpMessageHandler<CorrelationIdHandler>().AddHttpMessageHandler<LoggerHandler>();
+            IHttpClientBuilder httpClientBuilder = services.AddHttpClient(clientName)
+                .AddHttpMessageHandler<AuthorizationHandler>().AddHttpMessageHandler<CorrelationIdHandler>()
+                .AddHttpMessageHandler<LoggerHandler>();
+
+            // get the custom delegating handler service if found and add it as Message Handler if exists
+            var customDelegatingHandlerService = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(ICustomDelegatingHandler));
+            if (customDelegatingHandlerService != null)
+            {
+                httpClientBuilder.AddHttpMessageHandler((serviceProvider) => serviceProvider.GetService<ICustomDelegatingHandler>() as DelegatingHandler);
+            }
         }
 
         private static void AddClient(this IServiceCollection services, string clientName, TokenFlowMapper tokenFlowMapper)

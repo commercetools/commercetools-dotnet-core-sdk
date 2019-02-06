@@ -5,6 +5,7 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Products;
 using commercetools.Sdk.Domain.Products.Attributes;
+using Xunit.Abstractions;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
@@ -15,7 +16,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public CategoryFixture CategoryFixture { get; }
         public List<Product> ProductsToDelete { get; }
 
-        public ProductFixture()
+        public ProductFixture() : base()
         {
             this.ProductsToDelete = new List<Product>();
             this.productTypeFixture = new ProductTypeFixture();
@@ -57,13 +58,14 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             productDraft.Key = this.RandomString(3);
             productDraft.Slug = new LocalizedString() {{"en", this.RandomString(3)}};
             productDraft.ProductType = new ResourceIdentifier() {Id = productType.Id};
-            ProductVariantDraft productMasterVariant = this.GetRandomProductVariantDraft(category.Id, ReferenceTypeId.Category);
+            ProductVariantDraft productMasterVariant =
+                this.GetRandomProductVariantDraft(category.Id, ReferenceTypeId.Category);
             productDraft.MasterVariant = productMasterVariant;
             productDraft.Categories = new List<ResourceIdentifier>
             {
                 new ResourceIdentifier() {Id = category.Id}
             };
-            
+
             if (withVariants) //then create variants for this product
             {
                 productDraft.Variants = new List<ProductVariantDraft>();
@@ -109,13 +111,36 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public ProductVariantDraft GetRandomProductVariantDraft(string referenceAttributeId = "",
             ReferenceTypeId? referenceTypeId = null)
         {
+            var price = GetRandomPriceDraft();
             var productVariantDraft = new ProductVariantDraft()
             {
                 Key = this.RandomString(5),
                 Sku = this.RandomString(5),
+                Prices = new List<PriceDraft>(){price},
                 Attributes = GetListOfRandomAttributes(referenceAttributeId, referenceTypeId)
             };
             return productVariantDraft;
+        }
+
+        /// <summary>
+        /// Get Random Price Draft
+        /// </summary>
+        /// <returns></returns>
+        internal PriceDraft GetRandomPriceDraft()
+        {
+            var money = new Money()
+            {
+                CentAmount = this.RandomInt(1000, 5000), 
+                CurrencyCode = "EUR"
+            };
+            var priceDraft = new PriceDraft()
+            {
+                Value = money,
+                Country = "DE",
+                ValidFrom = DateTime.Today.AddMonths(this.RandomInt(-5, -1)),
+                ValidUntil = DateTime.Today.AddMonths(this.RandomInt(1, 5))
+            };
+            return priceDraft;
         }
 
         //TODO Add utility class for creating random strings,numbers,years,dates,...etc for testing
