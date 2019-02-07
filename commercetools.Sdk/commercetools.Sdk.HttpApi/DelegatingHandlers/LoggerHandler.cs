@@ -1,13 +1,11 @@
 ﻿using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
-namespace commercetools.Sdk.HttpApi
+namespace commercetools.Sdk.HttpApi.DelegatingHandlers
 {
-    using Microsoft.Extensions.Logging;
-    using System;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public class LoggerHandler : DelegatingHandler
     {
         private readonly ILoggerFactory loggerFactory;

@@ -1,7 +1,9 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.HttpApi.Domain;
+using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using commercetools.Sdk.Serialization;
 
 namespace commercetools.Sdk.HttpApi
@@ -50,18 +52,9 @@ namespace commercetools.Sdk.HttpApi
                 return this.serializerService.Deserialize<T>(content);
             }
 
-            if (!string.IsNullOrEmpty(content))
-            {
-                HttpApiClientException httpApiClientException = this.serializerService.Deserialize<HttpApiClientException>(content);
-                throw httpApiClientException;
-            }
-
-            HttpApiClientException generalClientException = new HttpApiClientException
-            {
-                StatusCode = (int)result.StatusCode,
-                Message = result.ReasonPhrase
-            };
-            throw generalClientException;
+            // it will not reach this because either it will success and return the deserialized object or fail and handled by ErrorHandler which will throw it using the right exception type
+            var exception = new Exception(result.ReasonPhrase);
+            throw exception;
         }
     }
 }

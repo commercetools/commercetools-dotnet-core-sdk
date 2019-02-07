@@ -70,11 +70,8 @@ namespace commercetools.Sdk.HttpApi.Tokens
                 return this.serializerService.Deserialize<Token>(content);
             }
 
-            HttpApiClientException generalClientException = new HttpApiClientException
-            {
-                StatusCode = (int)result.StatusCode,
-                Message = result.ReasonPhrase
-            };
+            HttpApiClientException generalClientException =
+                new HttpApiClientException(result.ReasonPhrase, (int)result.StatusCode);
             throw generalClientException;
         }
     }

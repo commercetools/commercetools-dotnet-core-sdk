@@ -279,5 +279,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Assert.NotNull(retrievedCategory.Parent);
             Assert.NotNull(retrievedCategory.Parent.Obj);
         }
+        /*
+        [Fact]
+        public async void TestExceptionWithAwait()
+        {
+            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
+            Category retrievedCategory = await commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(new Guid("2bafc816-4223-4ff0-ac8a-0f08a8f29f12")));
+            Assert.Equal("2bafc816-4223-4ff0-ac8a-0f08a8f29f12", retrievedCategory.Id);
+            
+        }
+        */
     }
 }

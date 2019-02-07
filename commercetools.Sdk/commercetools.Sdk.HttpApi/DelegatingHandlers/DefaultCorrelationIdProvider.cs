@@ -1,7 +1,7 @@
-﻿namespace commercetools.Sdk.HttpApi
-{
-    using System;
+﻿using System;
 
+namespace commercetools.Sdk.HttpApi.DelegatingHandlers
+{
     internal class DefaultCorrelationIdProvider : ICorrelationIdProvider
     {
         private readonly IClientConfiguration clientConfiguration;

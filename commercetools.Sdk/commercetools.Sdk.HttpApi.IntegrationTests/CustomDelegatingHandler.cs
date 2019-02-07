@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using commercetools.Sdk.HttpApi.DelegatingHandlers;
 using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
@@ -31,7 +32,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 if (!response.IsSuccessStatusCode)
                 {
                     String body = response.Content.ReadAsStringAsync().Result;
-                    throw new Exception($"Request Url: {request.RequestUri} \r\n Response Status Code: {response.StatusCode} \r\n Response Reason: {response.ReasonPhrase} \r\n Response {body}");
+                    throw new Exception($"Response {body}");
+                    //throw new Exception($"Request Url: {request.RequestUri} \r\n Response Status Code: {response.StatusCode} \r\n Response Reason: {response.ReasonPhrase} \r\n Response {body}");
                     //outputHelper.WriteLine($"Request Url: {request.RequestUri} \r\n Response Status Code: {response.StatusCode} \r\n Response Reason: {response.ReasonPhrase}");
                 }
             }

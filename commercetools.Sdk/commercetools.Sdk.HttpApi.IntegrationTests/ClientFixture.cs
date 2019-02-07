@@ -30,12 +30,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 AddEnvironmentVariables().
                 Build();
             
-            //Inject our custom delegating handler
-            //services.AddSingleton<ITestOutputHelper,TestOutputHelper>();
-            services.AddSingleton<ICustomDelegatingHandler, CustomDelegatingHandler>();
-            
             services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials);
-            
             this.serviceProvider = services.BuildServiceProvider();
         }
 

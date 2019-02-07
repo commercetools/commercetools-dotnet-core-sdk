@@ -1,11 +1,11 @@
-﻿namespace commercetools.Sdk.HttpApi
-{
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using commercetools.Sdk.HttpApi.Tokens;
-    using Domain;
+﻿using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using commercetools.Sdk.HttpApi.Domain;
+using commercetools.Sdk.HttpApi.Tokens;
 
+namespace commercetools.Sdk.HttpApi.DelegatingHandlers
+{
     public class AuthorizationHandler : DelegatingHandler
     {
         private readonly ITokenProviderFactory tokenProviderFactory;

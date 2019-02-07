@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.HttpApi.AdditionalParameters;
+using commercetools.Sdk.HttpApi.DelegatingHandlers;
 using commercetools.Sdk.HttpApi.HttpApiCommands;
 using commercetools.Sdk.HttpApi.RequestBuilders;
 using commercetools.Sdk.HttpApi.SearchParameters;
@@ -65,14 +66,17 @@ namespace commercetools.Sdk.HttpApi
             services.AddSingleton(tokenFlowRegister);
             IHttpClientBuilder httpClientBuilder = services.AddHttpClient(clientName)
                 .AddHttpMessageHandler<AuthorizationHandler>().AddHttpMessageHandler<CorrelationIdHandler>()
-                .AddHttpMessageHandler<LoggerHandler>();
+                .AddHttpMessageHandler<LoggerHandler>()
+                .AddHttpMessageHandler<ErrorHandler>();
 
             // get the custom delegating handler service if found and add it as Message Handler if exists
+            /*
             var customDelegatingHandlerService = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(ICustomDelegatingHandler));
             if (customDelegatingHandlerService != null)
             {
-                httpClientBuilder.AddHttpMessageHandler((serviceProvider) => serviceProvider.GetService<ICustomDelegatingHandler>() as DelegatingHandler);
+                //httpClientBuilder.AddHttpMessageHandler((serviceProvider) => serviceProvider.GetService<ICustomDelegatingHandler>() as DelegatingHandler);
             }
+            */
         }
 
         private static void AddClient(this IServiceCollection services, string clientName, TokenFlowMapper tokenFlowMapper)
@@ -96,6 +100,7 @@ namespace commercetools.Sdk.HttpApi
             services.AddSingleton<ICorrelationIdProvider, DefaultCorrelationIdProvider>();
             services.AddSingleton<CorrelationIdHandler>();
             services.AddSingleton<LoggerHandler>();
+            services.AddSingleton<ErrorHandler>();
             services.AddSingleton<AuthorizationHandler>();
             services.AddHttpClient(DefaultClientNames.Authorization);
             services.AddSingleton<IEndpointRetriever, EndpointRetriever>();
@@ -108,6 +113,7 @@ namespace commercetools.Sdk.HttpApi
             services.AddSingleton<IParametersBuilderFactory<IUploadImageParametersBuilder>, ParametersBuilderFactory<IUploadImageParametersBuilder>>();
             services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
+            services.AddSingleton<IApiExceptionFactory, ApiExceptionFactory>();
         }
     }
 }
