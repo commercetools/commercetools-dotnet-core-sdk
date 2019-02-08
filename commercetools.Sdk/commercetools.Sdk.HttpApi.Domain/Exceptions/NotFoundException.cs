@@ -1,13 +1,12 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
-namespace commercetools.Sdk.HttpApi.Domain
+namespace commercetools.Sdk.HttpApi.Domain.Exceptions
 {
-    public class NotFoundException : HttpApiClientException
+    public class NotFoundException : ClientErrorException
     {
         private const int Code = 404;
-        
-        public NotFoundException(string message, List<Error> errors) : base(message,Code,errors)
+
+        public NotFoundException() : base(Code)
         {
         }
     }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 namespace commercetools.Sdk.HttpApi
 {
     /// <summary>
-    /// Responsible for Creating HTTP Exceptions based on the status code return from unsuccessful responses
+    /// Responsible for Creating HTTP Exceptions based on the status code return from unsuccessful requests
     /// </summary>
     public class ApiExceptionFactory : IApiExceptionFactory
     {
@@ -25,7 +25,7 @@ namespace commercetools.Sdk.HttpApi
         /// <returns>Api Exception or any exception inherit from it</returns>
         public ApiException CreateApiException(HttpRequestMessage request, HttpResponseMessage response)
         {
-            var apiException = new ApiException()
+            var apiException = new ApiException("Inner exception")
             {
                 Request = request,
                 Response = response,

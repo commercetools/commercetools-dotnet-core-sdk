@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 
@@ -9,6 +10,8 @@ namespace commercetools.Sdk.HttpApi.Domain.Exceptions
     /// </summary>
     public class ApiException : Exception
     {
+        private const string CorrelationHeaderKey = "X-Correlation-ID";
+        
         #region Properites
 
         public HttpRequestMessage Request { get; set; }
@@ -16,6 +19,16 @@ namespace commercetools.Sdk.HttpApi.Domain.Exceptions
         public HttpResponseMessage Response { get; set; }
         
         public string ProjectKey { get; set; }
+
+        public string CorrelationId {
+            get
+            {
+                var correlationHeaderValue = this.Request.Headers.GetValues(CorrelationHeaderKey).FirstOrDefault();
+                return correlationHeaderValue;
+            }
+        }
+        public string HttpSummary => GetHttpSummary();
+        public string ResponseBody => GetResponseBody();
         
         #endregion
 
@@ -32,15 +45,94 @@ namespace commercetools.Sdk.HttpApi.Domain.Exceptions
             Response = response;
         }
 
+        public ApiException(string message) : base(message)
+        {
+            
+        }
+
         #endregion
 
         public override string Message => this.GetExceptionMessage();
+        
 
+        /// <summary>
+        /// Build Exception Message
+        /// </summary>
+        /// <returns></returns>
         private string GetExceptionMessage()
         {
-            if (Request == null || Response == null)
-                return "";
-            return $"API Exception Message at {Request.RequestUri}";
+            string exceptionMessage = "";
+            StringBuilder builder = new StringBuilder();
+            
+            builder.Append(HttpSummary)
+                .Append(ResponseBody)
+                .Append($"project: {ProjectKey}");
+            
+            exceptionMessage = builder.ToString();
+            return exceptionMessage;
         }
+
+
+        #region Functions
+        
+        /// <summary>
+        /// Get Summary of the Http Request
+        /// </summary>
+        /// <returns>The Http Request Summary</returns>
+        private string GetHttpSummary()
+        {
+            string httpSummary = "";
+            try
+            {
+                StringBuilder builder = new StringBuilder();
+                if (this.Request != null)
+                {
+                    builder.Append("Request Summary: ");
+                    builder.Append(this.Request.Method.Method);
+                    builder.Append(" ");
+                    builder.Append(this.Request.RequestUri);
+                    builder.Append(" failed ");
+                    builder.Append(Response?.StatusCode.ToString() ?? "an unknown status code");
+                    builder.Append(CorrelationId!=null ? $" with {CorrelationHeaderKey} '{CorrelationId}'" : "");
+                    builder.Append(" on ");
+                    builder.Append(DateTime.UtcNow.ToString("s"));
+                    builder.Append(Environment.NewLine);
+                    httpSummary = builder.ToString();
+                }
+            }
+            catch (Exception e)
+            {
+                httpSummary = "";
+            }
+            return httpSummary;
+        }
+
+        /// <summary>
+        /// Get Response Body
+        /// </summary>
+        /// <returns></returns>
+        private string GetResponseBody()
+        {
+            string responseBody = "";
+            try
+            {
+                StringBuilder builder = new StringBuilder();
+                if (this.Response != null)
+                {
+                    string content = this.Response.Content.ReadAsStringAsync().Result;
+                    builder.Append("Response: ");
+                    builder.Append(content);
+                    builder.Append(Environment.NewLine);
+                    responseBody = builder.ToString();
+                }
+            }
+            catch (Exception e)
+            {
+                responseBody = "";
+            }
+            return responseBody;
+        }
+
+        #endregion
     }
 }

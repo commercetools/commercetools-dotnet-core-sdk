@@ -53,7 +53,7 @@ namespace commercetools.Sdk.HttpApi
             }
 
             // it will not reach this because either it will success and return the deserialized object or fail and handled by ErrorHandler which will throw it using the right exception type
-            var exception = new Exception(result.ReasonPhrase);
+            var exception = new ApiException(result.ReasonPhrase);
             throw exception;
         }
     }
