@@ -3,6 +3,7 @@ using commercetools.Sdk.Domain.Carts;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.Linq.Discount;
@@ -144,6 +145,19 @@ namespace commercetools.Sdk.Linq.Tests
         {
             Expression<Func<Cart, bool>> expression = c => c.CustomerId == "45224437-12bd-4742-830c-3a36b52541d3";
             Expression<Func<Cart, bool>> expressionSimilar = c => c.Customer().Id == "45224437-12bd-4742-830c-3a36b52541d3";
+            IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("customer.id = \"45224437-12bd-4742-830c-3a36b52541d3\"", result);
+        }
+        
+        [Fact]
+        public void CartPredicateCustomerIdNonLocal()
+        {
+            Customer customer = new Customer()
+            {
+                Id = "45224437-12bd-4742-830c-3a36b52541d3"
+            };
+            Expression<Func<Cart, bool>> expression = c => c.CustomerId == customer.Id.valueOf();
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("customer.id = \"45224437-12bd-4742-830c-3a36b52541d3\"", result);

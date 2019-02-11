@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.Linq.Filter;
@@ -21,6 +23,19 @@ namespace commercetools.Sdk.Linq.Tests
         public void FilterByCategoryId()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Categories.Any(c => c.Id == "34940e9b-0752-4ffa-8e6e-4f2417995a3e");
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("categories.id:\"34940e9b-0752-4ffa-8e6e-4f2417995a3e\"", result);
+        }
+        
+        [Fact]
+        public void FilterByCategoryIdNonLocal()
+        {
+            Category category = new Category()
+            {
+                Id = "34940e9b-0752-4ffa-8e6e-4f2417995a3e"
+            };
+            Expression<Func<ProductProjection, bool>> expression = p => p.Categories.Any(c => c.Id == category.Id.valueOf());
             IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("categories.id:\"34940e9b-0752-4ffa-8e6e-4f2417995a3e\"", result);
