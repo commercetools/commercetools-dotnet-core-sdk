@@ -47,10 +47,22 @@ namespace commercetools.Sdk.Linq.Tests
             {
                 Key = "c14"
             };
-            // Only local variables are supported.
-            // In case a comparison to a property or another expression needs to be done, then it has to be put to a local variable.
             string key = category.Key;
             Expression<Func<Category, bool>> expression = c => c.Key == key;
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("key = \"c14\"", result);
+        }
+        
+        [Fact]
+        public void ExpressionStringEqualVarPropertyNonLocal()
+        {
+            Category category = new Category
+            {
+                Key = "c14"
+            };
+            // For comparison of non local values the valueOf extension method has to be used
+            Expression<Func<Category, bool>> expression = c => c.Key == category.Key.valueOf();
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("key = \"c14\"", result);

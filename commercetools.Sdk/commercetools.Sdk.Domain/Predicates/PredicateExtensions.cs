@@ -6,6 +6,11 @@ namespace commercetools.Sdk.Domain.Predicates
 {
     public static class PredicateExtensions
     {
+        public static object valueOf<T>(this T source)
+        {
+            return source;
+        }
+        
         public static bool In<T>(this T source, params T[] values)
         {
             throw new NotImplementedException();

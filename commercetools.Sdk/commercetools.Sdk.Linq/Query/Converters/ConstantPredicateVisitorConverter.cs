@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq.Expressions;
 using commercetools.Sdk.Linq.Query.Visitors;
 
@@ -15,6 +16,14 @@ namespace commercetools.Sdk.Linq.Query.Converters
 
         public bool CanConvert(Expression expression)
         {
+            if (expression is MethodCallExpression methodCallExpression)
+            {
+                if (methodCallExpression.Method.Name == "valueOf")
+                {
+                    return true;
+                }
+            }
+
             return expression.NodeType == ExpressionType.Constant || IsVariable(expression);
         }
 
@@ -26,9 +35,8 @@ namespace commercetools.Sdk.Linq.Query.Converters
                 return new ConstantPredicateVisitor(constantExpression);
             }
 
-            MemberExpression memberExpression = expression as MemberExpression;
             var compiledValue = Expression.Lambda(expression, null).Compile().DynamicInvoke(null).ToString();
-            if (memberExpression?.Type == typeof(string))
+            if (expressionType(expression) == typeof(string))
             {
                 compiledValue = compiledValue.WrapInQuotes();
             }
@@ -36,6 +44,16 @@ namespace commercetools.Sdk.Linq.Query.Converters
             return new ConstantPredicateVisitor(compiledValue);
         }
 
+        private Type expressionType(Expression expression)
+        {
+            if (expression is MethodCallExpression)
+            {
+                return (expression as MethodCallExpression).Arguments[0].Type;
+            }
+
+            return (expression as MemberExpression).Type;
+        }
+        
         private static bool IsVariable(Expression expression)
         {
             if (expression.NodeType != ExpressionType.MemberAccess)
