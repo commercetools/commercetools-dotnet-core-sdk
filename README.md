@@ -169,9 +169,9 @@ There are numerous commands and objects that accept predicates. In order to faci
     QueryCommand<Category> queryCommand = new QueryCommand<Category>();
     queryCommand.SetWhere(queryPredicate);
 
-Right now only local variables are supported in comparisons. For example, the following lambda expression would not work:
+In order to use values from objects directly use the valueOf extension method:
 
-    c => c.Key == category.Key
+    c => c.Key == category.Key.valueOf()
 
 Setting the "where" query string parameter as a string can be done in the following way:
 
