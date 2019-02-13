@@ -5,6 +5,7 @@ using commercetools.Sdk.HttpApi.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using commercetools.Sdk.Client.Linq;
 using commercetools.Sdk.Domain.Query;
 using Xunit;
 using commercetools.Sdk.Domain.Categories.UpdateActions;
@@ -278,6 +279,23 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Category retrievedCategory = commerceToolsClient.ExecuteAsync(new GetByKeyCommand<Category>(category.Key, expansions)).Result;
             Assert.NotNull(retrievedCategory.Parent);
             Assert.NotNull(retrievedCategory.Parent.Obj);
+        }
+
+        [Fact]
+        public void QueryContextLinqProvider()
+        {
+            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
+            Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent());
+            this.categoryFixture.CategoriesToDelete.Add(category);
+
+            var query = from p in new QueryContext<Category>(commerceToolsClient)
+                where p.Key == "c14"
+                select p;
+
+            foreach (Category c in query)
+            {
+                Assert.IsType<Category>(c);
+            }
         }
     }
 }
