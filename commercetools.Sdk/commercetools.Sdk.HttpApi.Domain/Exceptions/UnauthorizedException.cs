@@ -1,10 +1,17 @@
+using System.Runtime.CompilerServices;
+
 namespace commercetools.Sdk.HttpApi.Domain.Exceptions
 {
+    /// <summary>
+    /// Unauthorized access to the commercetools platform with either invalid client credentials or tokens.
+    /// Most likely the subclass exceptions InvalidTokenException will be thrown.
+    /// </summary>
+    /// <seealso cref="commercetools.Sdk.HttpApi.Domain.Exceptions.InvalidTokenException" />
     public class UnauthorizedException : ClientErrorException
     {
-        private const int Code = 401;
-        
-        public UnauthorizedException(string message) : base(Code, message)
+        public override int StatusCode => 401;
+
+        public UnauthorizedException()
         {
             
         }

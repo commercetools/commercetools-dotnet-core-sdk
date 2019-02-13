@@ -1,13 +1,15 @@
 namespace commercetools.Sdk.HttpApi.Domain.Exceptions
 {
+    /// <summary>
+    /// Exceptions with status code (4xx)
+    /// </summary>
     public class ClientErrorException : ApiServiceException
     {
-        public ClientErrorException(int statusCode) : base(statusCode)
+        public override int StatusCode { get; set; }
+        
+        public ClientErrorException()
         {
-        }
-
-        public ClientErrorException(int statusCode, string message) : base(statusCode, message)
-        {
+            
         }
     }
 }
