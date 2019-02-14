@@ -91,7 +91,7 @@ namespace commercetools.Sdk.Client.Linq
 
                         break;
                     default:
-                        throw new NotImplementedException();
+                        break;
                 }
             }
 
@@ -106,7 +106,8 @@ namespace commercetools.Sdk.Client.Linq
 
         public TResult Execute<TResult>(Expression expression)
         {
-            PagedQueryResult<T> returnedSet = client.ExecuteAsync(command).Result;
+            var result = client.ExecuteAsync(command);
+            PagedQueryResult<T> returnedSet = result.Result;
 
             this.result = returnedSet.Results;
             return (TResult)this.result.GetEnumerator();

@@ -216,7 +216,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == id);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
             queryCommand.SetWhere(queryPredicate);
-            queryCommand.Limit = 2; 
+            queryCommand.Limit = 2;
             PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.Equal(2, returnedSet.Results.Count);
             Assert.Equal(3, returnedSet.Total);
