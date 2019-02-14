@@ -11,32 +11,38 @@ namespace commercetools.Sdk.HttpApi.Domain.Exceptions
     public class ApiException : Exception
     {
         private const string CorrelationHeaderKey = "X-Correlation-ID";
-        
+
         #region Properites
 
+        private string ParentExceptionMessage { get; set; }
+
         public HttpRequestMessage Request { get; set; }
-        
+
         public HttpResponseMessage Response { get; set; }
         
+        public HttpApiErrorResponse ErrorResponse { get; set; }
+
         public string ProjectKey { get; set; }
 
-        public string CorrelationId {
+        public string CorrelationId
+        {
             get
             {
-                var correlationHeaderValue = this.Request.Headers.GetValues(CorrelationHeaderKey).FirstOrDefault();
+                var correlationHeaderValue = Request?.Headers.GetValues(CorrelationHeaderKey).FirstOrDefault();
                 return correlationHeaderValue;
             }
         }
+
+        public override string Message => this.GetExceptionMessage();
         public string HttpSummary => GetHttpSummary();
         public string ResponseBody => GetResponseBody();
-        
+
         #endregion
 
         #region Constructors
 
         public ApiException()
         {
-            
         }
 
         public ApiException(HttpRequestMessage request, HttpResponseMessage response)
@@ -47,34 +53,14 @@ namespace commercetools.Sdk.HttpApi.Domain.Exceptions
 
         public ApiException(string message) : base(message)
         {
-            
+            this.ParentExceptionMessage = message;
         }
 
         #endregion
 
-        public override string Message => this.GetExceptionMessage();
-        
-
-        /// <summary>
-        /// Build Exception Message
-        /// </summary>
-        /// <returns></returns>
-        private string GetExceptionMessage()
-        {
-            string exceptionMessage = "";
-            StringBuilder builder = new StringBuilder();
-            
-            builder.Append(HttpSummary)
-                .Append(ResponseBody)
-                .Append($"project: {ProjectKey}");
-            
-            exceptionMessage = builder.ToString();
-            return exceptionMessage;
-        }
-
 
         #region Functions
-        
+
         /// <summary>
         /// Get Summary of the Http Request
         /// </summary>
@@ -93,7 +79,7 @@ namespace commercetools.Sdk.HttpApi.Domain.Exceptions
                     builder.Append(this.Request.RequestUri);
                     builder.Append(" failed ");
                     builder.Append(Response?.StatusCode.ToString() ?? "an unknown status code");
-                    builder.Append(CorrelationId!=null ? $" with {CorrelationHeaderKey} '{CorrelationId}'" : "");
+                    builder.Append(CorrelationId != null ? $" with {CorrelationHeaderKey} '{CorrelationId}'" : "");
                     builder.Append(" on ");
                     builder.Append(DateTime.UtcNow.ToString("s"));
                     builder.Append(Environment.NewLine);
@@ -104,6 +90,7 @@ namespace commercetools.Sdk.HttpApi.Domain.Exceptions
             {
                 httpSummary = "";
             }
+
             return httpSummary;
         }
 
@@ -119,7 +106,7 @@ namespace commercetools.Sdk.HttpApi.Domain.Exceptions
                 StringBuilder builder = new StringBuilder();
                 if (this.Response != null)
                 {
-                    string content = this.Response.Content.ReadAsStringAsync().Result;
+                    string content = this.Response?.Content?.ReadAsStringAsync().Result;
                     builder.Append("Response: ");
                     builder.Append(content);
                     builder.Append(Environment.NewLine);
@@ -130,7 +117,29 @@ namespace commercetools.Sdk.HttpApi.Domain.Exceptions
             {
                 responseBody = "";
             }
+
             return responseBody;
+        }
+
+
+        /// <summary>
+        /// Build Exception Message
+        /// </summary>
+        /// <returns></returns>
+        private string GetExceptionMessage()
+        {
+            string exceptionMessage = "";
+            StringBuilder builder = new StringBuilder();
+
+            builder.Append(!string.IsNullOrEmpty(this.ParentExceptionMessage)
+                    ? $"detailMessage: {ParentExceptionMessage}" + "\r\n"
+                    : "")
+                .Append(HttpSummary)
+                .Append(ResponseBody)
+                .Append(ProjectKey != null ? $"project: {ProjectKey}" : "");
+
+            exceptionMessage = builder.ToString();
+            return exceptionMessage;
         }
 
         #endregion

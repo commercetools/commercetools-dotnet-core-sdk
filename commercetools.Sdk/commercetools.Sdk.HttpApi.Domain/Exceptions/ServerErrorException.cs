@@ -1,13 +1,10 @@
 namespace commercetools.Sdk.HttpApi.Domain.Exceptions
 {
+    /// <summary>
+    /// Exceptions with status code (>= 500)
+    /// </summary>
     public abstract class ServerErrorException : ApiServiceException
     {
-        protected ServerErrorException(int statusCode) : base(statusCode)
-        {
-        }
-
-        protected ServerErrorException(int statusCode, string message) : base(statusCode, message)
-        {
-        }
+        public override int StatusCode { get; set; }
     }
 }

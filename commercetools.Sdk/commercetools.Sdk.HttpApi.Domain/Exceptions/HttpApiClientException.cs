@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using commercetools.Sdk.HttpApi.Domain.Exceptions;
 
 namespace commercetools.Sdk.HttpApi.Domain
 {
@@ -30,15 +30,5 @@ namespace commercetools.Sdk.HttpApi.Domain
             this.Errors = response.Errors;
         }
         
-    }
-    
-    /// <summary>
-    /// Http API Error Response
-    /// </summary>
-    public class HttpApiErrorResponse
-    {
-        public int StatusCode { get; set; }
-        public string Message { get; set; }
-        public List<Error> Errors { get; set; }
     }
 }

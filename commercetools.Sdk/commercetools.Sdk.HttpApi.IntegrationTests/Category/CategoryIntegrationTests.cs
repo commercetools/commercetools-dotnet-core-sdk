@@ -1,11 +1,11 @@
 ﻿using commercetools.Sdk.Client;
-using commercetools.Sdk.Client.Linq;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.HttpApi.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using commercetools.Sdk.Client.Linq;
 using commercetools.Sdk.Domain.Query;
 using Xunit;
 using commercetools.Sdk.Domain.Categories.UpdateActions;
@@ -216,7 +216,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == id);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
             queryCommand.SetWhere(queryPredicate);
-            queryCommand.Limit = 2;
+            queryCommand.Limit = 2; 
             PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.Equal(2, returnedSet.Results.Count);
             Assert.Equal(3, returnedSet.Total);
@@ -299,22 +299,5 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Assert.Equal(1, categories.Count);
             Assert.Equal(category.Key, categories.First().Key);
         }
-
-//        [Fact]
-//        public async void TestExceptionWithAwait()
-//        {
-//            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
-//            Category retrievedCategory = await commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(new Guid("2bafc816-4223-4ff0-ac8a-0f08a8f29f12")));
-//            Assert.Equal("2bafc816-4223-4ff0-ac8a-0f08a8f29f12", retrievedCategory.Id);
-//
-//        }
-//        [Fact]
-//        public void TestException()
-//        {
-//            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
-//            Category retrievedCategory = commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(new Guid("2bafc816-4223-4ff0-ac8a-0f08a8f29f12"))).Result;
-//            Assert.Equal("2bafc816-4223-4ff0-ac8a-0f08a8f29f12", retrievedCategory.Id);
-//
-//        }
     }
 }
