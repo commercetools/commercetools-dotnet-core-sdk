@@ -16,18 +16,16 @@ namespace commercetools.Sdk.Client.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return source.Provider.CreateQuery<TSource>((Expression)Expression.Call((Expression)null, WithClientTSource2(typeof(TSource)), source.Expression, (Expression)Expression.Constant((object)client)));
+            return source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+                    GetMethodInfo(WithClient, source, client),
+                    new[] { source.Expression, Expression.Constant(client) }));
         }
 
-        private static MethodInfo WithClientTSource2(Type TSource)
+        private static MethodInfo GetMethodInfo<T1, T2, T3>(Func<T1, T2, T3> f, T1 unused1, T2 unused2)
         {
-            var methodInfo = _sWithClientTSource2;
-            if ((object)methodInfo == null)
-            {
-                methodInfo = _sWithClientTSource2 = new Func<IQueryable<object>, IClient, IQueryable<object>>(WithClient<object>).GetMethodInfo().GetGenericMethodDefinition();
-            }
-
-            return methodInfo.MakeGenericMethod(TSource);
+            return f.Method;
         }
     }
 }
