@@ -183,3 +183,15 @@ There are numerous extension methods created for domain specific operations. The
 
     c => c.GeoLocation.WithinCircle(13.37774, 52.51627, 1000)
 
+## LINQ
+
+Experimental support for querying the API using LINQ is provided by the `commercetools.Sdk.Client.Linq.Api` class
+
+    var query = from c in Api.Query<Category>(commercetoolsClient)
+                    where c.Key == "c14"
+                    select c;
+    
+    foreach(Category c in query)
+    {
+        var c = c.Key;
+    }

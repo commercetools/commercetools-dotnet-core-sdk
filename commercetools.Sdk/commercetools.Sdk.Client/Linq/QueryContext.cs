@@ -84,6 +84,11 @@ namespace commercetools.Sdk.Client.Linq
                     case "ThenBy":
                         if (mc.Arguments[1] is UnaryExpression sort)
                         {
+                            if (mc.Method.Name == "OrderBy")
+                            {
+                                this.command.Sort.Clear();
+                            }
+
                             ISortExpressionVisitor sortVisitor = new SortExpressionVisitor();
                             var render = sortVisitor.Render(sort.Operand);
                             this.command.Sort.Add(render);
