@@ -9,6 +9,7 @@ using System.Linq;
 using commercetools.Sdk.Domain.Query;
 using Xunit;
 using commercetools.Sdk.Domain.Categories.UpdateActions;
+using commercetools.Sdk.Domain.Predicates;
 using ChangeNameUpdateAction = commercetools.Sdk.Domain.Categories.UpdateActions.ChangeNameUpdateAction;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
@@ -285,17 +286,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public void QueryContextLinqProvider()
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
-            Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent());
+
+            Category category = this.categoryFixture.CreateCategory();
             this.categoryFixture.CategoriesToDelete.Add(category);
 
-            var query = from p in new QueryContext<Category>(commerceToolsClient)
-                where p.Key == "c14"
-                select p;
+            var query = from c in Api.Query<Category>(commerceToolsClient)
+                where c.Key == category.Key.valueOf()
+                select c;
 
-            foreach (Category c in query)
-            {
-                Assert.IsType<Category>(c);
-            }
+
+            var categories = query.OrderBy(c => c.Key).ToList();
+            Assert.Equal(1, categories.Count);
+            Assert.Equal(category.Key, categories.First().Key);
         }
 
 //        [Fact]

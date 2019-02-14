@@ -1,3 +1,5 @@
+using commercetools.Sdk.Linq;
+
 namespace commercetools.Sdk.Client.Linq
 {
     using System;
@@ -9,10 +11,12 @@ namespace commercetools.Sdk.Client.Linq
     using Domain.Query;
     using Type = System.Type;
 
-    public class QueryContext<T> : IQueryable<T>, IQueryProvider
+    public class QueryContext<T> : IQueryProvider, IOrderedQueryable<T>
     {
         private readonly IClient client;
+
         private Expression expression = null;
+        private QueryCommand<T> command = new QueryCommand<T>();
         private IList<T> result = new List<T>();
 
         public QueryContext(IClient client)
@@ -49,6 +53,47 @@ namespace commercetools.Sdk.Client.Linq
             }
 
             this.expression = expression;
+            if (expression is MethodCallExpression mc)
+            {
+                switch (mc.Method.Name)
+                {
+                    case "Where":
+                        if (mc.Arguments[1] is UnaryExpression where)
+                        {
+                            var t = where.Operand as Expression<Func<T, bool>>;
+                            var queryPredicate = new QueryPredicate<T>(t);
+                            this.command.SetWhere(queryPredicate);
+                        }
+
+                        break;
+                    case "Take":
+                        if (mc.Arguments[1] is ConstantExpression limit)
+                        {
+                            this.command.Limit = (int)limit.Value;
+                        }
+
+                        break;
+                    case "Skip":
+                        if (mc.Arguments[1] is ConstantExpression offset)
+                        {
+                            this.command.Offset = (int)offset.Value;
+                        }
+
+                        break;
+                    case "OrderBy":
+                    case "ThenBy":
+                        if (mc.Arguments[1] is UnaryExpression sort)
+                        {
+                            ISortExpressionVisitor sortVisitor = new SortExpressionVisitor();
+                            var render = sortVisitor.Render(sort.Operand);
+                            this.command.Sort.Add(render);
+                        }
+
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
 
             return (IQueryable<TElement>)this;
         }
@@ -61,15 +106,7 @@ namespace commercetools.Sdk.Client.Linq
 
         public TResult Execute<TResult>(Expression expression)
         {
-
-            QueryCommand<T> queryCommand = new QueryCommand<T>();
-            if (expression is Expression<Func<T, bool>> expression1)
-            {
-                var queryPredicate = new QueryPredicate<T>(expression1);
-                queryCommand.SetWhere(queryPredicate);
-            }
-
-            PagedQueryResult<T> returnedSet = client.ExecuteAsync(queryCommand).Result;
+            PagedQueryResult<T> returnedSet = client.ExecuteAsync(command).Result;
 
             this.result = returnedSet.Results;
             return (TResult)this.result.GetEnumerator();
