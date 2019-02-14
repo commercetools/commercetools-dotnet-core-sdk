@@ -1,3 +1,4 @@
+using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Linq;
 
 namespace commercetools.Sdk.Client.Linq
@@ -13,22 +14,19 @@ namespace commercetools.Sdk.Client.Linq
 
     public class QueryContext<T> : IQueryProvider, IOrderedQueryable<T>
     {
-        private readonly IClient client;
+        private readonly QueryCommand<T> command = new QueryCommand<T>();
 
         private Expression expression = null;
-        private QueryCommand<T> command = new QueryCommand<T>();
-        private IList<T> result = new List<T>();
 
-        public QueryContext(IClient client)
-        {
-            this.client = client;
-        }
+        private IList<T> result = new List<T>();
 
         public Type ElementType => typeof(T);
 
         public Expression Expression => Expression.Constant(this);
 
         public IQueryProvider Provider => this;
+
+        private IClient Client { get; set; }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -37,7 +35,7 @@ namespace commercetools.Sdk.Client.Linq
 
         public IEnumerator<T> GetEnumerator()
         {
-            return (this as IQueryable).Provider.Execute<IEnumerator<T>>(expression);
+            return (this as IQueryable).Provider.Execute<IEnumerator<T>>(this.expression);
         }
 
         public IQueryable CreateQuery(Expression expression)
@@ -95,6 +93,13 @@ namespace commercetools.Sdk.Client.Linq
                         }
 
                         break;
+                    case "WithClient":
+                        if (mc.Arguments[1] is ConstantExpression cl)
+                        {
+                            this.Client = (IClient)cl.Value;
+                        }
+
+                        break;
                     default:
                         break;
                 }
@@ -108,10 +113,9 @@ namespace commercetools.Sdk.Client.Linq
             throw new NotImplementedException();
         }
 
-
         public TResult Execute<TResult>(Expression expression)
         {
-            var result = client.ExecuteAsync(command);
+            var result = Client.ExecuteAsync(command);
             PagedQueryResult<T> returnedSet = result.Result;
 
             this.result = returnedSet.Results;

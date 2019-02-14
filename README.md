@@ -187,11 +187,11 @@ There are numerous extension methods created for domain specific operations. The
 
 Experimental support for querying the API using LINQ is provided by the `commercetools.Sdk.Client.Linq.Api` class
 
-    var query = from c in Api.Query<Category>(commercetoolsClient)
+    var query = from c in Api.Query<Category>()
                     where c.Key == "c14"
                     select c;
     
-    foreach(Category c in query)
+    foreach(Category c in query.WithClient(commercetoolsClient))
     {
         var c = c.Key;
     }
