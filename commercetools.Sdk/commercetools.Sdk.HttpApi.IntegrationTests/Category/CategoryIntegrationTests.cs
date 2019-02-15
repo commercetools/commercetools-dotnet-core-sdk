@@ -292,9 +292,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 
             var query = from c in Api.Query<Category>()
                 where c.Key == category.Key.valueOf()
+                orderby c.Key descending
                 select c;
 
-            var categories = query.WithClient(commerceToolsClient).OrderBy(c => c.Key).ToList();
+            var categories = query.WithClient(commerceToolsClient).ToList();
             Assert.Equal(1, categories.Count);
             Assert.Equal(category.Key, categories.First().Key);
         }

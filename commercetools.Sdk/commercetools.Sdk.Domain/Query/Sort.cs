@@ -10,27 +10,28 @@ namespace commercetools.Sdk.Domain.Query
         public Expression<Func<T, IComparable>> Expression { get; set; }
         public SortDirection? SortDirection { get; set; }
 
-        public Sort(Expression<Func<T, IComparable>> expression)
+        private readonly string sortPath;
+
+        public Sort(Expression<Func<T, IComparable>> expression, SortDirection sortDirection = Query.SortDirection.Ascending)
+            : this(ServiceLocator.Current.GetService<ISortExpressionVisitor>().Render(expression), sortDirection)
         {
             this.Expression = expression;
         }
 
-        public Sort(Expression<Func<T, IComparable>> expression, SortDirection sortDirection)
+        public Sort(string path, SortDirection sortDirection)
         {
-            this.Expression = expression;
+            this.sortPath = path;
             this.SortDirection = sortDirection;
         }
 
         public override string ToString()
         {
-            string sortPath = ServiceLocator.Current.GetService<ISortExpressionVisitor>().Render(this.Expression);
+            string path = this.sortPath;
             if (this.SortDirection != null)
             {
-                sortPath += $" {this.SortDirection.GetDescription()}";
+                path += $" {this.SortDirection.GetDescription()}";
             }
-            return sortPath;
+            return path;
         }
     }
-
-    
 }

@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.Domain;
+﻿using System;
+using commercetools.Sdk.Domain;
 
 namespace commercetools.Sdk.Client
 {
@@ -6,7 +7,7 @@ namespace commercetools.Sdk.Client
     /// This class defines the commands that can be passed to commercetools API.
     /// </summary>
     /// <typeparam name="T">The domain specific type.</typeparam>
-    public abstract class Command<T>
+    public abstract class Command<T> : ICloneable
     {
         /// <summary>
         /// Gets or sets the additional parameters.
@@ -26,5 +27,10 @@ namespace commercetools.Sdk.Client
         /// This was created to make the code more readable in classes which parse commands with different input and return types.
         /// </remarks>
         public abstract System.Type ResourceType { get; }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 }

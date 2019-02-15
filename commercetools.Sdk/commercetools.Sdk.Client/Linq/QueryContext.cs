@@ -1,5 +1,5 @@
-using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Linq;
+using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Client.Linq
 {
@@ -14,9 +14,11 @@ namespace commercetools.Sdk.Client.Linq
 
     public class QueryContext<T> : IQueryProvider, IOrderedQueryable<T>
     {
-        private readonly QueryCommand<T> command = new QueryCommand<T>();
+        private readonly QueryCommand<T> command;
 
-        private Expression expression = null;
+        private readonly Expression expression;
+
+        private readonly IClient client = null;
 
         private IList<T> result = new List<T>();
 
@@ -26,7 +28,12 @@ namespace commercetools.Sdk.Client.Linq
 
         public IQueryProvider Provider => this;
 
-        private IClient Client { get; set; }
+        public QueryContext(QueryCommand<T> command, Expression expression = null, IClient client = null)
+        {
+            this.command = command;
+            this.expression = expression;
+            this.client = client;
+        }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -50,62 +57,71 @@ namespace commercetools.Sdk.Client.Linq
                 throw new ArgumentException("Only " + typeof(T).FullName + " objects are supported");
             }
 
-            this.expression = expression;
-            if (expression is MethodCallExpression mc)
+            if (!(expression is MethodCallExpression mc))
             {
-                switch (mc.Method.Name)
-                {
-                    case "Where":
-                        if (mc.Arguments[1] is UnaryExpression where)
-                        {
-                            var t = where.Operand as Expression<Func<T, bool>>;
-                            var queryPredicate = new QueryPredicate<T>(t);
-                            this.command.SetWhere(queryPredicate);
-                        }
-
-                        break;
-                    case "Take":
-                        if (mc.Arguments[1] is ConstantExpression limit)
-                        {
-                            this.command.Limit = (int)limit.Value;
-                        }
-
-                        break;
-                    case "Skip":
-                        if (mc.Arguments[1] is ConstantExpression offset)
-                        {
-                            this.command.Offset = (int)offset.Value;
-                        }
-
-                        break;
-                    case "OrderBy":
-                    case "ThenBy":
-                        if (mc.Arguments[1] is UnaryExpression sort)
-                        {
-                            if (mc.Method.Name == "OrderBy")
-                            {
-                                this.command.Sort.Clear();
-                            }
-
-                            ISortExpressionVisitor sortVisitor = new SortExpressionVisitor();
-                            var render = sortVisitor.Render(sort.Operand);
-                            this.command.Sort.Add(render);
-                        }
-
-                        break;
-                    case "WithClient":
-                        if (mc.Arguments[1] is ConstantExpression cl)
-                        {
-                            this.Client = (IClient)cl.Value;
-                        }
-
-                        break;
-                    default:
-                        break;
-                }
+                return (IQueryable<TElement>)this;
             }
 
-            return (IQueryable<TElement>)this;
+            var cmd = (QueryCommand<TElement>)this.command.Clone();
+            switch (mc.Method.Name)
+            {
+                case "Where":
+                    if (mc.Arguments[1] is UnaryExpression where)
+                    {
+                        var t = where.Operand as Expression<Func<TElement, bool>>;
+                        var queryPredicate = new QueryPredicate<TElement>(t);
+                        cmd.SetWhere(queryPredicate);
+                    }
+
+                    break;
+                case "Take":
+                    if (mc.Arguments[1] is ConstantExpression limit)
+                    {
+                        cmd.Limit = (int)limit.Value;
+                    }
+
+                    break;
+                case "Skip":
+                    if (mc.Arguments[1] is ConstantExpression offset)
+                    {
+                        cmd.Offset = (int)offset.Value;
+                    }
+
+                    break;
+                case "OrderBy":
+                case "ThenBy":
+                case "OrderByDescending":
+                case "ThenByDescending":
+                    if (mc.Arguments[1] is UnaryExpression sort)
+                    {
+                        if (mc.Method.Name.StartsWith("OrderBy", StringComparison.Ordinal))
+                        {
+                            cmd.Sort.Clear();
+                        }
+
+                        var direction = SortDirection.Ascending;
+                        if (mc.Method.Name.EndsWith("Descending", StringComparison.Ordinal))
+                        {
+                            direction = SortDirection.Descending;
+                        }
+
+                        var render = ServiceLocator.Current.GetService<ISortExpressionVisitor>().Render(sort.Operand);
+                        cmd.Sort.Add(new Sort<T>(render, direction).ToString());
+                    }
+
+                    break;
+                case "WithClient":
+                    if (mc.Arguments[1] is ConstantExpression cl)
+                    {
+                        return new QueryContext<TElement>(cmd, expression, (IClient)cl.Value);
+                    }
+
+                    break;
+                default:
+                    break;
+            }
+
+            return new QueryContext<TElement>(cmd, expression, this.client);
         }
 
         public object Execute(Expression expression)
@@ -115,8 +131,13 @@ namespace commercetools.Sdk.Client.Linq
 
         public TResult Execute<TResult>(Expression expression)
         {
-            var result = Client.ExecuteAsync(command);
-            PagedQueryResult<T> returnedSet = result.Result;
+            if (this.client == null)
+            {
+                throw new FieldAccessException("Client cannot be null");
+            }
+
+            var queryResult = this.client.ExecuteAsync(this.command);
+            PagedQueryResult<T> returnedSet = queryResult.Result;
 
             this.result = returnedSet.Results;
             return (TResult)this.result.GetEnumerator();
