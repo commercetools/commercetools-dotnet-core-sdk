@@ -3,6 +3,7 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using System;
 using System.Collections.Generic;
+using commercetools.Sdk.Domain.Categories.UpdateActions;
 using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
@@ -96,6 +97,22 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             CategoryDraft categoryDraft = this.GetCategoryDraft();
             categoryDraft.Parent = new Reference<Category>() { Id = parentCategory.Id, TypeId = ReferenceTypeId.Category };
             return categoryDraft;
+        }
+        
+        /// <summary>
+        /// Update Category set random Key and return updated instance
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns>Updated Category with newer version and updated random Key</returns>
+        public Category UpdateCategorySetRandomKey(Category category)
+        {
+            IClient commerceToolsClient = this.GetService<IClient>();
+            
+            List<UpdateAction<Category>> updateActions = new List<UpdateAction<Category>>();
+            SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction() { Key = this.RandomString(5) };
+            updateActions.Add(setKeyAction);
+            Category updatedCategory = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Category>(new Guid(category.Id), category.Version, updateActions)).Result;
+            return updatedCategory;
         }
     }
 }

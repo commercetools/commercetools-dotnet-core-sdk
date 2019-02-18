@@ -17,9 +17,17 @@ namespace commercetools.Sdk.HttpApi.Domain.Exceptions
         /// Gets the version of the object at the time of the failed command.
         /// </summary>
         /// <returns>Current Version of the resource</returns>
-        public int GetCurrentVersion()
+        public int? GetCurrentVersion()
         {
-            throw new NotImplementedException();
+            int? currentVersion = null;
+            if (ErrorResponse != null && ErrorResponse.Errors != null && ErrorResponse.Errors.Count == 1)
+            {
+                if (ErrorResponse.Errors[0] is ConcurrentModificationError error)
+                {
+                    currentVersion = error.CurrentVersion;
+                }
+            }
+            return currentVersion;
         }
     }
 }
