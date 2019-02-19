@@ -48,9 +48,13 @@ namespace commercetools.Sdk.HttpApi
                 apiException.Request = request;
                 apiException.Response = response;
                 apiException.ProjectKey = this.clientConfiguration.ProjectKey;
-                if (!string.IsNullOrEmpty(content))
+                if (!string.IsNullOrEmpty(content) && response.Content.Headers.ContentType.MediaType == "application/json")
                 {
-                    apiException.ErrorResponse = this.serializerService.Deserialize<HttpApiErrorResponse>(content);
+                    var errorResponse = this.serializerService.Deserialize<HttpApiErrorResponse>(content);
+                    if (errorResponse.Errors != null)
+                    {
+                        apiException.ErrorResponse = errorResponse;
+                    }
                 }
             }
 
