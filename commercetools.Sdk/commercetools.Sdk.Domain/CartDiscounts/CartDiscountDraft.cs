@@ -7,8 +7,7 @@ using commercetools.Sdk.Linq.Discount;
 
 namespace commercetools.Sdk.Domain.CartDiscounts
 {
-    [Endpoint("cart-discounts")]
-    public class CartDiscountDraft
+    public class CartDiscountDraft : IDraft<CartDiscount>
     {
         public LocalizedString Name { get; set; }
         public LocalizedString Description { get; set; }

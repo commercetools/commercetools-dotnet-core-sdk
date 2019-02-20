@@ -27,6 +27,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Errors
             Guid categoryId = Guid.NewGuid();//not exists
             NotFoundException exception = await Assert.ThrowsAsync<NotFoundException>(()=> commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(categoryId)));
             Assert.Equal(404, exception.StatusCode);
+            //var category = await commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(categoryId));
         }
         [Fact]
         public async void CheckErrorResponseException()
@@ -68,7 +69,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Errors
             Assert.Single(concurrentModificationException.ErrorResponse.Errors);
             Assert.IsType<ConcurrentModificationError>(concurrentModificationException.ErrorResponse.Errors[0]);
             Assert.Equal(concurrentModificationException.GetCurrentVersion(), updatedCategory.Version);
-            //check version
         }
     }
 }

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.ProductDiscounts;
-using Xunit.Abstractions;
 
-namespace commercetools.Sdk.HttpApi.IntegrationTests
+namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
 {
     public class ProductDiscountsFixture : ClientFixture, IDisposable
     {

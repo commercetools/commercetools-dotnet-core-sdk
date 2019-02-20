@@ -9,6 +9,6 @@ namespace commercetools.Sdk.Domain.CartDiscounts
     {
         public string Action => "changeName";
         [Required]
-        public CartDiscountValue Value { get; set; }
+        public LocalizedString Name { get; set; }
     }
 }

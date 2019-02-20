@@ -1,8 +1,7 @@
-﻿using commercetools.Sdk.Client;
-using commercetools.Sdk.Domain;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using commercetools.Sdk.Domain.Predicates;
+using commercetools.Sdk.Client;
+using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.ProductDiscounts.UpdateActions;
 using commercetools.Sdk.Domain.Query;
@@ -12,18 +11,16 @@ using Xunit.Abstractions;
 using SetDescriptionUpdateAction = commercetools.Sdk.Domain.ProductDiscounts.UpdateActions.SetDescriptionUpdateAction;
 
 
-namespace commercetools.Sdk.HttpApi.IntegrationTests
+namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
 {
     [Collection("Integration Tests")]
     public class ProductDiscountsIntegrationTests : IClassFixture<ProductDiscountsFixture>
     {
         private readonly ProductDiscountsFixture productDiscountFixture;
-        private readonly ITestOutputHelper outputHelper;
 
-        public ProductDiscountsIntegrationTests(ProductDiscountsFixture productDiscountsFixture, ITestOutputHelper output)
+        public ProductDiscountsIntegrationTests(ProductDiscountsFixture productDiscountsFixture)
         {
             this.productDiscountFixture = productDiscountsFixture;
-            this.outputHelper = output;
         }
 
         [Fact]
@@ -46,7 +43,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         [Fact]
         public void GetProductDiscountById()
         {
-            this.outputHelper.WriteLine("Testing GetProductDiscountById");
             IClient commerceToolsClient = this.productDiscountFixture.GetService<IClient>();
             ProductDiscount productDiscount = this.productDiscountFixture.CreateProductDiscount();
             this.productDiscountFixture.ProductDiscountsToDelete.Add(productDiscount);
