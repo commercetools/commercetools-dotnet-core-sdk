@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.Products;
 using commercetools.Sdk.Domain.Products.Attributes;
 using Xunit.Abstractions;
@@ -37,7 +38,22 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             this.CategoryFixture.Dispose();
         }
 
-        private Product Unpublish(Product product)
+        public Product Publish(Product product, PublishScope scope = PublishScope.All)
+        {
+            IClient commerceToolsClient = this.GetService<IClient>();
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+            PublishUpdateAction publishUpdateAction = new PublishUpdateAction()
+            {
+                Scope = scope
+            };
+            updateActions.Add(publishUpdateAction);
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+            return retrievedProduct;
+        }
+        
+        public Product Unpublish(Product product)
         {
             IClient commerceToolsClient = this.GetService<IClient>();
             List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
@@ -86,6 +102,17 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Category category = this.CategoryFixture.CreateCategory();
             this.CategoryFixture.CategoriesToDelete.Add(category);
             return this.CreateProduct(this.GetProductDraft(category, withVariants));
+        }
+        /// <summary>
+        /// Create product and publish it
+        /// </summary>
+        /// <param name="withVariants"></param>
+        /// <returns></returns>
+        public Product CreateProductAndPublishIt(bool withVariants = false)
+        {
+            var product = this.CreateProduct(withVariants);
+            product = this.Publish(product);
+            return product;
         }
 
         public ProductDraft GetProductDraft()

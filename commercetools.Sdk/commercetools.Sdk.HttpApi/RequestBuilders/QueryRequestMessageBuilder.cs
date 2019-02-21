@@ -57,6 +57,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
                 queryStringParameters.Add(new KeyValuePair<string, string>("offset", command.Offset.ToString()));
             }
 
+            queryStringParameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));
             queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });            
             return new Uri(requestUri);
         }
