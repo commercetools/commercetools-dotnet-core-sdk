@@ -6,6 +6,6 @@ namespace commercetools.Sdk.Domain.InventoryEntries
     {
         public string Action => "removeQuantity";
         [Required]
-        public double Quantity { get; set; }
+        public long Quantity { get; set; }
     }
 }
