@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain.Carts
+﻿using commercetools.Sdk.Domain.Channels;
+
+namespace commercetools.Sdk.Domain.Carts
 {
     public class LineItemDraft
     {

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using commercetools.Sdk.Domain.Channels;
 
 namespace commercetools.Sdk.Domain.InventoryEntries
 {

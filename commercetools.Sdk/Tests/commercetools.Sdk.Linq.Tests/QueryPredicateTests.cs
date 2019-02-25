@@ -9,6 +9,7 @@ using commercetools.Sdk.Linq.Query;
 using Xunit;
 using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.Domain.Channels;
 
 namespace commercetools.Sdk.Linq.Tests
 {

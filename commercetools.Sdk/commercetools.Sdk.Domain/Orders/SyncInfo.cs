@@ -1,4 +1,5 @@
 ﻿using System;
+using commercetools.Sdk.Domain.Channels;
 
 namespace commercetools.Sdk.Domain.Orders
 {

@@ -1,5 +1,6 @@
 ﻿using commercetools.Sdk.Domain.CustomerGroups;
 using System;
+using commercetools.Sdk.Domain.Channels;
 
 namespace commercetools.Sdk.Domain
 {

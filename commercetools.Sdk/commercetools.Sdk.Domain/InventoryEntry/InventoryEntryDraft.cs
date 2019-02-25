@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain
+﻿using commercetools.Sdk.Domain.Channels;
+
+namespace commercetools.Sdk.Domain
 {
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -11,6 +13,6 @@
         public long QuantityOnStock { get; set; }
         public int RestockableInDays { get; set; }
         public DateTime ExpectedDelivery { get; set; }
-        public CustomFields Custom { get; set; }
+        public CustomFieldsDraft Custom { get; set; }
     }
 }

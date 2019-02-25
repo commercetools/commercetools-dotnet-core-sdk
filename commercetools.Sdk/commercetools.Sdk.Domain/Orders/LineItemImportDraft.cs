@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.Channels;
 
 namespace commercetools.Sdk.Domain.Orders
 {
