@@ -6,7 +6,7 @@ namespace commercetools.Sdk.Domain.Carts
     using System.Collections.Generic;
     using commercetools.Sdk.Domain.Validation.Attributes;
 
-    public class CartDraft
+    public class CartDraft : IDraft<Cart>
     {
         [Required]
         [Currency]

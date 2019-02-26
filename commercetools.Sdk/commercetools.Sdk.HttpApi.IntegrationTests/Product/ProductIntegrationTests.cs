@@ -306,6 +306,28 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Assert.True(retrievedProductVariants.Count < productVariants.Count);
         }
 
+        [Fact]
+        public void UpdateProductByIdAddToCategory()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+
+            Category newCategory = this.productFixture.CreateNewCategory();
+            
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+            AddToCategoryUpdateAction addToCategoryUpdateAction = new AddToCategoryUpdateAction()
+            {
+                OrderHint = this.productFixture.RandomSortOrder(),
+                Category =  new ResourceIdentifier() { Id = newCategory.Id}
+            };
+            updateActions.Add(addToCategoryUpdateAction);
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+            Assert.Contains(retrievedProduct.MasterData.Current.Categories, c =>c.Id.Equals(newCategory.Id));
+            
+        }
         #endregion
     }
 }

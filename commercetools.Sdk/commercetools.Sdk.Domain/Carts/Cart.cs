@@ -6,6 +6,7 @@ namespace commercetools.Sdk.Domain.Carts
     using System;
     using System.Collections.Generic;
 
+    [Endpoint("carts")]
     public class Cart
     {
         public string Id { get; set; }

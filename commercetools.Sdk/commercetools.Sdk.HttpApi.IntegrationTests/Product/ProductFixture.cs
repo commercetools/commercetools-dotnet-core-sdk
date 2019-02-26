@@ -212,5 +212,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             attributes.Add(setAttribute);
             return attributes;
         }
+
+        public Category CreateNewCategory()
+        {
+            Category category = this.CategoryFixture.CreateCategory();
+            this.CategoryFixture.CategoriesToDelete.Add(category);
+            return category;
+        }
     }
 }
