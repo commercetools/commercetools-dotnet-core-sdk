@@ -40,6 +40,7 @@ namespace commercetools.Sdk.Client.Linq
                 return new CtpQueryable<TElement>(this as CtpQueryProvider<TElement>, expression);
             }
 
+            var cmd = this.Command as QueryCommand<TElement>;
             switch (mc.Method.Name)
             {
                 case "Where":
@@ -47,21 +48,21 @@ namespace commercetools.Sdk.Client.Linq
                     {
                         var t = where.Operand as Expression<Func<TElement, bool>>;
                         var queryPredicate = new QueryPredicate<TElement>(t);
-                        (this.Command as QueryCommand<TElement>).SetWhere(queryPredicate);
+                        cmd.SetWhere(queryPredicate);
                     }
 
                     break;
                 case "Take":
                     if (mc.Arguments[1] is ConstantExpression limit)
                     {
-                        (this.Command as QueryCommand<TElement>).Limit = (int)limit.Value;
+                        cmd.Limit = (int)limit.Value;
                     }
 
                     break;
                 case "Skip":
                     if (mc.Arguments[1] is ConstantExpression offset)
                     {
-                        (this.Command as QueryCommand<TElement>).Offset = (int)offset.Value;
+                        cmd.Offset = (int)offset.Value;
                     }
 
                     break;
@@ -73,7 +74,7 @@ namespace commercetools.Sdk.Client.Linq
                     {
                         if (mc.Method.Name.StartsWith("OrderBy", StringComparison.Ordinal))
                         {
-                            (this.Command as QueryCommand<TElement>).Sort.Clear();
+                            cmd.Sort.Clear();
                         }
 
                         var direction = SortDirection.Ascending;
@@ -83,9 +84,15 @@ namespace commercetools.Sdk.Client.Linq
                         }
 
                         var render = ServiceLocator.Current.GetService<ISortExpressionVisitor>().Render(sort.Operand);
-                        (this.Command as QueryCommand<TElement>).Sort.Add(new Sort<T>(render, direction).ToString());
+                        cmd.Sort.Add(new Sort<T>(render, direction).ToString());
                     }
 
+                    break;
+                case "Expand":
+                    if (mc.Arguments[1] is UnaryExpression expand)
+                    {
+                        cmd.Expand.Add(new Expansion<TElement>(expand.Operand).ToString());
+                    }
                     break;
                 default:
                     break;

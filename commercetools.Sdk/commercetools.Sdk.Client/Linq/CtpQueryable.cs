@@ -11,9 +11,9 @@ namespace commercetools.Sdk.Client.Linq
 
         public Type ElementType => typeof(T);
 
-        public Expression Expression { get; private set; }
+        public Expression Expression { get; }
 
-        public IQueryProvider Provider { get; private set; }
+        public IQueryProvider Provider { get; }
 
 
         public CtpQueryable(IClient client, QueryCommand<T> command)

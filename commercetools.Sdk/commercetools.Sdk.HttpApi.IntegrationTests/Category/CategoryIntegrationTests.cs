@@ -287,7 +287,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
 
-            Category category = this.categoryFixture.CreateCategory();
+            Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent());
             this.categoryFixture.CategoriesToDelete.Add(category);
 
             var query = from c in commerceToolsClient.Query<Category>()
@@ -295,13 +295,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 orderby c.Key descending
                 select c;
 
+            query.Expand(c => c.Parent).Expand(c => c.Ancestors.ExpandAll());
+
             var command = ((CtpQueryProvider<Category>) query.Provider).Command;
             Assert.Equal($"key = \"{category.Key}\"", command.Where);
             Assert.Equal("key desc", string.Join(", ", command.Sort));
+            Assert.Equal("parent, ancestors[*]", string.Join(", ", command.Expand));
 
             var categories = query.ToList();
             Assert.Equal(1, categories.Count);
             Assert.Equal(category.Key, categories.First().Key);
+            Assert.Equal(category.Parent.Id, categories.First().Parent.Obj.Id);
+            Assert.Equal(category.Parent.Id, categories.First().Ancestors.First().Id);
         }
     }
 }
