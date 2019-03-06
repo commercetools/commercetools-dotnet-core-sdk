@@ -290,12 +290,16 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Category category = this.categoryFixture.CreateCategory();
             this.categoryFixture.CategoriesToDelete.Add(category);
 
-            var query = from c in Api.Query<Category>()
+            var query = from c in commerceToolsClient.Query<Category>()
                 where c.Key == category.Key.valueOf()
                 orderby c.Key descending
                 select c;
 
-            var categories = query.WithClient(commerceToolsClient).ToList();
+            var command = ((CtpQueryProvider<Category>) query.Provider).Command;
+            Assert.Equal($"key = \"{category.Key}\"", command.Where);
+            Assert.Equal("key desc", string.Join(", ", command.Sort));
+
+            var categories = query.ToList();
             Assert.Equal(1, categories.Count);
             Assert.Equal(category.Key, categories.First().Key);
         }
