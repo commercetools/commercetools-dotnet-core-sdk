@@ -163,13 +163,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             }
 
             string id = parentCategory.Id;
-            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == id);
-            List<Sort<Category>> sortPredicates = new List<Sort<Category>>();
-            Sort<Category> sort = new Sort<Category>(c => c.Name["en"]);
-            sortPredicates.Add(sort);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
-            queryCommand.SetSort(sortPredicates);
-            queryCommand.SetWhere(queryPredicate);
+            queryCommand.Sort(c => c.Name["en"]);
+            queryCommand.Where(c => c.Parent.Id == id);
             PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             var sortedList = returnedSet.Results.OrderBy(c => c.Name["en"]);
             Assert.True(sortedList.SequenceEqual(returnedSet.Results));
@@ -235,9 +231,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             }
 
             string id = parentCategory.Id;
-            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == id);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
-            queryCommand.SetWhere(queryPredicate);
+            queryCommand.Where(c => c.Parent.Id == id);
             queryCommand.Offset = 2;
             PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.Single(returnedSet.Results);
@@ -260,10 +255,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
             Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent());
             this.categoryFixture.CategoriesToDelete.Add(category);
-            List<Expansion<Category>> expansions = new List<Expansion<Category>>();
-            ReferenceExpansion<Category> expand = new ReferenceExpansion<Category>(c => c.Parent);
-            expansions.Add(expand);
-            Category retrievedCategory = commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(new Guid(category.Id), expansions)).Result;
+            Category retrievedCategory = commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(new Guid(category.Id)).Expand(c => c.Parent)).Result;
             Assert.NotNull(retrievedCategory.Parent);
             Assert.NotNull(retrievedCategory.Parent.Obj);
         }

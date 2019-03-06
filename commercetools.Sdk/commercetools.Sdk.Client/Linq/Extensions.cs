@@ -2,6 +2,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Query;
 
 namespace commercetools.Sdk.Client.Linq
 {
@@ -29,10 +30,37 @@ namespace commercetools.Sdk.Client.Linq
                     new[] { source.Expression, expression }));
         }
 
+        public static QueryCommand<T> Where<T>(this QueryCommand<T> command, Expression<Func<T, bool>> expression)
+        {
+            command.SetWhere(new QueryPredicate<T>(expression));
+
+            return command;
+        }
+
+        public static GetCommand<T> Expand<T>(this GetCommand<T> command, Expression<Func<T, Reference>> expression)
+        {
+            command.Expand.Add(new Expansion<T>(expression).ToString());
+
+            return command;
+        }
+
+        public static QueryCommand<T> Expand<T>(this QueryCommand<T> command, Expression<Func<T, Reference>> expression)
+        {
+            command.Expand.Add(new Expansion<T>(expression).ToString());
+
+            return command;
+        }
+
+        public static QueryCommand<T> Sort<T>(this QueryCommand<T> command, Expression<Func<T, IComparable>> expression, SortDirection sortDirection = SortDirection.Ascending)
+        {
+            command.Sort.Add(new Sort<T>(expression, sortDirection).ToString());
+
+            return command;
+        }
+
         private static MethodInfo GetMethodInfo<T1, T2, T3>(Func<T1, T2, T3> f, T1 unused1, T2 unused2)
         {
             return f.Method;
         }
-
     }
 }
