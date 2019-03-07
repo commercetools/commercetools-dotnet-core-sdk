@@ -13,11 +13,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         public List<Cart> CartToDelete { get; }
 
         private CustomerFixture customerFixture;
+        private ProductFixture productFixture;
         
         public CartFixture() : base()
         {
             this.CartToDelete = new List<Cart>();
             this.customerFixture = new CustomerFixture();
+            this.productFixture = new ProductFixture();
         }
 
         public void Dispose()
@@ -31,6 +33,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                         cart.Version)).Result;
             }
             this.customerFixture.Dispose();
+            this.productFixture.Dispose();
         }
         
         public CartDraft GetCartDraft()
@@ -60,5 +63,36 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             Cart cart = commerceToolsClient.ExecuteAsync(new CreateCommand<Cart>(cartDraft)).Result;
             return cart;
         }
+
+        /// <summary>
+        /// Get Line Item Draft, by default master variant is selected
+        /// </summary>
+        /// <param name="productId">product Id</param>
+        /// <param name="variantId">variant Id - by default master variant Id</param>
+        /// <param name="quantity">quantity of this product variant</param>
+        /// <returns>line item draft</returns>
+        public LineItemDraft GetLineItemDraft(string productId, int variantId = 1, int quantity = 1)
+        {
+            LineItemDraft lineItemDraft = new LineItemDraft();
+            lineItemDraft.ProductId = productId;
+            lineItemDraft.VariantId = variantId.ToString();
+            lineItemDraft.Quantity = quantity;
+            return lineItemDraft;
+        }
+        public LineItemDraft GetLineItemDraftBySku(string sku, int quantity = 1)
+        {
+            LineItemDraft lineItemDraft = new LineItemDraft();
+            lineItemDraft.Sku = sku;
+            lineItemDraft.Quantity = quantity;
+            return lineItemDraft;
+        }
+
+        public Product CreateProduct()
+        {
+            Product product = this.productFixture.CreateProductAndPublishIt(true);
+            this.productFixture.ProductsToDelete.Add(product);
+            return product;
+        }
+        
     }
 }
