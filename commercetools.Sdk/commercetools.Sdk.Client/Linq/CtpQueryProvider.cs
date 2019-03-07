@@ -1,48 +1,26 @@
+using System.Collections.Generic;
+using System.Linq;
 using commercetools.Sdk.Linq;
 using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Client.Linq
 {
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
-    using Domain;
     using Domain.Query;
-    using Type = System.Type;
 
-    public class QueryContext<T> : IQueryProvider, IOrderedQueryable<T>
+    public class CtpQueryProvider<T> : IQueryProvider
     {
-        private readonly QueryCommand<T> command;
-
-        private readonly Expression expression;
-
-        private readonly IClient client = null;
+        public QueryCommand<T> Command { get; }
+        private readonly IClient client;
 
         private IList<T> result = new List<T>();
 
-        public Type ElementType => typeof(T);
-
-        public Expression Expression => Expression.Constant(this);
-
-        public IQueryProvider Provider => this;
-
-        public QueryContext(QueryCommand<T> command, Expression expression = null, IClient client = null)
+        public CtpQueryProvider(IClient client, QueryCommand<T> command)
         {
-            this.command = command;
-            this.expression = expression;
             this.client = client;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return (this as IQueryable).Provider.Execute<IEnumerator<T>>(this.expression);
+            this.Command = command;
         }
 
         public IQueryable CreateQuery(Expression expression)
@@ -59,10 +37,10 @@ namespace commercetools.Sdk.Client.Linq
 
             if (!(expression is MethodCallExpression mc))
             {
-                return (IQueryable<TElement>)this;
+                return new CtpQueryable<TElement>(this as CtpQueryProvider<TElement>, expression);
             }
 
-            var cmd = (QueryCommand<TElement>)this.command.Clone();
+            var cmd = this.Command as QueryCommand<TElement>;
             switch (mc.Method.Name)
             {
                 case "Where":
@@ -110,18 +88,17 @@ namespace commercetools.Sdk.Client.Linq
                     }
 
                     break;
-                case "WithClient":
-                    if (mc.Arguments[1] is ConstantExpression cl)
+                case "Expand":
+                    if (mc.Arguments[1] is UnaryExpression expand)
                     {
-                        return new QueryContext<TElement>(cmd, expression, (IClient)cl.Value);
+                        cmd.Expand.Add(new Expansion<TElement>(expand.Operand).ToString());
                     }
-
                     break;
                 default:
                     break;
             }
 
-            return new QueryContext<TElement>(cmd, expression, this.client);
+            return new CtpQueryable<TElement>(this as CtpQueryProvider<TElement>, expression);
         }
 
         public object Execute(Expression expression)
@@ -136,8 +113,8 @@ namespace commercetools.Sdk.Client.Linq
                 throw new FieldAccessException("Client cannot be null");
             }
 
-            var queryResult = this.client.ExecuteAsync(this.command);
-            PagedQueryResult<T> returnedSet = queryResult.Result;
+            var queryResult = this.client.ExecuteAsync(this.Command);
+            var returnedSet = queryResult.Result;
 
             this.result = returnedSet.Results;
             return (TResult)this.result.GetEnumerator();

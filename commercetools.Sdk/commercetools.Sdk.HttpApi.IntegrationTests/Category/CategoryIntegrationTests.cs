@@ -163,13 +163,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             }
 
             string id = parentCategory.Id;
-            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == id);
-            List<Sort<Category>> sortPredicates = new List<Sort<Category>>();
-            Sort<Category> sort = new Sort<Category>(c => c.Name["en"]);
-            sortPredicates.Add(sort);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
-            queryCommand.SetSort(sortPredicates);
-            queryCommand.SetWhere(queryPredicate);
+            queryCommand.Sort(c => c.Name["en"]);
+            queryCommand.Where(c => c.Parent.Id == id);
             PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             var sortedList = returnedSet.Results.OrderBy(c => c.Name["en"]);
             Assert.True(sortedList.SequenceEqual(returnedSet.Results));
@@ -235,9 +231,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             }
 
             string id = parentCategory.Id;
-            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == id);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
-            queryCommand.SetWhere(queryPredicate);
+            queryCommand.Where(c => c.Parent.Id == id);
             queryCommand.Offset = 2;
             PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.Single(returnedSet.Results);
@@ -260,10 +255,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
             Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent());
             this.categoryFixture.CategoriesToDelete.Add(category);
-            List<Expansion<Category>> expansions = new List<Expansion<Category>>();
-            ReferenceExpansion<Category> expand = new ReferenceExpansion<Category>(c => c.Parent);
-            expansions.Add(expand);
-            Category retrievedCategory = commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(new Guid(category.Id), expansions)).Result;
+            Category retrievedCategory = commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(new Guid(category.Id)).Expand(c => c.Parent)).Result;
             Assert.NotNull(retrievedCategory.Parent);
             Assert.NotNull(retrievedCategory.Parent.Obj);
         }
@@ -287,17 +279,26 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
 
-            Category category = this.categoryFixture.CreateCategory();
+            Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent());
             this.categoryFixture.CategoriesToDelete.Add(category);
 
-            var query = from c in Api.Query<Category>()
+            var query = from c in commerceToolsClient.Query<Category>()
                 where c.Key == category.Key.valueOf()
                 orderby c.Key descending
                 select c;
 
-            var categories = query.WithClient(commerceToolsClient).ToList();
+            query.Expand(c => c.Parent).Expand(c => c.Ancestors.ExpandAll());
+
+            var command = ((CtpQueryProvider<Category>) query.Provider).Command;
+            Assert.Equal($"key = \"{category.Key}\"", command.Where);
+            Assert.Equal("key desc", string.Join(", ", command.Sort));
+            Assert.Equal("parent, ancestors[*]", string.Join(", ", command.Expand));
+
+            var categories = query.ToList();
             Assert.Equal(1, categories.Count);
             Assert.Equal(category.Key, categories.First().Key);
+            Assert.Equal(category.Parent.Id, categories.First().Parent.Obj.Id);
+            Assert.Equal(category.Parent.Id, categories.First().Ancestors.First().Id);
         }
     }
 }
