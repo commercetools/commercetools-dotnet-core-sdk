@@ -13,7 +13,16 @@ after_build:
 
 test_script:
   - ps: dotnet test Tests --no-build -c Release
-  
+
 artifacts:
 - path: /**/*.nupkg
   name: NuGet Package
+
+deploy:
+  - provider: NuGet
+    server: https://www.myget.org/F/commercetools-dotnet-core-sdk/api/v2/package
+    api_key:
+      secure: sLfpoizqShKpK/JdBg/ECoQ9O/DLhrocq3pAIcWWMjRRsi8HaFUPMWPfUmX+qgsy
+    skip_symbols: true
+    on:
+      branch: master
