@@ -7,6 +7,5 @@
         public const string OrderNumber = "order-number";
         public const string PasswordToken = "password-token";
         public const string EmailToken = "email-token";
-        public const string CustomerId = "customerId";
     }
 }
