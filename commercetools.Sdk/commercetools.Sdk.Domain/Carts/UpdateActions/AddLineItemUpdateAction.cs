@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class AddLineItemUpdateAction : UpdateAction<Cart>
+    public abstract class AddLineItemUpdateAction : UpdateAction<Cart>
     {
         public string Action => "addLineItem";
         [Required]

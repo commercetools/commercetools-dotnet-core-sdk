@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Domain.Carts
 {
-    public class LineItemDraft
+    public class LineItemDraft : IDraft<LineItem>
     {
         public string VariantId { get; set; }
 

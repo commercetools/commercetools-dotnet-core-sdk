@@ -34,8 +34,8 @@ namespace commercetools.Sdk.Domain.Orders
         public ShipmentState ShipmentState { get; set; }
         public PaymentState PaymentState { get; set; }
         public ShippingInfo ShippingInfo { get; set; }
-        public SyncInfo SyncInfo { get; set; }
-        public ReturnInfo ReturnInfo { get; set; }
+        public List<SyncInfo> SyncInfo { get; set; }
+        public List<ReturnInfo> ReturnInfo { get; set; }
         public List<DiscountCodeInfo> DiscountCodes { get; set; }
         public List<Reference<CartDiscount>> RefusedGifts { get; set; }
         public int LastMessageSequenceNumber { get; set; }
