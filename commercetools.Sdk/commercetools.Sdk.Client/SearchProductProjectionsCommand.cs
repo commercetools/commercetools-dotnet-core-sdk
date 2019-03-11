@@ -10,6 +10,11 @@ namespace commercetools.Sdk.Client
         {
         }
 
+        public SearchProductProjectionsCommand()
+            : base(new ProductProjectionSearchParameters())
+        {
+        }
+
         public SearchProductProjectionsCommand(ISearchParameters<ProductProjection> searchParameters, IAdditionalParameters<ProductProjection> additionalParameters)
             : base(searchParameters, additionalParameters)
         {

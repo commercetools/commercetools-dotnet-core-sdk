@@ -2,6 +2,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Domain.Query;
 
 namespace commercetools.Sdk.Client.Linq
@@ -54,6 +55,31 @@ namespace commercetools.Sdk.Client.Linq
         public static QueryCommand<T> Sort<T>(this QueryCommand<T> command, Expression<Func<T, IComparable>> expression, SortDirection sortDirection = SortDirection.Ascending)
         {
             command.Sort.Add(new Sort<T>(expression, sortDirection).ToString());
+
+            return command;
+        }
+
+
+        public static SearchProductProjectionsCommand FilterQuery(this SearchProductProjectionsCommand command, Expression<Func<ProductProjection, bool>> expression)
+        {
+            var p = command.SearchParameters as ProductProjectionSearchParameters;
+            p.FilterQuery.Add(new Filter<ProductProjection>(expression).ToString());
+
+            return command;
+        }
+
+        public static SearchProductProjectionsCommand Filter(this SearchProductProjectionsCommand command, Expression<Func<ProductProjection, bool>> expression)
+        {
+            var p = command.SearchParameters as ProductProjectionSearchParameters;
+            p.Filter.Add(new Filter<ProductProjection>(expression).ToString());
+
+            return command;
+        }
+
+        public static SearchProductProjectionsCommand FilterFacets(this SearchProductProjectionsCommand command, Expression<Func<ProductProjection, bool>> expression)
+        {
+            var p = command.SearchParameters as ProductProjectionSearchParameters;
+            p.FilterFacets.Add(new Filter<ProductProjection>(expression).ToString());
 
             return command;
         }

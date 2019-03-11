@@ -3,6 +3,7 @@ using commercetools.Sdk.Domain;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using commercetools.Sdk.Client.Linq;
 using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Domain.Products.Attributes;
 using Xunit;
@@ -22,10 +23,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public void GetProductProjectionsFilterByCentAmountRange()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
-            Filter<ProductProjection> centAmountFilter = new Filter<ProductProjection>(p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 3000)));      
-            ProductProjectionSearchParameters searchParameters = new ProductProjectionSearchParameters();
-            searchParameters.SetFilter(new List<Filter<ProductProjection>>() { centAmountFilter });
-            SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand(searchParameters);
+            SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand();
+            searchProductProjectionsCommand.Filter(p =>
+                p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 3000)));
             PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             Assert.Equal(19, results.Count);
         }
@@ -34,10 +34,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public void GetProductProjectionsFilterQueryByCentAmountRange()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
-            Filter<ProductProjection> centAmountFilter = new Filter<ProductProjection>(p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 3000)));
-            ProductProjectionSearchParameters searchParameters = new ProductProjectionSearchParameters();
-            searchParameters.SetFilterQuery(new List<Filter<ProductProjection>>() { centAmountFilter });
-            SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand(searchParameters);
+            SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand();
+            searchProductProjectionsCommand.FilterQuery(p =>
+                p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 3000)));
             PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             Assert.Equal(19, results.Count);
         }
@@ -46,10 +45,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public void GetProductProjectionsFilterFacetByCentAmountRange()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
-            Filter<ProductProjection> centAmountFilter = new Filter<ProductProjection>(p => p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 3000)));
-            ProductProjectionSearchParameters searchParameters = new ProductProjectionSearchParameters();
-            searchParameters.SetFilterFacets(new List<Filter<ProductProjection>>() { centAmountFilter });
-            SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand(searchParameters);
+            SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand();
+            searchProductProjectionsCommand.FilterFacets(p =>
+                p.Variants.Any(v => v.Price.Value.CentAmount.Range(1, 3000)));
             PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             Assert.Equal(20, results.Count);
         }
@@ -59,7 +57,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
             Facet<ProductProjection> colorFacet = new TermFacet<ProductProjection>(p => p.Variants.Select(v => v.Attributes.Where(a => a.Name == "color").Select(a => ((EnumAttribute)a).Value.Key).FirstOrDefault()).FirstOrDefault());
-            
+
             ProductProjectionSearchParameters searchParameters = new ProductProjectionSearchParameters();
             searchParameters.SetFacets(new List<Facet<ProductProjection>>() { colorFacet });
             SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand(searchParameters);
@@ -88,7 +86,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
             Facet<ProductProjection> colorFacet = new TermFacet<ProductProjection>(p => p.Variants.Select(v => v.Attributes.Where(a => a.Name == "color").Select(a => ((EnumAttribute)a).Value.Key).FirstOrDefault()).FirstOrDefault());
             colorFacet.IsCountingProducts = true;
-            
+
             ProductProjectionSearchParameters searchParameters = new ProductProjectionSearchParameters();
             searchParameters.SetFacets(new List<Facet<ProductProjection>>() { colorFacet });
             SearchProductProjectionsCommand searchProductProjectionsCommand = new SearchProductProjectionsCommand(searchParameters);
