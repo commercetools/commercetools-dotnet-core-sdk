@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,12 +26,19 @@ namespace commercetools.Sdk.HttpApi.DelegatingHandlers
             // https://gunnarpeipman.com/aspnet/aspnet-core-request-body/
             logger.LogInformation(request.RequestUri.ToString());
             logger.LogInformation(request.Method.ToString());
-            logger.LogInformation(request.Headers.GetValues("X-Correlation-ID").FirstOrDefault());
+            if (request.Headers.TryGetValues("X-Correlation-ID", out var requestCorrelationId))
+            {
+                logger.LogInformation(requestCorrelationId.FirstOrDefault());
+            }
+
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
             if (response != null)
             {
                 logger.LogInformation(response.StatusCode.ToString());
-                logger.LogInformation(response.Headers.GetValues("X-Correlation-ID").FirstOrDefault());
+                if (response.Headers.TryGetValues("X-Correlation-ID", out var responseCorrelationId))
+                {
+                    logger.LogInformation(responseCorrelationId.FirstOrDefault());
+                }
             }
 
             return response;
