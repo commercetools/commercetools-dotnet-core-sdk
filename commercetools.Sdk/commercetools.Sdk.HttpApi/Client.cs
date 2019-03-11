@@ -68,7 +68,7 @@ namespace commercetools.Sdk.HttpApi
                 .GetExecutingAssembly().GetName().Version.ToString();
             //ToDO: Make dotnet version string in better way, it now return (commercetools-dotnet-core-sdk/1.0.0.0 .NET Core 4.6.27317.03) and should return something like ( commercetools-dotnet-core-sdk/1.0.0.0 .NET-Core/4.6.27317.03)
             string dotNetVersion = RuntimeInformation.FrameworkDescription;
-            string userAgent = $"commercetools-dotnet-core-sdk/{assemblyVersion} {dotNetVersion}";
+            string userAgent = $"commercetools-dotnet-core-sdk/{assemblyVersion}";
             return userAgent;
         }
     }
