@@ -63,23 +63,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Category\CategoryFixture.cs" />
-    <Compile Remove="CustomerGroups\CustomerGroupFixture.cs" />
-    <Compile Remove="Customers\CustomerFixture.cs" />
-    <Compile Remove="Customers\CustomerIntegrationTests.cs" />
-    <Compile Remove="Product\ProductFixture.cs" />
-    <Compile Remove="Product\ProductIntegrationTests.cs" />
-    <Compile Remove="ProductType\ProductTypeFixture.cs" />
-    <Compile Remove="ProductType\ProductTypeIntegrationTests.cs" />
-    <Compile Remove="Project\ProjectFixture.cs" />
-    <Compile Remove="Project\ProjectIntegrationTests.cs" />
-    <Compile Remove="Type\TypeFixture.cs" />
-    <Compile Remove="Type\TypeIntegrationTests.cs" />
-    <Compile Remove="ProductProjectionSearchIntegrationTests.cs" />
-    <Compile Remove="TokenIntegrationTests.cs" />
-    <Compile Remove="Category\CategoryIntegrationTests.cs" />
-    <Compile Remove="CustomerGroups\CustomerGroupIntegrationTests.cs" />
-  </ItemGroup>
 </Project>

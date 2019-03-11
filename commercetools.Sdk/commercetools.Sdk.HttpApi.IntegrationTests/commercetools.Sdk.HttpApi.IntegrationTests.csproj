@@ -20,13 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="UnitTest1.cs" />
-    <Compile Remove="CategoryRequestMessageTests.cs" />
-    <Compile Remove="ClientTests.cs" />
-    <Compile Remove="ProductRequestMessageTests.cs" />
-    <Compile Remove="RequestBuilderTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\commercetools.Sdk.DependencyInjection\commercetools.Sdk.DependencyInjection.csproj" />
     <ProjectReference Include="..\commercetools.Sdk.Domain\commercetools.Sdk.Domain.csproj" />
     <ProjectReference Include="..\commercetools.Sdk.HttpApi\commercetools.Sdk.HttpApi.csproj" />
