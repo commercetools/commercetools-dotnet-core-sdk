@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,32 +16,25 @@ namespace commercetools.Sdk.HttpApi.DelegatingHandlers
             this.loggerFactory = loggerFactory;
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+            CancellationToken cancellationToken)
         {
             // TODO Which name should be set here?
-            var logger = this.loggerFactory.CreateLogger("LoggerHandler");
+            var logger = this.loggerFactory.CreateLogger("commercetoolsLoggerHandler");
 
-            // The logging of the Content is not easy so that it is not done here on purpose.
-            // It can be done, however.
-            // https://gunnarpeipman.com/aspnet/aspnet-core-request-body/
-            logger.LogInformation(request.RequestUri.ToString());
-            logger.LogInformation(request.Method.ToString());
-            if (request.Headers.TryGetValues("X-Correlation-ID", out var requestCorrelationId))
+            if (request == null)
             {
-                logger.LogInformation(requestCorrelationId.FirstOrDefault());
+                throw new ArgumentNullException(nameof(request));
             }
 
-            var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
-            if (response != null)
+            using (Log.BeginRequestPipelineScope(logger, request))
             {
-                logger.LogInformation(response.StatusCode.ToString());
-                if (response.Headers.TryGetValues("X-Correlation-ID", out var responseCorrelationId))
-                {
-                    logger.LogInformation(responseCorrelationId.FirstOrDefault());
-                }
-            }
+                Log.RequestPipelineStart(logger, request);
+                var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+                Log.RequestPipelineEnd(logger, response);
 
-            return response;
+                return response;
+            }
         }
     }
 }
