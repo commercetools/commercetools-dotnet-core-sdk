@@ -18,6 +18,14 @@ artifacts:
 - path: /**/*.nupkg
   name: NuGet Package
 
+version: 1.0.0.{build}
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+
 deploy:
   - provider: NuGet
     server: https://www.myget.org/F/commercetools-dotnet-core-sdk/api/v2/package
