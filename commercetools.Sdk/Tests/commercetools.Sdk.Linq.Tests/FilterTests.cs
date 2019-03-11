@@ -259,6 +259,15 @@ namespace commercetools.Sdk.Linq.Tests
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("searchKeywords.en.text:\"jeans\"", result);
         }
+        
+        //ToDo: fix camel case
+        public void FilterAttributeName()
+        {
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "Color" && ((TextAttribute)a).Value == "Red"));
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.attributes.Color:\"Red\"", result);
+        }
 
         [Fact]
         public void FilterByCreatedAt()
