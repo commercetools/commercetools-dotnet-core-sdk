@@ -91,7 +91,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             AddLineItemBySkuUpdateAction addLineItemUpdateAction = new AddLineItemBySkuUpdateAction()
             {
                 LineItem = lineItemDraft,
-                Sku= sku
+                Sku= sku,
+                Quantity = lineItemDraft.Quantity
             };
             
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>>();

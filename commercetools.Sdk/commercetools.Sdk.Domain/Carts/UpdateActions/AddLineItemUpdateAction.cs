@@ -8,5 +8,7 @@
         public string Action => "addLineItem";
         [Required]
         public LineItemDraft LineItem { get; set; }
+        
+        public int Quantity { get; set; }
     }
 }
