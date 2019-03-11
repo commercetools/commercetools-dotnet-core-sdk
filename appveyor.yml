@@ -19,12 +19,15 @@ artifacts:
   name: NuGet Package
 
 version: 1.0.0.{build}
-assembly_info:
+dotnet_csproj:
   patch: true
-  file: '**\AssemblyInfo.*'
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
   assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+
 
 deploy:
   - provider: NuGet
