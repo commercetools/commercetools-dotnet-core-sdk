@@ -52,6 +52,20 @@ namespace commercetools.Sdk.Client
             return command;
         }
 
+        public static QueryCommand<T> Limit<T>(this QueryCommand<T> command, int limit)
+        {
+            command.Limit = limit;
+
+            return command;
+        }
+
+        public static QueryCommand<T> Offset<T>(this QueryCommand<T> command, int offset)
+        {
+            command.Offset = offset;
+
+            return command;
+        }
+
         public static QueryCommand<T> Sort<T>(this QueryCommand<T> command, Expression<Func<T, IComparable>> expression, SortDirection sortDirection = SortDirection.Ascending)
         {
             command.Sort.Add(new Sort<T>(expression, sortDirection).ToString());
