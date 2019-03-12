@@ -185,7 +185,7 @@ There are numerous extension methods created for domain specific operations. The
 
 ## LINQ
 
-Experimental support for querying the API using LINQ is provided by the `commercetools.Sdk.Client.Linq.Extensions`
+Experimental support for querying the API using LINQ is provided by the `commercetools.Sdk.Client.Extensions`
 
     var query = from c in client.Query<Category>()
                     where c.Key == "c14"
