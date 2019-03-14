@@ -1,4 +1,4 @@
-namespace commercetools.Sdk.Client.Linq
+namespace commercetools.Sdk.Client
 {
     using System;
     using System.Collections;
@@ -6,7 +6,7 @@ namespace commercetools.Sdk.Client.Linq
     using System.Linq;
     using System.Linq.Expressions;
 
-    public class CtpQueryable<T>: IOrderedQueryable<T>
+    public class ClientQueryable<T>: IOrderedQueryable<T>
     {
 
         public Type ElementType => typeof(T);
@@ -16,13 +16,13 @@ namespace commercetools.Sdk.Client.Linq
         public IQueryProvider Provider { get; }
 
 
-        public CtpQueryable(IClient client, QueryCommand<T> command)
+        public ClientQueryable(IClient client, QueryCommand<T> command)
         {
-            this.Provider = new CtpQueryProvider<T>(client, command);
+            this.Provider = new ClientQueryProvider<T>(client, command);
             this.Expression = Expression.Constant(this);
         }
 
-        public CtpQueryable(IQueryProvider provider, Expression expression)
+        public ClientQueryable(IQueryProvider provider, Expression expression)
         {
             this.Provider = provider;
             this.Expression = expression;

@@ -2,8 +2,6 @@
 using commercetools.Sdk.Domain;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using commercetools.Sdk.Client.Linq;
 using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Domain.Products.Attributes;
 using Xunit;

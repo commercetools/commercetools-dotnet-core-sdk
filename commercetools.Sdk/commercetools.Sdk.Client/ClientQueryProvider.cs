@@ -3,21 +3,21 @@ using System.Linq;
 using commercetools.Sdk.Linq;
 using commercetools.Sdk.Registration;
 
-namespace commercetools.Sdk.Client.Linq
+namespace commercetools.Sdk.Client
 {
     using System;
     using System.Linq;
     using System.Linq.Expressions;
     using Domain.Query;
 
-    public class CtpQueryProvider<T> : IQueryProvider
+    public class ClientQueryProvider<T> : IQueryProvider
     {
         public QueryCommand<T> Command { get; }
         private readonly IClient client;
 
         private IList<T> result = new List<T>();
 
-        public CtpQueryProvider(IClient client, QueryCommand<T> command)
+        public ClientQueryProvider(IClient client, QueryCommand<T> command)
         {
             this.client = client;
             this.Command = command;
@@ -37,7 +37,7 @@ namespace commercetools.Sdk.Client.Linq
 
             if (!(expression is MethodCallExpression mc))
             {
-                return new CtpQueryable<TElement>(this as CtpQueryProvider<TElement>, expression);
+                return new ClientQueryable<TElement>(this as ClientQueryProvider<TElement>, expression);
             }
 
             var cmd = this.Command as QueryCommand<TElement>;
@@ -98,7 +98,7 @@ namespace commercetools.Sdk.Client.Linq
                     break;
             }
 
-            return new CtpQueryable<TElement>(this as CtpQueryProvider<TElement>, expression);
+            return new ClientQueryable<TElement>(this as ClientQueryProvider<TElement>, expression);
         }
 
         public object Execute(Expression expression)

@@ -18,7 +18,7 @@ namespace commercetools.Sdk.Domain.ProductProjections
 
         public bool? Fuzzy { get; set; }
 
-        public bool? FuzzyLevel { get; set; }
+        public int? FuzzyLevel { get; set; }
 
         public List<string> Filter { get; }
 

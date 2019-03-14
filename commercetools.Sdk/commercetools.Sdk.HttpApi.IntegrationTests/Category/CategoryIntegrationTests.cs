@@ -5,7 +5,6 @@ using commercetools.Sdk.HttpApi.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using commercetools.Sdk.Client.Linq;
 using commercetools.Sdk.Domain.Query;
 using Xunit;
 using commercetools.Sdk.Domain.Categories.UpdateActions;
@@ -289,7 +288,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 
             query.Expand(c => c.Parent).Expand(c => c.Ancestors.ExpandAll());
 
-            var command = ((CtpQueryProvider<Category>) query.Provider).Command;
+            var command = ((ClientQueryProvider<Category>) query.Provider).Command;
             Assert.Equal($"key = \"{category.Key}\"", command.Where);
             Assert.Equal("key desc", string.Join(", ", command.Sort));
             Assert.Equal("parent, ancestors[*]", string.Join(", ", command.Expand));
