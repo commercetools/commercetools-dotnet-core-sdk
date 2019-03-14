@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace commercetools.Sdk.Linq
+namespace commercetools.Sdk.Linq.Sort
 {
     public class SortExpressionVisitor : ISortExpressionVisitor
     {
@@ -12,16 +12,19 @@ namespace commercetools.Sdk.Linq
             {
                 return Render(((LambdaExpression)expression).Body);
             }
+
             // c.Parent.TypeId
             if (expression.NodeType == ExpressionType.MemberAccess)
             {
                 return GetMember((MemberExpression)expression);
             }
+
             // c.Slug["en"]
             if (expression.NodeType == ExpressionType.Call)
             {
                 return GetMethod((MethodCallExpression)expression);
             }
+
             // Convert(m.CreatedAt, IComparable)
             if (expression.NodeType == ExpressionType.Convert)
             {
@@ -31,12 +34,14 @@ namespace commercetools.Sdk.Linq
                     return Render(unaryExpression.Operand);
                 }
             }
+
             // c
             // lambda expression parameter does not need to be returned
             if (expression.NodeType == ExpressionType.Parameter)
             {
                 return string.Empty;
             }
+
             // TODO Move message to a resource file
             throw new NotSupportedException("The expression type is not supported.");
         }
@@ -50,6 +55,7 @@ namespace commercetools.Sdk.Linq
                 var key = expression.Arguments[0].ToString().Replace("\"", "");
                 return Render(expression.Object) + "." + key;
             }
+
             // TODO Move message to a resource file
             throw new NotSupportedException("The expression type is not supported.");
         }

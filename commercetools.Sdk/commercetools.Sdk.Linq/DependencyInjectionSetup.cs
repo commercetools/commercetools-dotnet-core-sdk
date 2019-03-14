@@ -1,6 +1,7 @@
 ﻿using commercetools.Sdk.Linq.Discount;
 using commercetools.Sdk.Linq.Filter;
 using commercetools.Sdk.Linq.Query;
+using commercetools.Sdk.Linq.Sort;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace commercetools.Sdk.Linq

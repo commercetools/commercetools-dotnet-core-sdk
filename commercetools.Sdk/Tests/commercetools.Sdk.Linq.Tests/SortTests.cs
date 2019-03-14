@@ -2,6 +2,7 @@
 using commercetools.Sdk.Domain.Categories;
 using System;
 using System.Linq.Expressions;
+using commercetools.Sdk.Linq.Sort;
 using Xunit;
 
 namespace commercetools.Sdk.Linq.Tests
