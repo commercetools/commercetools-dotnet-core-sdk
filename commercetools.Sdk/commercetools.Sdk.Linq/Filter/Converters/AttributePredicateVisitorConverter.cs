@@ -43,18 +43,25 @@ namespace commercetools.Sdk.Linq.Filter.Converters
             if (binaryExpression.Left is MemberExpression memberExpression && memberExpression.Member.Name == "Name")
             {
                 IPredicateVisitor name = predicateVisitorFactory.Create(binaryExpression.Right);
-                return RemoveQuotes(name);
+                return RemoveQuotesWithCaseSensitive(name);
             }
 
             return null;
         }
 
         // TODO Combine this with other similar methods.
-        private static IPredicateVisitor RemoveQuotes(IPredicateVisitor inner)
+
+        /// <summary>
+        /// Remove Quotes and make it constant predicate visitor with case sensitive
+        /// Attribute names must be case sensitive
+        /// </summary>
+        /// <param name="inner">The inner Constant Predicate Visitor</param>
+        /// <returns>Constant Predicate Visitor</returns>
+        private static IPredicateVisitor RemoveQuotesWithCaseSensitive(IPredicateVisitor inner)
         {
             if (inner is ConstantPredicateVisitor constantVisitor)
             {
-                ConstantPredicateVisitor constantWithoutQuotes = new ConstantPredicateVisitor(constantVisitor.Constant.RemoveQuotes());
+                ConstantPredicateVisitor constantWithoutQuotes = new ConstantPredicateVisitor(constantVisitor.Constant.RemoveQuotes(), true);
                 return constantWithoutQuotes;
             }
 

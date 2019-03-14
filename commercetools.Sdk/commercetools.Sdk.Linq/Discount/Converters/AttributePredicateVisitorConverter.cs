@@ -57,18 +57,24 @@ namespace commercetools.Sdk.Linq.Discount.Converters
             {
                 if (nameExpression.Left is MemberExpression memberExpression && memberExpression.Member.Name == "Name")
                 {
-                    return RemoveQuotes(predicateVisitorFactory.Create(nameExpression.Right));
+                    return RemoveQuotesWithCaseSensitive(predicateVisitorFactory.Create(nameExpression.Right));
                 }
             }
 
             return null;
         }
 
-        private static IPredicateVisitor RemoveQuotes(IPredicateVisitor inner)
+        /// <summary>
+        /// Remove Quotes and make it constant predicate visitor with case sensitive
+        /// Attribute names must be case sensitive
+        /// </summary>
+        /// <param name="inner">The inner Constant Predicate Visitor</param>
+        /// <returns>Constant Predicate Visitor</returns>
+        private static IPredicateVisitor RemoveQuotesWithCaseSensitive(IPredicateVisitor inner)
         {
             if (inner is ConstantPredicateVisitor constantVisitor)
             {
-                ConstantPredicateVisitor constantWithoutQuotes = new ConstantPredicateVisitor(constantVisitor.Constant.RemoveQuotes());
+                ConstantPredicateVisitor constantWithoutQuotes = new ConstantPredicateVisitor(constantVisitor.Constant.RemoveQuotes(), true);
                 return constantWithoutQuotes;
             }
 

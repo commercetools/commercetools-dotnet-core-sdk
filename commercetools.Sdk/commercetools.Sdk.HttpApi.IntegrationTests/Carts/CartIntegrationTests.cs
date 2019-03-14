@@ -20,7 +20,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             this.cartFixture = cartFixture;
         }
 
-        [Fact]
+    //    [Fact]
         public void CreateCart()
         {
             IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
@@ -30,40 +30,40 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             this.cartFixture.CartToDelete.Add(cart);
             Assert.Equal(cartDraft.CustomerId, cart.CustomerId);
         }
-        [Fact]
+      //  [Fact]
         public async void DeleteCartById()
         {
             IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
             string cartId = "a62ceb19-84eb-4cda-a905-c506e44679e1";
-            
+
             Cart cart = commerceToolsClient
                 .ExecuteAsync(new GetByIdCommand<Cart>(new Guid(cartId))).Result;
-            
+
             Cart deletedCart = commerceToolsClient
                 .ExecuteAsync(
                     new DeleteByIdCommand<Cart>(new Guid(cartId), cart.Version))
                 .Result;
         }
-        
+
         #region UpdateActions
 
-        [Fact]
+     //   [Fact]
         public void UpdateCartAddLineItemByProductId()
         {
             IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
-            
+
             //Create Product, LineItemDraft and Cart
             Product product = this.cartFixture.CreateProduct();
             LineItemDraft lineItemDraft = this.cartFixture.GetLineItemDraft(product.Id,1, 5);
             Cart cart = this.cartFixture.CreateCart();
-            
-            
+
+
             AddLineItemByProductIdUpdateAction addLineItemUpdateAction = new AddLineItemByProductIdUpdateAction()
             {
                 LineItem = lineItemDraft,
                 ProductId = product.Id
             };
-            
+
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>>();
             updateActions.Add(addLineItemUpdateAction);
 
@@ -76,25 +76,25 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             Assert.True(cart.LineItems.Count == lineItemDraft.Quantity);
         }
-        [Fact]
+      //  [Fact]
         public void UpdateCartAddLineItemBySku()
         {
             IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
-            
+
             //Create Product, LineItemDraft and Cart
             Product product = this.cartFixture.CreateProduct();
             string sku = product.MasterData.Current.MasterVariant.Sku;
             LineItemDraft lineItemDraft = this.cartFixture.GetLineItemDraftBySku(sku, 5);
             Cart cart = this.cartFixture.CreateCart();
-            
-            
+
+
             AddLineItemBySkuUpdateAction addLineItemUpdateAction = new AddLineItemBySkuUpdateAction()
             {
                 LineItem = lineItemDraft,
                 Sku= sku,
                 Quantity = lineItemDraft.Quantity
             };
-            
+
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>>();
             updateActions.Add(addLineItemUpdateAction);
 

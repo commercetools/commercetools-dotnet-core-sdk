@@ -54,7 +54,7 @@ namespace commercetools.Sdk.Linq.Tests
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("key = \"c14\"", result);
         }
-        
+
         [Fact]
         public void ExpressionStringEqualVarPropertyNonLocal()
         {
@@ -248,6 +248,15 @@ namespace commercetools.Sdk.Linq.Tests
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes(name = \"text-name\" and value = \"text-value\")", result);
+        }
+
+        [Fact]
+        public void ExpressionPropertyTextAttributeValueEqualCaseSensitive()
+        {
+            Expression<Func<ProductVariant, bool>> expression = p => p.Attributes.Any(a => a.ToTextAttribute().Name == "Color" && a.ToTextAttribute().Value == "Red");
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("attributes(name = \"Color\" and value = \"Red\")", result);
         }
 
         [Fact]

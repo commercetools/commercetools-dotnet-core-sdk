@@ -19,7 +19,7 @@ namespace commercetools.Sdk.Linq.Tests
         {
             this.linqFixture = linqFixture;
         }
-        
+
         [Fact]
         public void LineItemCountByProductIdGreaterThanTen()
         {
@@ -149,7 +149,7 @@ namespace commercetools.Sdk.Linq.Tests
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("customer.id = \"45224437-12bd-4742-830c-3a36b52541d3\"", result);
         }
-        
+
         [Fact]
         public void CartPredicateCustomerIdNonLocal()
         {
@@ -274,6 +274,15 @@ namespace commercetools.Sdk.Linq.Tests
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes.color = \"green\"", result);
+        }
+
+        [Fact]
+        public void LineItemPredicateTextAttributeCaseSensitive()
+        {
+            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "Color" && ((TextAttribute)a).Value == "Green");
+            IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("attributes.Color = \"Green\"", result);
         }
 
         [Fact]

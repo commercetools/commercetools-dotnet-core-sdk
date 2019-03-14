@@ -27,7 +27,7 @@ namespace commercetools.Sdk.Linq.Tests
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("categories.id:\"34940e9b-0752-4ffa-8e6e-4f2417995a3e\"", result);
         }
-        
+
         [Fact]
         public void FilterByCategoryIdNonLocal()
         {
@@ -259,9 +259,10 @@ namespace commercetools.Sdk.Linq.Tests
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("searchKeywords.en.text:\"jeans\"", result);
         }
-        
+
         //ToDo: fix camel case
-        public void FilterAttributeName()
+        [Fact]
+        public void FilterAttributeNameCaseSensitive()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "Color" && ((TextAttribute)a).Value == "Red"));
             IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
