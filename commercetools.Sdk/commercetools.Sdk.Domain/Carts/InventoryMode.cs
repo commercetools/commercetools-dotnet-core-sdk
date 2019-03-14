@@ -2,8 +2,8 @@
 {
     public enum InventoryMode
     {
+        None,
         TrackOnly,
-        ReserveOnOrder,
-        None
+        ReserveOnOrder
     }
 }
