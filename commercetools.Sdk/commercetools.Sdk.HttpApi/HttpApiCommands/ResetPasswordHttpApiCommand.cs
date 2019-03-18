@@ -1,10 +1,10 @@
-﻿using commercetools.Sdk.Client;
-using System.Net.Http;
+﻿using System.Net.Http;
+using commercetools.Sdk.Client;
 using commercetools.Sdk.HttpApi.RequestBuilders;
 
 namespace commercetools.Sdk.HttpApi.HttpApiCommands
 {
-    public class ResetPasswordHttpApiCommand<T> : IHttpApiCommand<ResetPasswordCommand<T>, T>
+    public class ResetPasswordHttpApiCommand<T> : IHttpApiCommandGeneric<ResetPasswordCommand<T>, T>
     {
         private readonly ResetPasswordCommand<T> command;
         private readonly ResetPasswordRequestMessageBuilder requestBuilder;

@@ -41,18 +41,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Errors
             ErrorResponseException exception = await Assert.ThrowsAsync<ErrorResponseException>(()=> commerceToolsClient.ExecuteAsync(new CreateCommand<Product>(productDraft)));
             Assert.Equal(400, exception.StatusCode);
         }
-        
+
         /// <summary>
-        /// The request attempts to modify a resource that is out of date, i.e. that has been modified by another client since the last time it was retrieved. 
+        /// The request attempts to modify a resource that is out of date, i.e. that has been modified by another client since the last time it was retrieved.
         /// </summary>
         [Fact]
-        public async void CheckConcurrentModificationException()
+        public void CheckConcurrentModificationException()
         {
             ConcurrentModificationException concurrentModificationException = null;
-            
+
             Category originalCategory = this.errorsFixture.CategoryFixture.CreateCategory();
             //update it, then it has a newer version
-            Category updatedCategory = this.errorsFixture.CategoryFixture.UpdateCategorySetRandomKey(originalCategory);   
+            Category updatedCategory = this.errorsFixture.CategoryFixture.UpdateCategorySetRandomKey(originalCategory);
             // then if we try to update the original category it will throw ConCurrentModification Exception
             try
             {
@@ -63,7 +63,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Errors
                 if (ex is AggregateException && ex.InnerException is ConcurrentModificationException exception)
                     concurrentModificationException = exception;
             }
-            
+
             this.errorsFixture.CategoryFixture.CategoriesToDelete.Add(updatedCategory);
             Assert.NotNull(concurrentModificationException);
             Assert.Single(concurrentModificationException.ErrorResponse.Errors);

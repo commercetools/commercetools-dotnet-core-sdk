@@ -18,11 +18,11 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             this.serializerService = serializerService;
         }
 
-        private HttpMethod HttpMethod => HttpMethod.Post;
+        private static HttpMethod HttpMethod => HttpMethod.Post;
 
         public HttpRequestMessage GetRequestMessage<T>(ChangePasswordCommand<T> command)
         {
-            return this.GetRequestMessage<T>(this.GetRequestUri(command), this.GetHttpContent(command), this.HttpMethod);
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(), this.GetHttpContent(command), HttpMethod);
         }
 
         private HttpContent GetHttpContent<T>(ChangePasswordCommand<T> command)
@@ -37,7 +37,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             return new StringContent(this.serializerService.Serialize(requestBody));
         }
 
-        private Uri GetRequestUri<T>(ChangePasswordCommand<T> command)
+        private Uri GetRequestUri<T>()
         {
             string requestUri = this.GetMessageBase<T>() + "/password";
             return new Uri(requestUri);

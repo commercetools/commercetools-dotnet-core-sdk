@@ -16,7 +16,8 @@ namespace commercetools.Sdk.HttpApi.DelegatingHandlers
             this.loggerFactory = loggerFactory;
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+        protected override async Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
             // TODO Which name should be set here?

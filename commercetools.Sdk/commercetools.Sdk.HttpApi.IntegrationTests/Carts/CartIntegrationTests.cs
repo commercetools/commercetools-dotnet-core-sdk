@@ -31,7 +31,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             Assert.Equal(cartDraft.CustomerId, cart.CustomerId);
         }
       //  [Fact]
-        public async void DeleteCartById()
+        public void DeleteCartById()
         {
             IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
             string cartId = "a62ceb19-84eb-4cda-a905-c506e44679e1";

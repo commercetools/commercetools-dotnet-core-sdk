@@ -68,15 +68,6 @@ namespace commercetools.Sdk.HttpApi
                 .AddHttpMessageHandler<AuthorizationHandler>().AddHttpMessageHandler<CorrelationIdHandler>()
                 .AddHttpMessageHandler<LoggerHandler>()
                 .AddHttpMessageHandler<ErrorHandler>();
-
-            // get the custom delegating handler service if found and add it as Message Handler if exists
-            /*
-            var customDelegatingHandlerService = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(ICustomDelegatingHandler));
-            if (customDelegatingHandlerService != null)
-            {
-                //httpClientBuilder.AddHttpMessageHandler((serviceProvider) => serviceProvider.GetService<ICustomDelegatingHandler>() as DelegatingHandler);
-            }
-            */
         }
 
         private static void AddClient(this IServiceCollection services, string clientName, TokenFlowMapper tokenFlowMapper)

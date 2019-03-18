@@ -3,8 +3,7 @@
     // variants(not(attributes(name="attribute-name")))
     public class ContainerPredicateVisitor : IPredicateVisitor
     {
-        public ContainerPredicateVisitor(IPredicateVisitor inner, IPredicateVisitor parent,
-            bool renderInnerWithOutParentheses = false)
+        public ContainerPredicateVisitor(IPredicateVisitor inner, IPredicateVisitor parent, bool renderInnerWithOutParentheses = false)
         {
             this.Inner = inner;
             this.Parent = parent;

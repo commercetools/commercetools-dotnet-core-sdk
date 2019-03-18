@@ -1,6 +1,6 @@
 ﻿namespace commercetools.Sdk.HttpApi
 {
-    public interface IHttpApiCommand<T, S> : IHttpApiCommand
+    public interface IHttpApiCommandGeneric<T, S> : IHttpApiCommand
     {
     }
 }

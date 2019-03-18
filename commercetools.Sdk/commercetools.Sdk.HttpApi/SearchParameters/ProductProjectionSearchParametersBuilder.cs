@@ -21,12 +21,12 @@ namespace commercetools.Sdk.HttpApi.SearchParameters
                 return parameters;
             }
 
-            parameters.AddRange(this.AddTextLanguageParameter(productProjectionSearchParameters));
-            parameters.AddRange(this.AddParameters(productProjectionSearchParameters.Filter, "filter"));
-            parameters.AddRange(this.AddParameters(productProjectionSearchParameters.FilterQuery, "filter.query"));
-            parameters.AddRange(this.AddParameters(productProjectionSearchParameters.FilterFacets, "filter.facets"));
-            parameters.AddRange(this.AddParameters(productProjectionSearchParameters.Facets, "facet"));
-            parameters.AddRange(this.AddParameters(productProjectionSearchParameters.Sort, "sort"));
+            parameters.AddRange(AddTextLanguageParameter(productProjectionSearchParameters));
+            parameters.AddRange(AddParameters(productProjectionSearchParameters.Filter, "filter"));
+            parameters.AddRange(AddParameters(productProjectionSearchParameters.FilterQuery, "filter.query"));
+            parameters.AddRange(AddParameters(productProjectionSearchParameters.FilterFacets, "filter.facets"));
+            parameters.AddRange(AddParameters(productProjectionSearchParameters.Facets, "facet"));
+            parameters.AddRange(AddParameters(productProjectionSearchParameters.Sort, "sort"));
             if (productProjectionSearchParameters.Fuzzy != null)
             {
                 parameters.Add(new KeyValuePair<string, string>("fuzzy", productProjectionSearchParameters.Fuzzy.ToString()));
@@ -55,7 +55,7 @@ namespace commercetools.Sdk.HttpApi.SearchParameters
             return parameters;
         }
 
-        private List<KeyValuePair<string, string>> AddTextLanguageParameter(ProductProjectionSearchParameters productProjectionSearchParameters)
+        private static List<KeyValuePair<string, string>> AddTextLanguageParameter(ProductProjectionSearchParameters productProjectionSearchParameters)
         {
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
             if (productProjectionSearchParameters?.Text != null)
@@ -66,7 +66,7 @@ namespace commercetools.Sdk.HttpApi.SearchParameters
             return queryStringParameters;
         }
 
-        private List<KeyValuePair<string, string>> AddParameters(List<string> parameters, string parameterName)
+        private static List<KeyValuePair<string, string>> AddParameters(List<string> parameters, string parameterName)
         {
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
             foreach (var filter in parameters)

@@ -67,7 +67,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             InventoryEntry inventoryEntry = this.inventoryFixture.CreateInventoryEntry();
             this.inventoryFixture.InventoryEntries.Add(inventoryEntry);
             QueryPredicate<InventoryEntry> queryPredicate =
-                new QueryPredicate<InventoryEntry>(ie => ie.Id == inventoryEntry.Id.valueOf());
+                new QueryPredicate<InventoryEntry>(ie => ie.Id == inventoryEntry.Id.valueOf().ToString());
             QueryCommand<InventoryEntry> queryCommand = new QueryCommand<InventoryEntry>();
             queryCommand.SetWhere(queryPredicate);
             PagedQueryResult<InventoryEntry> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
@@ -84,23 +84,23 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
 
             long newAddedQuantity = this.inventoryFixture.RandomInt(1, 10);
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
-            
+
             AddQuantityUpdateAction addQuantityUpdateAction = new AddQuantityUpdateAction()
             {
                 Quantity = newAddedQuantity
             };
             updateActions.Add(addQuantityUpdateAction);
-            
+
             //Increments quantityOnStock and updates availableQuantity according to the new quantity
             InventoryEntry retrievedInventoryEntry = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<InventoryEntry>(new Guid(inventoryEntry.Id), inventoryEntry.Version, updateActions)).Result;
             this.inventoryFixture.InventoryEntries.Add(retrievedInventoryEntry);
-            
+
             Assert.Equal(inventoryEntry.Id, retrievedInventoryEntry.Id);
             Assert.Equal(inventoryEntry.QuantityOnStock + newAddedQuantity, retrievedInventoryEntry.QuantityOnStock);
             Assert.Equal(inventoryEntry.AvailableQuantity + newAddedQuantity, retrievedInventoryEntry.AvailableQuantity);
         }
-        
+
         [Fact]
         public void UpdateInventoryEntryByIdSetRemoveQuantity()
         {
@@ -109,23 +109,23 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
 
             long newRemovedQuantity = this.inventoryFixture.RandomInt(1, 10);
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
-            
+
             RemoveQuantityUpdateAction removeQuantityUpdateAction = new RemoveQuantityUpdateAction()
             {
                 Quantity = newRemovedQuantity
             };
             updateActions.Add(removeQuantityUpdateAction);
-            
+
             //Decrements quantityOnStock and updates availableQuantity according to the new quantity
             InventoryEntry retrievedInventoryEntry = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<InventoryEntry>(new Guid(inventoryEntry.Id), inventoryEntry.Version, updateActions)).Result;
             this.inventoryFixture.InventoryEntries.Add(retrievedInventoryEntry);
-            
+
             Assert.Equal(inventoryEntry.Id, retrievedInventoryEntry.Id);
             Assert.Equal(inventoryEntry.QuantityOnStock - newRemovedQuantity, retrievedInventoryEntry.QuantityOnStock);
             Assert.Equal(inventoryEntry.AvailableQuantity - newRemovedQuantity, retrievedInventoryEntry.AvailableQuantity);
         }
-        
+
         [Fact]
         public void UpdateInventoryEntryByIdChangeQuantity()
         {
@@ -134,18 +134,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
 
             long newQuantity = this.inventoryFixture.RandomInt(100, 1000);
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
-            
+
             ChangeQuantityUpdateAction changeQuantityUpdateAction = new ChangeQuantityUpdateAction()
             {
                 Quantity = newQuantity
             };
             updateActions.Add(changeQuantityUpdateAction);
-            
+
             //Sets quantityOnStock and updates availableQuantity according to the new quantity
             InventoryEntry retrievedInventoryEntry = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<InventoryEntry>(new Guid(inventoryEntry.Id), inventoryEntry.Version, updateActions)).Result;
             this.inventoryFixture.InventoryEntries.Add(retrievedInventoryEntry);
-            
+
             Assert.Equal(retrievedInventoryEntry.Id, inventoryEntry.Id);
             Assert.Equal(newQuantity, retrievedInventoryEntry.QuantityOnStock);
             Assert.Equal(newQuantity, retrievedInventoryEntry.AvailableQuantity);
@@ -159,22 +159,22 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
 
             int newRestockableInDays = this.inventoryFixture.RandomInt(1, 100);
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
-            
+
             SetRestockableInDaysUpdateAction setRestockableInDaysUpdateAction = new SetRestockableInDaysUpdateAction()
             {
                 RestockableInDays = newRestockableInDays
             };
             updateActions.Add(setRestockableInDaysUpdateAction);
-            
+
             //Increments quantityOnStock and updates availableQuantity according to the new quantity
             InventoryEntry retrievedInventoryEntry = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<InventoryEntry>(new Guid(inventoryEntry.Id), inventoryEntry.Version, updateActions)).Result;
             this.inventoryFixture.InventoryEntries.Add(retrievedInventoryEntry);
-            
+
             Assert.Equal(retrievedInventoryEntry.Id, inventoryEntry.Id);
             Assert.Equal(newRestockableInDays, retrievedInventoryEntry.RestockableInDays);
         }
-        
+
         [Fact]
         public void UpdateInventoryEntryByIdSetExpectedDelivery()
         {
@@ -183,21 +183,21 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
 
             DateTime newExpectedDelivery = DateTime.Today.AddDays(this.inventoryFixture.RandomInt(1, 100));
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
-            
+
             SetExpectedDeliveryUpdateAction setExpectedDeliveryUpdateAction = new SetExpectedDeliveryUpdateAction()
             {
                 ExpectedDelivery = newExpectedDelivery
             };
             updateActions.Add(setExpectedDeliveryUpdateAction);
-            
+
             InventoryEntry retrievedInventoryEntry = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<InventoryEntry>(new Guid(inventoryEntry.Id), inventoryEntry.Version, updateActions)).Result;
             this.inventoryFixture.InventoryEntries.Add(retrievedInventoryEntry);
-            
+
             Assert.Equal(retrievedInventoryEntry.Id, inventoryEntry.Id);
             Assert.Equal(newExpectedDelivery, retrievedInventoryEntry.ExpectedDelivery);
         }
-        
+
         [Fact]
         public void UpdateInventoryEntryByIdSetSupplyChannel()
         {
@@ -206,23 +206,23 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
 
             Channel supplyChannel = this.inventoryFixture.channelFixture.CreateChannel();
             Reference<Channel> channelReference =new Reference<Channel>() { Id = supplyChannel.Id, TypeId = ReferenceTypeId.Channel };
-            
+
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
-            
+
             SetSupplyChannelUpdateAction setSupplyChannelUpdateAction = new SetSupplyChannelUpdateAction()
             {
-                SupplyChannel = channelReference 
+                SupplyChannel = channelReference
             };
             updateActions.Add(setSupplyChannelUpdateAction);
-            
+
             InventoryEntry retrievedInventoryEntry = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<InventoryEntry>(new Guid(inventoryEntry.Id), inventoryEntry.Version, updateActions)).Result;
             this.inventoryFixture.InventoryEntries.Add(retrievedInventoryEntry);
-            
+
             Assert.Equal(retrievedInventoryEntry.Id, inventoryEntry.Id);
             Assert.Equal(supplyChannel.Id, retrievedInventoryEntry.SupplyChannel.Id);
         }
-        
+
         [Fact]
         public void UpdateInventoryEntryByIdSetCustomType()
         {
@@ -231,29 +231,29 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
 
             var type = this.inventoryFixture.CreateNewType();
             var fields = this.inventoryFixture.CreateNewFields();
-            
+
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
-            
+
             SetCustomTypeUpdateAction setCustomTypeUpdateAction = new SetCustomTypeUpdateAction()
             {
                 Type = new ResourceIdentifier() { Id = type.Id }, Fields = fields
             };
             updateActions.Add(setCustomTypeUpdateAction);
-            
+
             InventoryEntry retrievedInventoryEntry = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<InventoryEntry>(new Guid(inventoryEntry.Id), inventoryEntry.Version, updateActions)).Result;
             this.inventoryFixture.InventoryEntries.Add(retrievedInventoryEntry);
-            
+
             Assert.Equal(retrievedInventoryEntry.Id, inventoryEntry.Id);
             Assert.Equal(type.Id, retrievedInventoryEntry.Custom.Type.Id);
         }
-        
+
         [Fact]
         public void UpdateInventoryEntryByIdSetCustomField()
         {
             IClient commerceToolsClient = this.inventoryFixture.GetService<IClient>();
             InventoryEntry inventoryEntry = this.inventoryFixture.CreateInventoryEntryWithCustomFields();
-            
+
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
             string newValue = this.inventoryFixture.RandomString(6);
             SetCustomFieldUpdateAction setCustomFieldUpdateAction = new SetCustomFieldUpdateAction()
@@ -261,11 +261,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
                 Name = "string-field", Value = newValue
             };
             updateActions.Add(setCustomFieldUpdateAction);
-            
+
             InventoryEntry retrievedInventoryEntry = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<InventoryEntry>(new Guid(inventoryEntry.Id), inventoryEntry.Version, updateActions)).Result;
             this.inventoryFixture.InventoryEntries.Add(retrievedInventoryEntry);
-            
+
             Assert.Equal(retrievedInventoryEntry.Id, inventoryEntry.Id);
             Assert.Equal(newValue, retrievedInventoryEntry.Custom.Fields["string-field"]);
         }

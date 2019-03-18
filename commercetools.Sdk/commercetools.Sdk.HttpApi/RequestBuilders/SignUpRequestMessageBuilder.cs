@@ -22,11 +22,11 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             this.serializerService = serializerService;
         }
 
-        private HttpMethod HttpMethod => HttpMethod.Post;
+        private static HttpMethod HttpMethod => HttpMethod.Post;
 
         public HttpRequestMessage GetRequestMessage<T>(SignUpCommand<T> command)
         {
-            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), this.GetHttpContent<T>(command), this.HttpMethod);
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), this.GetHttpContent<T>(command), HttpMethod);
         }
 
         private HttpContent GetHttpContent<T>(SignUpCommand<T> command)

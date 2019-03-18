@@ -4,7 +4,7 @@ using commercetools.Sdk.HttpApi.RequestBuilders;
 
 namespace commercetools.Sdk.HttpApi.HttpApiCommands
 {
-    public class UploadImageHttpApiCommand<T> : IHttpApiCommand<UploadImageCommand<T>, T>
+    public class UploadImageHttpApiCommand<T> : IHttpApiCommandGeneric<UploadImageCommand<T>, T>
     {
         private readonly UploadImageCommand<T> command;
         private readonly UploadImageRequestMessageBuilder requestBuilder;

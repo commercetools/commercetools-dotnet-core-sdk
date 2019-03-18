@@ -1,13 +1,13 @@
-﻿using commercetools.Sdk.Client;
-using commercetools.Sdk.Serialization;
-using Microsoft.AspNetCore.WebUtilities;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using commercetools.Sdk.HttpApi.AdditionalParameters;
-
-namespace commercetools.Sdk.HttpApi.RequestBuilders
+﻿namespace commercetools.Sdk.HttpApi.RequestBuilders
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Net.Http;
+    using AdditionalParameters;
+    using commercetools.Sdk.Client;
+    using Microsoft.AspNetCore.WebUtilities;
+    using Serialization;
+
     public class UpdateRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
         private readonly ISerializerService serializerService;
@@ -22,11 +22,11 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             this.serializerService = serializerService;
         }
 
-        private HttpMethod HttpMethod => HttpMethod.Post;
+        private static HttpMethod HttpMethod => HttpMethod.Post;
 
         public HttpRequestMessage GetRequestMessage<T>(UpdateCommand<T> command)
         {
-            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), this.GetHttpContent<T>(command), this.HttpMethod);
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), this.GetHttpContent<T>(command), HttpMethod);
         }
 
         private HttpContent GetHttpContent<T>(UpdateCommand<T> command)
@@ -36,6 +36,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
                 Version = command.Version,
                 Actions = command.UpdateActions
             };
+
             // TODO Make sure property validation works for update actions as well
             return new StringContent(this.serializerService.Serialize(requestBody));
         }

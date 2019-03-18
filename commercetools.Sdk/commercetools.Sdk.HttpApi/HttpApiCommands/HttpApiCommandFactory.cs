@@ -1,14 +1,14 @@
-﻿using commercetools.Sdk.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using commercetools.Sdk.Registration;
-using commercetools.Sdk.HttpApi.RequestBuilders;
-
-namespace commercetools.Sdk.HttpApi.HttpApiCommands
+﻿namespace commercetools.Sdk.HttpApi.HttpApiCommands
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Reflection;
+    using commercetools.Sdk.Client;
+    using Registration;
+    using RequestBuilders;
+
     public class HttpApiCommandFactory : IHttpApiCommandFactory
     {
         private readonly Dictionary<Type, ObjectActivator> activators;
@@ -35,6 +35,7 @@ namespace commercetools.Sdk.HttpApi.HttpApiCommands
             {
                 // retrieving the command type from IHttpApiCommand, e.g. GetHttpApiCommand<T>: IHttpApiCommand<GetCommand<T>, T>
                 var httpApiCommandGenericType = type.GetInterfaces().First().GetGenericArguments().First();
+
                 // IsAssignableFrom does not work on open generic types <>, which means the type of T needs to be passed first
                 if (httpApiCommandGenericType.GetGenericTypeDefinition().MakeGenericType(typeOfGeneric).IsAssignableFrom(command.GetType()))
                 {
@@ -45,7 +46,7 @@ namespace commercetools.Sdk.HttpApi.HttpApiCommands
 
             if (httApiCommandType == null)
             {
-                throw new ArgumentException();
+                throw new ArgumentException($"Can't find registered httApiCommandType for command of type {command.GetType()}", nameof(command));
             }
 
             // CreateHttpApiCommand<T> => CreateHttpApiCommand<Category>
@@ -70,20 +71,20 @@ namespace commercetools.Sdk.HttpApi.HttpApiCommands
 
         // TODO Move this to a different class perhaps
         // https://rogerjohansson.blog/2008/02/28/linq-expressions-creating-objects/
-        private ObjectActivator GetActivator(ConstructorInfo ctor)
+        private static ObjectActivator GetActivator(ConstructorInfo ctor)
         {
             Type type = ctor.DeclaringType;
             ParameterInfo[] paramsInfo = ctor.GetParameters();
 
-            //create a single param of type object[]
+            // create a single param of type object[]
             ParameterExpression param =
                 Expression.Parameter(typeof(object[]), "args");
 
             Expression[] argsExp =
                 new Expression[paramsInfo.Length];
 
-            //pick each arg from the params array
-            //and create a typed expression of them
+            // pick each arg from the params array
+            // and create a typed expression of them
             for (int i = 0; i < paramsInfo.Length; i++)
             {
                 Expression index = Expression.Constant(i);
@@ -98,16 +99,16 @@ namespace commercetools.Sdk.HttpApi.HttpApiCommands
                 argsExp[i] = paramCastExp;
             }
 
-            //make a NewExpression that calls the
-            //ctor with the args we just created
+            // make a NewExpression that calls the
+            // ctor with the args we just created
             NewExpression newExp = Expression.New(ctor, argsExp);
 
-            //create a lambda with the New
-            //Expression as body and our param object[] as arg
+            // create a lambda with the New
+            // Expression as body and our param object[] as arg
             LambdaExpression lambda =
                 Expression.Lambda(typeof(ObjectActivator), newExp, param);
 
-            //compile it
+            // compile it
             ObjectActivator compiled = (ObjectActivator)lambda.Compile();
             return compiled;
         }

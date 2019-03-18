@@ -3,12 +3,13 @@ using System.Net.Http;
 using commercetools.Sdk.Serialization;
 
 namespace commercetools.Sdk.HttpApi.Tokens
-{ 
+{
     internal class PasswordTokenProvider : TokenProvider, ITokenProvider
     {
         private readonly IUserCredentialsStoreManager userCredentialsManager;
 
-        public PasswordTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, IUserCredentialsStoreManager userCredentialsStoreManager, ISerializerService serializerService) : base(httpClientFactory, clientConfiguration, userCredentialsStoreManager, serializerService)
+        public PasswordTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, IUserCredentialsStoreManager userCredentialsStoreManager, ISerializerService serializerService)
+            : base(httpClientFactory, clientConfiguration, userCredentialsStoreManager, serializerService)
         {
             this.userCredentialsManager = userCredentialsStoreManager;
         }

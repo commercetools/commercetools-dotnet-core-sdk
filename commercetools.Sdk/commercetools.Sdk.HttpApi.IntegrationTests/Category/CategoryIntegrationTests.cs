@@ -282,7 +282,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             this.categoryFixture.CategoriesToDelete.Add(category);
 
             var query = from c in commerceToolsClient.Query<Category>()
-                where c.Key == category.Key.valueOf()
+                where c.Key == category.Key.valueOf().ToString()
                 orderby c.Key descending
                 select c;
 
@@ -294,7 +294,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Assert.Equal("parent, ancestors[*]", string.Join(", ", command.Expand));
 
             var categories = query.ToList();
-            Assert.Equal(1, categories.Count);
+            Assert.Single(categories);
             Assert.Equal(category.Key, categories.First().Key);
             Assert.Equal(category.Parent.Id, categories.First().Parent.Obj.Id);
             Assert.Equal(category.Parent.Id, categories.First().Ancestors.First().Id);

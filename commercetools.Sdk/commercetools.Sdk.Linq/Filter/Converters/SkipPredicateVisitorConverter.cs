@@ -36,7 +36,6 @@ namespace commercetools.Sdk.Linq.Filter.Converters
             }
 
             return null;
-
         }
     }
 }

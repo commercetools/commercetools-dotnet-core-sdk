@@ -127,7 +127,7 @@ namespace commercetools.Sdk.HttpApi
         /// </summary>
         /// <param name="predicate">predicate which we check if the response message meet it's criteria</param>
         /// <param name="exceptionCreator">delegate function we use to create the right exception based on the status</param>
-        private void AddResponsibility(Predicate<HttpResponseMessage> predicate, Func<HttpResponseMessage, ApiException> exceptionCreator) 
+        private void AddResponsibility(Predicate<HttpResponseMessage> predicate, Func<HttpResponseMessage, ApiException> exceptionCreator)
         {
             if (this.responsibilities == null)
             {

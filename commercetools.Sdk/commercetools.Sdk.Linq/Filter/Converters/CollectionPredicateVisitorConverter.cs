@@ -92,7 +92,5 @@ namespace commercetools.Sdk.Linq.Filter.Converters
             EqualPredicateVisitor combined = new EqualPredicateVisitor(equalLeft?.Left, collection);
             return combined;
         }
-
-
     }
 }

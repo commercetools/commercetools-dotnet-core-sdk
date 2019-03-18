@@ -3,10 +3,15 @@
     public class ClientConfiguration : IClientConfiguration
     {
         public string ClientId { get; set; }
+
         public string ProjectKey { get; set; }
+
         public string ClientSecret { get; set; }
+
         public string Scope { get; set; }
+
         public string AuthorizationBaseAddress { get; set; }
+
         public string ApiBaseAddress { get; set; }
     }
 }

@@ -1,10 +1,10 @@
-﻿using commercetools.Sdk.Client;
-using System.Net.Http;
+﻿using System.Net.Http;
+using commercetools.Sdk.Client;
 using commercetools.Sdk.HttpApi.RequestBuilders;
 
 namespace commercetools.Sdk.HttpApi.HttpApiCommands
 {
-    public class CreateTokenForPasswordResetHttpApiCommand<T> : IHttpApiCommand<CreateTokenForPasswordResetCommand<T>, T>
+    public class CreateTokenForPasswordResetHttpApiCommand<T> : IHttpApiCommandGeneric<CreateTokenForPasswordResetCommand<T>, T>
     {
         private readonly CreateTokenForPasswordResetCommand<T> command;
         private readonly CreateTokenForPasswordResetRequestMessageBuilder requestBuilder;

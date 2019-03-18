@@ -12,7 +12,6 @@ namespace commercetools.Sdk.Client
 
     public class ClientQueryProvider<T> : IQueryProvider
     {
-        public QueryCommand<T> Command { get; }
         private readonly IClient client;
 
         private IList<T> result = new List<T>();
@@ -22,6 +21,8 @@ namespace commercetools.Sdk.Client
             this.client = client;
             this.Command = command;
         }
+
+        public QueryCommand<T> Command { get; }
 
         public IQueryable CreateQuery(Expression expression)
         {
@@ -35,12 +36,15 @@ namespace commercetools.Sdk.Client
                 throw new ArgumentException("Only " + typeof(T).FullName + " objects are supported");
             }
 
-            if (!(expression is MethodCallExpression mc))
+            bool isMethodCallExpression = expression is MethodCallExpression;
+
+            if (!isMethodCallExpression)
             {
-                return new ClientQueryable<TElement>(this as ClientQueryProvider<TElement>, expression);
+                return new ClientQueryableCollection<TElement>(this as ClientQueryProvider<TElement>, expression);
             }
 
             var cmd = this.Command as QueryCommand<TElement>;
+            MethodCallExpression mc = expression as MethodCallExpression;
             switch (mc.Method.Name)
             {
                 case "Where":
@@ -93,12 +97,13 @@ namespace commercetools.Sdk.Client
                     {
                         cmd.Expand.Add(new Expansion<TElement>(expand.Operand).ToString());
                     }
+
                     break;
                 default:
                     break;
             }
 
-            return new ClientQueryable<TElement>(this as ClientQueryProvider<TElement>, expression);
+            return new ClientQueryableCollection<TElement>(this as ClientQueryProvider<TElement>, expression);
         }
 
         public object Execute(Expression expression)

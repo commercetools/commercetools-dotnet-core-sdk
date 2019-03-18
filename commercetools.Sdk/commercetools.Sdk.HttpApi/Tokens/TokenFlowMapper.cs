@@ -22,7 +22,7 @@ namespace commercetools.Sdk.HttpApi.Tokens
                 return this.Clients[name];
             }
 
-            throw new ArgumentException();
+            throw new ArgumentException($"Client with name {name} not exists", nameof(name));
         }
     }
 }

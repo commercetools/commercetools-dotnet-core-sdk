@@ -21,22 +21,26 @@ namespace commercetools.Sdk.Linq
             {
                 return GetPath(((LambdaExpression)expression).Body);
             }
+
             // c.Parent
             if (expression.NodeType == ExpressionType.MemberAccess)
             {
                 return GetMember((MemberExpression)expression);
             }
+
             // c.Ancestors[0] or c.Ancestors.ExpandAll()
             if (expression.NodeType == ExpressionType.Call)
             {
                 return GetMethod((MethodCallExpression)expression);
             }
+
             // c
             // lambda expression parameter does not need to be returned
             if (expression.NodeType == ExpressionType.Parameter)
             {
                 return string.Empty;
             }
+
             // TODO Move message to a resource file
             throw new NotSupportedException("The expression type is not supported.");
         }
@@ -46,6 +50,7 @@ namespace commercetools.Sdk.Linq
             var parent = expression.Expression;
             var parentPath = GetPath(parent);
             var memberName = string.Empty;
+
             // c.Parent.Obj.Parent
             // Obj does not need to be returned
             if (expression.Member.Name == "Obj")
@@ -53,6 +58,7 @@ namespace commercetools.Sdk.Linq
                 // Obj always has a parent path
                 return parentPath + string.Empty;
             }
+
             if (string.IsNullOrEmpty(parentPath))
             {
                 return expression.Member.Name.ToCamelCase();
@@ -72,11 +78,13 @@ namespace commercetools.Sdk.Linq
                 var index = expression.Arguments[0].ToString();
                 return GetPath(expression.Object) + $"[{index}]";
             }
+
             // c.Ancestors.ExpandAll()
             if (this.expandMethodMapping.ContainsKey(expression.Method.Name))
             {
                 return GetPath(expression.Arguments[0]) + this.expandMethodMapping[expression.Method.Name];
             }
+
             // TODO Move to resource file and also add the name of the method
             throw new NotSupportedException("The method call is not supported in this expression.");
         }

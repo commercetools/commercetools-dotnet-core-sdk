@@ -4,7 +4,7 @@ using commercetools.Sdk.HttpApi.RequestBuilders;
 
 namespace commercetools.Sdk.HttpApi.HttpApiCommands
 {
-    public class SignUpHttpApiCommand<T> : IHttpApiCommand<SignUpCommand<T>, T>
+    public class SignUpHttpApiCommand<T> : IHttpApiCommandGeneric<SignUpCommand<T>, T>
     {
         private readonly SignUpCommand<T> command;
         private readonly SignUpRequestMessageBuilder requestBuilder;

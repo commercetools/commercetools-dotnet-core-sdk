@@ -5,12 +5,12 @@ namespace commercetools.Sdk.Linq.Filter.Visitors
 {
     public class RangeCollectionPredicateVisitor : IPredicateVisitor
     {
-        public IEnumerable<RangePredicateVisitor> Ranges { get; }
-
         public RangeCollectionPredicateVisitor(IEnumerable<RangePredicateVisitor> ranges)
         {
             this.Ranges = ranges;
         }
+
+        public IEnumerable<RangePredicateVisitor> Ranges { get; }
 
         public string Render()
         {

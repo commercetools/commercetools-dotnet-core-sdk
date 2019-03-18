@@ -21,7 +21,7 @@ namespace commercetools.Sdk.Linq
 
         public static string RemoveQuotes(this string value)
         {
-            return value.Replace("\"", "");
+            return value.Replace("\"", string.Empty);
         }
     }
 }

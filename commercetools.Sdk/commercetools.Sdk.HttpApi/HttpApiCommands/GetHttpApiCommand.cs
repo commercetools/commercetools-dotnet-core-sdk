@@ -5,7 +5,7 @@ namespace commercetools.Sdk.HttpApi.HttpApiCommands
     using System.Net.Http;
     using commercetools.Sdk.Client;
 
-    public class GetHttpApiCommand<T> : IHttpApiCommand<GetCommand<T>, T>
+    public class GetHttpApiCommand<T> : IHttpApiCommandGeneric<GetCommand<T>, T>
     {
         private readonly GetCommand<T> command;
         private readonly GetRequestMessageBuilder requestBuilder;

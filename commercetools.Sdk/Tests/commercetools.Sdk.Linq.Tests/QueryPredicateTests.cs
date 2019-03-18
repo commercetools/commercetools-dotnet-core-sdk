@@ -63,7 +63,7 @@ namespace commercetools.Sdk.Linq.Tests
                 Key = "c14"
             };
             // For comparison of non local values the valueOf extension method has to be used
-            Expression<Func<Category, bool>> expression = c => c.Key == category.Key.valueOf();
+            Expression<Func<Category, bool>> expression = c => c.Key == category.Key.valueOf().ToString();
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("key = \"c14\"", result);

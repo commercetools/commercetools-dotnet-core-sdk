@@ -5,7 +5,7 @@ namespace commercetools.Sdk.HttpApi.HttpApiCommands
     using System.Net.Http;
     using commercetools.Sdk.Client;
 
-    public class GetMatchingHttpApiCommand<T> : IHttpApiCommand<GetMatchingCommand<T>, T>
+    public class GetMatchingHttpApiCommand<T> : IHttpApiCommandGeneric<GetMatchingCommand<T>, T>
     {
         private readonly GetMatchingCommand<T> command;
         private readonly GetMatchingRequestMessageBuilder requestBuilder;

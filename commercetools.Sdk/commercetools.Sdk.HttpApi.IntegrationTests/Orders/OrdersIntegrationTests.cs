@@ -27,7 +27,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
             this.ordersFixture.OrdersToDelete.Add(order);
             Assert.Equal(order.OrderNumber, orderFromCartDraft.OrderNumber);
         }
-        
+
         [Fact]
         public void GetOrderById()
         {
@@ -37,14 +37,14 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
                 .ExecuteAsync(new GetByIdCommand<Order>(new Guid(orderId))).Result;
         }
         [Fact]
-        public async void DeleteOrderById()
+        public void DeleteOrderById()
         {
             IClient commerceToolsClient = this.ordersFixture.GetService<IClient>();
             string orderId = "88505634-a81a-4cbe-92a9-7796be230a1f";
-            
+
             Order order = commerceToolsClient
                 .ExecuteAsync(new GetByIdCommand<Order>(new Guid(orderId))).Result;
-            
+
             Order deletedOrder = commerceToolsClient
                 .ExecuteAsync(
                     new DeleteByIdCommand<Order>(new Guid(orderId), order.Version))

@@ -22,7 +22,7 @@ namespace commercetools.Sdk.Linq.Query.Converters
         {
             if (expression.NodeType == ExpressionType.Constant)
             {
-                string constantExpression = this.FormatConstantString(expression);
+                string constantExpression = FormatConstantString(expression);
                 return new ConstantPredicateVisitor(constantExpression);
             }
 
@@ -57,7 +57,7 @@ namespace commercetools.Sdk.Linq.Query.Converters
         /// </summary>
         /// <param name="expression">constant expression</param>
         /// <returns>formatted constant as string</returns>
-        private string FormatConstantString(Expression expression)
+        private static string FormatConstantString(Expression expression)
         {
             string expressionString = expression.ToString();
             if (double.TryParse(expressionString, out var doubleConstant))

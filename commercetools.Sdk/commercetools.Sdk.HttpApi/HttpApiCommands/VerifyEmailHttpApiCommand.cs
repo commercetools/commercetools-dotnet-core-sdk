@@ -1,10 +1,10 @@
-﻿using commercetools.Sdk.Client;
-using System.Net.Http;
+﻿using System.Net.Http;
+using commercetools.Sdk.Client;
 using commercetools.Sdk.HttpApi.RequestBuilders;
 
 namespace commercetools.Sdk.HttpApi.HttpApiCommands
 {
-    public class VerifyEmailHttpApiCommand<T> : IHttpApiCommand<VerifyEmailCommand<T>, T>
+    public class VerifyEmailHttpApiCommand<T> : IHttpApiCommandGeneric<VerifyEmailCommand<T>, T>
     {
         private readonly VerifyEmailCommand<T> command;
         private readonly VerifyEmailRequestMessageBuilder requestBuilder;

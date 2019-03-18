@@ -6,6 +6,7 @@
     /// <remarks>
     /// It is used to register all implementing classes in DI.
     /// </remarks>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1040", Justification = "used to register all implementing classes in DI")]
     public interface IRequestMessageBuilder
     {
     }

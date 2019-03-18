@@ -1,10 +1,10 @@
-﻿using commercetools.Sdk.Client;
-using System.Net.Http;
+﻿using System.Net.Http;
+using commercetools.Sdk.Client;
 using commercetools.Sdk.HttpApi.RequestBuilders;
 
 namespace commercetools.Sdk.HttpApi.HttpApiCommands
 {
-    public class LoginHttpApiCommand<T> : IHttpApiCommand<LoginCommand<T>, T>
+    public class LoginHttpApiCommand<T> : IHttpApiCommandGeneric<LoginCommand<T>, T>
     {
         private readonly LoginCommand<T> command;
         private readonly LoginRequestMessageBuilder requestBuilder;

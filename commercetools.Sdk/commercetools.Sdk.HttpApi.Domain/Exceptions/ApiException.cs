@@ -86,7 +86,7 @@ namespace commercetools.Sdk.HttpApi.Domain.Exceptions
                     httpSummary = builder.ToString();
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 httpSummary = "";
             }
@@ -113,7 +113,7 @@ namespace commercetools.Sdk.HttpApi.Domain.Exceptions
                     responseBody = builder.ToString();
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 responseBody = "";
             }

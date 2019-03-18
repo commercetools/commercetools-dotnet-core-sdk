@@ -50,7 +50,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
             CartDiscount cartDiscount = this.cartDiscountFixture.CreateCartDiscount();
             this.cartDiscountFixture.CartDiscountsToDelete.Add(cartDiscount);
             QueryPredicate<CartDiscount> queryPredicate =
-                new QueryPredicate<CartDiscount>(cd => cd.Id == cartDiscount.Id.valueOf());
+                new QueryPredicate<CartDiscount>(cd => cd.Id == cartDiscount.Id.valueOf().ToString());
             QueryCommand<CartDiscount> queryCommand = new QueryCommand<CartDiscount>();
             queryCommand.SetWhere(queryPredicate);
             PagedQueryResult<CartDiscount> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
@@ -151,7 +151,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
                 .Result;
 
             var cartDiscountTarget = (LineItemsCartDiscountTarget) cartDiscount.Target;
-            
+
             this.cartDiscountFixture.CartDiscountsToDelete.Add(retrievedCartDiscount);
 
             Assert.NotEqual(cartDiscount.Version, retrievedCartDiscount.Version);

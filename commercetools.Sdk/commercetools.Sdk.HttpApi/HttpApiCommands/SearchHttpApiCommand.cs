@@ -5,7 +5,7 @@ namespace commercetools.Sdk.HttpApi
     using System.Net.Http;
     using commercetools.Sdk.Client;
 
-    public class SearchHttpApiCommand<T> : IHttpApiCommand<SearchCommand<T>, T>
+    public class SearchHttpApiCommand<T> : IHttpApiCommandGeneric<SearchCommand<T>, T>
     {
         private readonly SearchCommand<T> command;
         private readonly SearchRequestMessageBuilder requestBuilder;

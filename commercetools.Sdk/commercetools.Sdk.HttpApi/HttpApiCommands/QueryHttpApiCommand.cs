@@ -4,7 +4,7 @@ using commercetools.Sdk.HttpApi.RequestBuilders;
 
 namespace commercetools.Sdk.HttpApi.HttpApiCommands
 {
-    public class QueryHttpApiCommand<T> : IHttpApiCommand<QueryCommand<T>, T>
+    public class QueryHttpApiCommand<T> : IHttpApiCommandGeneric<QueryCommand<T>, T>
     {
         private readonly QueryCommand<T> command;
         private readonly QueryRequestMessageBuilder requestBuilder;

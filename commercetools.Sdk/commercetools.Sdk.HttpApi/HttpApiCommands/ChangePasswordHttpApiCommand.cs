@@ -1,10 +1,10 @@
-﻿using commercetools.Sdk.Client;
-using System.Net.Http;
+﻿using System.Net.Http;
+using commercetools.Sdk.Client;
 using commercetools.Sdk.HttpApi.RequestBuilders;
 
 namespace commercetools.Sdk.HttpApi.HttpApiCommands
 {
-    public class ChangePasswordHttpApiCommand<T> : IHttpApiCommand<ChangePasswordCommand<T>, T>
+    public class ChangePasswordHttpApiCommand<T> : IHttpApiCommandGeneric<ChangePasswordCommand<T>, T>
     {
         private readonly ChangePasswordCommand<T> command;
         private readonly ChangePasswordRequestMessageBuilder requestBuilder;

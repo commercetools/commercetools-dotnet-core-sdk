@@ -6,27 +6,25 @@ namespace commercetools.Sdk.Client
     using System.Linq;
     using System.Linq.Expressions;
 
-    public class ClientQueryable<T>: IOrderedQueryable<T>
+    public class ClientQueryableCollection<T> : IOrderedQueryable<T>
     {
+        public ClientQueryableCollection(IClient client, QueryCommand<T> command)
+        {
+            this.Provider = new ClientQueryProvider<T>(client, command);
+            this.Expression = Expression.Constant(this);
+        }
+
+        public ClientQueryableCollection(IQueryProvider provider, Expression expression)
+        {
+            this.Provider = provider;
+            this.Expression = expression;
+        }
 
         public Type ElementType => typeof(T);
 
         public Expression Expression { get; }
 
         public IQueryProvider Provider { get; }
-
-
-        public ClientQueryable(IClient client, QueryCommand<T> command)
-        {
-            this.Provider = new ClientQueryProvider<T>(client, command);
-            this.Expression = Expression.Constant(this);
-        }
-
-        public ClientQueryable(IQueryProvider provider, Expression expression)
-        {
-            this.Provider = provider;
-            this.Expression = expression;
-        }
 
         IEnumerator IEnumerable.GetEnumerator()
         {

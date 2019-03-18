@@ -25,7 +25,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
 
         public HttpRequestMessage GetRequestMessage<T>(SearchCommand<T> command)
         {
-            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), this.GetHttpContent(command), HttpMethod);
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(), this.GetHttpContent(command), HttpMethod);
         }
 
         private HttpContent GetHttpContent<T>(SearchCommand<T> command)
@@ -41,7 +41,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             return new FormUrlEncodedContent(parameters);
         }
 
-        private Uri GetRequestUri<T>(SearchCommand<T> command)
+        private Uri GetRequestUri<T>()
         {
             string requestUri = this.GetMessageBase<T>() + "/search";
             return new Uri(requestUri);

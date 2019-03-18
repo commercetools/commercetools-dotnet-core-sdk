@@ -1,15 +1,12 @@
-﻿using commercetools.Sdk.HttpApi.AdditionalParameters;
-
-namespace commercetools.Sdk.HttpApi.RequestBuilders
+﻿namespace commercetools.Sdk.HttpApi.RequestBuilders
 {
-    using commercetools.Sdk.Client;
-    using commercetools.Sdk.Domain;
-    using commercetools.Sdk.Linq;
-    using Microsoft.AspNetCore.WebUtilities;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
+    using AdditionalParameters;
+    using commercetools.Sdk.Client;
+    using Microsoft.AspNetCore.WebUtilities;
 
     public class QueryRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
@@ -21,11 +18,11 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
         {
         }
 
-        private HttpMethod HttpMethod => HttpMethod.Get;
+        private static HttpMethod HttpMethod => HttpMethod.Get;
 
         public HttpRequestMessage GetRequestMessage<T>(QueryCommand<T> command)
         {
-            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), null, this.HttpMethod);
+            return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), null, HttpMethod);
         }
 
         private Uri GetRequestUri<T>(QueryCommand<T> command)
@@ -58,7 +55,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             }
 
             queryStringParameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));
-            queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });            
+            queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
             return new Uri(requestUri);
         }
     }

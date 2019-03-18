@@ -52,5 +52,24 @@ namespace commercetools.Sdk.Domain
         {
             return moneyLeft.CompareTo(moneyRight) != 0;
         }
+
+        public override bool Equals(object obj)
+        {
+            BaseMoney money = obj as BaseMoney;
+            if (money == null)
+            {
+                throw new ArgumentException();
+            }
+            if (this.CurrencyCode != money.CurrencyCode)
+            {
+                throw new ArgumentException();
+            }
+            return this.CentAmount.Equals(money.CentAmount) && this.CurrencyCode.Equals(money.CurrencyCode) && this.FractionDigits.Equals(money.FractionDigits);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.CentAmount.GetHashCode() + this.CurrencyCode.GetHashCode() + this.FractionDigits.GetHashCode();
+        }
     }
 }

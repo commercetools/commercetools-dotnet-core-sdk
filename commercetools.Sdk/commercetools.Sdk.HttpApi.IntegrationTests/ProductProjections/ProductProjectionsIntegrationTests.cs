@@ -19,7 +19,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
         {
             this.productProjectionsFixture = productProjectionsFixture;
         }
-        
+
         [Fact]
         public void GetProductProjectionById()
         {
@@ -29,22 +29,22 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             var publishedProduct = this.productProjectionsFixture.productFixture.CreateProductAndPublishIt(true);
             ProductProjectionAdditionalParameters stagedAdditionalParameters = new ProductProjectionAdditionalParameters();
             stagedAdditionalParameters.Staged = true;
-            
+
             //Act
             var stagedProductProjection = commerceToolsClient.ExecuteAsync(new GetByIdCommand<ProductProjection>(new Guid(stagedProduct.Id), stagedAdditionalParameters)).Result;
             var publishedProductProjection = commerceToolsClient.ExecuteAsync(new GetByIdCommand<ProductProjection>(new Guid(publishedProduct.Id))).Result;
 
-            publishedProduct = this.productProjectionsFixture.productFixture.Unpublish(publishedProduct);//unpublish it before dispose 
+            publishedProduct = this.productProjectionsFixture.productFixture.Unpublish(publishedProduct);//unpublish it before dispose
             this.productProjectionsFixture.productFixture.ProductsToDelete.Add(stagedProduct);
             this.productProjectionsFixture.productFixture.ProductsToDelete.Add(publishedProduct);
-            
+
             //Assert
             Assert.Equal(stagedProduct.Id, stagedProductProjection.Id);
             Assert.True(stagedProductProjection.Published == false);
             Assert.Equal(publishedProduct.Id, publishedProductProjection.Id);
             Assert.True(publishedProductProjection.Published);
         }
-        
+
         [Fact]
         public void GetProductProjectionByKey()
         {
@@ -54,15 +54,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             var publishedProduct = this.productProjectionsFixture.productFixture.CreateProductAndPublishIt(true);
             ProductProjectionAdditionalParameters stagedAdditionalParameters = new ProductProjectionAdditionalParameters();
             stagedAdditionalParameters.Staged = true;
-            
+
             //Act
             var stagedProductProjection = commerceToolsClient.ExecuteAsync(new GetByKeyCommand<ProductProjection>(stagedProduct.Key, stagedAdditionalParameters)).Result;
             var publishedProductProjection = commerceToolsClient.ExecuteAsync(new GetByKeyCommand<ProductProjection>(publishedProduct.Key)).Result;
 
-            publishedProduct = this.productProjectionsFixture.productFixture.Unpublish(publishedProduct);//unpublish it before dispose 
+            publishedProduct = this.productProjectionsFixture.productFixture.Unpublish(publishedProduct);//unpublish it before dispose
             this.productProjectionsFixture.productFixture.ProductsToDelete.Add(stagedProduct);
             this.productProjectionsFixture.productFixture.ProductsToDelete.Add(publishedProduct);
-            
+
             //Assert
             Assert.Equal(stagedProduct.Key, stagedProductProjection.Key);
             Assert.True(stagedProductProjection.Published == false);
@@ -76,21 +76,20 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             //Arrange
             IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
             var publishedProduct = this.productProjectionsFixture.productFixture.CreateProductAndPublishIt(true);
-            
+
             //Act
-            QueryPredicate<ProductProjection> queryPredicate = new QueryPredicate<ProductProjection>(productProjection => productProjection.Key == publishedProduct.Key.valueOf());
             QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>();
-            queryCommand.SetWhere(queryPredicate);
+            queryCommand.Where(productProjection => productProjection.Key == publishedProduct.Key.valueOf().ToString());
             PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
-            
-            publishedProduct = this.productProjectionsFixture.productFixture.Unpublish(publishedProduct);//unpublish it before dispose 
+
+            publishedProduct = this.productProjectionsFixture.productFixture.Unpublish(publishedProduct);//unpublish it before dispose
             this.productProjectionsFixture.productFixture.ProductsToDelete.Add(publishedProduct);
-            
+
             //Assert
             Assert.NotNull(returnedSet.Results);
             Assert.Contains(returnedSet.Results, pp => pp.Id == publishedProduct.Id);
         }
-        
+
         [Fact]
         public void QueryAndOffsetStagedProductProjections()
         {
@@ -100,19 +99,19 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             for (int i = 0; i < 3; i++)
             {
                 Product stagedProduct = this.productProjectionsFixture.productFixture.CreateProduct(true);
-                this.productProjectionsFixture.productFixture.ProductsToDelete.Add(stagedProduct);    
+                this.productProjectionsFixture.productFixture.ProductsToDelete.Add(stagedProduct);
             }
 
             //Act
             ProductProjectionAdditionalParameters stagedAdditionalParameters = new ProductProjectionAdditionalParameters();
             stagedAdditionalParameters.Staged = true;
-            
+
             QueryPredicate<ProductProjection> queryPredicate = new QueryPredicate<ProductProjection>(productProjection => productProjection.Version == 1);
             QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>(stagedAdditionalParameters);
             queryCommand.SetWhere(queryPredicate);
             queryCommand.Offset = 2;
             PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
-            
+
             //Assert
             Assert.Single(returnedSet.Results);
             Assert.Equal(3, returnedSet.Total);

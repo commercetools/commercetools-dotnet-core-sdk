@@ -32,7 +32,6 @@ namespace commercetools.Sdk.Linq.Query.Converters
             }
 
             return null;
-
         }
     }
 }

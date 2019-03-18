@@ -23,22 +23,22 @@ namespace commercetools.Sdk.HttpApi.AdditionalParameters
 
             if (productAdditionalParameters.PriceChannel != null)
             {
-                parameters.Add(new KeyValuePair<string, string>("priceChannel", productAdditionalParameters.PriceChannel.ToString()));
+                parameters.Add(new KeyValuePair<string, string>("priceChannel", productAdditionalParameters.PriceChannel));
             }
 
             if (productAdditionalParameters.PriceCountry != null)
             {
-                parameters.Add(new KeyValuePair<string, string>("priceCountry", productAdditionalParameters.PriceCountry.ToString()));
+                parameters.Add(new KeyValuePair<string, string>("priceCountry", productAdditionalParameters.PriceCountry));
             }
 
             if (productAdditionalParameters.PriceCurrency != null)
             {
-                parameters.Add(new KeyValuePair<string, string>("priceCurrency", productAdditionalParameters.PriceCurrency.ToString()));
+                parameters.Add(new KeyValuePair<string, string>("priceCurrency", productAdditionalParameters.PriceCurrency));
             }
 
             if (productAdditionalParameters.PriceCustomerGroup != null)
             {
-                parameters.Add(new KeyValuePair<string, string>("priceCustomerGroup", productAdditionalParameters.PriceCustomerGroup.ToString()));
+                parameters.Add(new KeyValuePair<string, string>("priceCustomerGroup", productAdditionalParameters.PriceCustomerGroup));
             }
 
             if (productAdditionalParameters.Staged != null)

@@ -52,7 +52,7 @@ namespace commercetools.Sdk.Linq.Sort
             // in case the dictionary indexer is called, the method name is "get_Item"
             if (expression.Method.Name == "get_Item")
             {
-                var key = expression.Arguments[0].ToString().Replace("\"", "");
+                var key = expression.Arguments[0].ToString().Replace("\"", string.Empty);
                 return Render(expression.Object) + "." + key;
             }
 

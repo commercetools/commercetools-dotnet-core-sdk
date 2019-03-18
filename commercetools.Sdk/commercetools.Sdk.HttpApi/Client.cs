@@ -31,7 +31,7 @@ namespace commercetools.Sdk.HttpApi
                 if (this.httpClient == null)
                 {
                     this.httpClient = this.httpClientFactory.CreateClient(this.Name);
-                    this.httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(this.GetClientUserAgent());
+                    this.httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(GetClientUserAgent());
                 }
 
                 return this.httpClient;
@@ -42,6 +42,21 @@ namespace commercetools.Sdk.HttpApi
         {
             IHttpApiCommand httpApiCommand = this.httpApiCommandFactory.Create(command);
             return await this.SendRequest<T>(httpApiCommand.HttpRequestMessage).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get UserAgent which we will set in the http client
+        /// </summary>
+        /// <returns>user agent with assembly version and .Net version</returns>
+        private static string GetClientUserAgent()
+        {
+            string assemblyVersion = Assembly
+                .GetExecutingAssembly().GetName().Version.ToString();
+
+            // TODO: Make dotnet version string in better way, it now return (commercetools-dotnet-core-sdk/1.0.0.0 .NET Core 4.6.27317.03) and should return something like ( commercetools-dotnet-core-sdk/1.0.0.0 .NET-Core/4.6.27317.03)
+            string dotNetVersion = RuntimeInformation.FrameworkDescription;
+            string userAgent = $"commercetools-dotnet-core-sdk/{assemblyVersion}";
+            return userAgent;
         }
 
         private async Task<T> SendRequest<T>(HttpRequestMessage requestMessage)
@@ -56,20 +71,6 @@ namespace commercetools.Sdk.HttpApi
             // it will not reach this because either it will success and return the deserialized object or fail and handled by ErrorHandler which will throw it using the right exception type
             var exception = new ApiException(result.ReasonPhrase);
             throw exception;
-        }
-
-        /// <summary>
-        /// Get UserAgent which we will set in the http client
-        /// </summary>
-        /// <returns>user agent with assembly version and .Net version</returns>
-        private string GetClientUserAgent()
-        {
-            string assemblyVersion = Assembly
-                .GetExecutingAssembly().GetName().Version.ToString();
-            //ToDO: Make dotnet version string in better way, it now return (commercetools-dotnet-core-sdk/1.0.0.0 .NET Core 4.6.27317.03) and should return something like ( commercetools-dotnet-core-sdk/1.0.0.0 .NET-Core/4.6.27317.03)
-            string dotNetVersion = RuntimeInformation.FrameworkDescription;
-            string userAgent = $"commercetools-dotnet-core-sdk/{assemblyVersion}";
-            return userAgent;
         }
     }
 }
