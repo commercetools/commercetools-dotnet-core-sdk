@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
@@ -96,9 +97,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             //Arrange
             IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
 
+            ProductType productType = this.productProjectionsFixture.productFixture.CreateNewProductType();
+
             for (int i = 0; i < 3; i++)
             {
-                Product stagedProduct = this.productProjectionsFixture.productFixture.CreateProduct(true);
+                Product stagedProduct = this.productProjectionsFixture.productFixture.CreateProduct(productType, true);
                 this.productProjectionsFixture.productFixture.ProductsToDelete.Add(stagedProduct);
             }
 
@@ -106,15 +109,101 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             ProductProjectionAdditionalParameters stagedAdditionalParameters = new ProductProjectionAdditionalParameters();
             stagedAdditionalParameters.Staged = true;
 
-            QueryPredicate<ProductProjection> queryPredicate = new QueryPredicate<ProductProjection>(productProjection => productProjection.Version == 1);
+            //Retrieve Products with created productType
             QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>(stagedAdditionalParameters);
-            queryCommand.SetWhere(queryPredicate);
+            queryCommand.Where(productProjection => productProjection.ProductType.Id == productType.Id.valueOf().ToString());
             queryCommand.Offset = 2;
             PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
 
             //Assert
             Assert.Single(returnedSet.Results);
             Assert.Equal(3, returnedSet.Total);
+        }
+
+        [Fact]
+        public void QueryAndLimitStagedProductProjections()
+        {
+            //Arrange
+            IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
+
+            ProductType productType = this.productProjectionsFixture.productFixture.CreateNewProductType();
+
+            for (int i = 0; i < 3; i++)
+            {
+                Product stagedProduct = this.productProjectionsFixture.productFixture.CreateProduct(productType, true);
+                this.productProjectionsFixture.productFixture.ProductsToDelete.Add(stagedProduct);
+            }
+
+            //Act
+            ProductProjectionAdditionalParameters stagedAdditionalParameters = new ProductProjectionAdditionalParameters();
+            stagedAdditionalParameters.Staged = true;
+
+            //Retrieve Products with created productType limited by 2
+            QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>(stagedAdditionalParameters);
+            queryCommand.Where(productProjection => productProjection.ProductType.Id == productType.Id.valueOf().ToString());
+            queryCommand.Limit = 2;
+            PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
+
+            //Assert
+            Assert.Equal(2, returnedSet.Results.Count);
+            Assert.Equal(3, returnedSet.Total);
+        }
+
+        [Fact]
+        public void QueryAndSortStagedProductProjections()
+        {
+            //Arrange
+            IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
+
+            ProductType productType = this.productProjectionsFixture.productFixture.CreateNewProductType();
+
+            for (int i = 0; i < 3; i++)
+            {
+                Product stagedProduct = this.productProjectionsFixture.productFixture.CreateProduct(productType, true);
+                this.productProjectionsFixture.productFixture.ProductsToDelete.Add(stagedProduct);
+            }
+
+            //Act
+            ProductProjectionAdditionalParameters stagedAdditionalParameters = new ProductProjectionAdditionalParameters();
+            stagedAdditionalParameters.Staged = true;
+
+            //Retrieve Products with created productType sorted by name
+            QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>(stagedAdditionalParameters);
+            queryCommand.Where(productProjection => productProjection.ProductType.Id == productType.Id.valueOf().ToString());
+            queryCommand.Sort(p=>p.Name["en"]);
+            PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
+            var sortedList = returnedSet.Results.OrderBy(p => p.Name["en"]);
+            //Assert
+
+            Assert.True(sortedList.SequenceEqual(returnedSet.Results));
+        }
+
+        /// <summary>
+        /// Expand ProductType and Categories
+        /// </summary>
+        [Fact]
+        public void QueryAndExpandParents()
+        {
+            //Arrange
+            IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
+            ProductType productType = this.productProjectionsFixture.productFixture.CreateNewProductType();
+            var publishedProduct =
+                this.productProjectionsFixture.productFixture.CreateProductAndPublishIt(productType, true);
+
+            //Act
+            QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>();
+            queryCommand.Where(productProjection => productProjection.ProductType.Id == productType.Id.valueOf().ToString());
+            queryCommand.Expand(p => p.ProductType).Expand(p => p.Categories.ExpandAll());
+            PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
+
+            publishedProduct = this.productProjectionsFixture.productFixture.Unpublish(publishedProduct);//unpublish it before dispose
+            this.productProjectionsFixture.productFixture.ProductsToDelete.Add(publishedProduct);
+
+            //Assert
+            Assert.NotNull(returnedSet.Results);
+            Assert.Contains(returnedSet.Results,
+                pp => pp.Id == publishedProduct.Id && pp.ProductType.Obj != null && pp.Categories.Count == 1 &&
+                      pp.Categories[0].Obj != null);
         }
     }
 }
