@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.HttpApi.AdditionalParameters;
@@ -39,6 +40,11 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             // TODO Add version with QueryHelpers instead
             requestUri += $"?version={command.Version}";
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
+            if (command.Expand != null)
+            {
+                queryStringParameters.AddRange(command.Expand.Select(x => new KeyValuePair<string, string>("expand", x)));
+            }
+
             queryStringParameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));
             if (command.DataErasure != null)
             {

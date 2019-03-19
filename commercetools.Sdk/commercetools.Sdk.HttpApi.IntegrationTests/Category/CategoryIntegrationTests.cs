@@ -9,6 +9,7 @@ using commercetools.Sdk.Domain.Query;
 using Xunit;
 using commercetools.Sdk.Domain.Categories.UpdateActions;
 using commercetools.Sdk.Domain.Predicates;
+using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using ChangeNameUpdateAction = commercetools.Sdk.Domain.Categories.UpdateActions.ChangeNameUpdateAction;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
@@ -64,12 +65,52 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         }
 
         [Fact]
+        public async void DeleteCategoryByIdAndExpandParent()
+        {
+            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
+            Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent());
+
+            //expansions
+            List<Expansion<Category>> expansions = new List<Expansion<Category>>();
+            ReferenceExpansion<Category> expand = new ReferenceExpansion<Category>(c => c.Parent);
+            expansions.Add(expand);
+
+            Category retrievedCategory = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<Category>(new Guid(category.Id), category.Version, expansions)).Result;
+            NotFoundException exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+                commerceToolsClient.ExecuteAsync(
+                    new GetByIdCommand<Category>(new Guid(retrievedCategory.Id))));
+
+            Assert.NotNull(retrievedCategory.Parent.Obj);
+            Assert.Equal(404, exception.StatusCode);
+        }
+
+        [Fact]
         public void DeleteCategoryByKey()
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
             Category category = this.categoryFixture.CreateCategory();
             Category retrievedCategory = commerceToolsClient.ExecuteAsync(new DeleteByKeyCommand<Category>(category.Key, category.Version)).Result;
             Assert.ThrowsAsync<HttpApiClientException>(() => commerceToolsClient.ExecuteAsync<Category>(new GetByIdCommand<Category>(new Guid(retrievedCategory.Id))));
+        }
+
+        [Fact]
+        public async void DeleteCategoryByKeyAndExpandParent()
+        {
+            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
+            Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent());
+
+            //expansions
+            List<Expansion<Category>> expansions = new List<Expansion<Category>>();
+            ReferenceExpansion<Category> expand = new ReferenceExpansion<Category>(c => c.Parent);
+            expansions.Add(expand);
+
+            Category retrievedCategory = commerceToolsClient.ExecuteAsync(new DeleteByKeyCommand<Category>(category.Key, category.Version, expansions)).Result;
+            NotFoundException exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+                commerceToolsClient.ExecuteAsync(
+                    new GetByIdCommand<Category>(new Guid(retrievedCategory.Id))));
+
+            Assert.NotNull(retrievedCategory.Parent.Obj);
+            Assert.Equal(404, exception.StatusCode);
         }
 
         [Fact]
@@ -90,6 +131,30 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         }
 
         [Fact]
+        public void UpdateCategoryByIdSetKeyAndExpandParent()
+        {
+            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
+            Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent());
+            string newKey = this.categoryFixture.RandomString(5);
+
+            //expansions
+            List<Expansion<Category>> expansions = new List<Expansion<Category>>();
+            ReferenceExpansion<Category> expand = new ReferenceExpansion<Category>(c => c.Parent);
+            expansions.Add(expand);
+
+            //updateActions
+            List<UpdateAction<Category>> updateActions = new List<UpdateAction<Category>>();
+            SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction() { Key = newKey };
+            updateActions.Add(setKeyAction);
+
+            Category retrievedCategory = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Category>(new Guid(category.Id), category.Version, updateActions, expansions)).Result;
+            this.categoryFixture.CategoriesToDelete.Add(retrievedCategory);
+            Assert.Equal(newKey, retrievedCategory.Key);
+            Assert.NotNull(retrievedCategory.Parent.Obj);
+        }
+
+
+        [Fact]
         public void UpdateCategoryByKeySetExternalId()
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
@@ -101,6 +166,29 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Category retrievedCategory = commerceToolsClient.ExecuteAsync(new UpdateByKeyCommand<Category>(category.Key, category.Version, updateActions)).Result;
             this.categoryFixture.CategoriesToDelete.Add(retrievedCategory);
             Assert.Equal(externalId, retrievedCategory.ExternalId);
+        }
+
+        [Fact]
+        public void UpdateCategoryByKeySetExternalIdAndExpandParent()
+        {
+            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
+            Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent());
+            string externalId = this.categoryFixture.RandomString(5);
+
+            //expansions
+            List<Expansion<Category>> expansions = new List<Expansion<Category>>();
+            ReferenceExpansion<Category> expand = new ReferenceExpansion<Category>(c => c.Parent);
+            expansions.Add(expand);
+
+            //updateActions
+            List<UpdateAction<Category>> updateActions = new List<UpdateAction<Category>>();
+            SetExternalIdUpdateAction setKeyAction = new SetExternalIdUpdateAction() { ExternalId = externalId };
+            updateActions.Add(setKeyAction);
+
+            Category retrievedCategory = commerceToolsClient.ExecuteAsync(new UpdateByKeyCommand<Category>(category.Key, category.Version, updateActions, expansions)).Result;
+            this.categoryFixture.CategoriesToDelete.Add(retrievedCategory);
+            Assert.Equal(externalId, retrievedCategory.ExternalId);
+            Assert.NotNull(retrievedCategory.Parent.Obj);
         }
 
         [Fact]
