@@ -65,7 +65,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             return retrievedProduct;
         }
 
-        public ProductDraft GetProductDraft(Category category, ProductType productType, bool withVariants = false)
+        public ProductDraft GetProductDraft(Category category, ProductType productType, bool withVariants = false, bool publish = false)
         {
             ProductDraft productDraft = new ProductDraft();
             productDraft.Name = new LocalizedString() {{"en", this.RandomString(4)}};
@@ -79,6 +79,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             {
                 new ResourceIdentifier() {Id = category.Id}
             };
+            productDraft.Publish = publish;//if true, the product is published immediately
 
             if (withVariants) //then create variants for this product
             {
@@ -94,42 +95,23 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         /// Create a Product
         /// </summary>
         /// <param name="withVariants">if true then it will create product with product variants, else it will create product with empty variants</param>
+        /// <param name="publish">if true, this product is published immediately.</param>
         /// <returns></returns>
-        public Product CreateProduct(bool withVariants = false)
+        public Product CreateProduct(bool withVariants = false, bool publish = false)
         {
             Category category = this.CreateNewCategory();
             ProductType productType = this.CreateNewProductType();
-            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants));
+            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish));
         }
 
-        public Product CreateProduct(Category category, ProductType productType, bool withVariants = false)
+        public Product CreateProduct(Category category, ProductType productType, bool withVariants = false, bool publish = false)
         {
-            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants));
+            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish));
         }
-        public Product CreateProduct(ProductType productType, bool withVariants = false)
+        public Product CreateProduct(ProductType productType, bool withVariants = false, bool publish = false)
         {
             Category category = this.CreateNewCategory();
-            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants));
-        }
-
-        /// <summary>
-        /// Create product and publish it
-        /// </summary>
-        /// <param name="withVariants"></param>
-        /// <returns></returns>
-        public Product CreateProductAndPublishIt(bool withVariants = false)
-        {
-            var product = this.CreateProduct(withVariants);
-            product = this.Publish(product);
-            return product;
-        }
-
-        public Product CreateProductAndPublishIt(ProductType productType, bool withVariants = false)
-        {
-            Category category = this.CreateNewCategory();
-            var product = this.CreateProduct(category, productType, withVariants);
-            product = this.Publish(product);
-            return product;
+            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish));
         }
 
         public ProductDraft GetProductDraft()

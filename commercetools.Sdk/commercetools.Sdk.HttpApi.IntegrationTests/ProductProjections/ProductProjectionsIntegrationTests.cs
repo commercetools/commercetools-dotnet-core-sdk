@@ -27,7 +27,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             //Arrange
             IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
             var stagedProduct = this.productProjectionsFixture.productFixture.CreateProduct(true);
-            var publishedProduct = this.productProjectionsFixture.productFixture.CreateProductAndPublishIt(true);
+            var publishedProduct = this.productProjectionsFixture.productFixture.CreateProduct(true, true);
             ProductProjectionAdditionalParameters stagedAdditionalParameters = new ProductProjectionAdditionalParameters();
             stagedAdditionalParameters.Staged = true;
 
@@ -52,7 +52,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             //Arrange
             IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
             var stagedProduct = this.productProjectionsFixture.productFixture.CreateProduct(true);
-            var publishedProduct = this.productProjectionsFixture.productFixture.CreateProductAndPublishIt(true);
+            var publishedProduct = this.productProjectionsFixture.productFixture.CreateProduct(true, true);
             ProductProjectionAdditionalParameters stagedAdditionalParameters = new ProductProjectionAdditionalParameters();
             stagedAdditionalParameters.Staged = true;
 
@@ -76,7 +76,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
         {
             //Arrange
             IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-            var publishedProduct = this.productProjectionsFixture.productFixture.CreateProductAndPublishIt(true);
+            var publishedProduct = this.productProjectionsFixture.productFixture.CreateProduct(true, true);
 
             //Act
             QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>();
@@ -188,7 +188,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
             ProductType productType = this.productProjectionsFixture.productFixture.CreateNewProductType();
             var publishedProduct =
-                this.productProjectionsFixture.productFixture.CreateProductAndPublishIt(productType, true);
+                this.productProjectionsFixture.productFixture.CreateProduct(productType, true, true);
 
             //Act
             QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>();
