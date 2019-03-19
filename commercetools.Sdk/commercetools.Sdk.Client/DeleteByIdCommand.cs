@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Query;
 
 namespace commercetools.Sdk.Client
 {
@@ -11,9 +13,21 @@ namespace commercetools.Sdk.Client
         }
 
         public DeleteByIdCommand(Guid id, int version, IAdditionalParameters<T> additionalParameters)
+        : base(additionalParameters)
         {
             this.Init(id, version);
-            this.AdditionalParameters = additionalParameters;
+        }
+
+        public DeleteByIdCommand(Guid id, int version, List<Expansion<T>> expandPredicates)
+            : base(expandPredicates)
+        {
+            this.Init(id, version);
+        }
+
+        public DeleteByIdCommand(Guid id, int version, List<Expansion<T>> expandPredicates, IAdditionalParameters<T> additionalParameters)
+            : base(expandPredicates, additionalParameters)
+        {
+            this.Init(id, version);
         }
 
         private void Init(Guid id, int version)

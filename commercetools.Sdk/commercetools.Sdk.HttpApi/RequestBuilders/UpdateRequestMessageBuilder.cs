@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.HttpApi.RequestBuilders
+﻿using System.Linq;
+
+namespace commercetools.Sdk.HttpApi.RequestBuilders
 {
     using System;
     using System.Collections.Generic;
@@ -54,6 +56,11 @@
             }
 
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
+            if (command.Expand != null)
+            {
+                queryStringParameters.AddRange(command.Expand.Select(x => new KeyValuePair<string, string>("expand", x)));
+            }
+
             queryStringParameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));
             queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
             return new Uri(requestUri);

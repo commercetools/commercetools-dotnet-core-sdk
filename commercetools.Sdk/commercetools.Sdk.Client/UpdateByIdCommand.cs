@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Client
+﻿using commercetools.Sdk.Domain.Query;
+
+namespace commercetools.Sdk.Client
 {
     using System;
     using System.Collections.Generic;
@@ -13,6 +15,18 @@
 
         public UpdateByIdCommand(Guid id, int version, List<UpdateAction<T>> updateActions, IAdditionalParameters<T> additionalParameters)
             : base(additionalParameters)
+        {
+            this.Init(id, version, updateActions);
+        }
+
+        public UpdateByIdCommand(Guid id, int version, List<UpdateAction<T>> updateActions, List<Expansion<T>> expandPredicates)
+            : base(expandPredicates)
+        {
+            this.Init(id, version, updateActions);
+        }
+
+        public UpdateByIdCommand(Guid id, int version, List<UpdateAction<T>> updateActions, List<Expansion<T>> expandPredicates, IAdditionalParameters<T> additionalParameters)
+            : base(expandPredicates, additionalParameters)
         {
             this.Init(id, version, updateActions);
         }
