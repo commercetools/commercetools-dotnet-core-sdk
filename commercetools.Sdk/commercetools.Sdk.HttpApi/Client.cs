@@ -8,6 +8,7 @@ using commercetools.Sdk.Serialization;
 
 namespace commercetools.Sdk.HttpApi
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1724", Justification = "there is no better name")]
     public class Client : IClient
     {
         private readonly IHttpApiCommandFactory httpApiCommandFactory;

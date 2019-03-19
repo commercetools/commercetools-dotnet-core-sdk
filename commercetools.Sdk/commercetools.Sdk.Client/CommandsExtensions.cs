@@ -1,15 +1,11 @@
-using System.Linq;
+using System;
 using System.Linq.Expressions;
-using System.Reflection;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Domain.Query;
 
 namespace commercetools.Sdk.Client
 {
-    using System;
-
-    [Obsolete("Experimental")]
     public static class CommandsExtensions
     {
         public static QueryCommand<T> Where<T>(this QueryCommand<T> command, Expression<Func<T, bool>> expression)
