@@ -370,7 +370,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             this.categoryFixture.CategoriesToDelete.Add(category);
 
             var query = from c in commerceToolsClient.Query<Category>()
-                where c.Key == category.Key.valueOf().ToString()
+                where c.Key == category.Key.valueOf()
                 orderby c.Key descending
                 select c;
 

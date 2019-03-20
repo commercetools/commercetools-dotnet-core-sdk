@@ -67,7 +67,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             InventoryEntry inventoryEntry = this.inventoryFixture.CreateInventoryEntry();
             this.inventoryFixture.InventoryEntries.Add(inventoryEntry);
             QueryPredicate<InventoryEntry> queryPredicate =
-                new QueryPredicate<InventoryEntry>(ie => ie.Id == inventoryEntry.Id.valueOf().ToString());
+                new QueryPredicate<InventoryEntry>(ie => ie.Id == inventoryEntry.Id.valueOf());
             QueryCommand<InventoryEntry> queryCommand = new QueryCommand<InventoryEntry>();
             queryCommand.SetWhere(queryPredicate);
             PagedQueryResult<InventoryEntry> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;

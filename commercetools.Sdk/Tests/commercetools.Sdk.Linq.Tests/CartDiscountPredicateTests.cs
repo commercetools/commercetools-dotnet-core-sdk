@@ -157,7 +157,7 @@ namespace commercetools.Sdk.Linq.Tests
             {
                 Id = "45224437-12bd-4742-830c-3a36b52541d3"
             };
-            Expression<Func<Cart, bool>> expression = c => c.CustomerId == customer.Id.valueOf().ToString();
+            Expression<Func<Cart, bool>> expression = c => c.CustomerId == customer.Id.valueOf();
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("customer.id = \"45224437-12bd-4742-830c-3a36b52541d3\"", result);

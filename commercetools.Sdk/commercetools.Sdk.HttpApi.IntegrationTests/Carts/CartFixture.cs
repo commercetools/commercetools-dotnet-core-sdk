@@ -14,7 +14,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
         private CustomerFixture customerFixture;
         private ProductFixture productFixture;
-        
+
         public CartFixture() : base()
         {
             this.CartToDelete = new List<Cart>();
@@ -35,12 +35,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             this.customerFixture.Dispose();
             this.productFixture.Dispose();
         }
-        
+
         public CartDraft GetCartDraft()
         {
             Customer customer = this.customerFixture.CreateCustomer();
             this.customerFixture.CustomersToDelete.Add(customer);
-            
+
             CartDraft cartDraft = new CartDraft();
             cartDraft.CustomerId = customer.Id;
             cartDraft.Currency = "EUR";
@@ -51,7 +51,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             cartDraft.DeleteDaysAfterLastModification = 30;
             return cartDraft;
         }
-        
+
         public Cart CreateCart()
         {
             return this.CreateCart(this.GetCartDraft());
@@ -89,10 +89,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
         public Product CreateProduct()
         {
-            Product product = this.productFixture.CreateProductAndPublishIt(true);
+            Product product = this.productFixture.CreateProduct(withVariants:true, publish:true);
             this.productFixture.ProductsToDelete.Add(product);
             return product;
         }
-        
+
     }
 }

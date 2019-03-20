@@ -52,7 +52,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 .Result;
             return retrievedProduct;
         }
-        
+
         public Product Unpublish(Product product)
         {
             IClient commerceToolsClient = this.GetService<IClient>();
@@ -65,10 +65,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             return retrievedProduct;
         }
 
-        public ProductDraft GetProductDraft(Category category, bool withVariants = false)
+        public ProductDraft GetProductDraft(Category category, ProductType productType, bool withVariants = false, bool publish = false)
         {
-            ProductType productType = this.productTypeFixture.CreateProductType();
-            this.productTypeFixture.ProductTypesToDelete.Add(productType);
             ProductDraft productDraft = new ProductDraft();
             productDraft.Name = new LocalizedString() {{"en", this.RandomString(4)}};
             productDraft.Key = this.RandomString(3);
@@ -81,6 +79,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             {
                 new ResourceIdentifier() {Id = category.Id}
             };
+            productDraft.Publish = publish;//if true, the product is published immediately
 
             if (withVariants) //then create variants for this product
             {
@@ -96,30 +95,30 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         /// Create a Product
         /// </summary>
         /// <param name="withVariants">if true then it will create product with product variants, else it will create product with empty variants</param>
+        /// <param name="publish">if true, this product is published immediately.</param>
         /// <returns></returns>
-        public Product CreateProduct(bool withVariants = false)
+        public Product CreateProduct(bool withVariants = false, bool publish = false)
         {
-            Category category = this.CategoryFixture.CreateCategory();
-            this.CategoryFixture.CategoriesToDelete.Add(category);
-            return this.CreateProduct(this.GetProductDraft(category, withVariants));
+            Category category = this.CreateNewCategory();
+            ProductType productType = this.CreateNewProductType();
+            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish));
         }
-        /// <summary>
-        /// Create product and publish it
-        /// </summary>
-        /// <param name="withVariants"></param>
-        /// <returns></returns>
-        public Product CreateProductAndPublishIt(bool withVariants = false)
+
+        public Product CreateProduct(Category category, ProductType productType, bool withVariants = false, bool publish = false)
         {
-            var product = this.CreateProduct(withVariants);
-            product = this.Publish(product);
-            return product;
+            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish));
+        }
+        public Product CreateProduct(ProductType productType, bool withVariants = false, bool publish = false)
+        {
+            Category category = this.CreateNewCategory();
+            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish));
         }
 
         public ProductDraft GetProductDraft()
         {
-            Category category = this.CategoryFixture.CreateCategory();
-            this.CategoryFixture.CategoriesToDelete.Add(category);
-            return this.GetProductDraft(category);
+            Category category = this.CreateNewCategory();
+            ProductType productType = this.CreateNewProductType();
+            return this.GetProductDraft(category,productType);
         }
 
         public Product CreateProduct(ProductDraft productDraft)
@@ -157,7 +156,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         {
             var money = new Money()
             {
-                CentAmount = this.RandomInt(1000, 5000), 
+                CentAmount = this.RandomInt(1000, 5000),
                 CurrencyCode = "EUR"
             };
             var priceDraft = new PriceDraft()
@@ -218,6 +217,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Category category = this.CategoryFixture.CreateCategory();
             this.CategoryFixture.CategoriesToDelete.Add(category);
             return category;
+        }
+
+        public ProductType CreateNewProductType()
+        {
+            ProductType productType = this.productTypeFixture.CreateProductType();
+            this.productTypeFixture.ProductTypesToDelete.Add(productType);
+            return productType;
         }
     }
 }

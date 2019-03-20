@@ -35,7 +35,7 @@ namespace commercetools.Sdk.Linq.Tests
             {
                 Id = "34940e9b-0752-4ffa-8e6e-4f2417995a3e"
             };
-            Expression<Func<ProductProjection, bool>> expression = p => p.Categories.Any(c => c.Id == category.Id.valueOf().ToString());
+            Expression<Func<ProductProjection, bool>> expression = p => p.Categories.Any(c => c.Id == category.Id.valueOf());
             IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("categories.id:\"34940e9b-0752-4ffa-8e6e-4f2417995a3e\"", result);
