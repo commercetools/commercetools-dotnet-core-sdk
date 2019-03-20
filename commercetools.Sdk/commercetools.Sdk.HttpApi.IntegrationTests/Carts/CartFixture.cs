@@ -89,7 +89,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
         public Product CreateProduct()
         {
-            Product product = this.productFixture.CreateProduct(true, true);
+            Product product = this.productFixture.CreateProduct(withVariants:true, publish:true);
             this.productFixture.ProductsToDelete.Add(product);
             return product;
         }

@@ -27,7 +27,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             //Arrange
             IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
             var stagedProduct = this.productProjectionsFixture.productFixture.CreateProduct(true);
-            var publishedProduct = this.productProjectionsFixture.productFixture.CreateProduct(true, true);
+            var publishedProduct = this.productProjectionsFixture.productFixture.CreateProduct(withVariants:true, publish:true);
             ProductProjectionAdditionalParameters stagedAdditionalParameters = new ProductProjectionAdditionalParameters();
             stagedAdditionalParameters.Staged = true;
 
@@ -52,7 +52,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             //Arrange
             IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
             var stagedProduct = this.productProjectionsFixture.productFixture.CreateProduct(true);
-            var publishedProduct = this.productProjectionsFixture.productFixture.CreateProduct(true, true);
+            var publishedProduct = this.productProjectionsFixture.productFixture.CreateProduct(withVariants:true, publish:true);
             ProductProjectionAdditionalParameters stagedAdditionalParameters = new ProductProjectionAdditionalParameters();
             stagedAdditionalParameters.Staged = true;
 
@@ -76,11 +76,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
         {
             //Arrange
             IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-            var publishedProduct = this.productProjectionsFixture.productFixture.CreateProduct(true, true);
+            var publishedProduct = this.productProjectionsFixture.productFixture.CreateProduct(withVariants:true, publish:true);
 
             //Act
             QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>();
-            queryCommand.Where(productProjection => productProjection.Key == publishedProduct.Key.valueOf().ToString());
+            queryCommand.Where(productProjection => productProjection.Id == publishedProduct.Key.valueOf());
             PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
 
             publishedProduct = this.productProjectionsFixture.productFixture.Unpublish(publishedProduct);//unpublish it before dispose
@@ -111,7 +111,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
 
             //Retrieve Products with created productType
             QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>(stagedAdditionalParameters);
-            queryCommand.Where(productProjection => productProjection.ProductType.Id == productType.Id.valueOf().ToString());
+            queryCommand.Where(productProjection => productProjection.ProductType.Id == productType.Id.valueOf());
             queryCommand.Offset = 2;
             PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
 
@@ -140,7 +140,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
 
             //Retrieve Products with created productType limited by 2
             QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>(stagedAdditionalParameters);
-            queryCommand.Where(productProjection => productProjection.ProductType.Id == productType.Id.valueOf().ToString());
+            queryCommand.Where(productProjection => productProjection.ProductType.Id == productType.Id.valueOf());
             queryCommand.Limit = 2;
             PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
 
@@ -169,7 +169,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
 
             //Retrieve Products with created productType sorted by name
             QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>(stagedAdditionalParameters);
-            queryCommand.Where(productProjection => productProjection.ProductType.Id == productType.Id.valueOf().ToString());
+            queryCommand.Where(productProjection => productProjection.ProductType.Id == productType.Id.valueOf());
             queryCommand.Sort(p=>p.Name["en"]);
             PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             var sortedList = returnedSet.Results.OrderBy(p => p.Name["en"]);
@@ -192,7 +192,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
 
             //Act
             QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>();
-            queryCommand.Where(productProjection => productProjection.ProductType.Id == productType.Id.valueOf().ToString());
+            queryCommand.Where(productProjection => productProjection.ProductType.Id == productType.Id.valueOf());
             queryCommand.Expand(p => p.ProductType).Expand(p => p.Categories.ExpandAll());
             PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
 

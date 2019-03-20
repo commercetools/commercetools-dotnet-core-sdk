@@ -50,7 +50,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
             CartDiscount cartDiscount = this.cartDiscountFixture.CreateCartDiscount();
             this.cartDiscountFixture.CartDiscountsToDelete.Add(cartDiscount);
             QueryPredicate<CartDiscount> queryPredicate =
-                new QueryPredicate<CartDiscount>(cd => cd.Id == cartDiscount.Id.valueOf().ToString());
+                new QueryPredicate<CartDiscount>(cd => cd.Id == cartDiscount.Id.valueOf());
             QueryCommand<CartDiscount> queryCommand = new QueryCommand<CartDiscount>();
             queryCommand.SetWhere(queryPredicate);
             PagedQueryResult<CartDiscount> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
