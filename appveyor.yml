@@ -4,10 +4,10 @@ image: Visual Studio 2017
 before_build:
   - ps: cd commercetools.Sdk
   - ps: dotnet restore
-  - ps: dotnet user-secrets set "Client:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests
-  - ps: dotnet user-secrets set "Client:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests
-  - ps: dotnet user-secrets set "Client:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests
-  - ps: dotnet user-secrets set "Client:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests
+  - ps: dotnet user-secrets set "Client:ClientId" $env:CTP_CLIENT_ID --project commercetools.Sdk.HttpApi.IntegrationTests
+  - ps: dotnet user-secrets set "Client:ClientSecret" $env:CTP_CLIENT_SECRET --project commercetools.Sdk.HttpApi.IntegrationTests
+  - ps: dotnet user-secrets set "Client:Scope" $env:CTP_CLIENT_SCOPE --project commercetools.Sdk.HttpApi.IntegrationTests
+  - ps: dotnet user-secrets set "Client:ProjectKey" $env:CTP_PROJECTKEY --project commercetools.Sdk.HttpApi.IntegrationTests
 
 build_script:
   - ps: dotnet build -c Release
