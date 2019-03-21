@@ -11,11 +11,11 @@ namespace commercetools.Sdk.Domain.Messages
     public abstract class Message
     {
         public string Id { get; set; }
-        
+
         public int Version { get; set; }
 
         public int SequenceNumber { get; set; }
-        
+
         public int ResourceVersion { get; set; }
         public DateTime CreatedAt { get; set; }
 
@@ -24,11 +24,11 @@ namespace commercetools.Sdk.Domain.Messages
         public ResourceIdentifier Resource { get; set; }
 
         public UserProvidedIdentifiers ResourceUserProvidedIdentifiers { get; set; }
-            
+
         public virtual string Type
         {
             get => this.GetType().GetTypeMarkerAttributeValue();
-            set => throw new NotImplementedException();
+            set { }
         }
     }
 }

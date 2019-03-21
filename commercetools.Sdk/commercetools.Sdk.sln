@@ -32,7 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StyleCop", "StyleCop", "{F8
 		StyleCop\stylecop.ruleset = StyleCop\stylecop.ruleset
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Domain.Tests", "commercetools.Sdk.Domain.Tests\commercetools.Sdk.Domain.Tests.csproj", "{5F639083-E3CB-435B-9E8F-52A9BF197DEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Domain.Tests", "Tests\commercetools.Sdk.Domain.Tests\commercetools.Sdk.Domain.Tests.csproj", "{5F639083-E3CB-435B-9E8F-52A9BF197DEB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.DependencyInjection", "commercetools.Sdk.DependencyInjection\commercetools.Sdk.DependencyInjection.csproj", "{D7492547-921F-49E4-8689-C964CBC0D38E}"
 EndProject
