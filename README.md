@@ -15,7 +15,7 @@ The commercetools .NET Core SDK enables developers to easily communicate with th
 ## Technical Overview
 
 The SDK consists of the following projects:
-* `commercetools.Sdk.Client`: Contains abstract commands which are used to create instances of HTTP API commands. Some commands are implemented as abstract types??????? and you must specify a domain object when using them, whereas others are specific to a domain object. 
+* `commercetools.Sdk.Client`: Contains abstract commands which are used to create instances of HTTP API commands. Some commands are implemented as generic types and you must specify a domain object when using them, whereas others are specific to a domain object. 
 * `commercetools.Sdk.DependencyInjection`: Default entry point to start using the SDK. Contains one class, `DependencyInjectionSetup`, which initializes all services the SDK uses and injects them into the service collection.
 * `commercetools.Sdk.Domain`: Models commercetools domain objects.
 * `commercetools.Sdk.HttpApi`: Communicates directly with the HTTP API.
