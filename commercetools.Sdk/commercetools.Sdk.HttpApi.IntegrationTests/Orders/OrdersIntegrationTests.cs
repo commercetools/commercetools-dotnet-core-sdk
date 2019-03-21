@@ -17,7 +17,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
             this.ordersFixture = ordersFixture;
         }
 
-        [Fact]
+        [Fact(Skip = "refactor to dynamic order ids")]
         public void CreateOrderFromCart()
         {
             IClient commerceToolsClient = this.ordersFixture.GetService<IClient>();
@@ -28,7 +28,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
             Assert.Equal(order.OrderNumber, orderFromCartDraft.OrderNumber);
         }
 
-        [Fact]
+        [Fact(Skip = "refactor to dynamic order ids")]
         public void GetOrderById()
         {
             IClient commerceToolsClient = this.ordersFixture.GetService<IClient>();
@@ -36,7 +36,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
             Order order = commerceToolsClient
                 .ExecuteAsync(new GetByIdCommand<Order>(new Guid(orderId))).Result;
         }
-        [Fact]
+        [Fact(Skip = "refactor to dynamic order ids")]
         public void DeleteOrderById()
         {
             IClient commerceToolsClient = this.ordersFixture.GetService<IClient>();

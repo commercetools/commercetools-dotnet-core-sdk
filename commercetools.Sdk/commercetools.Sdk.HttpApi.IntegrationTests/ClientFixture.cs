@@ -28,8 +28,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 AddJsonFile("appsettings.test.Development.json", true).
                 // https://www.jerriepelser.com/blog/aspnet-core-no-more-worries-about-checking-in-secrets/
                 AddEnvironmentVariables().
+                AddUserSecrets<ClientFixture>().
                 Build();
-            
+
             services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials);
             this.serviceProvider = services.BuildServiceProvider();
         }
@@ -78,7 +79,5 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             int append = 5;//hack to not have a trailing 0 which is not accepted in sphere
             return "0." + RandomInt() + append;
         }
-        
-        
     }
 }

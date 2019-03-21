@@ -80,7 +80,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
 
             //Act
             QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>();
-            queryCommand.Where(productProjection => productProjection.Id == publishedProduct.Key.valueOf());
+            queryCommand.Where(productProjection => productProjection.Key == publishedProduct.Key.valueOf());
             PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
 
             publishedProduct = this.productProjectionsFixture.productFixture.Unpublish(publishedProduct);//unpublish it before dispose
