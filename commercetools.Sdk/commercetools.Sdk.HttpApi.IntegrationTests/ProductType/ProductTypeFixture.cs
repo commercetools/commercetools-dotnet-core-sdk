@@ -38,8 +38,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public ProductTypeDraft CreateProductTypeDraft()
         {
             ProductTypeDraft productTypeDraft = new ProductTypeDraft();
-            productTypeDraft.Name = this.RandomString(5);
-            productTypeDraft.Description = this.RandomString(4);
+            productTypeDraft.Name = this.RandomString(10);
+            productTypeDraft.Description = this.RandomString(10);
             productTypeDraft.Attributes = new List<AttributeDefinitionDraft>();
             productTypeDraft.Attributes.Add(this.CreateTextAttributeDefinitionDraft());
             productTypeDraft.Attributes.Add(this.CreateLocalizedTextAttributeDefinitionDraft());

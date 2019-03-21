@@ -1,9 +1,6 @@
 language: csharp
 mono: none
-dotnet: 2.1
-
-env:
-  global:
+dotnet: 2.1.502
 
 before_install:
  - cd commercetools.Sdk

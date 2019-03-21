@@ -35,15 +35,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public CategoryDraft GetCategoryDraft()
         {
             CategoryDraft categoryDraft = new CategoryDraft();
-            string categoryName = this.RandomString(4);
+            string categoryName = this.RandomString(10);
             LocalizedString localizedStringName = new LocalizedString();
             localizedStringName.Add("en", categoryName);
             categoryDraft.Name = localizedStringName;
-            string slug = this.RandomString(5);
+            string slug = this.RandomString(10);
             LocalizedString localizedStringSlug = new LocalizedString();
             localizedStringSlug.Add("en", slug);
             categoryDraft.Slug = localizedStringSlug;
-            categoryDraft.Key = this.RandomString(3);
+            categoryDraft.Key = this.RandomString(10);
             return categoryDraft;
         }
 
@@ -98,7 +98,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             categoryDraft.Parent = new Reference<Category>() { Id = parentCategory.Id, TypeId = ReferenceTypeId.Category };
             return categoryDraft;
         }
-        
+
         /// <summary>
         /// Update Category set random Key and return updated instance
         /// </summary>
@@ -107,9 +107,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public Category UpdateCategorySetRandomKey(Category category)
         {
             IClient commerceToolsClient = this.GetService<IClient>();
-            
+
             List<UpdateAction<Category>> updateActions = new List<UpdateAction<Category>>();
-            SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction() { Key = this.RandomString(5) };
+            SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction() { Key = this.RandomString(10) };
             updateActions.Add(setKeyAction);
             Category updatedCategory = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Category>(new Guid(category.Id), category.Version, updateActions)).Result;
             return updatedCategory;
