@@ -118,7 +118,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
             Category category = this.categoryFixture.CreateCategory();
-            string newKey = this.categoryFixture.RandomString(5);
+            string newKey = this.categoryFixture.RandomString(10);
             List<UpdateAction<Category>> updateActions = new List<UpdateAction<Category>>();
             SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction() { Key = newKey };
             updateActions.Add(setKeyAction);
@@ -135,7 +135,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
             Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent());
-            string newKey = this.categoryFixture.RandomString(5);
+            string newKey = this.categoryFixture.RandomString(10);
 
             //expansions
             List<Expansion<Category>> expansions = new List<Expansion<Category>>();
@@ -159,7 +159,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
             Category category = this.categoryFixture.CreateCategory();
-            string externalId = this.categoryFixture.RandomString(5);
+            string externalId = this.categoryFixture.RandomString(10);
             List<UpdateAction<Category>> updateActions = new List<UpdateAction<Category>>();
             SetExternalIdUpdateAction setKeyAction = new SetExternalIdUpdateAction() { ExternalId = externalId };
             updateActions.Add(setKeyAction);
@@ -173,7 +173,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
             Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent());
-            string externalId = this.categoryFixture.RandomString(5);
+            string externalId = this.categoryFixture.RandomString(10);
 
             //expansions
             List<Expansion<Category>> expansions = new List<Expansion<Category>>();
@@ -196,7 +196,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
             Category category = this.categoryFixture.CreateCategory();
-            string name = this.categoryFixture.RandomString(5);
+            string name = this.categoryFixture.RandomString(10);
             List<UpdateAction<Category>> updateActions = new List<UpdateAction<Category>>();
             ChangeNameUpdateAction changeNameUpdateAction = new ChangeNameUpdateAction() { Name = new LocalizedString() { { "en", name } } };
             updateActions.Add(changeNameUpdateAction);

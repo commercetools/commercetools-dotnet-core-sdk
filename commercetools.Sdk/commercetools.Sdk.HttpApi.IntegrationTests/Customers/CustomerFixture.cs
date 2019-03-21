@@ -29,7 +29,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Customers
         public CustomerDraft GetCustomerDraft()
         {
             CustomerDraft customerDraft = new CustomerDraft();
-            customerDraft.Email = $"{this.RandomString(5)}@email.com";
+            customerDraft.Email = $"{this.RandomString(10)}@email.com";
             customerDraft.Password = Password;
             return customerDraft;
         }

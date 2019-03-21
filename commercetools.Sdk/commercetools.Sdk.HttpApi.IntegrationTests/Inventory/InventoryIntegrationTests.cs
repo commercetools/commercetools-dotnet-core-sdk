@@ -255,7 +255,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             InventoryEntry inventoryEntry = this.inventoryFixture.CreateInventoryEntryWithCustomFields();
 
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
-            string newValue = this.inventoryFixture.RandomString(6);
+            string newValue = this.inventoryFixture.RandomString(10);
             SetCustomFieldUpdateAction setCustomFieldUpdateAction = new SetCustomFieldUpdateAction()
             {
                 Name = "string-field", Value = newValue

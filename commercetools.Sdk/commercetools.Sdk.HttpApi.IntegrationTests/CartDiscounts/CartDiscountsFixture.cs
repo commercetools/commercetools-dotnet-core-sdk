@@ -16,7 +16,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
         {
             this.CartDiscountsToDelete = new List<CartDiscount>();
         }
-        
+
         public void Dispose()
         {
             IClient commerceToolsClient = this.GetService<IClient>();
@@ -32,7 +32,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
         public CartDiscountDraft GetCartDiscountDraft()
         {
             CartDiscountDraft cartDiscountDraft = new CartDiscountDraft();
-            cartDiscountDraft.Name = new LocalizedString() {{"en", this.RandomString(4)}};
+            cartDiscountDraft.Name = new LocalizedString() {{"en", this.RandomString(10)}};
             cartDiscountDraft.Description = new LocalizedString() {{"en", this.RandomString(20)}};
             cartDiscountDraft.Value = this.GetCartDiscountValueAsAbsolute();
             cartDiscountDraft.CartPredicate = "1 = 1"; //match all carts
@@ -45,7 +45,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
             cartDiscountDraft.RequiresDiscountCode = false;
             return cartDiscountDraft;
         }
-        
+
         public CartDiscount CreateCartDiscount()
         {
             return this.CreateCartDiscount(this.GetCartDiscountDraft());
@@ -57,7 +57,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
             CartDiscount cartDiscount = commerceToolsClient.ExecuteAsync(new CreateCommand<CartDiscount>(cartDiscountDraft)).Result;
             return cartDiscount;
         }
-        
+
         public AbsoluteCartDiscountValue GetCartDiscountValueAsAbsolute()
         {
             var money = new Money()

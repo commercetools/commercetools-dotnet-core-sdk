@@ -186,7 +186,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
             IClient commerceToolsClient = this.cartDiscountFixture.GetService<IClient>();
             CartDiscount cartDiscount = this.cartDiscountFixture.CreateCartDiscount();
 
-            string name = this.cartDiscountFixture.RandomString(4);
+            string name = this.cartDiscountFixture.RandomString(10);
             List<UpdateAction<CartDiscount>> updateActions = new List<UpdateAction<CartDiscount>>();
             ChangeNameUpdateAction changeNameUpdateAction = new ChangeNameUpdateAction()
             {
