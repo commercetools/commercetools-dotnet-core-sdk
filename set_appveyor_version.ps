@@ -49,7 +49,4 @@ function getVersion() {
 
 $version = getVersion
 echo "Build version: " + $version
-if ($env:APPVEYOR -eq "true") {
-    echo "Set version: " + $version
-    Update-AppveyorBuild -Version $version
-}
+Update-AppveyorBuild -Version $version
