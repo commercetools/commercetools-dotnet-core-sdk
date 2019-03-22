@@ -1,5 +1,7 @@
 image: Visual Studio 2017
 
+install:
+  - ps: .\set_appveyor_version.ps1
 
 before_build:
   - ps: cd commercetools.Sdk
@@ -39,11 +41,11 @@ version: 1.0.0.{build}
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
-  version: '{version}'
-  package_version: '{version}'
-  assembly_version: '{version}'
-  file_version: '{version}'
-  informational_version: '{version}'
+  version: '$(appveyor_build_version)'
+  package_version: '$(appveyor_build_version)'
+  assembly_version: '$(appveyor_build_version)'
+  file_version: '$(appveyor_build_version)'
+  informational_version: '$(appveyor_build_version)'
 
 
 deploy:
