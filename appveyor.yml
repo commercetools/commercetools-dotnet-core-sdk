@@ -2,7 +2,7 @@ image: Visual Studio 2017
 
 
 before_build:
-  - ps: .\set_appveyor_version.ps
+  - ps: .\set_appveyor_version.ps1
   - ps: cd commercetools.Sdk
   - ps: dotnet restore
   - ps: dotnet user-secrets set "Client:ClientId" $env:CTP_CLIENT_ID --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
