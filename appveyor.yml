@@ -40,11 +40,11 @@ version: 1.0.0.{build}
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
-  version: '{appveyor_build_version}'
-  package_version: '{appveyor_build_version}'
-  assembly_version: '{appveyor_build_version}'
-  file_version: '{appveyor_build_version}'
-  informational_version: '{appveyor_build_version}'
+  version: '$(appveyor_build_version)'
+  package_version: '$(appveyor_build_version)'
+  assembly_version: '$(appveyor_build_version)'
+  file_version: '$(appveyor_build_version)'
+  informational_version: '$(appveyor_build_version)'
 
 
 deploy:
