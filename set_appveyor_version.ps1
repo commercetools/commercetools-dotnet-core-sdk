@@ -22,7 +22,7 @@ function getVersion() {
 
         if ($branch -eq "master" -And $noPR)
         {
-            $packageVersion = $version + "-dev-" + $buildNumber + $dbgSuffix;
+            $packageVersion = $version + "." + $buildNumber + "-dev"  + $dbgSuffix;
         }
         else
         {
