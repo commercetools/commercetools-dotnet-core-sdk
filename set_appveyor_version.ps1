@@ -48,5 +48,5 @@ function getVersion() {
 
 
 $version = getVersion
-echo "Build version: " + $version
+echo "Build version: $version"
 Update-AppveyorBuild -Version $version
