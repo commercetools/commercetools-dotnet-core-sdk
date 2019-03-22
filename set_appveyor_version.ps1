@@ -50,4 +50,4 @@ function getVersion() {
 $version = getVersion
 echo "Build version: $version"
 Update-AppveyorBuild -Version $version
-Set-AppveyorBuildVariable -Name APPVEYOR_BUILD_VERSION -Value $version
+# Set-AppveyorBuildVariable -Name APPVEYOR_BUILD_VERSION -Value $version
