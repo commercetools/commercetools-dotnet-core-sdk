@@ -3,6 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageVersion>1.0.0.0</PackageVersion>
+    <authors>commercetools</authors>
+    <owners>commercetools</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The commercetools SDK allows developers to work effectively with the commercetools platform in their .NET applications by providing typesafe access to the commercetools HTTP API.</description>
+    <copyright>Copyright commercetools 2019</copyright>
+    <PackageProjectUrl>https://github.com/commercetools/commercetools-dotnet-core-sdk</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/commercetools/commercetools-dotnet-core-sdk/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/commercetools/commercetools-dotnet-core-sdk/master/ct-logo.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/commercetools/commercetools-dotnet-core-sdk</RepositoryUrl>
+    <PackageTags>commercetools</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
