@@ -20,7 +20,7 @@ function getVersion() {
         $branch = $env:APPVEYOR_REPO_BRANCH;
         $noPR = [string]::IsNullOrEmpty($env:APPVEYOR_PULL_REQUEST_NUMBER);
 
-        if ($branch -eq "master")
+        if ($branch -eq "master" -And $noPR)
         {
             $packageVersion = $version + "-dev-" + $buildNumber + $dbgSuffix;
         }
