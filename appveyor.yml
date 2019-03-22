@@ -53,7 +53,7 @@ init:
 
       $version = getVersion
       echo "Build version: $version"
-      Update-AppveyorBuild -Version $version
+      # Update-AppveyorBuild -Version $version
 before_build:
   - ps: cd commercetools.Sdk
   - ps: dotnet restore
