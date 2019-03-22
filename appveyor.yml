@@ -7,13 +7,14 @@ cache:
 
 install:
   - ps: cinst pandoc
+  - ps: $env:Path += ";C:\Program Files (x86)\Pandoc\"
   - ps: .\set_appveyor_version.ps1
 
 before_build:
   - pandoc -v
   - pandoc README.md -f markdown -t plain --wrap=none -o readme.txt
   - ps: cd commercetools.Sdk
-  - ps: dotnet restore
+  - ps: dotnet restore --packages ..\packages
   - ps: dotnet user-secrets set "Client:ClientId" $env:CTP_CLIENT_ID --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
   - ps: dotnet user-secrets set "Client:ClientSecret" $env:CTP_CLIENT_SECRET --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
   - ps: dotnet user-secrets set "Client:Scope" $env:CTP_CLIENT_SCOPE --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
@@ -39,7 +40,7 @@ after_build:
 
 test_script:
   - ps: dotnet test Tests --no-build -c Release
-#  - ps: dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
+  - ps: dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
 
 artifacts:
 - path: /**/*.nupkg
