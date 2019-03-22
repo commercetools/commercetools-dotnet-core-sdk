@@ -10,7 +10,7 @@
     <description>The commercetools SDK allows developers to work effectively with the commercetools platform in their .NET applications by providing typesafe access to the commercetools HTTP API.</description>
     <copyright>Copyright commercetools 2019</copyright>
     <PackageProjectUrl>https://github.com/commercetools/commercetools-dotnet-core-sdk</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/commercetools/commercetools-dotnet-core-sdk/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageIconUrl>https://raw.githubusercontent.com/commercetools/commercetools-dotnet-core-sdk/master/ct-logo.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/commercetools/commercetools-dotnet-core-sdk</RepositoryUrl>
     <PackageTags>commercetools</PackageTags>
@@ -34,7 +34,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\..\README.md">
+    <Content Include="..\..\readme.txt" Condition="Exists('..\..\readme.txt')">
+      <Pack>true</Pack>
+      <PackagePath>\</PackagePath>
+    </Content>
+    <Content Include="..\..\LICENSE">
       <Pack>true</Pack>
       <PackagePath>\</PackagePath>
     </Content>
