@@ -6,7 +6,7 @@ cache:
   - packages -> **\*.csproj
 
 install:
-  - ps: cinst pandoc
+  - ps: cinst pandoc --no-progress
   - ps: $env:Path += ";C:\Program Files (x86)\Pandoc\"
   - ps: .\set_appveyor_version.ps1
 
