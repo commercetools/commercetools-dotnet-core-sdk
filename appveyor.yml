@@ -50,7 +50,7 @@ deploy:
   - provider: NuGet
     server: https://www.myget.org/F/commercetools-dotnet-core-sdk/api/v2/package
     api_key:
-      secure: sLfpoizqShKpK/JdBg/ECoQ9O/DLhrocq3pAIcWWMjRRsi8HaFUPMWPfUmX+qgsy
+      secure: +Pfl0dfkKW+5dZY/6vRFGLhE3pOd3xMTz1v7ARA8hgrtUVwnl4BdnW1hHTg1df+d
     skip_symbols: true
     on:
       branch: master
