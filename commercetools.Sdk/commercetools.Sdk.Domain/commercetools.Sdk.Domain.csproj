@@ -13,4 +13,11 @@
     <ProjectReference Include="..\commercetools.Sdk.Linq\commercetools.Sdk.Linq.csproj" />
     <ProjectReference Include="..\commercetools.Sdk.Reflection\commercetools.Sdk.Registration.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\README.md">
+      <Pack>true</Pack>
+      <PackagePath>\</PackagePath>
+    </Content>
+  </ItemGroup>
 </Project>
