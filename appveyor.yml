@@ -43,7 +43,7 @@ test_script:
   - ps: dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
 
 artifacts:
-- path: /**/*.nupkg
+- path: commercetools.Sdk/**/*.nupkg
   name: NuGet Package
 
 version: 1.0.0.{build}
