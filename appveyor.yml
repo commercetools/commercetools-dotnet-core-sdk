@@ -9,11 +9,7 @@ install:
   - ps: .\set_appveyor_version.ps1
 
 before_build:
-  - ps: >-
-      if (-Not (Test-Path "C:\Program Files (x86)\Pandoc\")) {
-        cinst pandoc
-      }
-  - ps: $env:Path += ";C:\Program Files (x86)\Pandoc\"
+  - ps: cinst pandoc
   - pandoc -v
   - pandoc README.md -f markdown -t plain --wrap=none -o readme.txt
   - ps: cd commercetools.Sdk
@@ -43,7 +39,7 @@ after_build:
 
 test_script:
   - ps: dotnet test Tests --no-build -c Release
-  - ps: dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
+#  - ps: dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
 
 artifacts:
 - path: /**/*.nupkg
