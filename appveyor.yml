@@ -36,7 +36,6 @@ artifacts:
 - path: /**/*.nupkg
   name: NuGet Package
 
-version: 1.0.0.{build}
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
