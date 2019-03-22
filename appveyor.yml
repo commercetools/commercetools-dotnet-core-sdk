@@ -7,7 +7,7 @@ cache:
 
 install:
   - ps: cinst pandoc --no-progress
-  - ps: $env:Path += ";C:\Program Files\Pandoc"
+  - ps: $env:Path += ";C:\ProgramData\chocolatey\bin"
   - ps: .\set_appveyor_version.ps1
 
 before_build:
@@ -40,7 +40,7 @@ after_build:
 
 test_script:
   - ps: dotnet test Tests --no-build -c Release
-  - ps: dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
+#  - ps: dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
 
 artifacts:
 - path: commercetools.Sdk/**/*.nupkg
