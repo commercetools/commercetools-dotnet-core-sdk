@@ -1,5 +1,10 @@
 image: Visual Studio 2017
 
+cache:
+  - C:\ProgramData\chocolatey\bin -> appveyor.yml
+  - C:\ProgramData\chocolatey\lib -> appveyor.yml
+  - packages
+
 install:
   - ps: .\set_appveyor_version.ps1
 
