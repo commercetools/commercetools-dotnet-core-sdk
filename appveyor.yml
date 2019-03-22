@@ -7,7 +7,7 @@ cache:
 
 install:
   - ps: cinst pandoc --no-progress
-  - ps: $env:Path += ";C:\Program Files (x86)\Pandoc\"
+  - ps: $env:Path += ";C:\Program Files\Pandoc"
   - ps: .\set_appveyor_version.ps1
 
 before_build:
