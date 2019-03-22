@@ -1,14 +1,14 @@
 function getVersion() {
     $version = "1.0.0";
     $dbgSuffix = If ($env:CONFIGURATION -eq "Debug") { "-dbg" } else { "" };
+    $buildNumber = $env:APPVEYOR_BUILD_NUMBER;
 
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
-        $packageVersion = $env:APPVEYOR_REPO_TAG_NAME;
+        $packageVersion = $env:APPVEYOR_REPO_TAG_NAME + "." + $buildNumber;
     }
     else
     {
-        $buildNumber = $env:APPVEYOR_BUILD_NUMBER;
         $branch = $env:APPVEYOR_REPO_BRANCH;
         $noPR = [string]::IsNullOrEmpty($env:APPVEYOR_PULL_REQUEST_NUMBER);
 
@@ -50,3 +50,4 @@ function getVersion() {
 $version = getVersion
 echo "Build version: $version"
 Update-AppveyorBuild -Version $version
+$env:APPVEYOR_BUILD_VERSION = $version
