@@ -6,10 +6,10 @@ cache:
   - packages -> **\*.csproj
 
 install:
+  - ps: cinst pandoc
   - ps: .\set_appveyor_version.ps1
 
 before_build:
-  - ps: cinst pandoc
   - pandoc -v
   - pandoc README.md -f markdown -t plain --wrap=none -o readme.txt
   - ps: cd commercetools.Sdk
