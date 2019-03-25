@@ -41,6 +41,7 @@ function getVersion() {
                 $safeBranch = $branch -replace "[^0-9A-Za-z-]+", ""
                 $suffix += "-" + $safeBranch;
             }
+
             # Nuget limits "special version part" to 20 chars. Add one for the hyphen.
             if ($suffix.Length > 21)
             {
