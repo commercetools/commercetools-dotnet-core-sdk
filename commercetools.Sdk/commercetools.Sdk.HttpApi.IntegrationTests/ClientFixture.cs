@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using commercetools.Sdk.Client;
@@ -20,6 +21,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         private readonly ServiceProvider serviceProvider;
         private readonly IConfiguration configuration;
 
+        private List<string> europeCountries = new List<string>()
+            {"BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FR", "HU", "IT", "IE", "NL", "PL", "PT", "ES", "SE"};
+
         public ClientFixture()
         {
             var services = new ServiceCollection();
@@ -29,7 +33,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 // https://www.jerriepelser.com/blog/aspnet-core-no-more-worries-about-checking-in-secrets/
                 AddEnvironmentVariables().
                 Build();
-            
+
             services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials);
             this.serviceProvider = services.BuildServiceProvider();
         }
@@ -72,13 +76,28 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             var ran = random.NextDouble(0.1, 0.9);
             return string.Format(CultureInfo.InvariantCulture, "{0:0.00}", ran);
         }
+        public Double RandomDouble()
+        {
+            var ran = random.NextDouble(0.1, 0.9);
+            return ran;
+        }
+        public Double RandomDouble(double min, double max)
+        {
+            var ran = random.NextDouble(min, max);
+            return ran;
+        }
 
         public string RandomSortOrder()
         {
             int append = 5;//hack to not have a trailing 0 which is not accepted in sphere
             return "0." + RandomInt() + append;
         }
-        
-        
+
+        public string GetRandomEuropeCountry()
+        {
+            int ran = this.RandomInt(0, europeCountries.Count);
+            string country = europeCountries[ran];
+            return country;
+        }
     }
 }

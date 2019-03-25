@@ -20,20 +20,5 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             this.productFixture.Dispose();
         }
 
-        /// <summary>
-        /// unPublish Products Before Dispose
-        /// </summary>
-        private void UnPublishProducts()
-        {
-            var publishedProducts = productFixture.ProductsToDelete.Where(p => p.MasterData.Published).ToList();
-            if (publishedProducts.Count > 0)
-            {
-                foreach (var product in publishedProducts)
-                {
-                    productFixture.Unpublish(product);
-                }
-            }
-        }
-
     }
 }
