@@ -22,11 +22,11 @@ function getVersion() {
 
         if ($branch -eq "master" -And $noPR)
         {
-            $packageVersion = $version + "-beta" + $buildNumber + $dbgSuffix;
+            $packageVersion = $version + "." + $buildNumber + "-dev"  + $dbgSuffix;
         }
         else
         {
-            $suffix = "-alpha" + $buildNumber + $dbgSuffix;
+            $suffix = "-ci-" + $buildNumber + $dbgSuffix;
 
             if (!$noPR)
             {
@@ -34,7 +34,7 @@ function getVersion() {
             }
             elseif ($branch.StartsWith("release", "CurrentCultureIgnoreCase"))
             {
-                $suffix += "-pre";
+                $suffix += "-pre-" + $buildNumber;
             }
             else
             {

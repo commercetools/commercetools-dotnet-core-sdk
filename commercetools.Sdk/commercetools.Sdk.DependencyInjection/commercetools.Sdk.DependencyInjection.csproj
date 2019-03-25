@@ -33,9 +33,5 @@
       <Pack>true</Pack>
       <PackagePath>\</PackagePath>
     </Content>
-    <Content Include="..\..\LICENSE">
-      <Pack>true</Pack>
-      <PackagePath>\</PackagePath>
-    </Content>
   </ItemGroup>
 </Project>

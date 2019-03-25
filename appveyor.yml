@@ -54,6 +54,7 @@ dotnet_csproj:
   file_version: '$(appveyor_build_version)'
   informational_version: '$(appveyor_build_version)'
 
+max_jobs: 1
 nuget:
   project_feed: true
 
