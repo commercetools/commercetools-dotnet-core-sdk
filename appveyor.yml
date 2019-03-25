@@ -5,7 +5,7 @@ cache:
   - packages -> **\*.csproj
 
 install:
-  - ps: cinst pandoc --no-progress --cache C\:ProgramData\chocolatey\cache
+  - ps: cinst pandoc --no-progress --cache C:\ProgramData\chocolatey\cache
   - ps: $env:Path += ";C:\ProgramData\chocolatey\bin"
   - ps: .\set_appveyor_version.ps1
 
