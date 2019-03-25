@@ -6,7 +6,6 @@ cache:
 
 install:
   - ps: cinst pandoc --no-progress --cache C:\ProgramData\chocolatey\cache
-  - ps: $env:Path += ";C:\ProgramData\chocolatey\bin"
   - ps: .\set_appveyor_version.ps1
 
 before_build:
