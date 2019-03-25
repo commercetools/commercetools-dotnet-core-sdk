@@ -28,6 +28,20 @@ function getVersion() {
         {
             $suffix = "-alpha" + $buildNumber + $dbgSuffix;
 
+            if (!$noPR)
+            {
+                $suffix += "-pr-" + $env:APPVEYOR_PULL_REQUEST_NUMBER;
+            }
+            elseif ($branch.StartsWith("release", "CurrentCultureIgnoreCase"))
+            {
+                $suffix += "-pre";
+            }
+            else
+            {
+                $safeBranch = $branch -replace "[^0-9A-Za-z-]+", ""
+                $suffix += "-" + $safeBranch;
+            }
+
             # Nuget limits "special version part" to 20 chars. Add one for the hyphen.
             if ($suffix.Length > 21)
             {

@@ -54,6 +54,8 @@ dotnet_csproj:
   file_version: '$(appveyor_build_version)'
   informational_version: '$(appveyor_build_version)'
 
+nuget:
+  project_feed: true
 
 deploy:
   - provider: NuGet
