@@ -7,13 +7,13 @@
 #$env:APPVEYOR_BUILD_VERSION = "1.0.0.1"
 
 function getVersion() {
-    $version = $env:APPVEYOR_BUILD_VERSION;
+    $version = $env:APPVEYOR_BUILD_VERSION.split('.')[0..2] -join '.';
     $dbgSuffix = If ($env:CONFIGURATION -eq "Debug") { "-dbg" } else { "" };
     $buildNumber = $env:APPVEYOR_BUILD_NUMBER;
 
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
-        $packageVersion = $env:APPVEYOR_REPO_TAG_NAME + "." + $buildNumber;
+        $packageVersion = $env:APPVEYOR_REPO_TAG_NAME + "+" + $buildNumber;
     }
     else
     {
@@ -22,7 +22,7 @@ function getVersion() {
 
         if ($branch -eq "master" -And $noPR)
         {
-            $packageVersion = $version + "-dev"  + $dbgSuffix;
+            $packageVersion = $version + "-dev"  + $dbgSuffix + "+" + $buildNumber;
         }
         else
         {
@@ -42,10 +42,11 @@ function getVersion() {
                 $suffix += "-" + $safeBranch;
             }
             # Nuget limits "special version part" to 20 chars. Add one for the hyphen.
-            if ($suffix.Length > 21)
+            if ($suffix.Length > 15)
             {
-                $suffix = $suffix.Substring(0, 21);
+                $suffix = $suffix.Substring(0, 15);
             }
+            $suffix += "+" + $buildNumber
 
             $packageVersion = $version + $suffix;
         }
