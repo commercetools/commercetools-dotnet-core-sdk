@@ -1,12 +1,11 @@
 image: Visual Studio 2017
 
 cache:
-  - C:\ProgramData\chocolatey\bin -> appveyor.yml
-  - C:\ProgramData\chocolatey\lib -> appveyor.yml
+  - C:\ProgramData\chocolatey\cache -> appveyor.yml
   - packages -> **\*.csproj
 
 install:
-  - ps: cinst pandoc --no-progress
+  - ps: cinst pandoc --no-progress --cache C\:ProgramData\chocolatey\cache
   - ps: $env:Path += ";C:\ProgramData\chocolatey\bin"
   - ps: .\set_appveyor_version.ps1
 
