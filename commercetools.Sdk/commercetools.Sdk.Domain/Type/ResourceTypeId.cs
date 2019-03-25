@@ -50,6 +50,9 @@ namespace commercetools.Sdk.Domain
         ShoppingListTextLineItem,
 
         [Description("review")]
-        Review
+        Review,
+
+        [Description("order")]
+        Order
     }
 }

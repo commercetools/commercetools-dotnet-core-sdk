@@ -33,5 +33,35 @@
         public string Fax { get; set; }
         public string AdditionalAddressInfo { get; set; }
         public string ExternalId { get; set; }
+
+        public override string ToString()
+        {
+            return "Address{" +
+                   "country=" + Country +
+                   ", key=" + Key +
+                   ", title=" + Title +
+                   ", salutation=" + Salutation +
+                   ", firstName=" + FirstName +
+                   ", lastName=" + LastName +
+                   ", streetName=" + StreetName +
+                   ", streetNumber=" + StreetNumber +
+                   ", additionalStreetInfo=" + AdditionalStreetInfo +
+                   ", postalCode=" + PostalCode +
+                   ", city=" + City +
+                   ", region=" + Region +
+                   ", state=" + State +
+                   ", company=" + Company +
+                   ", department=" + Department +
+                   ", building=" + Building +
+                   ", apartment=" + Apartment +
+                   ", poBox=" + POBox +
+                   ", phone=" + Phone +
+                   ", mobile=" + Mobile +
+                   ", email=" + Email +
+                   ", additionalAddressInfo=" + AdditionalAddressInfo +
+                   ", fax=" + Fax +
+                   ", externalId=" + ExternalId +
+                   "}";
+        }
     }
 }
