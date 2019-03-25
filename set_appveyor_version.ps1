@@ -7,7 +7,7 @@
 #$env:APPVEYOR_BUILD_VERSION = "1.0.0.1"
 
 function getVersion() {
-    $version = $env:APPVEYOR_BUILD_VERSION.split('.')[0..2] -join '.';
+    $version = $env:APPVEYOR_BUILD_VERSION;
     $dbgSuffix = If ($env:CONFIGURATION -eq "Debug") { "-dbg" } else { "" };
     $buildNumber = $env:APPVEYOR_BUILD_NUMBER;
 
@@ -22,11 +22,11 @@ function getVersion() {
 
         if ($branch -eq "master" -And $noPR)
         {
-            $packageVersion = $version + "." + $buildNumber + "-dev"  + $dbgSuffix;
+            $packageVersion = $version + "-dev"  + $dbgSuffix;
         }
         else
         {
-            $suffix = "-ci-" + $buildNumber + $dbgSuffix;
+            $suffix = "-ci" + $dbgSuffix;
 
             if (!$noPR)
             {
@@ -34,7 +34,7 @@ function getVersion() {
             }
             elseif ($branch.StartsWith("release", "CurrentCultureIgnoreCase"))
             {
-                $suffix += "-pre-" + $buildNumber;
+                $suffix += "-pre";
             }
             else
             {
