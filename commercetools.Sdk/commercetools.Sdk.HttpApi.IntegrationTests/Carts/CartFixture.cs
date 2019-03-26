@@ -6,12 +6,18 @@ using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.Messages;
+using commercetools.Sdk.Domain.Payments;
 using commercetools.Sdk.Domain.ShippingMethods;
+using commercetools.Sdk.Domain.ShoppingLists;
 using commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups;
 using commercetools.Sdk.HttpApi.IntegrationTests.Customers;
 using commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes;
+using commercetools.Sdk.HttpApi.IntegrationTests.Payments;
+using commercetools.Sdk.HttpApi.IntegrationTests.Project;
 using commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods;
+using commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
+using LineItemDraft = commercetools.Sdk.Domain.Carts.LineItemDraft;
 using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
@@ -27,6 +33,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         private readonly DiscountCodeFixture discountCodeFixture;
         private readonly CustomerGroupFixture customerGroupFixture;
         private readonly TypeFixture typeFixture;
+        private readonly ShoppingListFixture shoppingListFixture;
+        private readonly PaymentsFixture paymentsFixture;
+        private readonly ProjectFixture projectFixture;
 
         public CartFixture() : base()
         {
@@ -38,6 +47,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             this.discountCodeFixture = new DiscountCodeFixture();
             this.customerGroupFixture = new CustomerGroupFixture();
             this.typeFixture = new TypeFixture();
+            this.shoppingListFixture = new ShoppingListFixture();
+            this.paymentsFixture = new PaymentsFixture();
+            this.projectFixture = new ProjectFixture();
         }
 
         public void Dispose()
@@ -57,6 +69,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             this.discountCodeFixture.Dispose();
             this.customerGroupFixture.Dispose();
             this.typeFixture.Dispose();
+            this.shoppingListFixture.Dispose();
         }
 
         public CartDraft GetCartDraft(bool withCustomer = true, bool withDefaultShippingCountry = true)
@@ -114,11 +127,26 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return lineItemDraft;
         }
 
-        public Product CreateProduct()
+        public Product CreateProduct(bool cleanOnDispose = true)
         {
-            Product product = this.productFixture.CreateProduct(withVariants:true, publish:true);
-            this.productFixture.ProductsToDelete.Add(product);
+            Product product = this.productFixture.CreateProduct(withVariants:false, publish:true);
+            if (cleanOnDispose) // if you're not going to update this product
+            {
+                this.productFixture.ProductsToDelete.Add(product);
+            }
             return product;
+        }
+
+        public void CleanProductOnDispose(Product product)
+        {
+            this.productFixture.ProductsToDelete.Add(product);
+        }
+
+        public Customer CreateCustomer()
+        {
+            Customer customer = this.customerFixture.CreateCustomer();
+            this.customerFixture.CustomersToDelete.Add(customer);
+            return customer;
         }
 
         public ShippingMethod CreateShippingMethod(string shippingCountry = null)
@@ -157,6 +185,21 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             CustomerGroup customerGroup = this.customerGroupFixture.CreateCustomerGroup();
             this.customerGroupFixture.CustomerGroupsToDelete.Add(customerGroup);
             return customerGroup;
+        }
+
+        public Payment CreatePayment()
+        {
+            Payment payment = this.paymentsFixture.CreatePayment();
+            this.paymentsFixture.PaymentsToDelete.Add(payment);
+            return payment;
+        }
+
+        public ShoppingList CreateShoppingList()
+        {
+            ShoppingList shoppingList =
+                this.shoppingListFixture.CreateShoppingList(withCustomer: true, withLineItem: true);
+            this.shoppingListFixture.ShoppingListToDelete.Add(shoppingList);
+            return shoppingList;
         }
 
         public Type CreateCustomType()
@@ -199,11 +242,30 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             {
                 Country = "DE",
                 PostalCode = this.RandomInt().ToString(),
-                StreetName = this.RandomString(10)
+                StreetName = this.RandomString(10),
+                Key = this.RandomString(10)
             };
             return shippingAddress;
         }
 
+        public List<string> GetProjectLanguages()
+        {
+            return this.projectFixture.GetProjectLanguages();
+        }
+
+        public CustomLineItemDraft GetCustomLineItemDraft()
+        {
+            var customLineItemDraft = new CustomLineItemDraft
+            {
+                Name = new LocalizedString() {{"en", this.RandomString(10)}},
+                Slug = this.RandomString(10),
+                Quantity = this.RandomInt(1,10),
+                Money = Money.Parse($"{this.RandomInt(100,10000)} EUR"),
+
+
+            };
+            return customLineItemDraft;
+        }
 
     }
 }

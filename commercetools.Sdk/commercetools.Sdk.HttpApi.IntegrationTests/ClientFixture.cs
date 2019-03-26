@@ -99,5 +99,16 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             string country = europeCountries[ran];
             return country;
         }
+
+        public Money MultiplyMoney(BaseMoney oldMoney, int multiplyBy)
+        {
+            var newMoney = new Money()
+            {
+                CurrencyCode = oldMoney.CurrencyCode,
+                FractionDigits = oldMoney.FractionDigits,
+                CentAmount = oldMoney.CentAmount * multiplyBy
+            };
+            return newMoney;
+        }
     }
 }
