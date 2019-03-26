@@ -6,7 +6,7 @@
 
     public class UpdateItemShippingAddressUpdateAction : UpdateAction<Cart>
     {
-        public string Action => "addItemShippingAddress";
+        public string Action => "updateItemShippingAddress";
         [Required]
         public Address Address { get; set; }
     }

@@ -8,7 +8,7 @@
         public string ProductId { get; set; }
         public int VariantId { get; set; }
         public Reference<ProductType> ProductType { get; set; }
-        public double Quantity { get; set; }
+        public int Quantity { get; set; }
         public CustomFields Custom { get; set; }
         public DateTime AddedAt { get; set; }
         public LocalizedString Name { get; set; }

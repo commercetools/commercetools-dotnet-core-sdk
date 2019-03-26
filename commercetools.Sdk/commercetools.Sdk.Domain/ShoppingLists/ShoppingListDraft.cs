@@ -14,9 +14,9 @@
         [Required]
         public LocalizedString Name { get; set; }
         public LocalizedString Description { get; set; }
-        public Reference<Customer> Customer { get; set; }
+        public ResourceIdentifier Customer { get; set; }
         public string AnonymousId { get; set; }
-        public List<LineItem> LineItems { get; set; }
+        public List<LineItemDraft> LineItems { get; set; }
         public List<TextLineItem> TextLineItems { get; set; }
         public CustomFields Custom { get; set; }
         public int DeleteDaysAfterLastModification { get; set; }

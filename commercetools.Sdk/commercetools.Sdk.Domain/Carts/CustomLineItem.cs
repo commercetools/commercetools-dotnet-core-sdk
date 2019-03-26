@@ -11,9 +11,9 @@ namespace commercetools.Sdk.Domain.Carts
         public BaseMoney Money { get; set; }
         public TaxedItemPrice TaxedPrice { get; set; }
         public Money TotalPrice { get; set; }
-        public double Quantity { get; set; }
+        public long Quantity { get; set; }
         public string Slug { get; set; }
-        public ItemState State { get; set; }
+        public ItemState[] State { get; set; }
         public Reference<TaxCategory> TaxCategory { get; set; }
         public TaxRate TaxRate { get; set; }
         public List<DiscountedLineItemPriceForQuantity> DiscountedPricePerQuantity { get; set; }
