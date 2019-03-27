@@ -41,8 +41,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
         public CustomerGroupDraft CreateCustomerGroupDraft()
         {
             CustomerGroupDraft draft = new CustomerGroupDraft();
-            draft.GroupName = this.RandomString(6);
-            draft.Key = this.RandomString(4);
+            draft.GroupName = this.RandomString(10);
+            draft.Key = this.RandomString(10);
             return draft;
         }
 
@@ -57,8 +57,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
         public CustomerGroupDraft CreateCustomerGroupDraftWithCustomFields()
         {
             CustomerGroupDraft draft = new CustomerGroupDraft();
-            draft.GroupName = this.RandomString(6);
-            draft.Key = this.RandomString(4);
+            draft.GroupName = this.RandomString(10);
+            draft.Key = this.RandomString(10);
             CustomFieldsDraft customFieldsDraft = new CustomFieldsDraft();
             Type type = this.typeFixture.CreateType();
             this.typeFixture.TypesToDelete.Add(type);

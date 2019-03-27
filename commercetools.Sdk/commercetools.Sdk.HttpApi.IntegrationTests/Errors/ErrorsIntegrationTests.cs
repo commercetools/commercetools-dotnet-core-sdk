@@ -35,8 +35,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Errors
             IClient commerceToolsClient = this.errorsFixture.GetService<IClient>();
             string productTypeId = Guid.NewGuid().ToString();//references another resource that does not exist
             ProductDraft productDraft = new ProductDraft();
-            productDraft.Name = new LocalizedString() {{"en", this.errorsFixture.RandomString(4)}};
-            productDraft.Slug = new LocalizedString() {{"en", this.errorsFixture.RandomString(3)}};
+            productDraft.Name = new LocalizedString() {{"en", this.errorsFixture.RandomString(10)}};
+            productDraft.Slug = new LocalizedString() {{"en", this.errorsFixture.RandomString(10)}};
             productDraft.ProductType = new ResourceIdentifier() {Id = productTypeId};
             ErrorResponseException exception = await Assert.ThrowsAsync<ErrorResponseException>(()=> commerceToolsClient.ExecuteAsync(new CreateCommand<Product>(productDraft)));
             Assert.Equal(400, exception.StatusCode);

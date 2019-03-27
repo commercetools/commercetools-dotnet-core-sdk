@@ -80,9 +80,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public ProductDraft GetProductDraft(Category category, ProductType productType, bool withVariants = false, bool publish = false)
         {
             ProductDraft productDraft = new ProductDraft();
-            productDraft.Name = new LocalizedString() {{"en", this.RandomString(4)}};
-            productDraft.Key = this.RandomString(3);
-            productDraft.Slug = new LocalizedString() {{"en", this.RandomString(3)}};
+            productDraft.Name = new LocalizedString() {{"en", this.RandomString(10)}};
+            productDraft.Key = this.RandomString(10);
+            productDraft.Slug = new LocalizedString() {{"en", this.RandomString(10)}};
             productDraft.ProductType = new ResourceIdentifier() {Id = productType.Id};
             ProductVariantDraft productMasterVariant =
                 this.GetRandomProductVariantDraft(category.Id, ReferenceTypeId.Category);
@@ -160,8 +160,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             var price = GetRandomPriceDraft();
             var productVariantDraft = new ProductVariantDraft()
             {
-                Key = this.RandomString(5),
-                Sku = this.RandomString(5),
+                Key = this.RandomString(10),
+                Sku = this.RandomString(10),
                 Prices = new List<PriceDraft>(){price},
                 Attributes = GetListOfRandomAttributes(referenceAttributeId, referenceTypeId)
             };
@@ -200,9 +200,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             ReferenceTypeId? referenceTypeId = null)
         {
             List<Attribute> attributes = new List<Attribute>();
-            attributes.Add(new TextAttribute() {Name = "text-attribute-name", Value = this.RandomString(5)});
+            attributes.Add(new TextAttribute() {Name = "text-attribute-name", Value = this.RandomString(10)});
             attributes.Add(new LocalizedTextAttribute()
-                {Name = "localized-text-attribute-name", Value = new LocalizedString() {{"en", this.RandomString(5)}}});
+                {Name = "localized-text-attribute-name", Value = new LocalizedString() {{"en", this.RandomString(10)}}});
             attributes.Add(new EnumAttribute()
                 {Name = "enum-attribute-name", Value = new PlainEnumValue() {Key = "enum-key-1"}});
             attributes.Add(new LocalizedEnumAttribute()

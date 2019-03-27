@@ -18,26 +18,26 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Messages
         {
             this.messagesFixture = messagesFixture;
         }
-        
+
         //TODO check if the messages enable in danger zone and add at least one category for example to insert at least one message in the queue
-        [Fact(Skip = "Need to create test data first")]
+        [Fact]
         public void QueryAndSortMessagesDescending()
         {
             IClient commerceToolsClient = this.messagesFixture.GetService<IClient>();
-            
+
             QueryPredicate<Message> queryPredicate = new QueryPredicate<Message>(m => m.Type == "CustomerEmailVerified" || m.Type=="CategoryCreated");
-            
+
             //QueryPredicate<Message> queryPredicate = new QueryPredicate<Message>(m => m.Version >=1);
-            
+
             List<Sort<Message>> sortPredicates = new List<Sort<Message>>();
             Sort<Message> sort = new Sort<Message>(m=>m.CreatedAt, SortDirection.Descending);
             sortPredicates.Add(sort);
-            
+
             QueryCommand<Message> queryCommand = new QueryCommand<Message>();
             queryCommand.SetWhere(queryPredicate);
             queryCommand.SetSort(sortPredicates);
             //queryCommand.Limit = 100;
-            
+
             PagedQueryResult<Message> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.True(returnedSet.Count > 0);
         }
