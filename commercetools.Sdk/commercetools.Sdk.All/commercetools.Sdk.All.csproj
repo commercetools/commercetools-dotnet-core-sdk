@@ -17,6 +17,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\commercetools.Sdk.Client\commercetools.Sdk.Client.csproj" />
+      <ProjectReference Include="..\commercetools.Sdk.DependencyInjection\commercetools.Sdk.DependencyInjection.csproj" />
       <ProjectReference Include="..\commercetools.Sdk.Domain\commercetools.Sdk.Domain.csproj" />
       <ProjectReference Include="..\commercetools.Sdk.HttpApi.Domain\commercetools.Sdk.HttpApi.Domain.csproj" />
       <ProjectReference Include="..\commercetools.Sdk.HttpApi\commercetools.Sdk.HttpApi.csproj" />
