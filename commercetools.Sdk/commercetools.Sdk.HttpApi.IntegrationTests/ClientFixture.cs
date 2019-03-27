@@ -32,6 +32,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 AddJsonFile("appsettings.test.Development.json", true).
                 // https://www.jerriepelser.com/blog/aspnet-core-no-more-worries-about-checking-in-secrets/
                 AddEnvironmentVariables().
+                AddUserSecrets<ClientFixture>().
                 Build();
 
             services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials);

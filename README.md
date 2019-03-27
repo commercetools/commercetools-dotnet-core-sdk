@@ -3,7 +3,9 @@
 
 <img src="http://dev.commercetools.com/assets/img/CT-logo.svg" width="550px" alt="CT-logo"></img>
 
-[![Travis Build Status](https://travis-ci.org/commercetools/commercetools-dotnet-sdk.svg?branch=master)](https://travis-ci.org/commercetools/commercetools-dotnet-sdk)
+[![Travis Build Status](https://travis-ci.com/commercetools/commercetools-dotnet-core-sdk.svg?branch=master)](https://travis-ci.com/commercetools/commercetools-dotnet-core-sdk)
+[![AppVeyor Build Status](https://img.shields.io/appveyor/ci/commercetools/commercetools-dotnet-core-sdk.svg)](https://ci.appveyor.com/project/commercetools/commercetools-dotnet-core-sdk)
+[![NuGet Version and Downloads count](https://buildstats.info/nuget/commercetools.Sdk.Client?includePreReleases=true)](https://www.nuget.org/packages/commercetools.Sdk.Client)
 
 The commercetools .NET Core SDK enables developers to easily communicate with the [commercetools HTTP API](https://docs.commercetools.com/http-api.html). The developers do not need to create plain HTTP requests, but they can instead use the domain specific classes and methods to formulate valid requests. 
 
@@ -11,10 +13,38 @@ The commercetools .NET Core SDK enables developers to easily communicate with th
 
  - [ ] TODO Add the package name once it has been published. 
  - Download from Nuget
+ 
+## Technical Overview
 
-## Getting Started
+The SDK consists of the following projects:
+* `commercetools.Sdk.Client`: Contains abstract commands which are used to create instances of HTTP API commands. Some commands are implemented as generic types and you must specify a domain object when using them, whereas others are specific to a domain object. 
+* `commercetools.Sdk.DependencyInjection`: Default entry point to start using the SDK. Contains one class, `DependencyInjectionSetup`, which initializes all services the SDK uses and injects them into the service collection.
+* `commercetools.Sdk.Domain`: Models commercetools domain objects.
+* `commercetools.Sdk.HttpApi`: Communicates directly with the HTTP API.
+	* `Client`: Has one method, `ExecuteAsync()`, which executes commands. Executes commands which calls the HTTP API. Takes commands from classes in the `commercetools.Sdk.Client` project to construct implementations of the `IHttpApiCommand` interface.
+	* `IHttpApiCommand`: Classes implementing this interface are containers for a command from a `commercetools.Sdk.Client` class and a request builder which builds the request to the HTTP API endpoint. 
+* `commercetools.Sdk.HttpApi.Domain`: Handles exceptions and errors from the HTTP API.
+* `commercetools.Sdk.HttpApi.Linq`: Uses LINQ expressions to build queries for the `where` fields in the HTTP API. 
+* `commercetools.Sdk.HttpApi.Registration`: Helper classes for things like creating service locators.
+* `commercetools.Sdk.HttpApi.Serialization`: Serialization and deserialization services for responses and requests to the HTTP API.
+
+In addition, the SDK has the following directories:
+* `/Examples`: Contains examples of common SDK use cases for MVC applications. 
+* `/Tests`: Integration tests for the SDK. A good way for anyone using the .NET SDK to understand it futher.
+
+## Getting Started with the .NET SDK
 
 All operations (get, query, create, update, delete and others) are available as commands that can be passed to the client. In order to use the client object, it needs to be setup first through dependency injection setup.
+
+### Basic Workflow
+
+At a high level, to make a basic call to the API, do the following: 
+
+1. Use the dependency injection class to set things up. 
+2. get a client object from the services responsible for calling requests to the API
+3. If needed – Create a draft object as a required for the command, as needed.
+4. Use executeAsync(Command<T>) (find commands in the Client project – specify the domain obj you're working on)
+5. Receive the response as a model. 
 
 ### Dependency Injection Setup
 

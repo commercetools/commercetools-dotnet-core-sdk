@@ -65,7 +65,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
         {
             IClient commerceToolsClient = this.customerGroupFixture.GetService<IClient>();
             CustomerGroup customerGroup = this.customerGroupFixture.CreateCustomerGroup();
-            string name = this.customerGroupFixture.RandomString(5);
+            string name = this.customerGroupFixture.RandomString(10);
             List<UpdateAction<CustomerGroup>> updateActions = new List<UpdateAction<CustomerGroup>>();
             ChangeNameUpdateAction changeNameUpdateAction = new ChangeNameUpdateAction() { Name = name };
             updateActions.Add(changeNameUpdateAction);
@@ -79,7 +79,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
         {
             IClient commerceToolsClient = this.customerGroupFixture.GetService<IClient>();
             CustomerGroup customerGroup = this.customerGroupFixture.CreateCustomerGroup();
-            string key = this.customerGroupFixture.RandomString(5);
+            string key = this.customerGroupFixture.RandomString(10);
             List<UpdateAction<CustomerGroup>> updateActions = new List<UpdateAction<CustomerGroup>>();
             SetKeyUpdateAction setKeyUpdateAction = new SetKeyUpdateAction() { Key = key };
             updateActions.Add(setKeyUpdateAction);
@@ -109,7 +109,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
             IClient commerceToolsClient = this.customerGroupFixture.GetService<IClient>();
             CustomerGroup customerGroup = this.customerGroupFixture.CreateCustomerGroupWithCustomFields();
             List<UpdateAction<CustomerGroup>> updateActions = new List<UpdateAction<CustomerGroup>>();
-            string newValue = this.customerGroupFixture.RandomString(6);
+            string newValue = this.customerGroupFixture.RandomString(10);
             SetCustomFieldUpdateAction setCustomFieldUpdateAction = new SetCustomFieldUpdateAction() { Name = "string-field", Value = newValue };
             updateActions.Add(setCustomFieldUpdateAction);
             CustomerGroup retrievedCustomerGroup = commerceToolsClient.ExecuteAsync(new UpdateByKeyCommand<CustomerGroup>(customerGroup.Key, customerGroup.Version, updateActions)).Result;

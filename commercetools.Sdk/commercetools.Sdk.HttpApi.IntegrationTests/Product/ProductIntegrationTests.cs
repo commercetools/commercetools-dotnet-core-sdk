@@ -187,7 +187,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
             Product product = this.productFixture.CreateProduct();
-            string newKey = this.productFixture.RandomString(5);
+            string newKey = this.productFixture.RandomString(10);
             List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
             SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction() {Key = newKey};
             updateActions.Add(setKeyAction);
@@ -206,7 +206,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
             Product product = this.productFixture.CreateProduct();
-            string name = this.productFixture.RandomString(5);
+            string name = this.productFixture.RandomString(10);
             List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
             ChangeNameUpdateAction changeNameUpdateAction = new ChangeNameUpdateAction()
                 {Name = new LocalizedString() {{"en", name}}};
@@ -239,7 +239,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
             Product product = this.productFixture.CreateProduct();
-            string newSlug = this.productFixture.RandomString(3);
+            string newSlug = this.productFixture.RandomString(10);
             List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
             ChangeSlugUpdateAction changeSlugUpdateAction = new ChangeSlugUpdateAction()
                 {Slug = new LocalizedString() {{"en", newSlug}}};
@@ -260,8 +260,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             var productCategory = product.MasterData.Staged.Categories[0];
             AddProductVariantUpdateAction addProductVariantUpdateAction = new AddProductVariantUpdateAction()
             {
-                Sku = this.productFixture.RandomString(5),
-                Key = this.productFixture.RandomString(5),
+                Sku = this.productFixture.RandomString(10),
+                Key = this.productFixture.RandomString(10),
                 Attributes = this.productFixture.GetListOfRandomAttributes(productCategory.Id, ReferenceTypeId.Category)
             };
 
@@ -313,7 +313,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Product product = this.productFixture.CreateProduct();
 
             Category newCategory = this.productFixture.CreateNewCategory();
-            
+
             List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
             AddToCategoryUpdateAction addToCategoryUpdateAction = new AddToCategoryUpdateAction()
             {
@@ -326,7 +326,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 .Result;
             this.productFixture.ProductsToDelete.Add(retrievedProduct);
             Assert.Contains(retrievedProduct.MasterData.Current.Categories, c =>c.Id.Equals(newCategory.Id));
-            
+
         }
         #endregion
     }

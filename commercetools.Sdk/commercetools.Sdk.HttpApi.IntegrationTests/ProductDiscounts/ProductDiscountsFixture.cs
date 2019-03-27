@@ -43,7 +43,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
         {
             string predicate = this.GetProductDiscountPredicateBasedonProduct(productId);
             ProductDiscountDraft productDiscountDraft = new ProductDiscountDraft();
-            productDiscountDraft.Name = new LocalizedString() {{"en", this.RandomString(4)}};
+            productDiscountDraft.Name = new LocalizedString() {{"en", this.RandomString(10)}};
             productDiscountDraft.Description = new LocalizedString() {{"en", this.RandomString(20)}};
             productDiscountDraft.Value = GetProductDiscountValueAsAbsolute();
             productDiscountDraft.Predicate = predicate;

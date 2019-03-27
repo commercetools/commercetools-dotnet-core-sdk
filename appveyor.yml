@@ -1,9 +1,34 @@
 image: Visual Studio 2017
 
+cache:
+  - C:\ProgramData\chocolatey\cache -> appveyor.yml
+  - packages -> **\*.csproj
+
+install:
+  - ps: cinst pandoc --no-progress --cache C:\ProgramData\chocolatey\cache
+  - ps: .\set_appveyor_version.ps1
 
 before_build:
+  - pandoc -v
+  - pandoc README.md -f markdown -t plain --wrap=none -o readme.txt
   - ps: cd commercetools.Sdk
-  - ps: dotnet restore
+  - ps: dotnet restore --packages ..\packages
+  - ps: dotnet user-secrets set "Client:ClientId" $env:CTP_CLIENT_ID --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
+  - ps: dotnet user-secrets set "Client:ClientSecret" $env:CTP_CLIENT_SECRET --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
+  - ps: dotnet user-secrets set "Client:Scope" $env:CTP_CLIENT_SCOPE --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
+  - ps: dotnet user-secrets set "Client:ProjectKey" $env:CTP_PROJECTKEY --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
+  - ps: dotnet user-secrets set "TokenClient:ClientId" $env:CTP_CLIENT_ID --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
+  - ps: dotnet user-secrets set "TokenClient:ClientSecret" $env:CTP_CLIENT_SECRET --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
+  - ps: dotnet user-secrets set "TokenClient:Scope" $env:CTP_CLIENT_SCOPE --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
+  - ps: dotnet user-secrets set "TokenClient:ProjectKey" $env:CTP_PROJECTKEY --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
+  - ps: dotnet user-secrets set "TokenClientWithSmallerScope:ClientId" $env:CTP_CLIENT_ID --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
+  - ps: dotnet user-secrets set "TokenClientWithSmallerScope:ClientSecret" $env:CTP_CLIENT_SECRET --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
+  - ps: dotnet user-secrets set "TokenClientWithSmallerScope:Scope" $env:CTP_CLIENT_SCOPE --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
+  - ps: dotnet user-secrets set "TokenClientWithSmallerScope:ProjectKey" $env:CTP_PROJECTKEY --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
+  - ps: dotnet user-secrets set "TokenClientWithAnonymousScope:ClientId" $env:CTP_CLIENT_ID --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
+  - ps: dotnet user-secrets set "TokenClientWithAnonymousScope:ClientSecret" $env:CTP_CLIENT_SECRET --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
+  - ps: dotnet user-secrets set "TokenClientWithAnonymousScope:Scope" $env:CTP_CLIENT_SCOPE --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
+  - ps: dotnet user-secrets set "TokenClientWithAnonymousScope:ProjectKey" $env:CTP_PROJECTKEY --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
 
 build_script:
   - ps: dotnet build -c Release
@@ -13,27 +38,40 @@ after_build:
 
 test_script:
   - ps: dotnet test Tests --no-build -c Release
+  - ps: dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
 
 artifacts:
-- path: /**/*.nupkg
+- path: commercetools.Sdk/**/*.nupkg
   name: NuGet Package
 
 version: 1.0.0.{build}
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
-  version: '{version}'
-  package_version: '{version}'
-  assembly_version: '{version}'
-  file_version: '{version}'
-  informational_version: '{version}'
+  version: '$(appveyor_build_version)'
+  package_version: '$(appveyor_build_version)'
+  assembly_version: '$(appveyor_build_version)'
+  file_version: '$(appveyor_build_version)'
+  informational_version: '$(appveyor_build_version)'
 
+max_jobs: 1
+nuget:
+  project_feed: true
 
 deploy:
   - provider: NuGet
+    name: MyGet
     server: https://www.myget.org/F/commercetools-dotnet-core-sdk/api/v2/package
     api_key:
-      secure: sLfpoizqShKpK/JdBg/ECoQ9O/DLhrocq3pAIcWWMjRRsi8HaFUPMWPfUmX+qgsy
+      secure: +Pfl0dfkKW+5dZY/6vRFGLhE3pOd3xMTz1v7ARA8hgrtUVwnl4BdnW1hHTg1df+d
     skip_symbols: true
     on:
       branch: master
+  - provider: NuGet
+    name: NuGet
+    api_key:
+      secure: ni5E0gEpw5PzW7pLN/SxmH4OZtqHMuCXGxZrxc7LPAMtrQg0JnOMIhFhS3lGesPU
+    skip_symbols: true
+    on:
+      branch: master
+      APPVEYOR_REPO_TAG: true

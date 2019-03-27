@@ -73,7 +73,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             IClient commerceToolsClient = this.typeFixture.GetService<IClient>();
             Type type = this.typeFixture.CreateType();
             List<UpdateAction<Type>> updateActions = new List<UpdateAction<Type>>();
-            string newName = this.typeFixture.RandomString(7);
+            string newName = this.typeFixture.RandomString(10);
             ChangeNameUpdateAction changeNameUpdateAction = new ChangeNameUpdateAction() { Name = new LocalizedString() { { "en", newName } } };
             updateActions.Add(changeNameUpdateAction);
             Type retrievedType = commerceToolsClient.ExecuteAsync(new UpdateByKeyCommand<Type>(type.Key, type.Version, updateActions)).Result;
@@ -87,7 +87,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             IClient commerceToolsClient = this.typeFixture.GetService<IClient>();
             Type type = this.typeFixture.CreateType();
             List<UpdateAction<Type>> updateActions = new List<UpdateAction<Type>>();
-            string newKey = this.typeFixture.RandomString(7);
+            string newKey = this.typeFixture.RandomString(10);
             ChangeKeyUpdateAction changeKeyUpdateAction = new ChangeKeyUpdateAction() { Key = newKey };
             updateActions.Add(changeKeyUpdateAction);
             Type retrievedType = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Type>(new Guid(type.Id), type.Version, updateActions)).Result;
@@ -101,7 +101,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             IClient commerceToolsClient = this.typeFixture.GetService<IClient>();
             Type type = this.typeFixture.CreateType();
             List<UpdateAction<Type>> updateActions = new List<UpdateAction<Type>>();
-            string newKey = this.typeFixture.RandomString(7);
+            string newKey = this.typeFixture.RandomString(10);
             AddEnumToFieldDefinitionUpdateAction addEnumToFieldDefinitionUpdateAction = new AddEnumToFieldDefinitionUpdateAction() { FieldName = "enum-field", Value = new EnumValue() { Key = "new-enum-key", Label = "new-enum-label" } };
             updateActions.Add(addEnumToFieldDefinitionUpdateAction);
             Type retrievedType = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Type>(new Guid(type.Id), type.Version, updateActions)).Result;
@@ -115,7 +115,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             IClient commerceToolsClient = this.typeFixture.GetService<IClient>();
             Type type = this.typeFixture.CreateType();
             List<UpdateAction<Type>> updateActions = new List<UpdateAction<Type>>();
-            string newKey = this.typeFixture.RandomString(7);
+            string newKey = this.typeFixture.RandomString(10);
             AddFieldDefinitionUpdateAction addFieldDefinitionUpdateAction = new AddFieldDefinitionUpdateAction() { FieldDefinition = this.typeFixture.CreateNewStringFieldDefinition() };
             updateActions.Add(addFieldDefinitionUpdateAction);
             Type retrievedType = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Type>(new Guid(type.Id), type.Version, updateActions)).Result;

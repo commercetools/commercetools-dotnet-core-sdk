@@ -27,10 +27,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
         public void CreateProductDiscount()
         {
             IClient commerceToolsClient = this.productDiscountFixture.GetService<IClient>();
-            
+
             //Create Product
             Product product = this.productDiscountFixture.CreateProductWithVariant();
-            
+
             //Then Create Product Discount for this Product
             ProductDiscountDraft productDiscountDraft = this.productDiscountFixture.GetProductDiscountDraft(product.Id);
             ProductDiscount productDiscount = commerceToolsClient
@@ -78,25 +78,25 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
                 commerceToolsClient.ExecuteAsync(
                     new GetByIdCommand<ProductDiscount>(new Guid(retrievedProductDiscount.Id))));
         }
-        
+
         [Fact]
         public void GetMatchingProductDiscountValidQuery()
         {
             IClient commerceToolsClient = this.productDiscountFixture.GetService<IClient>();
-            
+
             //Create Product with product variant
             Product product = this.productDiscountFixture.CreateProductWithVariant();
-            
+
             //Create Product Discount for this product
             ProductDiscount productDiscount = this.productDiscountFixture.CreateProductDiscount(product);
             this.productDiscountFixture.ProductDiscountsToDelete.Add(productDiscount);
-            
+
             var masterVariant = product.MasterData.Staged.MasterVariant;
-            
+
             Assert.NotEmpty(masterVariant.Prices);
-            
+
             var masterVariantPrice = masterVariant.Prices[0];
-            
+
             var matchingProductDiscountParams= new GetMatchingProductDiscountParameters()
             {
                 Staged = true,
@@ -110,26 +110,26 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             Assert.NotNull(matchingProductDiscount);
         }
 
-        
+
         #region UpdateActions
-        
+
         [Fact]
         public void UpdateProductDiscountByIdChangeIsActive()
         {
             IClient commerceToolsClient = this.productDiscountFixture.GetService<IClient>();
             ProductDiscount productDiscount = this.productDiscountFixture.CreateProductDiscount();
-            
+
             List<UpdateAction<ProductDiscount>> updateActions = new List<UpdateAction<ProductDiscount>>();
             ChangeIsActiveUpdateAction changeIsActiveUpdateAction = new ChangeIsActiveUpdateAction()
             {
                 IsActive = !productDiscount.IsActive
             };
             updateActions.Add(changeIsActiveUpdateAction);
-            
+
             ProductDiscount retrievedProductDiscount = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version, updateActions))
                 .Result;
-                        
+
             this.productDiscountFixture.ProductDiscountsToDelete.Add(retrievedProductDiscount);
             Assert.NotEqual(retrievedProductDiscount.IsActive, productDiscount.IsActive);
         }
@@ -139,23 +139,23 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
         {
             IClient commerceToolsClient = this.productDiscountFixture.GetService<IClient>();
             ProductDiscount productDiscount = this.productDiscountFixture.CreateProductDiscount();
-            
+
             //creating new product discount value
             var newProductDiscountValue = this.productDiscountFixture.GetProductDiscountValueAsAbsolute();
-            
+
             List<UpdateAction<ProductDiscount>> updateActions = new List<UpdateAction<ProductDiscount>>();
             ChangeValueUpdateAction changeValueUpdateAction = new ChangeValueUpdateAction()
                 {Value = newProductDiscountValue};
             updateActions.Add(changeValueUpdateAction);
-            
+
             ProductDiscount retrievedProductDiscount = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version, updateActions))
                 .Result;
-                        
+
             this.productDiscountFixture.ProductDiscountsToDelete.Add(retrievedProductDiscount);
             Assert.NotEqual(productDiscount.Version, retrievedProductDiscount.Version);
         }
-        
+
         [Fact]
         public void UpdateProductDiscountByIdChangePredicate()
         {
@@ -163,40 +163,40 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             ProductDiscount productDiscount = this.productDiscountFixture.CreateProductDiscount();
 
             Product product = this.productDiscountFixture.CreateProductWithVariant();
-            
+
             //creating new predicate based on product "product.id = "ae3630c9-365a-4abe-a9b3-c14bb8b9ce95" "
-            string predicate = this.productDiscountFixture.GetProductDiscountPredicateBasedonProduct(product.Id); 
-            
+            string predicate = this.productDiscountFixture.GetProductDiscountPredicateBasedonProduct(product.Id);
+
             List<UpdateAction<ProductDiscount>> updateActions = new List<UpdateAction<ProductDiscount>>();
             ChangePredicateUpdateAction changePredicateUpdateAction = new ChangePredicateUpdateAction()
                 {Predicate = predicate};
             updateActions.Add(changePredicateUpdateAction);
-            
+
             ProductDiscount retrievedProductDiscount = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version, updateActions))
                 .Result;
-                        
+
             this.productDiscountFixture.ProductDiscountsToDelete.Add(retrievedProductDiscount);
             Assert.NotEqual(productDiscount.Predicate, retrievedProductDiscount.Predicate);
         }
-        
+
         [Fact]
         public void UpdateProductDiscountByIdSetValidFrom()
         {
             IClient commerceToolsClient = this.productDiscountFixture.GetService<IClient>();
             ProductDiscount productDiscount = this.productDiscountFixture.CreateProductDiscount();
-            
+
             List<UpdateAction<ProductDiscount>> updateActions = new List<UpdateAction<ProductDiscount>>();
             SetValidFromUpdateAction setValidFromUpdateAction = new SetValidFromUpdateAction()
             {
                 ValidFrom = DateTime.Today
             };
             updateActions.Add(setValidFromUpdateAction);
-            
+
             ProductDiscount retrievedProductDiscount = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version, updateActions))
                 .Result;
-                        
+
             this.productDiscountFixture.ProductDiscountsToDelete.Add(retrievedProductDiscount);
             Assert.NotEqual(retrievedProductDiscount.ValidFrom, productDiscount.ValidFrom);
         }
@@ -205,18 +205,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
         {
             IClient commerceToolsClient = this.productDiscountFixture.GetService<IClient>();
             ProductDiscount productDiscount = this.productDiscountFixture.CreateProductDiscount();
-            
+
             List<UpdateAction<ProductDiscount>> updateActions = new List<UpdateAction<ProductDiscount>>();
             SetValidUntilUpdateAction setValidUntilUpdateAction = new SetValidUntilUpdateAction()
             {
                 ValidUntil = DateTime.Today
             };
             updateActions.Add(setValidUntilUpdateAction);
-            
+
             ProductDiscount retrievedProductDiscount = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version, updateActions))
                 .Result;
-                        
+
             this.productDiscountFixture.ProductDiscountsToDelete.Add(retrievedProductDiscount);
             Assert.NotEqual(retrievedProductDiscount.ValidUntil, productDiscount.ValidUntil);
         }
@@ -225,7 +225,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
         {
             IClient commerceToolsClient = this.productDiscountFixture.GetService<IClient>();
             ProductDiscount productDiscount = this.productDiscountFixture.CreateProductDiscount();
-            
+
             List<UpdateAction<ProductDiscount>> updateActions = new List<UpdateAction<ProductDiscount>>();
             SetValidFromAndUntilUpdateAction setValidUntilUpdateAction = new SetValidFromAndUntilUpdateAction()
             {
@@ -233,39 +233,39 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
                 ValidUntil = productDiscount.ValidUntil.AddDays(2)
             };
             updateActions.Add(setValidUntilUpdateAction);
-            
+
             ProductDiscount retrievedProductDiscount = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version, updateActions))
                 .Result;
-                        
+
             this.productDiscountFixture.ProductDiscountsToDelete.Add(retrievedProductDiscount);
-            
+
             Assert.NotEqual(retrievedProductDiscount.ValidFrom, productDiscount.ValidFrom);
             Assert.NotEqual(retrievedProductDiscount.ValidUntil, productDiscount.ValidUntil);
         }
-        
+
         [Fact]
         public void UpdateProductDiscountByIdChangeName()
         {
             IClient commerceToolsClient = this.productDiscountFixture.GetService<IClient>();
             ProductDiscount productDiscount = this.productDiscountFixture.CreateProductDiscount();
 
-            string name = this.productDiscountFixture.RandomString(4);
+            string name = this.productDiscountFixture.RandomString(10);
             List<UpdateAction<ProductDiscount>> updateActions = new List<UpdateAction<ProductDiscount>>();
             ChangeNameUpdateAction changeNameUpdateAction = new ChangeNameUpdateAction()
             {
                 Name = new LocalizedString() { { "en", name } }
             };
             updateActions.Add(changeNameUpdateAction);
-            
+
             ProductDiscount retrievedProductDiscount = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version, updateActions))
                 .Result;
-                        
+
             this.productDiscountFixture.ProductDiscountsToDelete.Add(retrievedProductDiscount);
             Assert.Equal(name, retrievedProductDiscount.Name["en"]);
         }
-        
+
         [Fact]
         public void UpdateProductDiscountByIdSetDescription()
         {
@@ -279,32 +279,32 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
                 Description = new LocalizedString() { { "en", newDescription } }
             };
             updateActions.Add(setDescriptionUpdateAction);
-            
+
             ProductDiscount retrievedProductDiscount = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version, updateActions))
                 .Result;
-                        
+
             this.productDiscountFixture.ProductDiscountsToDelete.Add(retrievedProductDiscount);
             Assert.Equal(newDescription, retrievedProductDiscount.Description["en"]);
         }
-        
+
         [Fact]
         public void UpdateProductDiscountByIdChangeSortOrder()
         {
             IClient commerceToolsClient = this.productDiscountFixture.GetService<IClient>();
             ProductDiscount productDiscount = this.productDiscountFixture.CreateProductDiscount();
-            
+
             List<UpdateAction<ProductDiscount>> updateActions = new List<UpdateAction<ProductDiscount>>();
             ChangeSortOrderUpdateAction changeSortOrderUpdateAction = new ChangeSortOrderUpdateAction()
             {
                 SortOrder = this.productDiscountFixture.RandomSortOrder()
             };
             updateActions.Add(changeSortOrderUpdateAction);
-            
+
             ProductDiscount retrievedProductDiscount = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version, updateActions))
                 .Result;
-                        
+
             this.productDiscountFixture.ProductDiscountsToDelete.Add(retrievedProductDiscount);
             Assert.NotEqual(retrievedProductDiscount.SortOrder, productDiscount.SortOrder);
         }
