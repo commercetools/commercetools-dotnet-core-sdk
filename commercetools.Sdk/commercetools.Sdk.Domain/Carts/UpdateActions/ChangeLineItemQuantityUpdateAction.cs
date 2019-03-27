@@ -9,7 +9,7 @@
         [Required]
         public string LineItemId { get; set; }
         [Required]
-        public double Quantity { get; set; }
+        public long Quantity { get; set; }
         public BaseMoney ExternalPrice { get; set; }
         public ExternalLineItemTotalPrice ExternalTotalPrice { get; set; }
     }

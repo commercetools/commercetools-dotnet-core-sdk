@@ -4,6 +4,6 @@
     public class ScoreShippingRateInputBase
     {
         public string Type => this.GetType().GetTypeMarkerAttributeValue();
-        public double Score { get; set; }
+        public long Score { get; set; }
     }
 }
