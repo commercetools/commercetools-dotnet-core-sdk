@@ -72,17 +72,21 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             this.shoppingListFixture.Dispose();
         }
 
-        public CartDraft GetCartDraft(bool withCustomer = true, bool withDefaultShippingCountry = true)
+        public CartDraft GetCartDraft(bool withCustomer = true, bool withDefaultShippingCountry = true, bool withItemShippingAddress = false)
         {
-            var address = withDefaultShippingCountry
-                ? new Address() {Country = "DE"}
-                : new Address() {Country = this.GetRandomEuropeCountry()};
+            string country = withDefaultShippingCountry ? "DE" : this.GetRandomEuropeCountry();
+
+            var address = new Address { Country = country, Key = this.RandomString(10)};
 
             CartDraft cartDraft = new CartDraft();
             cartDraft.Currency = "EUR";
             cartDraft.ShippingAddress = address;
             cartDraft.DeleteDaysAfterLastModification = 30;
 
+            if (withItemShippingAddress)
+            {
+                cartDraft.ItemShippingAddresses = new List<Address> {address};
+            }
             if (withCustomer)//then create customer and attach it to the cart
             {
                 Customer customer = this.customerFixture.CreateCustomer();
@@ -92,9 +96,28 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return cartDraft;
         }
 
-        public Cart CreateCart(bool withCustomer = true, bool withDefaultShippingCountry = true)
+        public Cart CreateCart(bool withCustomer = true, bool withDefaultShippingCountry = true,  bool withItemShippingAddress = false)
         {
-            return this.CreateCart(this.GetCartDraft(withCustomer, withDefaultShippingCountry));
+            return this.CreateCart(this.GetCartDraft(withCustomer, withDefaultShippingCountry, withItemShippingAddress));
+        }
+
+        public Cart CreateCartWithCustomLineItem(bool withCustomer = true, bool withDefaultShippingCountry = true,  bool withItemShippingAddress = false)
+        {
+            var customLineItemDraft = this.GetCustomLineItemDraft();
+            CartDraft cartDraft = this.GetCartDraft(withCustomer, withDefaultShippingCountry, withItemShippingAddress);
+            cartDraft.CustomLineItems = new List<CustomLineItemDraft>{ customLineItemDraft };
+            Cart cart = this.CreateCart(cartDraft);
+            return cart;
+        }
+
+        public Cart CreateCartWithCustomLineItemWithSpecificTaxMode(TaxMode taxMode,bool withCustomer = true, bool withDefaultShippingCountry = true,  bool withItemShippingAddress = false)
+        {
+            var customLineItemDraft = this.GetCustomLineItemDraft();
+            CartDraft cartDraft = this.GetCartDraft(withCustomer, withDefaultShippingCountry, withItemShippingAddress);
+            cartDraft.CustomLineItems = new List<CustomLineItemDraft>{ customLineItemDraft };
+            cartDraft.TaxMode = taxMode;
+            Cart cart = this.CreateCart(cartDraft);
+            return cart;
         }
 
         public Cart CreateCart(CartDraft cartDraft)
@@ -255,16 +278,36 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
         public CustomLineItemDraft GetCustomLineItemDraft()
         {
+            TaxCategory taxCategory = this.CreateNewTaxCategory();
             var customLineItemDraft = new CustomLineItemDraft
             {
                 Name = new LocalizedString() {{"en", this.RandomString(10)}},
                 Slug = this.RandomString(10),
                 Quantity = this.RandomInt(1,10),
                 Money = Money.Parse($"{this.RandomInt(100,10000)} EUR"),
-
-
+                TaxCategory = new Reference<TaxCategory>() {Id = taxCategory.Id, TypeId = ReferenceTypeId.TaxCategory}
             };
             return customLineItemDraft;
+        }
+
+        public ItemShippingDetailsDraft GetItemShippingDetailsDraft(string addressKey)
+        {
+            var itemShippingTarget = this.GetItemShippingTarget(addressKey);
+            ItemShippingDetailsDraft itemShippingDetailsDraft = new ItemShippingDetailsDraft
+            {
+                Targets = new List<ItemShippingTarget>{itemShippingTarget}
+            };
+            return itemShippingDetailsDraft;
+        }
+
+        public ItemShippingTarget GetItemShippingTarget(string addressKey)
+        {
+            ItemShippingTarget itemShippingTarget = new ItemShippingTarget
+            {
+                Quantity = this.RandomInt(1,20),
+                AddressKey = addressKey
+            };
+            return itemShippingTarget;
         }
 
     }

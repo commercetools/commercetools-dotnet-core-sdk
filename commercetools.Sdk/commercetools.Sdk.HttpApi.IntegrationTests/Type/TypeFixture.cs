@@ -43,7 +43,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             typeDraft.Name.Add("en", this.RandomString(6));
             typeDraft.Description = new LocalizedString();
             typeDraft.Description.Add("en", this.RandomString(10));
-            typeDraft.ResourceTypeIds = new List<ResourceTypeId>() { ResourceTypeId.Category, ResourceTypeId.CustomerGroup, ResourceTypeId.InventoryEntry, ResourceTypeId.Order };
+            typeDraft.ResourceTypeIds = new List<ResourceTypeId>() { ResourceTypeId.Category, ResourceTypeId.CustomerGroup, ResourceTypeId.InventoryEntry, ResourceTypeId.Order, ResourceTypeId.CustomLineItem };
             typeDraft.FieldDefinitions = new List<FieldDefinition>();
             typeDraft.FieldDefinitions.Add(this.CreateStringFieldDefinition());
             typeDraft.FieldDefinitions.Add(this.CreateLocalizedStringFieldDefinition());

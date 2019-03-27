@@ -16,6 +16,7 @@ using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;
 using LineItemDraft = commercetools.Sdk.Domain.Carts.LineItemDraft;
 using SetCustomFieldUpdateAction = commercetools.Sdk.Domain.Carts.UpdateActions.SetCustomFieldUpdateAction;
+using SetCustomLineItemShippingDetailsUpdateAction = commercetools.Sdk.Domain.Carts.UpdateActions.SetCustomLineItemShippingDetailsUpdateAction;
 using SetCustomTypeUpdateAction = commercetools.Sdk.Domain.Carts.UpdateActions.SetCustomTypeUpdateAction;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
@@ -1165,7 +1166,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
             Cart cart = this.cartFixture.CreateCart();
             var customLineItem = this.cartFixture.GetCustomLineItemDraft();
-            var taxCategory = this.cartFixture.CreateNewTaxCategory();
 
             Assert.Empty(cart.CustomLineItems);
 
@@ -1176,7 +1176,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                     Slug = customLineItem.Slug,
                     Quantity = customLineItem.Quantity,
                     Money = customLineItem.Money,
-                    TaxCategory = new Reference<TaxCategory>() {Id = taxCategory.Id, TypeId = ReferenceTypeId.TaxCategory}
+                    TaxCategory = customLineItem.TaxCategory
                 };
 
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {addCustomLineItemUpdateAction};
@@ -1186,6 +1186,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                     cart.Version, updateActions))
                 .Result;
 
+            this.cartFixture.CartToDelete.Add(retrievedCart);
+
             Assert.Single(retrievedCart.CustomLineItems);
             Assert.Equal(customLineItem.Name["en"], retrievedCart.CustomLineItems[0].Name["en"]);
             Assert.Equal(customLineItem.Slug, retrievedCart.CustomLineItems[0].Slug);
@@ -1194,49 +1196,272 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         [Fact]
         public void UpdateCartRemoveCustomLineItem()
         {
-            throw new NotImplementedException();
+            IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
+
+            // First Create Cart with Custom Line Item
+            Cart retrievedCart = this.cartFixture.CreateCartWithCustomLineItem();
+            Assert.Single(retrievedCart.CustomLineItems);
+
+            // then remove it
+            string customLineItemId = retrievedCart.CustomLineItems[0].Id;
+            RemoveCustomLineItemUpdateAction removeCustomLineItemUpdateAction = new RemoveCustomLineItemUpdateAction
+            {
+                CustomLineItemId = customLineItemId
+            };
+            List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {removeCustomLineItemUpdateAction};
+
+            Cart cartWithEmptyCustomLineItems = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Cart>(new Guid(retrievedCart.Id),
+                    retrievedCart.Version, updateActions))
+                .Result;
+
+            this.cartFixture.CartToDelete.Add(cartWithEmptyCustomLineItems);
+
+            Assert.Empty(cartWithEmptyCustomLineItems.CustomLineItems);
+
         }
 
         [Fact]
         public void UpdateCartChangeCustomLineItemQuantity()
         {
-            throw new NotImplementedException();
+            IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
+
+            // First Create Cart with Custom Line Item
+            Cart retrievedCart = this.cartFixture.CreateCartWithCustomLineItem();
+            Assert.Single(retrievedCart.CustomLineItems);
+
+            // Then update the Quantity of it
+            string customLineItemId = retrievedCart.CustomLineItems[0].Id;
+            long newQuantity = retrievedCart.CustomLineItems[0].Quantity + 2;
+            ChangeCustomLineItemQuantityUpdateAction changeQuantityUpdateAction = new ChangeCustomLineItemQuantityUpdateAction
+            {
+                CustomLineItemId = customLineItemId,
+                Quantity = newQuantity
+            };
+            List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {changeQuantityUpdateAction};
+
+            Cart cartWithUpdatedQuantityForCustomLineItem = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Cart>(new Guid(retrievedCart.Id),
+                    retrievedCart.Version, updateActions))
+                .Result;
+
+            this.cartFixture.CartToDelete.Add(cartWithUpdatedQuantityForCustomLineItem);
+
+            Assert.Single(cartWithUpdatedQuantityForCustomLineItem.CustomLineItems);
+            Assert.Equal(newQuantity,cartWithUpdatedQuantityForCustomLineItem.CustomLineItems[0].Quantity);
         }
 
         [Fact]
         public void UpdateCartChangeCustomLineItemMoney()
         {
-            throw new NotImplementedException();
+            IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
+
+            // First Create Cart with Custom Line Item
+            Cart retrievedCart = this.cartFixture.CreateCartWithCustomLineItem();
+            Assert.Single(retrievedCart.CustomLineItems);
+
+            // Then update Money of it
+            string customLineItemId = retrievedCart.CustomLineItems[0].Id;
+            Money newMoney = this.cartFixture.MultiplyMoney(retrievedCart.CustomLineItems[0].Money, 2);
+            ChangeCustomLineItemMoneyUpdateAction changeMoneyUpdateAction = new ChangeCustomLineItemMoneyUpdateAction
+            {
+                CustomLineItemId = customLineItemId,
+                Money = newMoney
+            };
+            List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {changeMoneyUpdateAction};
+
+            Cart cartWithUpdatedMoneyForCustomLineItem = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Cart>(new Guid(retrievedCart.Id),
+                    retrievedCart.Version, updateActions))
+                .Result;
+
+            this.cartFixture.CartToDelete.Add(cartWithUpdatedMoneyForCustomLineItem);
+
+            Assert.Single(cartWithUpdatedMoneyForCustomLineItem.CustomLineItems);
+            Assert.Equal(newMoney,cartWithUpdatedMoneyForCustomLineItem.CustomLineItems[0].Money);
         }
 
         [Fact]
         public void UpdateCartSetCustomLineItemCustomType()
         {
-            throw new NotImplementedException();
+            IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
+
+            // First Create Cart with Custom Line Item
+            Cart retrievedCart = this.cartFixture.CreateCartWithCustomLineItem();
+            Assert.Single(retrievedCart.CustomLineItems);
+
+            // Then set it's custom type
+            string customLineItemId = retrievedCart.CustomLineItems[0].Id;
+            var customType = this.cartFixture.CreateCustomType();
+            var fields = this.cartFixture.CreateNewFields();
+
+            SetCustomLineItemCustomTypeUpdateAction setCustomTypeUpdateAction = new SetCustomLineItemCustomTypeUpdateAction
+            {
+                CustomLineItemId = customLineItemId,
+                Type = new ResourceIdentifier() { Id = customType.Id }, Fields = fields
+            };
+            List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {setCustomTypeUpdateAction};
+
+            Cart cartWithCustomTypeForCustomLineItem = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Cart>(new Guid(retrievedCart.Id),
+                    retrievedCart.Version, updateActions))
+                .Result;
+
+            this.cartFixture.CartToDelete.Add(cartWithCustomTypeForCustomLineItem);
+
+            Assert.Single(cartWithCustomTypeForCustomLineItem.CustomLineItems);
+            Assert.Equal(customType.Id, cartWithCustomTypeForCustomLineItem.CustomLineItems[0].Custom.Type.Id);
         }
 
         [Fact]
         public void UpdateCartSetCustomLineItemCustomField()
         {
-            throw new NotImplementedException();
+
+            IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
+
+            // First Create Cart with Custom Line Item
+            Cart retrievedCart = this.cartFixture.CreateCartWithCustomLineItem();
+            Assert.Single(retrievedCart.CustomLineItems);
+
+            // Then set custom type for the custom line item
+            string customLineItemId = retrievedCart.CustomLineItems[0].Id;
+            var customType = this.cartFixture.CreateCustomType();
+            var fields = this.cartFixture.CreateNewFields();
+
+            SetCustomLineItemCustomTypeUpdateAction setCustomTypeUpdateAction = new SetCustomLineItemCustomTypeUpdateAction
+            {
+                CustomLineItemId = customLineItemId,
+                Type = new ResourceIdentifier() { Id = customType.Id }, Fields = fields
+            };
+            List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {setCustomTypeUpdateAction};
+
+            Cart cartWithCustomTypeForCustomLineItem = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Cart>(new Guid(retrievedCart.Id),
+                    retrievedCart.Version, updateActions))
+                .Result;
+
+            Assert.Single(cartWithCustomTypeForCustomLineItem.CustomLineItems);
+            Assert.Equal(customType.Id, cartWithCustomTypeForCustomLineItem.CustomLineItems[0].Custom.Type.Id);
+
+            // then update it's fields
+
+            string stringFieldValue = this.cartFixture.RandomString(5);
+            SetCustomLineItemCustomFieldUpdateAction setCustomFieldUpdateAction = new SetCustomLineItemCustomFieldUpdateAction()
+            {
+                Name = "string-field",
+                Value = stringFieldValue,
+                CustomLineItemId = customLineItemId
+            };
+            updateActions.Clear();
+            updateActions.Add(setCustomFieldUpdateAction);
+
+            Cart cartWithUpdatedCustomFieldForCustomLineItem = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Cart>(new Guid(cartWithCustomTypeForCustomLineItem.Id),
+                    cartWithCustomTypeForCustomLineItem.Version, updateActions))
+                .Result;
+
+            this.cartFixture.CartToDelete.Add(cartWithUpdatedCustomFieldForCustomLineItem);
+
+            Assert.Single(cartWithUpdatedCustomFieldForCustomLineItem.CustomLineItems);
+            Assert.Equal(stringFieldValue, cartWithUpdatedCustomFieldForCustomLineItem.CustomLineItems[0].Custom.Fields["string-field"]);
         }
 
         [Fact]
         public void UpdateCartSetCustomLineItemTaxRate()
         {
-            throw new NotImplementedException();
+            IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
+
+            // First Create Cart with Custom Line Item and External Tax mode
+            Cart retrievedCart = this.cartFixture.CreateCartWithCustomLineItemWithSpecificTaxMode(TaxMode.External);
+            Assert.Single(retrievedCart.CustomLineItems);
+            Assert.Equal(TaxMode.External, retrievedCart.TaxMode);
+
+            // Then update TaxRate of it
+            string customLineItemId = retrievedCart.CustomLineItems[0].Id;
+            var externalTaxRateDraft = this.cartFixture.GetExternalTaxRateDraft();
+            SetCustomLineItemTaxRateUpdateAction setTaxRateUpdateAction = new SetCustomLineItemTaxRateUpdateAction
+            {
+                CustomLineItemId = customLineItemId,
+                ExternalTaxRate = externalTaxRateDraft
+            };
+            List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {setTaxRateUpdateAction};
+
+            Cart cartWithTaxRateForCustomLineItem = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Cart>(new Guid(retrievedCart.Id),
+                    retrievedCart.Version, updateActions))
+                .Result;
+
+            this.cartFixture.CartToDelete.Add(cartWithTaxRateForCustomLineItem);
+
+            Assert.Single(cartWithTaxRateForCustomLineItem.CustomLineItems);
+            Assert.Equal(externalTaxRateDraft.Name, cartWithTaxRateForCustomLineItem.CustomLineItems[0].TaxRate.Name);
+            Assert.Equal(externalTaxRateDraft.Amount, cartWithTaxRateForCustomLineItem.CustomLineItems[0].TaxRate.Amount);
         }
 
         [Fact]
         public void UpdateCartSetCustomLineItemTaxAmount()
         {
-            throw new NotImplementedException();
+            IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
+
+            // First Create Cart with Custom Line Item and ExternalAmount Tax mode
+            Cart retrievedCart = this.cartFixture.CreateCartWithCustomLineItemWithSpecificTaxMode(TaxMode.ExternalAmount);
+            Assert.Single(retrievedCart.CustomLineItems);
+            Assert.Equal(TaxMode.ExternalAmount, retrievedCart.TaxMode);
+
+            // Then update TaxRate of it
+            string customLineItemId = retrievedCart.CustomLineItems[0].Id;
+            var externalTaxAmountDraft = this.cartFixture.GetExternalTaxAmountDraft();
+            SetCustomLineItemTaxAmountUpdateAction setTaxAmountUpdateAction = new SetCustomLineItemTaxAmountUpdateAction
+            {
+                CustomLineItemId = customLineItemId,
+                ExternalTaxAmount = externalTaxAmountDraft
+            };
+            List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {setTaxAmountUpdateAction};
+
+            Cart cartWithTaxAmountForCustomLineItem = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Cart>(new Guid(retrievedCart.Id),
+                    retrievedCart.Version, updateActions))
+                .Result;
+
+            this.cartFixture.CartToDelete.Add(cartWithTaxAmountForCustomLineItem);
+
+            Assert.Single(cartWithTaxAmountForCustomLineItem.CustomLineItems);
+            Assert.Equal(externalTaxAmountDraft.TotalGross, cartWithTaxAmountForCustomLineItem.CustomLineItems[0].TaxedPrice.TotalGross);
         }
 
         [Fact]
         public void UpdateCartSetCustomLineItemShippingDetails()
         {
-            throw new NotImplementedException();
+            IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
+
+            // First Create Cart with Custom Line Item
+            Cart retrievedCart = this.cartFixture.CreateCartWithCustomLineItem(withItemShippingAddress: true);
+            Assert.Single(retrievedCart.CustomLineItems);
+            Assert.Single(retrievedCart.ItemShippingAddresses);
+
+            // Then update Shipping Details of it
+            string customLineItemId = retrievedCart.CustomLineItems[0].Id;
+            string addressKey = retrievedCart.ItemShippingAddresses[0].Key;
+            ItemShippingDetailsDraft itemShippingDetailsDraft = this.cartFixture.GetItemShippingDetailsDraft(addressKey);
+            SetCustomLineItemShippingDetailsUpdateAction setShippingDetailsUpdateAction = new SetCustomLineItemShippingDetailsUpdateAction
+            {
+                CustomLineItemId = customLineItemId,
+                ShippingDetails = itemShippingDetailsDraft
+            };
+            List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {setShippingDetailsUpdateAction};
+
+            Cart cartWithShippingDetailsForCustomLineItem = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Cart>(new Guid(retrievedCart.Id),
+                    retrievedCart.Version, updateActions))
+                .Result;
+
+            this.cartFixture.CartToDelete.Add(cartWithShippingDetailsForCustomLineItem);
+
+            Assert.Single(cartWithShippingDetailsForCustomLineItem.CustomLineItems);
+            Assert.NotNull(cartWithShippingDetailsForCustomLineItem.CustomLineItems[0].ShippingDetails);
+            Assert.Single(cartWithShippingDetailsForCustomLineItem.CustomLineItems[0].ShippingDetails.Targets);
+            Assert.Equal(itemShippingDetailsDraft.Targets[0].Quantity,cartWithShippingDetailsForCustomLineItem.CustomLineItems[0].ShippingDetails.Targets[0].Quantity);
+            Assert.Equal(itemShippingDetailsDraft.Targets[0].AddressKey,cartWithShippingDetailsForCustomLineItem.CustomLineItems[0].ShippingDetails.Targets[0].AddressKey);
         }
 
         [Fact]
