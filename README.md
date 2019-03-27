@@ -5,7 +5,7 @@
 
 [![Travis Build Status](https://travis-ci.com/commercetools/commercetools-dotnet-core-sdk.svg?branch=master)](https://travis-ci.com/commercetools/commercetools-dotnet-core-sdk)
 [![AppVeyor Build Status](https://img.shields.io/appveyor/ci/commercetools/commercetools-dotnet-core-sdk.svg)](https://ci.appveyor.com/project/commercetools/commercetools-dotnet-core-sdk)
-[![NuGet Version and Downloads count](https://buildstats.info/nuget/commercetools.Sdk.Client?includePreReleases=true)](https://www.nuget.org/packages/commercetools.Sdk.Client)
+[![NuGet Version and Downloads count](https://buildstats.info/nuget/commercetools.Sdk.All?includePreReleases=true)](https://www.nuget.org/packages/commercetools.Sdk.All)
 
 The commercetools .NET Core SDK enables developers to easily communicate with the [commercetools HTTP API](https://docs.commercetools.com/http-api.html). The developers do not need to create plain HTTP requests, but they can instead use the domain specific classes and methods to formulate valid requests. 
 
