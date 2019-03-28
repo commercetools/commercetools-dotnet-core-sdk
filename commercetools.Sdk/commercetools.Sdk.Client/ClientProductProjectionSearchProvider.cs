@@ -1,38 +1,38 @@
-using System.Collections.Generic;
-using commercetools.Sdk.Linq;
-using commercetools.Sdk.Registration;
-
 namespace commercetools.Sdk.Client
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
+    using Domain.ProductProjections;
     using Domain.Query;
+    using Linq;
+    using Registration;
 
-    public class ClientQueryProvider<T> : IQueryProvider
+    public class ClientProductProjectionSearchProvider : IQueryProvider
     {
         private readonly IClient client;
 
-        private IList<T> result = new List<T>();
+        private IList<ProductProjection> result = new List<ProductProjection>();
 
-        public ClientQueryProvider(IClient client, QueryCommand<T> command)
+        public ClientProductProjectionSearchProvider(IClient client, SearchProductProjectionsCommand command)
         {
             this.client = client;
             this.Command = command;
         }
 
-        public QueryCommand<T> Command { get; }
+        public SearchProductProjectionsCommand Command { get; }
 
         public IQueryable CreateQuery(Expression expression)
         {
-            return (this as IQueryProvider).CreateQuery<T>(expression);
+            return (this as IQueryProvider).CreateQuery<ProductProjection>(expression);
         }
 
         public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
         {
-            if (typeof(TElement) != typeof(T))
+            if (typeof(TElement) != typeof(ProductProjection))
             {
-                throw new ArgumentException("Only " + typeof(T).FullName + " objects are supported");
+                throw new ArgumentException("Only " + typeof(ProductProjection).FullName + " objects are supported");
             }
 
             bool isMethodCallExpression = expression is MethodCallExpression;
@@ -42,30 +42,62 @@ namespace commercetools.Sdk.Client
                 return new ClientQueryableCollection<TElement>(this as ClientQueryProvider<TElement>, expression);
             }
 
-            var cmd = this.Command as QueryCommand<TElement>;
+            var cmd = this.Command;
             MethodCallExpression mc = expression as MethodCallExpression;
             switch (mc.Method.Name)
             {
+                case "RangeFacet":
+                    if (mc.Arguments[1] is UnaryExpression rangeFacet)
+                    {
+                        var t = rangeFacet.Operand as Expression<Func<ProductProjection, bool>>;
+                        cmd.RangeFacet(t);
+                    }
+
+                    break;
+                case "TermFacet":
+                    if (mc.Arguments[1] is UnaryExpression facet)
+                    {
+                        var t = facet.Operand as Expression<Func<ProductProjection, IComparable>>;
+                        cmd.TermFacet(t);
+                    }
+
+                    break;
+                case "FilterFacet":
+                    if (mc.Arguments[1] is UnaryExpression filterFacet)
+                    {
+                        var t = filterFacet.Operand as Expression<Func<ProductProjection, bool>>;
+                        cmd.FilterFacets(t);
+                    }
+
+                    break;
+                case "Filter":
+                    if (mc.Arguments[1] is UnaryExpression filter)
+                    {
+                        var t = filter.Operand as Expression<Func<ProductProjection, bool>>;
+                        cmd.Filter(t);
+                    }
+
+                    break;
+                case "FilterQuery":
                 case "Where":
                     if (mc.Arguments[1] is UnaryExpression where)
                     {
-                        var t = where.Operand as Expression<Func<TElement, bool>>;
-                        var queryPredicate = new QueryPredicate<TElement>(t);
-                        cmd.SetWhere(queryPredicate);
+                        var t = where.Operand as Expression<Func<ProductProjection, bool>>;
+                        cmd.FilterQuery(t);
                     }
 
                     break;
                 case "Take":
                     if (mc.Arguments[1] is ConstantExpression limit)
                     {
-                        cmd.Limit = (int)limit.Value;
+                        cmd.Limit((int)limit.Value);
                     }
 
                     break;
                 case "Skip":
                     if (mc.Arguments[1] is ConstantExpression offset)
                     {
-                        cmd.Offset = (int)offset.Value;
+                        cmd.Offset((int)offset.Value);
                     }
 
                     break;
@@ -75,9 +107,10 @@ namespace commercetools.Sdk.Client
                 case "ThenByDescending":
                     if (mc.Arguments[1] is UnaryExpression sort)
                     {
+                        var parameters = cmd.SearchParameters as ProductProjectionSearchParameters;
                         if (mc.Method.Name.StartsWith("OrderBy", StringComparison.Ordinal))
                         {
-                            cmd.Sort.Clear();
+                            parameters.Sort.Clear();
                         }
 
                         var direction = SortDirection.Ascending;
@@ -87,22 +120,21 @@ namespace commercetools.Sdk.Client
                         }
 
                         var render = ServiceLocator.Current.GetService<ISortExpressionVisitor>().Render(sort.Operand);
-                        cmd.Sort.Add(new Sort<T>(render, direction).ToString());
+                        parameters.Sort.Add(new Sort<ProductProjection>(render, direction).ToString());
                     }
-
                     break;
-                case "Expand":
-                    if (mc.Arguments[1] is UnaryExpression expand)
-                    {
-                        cmd.Expand.Add(new Expansion<TElement>(expand.Operand).ToString());
-                    }
-
-                    break;
+//                case "Expand":
+//                    if (mc.Arguments[1] is UnaryExpression expand)
+//                    {
+//                        cmd.Expand(expand.Operand);
+//                    }
+//
+//                    break;
                 default:
                     break;
             }
 
-            return new ClientQueryableCollection<TElement>(this as ClientQueryProvider<TElement>, expression);
+            return new ClientQueryableCollection<TElement>(this, expression);
         }
 
         public object Execute(Expression expression)

@@ -2,8 +2,11 @@
 using commercetools.Sdk.Domain;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Domain.Products.Attributes;
+using commercetools.Sdk.HttpApi.HttpApiCommands;
+using commercetools.Sdk.Registration;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
@@ -91,6 +94,28 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             PagedQueryResult<ProductProjection> results = commerceToolsClient.ExecuteAsync(searchProductProjectionsCommand).Result;
             var facetCount = ((TermFacetResult)results.Facets["variants.attributes.color.key"]).Terms[0].ProductCount;
             Assert.Equal(572, facetCount);
+        }
+
+        [Fact]
+        public void UseLinqProvider()
+        {
+            var commerceToolsClient = this.productFixture.GetService<IClient>();
+
+            var search = from p in commerceToolsClient.SearchProducts()
+                where p.Categories.Any(reference => reference.Id == "abc")
+                select p;
+            
+            search.Filter(p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "color" && ((TextAttribute)a).Value == "red")));
+            search.FilterQuery(p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "size" && ((TextAttribute)a).Value == "48")));
+            search.TermFacet(projection => projection.Key);
+
+            var command = ((ClientProductProjectionSearchProvider) search.Provider).Command;
+            var commandFactory = this.productFixture.GetService<IHttpApiCommandFactory>();;
+            var httpApiCommand = commandFactory.Create(command);
+
+            var request = httpApiCommand.HttpRequestMessage;
+            Assert.Equal(HttpMethod.Post, request.Method);
+            Assert.Equal("filter=variants.attributes.color%3A%22red%22&filter.query=categories.id%3A%22abc%22&filter.query=variants.attributes.size%3A%2248%22&facet=key", request.Content.ReadAsStringAsync().Result);
         }
     }
 }
