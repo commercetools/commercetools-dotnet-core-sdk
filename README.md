@@ -228,4 +228,4 @@ Experimental support for querying the API using LINQ is provided by the `commerc
     
 Accessing the command built using LINQ
 
-    var command = ((CtpQueryProvider<Category>) query.Provider).Command;
+    var command = ((ClientQueryProvider<Category>) query.Provider).Command;

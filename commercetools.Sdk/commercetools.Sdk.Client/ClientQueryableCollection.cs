@@ -1,3 +1,6 @@
+using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.ProductProjections;
+
 namespace commercetools.Sdk.Client
 {
     using System;
@@ -11,6 +14,12 @@ namespace commercetools.Sdk.Client
         public ClientQueryableCollection(IClient client, QueryCommand<T> command)
         {
             this.Provider = new ClientQueryProvider<T>(client, command);
+            this.Expression = Expression.Constant(this);
+        }
+
+        public ClientQueryableCollection(IClient client, SearchProductProjectionsCommand command)
+        {
+            this.Provider = new ClientProductProjectionSearchProvider(client, command);
             this.Expression = Expression.Constant(this);
         }
 
