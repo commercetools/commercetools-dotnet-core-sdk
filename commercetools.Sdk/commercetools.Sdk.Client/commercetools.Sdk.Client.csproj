@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <CodeAnalysisRuleSet>$(SolutionDir)StyleCop\stylecop.ruleset</CodeAnalysisRuleSet>
-    <PackageVersion>1.0.0.0</PackageVersion>
+    <Version>1.0.0.0</Version>
     <authors>commercetools</authors>
     <owners>commercetools</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
