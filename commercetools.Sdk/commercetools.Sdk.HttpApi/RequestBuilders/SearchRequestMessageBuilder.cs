@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.HttpApi.AdditionalParameters;
@@ -35,6 +36,11 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             {
                 ISearchParametersBuilder searchParametersBuilder = this.searchParametersBuilderFactory.GetParameterBuilder(command.SearchParameters);
                 parameters.AddRange(searchParametersBuilder.GetSearchParameters(command.SearchParameters));
+            }
+
+            if (command.Expand != null)
+            {
+                parameters.AddRange(command.Expand.Select(x => new KeyValuePair<string, string>("expand", x)));
             }
 
             parameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));
