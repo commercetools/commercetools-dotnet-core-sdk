@@ -122,14 +122,15 @@ namespace commercetools.Sdk.Client
                         var render = ServiceLocator.Current.GetService<ISortExpressionVisitor>().Render(sort.Operand);
                         parameters.Sort.Add(new Sort<ProductProjection>(render, direction).ToString());
                     }
+
                     break;
-//                case "Expand":
-//                    if (mc.Arguments[1] is UnaryExpression expand)
-//                    {
-//                        cmd.Expand(expand.Operand);
-//                    }
-//
-//                    break;
+                case "Expand":
+                    if (mc.Arguments[1] is UnaryExpression expand)
+                    {
+                        cmd.Expand.Add(new Expansion<ProductProjection>(expand.Operand).ToString());
+                    }
+
+                    break;
                 default:
                     break;
             }

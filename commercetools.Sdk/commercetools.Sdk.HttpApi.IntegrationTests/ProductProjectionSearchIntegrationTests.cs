@@ -104,10 +104,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             var search = from p in commerceToolsClient.SearchProducts()
                 where p.Categories.Any(reference => reference.Id == "abc")
                 select p;
-            
-            search.Filter(p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "color" && ((TextAttribute)a).Value == "red")));
-            search.FilterQuery(p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "size" && ((TextAttribute)a).Value == "48")));
-            search.TermFacet(projection => projection.Key);
+
+            search.Expand(p => p.ProductType)
+                .Expand(p => p.TaxCategory)
+                .Filter(p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "color" && ((TextAttribute)a).Value == "red")))
+                .FilterQuery(p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "size" && ((TextAttribute)a).Value == "48")))
+                .TermFacet(projection => projection.Key);
 
             var command = ((ClientProductProjectionSearchProvider) search.Provider).Command;
             var commandFactory = this.productFixture.GetService<IHttpApiCommandFactory>();;
@@ -115,7 +117,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 
             var request = httpApiCommand.HttpRequestMessage;
             Assert.Equal(HttpMethod.Post, request.Method);
-            Assert.Equal("filter=variants.attributes.color%3A%22red%22&filter.query=categories.id%3A%22abc%22&filter.query=variants.attributes.size%3A%2248%22&facet=key", request.Content.ReadAsStringAsync().Result);
+            Assert.Equal("filter=variants.attributes.color%3A%22red%22&filter.query=categories.id%3A%22abc%22&filter.query=variants.attributes.size%3A%2248%22&facet=key&expand=productType&expand=taxCategory", request.Content.ReadAsStringAsync().Result);
         }
     }
 }

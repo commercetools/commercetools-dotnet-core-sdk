@@ -29,6 +29,27 @@ namespace commercetools.Sdk.Client
             return command;
         }
 
+        public static UpdateCommand<T> Expand<T>(this UpdateCommand<T> command, Expression<Func<T, Reference>> expression)
+        {
+            command.Expand.Add(new Expansion<T>(expression).ToString());
+
+            return command;
+        }
+
+        public static DeleteCommand<T> Expand<T>(this DeleteCommand<T> command, Expression<Func<T, Reference>> expression)
+        {
+            command.Expand.Add(new Expansion<T>(expression).ToString());
+
+            return command;
+        }
+
+        public static SearchCommand<T> Expand<T>(this SearchCommand<T> command, Expression<Func<T, Reference>> expression)
+        {
+            command.Expand.Add(new Expansion<T>(expression).ToString());
+
+            return command;
+        }
+
         public static QueryCommand<T> Limit<T>(this QueryCommand<T> command, int limit)
         {
             command.Limit = limit;
