@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.Messages;
@@ -96,9 +97,22 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return cartDraft;
         }
 
-        public Cart CreateCart(bool withCustomer = true, bool withDefaultShippingCountry = true,  bool withItemShippingAddress = false)
+        public Cart CreateCart(TaxMode taxMode = TaxMode.Platform,bool withCustomer = true, bool withDefaultShippingCountry = true,  bool withItemShippingAddress = false)
         {
-            return this.CreateCart(this.GetCartDraft(withCustomer, withDefaultShippingCountry, withItemShippingAddress));
+            CartDraft cartDraft = this.GetCartDraft(withCustomer, withDefaultShippingCountry, withItemShippingAddress);
+            cartDraft.TaxMode = taxMode;
+            return this.CreateCart(cartDraft);
+        }
+
+        public Cart CreateCartWithLineItem(TaxMode taxMode = TaxMode.Platform,bool withCustomer = true, bool withDefaultShippingCountry = true,  bool withItemShippingAddress = false)
+        {
+            Product product = this.CreateProduct();
+            LineItemDraft lineItemDraft = this.GetLineItemDraftBySku(product.MasterData.Current.MasterVariant.Sku, quantity: 6);
+            CartDraft cartDraft = this.GetCartDraft(withCustomer, withDefaultShippingCountry, withItemShippingAddress);
+            cartDraft.LineItems = new List<LineItemDraft>{ lineItemDraft };
+            cartDraft.TaxMode = taxMode;
+            Cart cart = this.CreateCart(cartDraft);
+            return cart;
         }
 
         public Cart CreateCartWithCustomLineItem(bool withCustomer = true, bool withDefaultShippingCountry = true,  bool withItemShippingAddress = false)
@@ -194,6 +208,46 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 FreeAbove = Money.Parse("100.00 EUR")
             };
             return rate;
+        }
+
+        public ShippingRateDraft GetShippingRateDraftWithPriceTiers()
+        {
+            ShippingRateDraft rate = new ShippingRateDraft()
+            {
+                Price = Money.Parse("10.00 EUR"),
+                Tiers = this.GetShippingRatePriceTiersAsCartScore()
+            };
+            return rate;
+        }
+
+        public ShippingRateDraft GetShippingRateDraftWithCartClassifications()
+        {
+            ShippingRateDraft rate = new ShippingRateDraft()
+            {
+                Price = Money.Parse("10.00 EUR"),
+                Tiers = GetShippingRatePriceTiersAsClassification()
+            };
+            return rate;
+        }
+
+        private List<ShippingRatePriceTier> GetShippingRatePriceTiersAsCartScore()
+        {
+            var shippingRatePriceTiers = new List<ShippingRatePriceTier>();
+            shippingRatePriceTiers.Add(new CartScoreShippingRatePriceTier{Score = 0, Price = Money.Parse("10.00 EUR")});
+            shippingRatePriceTiers.Add(new CartScoreShippingRatePriceTier{Score = 1, Price = Money.Parse("20.00 EUR")});
+            shippingRatePriceTiers.Add(new CartScoreShippingRatePriceTier{Score = 2, Price = Money.Parse("30.00 EUR")});
+            return shippingRatePriceTiers;
+        }
+        private List<ShippingRatePriceTier> GetShippingRatePriceTiersAsClassification()
+        {
+            var shippingRatePriceTiers = new List<ShippingRatePriceTier>();
+            shippingRatePriceTiers.Add(new CartClassificationShippingRatePriceTier{Value = "Small", Price = Money.Parse("20.00 EUR")});
+            shippingRatePriceTiers.Add(new CartClassificationShippingRatePriceTier{Value = "Heavy", Price = Money.Parse("30.00 EUR")});
+            return shippingRatePriceTiers;
+        }
+        public ShippingRate GetShippingRate()
+        {
+            return this.shippingMethodsFixture.GetShippingRate();
         }
 
         public DiscountCode CreateDiscountCode(string code)
@@ -300,6 +354,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return itemShippingDetailsDraft;
         }
 
+        public List<ItemShippingTarget> GetTargetsDelta(string addressKey)
+        {
+            var itemShippingTarget = this.GetItemShippingTarget(addressKey);
+            List<ItemShippingTarget> targetsDelta = new List<ItemShippingTarget> {itemShippingTarget};
+            return targetsDelta;
+        }
+
         public ItemShippingTarget GetItemShippingTarget(string addressKey)
         {
             ItemShippingTarget itemShippingTarget = new ItemShippingTarget
@@ -308,6 +369,19 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 AddressKey = addressKey
             };
             return itemShippingTarget;
+        }
+
+        public Sdk.Domain.Project.Project SetShippingRateInputTypeToCartScoreForCurrentProject()
+        {
+            return this.projectFixture.SetShippingRateInputTypeToCartScore();
+        }
+        public Sdk.Domain.Project.Project SetShippingRateInputTypeToCartClassificationForCurrentProject(List<LocalizedEnumValue> values)
+        {
+            return this.projectFixture.SetShippingRateInputTypeToCartClassification(values);
+        }
+        public Sdk.Domain.Project.Project RemoveExistingShippingRateInputTypeForCurrentProject()
+        {
+            return this.projectFixture.RemoveExistingShippingRateInputType();
         }
 
     }
