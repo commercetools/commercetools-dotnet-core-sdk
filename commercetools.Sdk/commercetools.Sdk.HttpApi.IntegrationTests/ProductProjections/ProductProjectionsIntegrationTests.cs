@@ -35,7 +35,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             var stagedProductProjection = commerceToolsClient.ExecuteAsync(new GetByIdCommand<ProductProjection>(new Guid(stagedProduct.Id), stagedAdditionalParameters)).Result;
             var publishedProductProjection = commerceToolsClient.ExecuteAsync(new GetByIdCommand<ProductProjection>(new Guid(publishedProduct.Id))).Result;
 
-            publishedProduct = this.productProjectionsFixture.productFixture.Unpublish(publishedProduct);//unpublish it before dispose
             this.productProjectionsFixture.productFixture.ProductsToDelete.Add(stagedProduct);
             this.productProjectionsFixture.productFixture.ProductsToDelete.Add(publishedProduct);
 
@@ -60,7 +59,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             var stagedProductProjection = commerceToolsClient.ExecuteAsync(new GetByKeyCommand<ProductProjection>(stagedProduct.Key, stagedAdditionalParameters)).Result;
             var publishedProductProjection = commerceToolsClient.ExecuteAsync(new GetByKeyCommand<ProductProjection>(publishedProduct.Key)).Result;
 
-            publishedProduct = this.productProjectionsFixture.productFixture.Unpublish(publishedProduct);//unpublish it before dispose
             this.productProjectionsFixture.productFixture.ProductsToDelete.Add(stagedProduct);
             this.productProjectionsFixture.productFixture.ProductsToDelete.Add(publishedProduct);
 
@@ -83,7 +81,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             queryCommand.Where(productProjection => productProjection.Key == publishedProduct.Key.valueOf());
             PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
 
-            publishedProduct = this.productProjectionsFixture.productFixture.Unpublish(publishedProduct);//unpublish it before dispose
             this.productProjectionsFixture.productFixture.ProductsToDelete.Add(publishedProduct);
 
             //Assert
@@ -196,7 +193,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             queryCommand.Expand(p => p.ProductType).Expand(p => p.Categories.ExpandAll());
             PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
 
-            publishedProduct = this.productProjectionsFixture.productFixture.Unpublish(publishedProduct);//unpublish it before dispose
             this.productProjectionsFixture.productFixture.ProductsToDelete.Add(publishedProduct);
 
             //Assert

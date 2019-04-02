@@ -8,7 +8,7 @@
         public string Action => "addCustomLineItem";
         [Required]
         public LocalizedString Name { get; set; }
-        public double Quantity { get; set; }
+        public long Quantity { get; set; }
         [Required]
         public BaseMoney Money { get; set; }
         [Required]

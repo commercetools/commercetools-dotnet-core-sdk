@@ -12,9 +12,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
         private ProductFixture productFixture;
         public ChannelFixture channelFixture;
         private TypeFixture typeFixture;
-        
+
         public List<InventoryEntry> InventoryEntries { get; }
-        
+
         public InventoryFixture() : base()
         {
             this.InventoryEntries = new List<InventoryEntry>();
@@ -22,7 +22,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             this.channelFixture = new ChannelFixture();
             this.typeFixture = new TypeFixture();
         }
-        
+
         public void Dispose()
         {
             IClient commerceToolsClient = this.GetService<IClient>();
@@ -36,12 +36,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             this.channelFixture.Dispose();
             this.typeFixture.Dispose();
         }
-        
+
         public InventoryEntryDraft GetInventoryEntryDraft()
         {
             Product product = this.productFixture.CreateProduct(true);
             this.productFixture.ProductsToDelete.Add(product);
-            
+
             InventoryEntryDraft inventoryEntryDraft = new InventoryEntryDraft();
             inventoryEntryDraft.Sku = product.MasterData.Current.MasterVariant.Sku;
             inventoryEntryDraft.QuantityOnStock = this.RandomInt(100, 1000);
@@ -60,7 +60,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             InventoryEntry inventoryEntry = commerceToolsClient.ExecuteAsync(new CreateCommand<InventoryEntry>(inventoryEntryDraft)).Result;
             return inventoryEntry;
         }
-        
+
         public InventoryEntry CreateInventoryEntryWithCustomFields()
         {
             InventoryEntryDraft draft = this.CreateInventoryEntryDraftWithCustomFields();
@@ -80,21 +80,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             draft.Custom = customFieldsDraft;
             return draft;
         }
-        
+
         public Fields CreateNewFields()
         {
-            Fields fields = new Fields();
-            fields.Add("string-field", "test");
-            fields.Add("localized-string-field", new LocalizedString() { { "en", "localized-string-field-value" } });
-            fields.Add("enum-field", "enum-key-1");
-            fields.Add("localized-enum-field", "enum-key-1");
-            fields.Add("number-field", 3);
-            fields.Add("boolean-field", true);
-            fields.Add("date-field", new DateTime(2018, 11, 28));
-            fields.Add("date-time-field", new DateTime(2018, 11, 28, 11, 01, 00));
-            fields.Add("time-field", new TimeSpan(11, 01, 00));
-            fields.Add("money-field", new Money() { CentAmount = 1800, CurrencyCode = "EUR" });
-            fields.Add("set-field", new FieldSet<string>() { "test1", "test2" });
+            Fields fields = this.typeFixture.CreateNewFields();
             return fields;
         }
 

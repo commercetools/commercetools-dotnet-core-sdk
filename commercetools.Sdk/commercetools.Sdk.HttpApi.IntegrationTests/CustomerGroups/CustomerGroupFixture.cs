@@ -70,18 +70,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
 
         public Fields CreateNewFields()
         {
-            Fields fields = new Fields();
-            fields.Add("string-field", "test");
-            fields.Add("localized-string-field", new LocalizedString() { { "en", "localized-string-field-value" } });
-            fields.Add("enum-field", "enum-key-1");
-            fields.Add("localized-enum-field", "enum-key-1");
-            fields.Add("number-field", 3);
-            fields.Add("boolean-field", true);
-            fields.Add("date-field", new DateTime(2018, 11, 28));
-            fields.Add("date-time-field", new DateTime(2018, 11, 28, 11, 01, 00));
-            fields.Add("time-field", new TimeSpan(11, 01, 00));
-            fields.Add("money-field", new Money() { CentAmount = 1800, CurrencyCode = "EUR" });
-            fields.Add("set-field", new FieldSet<string>() { "test1", "test2" });
+            Fields fields = this.typeFixture.CreateNewFields();
             return fields;
         }
 

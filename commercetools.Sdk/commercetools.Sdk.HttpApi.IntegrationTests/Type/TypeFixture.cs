@@ -43,7 +43,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             typeDraft.Name.Add("en", this.RandomString(10));
             typeDraft.Description = new LocalizedString();
             typeDraft.Description.Add("en", this.RandomString(10));
-            typeDraft.ResourceTypeIds = new List<ResourceTypeId>() { ResourceTypeId.Category, ResourceTypeId.CustomerGroup, ResourceTypeId.InventoryEntry };
+            typeDraft.ResourceTypeIds = new List<ResourceTypeId>() { ResourceTypeId.Category, ResourceTypeId.CustomerGroup, ResourceTypeId.InventoryEntry, ResourceTypeId.Order, ResourceTypeId.LineItem, ResourceTypeId.CustomLineItem };
             typeDraft.FieldDefinitions = new List<FieldDefinition>();
             typeDraft.FieldDefinitions.Add(this.CreateStringFieldDefinition());
             typeDraft.FieldDefinitions.Add(this.CreateLocalizedStringFieldDefinition());
@@ -218,6 +218,23 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             fieldType.ElementType = new StringFieldType();
             fieldDefinition.Type = fieldType;
             return fieldDefinition;
+        }
+
+        public Fields CreateNewFields()
+        {
+            Fields fields = new Fields();
+            fields.Add("string-field", "test");
+            fields.Add("localized-string-field", new LocalizedString() { { "en", "localized-string-field-value" } });
+            fields.Add("enum-field", "enum-key-1");
+            fields.Add("localized-enum-field", "enum-key-1");
+            fields.Add("number-field", 3);
+            fields.Add("boolean-field", true);
+            fields.Add("date-field", new DateTime(2018, 11, 28));
+            fields.Add("date-time-field", new DateTime(2018, 11, 28, 11, 01, 00));
+            fields.Add("time-field", new TimeSpan(11, 01, 00));
+            fields.Add("money-field", new Money() { CentAmount = 1800, CurrencyCode = "EUR" });
+            fields.Add("set-field", new FieldSet<string>() { "test1", "test2" });
+            return fields;
         }
     }
 }

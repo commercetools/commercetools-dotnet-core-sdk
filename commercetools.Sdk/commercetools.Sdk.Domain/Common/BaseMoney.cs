@@ -55,8 +55,7 @@ namespace commercetools.Sdk.Domain
 
         public override bool Equals(object obj)
         {
-            BaseMoney money = obj as BaseMoney;
-            if (money == null)
+            if (!(obj is BaseMoney money))
             {
                 throw new ArgumentException();
             }
@@ -64,12 +63,12 @@ namespace commercetools.Sdk.Domain
             {
                 throw new ArgumentException();
             }
-            return this.CentAmount.Equals(money.CentAmount) && this.CurrencyCode.Equals(money.CurrencyCode) && this.FractionDigits.Equals(money.FractionDigits);
+            return this.CentAmount.Equals(money.CentAmount) && this.CurrencyCode.Equals(money.CurrencyCode);
         }
 
         public override int GetHashCode()
         {
-            return this.CentAmount.GetHashCode() + this.CurrencyCode.GetHashCode() + this.FractionDigits.GetHashCode();
+            return this.CentAmount.GetHashCode() + this.CurrencyCode.GetHashCode();
         }
     }
 }

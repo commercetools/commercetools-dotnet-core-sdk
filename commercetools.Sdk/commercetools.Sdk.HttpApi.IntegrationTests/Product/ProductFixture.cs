@@ -6,6 +6,7 @@ using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.Products;
 using commercetools.Sdk.Domain.Products.Attributes;
+using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
 using Xunit.Abstractions;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 
@@ -14,6 +15,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
     public class ProductFixture : ClientFixture, IDisposable
     {
         private readonly ProductTypeFixture productTypeFixture;
+
+        private readonly TaxCategoryFixture taxCategoryFixture;
+
         public CategoryFixture CategoryFixture { get; }
         public List<Product> ProductsToDelete { get; }
 
@@ -22,20 +26,28 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             this.ProductsToDelete = new List<Product>();
             this.productTypeFixture = new ProductTypeFixture();
             this.CategoryFixture = new CategoryFixture();
+            this.taxCategoryFixture = new TaxCategoryFixture();
         }
 
         public void Dispose()
         {
+            Product toBeDeleted = null;
             IClient commerceToolsClient = this.GetService<IClient>();
             this.ProductsToDelete.Reverse();
             foreach (Product product in this.ProductsToDelete)
             {
+                toBeDeleted = product;
+                if (product.MasterData.Published) // unpublish it before delete
+                {
+                    toBeDeleted = Unpublish(product);
+                }
                 Product deletedType = commerceToolsClient
-                    .ExecuteAsync(new DeleteByIdCommand<Product>(new Guid(product.Id), product.Version)).Result;
+                    .ExecuteAsync(new DeleteByIdCommand<Product>(new Guid(toBeDeleted.Id), toBeDeleted.Version)).Result;
             }
 
             this.productTypeFixture.Dispose();
             this.CategoryFixture.Dispose();
+            this.taxCategoryFixture.Dispose();
         }
 
         public Product Publish(Product product, PublishScope scope = PublishScope.All)
@@ -87,6 +99,14 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 var productVariantDraft = this.GetRandomProductVariantDraft(category.Id, ReferenceTypeId.Category);
                 productDraft.Variants.Add(productVariantDraft);
             }
+
+            //Add taxCategory to product
+            var taxCategory = CreateNewTaxCategory();
+            productDraft.TaxCategory = new Reference<TaxCategory>()
+            {
+                TypeId = ReferenceTypeId.TaxCategory,
+                Id = taxCategory.Id
+            };
 
             return productDraft;
         }
@@ -162,7 +182,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             var priceDraft = new PriceDraft()
             {
                 Value = money,
-                Country = "DE",
+                //Country = "DE",
                 ValidFrom = DateTime.Today.AddMonths(this.RandomInt(-5, -1)),
                 ValidUntil = DateTime.Today.AddMonths(this.RandomInt(1, 5))
             };
@@ -224,6 +244,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             ProductType productType = this.productTypeFixture.CreateProductType();
             this.productTypeFixture.ProductTypesToDelete.Add(productType);
             return productType;
+        }
+
+        public TaxCategory CreateNewTaxCategory()
+        {
+            var taxCategory = this.taxCategoryFixture.CreateTaxCategory();
+            this.taxCategoryFixture.TaxCategoriesToDelete.Add(taxCategory);
+            return taxCategory;
         }
     }
 }

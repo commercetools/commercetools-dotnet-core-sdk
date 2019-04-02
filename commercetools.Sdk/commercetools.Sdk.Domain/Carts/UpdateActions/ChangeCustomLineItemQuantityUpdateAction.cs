@@ -9,6 +9,6 @@
         [Required]
         public string CustomLineItemId { get; set; }
         [Required]
-        public double Quantity { get; set; }
+        public long Quantity { get; set; }
     }
 }

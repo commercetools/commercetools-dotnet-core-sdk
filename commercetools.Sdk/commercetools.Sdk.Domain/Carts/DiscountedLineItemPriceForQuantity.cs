@@ -2,7 +2,7 @@
 {
     public class DiscountedLineItemPriceForQuantity
     {
-        public double Quantity { get; set; }
+        public long Quantity { get; set; }
         public DiscountedLineItemPrice DiscountedPrice { get; set; }
     }
 }

@@ -50,7 +50,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             {
                 requestUri += $"/{command.ParameterValue}";
             }
-            else
+            else if (!string.IsNullOrEmpty(command.ParameterKey) && command.ParameterValue != null)
             {
                 requestUri += $"/{command.ParameterKey}={command.ParameterValue}";
             }

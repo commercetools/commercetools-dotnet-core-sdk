@@ -8,7 +8,7 @@
         public string Action => "removeLineItem";
         [Required]
         public string LineItemId { get; set; }
-        public double Quantity { get; set; }
+        public long Quantity { get; set; }
         public BaseMoney ExternalPrice { get; set; }
         public ExternalLineItemTotalPrice ExternalTotalPrice { get; set; }
         public ItemShippingDetailsDraft ShippingDetailsToRemove { get; set; }

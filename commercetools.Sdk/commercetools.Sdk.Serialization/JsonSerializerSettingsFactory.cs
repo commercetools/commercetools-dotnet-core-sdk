@@ -18,7 +18,7 @@
             this.serializationContractResolver = serializationContractResolver;
         }
 
-        public JsonSerializerSettings CreateDeserilizationSettings(Type type)
+        public JsonSerializerSettings CreateDeserializationSettings(Type type)
         {
             if (!mapping.ContainsKey(type))
             {
@@ -42,9 +42,12 @@
             return mapping[type];
         }
 
-        public JsonSerializerSettings CreateSerilizationSettings(Type type)
+        public JsonSerializerSettings CreateSerializationSettings(Type type)
         {
-            JsonSerializerSettings settings = new JsonSerializerSettings();
+            JsonSerializerSettings settings = new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
             settings.ContractResolver = this.serializationContractResolver;
             return settings;
         }

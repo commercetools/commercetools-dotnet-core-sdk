@@ -14,5 +14,7 @@ namespace commercetools.Sdk.Domain.Project
         public IList<string> Currencies { get; set; }
         public IList<string> Languages { get; set; }
         public DateTime CreateAt { get; set; }
+        public string TrialUntil { get; set; }
+        public ShippingRateInputType ShippingRateInputType { get; set; }
     }
 }

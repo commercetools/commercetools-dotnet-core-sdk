@@ -5,12 +5,12 @@ namespace commercetools.Sdk.Client
 {
     public class ReplicateCartCommand : ReplicateCommand<Cart>
     {
-        protected ReplicateCartCommand(IReplicaDraft<Cart> replica)
+        public ReplicateCartCommand(IReplicaDraft<Cart> replica)
             : base(replica)
         {
         }
 
-        protected ReplicateCartCommand(IReplicaDraft<Cart> replica, IAdditionalParameters<Cart> additionalParameters)
+        public ReplicateCartCommand(IReplicaDraft<Cart> replica, IAdditionalParameters<Cart> additionalParameters)
             : base(replica, additionalParameters)
         {
         }
