@@ -99,6 +99,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             Assert.NotNull(replicatedCart);
             Assert.Equal(CartState.Active, replicatedCart.CartState);
+
+            this.cartFixture.CartToDelete.Add(replicatedCart);
+            this.cartFixture.CartToDelete.Add(cart);
         }
 
         [Fact]
