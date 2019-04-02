@@ -10,7 +10,9 @@ using commercetools.Sdk.Registration;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Linq;
 using commercetools.Sdk.DependencyInjection;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.HttpApi.Tokens;
+using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
@@ -110,6 +112,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 CentAmount = oldMoney.CentAmount * multiplyBy
             };
             return newMoney;
+        }
+
+        public List<LocalizedEnumValue> GetCartClassificationTestValues()
+        {
+            var classificationValues = new List<LocalizedEnumValue>();
+            classificationValues.Add(new LocalizedEnumValue()
+                {Key = "Small", Label = new LocalizedString() {{"en", "Small"}, {"de", "Klein"}}});
+            classificationValues.Add(new LocalizedEnumValue()
+                {Key = "Medium", Label = new LocalizedString() {{"en", "Medium"}, {"de", "Mittel"}}});
+            classificationValues.Add(new LocalizedEnumValue()
+                {Key = "Heavy", Label = new LocalizedString() {{"en", "Heavy"}, {"de", "Schwergut"}}});
+            return classificationValues;
         }
     }
 }
