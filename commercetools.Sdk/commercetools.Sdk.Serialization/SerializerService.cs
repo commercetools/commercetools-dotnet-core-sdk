@@ -17,13 +17,13 @@
 
         public T Deserialize<T>(string input)
         {
-            var settings = this.jsonSerializerSettingsFactory.CreateDeserilizationSettings(typeof(T));
+            var settings = this.jsonSerializerSettingsFactory.CreateDeserializationSettings(typeof(T));
             return JsonConvert.DeserializeObject<T>(input, settings);
         }
 
         public string Serialize<T>(T input)
         {
-            var settings = this.jsonSerializerSettingsFactory.CreateSerilizationSettings(typeof(T));
+            var settings = this.jsonSerializerSettingsFactory.CreateSerializationSettings(typeof(T));
             var results = this.modelValidator.IsValid(input).ToList();
             if (results.Count != 0)
             {
