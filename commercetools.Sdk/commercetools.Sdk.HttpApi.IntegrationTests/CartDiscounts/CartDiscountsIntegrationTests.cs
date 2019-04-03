@@ -280,7 +280,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
             List<UpdateAction<CartDiscount>> updateActions = new List<UpdateAction<CartDiscount>>();
             SetValidFromUpdateAction setValidFromUpdateAction = new SetValidFromUpdateAction()
             {
-                ValidFrom = DateTime.Today
+                ValidFrom = DateTime.Today.AddMinutes(1)
             };
             updateActions.Add(setValidFromUpdateAction);
 
@@ -302,7 +302,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
             List<UpdateAction<CartDiscount>> updateActions = new List<UpdateAction<CartDiscount>>();
             SetValidUntilUpdateAction setValidUntilUpdateAction = new SetValidUntilUpdateAction()
             {
-                ValidUntil = DateTime.Today
+                ValidUntil = DateTime.Today.AddDays(1)
             };
             updateActions.Add(setValidUntilUpdateAction);
 
