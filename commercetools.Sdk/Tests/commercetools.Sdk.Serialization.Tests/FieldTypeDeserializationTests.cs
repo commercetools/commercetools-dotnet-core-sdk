@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
+using FluentAssertions;
+using FluentAssertions.Json;
 using Xunit;
 using Type = commercetools.Sdk.Domain.Type;
 
@@ -45,10 +47,10 @@ namespace commercetools.Sdk.Serialization.Tests
             typeDraft.FieldDefinitions = new List<FieldDefinition>();
             typeDraft.FieldDefinitions.Add(fieldDefinition);
             string result = serializerService.Serialize(typeDraft);
-            string resultFormatted = JValue.Parse(result).ToString(Formatting.Indented);
+            JToken resultFormatted = JValue.Parse(result);
             string serialized = File.ReadAllText("Resources/FieldTypes/Serialized.json");
-            string serializedFormatted = JValue.Parse(serialized).ToString(Formatting.Indented);
-            Assert.Equal(serializedFormatted, resultFormatted);
+            JToken serializedFormatted = JValue.Parse(serialized);
+            serializedFormatted.Should().BeEquivalentTo(resultFormatted);
         }
     }
 }

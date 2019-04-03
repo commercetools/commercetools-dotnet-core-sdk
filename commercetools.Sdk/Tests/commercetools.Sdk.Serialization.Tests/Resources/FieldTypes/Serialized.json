@@ -1,7 +1,5 @@
 {
   "key": "new-key",
-  "name": null,
-  "description": null,
   "resourceTypeIds": [ "category", "custom-line-item" ],
   "fieldDefinitions": [
     {
