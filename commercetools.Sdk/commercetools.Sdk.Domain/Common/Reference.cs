@@ -1,9 +1,8 @@
 ﻿namespace commercetools.Sdk.Domain
 {
-    public class Reference
+    public class Reference: ResourceIdentifier
     {
-        public ReferenceTypeId TypeId { get; set; }
+        public new string Key => null;
 
-        public string Id { get; set; }
     }
 }

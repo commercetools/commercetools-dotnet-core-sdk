@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
+using commercetools.Sdk.Domain;
 
 namespace System
 {
@@ -14,6 +15,17 @@ namespace System
                 return attributes[0].Description;
             }
             return value.ToString();
+        }
+
+        public static Type GetResourceType(this Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+            ResourceTypeMarkerAttribute[] attributes = (ResourceTypeMarkerAttribute[])fi.GetCustomAttributes(typeof(ResourceTypeMarkerAttribute), false);
+            if (attributes.Length > 0)
+            {
+                return attributes[0].Value;
+            }
+            throw new Exception();
         }
 
         public static object GetEnum(this string value, Type enumType)

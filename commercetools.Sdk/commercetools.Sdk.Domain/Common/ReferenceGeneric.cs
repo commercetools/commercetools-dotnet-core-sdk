@@ -1,4 +1,7 @@
-﻿namespace commercetools.Sdk.Domain
+﻿using System;
+using commercetools.Sdk.Domain.Categories;
+
+namespace commercetools.Sdk.Domain
 {
     public class Reference<T> : Reference
     {
