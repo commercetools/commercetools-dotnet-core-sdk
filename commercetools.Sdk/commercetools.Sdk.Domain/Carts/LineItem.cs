@@ -20,7 +20,7 @@ namespace commercetools.Sdk.Domain.Carts
         public TaxRate TaxRate { get; set; }
         public Reference<Channel> SupplyChannel { get; set; }
         public Reference<Channel> DistributionChannel { get; set; }
-        public List<DiscountedLineItemPriceForQuantity> DiscountedLineItemPriceForQuantity { get; set; }
+        public List<DiscountedLineItemPriceForQuantity> DiscountedPricePerQuantity { get; set; }
         public LineItemPriceMode PriceMode { get; set; }
         public LineItemMode LineItemMode { get; set; }
         public CustomFields Custom { get; set; }
