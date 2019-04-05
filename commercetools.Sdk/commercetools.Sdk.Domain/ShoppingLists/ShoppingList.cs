@@ -5,6 +5,7 @@
     using System.Collections.Generic;
 
     [Endpoint("shopping-lists")]
+    [ResourceType(ReferenceTypeId.ShoppingList)]
     public class ShoppingList
     {
         public string Id { get; set; }

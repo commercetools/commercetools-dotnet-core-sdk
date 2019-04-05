@@ -3,6 +3,7 @@
 namespace commercetools.Sdk.Domain
 {
     [Endpoint("products")]
+    [ResourceType(ReferenceTypeId.Product)]
     public class Product
     {
         public string Id { get; set; }

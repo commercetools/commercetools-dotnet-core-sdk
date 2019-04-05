@@ -67,5 +67,25 @@ namespace System
                 currentBaseType = currentBaseType.BaseType;
             }
         }
+
+        /// <summary>
+        /// Get Types that marked with the passed custom attribute
+        /// </summary>
+        /// <param name="currentType">the type of the custom attribute</param>
+        /// <returns>All types that have this custom attribute</returns>
+        public static IEnumerable<Type> GetMarkedTypes(this Type currentType)
+        {
+            Assembly assembly = Assembly.GetAssembly(currentType);
+            List<Type> types = new List<Type>();
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (type.GetCustomAttributes(currentType).Any())
+                {
+                    types.Add(type);
+                }
+            }
+
+            return types;
+        }
     }
 }

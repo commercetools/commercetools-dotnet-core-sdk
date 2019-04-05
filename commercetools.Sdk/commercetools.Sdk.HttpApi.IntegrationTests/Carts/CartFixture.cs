@@ -82,7 +82,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             CartDraft cartDraft = new CartDraft();
             cartDraft.Currency = "EUR";
             cartDraft.ShippingAddress = address;
-            cartDraft.DeleteDaysAfterLastModification = 30;
+            cartDraft.DeleteDaysAfterLastModification = 1;
 
             if (withItemShippingAddress)
             {
@@ -339,7 +339,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 Slug = this.RandomString(10),
                 Quantity = this.RandomInt(1,10),
                 Money = Money.Parse($"{this.RandomInt(100,10000)} EUR"),
-                TaxCategory = new Reference<TaxCategory>() {Id = taxCategory.Id, TypeId = ReferenceTypeId.TaxCategory}
+                TaxCategory = new Reference<TaxCategory>() {Id = taxCategory.Id}
             };
             return customLineItemDraft;
         }

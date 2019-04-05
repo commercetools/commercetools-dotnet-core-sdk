@@ -1,8 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.Domain.Predicates;
+using commercetools.Sdk.Registration;
 using Newtonsoft.Json.Linq;
 using Type = System.Type;
 
@@ -10,24 +14,32 @@ namespace commercetools.Sdk.Serialization
 {
     internal class ReferenceConverter : JsonConverterBase
     {
-        public override bool CanConvert(Type objectType)
+        private IDecoratorTypeRetriever<ResourceTypeAttribute> typeRetriever;
+
+        public ReferenceConverter(IDecoratorTypeRetriever<ResourceTypeAttribute> typeRetriever)
         {
-            return objectType == typeof(Reference);
+            this.typeRetriever = typeRetriever;
         }
 
-        public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization, SerializerType.Serialization };
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(Reference) || objectType == typeof(ResourceIdentifier);
+        }
+
+        public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization};
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JObject jsonObject = JObject.Load(reader);
             JToken typeId = jsonObject["typeId"];
-            var enumVal = (ReferenceTypeId)typeId.ToString().GetEnum(typeof(ReferenceTypeId));
 
-            var t = enumVal.GetResourceType();
-
-            var referenceType = typeof(Reference<>).MakeGenericType(t);
-
-            return jsonObject.ToObject(referenceType, serializer);
+            var type = this.typeRetriever.GetTypeForToken(typeId);
+            if (type == null)
+            {
+                throw new JsonSerializationException();
+            }
+            var genericReferenceType = typeof(Reference<>).MakeGenericType(type);
+            return jsonObject.ToObject(genericReferenceType, serializer);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

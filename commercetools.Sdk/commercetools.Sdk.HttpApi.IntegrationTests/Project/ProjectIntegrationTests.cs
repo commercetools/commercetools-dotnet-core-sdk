@@ -41,13 +41,14 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Project
             var updatedProject = this.projectFixture.SetShippingRateInputTypeToCartScore();
 
             Assert.NotNull(updatedProject.ShippingRateInputType);
-            Assert.IsType(typeof(CartScoreShippingRateInputType), updatedProject.ShippingRateInputType);
+            Assert.IsType<CartScoreShippingRateInputType>(updatedProject.ShippingRateInputType);
 
             // then remove it
             updatedProject = this.projectFixture.RemoveExistingShippingRateInputType();
 
             Assert.Null(updatedProject.ShippingRateInputType);
         }
+
         [Fact]
         public void SetShippingRateInputTypeToCartClassification()
         {
@@ -62,15 +63,14 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Project
                 this.projectFixture.SetShippingRateInputTypeToCartClassification(classificationValues);
 
             Assert.NotNull(updatedProject.ShippingRateInputType);
-            Assert.IsType(typeof(CartClassificationShippingRateInputType), updatedProject.ShippingRateInputType);
+            Assert.IsType<CartClassificationShippingRateInputType>(updatedProject.ShippingRateInputType);
 
             // then remove it
             updatedProject = this.projectFixture.RemoveExistingShippingRateInputType();
 
             Assert.Null(updatedProject.ShippingRateInputType);
         }
+
         #endregion
-
-
     }
 }

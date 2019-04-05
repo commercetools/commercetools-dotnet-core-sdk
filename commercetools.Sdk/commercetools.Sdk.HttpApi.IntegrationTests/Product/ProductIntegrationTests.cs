@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Products;
 using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.Domain.Query;
@@ -120,9 +121,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public void QueryAndSortProducts()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+
+            ProductType productType = this.productFixture.CreateNewProductType();
             for (int i = 0; i < 3; i++)
             {
-                Product product = this.productFixture.CreateProduct();
+                Product product = this.productFixture.CreateProduct(productType);
                 this.productFixture.ProductsToDelete.Add(product);
             }
 
@@ -130,6 +133,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Sort<Product> sort = new Sort<Product>(p => p.Key);
             sortPredicates.Add(sort);
             QueryCommand<Product> queryCommand = new QueryCommand<Product>();
+            queryCommand.Where(product => product.ProductType.Id == productType.Id.valueOf());
             queryCommand.SetSort(sortPredicates);
 
             PagedQueryResult<Product> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
@@ -141,9 +145,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public void QueryAndSortProductsDescending()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            ProductType productType = this.productFixture.CreateNewProductType();
+
             for (int i = 0; i < 3; i++)
             {
-                Product product = this.productFixture.CreateProduct();
+                Product product = this.productFixture.CreateProduct(productType);
                 this.productFixture.ProductsToDelete.Add(product);
             }
 
@@ -151,6 +157,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Sort<Product> sort = new Sort<Product>(p => p.Key, SortDirection.Descending);
             sortPredicates.Add(sort);
             QueryCommand<Product> queryCommand = new QueryCommand<Product>();
+            queryCommand.Where(product => product.ProductType.Id == productType.Id.valueOf());
             queryCommand.SetSort(sortPredicates);
 
             PagedQueryResult<Product> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
@@ -318,16 +325,16 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             AddToCategoryUpdateAction addToCategoryUpdateAction = new AddToCategoryUpdateAction()
             {
                 OrderHint = this.productFixture.RandomSortOrder(),
-                Category =  new ResourceIdentifier() { Id = newCategory.Id}
+                Category = new ResourceIdentifier<Category> {Key = newCategory.Key}
             };
             updateActions.Add(addToCategoryUpdateAction);
             Product retrievedProduct = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
                 .Result;
             this.productFixture.ProductsToDelete.Add(retrievedProduct);
-            Assert.Contains(retrievedProduct.MasterData.Current.Categories, c =>c.Id.Equals(newCategory.Id));
-
+            Assert.Contains(retrievedProduct.MasterData.Current.Categories, c => c.Id.Equals(newCategory.Id));
         }
+
         #endregion
     }
 }

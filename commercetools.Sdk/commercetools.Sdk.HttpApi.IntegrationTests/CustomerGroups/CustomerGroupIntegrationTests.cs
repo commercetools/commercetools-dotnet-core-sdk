@@ -7,6 +7,7 @@ using commercetools.Sdk.HttpApi.Domain;
 using System;
 using System.Collections.Generic;
 using Xunit;
+using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
 {
@@ -26,7 +27,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
             IClient commerceToolsClient = this.customerGroupFixture.GetService<IClient>();
             CustomerGroup customerGroup = this.customerGroupFixture.CreateCustomerGroup();
             this.customerGroupFixture.CustomerGroupsToDelete.Add(customerGroup);
-            CustomerGroup retrievedCustomerGroup = commerceToolsClient.ExecuteAsync(new GetByIdCommand<CustomerGroup>(new Guid(customerGroup.Id))).Result;
+            CustomerGroup retrievedCustomerGroup = commerceToolsClient
+                .ExecuteAsync(new GetByIdCommand<CustomerGroup>(new Guid(customerGroup.Id))).Result;
             Assert.Equal(customerGroup.Id, retrievedCustomerGroup.Id);
         }
 
@@ -36,7 +38,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
             IClient commerceToolsClient = this.customerGroupFixture.GetService<IClient>();
             CustomerGroup customerGroup = this.customerGroupFixture.CreateCustomerGroup();
             this.customerGroupFixture.CustomerGroupsToDelete.Add(customerGroup);
-            CustomerGroup retrievedCustomerGroup = commerceToolsClient.ExecuteAsync(new GetByKeyCommand<CustomerGroup>(customerGroup.Key)).Result;
+            CustomerGroup retrievedCustomerGroup = commerceToolsClient
+                .ExecuteAsync(new GetByKeyCommand<CustomerGroup>(customerGroup.Key)).Result;
             Assert.Equal(customerGroup.Key, retrievedCustomerGroup.Key);
         }
 
@@ -45,7 +48,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
         {
             CustomerGroupDraft draft = this.customerGroupFixture.CreateCustomerGroupDraft();
             IClient commerceToolsClient = this.customerGroupFixture.GetService<IClient>();
-            CustomerGroup customerGroup = commerceToolsClient.ExecuteAsync(new CreateCommand<CustomerGroup>(draft)).Result;
+            CustomerGroup customerGroup =
+                commerceToolsClient.ExecuteAsync(new CreateCommand<CustomerGroup>(draft)).Result;
             this.customerGroupFixture.CustomerGroupsToDelete.Add(customerGroup);
             Assert.Equal(draft.Key, customerGroup.Key);
         }
@@ -55,7 +59,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
         {
             CustomerGroupDraft draft = this.customerGroupFixture.CreateCustomerGroupDraftWithCustomFields();
             IClient commerceToolsClient = this.customerGroupFixture.GetService<IClient>();
-            CustomerGroup customerGroup = commerceToolsClient.ExecuteAsync(new CreateCommand<CustomerGroup>(draft)).Result;
+            CustomerGroup customerGroup =
+                commerceToolsClient.ExecuteAsync(new CreateCommand<CustomerGroup>(draft)).Result;
             this.customerGroupFixture.CustomerGroupsToDelete.Add(customerGroup);
             Assert.Equal(draft.Custom.Fields.Count, customerGroup.Custom.Fields.Count);
         }
@@ -67,9 +72,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
             CustomerGroup customerGroup = this.customerGroupFixture.CreateCustomerGroup();
             string name = this.customerGroupFixture.RandomString(10);
             List<UpdateAction<CustomerGroup>> updateActions = new List<UpdateAction<CustomerGroup>>();
-            ChangeNameUpdateAction changeNameUpdateAction = new ChangeNameUpdateAction() { Name = name };
+            ChangeNameUpdateAction changeNameUpdateAction = new ChangeNameUpdateAction() {Name = name};
             updateActions.Add(changeNameUpdateAction);
-            CustomerGroup retrievedCustomerGroup = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<CustomerGroup>(new Guid(customerGroup.Id), customerGroup.Version, updateActions)).Result;
+            CustomerGroup retrievedCustomerGroup = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<CustomerGroup>(new Guid(customerGroup.Id), customerGroup.Version,
+                    updateActions)).Result;
             this.customerGroupFixture.CustomerGroupsToDelete.Add(retrievedCustomerGroup);
             Assert.Equal(name, retrievedCustomerGroup.Name);
         }
@@ -81,9 +88,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
             CustomerGroup customerGroup = this.customerGroupFixture.CreateCustomerGroup();
             string key = this.customerGroupFixture.RandomString(10);
             List<UpdateAction<CustomerGroup>> updateActions = new List<UpdateAction<CustomerGroup>>();
-            SetKeyUpdateAction setKeyUpdateAction = new SetKeyUpdateAction() { Key = key };
+            SetKeyUpdateAction setKeyUpdateAction = new SetKeyUpdateAction() {Key = key};
             updateActions.Add(setKeyUpdateAction);
-            CustomerGroup retrievedCustomerGroup = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<CustomerGroup>(new Guid(customerGroup.Id), customerGroup.Version, updateActions)).Result;
+            CustomerGroup retrievedCustomerGroup = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<CustomerGroup>(new Guid(customerGroup.Id), customerGroup.Version,
+                    updateActions)).Result;
             this.customerGroupFixture.CustomerGroupsToDelete.Add(retrievedCustomerGroup);
             Assert.Equal(key, retrievedCustomerGroup.Key);
         }
@@ -96,9 +105,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
             var type = this.customerGroupFixture.CreateNewType();
             var fields = this.customerGroupFixture.CreateNewFields();
             List<UpdateAction<CustomerGroup>> updateActions = new List<UpdateAction<CustomerGroup>>();
-            SetCustomTypeUpdateAction setCustomTypeUpdateAction = new SetCustomTypeUpdateAction() { Type = new ResourceIdentifier() { Id = type.Id }, Fields = fields };
+            SetCustomTypeUpdateAction setCustomTypeUpdateAction = new SetCustomTypeUpdateAction()
+                {Type = new ResourceIdentifier<Type> {Id = type.Id}, Fields = fields};
             updateActions.Add(setCustomTypeUpdateAction);
-            CustomerGroup retrievedCustomerGroup = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<CustomerGroup>(new Guid(customerGroup.Id), customerGroup.Version, updateActions)).Result;
+            CustomerGroup retrievedCustomerGroup = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<CustomerGroup>(new Guid(customerGroup.Id), customerGroup.Version,
+                    updateActions)).Result;
             this.customerGroupFixture.CustomerGroupsToDelete.Add(retrievedCustomerGroup);
             Assert.Equal(type.Id, retrievedCustomerGroup.Custom.Type.Id);
         }
@@ -110,9 +122,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
             CustomerGroup customerGroup = this.customerGroupFixture.CreateCustomerGroupWithCustomFields();
             List<UpdateAction<CustomerGroup>> updateActions = new List<UpdateAction<CustomerGroup>>();
             string newValue = this.customerGroupFixture.RandomString(10);
-            SetCustomFieldUpdateAction setCustomFieldUpdateAction = new SetCustomFieldUpdateAction() { Name = "string-field", Value = newValue };
+            SetCustomFieldUpdateAction setCustomFieldUpdateAction = new SetCustomFieldUpdateAction()
+                {Name = "string-field", Value = newValue};
             updateActions.Add(setCustomFieldUpdateAction);
-            CustomerGroup retrievedCustomerGroup = commerceToolsClient.ExecuteAsync(new UpdateByKeyCommand<CustomerGroup>(customerGroup.Key, customerGroup.Version, updateActions)).Result;
+            CustomerGroup retrievedCustomerGroup = commerceToolsClient
+                .ExecuteAsync(new UpdateByKeyCommand<CustomerGroup>(customerGroup.Key, customerGroup.Version,
+                    updateActions)).Result;
             this.customerGroupFixture.CustomerGroupsToDelete.Add(retrievedCustomerGroup);
             Assert.Equal(newValue, retrievedCustomerGroup.Custom.Fields["string-field"]);
         }
@@ -136,8 +151,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
         {
             IClient commerceToolsClient = this.customerGroupFixture.GetService<IClient>();
             CustomerGroup customerGroup = this.customerGroupFixture.CreateCustomerGroup();
-            CustomerGroup retrievedCustomerGroup = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<CustomerGroup>(new Guid(customerGroup.Id), customerGroup.Version)).Result;
-            Assert.ThrowsAsync<HttpApiClientException>(() => commerceToolsClient.ExecuteAsync(new GetByIdCommand<CustomerGroup>(new Guid(retrievedCustomerGroup.Id))));
+            CustomerGroup retrievedCustomerGroup = commerceToolsClient
+                .ExecuteAsync(new DeleteByIdCommand<CustomerGroup>(new Guid(customerGroup.Id), customerGroup.Version))
+                .Result;
+            Assert.ThrowsAsync<HttpApiClientException>(() =>
+                commerceToolsClient.ExecuteAsync(
+                    new GetByIdCommand<CustomerGroup>(new Guid(retrievedCustomerGroup.Id))));
         }
 
         [Fact]
@@ -145,8 +164,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
         {
             IClient commerceToolsClient = this.customerGroupFixture.GetService<IClient>();
             CustomerGroup customerGroup = this.customerGroupFixture.CreateCustomerGroup();
-            CustomerGroup retrievedCustomerGroup = commerceToolsClient.ExecuteAsync(new DeleteByKeyCommand<CustomerGroup>(customerGroup.Key, customerGroup.Version)).Result;
-            Assert.ThrowsAsync<HttpApiClientException>(() => commerceToolsClient.ExecuteAsync(new GetByIdCommand<CustomerGroup>(new Guid(retrievedCustomerGroup.Id))));
+            CustomerGroup retrievedCustomerGroup = commerceToolsClient
+                .ExecuteAsync(new DeleteByKeyCommand<CustomerGroup>(customerGroup.Key, customerGroup.Version)).Result;
+            Assert.ThrowsAsync<HttpApiClientException>(() =>
+                commerceToolsClient.ExecuteAsync(
+                    new GetByIdCommand<CustomerGroup>(new Guid(retrievedCustomerGroup.Id))));
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace commercetools.Sdk.Domain
 {
     [Endpoint("cart-discounts")]
+    [ResourceType(ReferenceTypeId.CartDiscount)]
     public class CartDiscount
     {
         public string Id { get; set; }

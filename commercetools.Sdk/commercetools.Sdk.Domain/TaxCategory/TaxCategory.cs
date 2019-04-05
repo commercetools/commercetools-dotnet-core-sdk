@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace commercetools.Sdk.Domain
 {
     [Endpoint("tax-categories")]
+    [ResourceType(ReferenceTypeId.TaxCategory)]
     public class TaxCategory
     {
         public string Id { get; set; }

@@ -5,6 +5,7 @@ using System.Text;
 namespace commercetools.Sdk.Domain
 {
     [Endpoint("discount-codes")]
+    [ResourceType(ReferenceTypeId.DiscountCode)]
     public class DiscountCode
     {
         public string Id { get; set; }

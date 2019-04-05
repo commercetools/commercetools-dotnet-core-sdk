@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain
+﻿using commercetools.Sdk.Domain.Customers;
+
+namespace commercetools.Sdk.Domain
 {
     using commercetools.Sdk.Domain.Validation.Attributes;
 
@@ -11,10 +13,10 @@
         public string AuthorName { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
-        public ResourceIdentifier Target { get; set; }
+        public IReferenceable Target { get; set; }
         public double Rating { get; set; }
-        public ResourceIdentifier State { get; set; }
-        public ResourceIdentifier Customer { get; set; }
+        public IReferenceable<State> State { get; set; }
+        public IReferenceable<Customer> Customer { get; set; }
         public CustomFields Custom { get; set; }
     }
 }

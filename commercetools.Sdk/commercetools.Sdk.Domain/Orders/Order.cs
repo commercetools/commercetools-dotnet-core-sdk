@@ -7,6 +7,7 @@ using commercetools.Sdk.Domain.CustomerGroups;
 namespace commercetools.Sdk.Domain.Orders
 {
     [Endpoint("orders")]
+    [ResourceType(ReferenceTypeId.Order)]
     public class Order
     {
         public string Id { get; set; }

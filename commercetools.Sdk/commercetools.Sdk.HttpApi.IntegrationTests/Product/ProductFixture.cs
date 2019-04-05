@@ -9,6 +9,7 @@ using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
 using Xunit.Abstractions;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
+using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
@@ -41,6 +42,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 {
                     toBeDeleted = Unpublish(product);
                 }
+
                 Product deletedType = commerceToolsClient
                     .ExecuteAsync(new DeleteByIdCommand<Product>(new Guid(toBeDeleted.Id), toBeDeleted.Version)).Result;
             }
@@ -77,21 +79,23 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             return retrievedProduct;
         }
 
-        public ProductDraft GetProductDraft(Category category, ProductType productType, bool withVariants = false, bool publish = false)
+        public ProductDraft GetProductDraft(Category category, ProductType productType, bool withVariants = false,
+            bool publish = false)
         {
             ProductDraft productDraft = new ProductDraft();
             productDraft.Name = new LocalizedString() {{"en", this.RandomString(10)}};
             productDraft.Key = this.RandomString(10);
             productDraft.Slug = new LocalizedString() {{"en", this.RandomString(10)}};
-            productDraft.ProductType = new ResourceIdentifier() {Id = productType.Id};
+            productDraft.ProductType = new ResourceIdentifier<ProductType> {Key = productType.Key};
             ProductVariantDraft productMasterVariant =
                 this.GetRandomProductVariantDraft(category.Id, ReferenceTypeId.Category);
             productDraft.MasterVariant = productMasterVariant;
-            productDraft.Categories = new List<ResourceIdentifier>
+
+            productDraft.Categories = new List<IReferenceable<Category>>
             {
-                new ResourceIdentifier() {Id = category.Id}
+                new ResourceIdentifier<Category> {Key = category.Key}
             };
-            productDraft.Publish = publish;//if true, the product is published immediately
+            productDraft.Publish = publish; //if true, the product is published immediately
 
             if (withVariants) //then create variants for this product
             {
@@ -104,7 +108,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             var taxCategory = CreateNewTaxCategory();
             productDraft.TaxCategory = new Reference<TaxCategory>()
             {
-                TypeId = ReferenceTypeId.TaxCategory,
                 Id = taxCategory.Id
             };
 
@@ -124,10 +127,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish));
         }
 
-        public Product CreateProduct(Category category, ProductType productType, bool withVariants = false, bool publish = false)
+        public Product CreateProduct(Category category, ProductType productType, bool withVariants = false,
+            bool publish = false)
         {
             return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish));
         }
+
         public Product CreateProduct(ProductType productType, bool withVariants = false, bool publish = false)
         {
             Category category = this.CreateNewCategory();
@@ -138,7 +143,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         {
             Category category = this.CreateNewCategory();
             ProductType productType = this.CreateNewProductType();
-            return this.GetProductDraft(category,productType);
+            return this.GetProductDraft(category, productType);
         }
 
         public Product CreateProduct(ProductDraft productDraft)
@@ -162,7 +167,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             {
                 Key = this.RandomString(10),
                 Sku = this.RandomString(10),
-                Prices = new List<PriceDraft>(){price},
+                Prices = new List<PriceDraft>() {price},
                 Attributes = GetListOfRandomAttributes(referenceAttributeId, referenceTypeId)
             };
             return productVariantDraft;
@@ -202,7 +207,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             List<Attribute> attributes = new List<Attribute>();
             attributes.Add(new TextAttribute() {Name = "text-attribute-name", Value = this.RandomString(10)});
             attributes.Add(new LocalizedTextAttribute()
-                {Name = "localized-text-attribute-name", Value = new LocalizedString() {{"en", this.RandomString(10)}}});
+            {
+                Name = "localized-text-attribute-name", Value = new LocalizedString() {{"en", this.RandomString(10)}}
+            });
             attributes.Add(new EnumAttribute()
                 {Name = "enum-attribute-name", Value = new PlainEnumValue() {Key = "enum-key-1"}});
             attributes.Add(new LocalizedEnumAttribute()
@@ -220,7 +227,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 attributes.Add(new ReferenceAttribute()
                 {
                     Name = "reference-attribute-name",
-                    Value = new Reference<Category>() {Id = referenceAttributeId, TypeId = referenceTypeId.Value}
+                    Value = new Reference<Category>()
+                    {
+                        Id = referenceAttributeId
+                    }
                 });
             }
 

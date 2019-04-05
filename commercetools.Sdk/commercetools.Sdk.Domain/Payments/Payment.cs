@@ -6,6 +6,7 @@ using System.Text;
 namespace commercetools.Sdk.Domain.Payments
 {
     [Endpoint("payments")]
+    [ResourceType(ReferenceTypeId.Payment)]
     public class Payment
     {
         public string Id { get; set; }

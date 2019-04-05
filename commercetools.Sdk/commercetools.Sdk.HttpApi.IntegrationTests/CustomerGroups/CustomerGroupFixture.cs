@@ -62,7 +62,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
             CustomFieldsDraft customFieldsDraft = new CustomFieldsDraft();
             Type type = this.typeFixture.CreateType();
             this.typeFixture.TypesToDelete.Add(type);
-            customFieldsDraft.Type = new ResourceIdentifier() { Key = type.Key };
+            customFieldsDraft.Type = new ResourceIdentifier<Type> { Key = type.Key };
             customFieldsDraft.Fields = this.CreateNewFields();
             draft.Custom = customFieldsDraft;
             return draft;

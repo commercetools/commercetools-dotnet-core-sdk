@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.Validation.Attributes;
 
 namespace commercetools.Sdk.Domain.Customers
@@ -29,7 +30,7 @@ namespace commercetools.Sdk.Domain.Customers
         public List<int> BillingAddresses { get; set; }
         public bool? IsEmailVerified { get; set; }
         public string ExternalId { get; set; }
-        public ResourceIdentifier CustomerGroup { get; set; }
+        public IReferenceable<CustomerGroup> CustomerGroup { get; set; }
         public CustomFieldsDraft Custom { get; set; }
         [Language]
         public string Locale { get; set; }

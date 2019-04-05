@@ -29,8 +29,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
             this.ShippingMethodsToDelete.Reverse();
             foreach (ShippingMethod shippingMethod in this.ShippingMethodsToDelete)
             {
-                ShippingMethod deletedShippingMethod = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<ShippingMethod>(new Guid(shippingMethod.Id), shippingMethod.Version)).Result;
+                ShippingMethod deletedShippingMethod = commerceToolsClient
+                    .ExecuteAsync(new DeleteByIdCommand<ShippingMethod>(new Guid(shippingMethod.Id),
+                        shippingMethod.Version)).Result;
             }
+
             this.taxCategoryFixture.Dispose();
             this.zonesFixture.Dispose();
         }
@@ -44,11 +47,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
             {
                 Name = $"Dhl_{ran}",
                 Key = $"Dhl_key_{ran}",
-                TaxCategory = new ResourceIdentifier()
+                TaxCategory = new ResourceIdentifier<TaxCategory>
                 {
-                    Id = taxCategory.Id
-                }
-                ,
+                    Key = taxCategory.Key
+                },
                 ZoneRates = new List<ZoneRateDraft>()
                 {
                     zoneRateDraft
@@ -64,11 +66,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
             ShippingRate shippingRate = this.GetShippingRate();
             ZoneRateDraft zoneRateDraft = new ZoneRateDraft()
             {
-                Zone = new ResourceIdentifier()
+                Zone = new ResourceIdentifier<Zone>
                 {
-                    Id = zone.Id
+                    Key = zone.Key
                 },
-                ShippingRates = new List<ShippingRate>(){ shippingRate }
+                ShippingRates = new List<ShippingRate>() {shippingRate}
             };
             return zoneRateDraft;
         }
@@ -91,7 +93,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
         public ShippingMethod CreateShippingMethod(ShippingMethodDraft shippingMethodDraft)
         {
             IClient commerceToolsClient = this.GetService<IClient>();
-            ShippingMethod shippingMethod = commerceToolsClient.ExecuteAsync(new CreateCommand<ShippingMethod>(shippingMethodDraft)).Result;
+            ShippingMethod shippingMethod = commerceToolsClient
+                .ExecuteAsync(new CreateCommand<ShippingMethod>(shippingMethodDraft)).Result;
             return shippingMethod;
         }
 
@@ -101,6 +104,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
             this.taxCategoryFixture.TaxCategoriesToDelete.Add(taxCategory);
             return taxCategory;
         }
+
         private Zone CreateNewZone(string country = null)
         {
             Zone zone = this.zonesFixture.CreateZone(country);

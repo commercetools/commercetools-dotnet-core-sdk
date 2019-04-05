@@ -1,17 +1,11 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 
 namespace commercetools.Sdk.Domain
 {
-    public class ResourceIdentifier<T>: ResourceIdentifier
+    public class ResourceIdentifier<T>: ResourceIdentifier, IReferenceable<T>
     {
         public new ReferenceTypeId TypeId => this.GetResourceType();
-
-        private ReferenceTypeId GetResourceType()
-        {
-            ReferenceTypeId referenceTypeId;
-            string refTypeName = typeof(T).Name;
-            Enum.TryParse(refTypeName, out referenceTypeId);
-            return referenceTypeId;
-        }
     }
 }

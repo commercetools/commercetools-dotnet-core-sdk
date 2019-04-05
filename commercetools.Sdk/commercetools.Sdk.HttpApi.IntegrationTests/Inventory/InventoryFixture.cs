@@ -30,8 +30,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             foreach (InventoryEntry inventoryEntry in this.InventoryEntries)
             {
                 InventoryEntry deletedEntry = commerceToolsClient
-                    .ExecuteAsync(new DeleteByIdCommand<InventoryEntry>(new Guid(inventoryEntry.Id), inventoryEntry.Version)).Result;
+                    .ExecuteAsync(new DeleteByIdCommand<InventoryEntry>(new Guid(inventoryEntry.Id),
+                        inventoryEntry.Version)).Result;
             }
+
             this.productFixture.Dispose();
             this.channelFixture.Dispose();
             this.typeFixture.Dispose();
@@ -57,7 +59,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
         public InventoryEntry CreateInventoryEntry(InventoryEntryDraft inventoryEntryDraft)
         {
             IClient commerceToolsClient = this.GetService<IClient>();
-            InventoryEntry inventoryEntry = commerceToolsClient.ExecuteAsync(new CreateCommand<InventoryEntry>(inventoryEntryDraft)).Result;
+            InventoryEntry inventoryEntry = commerceToolsClient
+                .ExecuteAsync(new CreateCommand<InventoryEntry>(inventoryEntryDraft)).Result;
             return inventoryEntry;
         }
 
@@ -65,7 +68,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
         {
             InventoryEntryDraft draft = this.CreateInventoryEntryDraftWithCustomFields();
             IClient commerceToolsClient = this.GetService<IClient>();
-            InventoryEntry inventoryEntry = commerceToolsClient.ExecuteAsync(new CreateCommand<InventoryEntry>(draft)).Result;
+            InventoryEntry inventoryEntry =
+                commerceToolsClient.ExecuteAsync(new CreateCommand<InventoryEntry>(draft)).Result;
             return inventoryEntry;
         }
 
@@ -75,7 +79,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             CustomFieldsDraft customFieldsDraft = new CustomFieldsDraft();
             Type type = this.typeFixture.CreateType();
             this.typeFixture.TypesToDelete.Add(type);
-            customFieldsDraft.Type = new ResourceIdentifier() { Key = type.Key };
+            customFieldsDraft.Type = new ResourceIdentifier<Type> {Key = type.Key};
             customFieldsDraft.Fields = this.CreateNewFields();
             draft.Custom = customFieldsDraft;
             return draft;
