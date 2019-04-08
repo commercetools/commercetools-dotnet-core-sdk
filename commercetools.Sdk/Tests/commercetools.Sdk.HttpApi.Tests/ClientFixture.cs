@@ -2,12 +2,19 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using commercetools.Sdk.Registration;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Linq;
 using commercetools.Sdk.HttpApi.Tokens;
 using commercetools.Sdk.DependencyInjection;
+using Moq;
+using Moq.Protected;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
@@ -75,6 +82,28 @@ namespace commercetools.Sdk.HttpApi.Tests
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        public Mock<IHttpClientFactory> GetClientFactoryMockWithSpecificResponse(string clientName, string jsonResponsePath)
+        {
+            string serialized = File.ReadAllText(jsonResponsePath);
+            var mockHttpClientFactory = new Mock<IHttpClientFactory>();
+            var mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            mockHttpClientFactory.Setup(x => x.CreateClient(clientName)).Returns(new HttpClient(mockHandler.Object));
+            mockHandler
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>()
+                )
+                .ReturnsAsync(new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(serialized)
+                })
+                .Verifiable();
+            return mockHttpClientFactory;
         }
     }
 }

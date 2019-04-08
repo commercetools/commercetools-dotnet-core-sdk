@@ -1,0 +1,6 @@
+{
+  "access_token":"7L3Be83-PjPIlEFUuk1DnsYI5_ZQtaIZ",
+  "token_type":"Bearer",
+  "expires_in":172800,
+  "scope":"manage_project:test-projectKey"
+}
