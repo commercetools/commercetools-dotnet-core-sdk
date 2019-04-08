@@ -10,6 +10,6 @@ namespace commercetools.Sdk.Domain.Orders.UpdateActions
         [Required]
         public Reference<Channel> Channel { get; set; }
         public string ExternalId { get; set; }
-        public DateTime SyncedAt { get; set; }
+        public DateTime? SyncedAt { get; set; }
     }
 }

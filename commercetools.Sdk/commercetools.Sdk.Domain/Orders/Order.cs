@@ -14,7 +14,7 @@ namespace commercetools.Sdk.Domain.Orders
         public int Version { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastModifiedAt { get; set; }
-        public DateTime CompletedAt { get; set; }
+        public DateTime? CompletedAt { get; set; }
         public string OrderNumber { get; set; }
         public string CustomerId { get; set; }
         public string CustomerEmail { get; set; }

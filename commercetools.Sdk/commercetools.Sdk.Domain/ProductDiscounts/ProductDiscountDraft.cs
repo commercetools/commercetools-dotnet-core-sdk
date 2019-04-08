@@ -13,8 +13,8 @@ namespace commercetools.Sdk.Domain.ProductDiscounts
         public string Predicate { get; set; }
         public string SortOrder { get; set; }
         public bool IsActive { get; set; }
-        public DateTime ValidFrom { get; set; }
-        public DateTime ValidUntil { get; set; }
+        public DateTime? ValidFrom { get; set; }
+        public DateTime? ValidUntil { get; set; }
 
         public void SetPredicate(Expression<Func<Product, bool>> expression)
         {

@@ -11,6 +11,6 @@ namespace commercetools.Sdk.Domain.Orders.UpdateActions
         public double Quantity { get; set; }
         public Reference<State> FromState { get; set; }
         public Reference<State> ToState { get; set; }
-        public DateTime ActualTransitionDate { get; set; }
+        public DateTime? ActualTransitionDate { get; set; }
     }
 }
