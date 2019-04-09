@@ -3,6 +3,7 @@
 namespace commercetools.Sdk.Domain.CustomerGroups
 {
     [Endpoint("customer-groups")]
+    [ResourceType(ReferenceTypeId.CustomerGroup)]
     public class CustomerGroup
     {
         public string Id { get; set; }

@@ -5,6 +5,7 @@ using System.Linq;
 namespace commercetools.Sdk.Domain
 {
     [Endpoint("types")]
+    [ResourceType(ReferenceTypeId.Type)]
     public class Type
     {
         public string Id { get; set; }

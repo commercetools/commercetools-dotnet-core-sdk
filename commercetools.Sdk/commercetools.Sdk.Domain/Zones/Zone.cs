@@ -5,6 +5,7 @@ using System.Text;
 namespace commercetools.Sdk.Domain.Zones
 {
     [Endpoint("zones")]
+    [ResourceType(ReferenceTypeId.Zone)]
     public class Zone
     {
         public string Id { get; set; }

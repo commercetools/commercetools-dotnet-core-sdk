@@ -26,7 +26,7 @@ namespace commercetools.Sdk.Domain.Orders
         public OrderState OrderState { get; set; }
         public ShipmentState ShipmentState { get; set; }
         public ShippingInfo ShippingInfo { get; set; }
-        public DateTime CompletedAt { get; set; }
+        public DateTime? CompletedAt { get; set; }
         public CustomFieldsDraft Custom { get; set; }
         public InventoryMode InventoryMode { get; set; }
         public RoundingMode TaxRoundingMode { get; set; }

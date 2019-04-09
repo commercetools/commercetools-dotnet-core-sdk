@@ -2,7 +2,7 @@
 {
     public class CustomFieldsDraft : IDraft<CustomFields>
     {
-        public ResourceIdentifier Type { get; set; }
+        public IReferenceable<Type> Type { get; set; }
         public Fields Fields { get; set; }
     }
 }

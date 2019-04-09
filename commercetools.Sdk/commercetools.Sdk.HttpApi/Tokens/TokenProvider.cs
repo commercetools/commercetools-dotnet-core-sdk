@@ -31,9 +31,12 @@ namespace commercetools.Sdk.HttpApi.Tokens
                     return token;
                 }
 
-                if (token.Expired && !string.IsNullOrEmpty(token.RefreshToken))
+                if (token.Expired)
                 {
-                    token = this.GetTokenAsync(this.GetRefreshTokenRequestMessage()).Result;
+                    var requestMessage = string.IsNullOrEmpty(token.RefreshToken)
+                        ? this.GetRequestMessage()
+                        : this.GetRefreshTokenRequestMessage();
+                    token = this.GetTokenAsync(requestMessage).Result;
                     this.tokenStoreManager.Token = token;
                     return token;
                 }

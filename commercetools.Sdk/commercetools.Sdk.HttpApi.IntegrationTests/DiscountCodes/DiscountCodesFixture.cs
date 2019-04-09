@@ -31,6 +31,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes
                     .ExecuteAsync(new DeleteByIdCommand<DiscountCode>(new Guid(discountCode.Id),
                         discountCode.Version)).Result;
             }
+
             this.cartDiscountsFixture.Dispose();
         }
 
@@ -54,8 +55,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes
             {
                 new Reference<CartDiscount>()
                 {
-                    Id= cartDiscount.Id,
-                    TypeId = ReferenceTypeId.CartDiscount
+                    Id = cartDiscount.Id,
                 }
             };
 
@@ -66,6 +66,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes
         {
             return this.CreateDiscountCode(this.GetDiscountCodeDraft());
         }
+
         public DiscountCode CreateDiscountCode(string code)
         {
             var discountCodeDraft = this.GetDiscountCodeDraft();
@@ -76,7 +77,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes
         public DiscountCode CreateDiscountCode(DiscountCodeDraft discountCodeDraft)
         {
             IClient commerceToolsClient = this.GetService<IClient>();
-            DiscountCode discountCode = commerceToolsClient.ExecuteAsync(new CreateCommand<DiscountCode>(discountCodeDraft)).Result;
+            DiscountCode discountCode = commerceToolsClient
+                .ExecuteAsync(new CreateCommand<DiscountCode>(discountCodeDraft)).Result;
             return discountCode;
         }
 
@@ -87,6 +89,5 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes
             this.cartDiscountsFixture.CartDiscountsToDelete.Add(cartDiscount);
             return cartDiscount;
         }
-
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace commercetools.Sdk.Domain.Customers
 {
     [Endpoint("customers")]
+    [ResourceType(ReferenceTypeId.Customer)]
     public class Customer
     {
         public string Id { get; set; }

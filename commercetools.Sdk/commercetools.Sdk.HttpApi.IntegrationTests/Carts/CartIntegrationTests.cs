@@ -15,6 +15,7 @@ using commercetools.Sdk.Domain.Project;
 using commercetools.Sdk.Domain.Query;
 using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.ShoppingLists;
+using commercetools.Sdk.Domain.Zones;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using commercetools.Sdk.HttpApi.HttpApiCommands;
 using Xunit;
@@ -24,6 +25,7 @@ using SetCustomFieldUpdateAction = commercetools.Sdk.Domain.Carts.UpdateActions.
 using SetCustomLineItemShippingDetailsUpdateAction =
     commercetools.Sdk.Domain.Carts.UpdateActions.SetCustomLineItemShippingDetailsUpdateAction;
 using SetCustomTypeUpdateAction = commercetools.Sdk.Domain.Carts.UpdateActions.SetCustomTypeUpdateAction;
+using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 {
@@ -92,7 +94,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             Cart cart = this.cartFixture.CreateCart();
             ReplicaCartDraft cartReplicationDraft = new ReplicaCartDraft()
             {
-                Reference = new Reference<Cart>() {Id = cart.Id, TypeId = ReferenceTypeId.Cart}
+                Reference = new Reference<Cart>() {Id = cart.Id}
             };
             var replicatedCart = commerceToolsClient
                 .ExecuteAsync(new ReplicateCartCommand(cartReplicationDraft)).Result;
@@ -230,11 +232,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             SetShippingMethodUpdateAction setShippingMethodUpdateAction = new SetShippingMethodUpdateAction()
             {
-                ShippingMethod = new Reference<ShippingMethod>()
-                {
-                    Id = shippingMethod.Id,
-                    TypeId = ReferenceTypeId.ShippingMethod
-                }
+                ShippingMethod = new Reference<ShippingMethod>() {Id = shippingMethod.Id}
             };
 
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {setShippingMethodUpdateAction};
@@ -263,7 +261,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             SetCustomShippingMethodUpdateAction setCustomShippingMethod = new SetCustomShippingMethodUpdateAction()
             {
                 ShippingMethodName = customShippingMethod,
-                TaxCategory = new Reference<TaxCategory>() {Id = taxCategory.Id, TypeId = ReferenceTypeId.TaxCategory},
+                TaxCategory = new Reference<TaxCategory>() {Id = taxCategory.Id},
                 ShippingRate = shippingRate
             };
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {setCustomShippingMethod};
@@ -341,8 +339,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             //removing the discount code
             RemoveDiscountCodeUpdateAction removeDiscountCodeUpdateAction = new RemoveDiscountCodeUpdateAction()
             {
-                DiscountCode = new Reference<DiscountCode>()
-                    {Id = discountCode.Id, TypeId = ReferenceTypeId.DiscountCode}
+                DiscountCode = new Reference<DiscountCode> {Id = discountCode.Id}
             };
             updateActions.Clear();
             updateActions.Add(removeDiscountCodeUpdateAction);
@@ -366,7 +363,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             SetCustomerGroupUpdateAction setCustomerGroupUpdateAction = new SetCustomerGroupUpdateAction()
             {
-                CustomerGroup = new ResourceIdentifier() {Id = customerGroup.Id}
+                CustomerGroup = new ResourceIdentifier<CustomerGroup>
+                {
+                    Key = customerGroup.Key
+                }
             };
 
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {setCustomerGroupUpdateAction};
@@ -392,7 +392,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             SetCustomTypeUpdateAction setCustomTypeUpdateAction = new SetCustomTypeUpdateAction()
             {
-                Type = new ResourceIdentifier() {Id = customType.Id}, Fields = fields
+                Type = new ResourceIdentifier<Type>
+                {
+                    Key = customType.Key
+                },
+                Fields = fields
             };
 
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {setCustomTypeUpdateAction};
@@ -419,7 +423,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             SetCustomTypeUpdateAction setCustomTypeUpdateAction = new SetCustomTypeUpdateAction()
             {
-                Type = new ResourceIdentifier() {Id = customType.Id}, Fields = fields
+                Type = new ResourceIdentifier<Type>
+                {
+                    Key = customType.Key
+                },
+                Fields = fields
             };
 
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {setCustomTypeUpdateAction};
@@ -490,11 +498,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             ShippingMethod shippingMethod = this.cartFixture.CreateShippingMethod(cart.ShippingAddress.Country);
             SetShippingMethodUpdateAction setShippingMethodUpdateAction = new SetShippingMethodUpdateAction()
             {
-                ShippingMethod = new Reference<ShippingMethod>()
-                {
-                    Id = shippingMethod.Id,
-                    TypeId = ReferenceTypeId.ShippingMethod
-                }
+                ShippingMethod = new Reference<ShippingMethod>() {Id = shippingMethod.Id}
             };
             ChangeTaxModeUpdateAction changeTaxModeUpdateAction = new ChangeTaxModeUpdateAction()
             {
@@ -549,7 +553,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 ShippingMethod = new Reference<ShippingMethod>()
                 {
                     Id = shippingMethod.Id,
-                    TypeId = ReferenceTypeId.ShippingMethod
                 }
             };
             ChangeTaxModeUpdateAction changeTaxModeUpdateAction = new ChangeTaxModeUpdateAction()
@@ -629,7 +632,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             Assert.IsType<CartScoreShippingRateInputType>(currentProject.ShippingRateInputType);
 
             //then create a cart
-            Cart cart = this.cartFixture.CreateCart(withCustomer: false, withDefaultShippingCountry: true, taxMode:TaxMode.External);
+            Cart cart = this.cartFixture.CreateCart(withCustomer: false, withDefaultShippingCountry: true,
+                taxMode: TaxMode.External);
             var externalTaxRateDraft = this.cartFixture.GetExternalTaxRateDraft();
             var shippingRateDraft = this.cartFixture.GetShippingRateDraftWithPriceTiers();
             string customShippingMethod = $"CustomShipping_{this.cartFixture.RandomInt()}";
@@ -639,7 +643,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             SetCustomShippingMethodUpdateAction setCustomShippingMethod = new SetCustomShippingMethodUpdateAction()
             {
                 ShippingMethodName = customShippingMethod,
-                ShippingRate = shippingRateDraft,//with shipping rate price tiers
+                ShippingRate = shippingRateDraft, //with shipping rate price tiers
                 ExternalTaxRate = externalTaxRateDraft,
                 TaxCategory = null
             };
@@ -650,11 +654,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 .Result;
 
             Assert.NotNull(cartWithShippingMethod.ShippingInfo);
-            Assert.Equal(customShippingMethod,cartWithShippingMethod.ShippingInfo.ShippingMethodName);
+            Assert.Equal(customShippingMethod, cartWithShippingMethod.ShippingInfo.ShippingMethodName);
 
             SetShippingRateInputUpdateAction setShippingRateInputUpdateAction = new SetShippingRateInputUpdateAction
             {
-                ShippingRateInput = new ScoreShippingRateInputDraft { Score = 1}
+                ShippingRateInput = new ScoreShippingRateInputDraft {Score = 1}
             };
             updateActions.Clear();
             updateActions.Add(setShippingRateInputUpdateAction);
@@ -673,7 +677,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             currentProject = this.cartFixture.RemoveExistingShippingRateInputTypeForCurrentProject();
             Assert.NotNull(currentProject);
             Assert.Null(currentProject.ShippingRateInputType);
-
         }
 
         [Fact]
@@ -682,24 +685,28 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
 
             //update the project's add shippingRateInputType to CartClassification
-            var classificationValues = this.cartFixture.GetCartClassificationTestValues(); //Small, Medium and Heavy classifications
-            var currentProject = this.cartFixture.SetShippingRateInputTypeToCartClassificationForCurrentProject(classificationValues);
+            var classificationValues =
+                this.cartFixture.GetCartClassificationTestValues(); //Small, Medium and Heavy classifications
+            var currentProject =
+                this.cartFixture.SetShippingRateInputTypeToCartClassificationForCurrentProject(classificationValues);
             Assert.NotNull(currentProject);
             Assert.NotNull(currentProject.ShippingRateInputType);
             Assert.IsType<CartClassificationShippingRateInputType>(currentProject.ShippingRateInputType);
 
             //then create a cart
-            Cart cart = this.cartFixture.CreateCart(withCustomer: false, withDefaultShippingCountry: true, taxMode:TaxMode.External);
+            Cart cart = this.cartFixture.CreateCart(withCustomer: false, withDefaultShippingCountry: true,
+                taxMode: TaxMode.External);
             var externalTaxRateDraft = this.cartFixture.GetExternalTaxRateDraft();
             var shippingRateDraft = this.cartFixture.GetShippingRateDraftWithCartClassifications();
             string customShippingMethod = $"CustomShipping_{this.cartFixture.RandomInt()}";
-            var smallClassificationPrice = (shippingRateDraft.Tiers[0] as CartClassificationShippingRatePriceTier)?.Price;
+            var smallClassificationPrice =
+                (shippingRateDraft.Tiers[0] as CartClassificationShippingRatePriceTier)?.Price;
 
             // set custom shipping method
             SetCustomShippingMethodUpdateAction setCustomShippingMethod = new SetCustomShippingMethodUpdateAction()
             {
                 ShippingMethodName = customShippingMethod,
-                ShippingRate = shippingRateDraft,//with shipping rate price tiers
+                ShippingRate = shippingRateDraft, //with shipping rate price tiers
                 ExternalTaxRate = externalTaxRateDraft,
                 TaxCategory = null
             };
@@ -710,11 +717,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 .Result;
 
             Assert.NotNull(cartWithShippingMethod.ShippingInfo);
-            Assert.Equal(customShippingMethod,cartWithShippingMethod.ShippingInfo.ShippingMethodName);
+            Assert.Equal(customShippingMethod, cartWithShippingMethod.ShippingInfo.ShippingMethodName);
 
             SetShippingRateInputUpdateAction setShippingRateInputUpdateAction = new SetShippingRateInputUpdateAction
             {
-                ShippingRateInput = new ClassificationShippingRateInputDraft { Key = "Small"}
+                ShippingRateInput = new ClassificationShippingRateInputDraft {Key = "Small"}
             };
             updateActions.Clear();
             updateActions.Add(setShippingRateInputUpdateAction);
@@ -725,7 +732,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 .Result;
 
             Assert.NotNull(cartWithShippingMethodWithSmallClassification.ShippingRateInput);
-            Assert.IsType<ClassificationShippingRateInput>(cartWithShippingMethodWithSmallClassification.ShippingRateInput);
+            Assert.IsType<ClassificationShippingRateInput>(cartWithShippingMethodWithSmallClassification
+                .ShippingRateInput);
             Assert.Equal(smallClassificationPrice, cartWithShippingMethodWithSmallClassification.ShippingInfo.Price);
             this.cartFixture.CartToDelete.Add(cartWithShippingMethodWithSmallClassification);
 
@@ -733,7 +741,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             currentProject = this.cartFixture.RemoveExistingShippingRateInputTypeForCurrentProject();
             Assert.NotNull(currentProject);
             Assert.Null(currentProject.ShippingRateInputType);
-
         }
 
 
@@ -776,7 +783,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             AddShoppingListUpdateAction addShoppingListUpdateAction = new AddShoppingListUpdateAction()
             {
-                ShoppingList = new ResourceIdentifier() {Id = shoppingList.Id}
+                ShoppingList = new ResourceIdentifier<ShoppingList>
+                {
+                    Key = shoppingList.Key
+                }
             };
 
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {addShoppingListUpdateAction};
@@ -892,7 +902,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             //make sure that product price is updated now
             //make sure that price of added lineItem not affected
-            cartWithLineItem = commerceToolsClient.ExecuteAsync(new GetByIdCommand<Cart>(new Guid(cart.Id))).Result;//retrieve the cart again
+            cartWithLineItem =
+                commerceToolsClient.ExecuteAsync(new GetByIdCommand<Cart>(new Guid(cart.Id)))
+                    .Result; //retrieve the cart again
             Assert.Equal(newPriceDraft.Value, productWithChangedPrice.MasterData.Current.MasterVariant.Prices[0].Value);
             Assert.NotEqual(newPriceDraft.Value, cartWithLineItem.LineItems[0].Price.Value);
             this.cartFixture.CleanProductOnDispose(productWithChangedPrice);
@@ -969,7 +981,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             //make sure that product attribute is updated now
             //make sure that product attribute of added lineItem not affected
 
-            var productAttributeValue = productWithChangedAttribute.MasterData.Current.MasterVariant.GetTextAttributeValue(textAttributeName);
+            var productAttributeValue =
+                productWithChangedAttribute.MasterData.Current.MasterVariant.GetTextAttributeValue(textAttributeName);
             var lineItemAttributeValue = cartWithLineItem.LineItems[0].Variant.GetTextAttributeValue(textAttributeName);
 
             //make sure both attributes has value and only the product attribute is the updated, and the lineItem Product attribute still has old value
@@ -982,7 +995,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             //recalculate the cart to update the attribute of the product of the line item
             RecalculateUpdateAction recalculateUpdateAction = new RecalculateUpdateAction
             {
-                UpdateProductData = true // the line item product data (name, variant, productType and attributes) will also be updated
+                UpdateProductData =
+                    true // the line item product data (name, variant, productType and attributes) will also be updated
             };
             cartUpdateActions.Clear();
             cartUpdateActions.Add(recalculateUpdateAction);
@@ -1013,7 +1027,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             AddPaymentUpdateAction addPaymentUpdateAction = new AddPaymentUpdateAction()
             {
-                Payment = new Reference<Payment>() {Id = payment.Id, TypeId = ReferenceTypeId.Payment}
+                Payment = new Reference<Payment>() {Id = payment.Id}
             };
 
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {addPaymentUpdateAction};
@@ -1040,7 +1054,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             Assert.Null(cart.PaymentInfo);
             AddPaymentUpdateAction addPaymentUpdateAction = new AddPaymentUpdateAction()
             {
-                Payment = new Reference<Payment>() {Id = payment.Id, TypeId = ReferenceTypeId.Payment}
+                Payment = new Reference<Payment>()
+                {
+                    Id = payment.Id
+                }
             };
 
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {addPaymentUpdateAction};
@@ -1056,7 +1073,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             //Then Delete it
             RemovePaymentUpdateAction removePaymentUpdateAction = new RemovePaymentUpdateAction()
             {
-                Payment = new Reference<Payment>() {Id = payment.Id, TypeId = ReferenceTypeId.Payment}
+                Payment = new Reference<Payment>() {Id = payment.Id}
             };
 
             updateActions.Clear();
@@ -1425,7 +1442,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             this.cartFixture.CartToDelete.Add(cartWithEmptyLineItems);
 
             Assert.Single(cartWithEmptyLineItems.LineItems);
-            Assert.Equal(1,cartWithEmptyLineItems.LineItems[0].Quantity);
+            Assert.Equal(1, cartWithEmptyLineItems.LineItems[0].Quantity);
         }
 
         [Fact]
@@ -1440,11 +1457,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             // then change it's quantity
             var lineItem = retrievedCart.LineItems[0];
             var newQuantity = lineItem.Quantity - 1;
-            ChangeLineItemQuantityUpdateAction changeLineItemQuantityUpdateAction = new ChangeLineItemQuantityUpdateAction
-            {
-                LineItemId = lineItem.Id,
-                Quantity = newQuantity
-            };
+            ChangeLineItemQuantityUpdateAction changeLineItemQuantityUpdateAction =
+                new ChangeLineItemQuantityUpdateAction
+                {
+                    LineItemId = lineItem.Id,
+                    Quantity = newQuantity
+                };
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {changeLineItemQuantityUpdateAction};
 
             Cart cartWithEmptyLineItems = commerceToolsClient
@@ -1455,7 +1473,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             this.cartFixture.CartToDelete.Add(cartWithEmptyLineItems);
 
             Assert.Single(cartWithEmptyLineItems.LineItems);
-            Assert.Equal(newQuantity,cartWithEmptyLineItems.LineItems[0].Quantity);
+            Assert.Equal(newQuantity, cartWithEmptyLineItems.LineItems[0].Quantity);
         }
 
         [Fact]
@@ -1490,6 +1508,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             Assert.Equal(externalTaxRateDraft.Amount,
                 cartWithTaxRateForLineItem.LineItems[0].TaxRate.Amount);
         }
+
         [Fact]
         public void UpdateCartSetLineItemTaxAmount()
         {
@@ -1616,7 +1635,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 new SetLineItemCustomTypeUpdateAction
                 {
                     LineItemId = lineItemId,
-                    Type = new ResourceIdentifier() {Id = customType.Id}, Fields = fields
+                    Type = new ResourceIdentifier<Type>
+                    {
+                        Key = customType.Key
+                    },
+                    Fields = fields
                 };
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {setCustomTypeUpdateAction};
 
@@ -1649,7 +1672,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 new SetLineItemCustomTypeUpdateAction
                 {
                     LineItemId = lineItemId,
-                    Type = new ResourceIdentifier() {Id = customType.Id}, Fields = fields
+                    Type = new ResourceIdentifier<Type>
+                    {
+                        Key = customType.Key
+                    },
+                    Fields = fields
                 };
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {setCustomTypeUpdateAction};
 
@@ -1725,7 +1752,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 cartWithShippingDetailsForLineItem.LineItems[0].ShippingDetails.Targets[0].AddressKey);
         }
 
-         [Fact]
+        [Fact]
         public void UpdateCartApplyDeltaToLineItemShippingDetailsTargets()
         {
             IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
@@ -1906,7 +1933,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 new SetCustomLineItemCustomTypeUpdateAction
                 {
                     CustomLineItemId = customLineItemId,
-                    Type = new ResourceIdentifier() {Id = customType.Id}, Fields = fields
+                    Type = new ResourceIdentifier<Type>
+                    {
+                        Key = customType.Key
+                    },
+                    Fields = fields
                 };
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {setCustomTypeUpdateAction};
 
@@ -1939,7 +1970,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 new SetCustomLineItemCustomTypeUpdateAction
                 {
                     CustomLineItemId = customLineItemId,
-                    Type = new ResourceIdentifier() {Id = customType.Id}, Fields = fields
+                    Type = new ResourceIdentifier<Type>
+                    {
+                        Key = customType.Key
+                    },
+                    Fields = fields
                 };
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {setCustomTypeUpdateAction};
 

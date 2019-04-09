@@ -16,8 +16,8 @@ namespace commercetools.Sdk.Domain.CartDiscounts
         public CartDiscountTarget Target { get; set; }
         public string SortOrder { get; set; }
         public bool IsActive { get; set; }
-        public DateTime ValidFrom { get; set; }
-        public DateTime ValidUntil { get; set; }
+        public DateTime? ValidFrom { get; set; }
+        public DateTime? ValidUntil { get; set; }
         public bool RequiresDiscountCode { get; set; }
         public List<Reference> References { get; set; }
         public StackingMode StackingMode { get; set; }

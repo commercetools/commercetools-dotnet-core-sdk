@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace commercetools.Sdk.Domain.ProductDiscounts
 {
     [Endpoint("product-discounts")]
+    [ResourceType(ReferenceTypeId.ProductDiscount)]
     public class ProductDiscount
     {
         public string Id { get; set; }
@@ -18,6 +19,6 @@ namespace commercetools.Sdk.Domain.ProductDiscounts
         public bool IsActive { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime ValidUntil { get; set; }
-        public List<Reference> References { get; set; }        
+        public List<Reference> References { get; set; }
     }
 }

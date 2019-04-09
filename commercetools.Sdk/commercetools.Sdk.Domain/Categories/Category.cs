@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace commercetools.Sdk.Domain.Categories
 {
     [Endpoint("categories")]
+    [ResourceType(ReferenceTypeId.Category)]
     public class Category
     {
         public string Id { get; set; }

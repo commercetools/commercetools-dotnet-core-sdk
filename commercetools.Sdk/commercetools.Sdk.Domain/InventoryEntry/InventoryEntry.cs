@@ -15,7 +15,7 @@ namespace commercetools.Sdk.Domain
         public long QuantityOnStock { get; set; }
         public long AvailableQuantity { get; set; }
         public int RestockableInDays { get; set; }
-        public DateTime ExpectedDelivery { get; set; }
+        public DateTime? ExpectedDelivery { get; set; }
         public CustomFields Custom { get; set; }
     }
 }

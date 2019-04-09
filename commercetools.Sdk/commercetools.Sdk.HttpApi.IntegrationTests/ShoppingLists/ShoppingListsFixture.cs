@@ -53,7 +53,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists
             {
                 Customer customer = this.customerFixture.CreateCustomer();
                 this.customerFixture.CustomersToDelete.Add(customer);
-                shoppingListDraft.Customer = new ResourceIdentifier {Id = customer.Id};
+                shoppingListDraft.Customer = new ResourceIdentifier<Customer> {Id = customer.Id};
             }
             if (withLineItem)
             {

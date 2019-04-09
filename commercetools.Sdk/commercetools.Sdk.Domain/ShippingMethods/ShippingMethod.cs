@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace commercetools.Sdk.Domain.ShippingMethods
 {
     [Endpoint("shipping-methods")]
+    [ResourceType(ReferenceTypeId.ShippingMethod)]
     public class ShippingMethod
     {
         public string Id { get; set; }
@@ -14,7 +15,7 @@ namespace commercetools.Sdk.Domain.ShippingMethods
         public string Name { get; set; }
         public string Description { get; set; }
         public Reference<TaxCategory> TaxCategory { get; set; }
-        public List<ZoneRateDraft> ZoneRates { get; set; }
+        public List<ZoneRate> ZoneRates { get; set; }
         public bool IsDefault { get; set; }
         public string Predicate { get; set; }
     }

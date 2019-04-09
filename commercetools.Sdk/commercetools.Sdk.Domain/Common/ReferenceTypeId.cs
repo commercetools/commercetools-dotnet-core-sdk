@@ -1,4 +1,15 @@
 ﻿using System.ComponentModel;
+using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.Domain.Channels;
+using commercetools.Sdk.Domain.CustomerGroups;
+using commercetools.Sdk.Domain.Customers;
+using commercetools.Sdk.Domain.Orders;
+using commercetools.Sdk.Domain.Payments;
+using commercetools.Sdk.Domain.ProductDiscounts;
+using commercetools.Sdk.Domain.ShippingMethods;
+using commercetools.Sdk.Domain.ShoppingLists;
+using commercetools.Sdk.Domain.Zones;
 
 namespace commercetools.Sdk.Domain
 {
@@ -49,7 +60,7 @@ namespace commercetools.Sdk.Domain
         [Description("shipping-method")]
         ShippingMethod,
 
-        [Description("shipping-list")]
+        [Description("shopping-list")]
         ShoppingList,
 
         [Description("state")]

@@ -7,6 +7,6 @@ namespace commercetools.Sdk.Domain.Orders
     {
         public List<ReturnItem> Items { get; set; }
         public string ReturnTrackingId { get; set; }
-        public DateTime ReturnDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
     }
 }

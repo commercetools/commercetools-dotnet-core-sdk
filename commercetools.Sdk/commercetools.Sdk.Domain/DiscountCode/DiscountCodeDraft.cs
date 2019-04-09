@@ -16,8 +16,8 @@ namespace commercetools.Sdk.Domain
         public string CartPredicate { get; set; }
         public List<string> Groups { get; set; }
         public bool IsActive { get; set; }
-        public DateTime ValidFrom { get; set; }
-        public DateTime ValidUntil { get; set; }
+        public DateTime? ValidFrom { get; set; }
+        public DateTime? ValidUntil { get; set; }
         public List<Reference> References { get; set; }
         public long MaxApplications { get; set; }
         public long MaxApplicationsPerCustomer { get; set; }

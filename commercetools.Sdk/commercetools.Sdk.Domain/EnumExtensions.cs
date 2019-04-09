@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
+using commercetools.Sdk.Domain;
 
 namespace System
 {

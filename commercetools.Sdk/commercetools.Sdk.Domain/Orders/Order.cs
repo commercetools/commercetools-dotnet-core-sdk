@@ -7,13 +7,14 @@ using commercetools.Sdk.Domain.CustomerGroups;
 namespace commercetools.Sdk.Domain.Orders
 {
     [Endpoint("orders")]
+    [ResourceType(ReferenceTypeId.Order)]
     public class Order
     {
         public string Id { get; set; }
         public int Version { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastModifiedAt { get; set; }
-        public DateTime CompletedAt { get; set; }
+        public DateTime? CompletedAt { get; set; }
         public string OrderNumber { get; set; }
         public string CustomerId { get; set; }
         public string CustomerEmail { get; set; }

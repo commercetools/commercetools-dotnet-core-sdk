@@ -27,8 +27,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             this.CategoriesToDelete.Reverse();
             foreach (Category category in this.CategoriesToDelete)
             {
-                Category deletedCategory = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<Category>(new Guid(category.Id), category.Version)).Result;
+                Category deletedCategory = commerceToolsClient
+                    .ExecuteAsync(new DeleteByIdCommand<Category>(new Guid(category.Id), category.Version)).Result;
             }
+
             this.typeFixture.Dispose();
         }
 
@@ -67,10 +69,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             CustomFieldsDraft customFieldsDraft = new CustomFieldsDraft();
             Type type = this.typeFixture.CreateType();
             this.typeFixture.TypesToDelete.Add(type);
-            customFieldsDraft.Type = new ResourceIdentifier() { Key = type.Key };
+            customFieldsDraft.Type = new ResourceIdentifier<Type> {Key = type.Key};
             customFieldsDraft.Fields = new Fields();
             customFieldsDraft.Fields.Add("string-field", "test");
-            customFieldsDraft.Fields.Add("localized-string-field", new LocalizedString() { { "en", "localized-string-field-value" } });
+            customFieldsDraft.Fields.Add("localized-string-field",
+                new LocalizedString() {{"en", "localized-string-field-value"}});
             customFieldsDraft.Fields.Add("enum-field", "enum-key-1");
             customFieldsDraft.Fields.Add("localized-enum-field", "enum-key-1");
             customFieldsDraft.Fields.Add("number-field", 3);
@@ -78,9 +81,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             customFieldsDraft.Fields.Add("date-field", new DateTime(2018, 11, 28));
             customFieldsDraft.Fields.Add("date-time-field", new DateTime(2018, 11, 28, 11, 01, 00));
             customFieldsDraft.Fields.Add("time-field", new TimeSpan(11, 01, 00));
-            customFieldsDraft.Fields.Add("money-field", new Money() { CentAmount = 1800, CurrencyCode = "EUR" });
-            customFieldsDraft.Fields.Add("set-field", new FieldSet<string>() { "test1", "test2" });
-            customFieldsDraft.Fields.Add("reference-field", new Reference<Category>() { Id = relatedCategory.Id, TypeId = ReferenceTypeId.Category });
+            customFieldsDraft.Fields.Add("money-field", new Money() {CentAmount = 1800, CurrencyCode = "EUR"});
+            customFieldsDraft.Fields.Add("set-field", new FieldSet<string>() {"test1", "test2"});
+            customFieldsDraft.Fields.Add("reference-field", new Reference<Category>() {Id = relatedCategory.Id});
             categoryDraft.Custom = customFieldsDraft;
             return categoryDraft;
         }
@@ -95,7 +98,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public CategoryDraft GetCategoryDraftWithParent(Category parentCategory)
         {
             CategoryDraft categoryDraft = this.GetCategoryDraft();
-            categoryDraft.Parent = new Reference<Category>() { Id = parentCategory.Id, TypeId = ReferenceTypeId.Category };
+            categoryDraft.Parent = new Reference<Category>() {Id = parentCategory.Id};
             return categoryDraft;
         }
 
@@ -109,9 +112,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             IClient commerceToolsClient = this.GetService<IClient>();
 
             List<UpdateAction<Category>> updateActions = new List<UpdateAction<Category>>();
-            SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction() { Key = this.RandomString(10) };
+            SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction() {Key = this.RandomString(10)};
             updateActions.Add(setKeyAction);
-            Category updatedCategory = commerceToolsClient.ExecuteAsync(new UpdateByIdCommand<Category>(new Guid(category.Id), category.Version, updateActions)).Result;
+            Category updatedCategory = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Category>(new Guid(category.Id), category.Version, updateActions))
+                .Result;
             return updatedCategory;
         }
     }

@@ -14,7 +14,7 @@ namespace commercetools.Sdk.Serialization
         {
             if (property?.Type == JTokenType.String)
             {
-                if (TimeSpan.TryParse(property.Value<string>(), out TimeSpan time))
+                if (TimeSpan.TryParseExact(property.Value<string>(), @"hh\:mm\:ss\.fff", null, out TimeSpan time))
                 {
                     return true;
                 }
