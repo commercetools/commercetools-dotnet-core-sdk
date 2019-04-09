@@ -377,7 +377,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             query.Expand(c => c.Parent).Expand(c => c.Ancestors.ExpandAll());
 
             var command = ((ClientQueryProvider<Category>) query.Provider).Command;
-            Assert.Equal($"key = \"{category.Key}\"", command.Where);
+            Assert.Equal($"key = \"{category.Key}\"", string.Join(", ",command.Where));
             Assert.Equal("key desc", string.Join(", ", command.Sort));
             Assert.Equal("parent, ancestors[*]", string.Join(", ", command.Expand));
 

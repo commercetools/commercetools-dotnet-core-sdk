@@ -31,7 +31,7 @@
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
             if (command.Where != null)
             {
-                queryStringParameters.Add(new KeyValuePair<string, string>("where", command.Where));
+                queryStringParameters.AddRange(command.Where.Select(x => new KeyValuePair<string, string>("where", x)));
             }
 
             if (command.Expand != null)

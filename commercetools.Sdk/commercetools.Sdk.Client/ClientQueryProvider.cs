@@ -51,7 +51,7 @@ namespace commercetools.Sdk.Client
                     {
                         var t = where.Operand as Expression<Func<TElement, bool>>;
                         var queryPredicate = new QueryPredicate<TElement>(t);
-                        cmd.SetWhere(queryPredicate);
+                        cmd.Where.Add(queryPredicate.ToString());
                     }
 
                     break;

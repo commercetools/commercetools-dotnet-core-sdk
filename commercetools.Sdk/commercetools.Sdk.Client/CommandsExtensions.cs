@@ -10,7 +10,7 @@ namespace commercetools.Sdk.Client
     {
         public static QueryCommand<T> Where<T>(this QueryCommand<T> command, Expression<Func<T, bool>> expression)
         {
-            command.SetWhere(new QueryPredicate<T>(expression));
+            command.Where.Add(new QueryPredicate<T>(expression).ToString());
 
             return command;
         }

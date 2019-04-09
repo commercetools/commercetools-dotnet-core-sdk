@@ -128,5 +128,18 @@ namespace commercetools.Sdk.HttpApi.Tests
             HttpRequestMessage httpRequestMessage = requestMessageBuilder.GetRequestMessage(matchingCommand);
             Assert.Equal(this.clientFixture.APIBaseAddressWithProjectKey + "/product-discounts/matching", httpRequestMessage.RequestUri.ToString());
         }
+
+        [Fact]
+        public void MultipleWhereParameters()
+        {
+            var c = new QueryCommand<Category>();
+            c.Where(category => category.Id == "abc").Where(category => category.Key == "def");
+            QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
+                this.clientFixture.GetService<IClientConfiguration>(),
+                this.clientFixture.GetService<IEndpointRetriever>(),
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
+            HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(c);
+            Assert.Equal("?where=id%20%3D%20%22abc%22&where=key%20%3D%20%22def%22", httpRequestMessage.RequestUri.Query);
+        }
     }
 }

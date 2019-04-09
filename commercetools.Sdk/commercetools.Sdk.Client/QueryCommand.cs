@@ -11,12 +11,14 @@ namespace commercetools.Sdk.Client
         {
             this.Sort = new List<string>();
             this.Expand = new List<string>();
+            this.Where = new List<string>();
         }
 
         public QueryCommand(IAdditionalParameters<T> additionalParameters)
         {
             this.Sort = new List<string>();
             this.Expand = new List<string>();
+            this.Where = new List<string>();
             this.AdditionalParameters = additionalParameters;
         }
 
@@ -30,7 +32,7 @@ namespace commercetools.Sdk.Client
 
         public List<string> Sort { get; }
 
-        public string Where { get; set; }
+        public List<string> Where { get; }
 
         public void SetExpand(List<Expansion<T>> expandPredicates)
         {
@@ -39,6 +41,7 @@ namespace commercetools.Sdk.Client
                 return;
             }
 
+            this.Expand.Clear();
             foreach (var expand in expandPredicates)
             {
                 this.Expand.Add(expand.ToString());
@@ -52,9 +55,24 @@ namespace commercetools.Sdk.Client
                 return;
             }
 
+            this.Sort.Clear();
             foreach (var sort in sortPredicates)
             {
                 this.Sort.Add(sort.ToString());
+            }
+        }
+
+        public void SetWhere(List<QueryPredicate<T>> queryPredicate)
+        {
+            if (queryPredicate == null)
+            {
+                return;
+            }
+
+            this.Where.Clear();
+            foreach (var query in queryPredicate)
+            {
+                this.Where.Add(query.ToString());
             }
         }
 
@@ -65,7 +83,8 @@ namespace commercetools.Sdk.Client
                 return;
             }
 
-            this.Where = queryPredicate.ToString();
+            this.Where.Clear();
+            this.Where.Add(queryPredicate.ToString());
         }
     }
 }
