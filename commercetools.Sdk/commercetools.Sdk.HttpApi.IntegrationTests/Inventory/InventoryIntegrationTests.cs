@@ -188,7 +188,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             IClient commerceToolsClient = this.inventoryFixture.GetService<IClient>();
             InventoryEntry inventoryEntry = this.inventoryFixture.CreateInventoryEntry();
 
-            DateTime newExpectedDelivery = DateTime.Today.AddDays(this.inventoryFixture.RandomInt(1, 100));
+            DateTime newExpectedDelivery = DateTime.Today.AddDays(this.inventoryFixture.RandomInt(1, 100)).ToUniversalTime();
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
 
             SetExpectedDeliveryUpdateAction setExpectedDeliveryUpdateAction = new SetExpectedDeliveryUpdateAction()
