@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Globalization;
 
 namespace commercetools.Sdk.Serialization
 {
@@ -13,7 +14,7 @@ namespace commercetools.Sdk.Serialization
         {
             if (property?.Type == JTokenType.String)
             {
-                if (DateTime.TryParse(property.Value<string>(), out DateTime date))
+                if (DateTime.TryParseExact(property.Value<string>(), "yyyy-MM-dd", null, DateTimeStyles.None, out DateTime date))
                 {
                     if (date.TimeOfDay.Ticks == 0)
                     {
