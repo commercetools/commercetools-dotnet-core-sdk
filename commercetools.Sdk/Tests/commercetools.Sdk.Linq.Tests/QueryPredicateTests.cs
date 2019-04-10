@@ -350,6 +350,24 @@ namespace commercetools.Sdk.Linq.Tests
             Assert.Equal("masterData(current(masterVariant(key = \"test\" and sku = \"something\")))", result);
         }
 
+        [Fact(Skip = "to be fixed")]
+        public void QueryNestedInCombination()
+        {
+            Expression<Func<Product, bool>> expression = p => p.MasterData.Current.MasterVariant.Key.In("test") && p.MasterData.Current.MasterVariant.Sku.In("test");
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("masterData(current(masterVariant(key in (\"test\") and sku in (\"test\")))", result);
+        }
+
+        [Fact]
+        public void QueryNestedDictionaryMethodCombination()
+        {
+            Expression<Func<Product, bool>> expression = p => p.MasterData.Current.Name["en"] == "test" && p.MasterData.Current.Categories.Any(reference => reference.Id == "test");
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("masterData(current(name(en = \"test\"))) and masterData(current(categories(id = \"test\")))", result);
+        }
+
         [Fact]
         public void QueryNestedIn()
         {

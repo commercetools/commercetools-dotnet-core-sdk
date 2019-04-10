@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.Domain.Query;
+﻿using System.Linq;
+using commercetools.Sdk.Domain.Query;
 
 namespace commercetools.Sdk.Client
 {
@@ -34,7 +35,17 @@ namespace commercetools.Sdk.Client
 
         public List<string> Where { get; }
 
-        public void SetExpand(List<Expansion<T>> expandPredicates)
+        public void SetExpand(IEnumerable<Expansion<T>> expandPredicates)
+        {
+            if (expandPredicates == null)
+            {
+                return;
+            }
+
+            this.SetExpand(expandPredicates.Select(predicate => predicate.ToString()));
+        }
+
+        public void SetExpand(IEnumerable<string> expandPredicates)
         {
             if (expandPredicates == null)
             {
@@ -44,11 +55,21 @@ namespace commercetools.Sdk.Client
             this.Expand.Clear();
             foreach (var expand in expandPredicates)
             {
-                this.Expand.Add(expand.ToString());
+                this.Expand.Add(expand);
             }
         }
 
-        public void SetSort(List<Sort<T>> sortPredicates)
+        public void SetSort(IEnumerable<Sort<T>> sortPredicates)
+        {
+            if (sortPredicates == null)
+            {
+                return;
+            }
+
+            this.SetSort(sortPredicates.Select(predicate => predicate.ToString()));
+        }
+
+        public void SetSort(IEnumerable<string> sortPredicates)
         {
             if (sortPredicates == null)
             {
@@ -58,11 +79,22 @@ namespace commercetools.Sdk.Client
             this.Sort.Clear();
             foreach (var sort in sortPredicates)
             {
-                this.Sort.Add(sort.ToString());
+                this.Sort.Add(sort);
             }
         }
 
-        public void SetWhere(List<QueryPredicate<T>> queryPredicate)
+
+        public void SetWhere(IEnumerable<QueryPredicate<T>> queryPredicate)
+        {
+            if (queryPredicate == null)
+            {
+                return;
+            }
+
+            this.SetWhere(queryPredicate.Select(predicate => predicate.ToString()));
+        }
+
+        public void SetWhere(IEnumerable<string> queryPredicate)
         {
             if (queryPredicate == null)
             {
@@ -72,7 +104,7 @@ namespace commercetools.Sdk.Client
             this.Where.Clear();
             foreach (var query in queryPredicate)
             {
-                this.Where.Add(query.ToString());
+                this.Where.Add(query);
             }
         }
 
@@ -83,8 +115,18 @@ namespace commercetools.Sdk.Client
                 return;
             }
 
+            this.SetWhere(queryPredicate.ToString());
+        }
+
+        public void SetWhere(string queryPredicate)
+        {
+            if (queryPredicate == null)
+            {
+                return;
+            }
+
             this.Where.Clear();
-            this.Where.Add(queryPredicate.ToString());
+            this.Where.Add(queryPredicate);
         }
     }
 }
