@@ -48,8 +48,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             productDiscountDraft.Value = GetProductDiscountValueAsAbsolute();
             productDiscountDraft.Predicate = predicate;
             productDiscountDraft.SortOrder = this.RandomSortOrder();
-            productDiscountDraft.ValidFrom = DateTime.Today.AddMonths(this.RandomInt(-5, -1));
-            productDiscountDraft.ValidUntil = DateTime.Today.AddMonths(this.RandomInt(1, 5));
+            productDiscountDraft.ValidFrom = DateTime.Today;
+            productDiscountDraft.ValidUntil = DateTime.Today.AddMonths(1);
             productDiscountDraft.IsActive = true;
 
             return productDiscountDraft;

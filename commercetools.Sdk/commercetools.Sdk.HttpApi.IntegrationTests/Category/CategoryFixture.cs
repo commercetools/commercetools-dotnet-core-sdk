@@ -46,6 +46,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             localizedStringSlug.Add("en", slug);
             categoryDraft.Slug = localizedStringSlug;
             categoryDraft.Key = this.RandomString(10);
+            categoryDraft.OrderHint = TestingUtility.RandomSortOrder();
             return categoryDraft;
         }
 

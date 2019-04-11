@@ -6,12 +6,14 @@ using System.IO;
 using System.Linq;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Predicates;
+using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.Products;
 using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.Domain.Query;
 using commercetools.Sdk.HttpApi.Domain;
 using Xunit;
 using SetDescriptionUpdateAction = commercetools.Sdk.Domain.Products.SetDescriptionUpdateAction;
+using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
@@ -258,7 +260,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         }
 
         [Fact]
-        public void UpdateProductByIdAddProductVariant()
+        public void UpdateProductAddProductVariant()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
             Product product = this.productFixture.CreateProduct();
@@ -269,7 +271,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             {
                 Sku = this.productFixture.RandomString(10),
                 Key = this.productFixture.RandomString(10),
-                Attributes = this.productFixture.GetListOfRandomAttributes(productCategory.Id, ReferenceTypeId.Category)
+                Attributes = TestingUtility.GetListOfRandomAttributes(productCategory.Id, ReferenceTypeId.Category)
             };
 
             updateActions.Add(addProductVariantUpdateAction);
@@ -314,7 +316,355 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         }
 
         [Fact]
-        public void UpdateProductByIdAddToCategory()
+        public void UpdateProductChangeMasterVariantBySku()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct(withVariants:true);
+
+            Assert.NotEmpty(product.MasterData.Staged.Variants);
+            string newMasterVariantSku = product.MasterData.Staged.Variants[0].Sku;
+
+            ChangeMasterVariantUpdateAction changeMasterVariantUpdateAction =
+                new ChangeMasterVariantUpdateAction(newMasterVariantSku);
+            ;
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>(){ changeMasterVariantUpdateAction };
+
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.Equal(newMasterVariantSku, retrievedProduct.MasterData.Staged.MasterVariant.Sku);
+
+        }
+        [Fact]
+        public void UpdateProductChangeMasterVariantByVariantId()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct(withVariants:true);
+
+            Assert.NotEmpty(product.MasterData.Staged.Variants);
+            int newMasterVariantId = product.MasterData.Staged.Variants[0].Id;
+
+            ChangeMasterVariantUpdateAction changeMasterVariantUpdateAction =
+                new ChangeMasterVariantUpdateAction(newMasterVariantId);
+            ;
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>(){ changeMasterVariantUpdateAction };
+
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.Equal(newMasterVariantId, retrievedProduct.MasterData.Staged.MasterVariant.Id);
+        }
+
+        [Fact]
+        public void UpdateProductAddPriceBySku()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct(withVariants:true);
+
+            Assert.NotEmpty(product.MasterData.Staged.Variants);
+            Assert.NotEmpty(product.MasterData.Staged.MasterVariant.Prices);
+
+            string sku = product.MasterData.Staged.MasterVariant.Sku;
+
+            var newProductPrice = TestingUtility.GetPriceDraft(this.productFixture.RandomInt(1000, 5000),
+                DateTime.Now.AddMonths(6), DateTime.Now.AddMonths(7));
+
+            AddPriceUpdateAction addPriceUpdateAction =
+                new AddPriceUpdateAction(sku, newProductPrice)
+            ;
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>(){ addPriceUpdateAction };
+
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.Equal(product.MasterData.Staged.MasterVariant.Prices.Count + 1, retrievedProduct.MasterData.Staged.MasterVariant.Prices.Count);
+        }
+
+        [Fact]
+        public void UpdateProductSetPrices()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct(withVariants:true);
+
+            Assert.NotEmpty(product.MasterData.Staged.Variants);
+            Assert.NotEmpty(product.MasterData.Staged.MasterVariant.Prices);
+
+            string sku = product.MasterData.Staged.MasterVariant.Sku;
+
+            var prices = TestingUtility.GetRandomListOfPriceDraft(3);
+
+            SetPricesUpdateAction setPricesUpdateAction =
+                new SetPricesUpdateAction(sku, prices);
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>(){ setPricesUpdateAction };
+
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.Equal(3, retrievedProduct.MasterData.Staged.MasterVariant.Prices.Count);
+        }
+
+
+        [Fact]
+        public void UpdateProductChangePrice()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+
+            Assert.NotEmpty(product.MasterData.Staged.MasterVariant.Prices);
+
+            var oldPrice = product.MasterData.Staged.MasterVariant.Prices[0];
+
+            var newProductPrice = TestingUtility.GetPriceDraft(this.productFixture.RandomInt(1000, 5000),
+                DateTime.Now.AddMonths(5), DateTime.Now.AddMonths(6));
+
+            ChangePriceUpdateAction changePriceUpdateAction =
+                    new ChangePriceUpdateAction
+                    {
+                        PriceId = oldPrice.Id,
+                        Price = newProductPrice,
+                        Staged = true
+                    }
+                ;
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>(){ changePriceUpdateAction };
+
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.NotEmpty(retrievedProduct.MasterData.Staged.MasterVariant.Prices);
+            Assert.Equal(newProductPrice.Value, retrievedProduct.MasterData.Staged.MasterVariant.Prices[0].Value);
+        }
+
+
+        [Fact]
+        public void UpdateProductRemovePrice()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+
+            Assert.NotEmpty(product.MasterData.Staged.MasterVariant.Prices);//with 2 prices
+
+            var removePrice = product.MasterData.Staged.MasterVariant.Prices[1];
+
+            RemovePriceUpdateAction removePriceUpdateAction =
+                    new RemovePriceUpdateAction
+                    {
+                        PriceId = removePrice.Id,
+                        Staged = true
+                    }
+                ;
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>(){ removePriceUpdateAction };
+
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.Single(retrievedProduct.MasterData.Staged.MasterVariant.Prices);
+            Assert.NotEqual(removePrice.Id, retrievedProduct.MasterData.Staged.MasterVariant.Prices[0].Id);
+        }
+
+        [Fact]
+        public void UpdateProductSetPriceCustomType()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+
+            Assert.NotEmpty(product.MasterData.Staged.MasterVariant.Prices);
+
+            var price = product.MasterData.Staged.MasterVariant.Prices[0];
+
+            var customType = this.productFixture.CreateCustomType();
+            var fields = this.productFixture.CreateNewFields();
+
+            SetPriceCustomTypeUpdateAction setCustomTypeUpdateAction = new SetPriceCustomTypeUpdateAction()
+            {
+                Type = new ResourceIdentifier<Type>
+                {
+                    Key = customType.Key
+                },
+                Fields = fields,
+                PriceId = price.Id
+            };
+
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>> {setCustomTypeUpdateAction};
+
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id),
+                    product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.Equal(customType.Id, retrievedProduct.MasterData.Staged.MasterVariant.Prices[0].Custom.Type.Id);
+
+        }
+
+        [Fact]
+        public void UpdateProductSetPriceCustomField()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+
+            Assert.NotEmpty(product.MasterData.Staged.MasterVariant.Prices);
+
+            // first set custom type for the price
+            var price = product.MasterData.Staged.MasterVariant.Prices[0];
+
+            var customType = this.productFixture.CreateCustomType();
+            var fields = this.productFixture.CreateNewFields();
+
+            SetPriceCustomTypeUpdateAction setCustomTypeUpdateAction = new SetPriceCustomTypeUpdateAction()
+            {
+                Type = new ResourceIdentifier<Type>
+                {
+                    Key = customType.Key
+                },
+                Fields = fields,
+                PriceId = price.Id
+            };
+
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>> {setCustomTypeUpdateAction};
+
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id),
+                    product.Version, updateActions))
+                .Result;
+
+            //Then update the custom field
+            string stringFieldValue = TestingUtility.RandomString(5);
+            updateActions.Clear();
+            SetPriceCustomFieldUpdateAction setCustomFieldUpdateAction = new SetPriceCustomFieldUpdateAction()
+            {
+                Name = "string-field",
+                Value = stringFieldValue,
+                PriceId = price.Id
+            };
+            updateActions.Add(setCustomFieldUpdateAction);
+
+            retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(retrievedProduct.Id),
+                    retrievedProduct.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.Equal(stringFieldValue, retrievedProduct.MasterData.Staged.MasterVariant.Prices[0].Custom.Fields["string-field"]);
+        }
+
+        /*
+        [Fact]
+        public void UpdateProductSetDiscountedPrice()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+
+            Assert.NotEmpty(product.MasterData.Staged.MasterVariant.Prices);
+
+            var price = product.MasterData.Staged.MasterVariant.Prices[0];
+            var productDiscount = this.productFixture.CreateProductDiscount();
+            var discountedPrice = new DiscountedPrice
+            {
+                Value = Money.Parse("100 EUR"),
+                Discount = new Reference<ProductDiscount> {Id = productDiscount.Id}
+            };
+            SetDiscountedPriceUpdateAction setDiscountedPriceUpdateAction = new SetDiscountedPriceUpdateAction
+            {
+                PriceId = price.Id,
+                Discounted = discountedPrice,
+                Staged = true
+            };
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>> {setDiscountedPriceUpdateAction};
+
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id),
+                    product.Version, updateActions))
+                .Result;
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+            Assert.Equal(discountedPrice.Value, retrievedProduct.MasterData.Staged.MasterVariant.Prices[0].Discounted.Value);
+        }
+        */
+
+        [Fact]
+        public void UpdateProductSetAttribute()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+
+            string textAttributeName = "text-attribute-name";
+            string sku = product.MasterData.Current.MasterVariant.Sku;
+            var newTextAttributeValue = TestingUtility.RandomString(10);
+
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+            SetAttributeUpdateAction setAttributeUpdateAction =
+                new SetAttributeUpdateAction(sku, textAttributeName, newTextAttributeValue);
+            updateActions.Add(setAttributeUpdateAction);
+
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            var productAttributeValue =
+                retrievedProduct.MasterData.Staged.MasterVariant.GetTextAttributeValue(textAttributeName);
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.NotNull(productAttributeValue);
+            Assert.Equal(newTextAttributeValue, productAttributeValue);
+        }
+
+        [Fact]
+        public void UpdateProductSetAttributeInAllVariants()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct(withVariants:true);
+
+            string textAttributeName = "text-attribute-name";
+            var newTextAttributeValue = TestingUtility.RandomString(10);
+
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+            SetAttributeInAllVariantsUpdateAction setAttributeUpdateAction =
+                new SetAttributeInAllVariantsUpdateAction
+                {
+                    Name = textAttributeName,
+                    Value = newTextAttributeValue,
+                    Staged = true
+                };
+            updateActions.Add(setAttributeUpdateAction);
+
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            var productAttributeValue =
+                retrievedProduct.MasterData.Staged.MasterVariant.GetTextAttributeValue(textAttributeName);
+            var productAttributeValueVariant =
+                retrievedProduct.MasterData.Staged.Variants[1].GetTextAttributeValue(textAttributeName);
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.NotNull(productAttributeValue);
+            Assert.Equal(newTextAttributeValue, productAttributeValue);
+            Assert.Equal(newTextAttributeValue, productAttributeValueVariant);
+        }
+
+        [Fact]
+        public void UpdateProductAddToCategory()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
             Product product = this.productFixture.CreateProduct();
@@ -335,6 +685,108 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Assert.Contains(retrievedProduct.MasterData.Current.Categories, c => c.Id.Equals(newCategory.Id));
         }
 
+        [Fact]
+        public void UpdateProductSetCategoryOrderHint()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+
+            Assert.Single(product.MasterData.Staged.Categories);
+
+            string newOrderHint = TestingUtility.RandomSortOrder();
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+            var categoryId = product.MasterData.Staged.Categories[0].Id;
+            SetCategoryOrderHintUpdateAction setOrderHintUpdateAction = new SetCategoryOrderHintUpdateAction()
+            {
+                OrderHint = newOrderHint,
+                CategoryId = categoryId,
+                Staged = true
+            };
+            updateActions.Add(setOrderHintUpdateAction);
+
+            //expansions
+            List<Expansion<Product>> expansions = new List<Expansion<Product>>();
+            ReferenceExpansion<Product> expand = new ReferenceExpansion<Product>(p => p.MasterData.Staged.Categories.ExpandAll());
+            expansions.Add(expand);
+
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions, expansions))
+                .Result;
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.Equal(newOrderHint, retrievedProduct.MasterData.Staged.CategoryOrderHints[categoryId]);
+        }
+
+        [Fact]
+        public void UpdateProductRemoveFromCategory()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+
+            Assert.Single(product.MasterData.Staged.Categories);
+
+            var category = product.MasterData.Staged.Categories[0];
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+            RemoveFromCategoryUpdateAction removeFromCategoryUpdateAction = new RemoveFromCategoryUpdateAction()
+            {
+                Staged = true,
+                Category = new ResourceIdentifier<Category>{ Id = category.Id}
+            };
+            updateActions.Add(removeFromCategoryUpdateAction);
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.Empty(retrievedProduct.MasterData.Staged.Categories);
+        }
+
+        [Fact]
+        public void UpdateCategorySetTaxCategory()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct(publish:true);
+
+            var taxCategory = this.productFixture.CreateNewTaxCategory();
+
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+            SetTaxCategoryUpdateAction setTaxCategoryUpdateAction = new SetTaxCategoryUpdateAction()
+            {
+                TaxCategory = new ResourceIdentifier<TaxCategory>
+                {
+                    Key = taxCategory.Key
+                }
+            };
+            updateActions.Add(setTaxCategoryUpdateAction);
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+            Assert.Equal(taxCategory.Id, retrievedProduct.TaxCategory.Id);
+        }
+
+        [Fact]
+        public void UpdateCategorySetSku()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+
+            var sku = TestingUtility.RandomString(10);
+
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+            SetSkuUpdateAction setSkuUpdateAction = new SetSkuUpdateAction()
+            {
+               Sku = sku,
+               VariantId = product.MasterData.Staged.MasterVariant.Id,
+               Staged = true
+            };
+            updateActions.Add(setSkuUpdateAction);
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+            Assert.Equal(sku, retrievedProduct.MasterData.Staged.MasterVariant.Sku);
+        }
         #endregion
     }
 }
