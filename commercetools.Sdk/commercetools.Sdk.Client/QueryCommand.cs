@@ -83,7 +83,6 @@ namespace commercetools.Sdk.Client
             }
         }
 
-
         public void SetWhere(IEnumerable<QueryPredicate<T>> queryPredicate)
         {
             if (queryPredicate == null)

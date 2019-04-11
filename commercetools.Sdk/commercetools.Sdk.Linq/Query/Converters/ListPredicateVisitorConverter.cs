@@ -32,7 +32,6 @@ namespace commercetools.Sdk.Linq.Query.Converters
                 return null;
             }
 
-
             IPredicateVisitor inner = predicateVisitorFactory.Create(methodCallExpression.Arguments[1]);
 
             var memberExpression = methodCallExpression.Arguments[0] as MemberExpression;
