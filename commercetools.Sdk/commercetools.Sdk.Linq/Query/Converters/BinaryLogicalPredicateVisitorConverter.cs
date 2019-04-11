@@ -70,21 +70,55 @@ namespace commercetools.Sdk.Linq.Query.Converters
             IPredicateVisitor innerLeft = left;
             IPredicateVisitor innerRight = right;
             ContainerPredicateVisitor container = null;
+
             while (innerLeft is ContainerPredicateVisitor containerLeft && innerRight is ContainerPredicateVisitor containerRight)
             {
-                container = containerLeft;
                 innerLeft = containerLeft.Inner;
                 innerRight = containerRight.Inner;
+                container = new ContainerPredicateVisitor(containerLeft.Parent, container);
             }
 
             if (innerLeft is BinaryPredicateVisitor binaryLeft && innerRight is BinaryPredicateVisitor binaryRight)
             {
                 BinaryPredicateVisitor binaryPredicateVisitor = new BinaryPredicateVisitor(innerLeft, operatorSign, innerRight);
-                ContainerPredicateVisitor combined = new ContainerPredicateVisitor(binaryPredicateVisitor, container?.Parent);
-                return combined;
+
+                return CombinePredicates(container, binaryPredicateVisitor);
             }
 
             return null;
+        }
+
+        // When there is more than one property accessor, the last accessor needs to be taken out and added to the binary logical predicate.
+        // property(property(property operator value)
+        private static IPredicateVisitor CombinePredicates(IPredicateVisitor left, IPredicateVisitor right)
+        {
+            var containerLeft = (ContainerPredicateVisitor)left;
+
+            IPredicateVisitor parent = containerLeft;
+            if (parent == null)
+            {
+                return new ContainerPredicateVisitor(right, left);
+            }
+
+            IPredicateVisitor innerContainer = right;
+            ContainerPredicateVisitor combinedContainer = null;
+            while (parent != null)
+            {
+                if (CanBeCombined(parent))
+                {
+                    var container = (ContainerPredicateVisitor)parent;
+                    innerContainer = new ContainerPredicateVisitor(innerContainer, container.Inner);
+                    combinedContainer = new ContainerPredicateVisitor(innerContainer, container.Parent);
+                    parent = container.Parent;
+                }
+            }
+
+            return combinedContainer;
+        }
+
+        private static bool CanBeCombined(IPredicateVisitor left)
+        {
+            return left is ContainerPredicateVisitor;
         }
     }
 }

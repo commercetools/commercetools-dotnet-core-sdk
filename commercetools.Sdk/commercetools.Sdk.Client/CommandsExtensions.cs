@@ -15,6 +15,13 @@ namespace commercetools.Sdk.Client
             return command;
         }
 
+        public static QueryCommand<T> Where<T>(this QueryCommand<T> command, string expression)
+        {
+            command.Where.Add(expression);
+
+            return command;
+        }
+
         public static GetCommand<T> Expand<T>(this GetCommand<T> command, Expression<Func<T, Reference>> expression)
         {
             command.Expand.Add(new Expansion<T>(expression).ToString());
@@ -50,6 +57,41 @@ namespace commercetools.Sdk.Client
             return command;
         }
 
+        public static GetCommand<T> Expand<T>(this GetCommand<T> command, string expression)
+        {
+            command.Expand.Add(expression);
+
+            return command;
+        }
+
+        public static QueryCommand<T> Expand<T>(this QueryCommand<T> command, string expression)
+        {
+            command.Expand.Add(expression);
+
+            return command;
+        }
+
+        public static UpdateCommand<T> Expand<T>(this UpdateCommand<T> command, string expression)
+        {
+            command.Expand.Add(expression);
+
+            return command;
+        }
+
+        public static DeleteCommand<T> Expand<T>(this DeleteCommand<T> command, string expression)
+        {
+            command.Expand.Add(expression);
+
+            return command;
+        }
+
+        public static SearchCommand<T> Expand<T>(this SearchCommand<T> command, string expression)
+        {
+            command.Expand.Add(expression);
+
+            return command;
+        }
+
         public static QueryCommand<T> Limit<T>(this QueryCommand<T> command, int limit)
         {
             command.Limit = limit;
@@ -60,6 +102,13 @@ namespace commercetools.Sdk.Client
         public static QueryCommand<T> Offset<T>(this QueryCommand<T> command, int offset)
         {
             command.Offset = offset;
+
+            return command;
+        }
+
+        public static QueryCommand<T> Sort<T>(this QueryCommand<T> command, string expression)
+        {
+            command.Sort.Add(expression);
 
             return command;
         }
@@ -127,6 +176,54 @@ namespace commercetools.Sdk.Client
             var rangeFacet = new RangeFacet<ProductProjection>(expression);
             rangeFacet.Alias = alias;
             p.Facets.Add(rangeFacet.ToString());
+
+            return command;
+        }
+
+        public static SearchProductProjectionsCommand FilterQuery(this SearchProductProjectionsCommand command, string expression)
+        {
+            var p = command.SearchParameters as ProductProjectionSearchParameters;
+            p.FilterQuery.Add(expression);
+
+            return command;
+        }
+
+        public static SearchProductProjectionsCommand Filter(this SearchProductProjectionsCommand command, string expression)
+        {
+            var p = command.SearchParameters as ProductProjectionSearchParameters;
+            p.Filter.Add(expression);
+
+            return command;
+        }
+
+        public static SearchProductProjectionsCommand FilterFacets(this SearchProductProjectionsCommand command, string expression)
+        {
+            var p = command.SearchParameters as ProductProjectionSearchParameters;
+            p.FilterFacets.Add(expression);
+
+            return command;
+        }
+
+        public static SearchProductProjectionsCommand TermFacet(this SearchProductProjectionsCommand command, string expression)
+        {
+            var p = command.SearchParameters as ProductProjectionSearchParameters;
+            p.Facets.Add(expression);
+
+            return command;
+        }
+
+        public static SearchProductProjectionsCommand RangeFacet(this SearchProductProjectionsCommand command, string expression)
+        {
+            var p = command.SearchParameters as ProductProjectionSearchParameters;
+            p.Facets.Add(expression);
+
+            return command;
+        }
+
+        public static SearchProductProjectionsCommand Sort(this SearchProductProjectionsCommand command, string expression)
+        {
+            var p = command.SearchParameters as ProductProjectionSearchParameters;
+            p.Sort.Add(expression);
 
             return command;
         }
