@@ -12,7 +12,7 @@ namespace commercetools.Sdk.Domain.ProductProjections
 
         public override string ToString()
         {
-            string facetPath = ServiceLocator.Current.GetService<IFilterPredicateExpressionVisitor>().Render(this.Expression);
+            string facetPath = this.Expression.RenderFilterPredicate();
             if (this.Alias != null)
             {
                 facetPath += $" as {this.Alias}";

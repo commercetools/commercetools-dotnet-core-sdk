@@ -16,10 +16,5 @@ namespace commercetools.Sdk.Domain.ShippingMethods
         public List<ZoneRateDraft> ZoneRates { get; set; }
         public bool IsDefault { get; set; }
         public string Predicate { get; set; }
-
-        public void SetCartPredicate(Expression<Func<Cart, bool>> expression)
-        {
-            this.Predicate = ServiceLocator.Current.GetService<IDiscountPredicateExpressionVisitor>().Render(expression);
-        }
     }
 }

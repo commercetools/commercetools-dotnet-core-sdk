@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.ProductDiscounts;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
@@ -41,16 +42,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
         /// <returns></returns>
         public ProductDiscountDraft GetProductDiscountDraft(string productId)
         {
-            string predicate = this.GetProductDiscountPredicateBasedonProduct(productId);
             ProductDiscountDraft productDiscountDraft = new ProductDiscountDraft();
             productDiscountDraft.Name = new LocalizedString() {{"en", this.RandomString(10)}};
             productDiscountDraft.Description = new LocalizedString() {{"en", this.RandomString(20)}};
             productDiscountDraft.Value = GetProductDiscountValueAsAbsolute();
-            productDiscountDraft.Predicate = predicate;
             productDiscountDraft.SortOrder = this.RandomSortOrder();
             productDiscountDraft.ValidFrom = DateTime.Today.AddMonths(this.RandomInt(-5, -1));
             productDiscountDraft.ValidUntil = DateTime.Today.AddMonths(this.RandomInt(1, 5));
             productDiscountDraft.IsActive = true;
+            productDiscountDraft.SetPredicate(product => product.ProductId() == productId);
 
             return productDiscountDraft;
         }

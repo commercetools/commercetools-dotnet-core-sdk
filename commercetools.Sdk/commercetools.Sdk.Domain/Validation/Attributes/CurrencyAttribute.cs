@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Domain.Validation.Attributes
 {
@@ -12,7 +11,7 @@ namespace commercetools.Sdk.Domain.Validation.Attributes
                 return ValidationResult.Success;
             }
 
-            ICurrencyValidator validator = ServiceLocator.Current.GetService<ICurrencyValidator>();
+            ICurrencyValidator validator = validationContext.GetService(typeof(ICurrencyValidator)) as ICurrencyValidator;
             var result = new ValidationResult(this.ErrorMessage);
             if (validator == null)
             {

@@ -16,8 +16,7 @@ namespace commercetools.Sdk.Domain.Query
 
         public override string ToString()
         {
-            return ServiceLocator.Current.GetService<IQueryPredicateExpressionVisitor>()
-                .Render(this.Expression);
+            return this.Expression.RenderQueryPredicate();
         }
     }
 }

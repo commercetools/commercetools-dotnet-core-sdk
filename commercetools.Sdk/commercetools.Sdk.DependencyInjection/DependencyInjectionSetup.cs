@@ -36,13 +36,10 @@ namespace commercetools.Sdk.DependencyInjection
         public static void UseCommercetools(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
             services.UseRegistration();
+            services.UseLinq();
             services.UseDomain();
             services.UseSerialization();
-            services.UseLinq();
             services.UseHttpApi(configuration, clients);
-            // TODO In case the service locator pattern is completely remove, remove these two lines as well
-            var serviceProvider = services.BuildServiceProvider();
-            ServiceLocator.SetServiceLocatorProvider(serviceProvider);
         }
     }
 }
