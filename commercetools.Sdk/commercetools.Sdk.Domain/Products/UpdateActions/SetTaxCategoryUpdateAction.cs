@@ -3,6 +3,6 @@
     public class SetTaxCategoryUpdateAction : UpdateAction<Product>
     {
         public string Action => "setTaxCategory";
-        public Reference<TaxCategory> TaxCategory { get; set; }
+        public ResourceIdentifier<TaxCategory> TaxCategory { get; set; }
     }
 }
