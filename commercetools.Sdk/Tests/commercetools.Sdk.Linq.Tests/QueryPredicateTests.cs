@@ -341,7 +341,7 @@ namespace commercetools.Sdk.Linq.Tests
             Assert.Equal("masterData(current(masterVariant(key = \"test\")))", result);
         }
 
-        [Fact(Skip = "to be fixed")]
+        [Fact]
         public void QueryNestedCombine()
         {
             Expression<Func<Product, bool>> expression = p => p.MasterData.Current.MasterVariant.Key == "test" && p.MasterData.Current.MasterVariant.Sku == "something";
@@ -350,13 +350,31 @@ namespace commercetools.Sdk.Linq.Tests
             Assert.Equal("masterData(current(masterVariant(key = \"test\" and sku = \"something\")))", result);
         }
 
-        [Fact(Skip = "to be fixed")]
+        [Fact]
+        public void QueryNestedMemberInCombination()
+        {
+            Expression<Func<Product, bool>> expression = p => p.MasterData.Current.MasterVariant.Key == "test" && p.MasterData.Current.MasterVariant.Sku.In("test");
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("masterData(current(masterVariant(key = \"test\" and sku in (\"test\"))))", result);
+        }
+
+        [Fact]
         public void QueryNestedInCombination()
         {
             Expression<Func<Product, bool>> expression = p => p.MasterData.Current.MasterVariant.Key.In("test") && p.MasterData.Current.MasterVariant.Sku.In("test");
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
-            Assert.Equal("masterData(current(masterVariant(key in (\"test\") and sku in (\"test\")))", result);
+            Assert.Equal("masterData(current(masterVariant(key in (\"test\") and sku in (\"test\"))))", result);
+        }
+
+        [Fact]
+        public void QueryNestedInAnyCombination()
+        {
+            Expression<Func<Product, bool>> expression = p => p.MasterData.Current.MasterVariant.Key.In("test") && p.MasterData.Current.Categories.Any(reference => reference.Id == "test");
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("masterData(current(masterVariant(key in (\"test\")))) and masterData(current(categories(id = \"test\")))", result);
         }
 
         [Fact]
