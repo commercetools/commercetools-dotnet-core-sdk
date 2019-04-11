@@ -8,7 +8,7 @@ namespace commercetools.Sdk.Registration
     /// Retrieves the types from an assembly.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812", Justification = "instantiated using DI")]
-    internal class TypeRetriever : ITypeRetriever
+    class TypeRetriever : ITypeRetriever
     {
         /// <summary>
         /// Gets the types from the same assembly as T that T is assignable from.
