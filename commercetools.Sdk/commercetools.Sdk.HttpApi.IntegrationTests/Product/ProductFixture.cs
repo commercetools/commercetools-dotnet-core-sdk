@@ -86,7 +86,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         }
 
         public ProductDraft GetProductDraft(Category category, ProductType productType, bool withVariants = false,
-            bool publish = false)
+            bool publish = false, bool withImages = false, bool withAssets = false)
         {
             ProductDraft productDraft = new ProductDraft();
             productDraft.Name = new LocalizedString() {{"en", this.RandomString(10)}};
@@ -113,6 +113,16 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 }
             }
 
+            if (withImages)
+            {
+                productDraft.MasterVariant.Images = TestingUtility.GetListOfImages(3);
+            }
+
+            if (withAssets)
+            {
+                productDraft.MasterVariant.Assets = TestingUtility.GetListOfAssetsDrafts(3);
+            }
+
             //Add taxCategory to product
             var taxCategory = CreateNewTaxCategory();
             productDraft.TaxCategory = new Reference<TaxCategory>()
@@ -128,24 +138,26 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         /// </summary>
         /// <param name="withVariants">if true then it will create product with product variants, else it will create product with empty variants</param>
         /// <param name="publish">if true, this product is published immediately.</param>
+        /// <param name="withImages">if true, this master product variant will have list of images.</param>
+        /// <param name="withAssets">if true, this master product variant will have list of assets.</param>
         /// <returns></returns>
-        public Product CreateProduct(bool withVariants = false, bool publish = false)
+        public Product CreateProduct(bool withVariants = false, bool publish = false, bool withImages = false, bool withAssets = false)
         {
             Category category = this.CreateNewCategory();
             ProductType productType = this.CreateNewProductType();
-            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish));
+            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish, withImages, withAssets));
         }
 
         public Product CreateProduct(Category category, ProductType productType, bool withVariants = false,
-            bool publish = false)
+            bool publish = false, bool withImages = false, bool withAssets = false)
         {
-            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish));
+            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish, withImages, withAssets));
         }
 
-        public Product CreateProduct(ProductType productType, bool withVariants = false, bool publish = false)
+        public Product CreateProduct(ProductType productType, bool withVariants = false, bool publish = false, bool withImages = false, bool withAssets = false)
         {
             Category category = this.CreateNewCategory();
-            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish));
+            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish, withImages, withAssets));
         }
 
         public ProductDraft GetProductDraft()

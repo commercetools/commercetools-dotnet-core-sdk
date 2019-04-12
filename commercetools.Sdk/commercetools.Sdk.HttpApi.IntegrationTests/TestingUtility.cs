@@ -18,6 +18,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         private static readonly List<string> EuropeCountries = new List<string>()
             {"BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FR", "HU", "IT", "IE", "NL", "PL", "PT", "ES", "SE"};
 
+        public static readonly string ExternalImageUrl = "https://commercetools.com/wp-content/uploads/2018/06/Feature_Guide.png";
+        public static readonly string AssetUrl = "https://commercetools.com/wp-content/uploads/2018/07/rewe-logo-1.gif";
         #endregion
 
         #region Functions
@@ -205,6 +207,67 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             return attributes;
         }
 
+        /// <summary>
+        /// Get list of Images
+        /// </summary>
+        /// <param name="count">count of images</param>
+        /// <returns></returns>
+        public static List<Image> GetListOfImages(int count = 2)
+        {
+            var images = new List<Image>();
+            for (int i = 1; i<= count; i++)
+            {
+                images.Add(new Image
+                {
+                    Label = $"Test-Image-{i}",
+                    Url = $"http://www.commercetools.com/assets/img/logo_{i}.gif",
+                    Dimensions = new Dimensions { W = 50, H = 50}
+                });
+            }
+            return images;
+        }
+
+        /// <summary>
+        /// Get list of Asset Drafts
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public static List<AssetDraft> GetListOfAssetsDrafts(int count = 2)
+        {
+            var assets = new List<AssetDraft>();
+            for (int i = 1; i<= count; i++)
+            {
+                assets.Add(GetAssetDraft());
+            }
+            return assets;
+        }
+
+        public static AssetDraft GetAssetDraft()
+        {
+            var rand = TestingUtility.RandomInt();
+            var assetSource = GetAssetSource();
+
+            var asset = new AssetDraft()
+            {
+                Key = $"Asset-Key-{rand}",
+                Sources = new List<AssetSource> {assetSource},
+                Name = new LocalizedString() {{"en", $"Asset_Name_{rand}"}},
+                Description = new LocalizedString() {{"en", $"Asset_Description_{rand}"}},
+                Tags = new List<string> { $"Tag_{rand}_1", $"Tag_{rand}_2"}
+            };
+            return asset;
+        }
+        private static AssetSource GetAssetSource(int random = 1)
+        {
+            var assetSource = new AssetSource
+            {
+                Key = $"AssetSource-Key-{random}",
+                ContentType = "image/gif",
+                Uri = $"http://www.commercetools.com/assets/img/logo_{random}.gif",
+                Dimensions = new AssetDimensions{ H= 100, W = 100}
+            };
+            return assetSource;
+        }
         #endregion
     }
 }

@@ -742,7 +742,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         }
 
         [Fact]
-        public void UpdateCategorySetTaxCategory()
+        public void UpdateProductSetTaxCategory()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
             Product product = this.productFixture.CreateProduct(publish:true);
@@ -766,7 +766,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         }
 
         [Fact]
-        public void UpdateCategorySetSku()
+        public void UpdateProductSetSku()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
             Product product = this.productFixture.CreateProduct();
@@ -786,6 +786,243 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 .Result;
             this.productFixture.ProductsToDelete.Add(retrievedProduct);
             Assert.Equal(sku, retrievedProduct.MasterData.Staged.MasterVariant.Sku);
+        }
+
+        [Fact]
+        public void UpdateProductSetProductVariantKey()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+
+            var key = TestingUtility.RandomString(10);
+            var sku = product.MasterData.Staged.MasterVariant.Sku;
+
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+            SetProductVariantKeyUpdateAction setKeyUpdateAction = new SetProductVariantKeyUpdateAction(sku, key);
+            updateActions.Add(setKeyUpdateAction);
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+            Assert.Equal(key, retrievedProduct.MasterData.Staged.MasterVariant.Key);
+        }
+
+        [Fact]
+        public void UpdateProductAddExternalImage()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+
+            Assert.Empty(product.MasterData.Staged.MasterVariant.Images);
+            var sku = product.MasterData.Staged.MasterVariant.Sku;
+            var image = new Image
+            {
+                Label = $"Test-External-Image-{TestingUtility.RandomInt()}",
+                Url = TestingUtility.ExternalImageUrl,
+                Dimensions = new Dimensions { W = 50, H = 50}
+            };
+
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+            AddExternalImageUpdateAction addExternalImageUpdateAction = new AddExternalImageUpdateAction(sku, image);
+
+            updateActions.Add(addExternalImageUpdateAction);
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.Single(retrievedProduct.MasterData.Staged.MasterVariant.Images);
+            Assert.Equal(image.Url,retrievedProduct.MasterData.Staged.MasterVariant.Images[0].Url);
+        }
+
+        [Fact]
+        public void UpdateProductMoveImageToPosition()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct(withImages:true);
+
+            Assert.Equal(3,product.MasterData.Staged.MasterVariant.Images.Count);
+
+            //move second image to first position
+            var sku = product.MasterData.Staged.MasterVariant.Sku;
+            var image = product.MasterData.Staged.MasterVariant.Images[1];
+
+            MoveImageToPositionUpdateAction moveImageToPositionUpdateAction =
+                new MoveImageToPositionUpdateAction(sku, image.Url,0, true);
+
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>{ moveImageToPositionUpdateAction };
+
+            var retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.True(retrievedProduct.MasterData.HasStagedChanges);
+            Assert.Equal(3,retrievedProduct.MasterData.Staged.MasterVariant.Images.Count);
+            Assert.Equal(image.Label, retrievedProduct.MasterData.Staged.MasterVariant.Images[0].Label);
+        }
+
+        [Fact]
+        public void UpdateProductRemoveImage()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct(withImages:true);
+
+            Assert.Equal(3,product.MasterData.Staged.MasterVariant.Images.Count);
+
+            //remove second image
+            var sku = product.MasterData.Staged.MasterVariant.Sku;
+            var image = product.MasterData.Staged.MasterVariant.Images[1];
+
+            RemoveImageUpdateAction removeImageUpdateAction =
+                new RemoveImageUpdateAction(sku, image.Url);
+
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>{ removeImageUpdateAction };
+
+            var retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.True(retrievedProduct.MasterData.HasStagedChanges);
+            Assert.Equal(2,retrievedProduct.MasterData.Staged.MasterVariant.Images.Count);
+        }
+        [Fact]
+        public void UpdateProductSetImageLabel()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct(withImages:true);
+
+            Assert.Equal(3,product.MasterData.Staged.MasterVariant.Images.Count);
+
+            //update the first image label
+            var sku = product.MasterData.Staged.MasterVariant.Sku;
+            var image = product.MasterData.Staged.MasterVariant.Images[0];
+            var newLabel = TestingUtility.RandomString(10);
+
+            SetImageLabelUpdateAction setImageLabelUpdateAction =
+                new SetImageLabelUpdateAction(sku, image.Url,newLabel);
+
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>{ setImageLabelUpdateAction };
+
+            var retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.True(retrievedProduct.MasterData.HasStagedChanges);
+            Assert.Equal(3,retrievedProduct.MasterData.Staged.MasterVariant.Images.Count);
+            Assert.Equal(newLabel, retrievedProduct.MasterData.Staged.MasterVariant.Images[0].Label);
+        }
+
+        [Fact]
+        public void UpdateProductAddAsset()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+
+            Assert.Empty(product.MasterData.Staged.MasterVariant.Assets);
+            var sku = product.MasterData.Staged.MasterVariant.Sku;
+
+            var asset = TestingUtility.GetAssetDraft();
+
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
+            AddAssetUpdateAction addAssetUpdateAction = new AddAssetUpdateAction(sku, asset, 0);
+
+            updateActions.Add(addAssetUpdateAction);
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.Single(retrievedProduct.MasterData.Staged.MasterVariant.Assets);
+            Assert.Equal(asset.Key,retrievedProduct.MasterData.Staged.MasterVariant.Assets[0].Key);
+        }
+
+        [Fact]
+        public void UpdateProductRemoveAssetUsingAssetId()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct(withAssets:true);
+
+            Assert.Equal(3,product.MasterData.Staged.MasterVariant.Assets.Count);
+
+            //remove second asset By Sku and assetID
+            var sku = product.MasterData.Staged.MasterVariant.Sku;
+            var asset = product.MasterData.Staged.MasterVariant.Assets[1];
+
+            RemoveAssetUpdateAction removeAssetUpdateAction =
+                new RemoveAssetUpdateAction(sku:sku, assetId:asset.Id, assetKey:null, staged:true);
+
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>{ removeAssetUpdateAction };
+
+            var retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.True(retrievedProduct.MasterData.HasStagedChanges);
+            Assert.Equal(2,retrievedProduct.MasterData.Staged.MasterVariant.Assets.Count);
+        }
+
+        [Fact]
+        public void UpdateProductRemoveAssetUsingAssetKey()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct(withAssets:true);
+
+            Assert.Equal(3,product.MasterData.Staged.MasterVariant.Assets.Count);
+
+            //remove second asset by VariantId and assetKey
+            var variantId = product.MasterData.Staged.MasterVariant.Id;
+            var asset = product.MasterData.Staged.MasterVariant.Assets[1];
+
+            RemoveAssetUpdateAction removeAssetUpdateAction =
+                new RemoveAssetUpdateAction(variantId:variantId, assetId:null, assetKey:asset.Key, staged:true);
+
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>{ removeAssetUpdateAction };
+
+            var retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.True(retrievedProduct.MasterData.HasStagedChanges);
+            Assert.Equal(2,retrievedProduct.MasterData.Staged.MasterVariant.Assets.Count);
+        }
+
+        [Fact]
+        public void UpdateProductSetAssetKey()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct(withAssets:true);
+
+            Assert.Equal(3,product.MasterData.Staged.MasterVariant.Assets.Count);
+
+            //set second asset Key
+            var sku = product.MasterData.Staged.MasterVariant.Sku;
+            var asset = product.MasterData.Staged.MasterVariant.Assets[1];
+            var key = TestingUtility.RandomString(10);
+
+            SetAssetKeyUpdateAction removeAssetUpdateAction =
+                new SetAssetKeyUpdateAction(sku:sku, assetId:asset.Id, assetKey:key, staged:true);
+
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>{ removeAssetUpdateAction };
+
+            var retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.True(retrievedProduct.MasterData.HasStagedChanges);
+            Assert.Equal(3,retrievedProduct.MasterData.Staged.MasterVariant.Assets.Count);
+            Assert.Equal(key,retrievedProduct.MasterData.Staged.MasterVariant.Assets[1].Key);
         }
         #endregion
     }
