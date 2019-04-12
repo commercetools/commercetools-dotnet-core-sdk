@@ -26,7 +26,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             this.clientFixture = clientFixture;
         }
 
-        
+
         [Theory]
         [MemberData(nameof(GetExceptionsTestData))]
         public void TestCreateApiExceptionTheory(int statusCode, string responseContent, bool isJsonResponse, Type expectedExceptionType)
@@ -36,24 +36,24 @@ namespace commercetools.Sdk.HttpApi.Tests
             var serializerService = this.clientFixture.GetService<ISerializerService>();
             var mockHttpRequestMessage = GetHttpRequestMessageMock(); //same request for all
             var exceptionFactory = new ApiExceptionFactory(clientConfiguration,serializerService);
-            
-            
+
+
             //Act
             var mockHttpResponseMessage = GetHttpResponseMessageMock(statusCode, responseContent, isJsonResponse);
             var exception =
                 exceptionFactory.CreateApiException(mockHttpRequestMessage.Object, mockHttpResponseMessage.Object);
-            
+
             //Assert Request
             Assert.NotNull(exception);
             Assert.NotNull(exception.Request);
             Assert.True(!string.IsNullOrEmpty(exception.CorrelationId));
-            
+
             //Assert Response
             Assert.True(!string.IsNullOrEmpty(exception.HttpSummary));
-            
+
             //Assert Exception
             Assert.IsType(expectedExceptionType, exception);
-            
+
             //Conditional Asserts Based on Exception Types
             if (exception is ConcurrentModificationException)
             {
@@ -79,7 +79,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             string serializedNotFound = File.ReadAllText("Resources/Responses/ResourceNotFound.json");
             string serializedConcurrentModification = File.ReadAllText("Resources/Responses/ConcurrentModification.json");
-            
+
             var allData = new List<object[]>
             {
                 new object[] { 403, "", false, typeof(ForbiddenException) },
@@ -95,7 +95,6 @@ namespace commercetools.Sdk.HttpApi.Tests
                 new object[] { 401, "", false, typeof(UnauthorizedException) },
                 new object[] { 400, "invalid_scope", false, typeof(InvalidTokenException) },
                 new object[] { 400, "", false, typeof(ErrorResponseException) },
-                new object[] { 503, "", false, typeof(ServiceUnavailableException) },
                 new object[] { 505, "<h2>Service Unavailable</h2>", false, typeof(ServiceUnavailableException) }, //hack to check if content contains service unavailable with different status code (505)
                 new object[] { 501, "", false, typeof(ApiException) },//General Exception if status not handled
             };
@@ -134,6 +133,6 @@ namespace commercetools.Sdk.HttpApi.Tests
         }
 
         #endregion
-        
+
     }
 }

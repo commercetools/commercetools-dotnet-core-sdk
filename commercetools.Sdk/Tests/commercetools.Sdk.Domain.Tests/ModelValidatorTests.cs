@@ -12,8 +12,6 @@ namespace commercetools.Sdk.Domain.Tests
             // Validation attributes use service locator to get the implementation objects.
             var services = new ServiceCollection();
             services.UseDomain();
-            ServiceProvider serviceProvider = services.BuildServiceProvider();
-            ServiceLocator.SetServiceLocatorProvider(serviceProvider);
         }
 
         [Fact]
