@@ -25,6 +25,9 @@ namespace commercetools.Sdk.Domain
                 serviceProvider.GetService<IFilterPredicateExpressionVisitor>();
             ExpressionExtensions.DiscountPredicateExpressionVisitor =
                 serviceProvider.GetService<IDiscountPredicateExpressionVisitor>();
+            ValidationExtensions.CountryValidator = serviceProvider.GetService<ICountryValidator>();
+            ValidationExtensions.CultureValidator = serviceProvider.GetService<ICultureValidator>();
+            ValidationExtensions.CurrencyValidator = serviceProvider.GetService<ICurrencyValidator>();
         }
     }
 }

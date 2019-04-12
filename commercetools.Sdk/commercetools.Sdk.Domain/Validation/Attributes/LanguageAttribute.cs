@@ -14,7 +14,7 @@ namespace commercetools.Sdk.Domain.Validation.Attributes
                 return ValidationResult.Success;
             }
 
-            ICultureValidator cultureValidator = validationContext.GetService(typeof(ICultureValidator)) as ICultureValidator;
+            ICultureValidator cultureValidator = ValidationExtensions.CultureValidator;
             var result = new ValidationResult(this.ErrorMessage);
             if (cultureValidator == null)
             {

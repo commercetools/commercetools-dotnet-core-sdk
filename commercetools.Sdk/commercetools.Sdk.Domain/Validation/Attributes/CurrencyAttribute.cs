@@ -11,7 +11,7 @@ namespace commercetools.Sdk.Domain.Validation.Attributes
                 return ValidationResult.Success;
             }
 
-            ICurrencyValidator validator = validationContext.GetService(typeof(ICurrencyValidator)) as ICurrencyValidator;
+            ICurrencyValidator validator = ValidationExtensions.CurrencyValidator;
             var result = new ValidationResult(this.ErrorMessage);
             if (validator == null)
             {

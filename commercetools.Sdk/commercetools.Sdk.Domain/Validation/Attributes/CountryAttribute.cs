@@ -12,7 +12,7 @@ namespace commercetools.Sdk.Domain.Validation.Attributes
                 return ValidationResult.Success;
             }
 
-            ICountryValidator validator = validationContext.GetService(typeof(ICountryValidator)) as ICountryValidator;
+            ICountryValidator validator = ValidationExtensions.CountryValidator;
             var result = new ValidationResult(this.ErrorMessage);
             if (validator == null)
             {
