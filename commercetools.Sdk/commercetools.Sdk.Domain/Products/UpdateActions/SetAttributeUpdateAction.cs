@@ -1,7 +1,5 @@
-﻿namespace commercetools.Sdk.Domain.Products
+﻿namespace commercetools.Sdk.Domain.Products.UpdateActions
 {
-    using System.ComponentModel.DataAnnotations;
-
     public class SetAttributeUpdateAction : UpdateAction<Product>
     {
         public string Action => "setAttribute";

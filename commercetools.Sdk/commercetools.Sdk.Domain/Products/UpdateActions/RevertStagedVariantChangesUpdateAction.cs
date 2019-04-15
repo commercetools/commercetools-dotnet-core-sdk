@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.Domain.Products
+﻿namespace commercetools.Sdk.Domain.Products.UpdateActions
 {
     public class RevertStagedVariantChangesUpdateAction : UpdateAction<Product>
     {

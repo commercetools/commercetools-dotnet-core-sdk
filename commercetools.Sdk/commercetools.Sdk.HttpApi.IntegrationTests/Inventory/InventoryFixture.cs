@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.HttpApi.IntegrationTests.Channels;
+using commercetools.Sdk.HttpApi.IntegrationTests.Products;
 using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory

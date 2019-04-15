@@ -61,7 +61,7 @@
     <Folder Include="Category\" />
     <Folder Include="CustomerGroups\" />
     <Folder Include="Customers\" />
-    <Folder Include="Product\" />
+    <Folder Include="Products\" />
     <Folder Include="ProductType\" />
     <Folder Include="Project\" />
     <Folder Include="Properties\" />

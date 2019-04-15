@@ -7,20 +7,21 @@ using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.Products;
 using commercetools.Sdk.Domain.Products.Attributes;
+using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
 using Xunit.Abstractions;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 using Type = commercetools.Sdk.Domain.Type;
 
-namespace commercetools.Sdk.HttpApi.IntegrationTests
+namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
 {
     public class ProductFixture : ClientFixture, IDisposable
     {
         private readonly ProductTypeFixture productTypeFixture;
         private readonly TaxCategoryFixture taxCategoryFixture;
         private readonly TypeFixture typeFixture;
-        private readonly ProductDiscountsFixture productDiscountsFixture;
+        //private readonly ProductDiscountsFixture productDiscountsFixture;
 
         public CategoryFixture CategoryFixture { get; }
         public List<Product> ProductsToDelete { get; }

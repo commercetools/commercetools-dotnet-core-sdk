@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.ProductDiscounts;
+using commercetools.Sdk.HttpApi.IntegrationTests.Products;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
 {

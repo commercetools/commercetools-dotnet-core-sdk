@@ -5,6 +5,7 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.ShoppingLists;
 using commercetools.Sdk.HttpApi.IntegrationTests.Customers;
+using commercetools.Sdk.HttpApi.IntegrationTests.Products;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists
 {

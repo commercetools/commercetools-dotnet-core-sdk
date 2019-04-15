@@ -14,6 +14,7 @@ using commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups;
 using commercetools.Sdk.HttpApi.IntegrationTests.Customers;
 using commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes;
 using commercetools.Sdk.HttpApi.IntegrationTests.Payments;
+using commercetools.Sdk.HttpApi.IntegrationTests.Products;
 using commercetools.Sdk.HttpApi.IntegrationTests.Project;
 using commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods;
 using commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists;

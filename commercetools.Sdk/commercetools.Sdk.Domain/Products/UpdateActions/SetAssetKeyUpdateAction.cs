@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace commercetools.Sdk.Domain.Products
+namespace commercetools.Sdk.Domain.Products.UpdateActions
 {
     public class SetAssetKeyUpdateAction : UpdateAction<Product>
     {

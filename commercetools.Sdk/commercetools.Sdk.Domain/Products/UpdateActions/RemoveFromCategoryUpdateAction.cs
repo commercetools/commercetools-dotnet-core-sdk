@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using commercetools.Sdk.Domain.Categories;
 
-namespace commercetools.Sdk.Domain.Products
+namespace commercetools.Sdk.Domain.Products.UpdateActions
 {
     public class RemoveFromCategoryUpdateAction : UpdateAction<Product>
     {

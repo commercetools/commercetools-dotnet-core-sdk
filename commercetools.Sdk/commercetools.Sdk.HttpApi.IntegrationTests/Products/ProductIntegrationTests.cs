@@ -12,10 +12,10 @@ using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.Domain.Query;
 using commercetools.Sdk.HttpApi.Domain;
 using Xunit;
-using SetDescriptionUpdateAction = commercetools.Sdk.Domain.Products.SetDescriptionUpdateAction;
+using SetDescriptionUpdateAction = commercetools.Sdk.Domain.Products.UpdateActions.SetDescriptionUpdateAction;
 using Type = commercetools.Sdk.Domain.Type;
 
-namespace commercetools.Sdk.HttpApi.IntegrationTests
+namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
 {
     [Collection("Integration Tests")]
     public class ProductIntegrationTests : IClassFixture<ProductFixture>

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace commercetools.Sdk.Domain.Products
+namespace commercetools.Sdk.Domain.Products.UpdateActions
 {
-    using System.ComponentModel.DataAnnotations;
-
     public class SetAssetCustomTypeUpdateAction : UpdateAction<Product>
     {
         public string Action => "setAssetCustomType";

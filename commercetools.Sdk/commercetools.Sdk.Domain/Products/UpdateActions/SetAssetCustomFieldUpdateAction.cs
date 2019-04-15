@@ -1,9 +1,7 @@
 ﻿using System;
 
-namespace commercetools.Sdk.Domain.Products
+namespace commercetools.Sdk.Domain.Products.UpdateActions
 {
-    using System.ComponentModel.DataAnnotations;
-
     public class SetAssetCustomFieldUpdateAction : UpdateAction<Product>
     {
         public string Action => "setAssetCustomField";
