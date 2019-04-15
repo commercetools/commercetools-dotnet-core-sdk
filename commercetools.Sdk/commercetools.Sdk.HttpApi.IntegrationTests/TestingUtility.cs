@@ -257,6 +257,42 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             };
             return asset;
         }
+
+        public static List<AssetSource> GetListOfAssetSource(int count = 2)
+        {
+            var assetSources = new List<AssetSource>();
+            for (int i = 1; i<= count; i++)
+            {
+                int rand = RandomInt();
+                assetSources.Add(GetAssetSource(rand));
+            }
+            return assetSources;
+        }
+
+        public static Dictionary<string, List<SearchKeywords>> GetSearchKeywords()
+        {
+            var searchKeywords = new Dictionary<string, List<SearchKeywords>>();
+            var searchKeywordsList = GetSearchKeywordList();
+            searchKeywords.Add("en", searchKeywordsList);
+            return searchKeywords;
+        }
+
+        private static List<SearchKeywords> GetSearchKeywordList()
+        {
+            var searchKeywordsList = new List<SearchKeywords>
+            {
+                new SearchKeywords {Text = "Raider", SuggestTokenizer = GetCustomTokenizer()}
+            };
+
+            return searchKeywordsList;
+        }
+
+        private static SuggestTokenizer GetCustomTokenizer()
+        {
+            var suggestTokenizer = new CustomTokenizer();
+            suggestTokenizer.Inputs = new List<string>{"Twix"};
+            return suggestTokenizer;
+        }
         private static AssetSource GetAssetSource(int random = 1)
         {
             var assetSource = new AssetSource
@@ -268,6 +304,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             };
             return assetSource;
         }
+
         #endregion
     }
 }

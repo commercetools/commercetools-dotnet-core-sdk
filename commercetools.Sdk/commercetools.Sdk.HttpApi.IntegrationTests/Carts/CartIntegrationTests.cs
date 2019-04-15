@@ -863,10 +863,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             LineItemDraft lineItemDraft = this.cartFixture.GetLineItemDraftBySku(sku, 1);
             Cart cart = this.cartFixture.CreateCart(withCustomer: false);
 
-            AddLineItemBySkuUpdateAction addLineItemUpdateAction = new AddLineItemBySkuUpdateAction()
+            AddLineItemUpdateAction addLineItemUpdateAction = new AddLineItemUpdateAction()
             {
-                LineItem = lineItemDraft,
-                Sku = sku,
+                Sku = lineItemDraft.Sku,
                 Quantity = lineItemDraft.Quantity
             };
 
@@ -945,10 +944,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             LineItemDraft lineItemDraft = this.cartFixture.GetLineItemDraftBySku(sku, 1);
             Cart cart = this.cartFixture.CreateCart(withCustomer: false);
 
-            AddLineItemBySkuUpdateAction addLineItemUpdateAction = new AddLineItemBySkuUpdateAction()
+            AddLineItemUpdateAction addLineItemUpdateAction = new AddLineItemUpdateAction()
             {
-                LineItem = lineItemDraft,
-                Sku = sku,
+                Sku = lineItemDraft.Sku,
                 Quantity = lineItemDraft.Quantity
             };
 
@@ -1326,10 +1324,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             Cart cart = this.cartFixture.CreateCart();
 
 
-            AddLineItemByProductIdUpdateAction addLineItemUpdateAction = new AddLineItemByProductIdUpdateAction()
+            AddLineItemUpdateAction addLineItemUpdateAction = new AddLineItemUpdateAction()
             {
-                LineItem = lineItemDraft,
                 ProductId = product.Id,
+                VariantId = lineItemDraft.VariantId,
                 Quantity = lineItemDraft.Quantity
             };
 
@@ -1360,10 +1358,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             Cart cart = this.cartFixture.CreateCart();
 
 
-            AddLineItemBySkuUpdateAction addLineItemUpdateAction = new AddLineItemBySkuUpdateAction()
+            AddLineItemUpdateAction addLineItemUpdateAction = new AddLineItemUpdateAction()
             {
-                LineItem = lineItemDraft,
-                Sku = sku,
+                Sku = lineItemDraft.Sku,
                 Quantity = lineItemDraft.Quantity
             };
 

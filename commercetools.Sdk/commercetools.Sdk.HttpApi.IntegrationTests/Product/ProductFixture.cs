@@ -89,8 +89,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             bool publish = false, bool withImages = false, bool withAssets = false)
         {
             ProductDraft productDraft = new ProductDraft();
-            productDraft.Name = new LocalizedString() {{"en", this.RandomString(10)}};
             productDraft.Key = this.RandomString(10);
+            productDraft.Name = new LocalizedString() {{"en", this.RandomString(10)}};
+            productDraft.Description = new LocalizedString() {{"en", this.RandomString(20)}};
             productDraft.Slug = new LocalizedString() {{"en", this.RandomString(10)}};
             productDraft.ProductType = new ResourceIdentifier<ProductType> {Key = productType.Key};
             ProductVariantDraft productMasterVariant =

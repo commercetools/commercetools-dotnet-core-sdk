@@ -152,7 +152,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         {
             LineItemDraft lineItemDraft = new LineItemDraft();
             lineItemDraft.ProductId = productId;
-            lineItemDraft.VariantId = variantId.ToString();
+            lineItemDraft.VariantId = variantId;
             lineItemDraft.Quantity = quantity;
             return lineItemDraft;
         }
