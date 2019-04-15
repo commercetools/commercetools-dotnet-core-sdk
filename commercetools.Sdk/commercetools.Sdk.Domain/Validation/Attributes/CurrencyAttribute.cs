@@ -6,20 +6,7 @@ namespace commercetools.Sdk.Domain.Validation.Attributes
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            if (value == null)
-            {
-                return ValidationResult.Success;
-            }
-
-            ICurrencyValidator validator = ValidationExtensions.CurrencyValidator;
-            var result = new ValidationResult(this.ErrorMessage);
-            if (validator == null)
-            {
-                return result;
-            }
-
-            bool validationResult = validator.IsCurrencyValid(value.ToString());
-            return validationResult ? ValidationResult.Success : result;
+            return ValidationResult.Success;
         }
     }
 }

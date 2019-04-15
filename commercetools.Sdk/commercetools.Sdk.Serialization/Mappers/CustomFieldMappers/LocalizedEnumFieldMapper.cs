@@ -6,8 +6,5 @@ namespace commercetools.Sdk.Serialization
 {
     internal class LocalizedEnumFieldMapper : LocalizedEnumConverter<Fields, LocalizedEnumValue>, ICustomJsonMapper<Fields>
     {
-        public LocalizedEnumFieldMapper(ICultureValidator cultureValidator) : base(cultureValidator)
-        {
-        }
     }
 }

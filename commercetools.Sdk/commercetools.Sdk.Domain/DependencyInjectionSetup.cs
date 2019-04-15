@@ -11,10 +11,7 @@ namespace commercetools.Sdk.Domain
     {
         public static void UseDomain(this IServiceCollection services)
         {
-            services.AddSingleton<ICountryValidator, CountryValidator>();
-            services.AddSingleton<ICurrencyValidator, CurrencyValidator>();
             services.AddSingleton<ICultureValidator, CultureValidator>();
-            services.AddSingleton<IModelValidator, ModelValidator>();
 
             ServiceProvider serviceProvider = services.BuildServiceProvider();
             ExpressionExtensions.SortExpressionVisitor = serviceProvider.GetService<ISortExpressionVisitor>();
@@ -25,9 +22,6 @@ namespace commercetools.Sdk.Domain
                 serviceProvider.GetService<IFilterPredicateExpressionVisitor>();
             ExpressionExtensions.DiscountPredicateExpressionVisitor =
                 serviceProvider.GetService<IDiscountPredicateExpressionVisitor>();
-            ValidationExtensions.CountryValidator = serviceProvider.GetService<ICountryValidator>();
-            ValidationExtensions.CultureValidator = serviceProvider.GetService<ICultureValidator>();
-            ValidationExtensions.CurrencyValidator = serviceProvider.GetService<ICurrencyValidator>();
         }
     }
 }

@@ -9,20 +9,7 @@ namespace commercetools.Sdk.Domain.Validation.Attributes
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            if (value == null)
-            {
-                return ValidationResult.Success;
-            }
-
-            ICultureValidator cultureValidator = ValidationExtensions.CultureValidator;
-            var result = new ValidationResult(this.ErrorMessage);
-            if (cultureValidator == null)
-            {
-                return result;
-            }
-
-            bool validationResult = cultureValidator.IsCultureValid(value.ToString());
-            return validationResult ? ValidationResult.Success : result;
+            return ValidationResult.Success;
         }
     }
 }

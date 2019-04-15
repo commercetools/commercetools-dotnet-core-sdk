@@ -1,5 +1,6 @@
 ﻿using commercetools.Sdk.Registration;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Validation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace commercetools.Sdk.Serialization.Tests
@@ -12,6 +13,7 @@ namespace commercetools.Sdk.Serialization.Tests
             services.UseRegistration();
             services.UseDomain();
             services.UseSerialization();
+            services.UseValidation();
             var serviceProvider = services.BuildServiceProvider();
             this.SerializerService = serviceProvider.GetService<ISerializerService>();
         }
