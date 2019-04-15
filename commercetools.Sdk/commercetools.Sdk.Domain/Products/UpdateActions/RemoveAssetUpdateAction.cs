@@ -15,7 +15,7 @@ namespace commercetools.Sdk.Domain.Products
 
 
         /// <summary>
-        /// Pass either assetId or assetKey
+        /// Remove Asset, pass either assetId or assetKey
         /// </summary>
         /// <param name="sku">Sku of the product Variant</param>
         /// <param name="assetId">Asset ID</param>
@@ -27,7 +27,7 @@ namespace commercetools.Sdk.Domain.Products
         }
 
         /// <summary>
-        /// Pass either assetId or assetKey
+        /// Remove Asset, pass either assetId or assetKey
         /// </summary>
         /// <param name="variantId">Id of the product Variant</param>
         /// <param name="assetId">Asset ID</param>
