@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain.Products.UpdateActions
+﻿using commercetools.Sdk.Domain.States;
+
+namespace commercetools.Sdk.Domain.Products.UpdateActions
 {
     public class TransitionStateUpdateAction : UpdateAction<Product>
     {

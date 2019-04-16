@@ -1,6 +1,7 @@
 ﻿using commercetools.Sdk.Domain.Customers;
+using commercetools.Sdk.Domain.States;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.Reviews
 {
     using commercetools.Sdk.Domain.Validation.Attributes;
 

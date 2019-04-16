@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using commercetools.Sdk.Domain.Reviews;
 
 namespace commercetools.Sdk.Domain.Channels
 {

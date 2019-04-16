@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain.Payments
+﻿using commercetools.Sdk.Domain.States;
+
+namespace commercetools.Sdk.Domain.Payments
 {
     public class PaymentStatus
     {

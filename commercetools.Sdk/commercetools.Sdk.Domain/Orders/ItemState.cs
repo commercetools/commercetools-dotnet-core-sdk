@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using commercetools.Sdk.Domain.States;
 
 namespace commercetools.Sdk.Domain.Orders
 {

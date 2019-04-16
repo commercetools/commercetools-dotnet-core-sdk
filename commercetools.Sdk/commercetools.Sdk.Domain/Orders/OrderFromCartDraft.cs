@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.States;
 
 namespace commercetools.Sdk.Domain.Orders
 {

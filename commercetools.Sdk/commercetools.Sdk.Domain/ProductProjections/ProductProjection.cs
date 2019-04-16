@@ -1,6 +1,8 @@
 ﻿using commercetools.Sdk.Domain.Categories;
 using System;
 using System.Collections.Generic;
+using commercetools.Sdk.Domain.Reviews;
+using commercetools.Sdk.Domain.States;
 
 namespace commercetools.Sdk.Domain.ProductProjections
 {
