@@ -21,10 +21,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         private readonly ProductTypeFixture productTypeFixture;
         private readonly TaxCategoryFixture taxCategoryFixture;
         private readonly TypeFixture typeFixture;
-        //private readonly ProductDiscountsFixture productDiscountsFixture;
 
         public CategoryFixture CategoryFixture { get; }
         public List<Product> ProductsToDelete { get; }
+        public List<ProductDiscount> ProductDiscounts { get; }
 
         public ProductFixture() : base()
         {
@@ -33,7 +33,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             this.CategoryFixture = new CategoryFixture();
             this.taxCategoryFixture = new TaxCategoryFixture();
             this.typeFixture = new TypeFixture();
-            //this.productDiscountsFixture = new ProductDiscountsFixture();
+            this.ProductDiscounts = new List<ProductDiscount>();
         }
 
         public void Dispose()
@@ -57,6 +57,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             this.CategoryFixture.Dispose();
             this.taxCategoryFixture.Dispose();
             this.typeFixture.Dispose();
+            this.DeleteProductDiscounts();
         }
 
         public Product Publish(Product product, PublishScope scope = PublishScope.All)
@@ -110,7 +111,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
                 productDraft.Variants = new List<ProductVariantDraft>();
                 for (var i = 0; i < 3; i++) // add 3 variants
                 {
-                    var productVariantDraft = TestingUtility.GetRandomProductVariantDraft(category.Id, ReferenceTypeId.Category);
+                    var productVariantDraft =
+                        TestingUtility.GetRandomProductVariantDraft(category.Id, ReferenceTypeId.Category);
                     productDraft.Variants.Add(productVariantDraft);
                 }
             }
@@ -143,23 +145,28 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         /// <param name="withImages">if true, this master product variant will have list of images.</param>
         /// <param name="withAssets">if true, this master product variant will have list of assets.</param>
         /// <returns></returns>
-        public Product CreateProduct(bool withVariants = false, bool publish = false, bool withImages = false, bool withAssets = false)
+        public Product CreateProduct(bool withVariants = false, bool publish = false, bool withImages = false,
+            bool withAssets = false)
         {
             Category category = this.CreateNewCategory();
             ProductType productType = this.CreateNewProductType();
-            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish, withImages, withAssets));
+            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish, withImages,
+                withAssets));
         }
 
         public Product CreateProduct(Category category, ProductType productType, bool withVariants = false,
             bool publish = false, bool withImages = false, bool withAssets = false)
         {
-            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish, withImages, withAssets));
+            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish, withImages,
+                withAssets));
         }
 
-        public Product CreateProduct(ProductType productType, bool withVariants = false, bool publish = false, bool withImages = false, bool withAssets = false)
+        public Product CreateProduct(ProductType productType, bool withVariants = false, bool publish = false,
+            bool withImages = false, bool withAssets = false)
         {
             Category category = this.CreateNewCategory();
-            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish, withImages, withAssets));
+            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish, withImages,
+                withAssets));
         }
 
         public ProductDraft GetProductDraft()
@@ -203,16 +210,50 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             this.typeFixture.TypesToDelete.Add(customType);
             return customType;
         }
+
         public Fields CreateNewFields()
         {
             Fields fields = this.typeFixture.CreateNewFields();
             return fields;
         }
-//        public ProductDiscount CreateProductDiscount()
-//        {
-//            var productDiscount = this.productDiscountsFixture.CreateProductDiscount();
-//            this.productDiscountsFixture.ProductDiscountsToDelete.Add(productDiscount);
-//            return productDiscount;
-//        }
+
+
+        /// <summary>
+        /// Get Product Discount Draft with external product discount value and can be used for all products
+        /// </summary>
+        /// <returns></returns>
+        private ProductDiscountDraft GetProductDiscountDraft()
+        {
+            string predicate = "1 = 1";//can be used for all products
+            ProductDiscountDraft productDiscountDraft = new ProductDiscountDraft();
+            productDiscountDraft.Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}};
+            productDiscountDraft.Value = new ExternalProductDiscountValue();
+            productDiscountDraft.Predicate = predicate;
+            productDiscountDraft.SortOrder = this.RandomSortOrder();
+            productDiscountDraft.IsActive = true;
+
+            return productDiscountDraft;
+        }
+
+        public ProductDiscount CreateProductDiscount()
+        {
+            IClient commerceToolsClient = this.GetService<IClient>();
+            var productDiscountDraft = GetProductDiscountDraft();
+            ProductDiscount productDiscount = commerceToolsClient
+                .ExecuteAsync(new CreateCommand<ProductDiscount>(productDiscountDraft)).Result;
+            this.ProductDiscounts.Add(productDiscount);
+            return productDiscount;
+        }
+
+        private void DeleteProductDiscounts()
+        {
+            IClient commerceToolsClient = this.GetService<IClient>();
+            this.ProductDiscounts.Reverse();
+            foreach (ProductDiscount productDiscount in this.ProductDiscounts)
+            {
+                ProductDiscount deletedType = commerceToolsClient
+                    .ExecuteAsync(new DeleteByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version)).Result;
+            }
+        }
     }
 }

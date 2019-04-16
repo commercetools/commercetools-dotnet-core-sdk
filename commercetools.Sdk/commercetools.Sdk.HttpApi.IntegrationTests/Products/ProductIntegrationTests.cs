@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.ProductDiscounts;
@@ -11,6 +12,7 @@ using commercetools.Sdk.Domain.Products;
 using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.Domain.Query;
 using commercetools.Sdk.HttpApi.Domain;
+using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;
 using SetDescriptionUpdateAction = commercetools.Sdk.Domain.Products.UpdateActions.SetDescriptionUpdateAction;
 using Type = commercetools.Sdk.Domain.Type;
@@ -168,25 +170,29 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         }
 
         [Fact]
-        public void DeleteProductById()
+        public async void DeleteProductById()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
             Product product = this.productFixture.CreateProduct();
             Product retrievedProduct = commerceToolsClient
                 .ExecuteAsync(new DeleteByIdCommand<Product>(new Guid(product.Id), product.Version)).Result;
-            Assert.ThrowsAsync<HttpApiClientException>(() =>
-                commerceToolsClient.ExecuteAsync(new GetByIdCommand<Product>(new Guid(retrievedProduct.Id))));
+            NotFoundException exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+                commerceToolsClient.ExecuteAsync(
+                    new GetByIdCommand<Product>(new Guid(retrievedProduct.Id))));
+            Assert.Equal(404, exception.StatusCode);
         }
 
         [Fact]
-        public void DeleteProductByKey()
+        public async void DeleteProductByKey()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
             Product product = this.productFixture.CreateProduct();
             Product retrievedProduct = commerceToolsClient
                 .ExecuteAsync(new DeleteByKeyCommand<Product>(product.Key, product.Version)).Result;
-            Assert.ThrowsAsync<HttpApiClientException>(() =>
-                commerceToolsClient.ExecuteAsync(new GetByIdCommand<Product>(new Guid(retrievedProduct.Id))));
+            NotFoundException exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+                commerceToolsClient.ExecuteAsync(
+                    new GetByIdCommand<Product>(new Guid(retrievedProduct.Id))));
+            Assert.Equal(404, exception.StatusCode);
         }
 
         [Fact]
@@ -613,7 +619,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
                 retrievedProduct.MasterData.Staged.MasterVariant.Prices[0].Custom.Fields["string-field"]);
         }
 
-        /*
+
         [Fact]
         public void UpdateProductSetDiscountedPrice()
         {
@@ -643,8 +649,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
                 .Result;
             this.productFixture.ProductsToDelete.Add(retrievedProduct);
             Assert.Equal(discountedPrice.Value, retrievedProduct.MasterData.Staged.MasterVariant.Prices[0].Discounted.Value);
+            Assert.Equal(discountedPrice.Discount.Id, retrievedProduct.MasterData.Staged.MasterVariant.Prices[0].Discounted.Discount.Id);
         }
-        */
+
 
         [Fact]
         public void UpdateProductSetAttribute()
