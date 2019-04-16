@@ -69,6 +69,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             CartDraft cartDraft = new CartDraft()
             {
+                Currency = "EUR",
                 Country = "ZZ"
             };
             ValidationException exception = Assert.Throws<ValidationException>(() => serializerService.Serialize(cartDraft));

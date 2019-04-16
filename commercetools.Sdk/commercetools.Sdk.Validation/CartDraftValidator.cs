@@ -1,4 +1,5 @@
 using commercetools.Sdk.Domain.Carts;
+using FluentValidation;
 
 namespace commercetools.Sdk.Validation
 {
@@ -6,7 +7,7 @@ namespace commercetools.Sdk.Validation
     {
         public CartDraftValidator()
         {
-            RuleFor(draft => draft.Currency).MustBeCurrency();
+            RuleFor(draft => draft.Currency).MustBeCurrency().NotEmpty();
             RuleFor(draft => draft.Country).MustBeCountry();
         }
     }

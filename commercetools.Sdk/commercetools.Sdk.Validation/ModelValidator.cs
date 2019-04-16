@@ -21,10 +21,7 @@ namespace commercetools.Sdk.Validation
         {
             if (mapping.TryGetValue(typeof(T), out IResourceValidator modelValidator))
             {
-                var results = modelValidator.Validate(input);
-                if (results.Errors.Count == 0) return;
-
-                throw new ValidationException(results.Errors);
+                (modelValidator as IValidator<T>).ValidateAndThrow(input);
             }
         }
     }
