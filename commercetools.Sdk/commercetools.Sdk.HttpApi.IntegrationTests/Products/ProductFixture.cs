@@ -8,7 +8,9 @@ using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.Products;
 using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.Domain.Products.UpdateActions;
+using commercetools.Sdk.Domain.States;
 using commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts;
+using commercetools.Sdk.HttpApi.IntegrationTests.States;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
 using Xunit.Abstractions;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
@@ -21,6 +23,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         private readonly ProductTypeFixture productTypeFixture;
         private readonly TaxCategoryFixture taxCategoryFixture;
         private readonly TypeFixture typeFixture;
+        private readonly StatesFixture statesFixture;
 
         public CategoryFixture CategoryFixture { get; }
         public List<Product> ProductsToDelete { get; }
@@ -34,6 +37,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             this.taxCategoryFixture = new TaxCategoryFixture();
             this.typeFixture = new TypeFixture();
             this.ProductDiscounts = new List<ProductDiscount>();
+            this.statesFixture = new StatesFixture();
         }
 
         public void Dispose()
@@ -58,6 +62,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             this.CategoryFixture.Dispose();
             this.taxCategoryFixture.Dispose();
             this.typeFixture.Dispose();
+            this.statesFixture.Dispose();
         }
 
         public Product Publish(Product product, PublishScope scope = PublishScope.All)
@@ -215,6 +220,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         {
             Fields fields = this.typeFixture.CreateNewFields();
             return fields;
+        }
+
+        public State CreateNewState(StateType stateType = StateType.ProductState,bool initial = true)
+        {
+            State state = this.statesFixture.CreateState(stateType, initial);
+            this.statesFixture.StatesToDelete.Add(state);
+            return state;
         }
 
 

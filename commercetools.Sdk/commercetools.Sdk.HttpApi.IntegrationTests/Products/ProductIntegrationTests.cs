@@ -11,6 +11,7 @@ using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.Products;
 using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.Domain.Query;
+using commercetools.Sdk.Domain.States;
 using commercetools.Sdk.HttpApi.Domain;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;
@@ -1584,6 +1585,33 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             Assert.Equal(oldVariantSku, revertedProduct.MasterData.Staged.MasterVariant.Sku);
         }
 
+        [Fact]
+        public void UpdateProductTransitionToNewState()
+        {
+            IClient commerceToolsClient = this.productFixture.GetService<IClient>();
+            Product product = this.productFixture.CreateProduct();
+
+            Assert.Null(product.State);
+
+            var initialProductState = this.productFixture.CreateNewState(StateType.ProductState, initial: true);
+
+            Assert.NotNull(initialProductState.Id);
+
+            TransitionStateUpdateAction transitionStateUpdateAction = new TransitionStateUpdateAction()
+            {
+               State = new Reference<State>{ Id = initialProductState.Id}
+            };
+            List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>> {transitionStateUpdateAction};
+
+            Product retrievedProduct = commerceToolsClient
+                .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id), product.Version, updateActions))
+                .Result;
+
+            this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+            Assert.NotNull(retrievedProduct.State);
+            Assert.Equal(initialProductState.Id, retrievedProduct.State.Id);
+        }
         #endregion
     }
 }
