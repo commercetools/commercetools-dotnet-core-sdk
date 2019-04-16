@@ -38,11 +38,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public TypeDraft CreateTypeDraft()
         {
             TypeDraft typeDraft = new TypeDraft();
-            typeDraft.Key = this.RandomString(10);
+            typeDraft.Key = TestingUtility.RandomString(10);
             typeDraft.Name = new LocalizedString();
-            typeDraft.Name.Add("en", this.RandomString(10));
+            typeDraft.Name.Add("en", TestingUtility.RandomString(10));
             typeDraft.Description = new LocalizedString();
-            typeDraft.Description.Add("en", this.RandomString(10));
+            typeDraft.Description.Add("en", TestingUtility.RandomString(10));
             typeDraft.ResourceTypeIds = new List<ResourceTypeId>() { ResourceTypeId.Category, ResourceTypeId.CustomerGroup, ResourceTypeId.InventoryEntry, ResourceTypeId.Order, ResourceTypeId.LineItem, ResourceTypeId.CustomLineItem, ResourceTypeId.ProductPrice, ResourceTypeId.Asset };
             typeDraft.FieldDefinitions = new List<FieldDefinition>();
             typeDraft.FieldDefinitions.Add(this.CreateStringFieldDefinition());

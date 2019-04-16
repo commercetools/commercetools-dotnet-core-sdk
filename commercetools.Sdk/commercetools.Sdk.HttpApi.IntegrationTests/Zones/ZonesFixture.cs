@@ -36,8 +36,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Zones
 
         public ZoneDraft GetZoneDraft(string country = null)
         {
-            int ran = this.RandomInt();
-            string zoneCountry = country ?? this.GetRandomEuropeCountry();
+            int ran = TestingUtility.RandomInt();
+            string zoneCountry = country ?? TestingUtility.GetRandomEuropeCountry();
             var locations = new List<Location>() { new Location() { Country =  zoneCountry}};
             ZoneDraft zoneDraft = new ZoneDraft()
             {

@@ -47,8 +47,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
 
             InventoryEntryDraft inventoryEntryDraft = new InventoryEntryDraft();
             inventoryEntryDraft.Sku = product.MasterData.Current.MasterVariant.Sku;
-            inventoryEntryDraft.QuantityOnStock = this.RandomInt(100, 1000);
-            inventoryEntryDraft.RestockableInDays = this.RandomInt(1, 100);
+            inventoryEntryDraft.QuantityOnStock = TestingUtility.RandomInt(100, 1000);
+            inventoryEntryDraft.RestockableInDays = TestingUtility.RandomInt(1, 100);
             return inventoryEntryDraft;
         }
 

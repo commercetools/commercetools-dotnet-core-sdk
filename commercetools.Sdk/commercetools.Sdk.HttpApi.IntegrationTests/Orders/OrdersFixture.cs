@@ -18,7 +18,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
             this.OrdersToDelete = new List<Order>();
             this.cartFixture = new CartFixture();
         }
-        
+
         public void Dispose()
         {
             IClient commerceToolsClient = this.GetService<IClient>();
@@ -31,23 +31,23 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
             }
             cartFixture.Dispose();
         }
-        
+
         public OrderFromCartDraft GetOrderFromCartDraft()
         {
             //Create A Cart
             Cart cart = this.cartFixture.CreateCart();
             this.cartFixture.CartToDelete.Add(cart);
-            
+
             //Add at least one product to this cart
-            
+
             //Then Create Order from this Cart
             OrderFromCartDraft orderFromCartDraft = new OrderFromCartDraft();
             orderFromCartDraft.Id = cart.Id;
             orderFromCartDraft.Version = cart.Version;
-            orderFromCartDraft.OrderNumber = this.RandomString(10);
+            orderFromCartDraft.OrderNumber = TestingUtility.RandomString(10);
             return orderFromCartDraft;
         }
-        
+
         public Order CreateOrderFromCart()
         {
             return this.CreateOrderFromCart(this.GetOrderFromCartDraft());
@@ -59,6 +59,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
             Order order = commerceToolsClient.ExecuteAsync(new CreateCommand<Order>(orderFromCartDraft)).Result;
             return order;
         }
-        
+
     }
 }

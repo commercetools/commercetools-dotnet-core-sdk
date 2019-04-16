@@ -57,7 +57,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Project
 
             Assert.NotNull(project);
 
-            var classificationValues = this.projectFixture
+            var classificationValues = TestingUtility
                 .GetCartClassificationTestValues();
             var updatedProject =
                 this.projectFixture.SetShippingRateInputTypeToCartClassification(classificationValues);

@@ -245,7 +245,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
             Product product = this.productFixture.CreateProduct();
-            string newKey = this.productFixture.RandomString(10);
+            string newKey = TestingUtility.RandomString(10);
             List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
             SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction() {Key = newKey};
             updateActions.Add(setKeyAction);
@@ -264,7 +264,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
             Product product = this.productFixture.CreateProduct();
-            string name = this.productFixture.RandomString(10);
+            string name = TestingUtility.RandomString(10);
             List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
             ChangeNameUpdateAction changeNameUpdateAction = new ChangeNameUpdateAction()
                 {Name = new LocalizedString() {{"en", name}}};
@@ -280,7 +280,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
             Product product = this.productFixture.CreateProduct();
-            string newDescription = this.productFixture.RandomString(20);
+            string newDescription = TestingUtility.RandomString(20);
             List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
             SetDescriptionUpdateAction setDescriptionUpdateAction = new SetDescriptionUpdateAction()
                 {Description = new LocalizedString() {{"en", newDescription}}};
@@ -297,7 +297,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
             Product product = this.productFixture.CreateProduct();
-            string newSlug = this.productFixture.RandomString(10);
+            string newSlug = TestingUtility.RandomString(10);
             List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
             ChangeSlugUpdateAction changeSlugUpdateAction = new ChangeSlugUpdateAction()
                 {Slug = new LocalizedString() {{"en", newSlug}}};
@@ -318,8 +318,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             var productCategory = product.MasterData.Staged.Categories[0];
             AddProductVariantUpdateAction addProductVariantUpdateAction = new AddProductVariantUpdateAction()
             {
-                Sku = this.productFixture.RandomString(10),
-                Key = this.productFixture.RandomString(10),
+                Sku = TestingUtility.RandomString(10),
+                Key = TestingUtility.RandomString(10),
                 Attributes = TestingUtility.GetListOfRandomAttributes(productCategory.Id, ReferenceTypeId.Category)
             };
 
@@ -423,7 +423,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
 
             string sku = product.MasterData.Staged.MasterVariant.Sku;
 
-            var newProductPrice = TestingUtility.GetPriceDraft(this.productFixture.RandomInt(1000, 5000),
+            var newProductPrice = TestingUtility.GetPriceDraft(TestingUtility.RandomInt(1000, 5000),
                 DateTime.Now.AddMonths(6), DateTime.Now.AddMonths(7));
 
             AddPriceUpdateAction addPriceUpdateAction =
@@ -478,7 +478,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
 
             var oldPrice = product.MasterData.Staged.MasterVariant.Prices[0];
 
-            var newProductPrice = TestingUtility.GetPriceDraft(this.productFixture.RandomInt(1000, 5000),
+            var newProductPrice = TestingUtility.GetPriceDraft(TestingUtility.RandomInt(1000, 5000),
                 DateTime.Now.AddMonths(5), DateTime.Now.AddMonths(6));
 
             ChangePriceUpdateAction changePriceUpdateAction =
@@ -727,7 +727,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
             AddToCategoryUpdateAction addToCategoryUpdateAction = new AddToCategoryUpdateAction()
             {
-                OrderHint = this.productFixture.RandomSortOrder(),
+                OrderHint = TestingUtility.RandomSortOrder(),
                 Category = new ResourceIdentifier<Category> {Key = newCategory.Key}
             };
             updateActions.Add(addToCategoryUpdateAction);

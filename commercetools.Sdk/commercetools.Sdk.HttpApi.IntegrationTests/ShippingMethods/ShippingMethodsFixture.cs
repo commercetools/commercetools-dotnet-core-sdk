@@ -40,7 +40,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
 
         public ShippingMethodDraft GetShippingMethodDraft(string country = null)
         {
-            int ran = this.RandomInt();
+            int ran = TestingUtility.RandomInt();
             TaxCategory taxCategory = this.CreateNewTaxCategory(country);
             ZoneRateDraft zoneRateDraft = this.GetNewZoneRateDraft(country);
             ShippingMethodDraft shippingMethodDraft = new ShippingMethodDraft()

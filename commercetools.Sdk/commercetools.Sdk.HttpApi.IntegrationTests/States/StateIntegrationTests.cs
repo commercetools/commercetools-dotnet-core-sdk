@@ -15,7 +15,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.States
             this.statesFixture = statesFixture;
         }
 
-        [Fact]
+        //[Fact]
         public void CreateState()
         {
             IClient commerceToolsClient = this.statesFixture.GetService<IClient>();

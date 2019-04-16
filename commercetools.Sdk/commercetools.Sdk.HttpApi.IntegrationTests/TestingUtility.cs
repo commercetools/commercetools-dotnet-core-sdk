@@ -6,6 +6,7 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Products.Attributes;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
+using LocalizedEnumValue = commercetools.Sdk.Domain.Common.LocalizedEnumValue;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
@@ -90,13 +91,21 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 
         public static List<LocalizedEnumValue> GetCartClassificationTestValues()
         {
-            var classificationValues = new List<LocalizedEnumValue>();
-            classificationValues.Add(new LocalizedEnumValue()
-                {Key = "Small", Label = new LocalizedString() {{"en", "Small"}, {"de", "Klein"}}});
-            classificationValues.Add(new LocalizedEnumValue()
-                {Key = "Medium", Label = new LocalizedString() {{"en", "Medium"}, {"de", "Mittel"}}});
-            classificationValues.Add(new LocalizedEnumValue()
-                {Key = "Heavy", Label = new LocalizedString() {{"en", "Heavy"}, {"de", "Schwergut"}}});
+            var classificationValues = new List<LocalizedEnumValue>
+            {
+                new LocalizedEnumValue()
+                {
+                    Key = "Small", Label = new LocalizedString() {{"en", "Small"}, {"de", "Klein"}}
+                },
+                new LocalizedEnumValue()
+                {
+                    Key = "Medium", Label = new LocalizedString() {{"en", "Medium"}, {"de", "Mittel"}}
+                },
+                new LocalizedEnumValue()
+                {
+                    Key = "Heavy", Label = new LocalizedString() {{"en", "Heavy"}, {"de", "Schwergut"}}
+                }
+            };
             return classificationValues;
         }
          /// <summary>
@@ -178,7 +187,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             attributes.Add(new EnumAttribute()
                 {Name = "enum-attribute-name", Value = new PlainEnumValue() {Key = "enum-key-1"}});
             attributes.Add(new LocalizedEnumAttribute()
-                {Name = "localized-enum-attribute-name", Value = new LocalizedEnumValue() {Key = "enum-key-1"}});
+                {Name = "localized-enum-attribute-name", Value = new commercetools.Sdk.Domain.Products.Attributes.LocalizedEnumValue() {Key = "enum-key-1"}});
             attributes.Add(new BooleanAttribute() {Name = "boolean-attribute-name", Value = true});
             attributes.Add(new NumberAttribute() {Name = "number-attribute-name", Value = 10});
             attributes.Add(new DateTimeAttribute()

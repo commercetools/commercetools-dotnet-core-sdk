@@ -40,6 +40,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         {
             Product toBeDeleted = null;
             IClient commerceToolsClient = this.GetService<IClient>();
+            this.DeleteProductDiscounts();//Delete Product discounts first
             this.ProductsToDelete.Reverse();
             foreach (Product product in this.ProductsToDelete)
             {
@@ -57,7 +58,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             this.CategoryFixture.Dispose();
             this.taxCategoryFixture.Dispose();
             this.typeFixture.Dispose();
-            this.DeleteProductDiscounts();
         }
 
         public Product Publish(Product product, PublishScope scope = PublishScope.All)
@@ -91,10 +91,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             bool publish = false, bool withImages = false, bool withAssets = false)
         {
             ProductDraft productDraft = new ProductDraft();
-            productDraft.Key = this.RandomString(10);
-            productDraft.Name = new LocalizedString() {{"en", this.RandomString(10)}};
-            productDraft.Description = new LocalizedString() {{"en", this.RandomString(20)}};
-            productDraft.Slug = new LocalizedString() {{"en", this.RandomString(10)}};
+            productDraft.Key = TestingUtility.RandomString(10);
+            productDraft.Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}};
+            productDraft.Description = new LocalizedString() {{"en", TestingUtility.RandomString(20)}};
+            productDraft.Slug = new LocalizedString() {{"en", TestingUtility.RandomString(10)}};
             productDraft.ProductType = new ResourceIdentifier<ProductType> {Key = productType.Key};
             ProductVariantDraft productMasterVariant =
                 TestingUtility.GetRandomProductVariantDraft(category.Id, ReferenceTypeId.Category);
@@ -229,7 +229,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             productDiscountDraft.Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}};
             productDiscountDraft.Value = new ExternalProductDiscountValue();
             productDiscountDraft.Predicate = predicate;
-            productDiscountDraft.SortOrder = this.RandomSortOrder();
+            productDiscountDraft.SortOrder = TestingUtility.RandomSortOrder();
             productDiscountDraft.IsActive = true;
 
             return productDiscountDraft;

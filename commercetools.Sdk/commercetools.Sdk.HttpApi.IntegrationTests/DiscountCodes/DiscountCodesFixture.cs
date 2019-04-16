@@ -39,9 +39,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes
         {
             DiscountCodeDraft discountCodeDraft = new DiscountCodeDraft()
             {
-                Code = this.RandomString(15),
-                Name = new LocalizedString() {{"en", this.RandomString(10)}},
-                Description = new LocalizedString() {{"en", this.RandomString(20)}},
+                Code = TestingUtility.RandomString(15),
+                Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}},
+                Description = new LocalizedString() {{"en", TestingUtility.RandomString(20)}},
                 IsActive = true,
                 CartPredicate = "1 = 1", //for all carts
                 ValidFrom = DateTime.Today,

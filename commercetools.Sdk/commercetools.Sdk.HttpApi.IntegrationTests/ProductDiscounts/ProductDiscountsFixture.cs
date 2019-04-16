@@ -31,7 +31,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
                         productDiscount.Version)).Result;
             }
             this.productFixture.Dispose();
-
             this.productTypeFixture.Dispose();
         }
 
@@ -44,11 +43,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
         {
             string predicate = this.GetProductDiscountPredicateBasedonProduct(productId);
             ProductDiscountDraft productDiscountDraft = new ProductDiscountDraft();
-            productDiscountDraft.Name = new LocalizedString() {{"en", this.RandomString(10)}};
-            productDiscountDraft.Description = new LocalizedString() {{"en", this.RandomString(20)}};
+            productDiscountDraft.Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}};
+            productDiscountDraft.Description = new LocalizedString() {{"en", TestingUtility.RandomString(20)}};
             productDiscountDraft.Value = GetProductDiscountValueAsAbsolute();
             productDiscountDraft.Predicate = predicate;
-            productDiscountDraft.SortOrder = this.RandomSortOrder();
+            productDiscountDraft.SortOrder = TestingUtility.RandomSortOrder();
             productDiscountDraft.ValidFrom = DateTime.Today;
             productDiscountDraft.ValidUntil = DateTime.Today.AddMonths(1);
             productDiscountDraft.IsActive = true;
@@ -93,7 +92,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
         {
             var productDiscountValue = new RelativeProductDiscountValue()
             {
-                Permyriad = this.RandomInt(1, 30)
+                Permyriad = TestingUtility.RandomInt(1, 30)
             };
             return productDiscountValue;
         }
@@ -107,7 +106,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             var money = new Money()
             {
                 CurrencyCode = "EUR",
-                CentAmount = this.RandomInt(1, 10)
+                CentAmount = TestingUtility.RandomInt(1, 10)
             };
             var productDiscountValue = new AbsoluteProductDiscountValue()
             {
