@@ -50,6 +50,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.MultipleC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.All", "commercetools.Sdk.All\commercetools.Sdk.All.csproj", "{264AEBC5-2534-4D04-BE64-2069B7343CCE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.Validation", "commercetools.Sdk.Validation\commercetools.Sdk.Validation.csproj", "{599C054B-7C1A-450B-B02E-E94E41CC184F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -132,6 +134,10 @@ Global
 		{264AEBC5-2534-4D04-BE64-2069B7343CCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{264AEBC5-2534-4D04-BE64-2069B7343CCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{264AEBC5-2534-4D04-BE64-2069B7343CCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{599C054B-7C1A-450B-B02E-E94E41CC184F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{599C054B-7C1A-450B-B02E-E94E41CC184F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{599C054B-7C1A-450B-B02E-E94E41CC184F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{599C054B-7C1A-450B-B02E-E94E41CC184F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,22 +1,24 @@
-﻿namespace commercetools.Sdk.Domain.Validation
-{
-    using System;
-    using System.Globalization;
-    using System.Linq;
+﻿using System;
+using System.Globalization;
+using System.Linq;
+using FluentValidation.Validators;
 
-    public class CurrencyValidator : ICurrencyValidator
+namespace commercetools.Sdk.Validation
+{
+    public class CurrencyValidator : PropertyValidator
     {
         private readonly RegionInfo[] regionInfos;
 
-        public CurrencyValidator()
+        public CurrencyValidator(): base("{PropertyName} isn't a valid currency")
         {
             this.regionInfos = CultureInfo.GetCultures(CultureTypes.AllCultures)
                 .Where(x => !x.Equals(CultureInfo.InvariantCulture))
                 .Where(x => !x.IsNeutralCulture).Select(x => new RegionInfo(x.Name)).ToArray();
         }
 
-        public bool IsCurrencyValid(string currency)
+        protected override bool IsValid(PropertyValidatorContext context)
         {
+            var currency = context.PropertyValue as string;
             if (string.IsNullOrEmpty(currency))
             {
                 return true;
