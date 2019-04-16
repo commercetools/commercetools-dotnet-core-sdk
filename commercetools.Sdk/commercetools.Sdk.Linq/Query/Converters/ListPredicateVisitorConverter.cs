@@ -1,18 +1,21 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Query.Converters
 {
-    public class MethodPredicateVisitorConverter : IQueryPredicateVisitorConverter
+    // p.Attributes.Any(...)
+    public class ListPredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
-        public int Priority { get; } = 3;
+        public int Priority { get; } = 4;
 
         public bool CanConvert(Expression expression)
         {
             if (expression is MethodCallExpression methodCallExpression)
             {
-                if (Mapping.AllowedMethods.ContainsKey(methodCallExpression.Method.Name))
+                if (IsMethodNameAllowed(methodCallExpression) && IsValidMethodCaller(methodCallExpression))
                 {
                     return true;
                 }
@@ -29,26 +32,16 @@ namespace commercetools.Sdk.Linq.Query.Converters
                 return null;
             }
 
-            string methodName = Mapping.AllowedMethods[methodCallExpression.Method.Name];
+            IPredicateVisitor inner = predicateVisitorFactory.Create(methodCallExpression.Arguments[1]);
 
             var memberExpression = methodCallExpression.Arguments[0] as MemberExpression;
+
+            // Id
             string currentName = memberExpression.Member.Name;
-            var callerParent = predicateVisitorFactory.Create(memberExpression.Expression);
-
             ConstantPredicateVisitor constant = new ConstantPredicateVisitor(currentName);
+            IPredicateVisitor parent = predicateVisitorFactory.Create(memberExpression);
 
-            // c.Key.In("c14", "c15")
-            if (methodCallExpression.Arguments.Count > 1)
-            {
-                IPredicateVisitor methodArguments = predicateVisitorFactory.Create(methodCallExpression.Arguments[1]);
-                var inner = new BinaryPredicateVisitor(constant, methodName, methodArguments);
-
-                return CombinePredicates(callerParent, inner);
-            }
-
-            // c.Key.IsDefined()
-            var binaryPredicateVisitor = new BinaryPredicateVisitor(constant, methodName, new ConstantPredicateVisitor(string.Empty));
-            return CombinePredicates(callerParent, binaryPredicateVisitor);
+            return CanBeCombined(parent) ? CombinePredicates(parent, inner) : new ContainerPredicateVisitor(inner, constant);
         }
 
         // When there is more than one property accessor, the last accessor needs to be taken out and added to the binary logical predicate.
@@ -82,6 +75,25 @@ namespace commercetools.Sdk.Linq.Query.Converters
         private static bool CanBeCombined(IPredicateVisitor left)
         {
             return left is ContainerPredicateVisitor;
+        }
+
+        private static bool IsMethodNameAllowed(MethodCallExpression expression)
+        {
+            return expression.Method.Name == "Any";
+        }
+
+        private static bool IsValidMethodCaller(MethodCallExpression expression)
+        {
+            Expression callerExpression = expression.Arguments[0];
+            if (callerExpression is MemberExpression memberExpression)
+            {
+                if (memberExpression.Type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

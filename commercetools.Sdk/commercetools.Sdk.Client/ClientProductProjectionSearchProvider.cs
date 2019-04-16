@@ -1,3 +1,5 @@
+using commercetools.Sdk.Domain;
+
 namespace commercetools.Sdk.Client
 {
     using System;
@@ -119,7 +121,7 @@ namespace commercetools.Sdk.Client
                             direction = SortDirection.Descending;
                         }
 
-                        var render = ServiceLocator.Current.GetService<ISortExpressionVisitor>().Render(sort.Operand);
+                        var render = sort.Operand.RenderSort();
                         parameters.Sort.Add(new Sort<ProductProjection>(render, direction).ToString());
                     }
 

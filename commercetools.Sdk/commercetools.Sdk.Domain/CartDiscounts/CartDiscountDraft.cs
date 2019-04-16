@@ -22,10 +22,5 @@ namespace commercetools.Sdk.Domain.CartDiscounts
         public List<Reference> References { get; set; }
         public StackingMode StackingMode { get; set; }
         public CustomFields Custom { get; set; }
-
-        public void SetCartPredicate(Expression<Func<Cart, bool>> expression)
-        {
-            this.CartPredicate = ServiceLocator.Current.GetService<IDiscountPredicateExpressionVisitor>().Render(expression);
-        }
     }
 }

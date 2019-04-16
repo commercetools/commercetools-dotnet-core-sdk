@@ -10,8 +10,15 @@ namespace commercetools.Sdk.Linq.Query.Converters
 
         public bool CanConvert(Expression expression)
         {
-            // TODO Add also a check that method name is get_Item
-            return expression.NodeType == ExpressionType.Call;
+            if (expression is MethodCallExpression methodCallExpression)
+            {
+                if (IsMethodNameAllowed(methodCallExpression))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public IPredicateVisitor Convert(Expression expression, IPredicateVisitorFactory predicateVisitorFactory)
@@ -38,6 +45,11 @@ namespace commercetools.Sdk.Linq.Query.Converters
             }
 
             return inner;
+        }
+
+        private static bool IsMethodNameAllowed(MethodCallExpression expression)
+        {
+            return expression.Method.Name == "get_Item";
         }
     }
 }

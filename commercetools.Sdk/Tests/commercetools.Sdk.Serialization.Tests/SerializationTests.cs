@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.IO;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Reviews;
 using commercetools.Sdk.Domain.States;
-using commercetools.Sdk.Domain.Validation;
+using commercetools.Sdk.Registration;
 using FluentAssertions;
-using Newtonsoft.Json;
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
@@ -22,6 +24,24 @@ namespace commercetools.Sdk.Serialization.Tests
         }
 
         [Fact]
+        public void SerializationWithoutValidation()
+        {
+            var services = new ServiceCollection();
+            services.UseRegistration();
+            services.UseDomain();
+            services.UseSerialization();
+            var serviceProvider = services.BuildServiceProvider();
+            var serializerService = serviceProvider.GetService<ISerializerService>();
+
+            ReviewDraft reviewDraft = new ReviewDraft()
+            {
+                Locale = "en-ZZZ"
+            };
+            var draft = serializerService.Serialize(reviewDraft);
+            Assert.Equal("{\"locale\":\"en-ZZZ\"}", draft);
+        }
+
+        [Fact]
         public void SerializeReviewDraftInvalidLocale()
         {
             ISerializerService serializerService = this.serializationFixture.SerializerService;
@@ -30,7 +50,32 @@ namespace commercetools.Sdk.Serialization.Tests
                 Locale = "en-ZZZ"
             };
             ValidationException exception = Assert.Throws<ValidationException>(() => serializerService.Serialize(reviewDraft));
-            Assert.Single(exception.ValidationResults);
+            Assert.Single(exception.Errors);
+        }
+
+        [Fact]
+        public void SerializeReviewDraftInvalidCurrency()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            CartDraft cartDraft = new CartDraft()
+            {
+                Currency = "ZZZ"
+            };
+            ValidationException exception = Assert.Throws<ValidationException>(() => serializerService.Serialize(cartDraft));
+            Assert.Single(exception.Errors);
+        }
+
+        [Fact]
+        public void SerializeReviewDraftInvalidCountry()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            CartDraft cartDraft = new CartDraft()
+            {
+                Currency = "EUR",
+                Country = "ZZ"
+            };
+            ValidationException exception = Assert.Throws<ValidationException>(() => serializerService.Serialize(cartDraft));
+            Assert.Single(exception.Errors);
         }
 
         [Fact]
