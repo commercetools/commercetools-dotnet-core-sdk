@@ -38,11 +38,20 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
             this.zonesFixture.Dispose();
         }
 
+        /// <summary>
+        /// Get Shipping Method Draft
+        /// </summary>
+        /// <param name="country"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public ShippingMethodDraft GetShippingMethodDraft(string country = null, string state = null)
         {
             int ran = TestingUtility.RandomInt();
-            TaxCategory taxCategory = this.CreateNewTaxCategory(country, state);
-            ZoneRateDraft zoneRateDraft = this.GetNewZoneRateDraft(country, state);
+            string shippingCountry = country ?? TestingUtility.GetRandomEuropeCountry();
+            string shippingState = state ?? $"{shippingCountry}_State_{TestingUtility.RandomInt()}";
+
+            TaxCategory taxCategory = this.CreateNewTaxCategory(shippingCountry, shippingState);
+            ZoneRateDraft zoneRateDraft = this.GetNewZoneRateDraft(shippingCountry, shippingState);
             ShippingMethodDraft shippingMethodDraft = new ShippingMethodDraft()
             {
                 Name = $"Dhl_{ran}",
