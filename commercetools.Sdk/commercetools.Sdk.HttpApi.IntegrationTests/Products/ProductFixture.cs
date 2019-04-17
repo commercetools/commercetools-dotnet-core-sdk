@@ -27,7 +27,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
 
         public CategoryFixture CategoryFixture { get; }
         public List<Product> ProductsToDelete { get; }
-        public List<ProductDiscount> ProductDiscounts { get; }
 
         public ProductFixture() : base()
         {
@@ -36,7 +35,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             this.CategoryFixture = new CategoryFixture();
             this.taxCategoryFixture = new TaxCategoryFixture();
             this.typeFixture = new TypeFixture();
-            this.ProductDiscounts = new List<ProductDiscount>();
             this.statesFixture = new StatesFixture();
         }
 
@@ -44,7 +42,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         {
             Product toBeDeleted = null;
             IClient commerceToolsClient = this.GetService<IClient>();
-            this.DeleteProductDiscounts();//Delete Product discounts first
+            this.ClearAllProductDiscounts();//Delete All Product discounts first if exists
             this.ProductsToDelete.Reverse();
             foreach (Product product in this.ProductsToDelete)
             {
@@ -253,18 +251,20 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             var productDiscountDraft = GetProductDiscountDraft();
             ProductDiscount productDiscount = commerceToolsClient
                 .ExecuteAsync(new CreateCommand<ProductDiscount>(productDiscountDraft)).Result;
-            this.ProductDiscounts.Add(productDiscount);
             return productDiscount;
         }
 
-        private void DeleteProductDiscounts()
+        private void ClearAllProductDiscounts()
         {
             IClient commerceToolsClient = this.GetService<IClient>();
-            this.ProductDiscounts.Reverse();
-            foreach (ProductDiscount productDiscount in this.ProductDiscounts)
+            //Query All Product Discounts first
+            QueryCommand<ProductDiscount> queryCommand = new QueryCommand<ProductDiscount>();
+            PagedQueryResult<ProductDiscount> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
+            foreach (var productDiscount in returnedSet.Results)
             {
-                ProductDiscount deletedType = commerceToolsClient
-                    .ExecuteAsync(new DeleteByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version)).Result;
+                var deletedType=commerceToolsClient
+                    .ExecuteAsync(
+                        new DeleteByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version)).Result;
             }
         }
     }

@@ -108,7 +108,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             var money = new Money()
             {
                 CurrencyCode = "EUR",
-                CentAmount = TestingUtility.RandomInt(1, 10)
+                CentAmount = TestingUtility.RandomInt(1, 10000)
             };
             var productDiscountValue = new AbsoluteProductDiscountValue()
             {
