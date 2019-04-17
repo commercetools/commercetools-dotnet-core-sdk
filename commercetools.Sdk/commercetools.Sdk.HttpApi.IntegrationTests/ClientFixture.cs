@@ -25,6 +25,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 AddUserSecrets<ClientFixture>().
                 Build();
 
+            /*
             var timeout = Policy.TimeoutAsync<HttpResponseMessage>(
                 TimeSpan.FromSeconds(10));
             var longTimeout = Policy.TimeoutAsync<HttpResponseMessage>(
@@ -33,8 +34,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             var registry = services.AddPolicyRegistry();
             registry.Add("regular", timeout);
             registry.Add("long", longTimeout);
-
             services.AddHttpClient("Client").AddPolicyHandlerFromRegistry("regular");
+            */
             services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials);
             this.serviceProvider = services.BuildServiceProvider();
         }
