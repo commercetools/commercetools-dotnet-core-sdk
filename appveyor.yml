@@ -11,6 +11,8 @@ install:
 before_build:
   - pandoc -v
   - pandoc README.md -f markdown -t plain --wrap=none -o readme.txt
+  - ps: Invoke-WebRequest -Uri "https://api.sphere.io"
+  - ps: Invoke-WebRequest -Uri "https://auth.sphere.io"
   - ps: cd commercetools.Sdk
   - ps: dotnet restore --packages ..\packages
   - ps: dotnet user-secrets set "Client:ClientId" $env:CTP_CLIENT_ID --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
