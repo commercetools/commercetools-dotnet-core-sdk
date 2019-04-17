@@ -38,7 +38,7 @@ after_build:
 
 test_script:
   - ps: dotnet test Tests --no-build -c Release
-  - ps: dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
+  - ps: dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release -v m
 
 artifacts:
 - path: commercetools.Sdk/**/*.nupkg
