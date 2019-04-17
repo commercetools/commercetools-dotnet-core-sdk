@@ -34,11 +34,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Zones
         /// </summary>
         /// <returns></returns>
 
-        public ZoneDraft GetZoneDraft(string country = null)
+        public ZoneDraft GetZoneDraft(string country = null, string state = null)
         {
             int ran = TestingUtility.RandomInt();
             string zoneCountry = country ?? TestingUtility.GetRandomEuropeCountry();
-            var locations = new List<Location>() { new Location() { Country =  zoneCountry}};
+            var locations = new List<Location>() { new Location() { Country =  zoneCountry, State = state}};
             ZoneDraft zoneDraft = new ZoneDraft()
             {
                 Name = $"EuropeZone_{ran}",
@@ -49,9 +49,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Zones
             return zoneDraft;
         }
 
-        public Zone CreateZone(string country = null)
+        public Zone CreateZone(string country = null, string state = null)
         {
-            return this.CreateZone(this.GetZoneDraft(country));
+            return this.CreateZone(this.GetZoneDraft(country, state));
         }
 
         public Zone CreateZone(ZoneDraft zoneDraft)

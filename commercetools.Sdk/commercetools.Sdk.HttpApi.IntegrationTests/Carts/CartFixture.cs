@@ -78,8 +78,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         public CartDraft GetCartDraft(bool withCustomer = true, bool withDefaultShippingCountry = true, bool withItemShippingAddress = false)
         {
             string country = withDefaultShippingCountry ? "DE" : TestingUtility.GetRandomEuropeCountry();
-
-            var address = new Address { Country = country, Key = TestingUtility.RandomString(10)};
+            string state = withDefaultShippingCountry ? null : $"{country}_State_{TestingUtility.RandomInt()}";
+            var address = new Address { Country = country, State = state, Key = TestingUtility.RandomString(10)};
 
             CartDraft cartDraft = new CartDraft();
             cartDraft.Currency = "EUR";
@@ -188,9 +188,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return customer;
         }
 
-        public ShippingMethod CreateShippingMethod(string shippingCountry = null)
+        public ShippingMethod CreateShippingMethod(string shippingCountry = null, string shippingState = null)
         {
-            ShippingMethod shippingMethod = this.shippingMethodsFixture.CreateShippingMethod(shippingCountry);
+            ShippingMethod shippingMethod = this.shippingMethodsFixture.CreateShippingMethod(shippingCountry, shippingState);
             this.shippingMethodsFixture.ShippingMethodsToDelete.Add(shippingMethod);
             return shippingMethod;
         }

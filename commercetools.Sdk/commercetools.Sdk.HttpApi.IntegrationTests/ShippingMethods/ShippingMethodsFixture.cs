@@ -38,11 +38,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
             this.zonesFixture.Dispose();
         }
 
-        public ShippingMethodDraft GetShippingMethodDraft(string country = null)
+        public ShippingMethodDraft GetShippingMethodDraft(string country = null, string state = null)
         {
             int ran = TestingUtility.RandomInt();
-            TaxCategory taxCategory = this.CreateNewTaxCategory(country);
-            ZoneRateDraft zoneRateDraft = this.GetNewZoneRateDraft(country);
+            TaxCategory taxCategory = this.CreateNewTaxCategory(country, state);
+            ZoneRateDraft zoneRateDraft = this.GetNewZoneRateDraft(country, state);
             ShippingMethodDraft shippingMethodDraft = new ShippingMethodDraft()
             {
                 Name = $"Dhl_{ran}",
@@ -60,9 +60,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
             return shippingMethodDraft;
         }
 
-        private ZoneRateDraft GetNewZoneRateDraft(string country = null)
+        private ZoneRateDraft GetNewZoneRateDraft(string country = null, string state = null)
         {
-            Zone zone = this.CreateNewZone(country);
+            Zone zone = this.CreateNewZone(country, state);
             ShippingRate shippingRate = this.GetShippingRate();
             ZoneRateDraft zoneRateDraft = new ZoneRateDraft()
             {
@@ -85,9 +85,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
             return rate;
         }
 
-        public ShippingMethod CreateShippingMethod(string shippingCountry = null)
+        public ShippingMethod CreateShippingMethod(string shippingCountry = null, string shippingState = null)
         {
-            return this.CreateShippingMethod(this.GetShippingMethodDraft(shippingCountry));
+            return this.CreateShippingMethod(this.GetShippingMethodDraft(shippingCountry, shippingState));
         }
 
         public ShippingMethod CreateShippingMethod(ShippingMethodDraft shippingMethodDraft)
@@ -98,16 +98,16 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
             return shippingMethod;
         }
 
-        private TaxCategory CreateNewTaxCategory(string country = null)
+        private TaxCategory CreateNewTaxCategory(string country = null, string state = null)
         {
-            TaxCategory taxCategory = this.taxCategoryFixture.CreateTaxCategory(country);
+            TaxCategory taxCategory = this.taxCategoryFixture.CreateTaxCategory(country, state);
             this.taxCategoryFixture.TaxCategoriesToDelete.Add(taxCategory);
             return taxCategory;
         }
 
-        private Zone CreateNewZone(string country = null)
+        private Zone CreateNewZone(string country = null, string state = null)
         {
-            Zone zone = this.zonesFixture.CreateZone(country);
+            Zone zone = this.zonesFixture.CreateZone(country, state);
             this.zonesFixture.ZonesToDelete.Add(zone);
             return zone;
         }

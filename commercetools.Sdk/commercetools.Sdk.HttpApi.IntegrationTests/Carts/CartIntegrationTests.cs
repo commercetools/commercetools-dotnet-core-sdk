@@ -229,7 +229,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             //create cart with shipping address in random Europe country
             Cart cart = this.cartFixture.CreateCart(withDefaultShippingCountry: false);
-            ShippingMethod shippingMethod = this.cartFixture.CreateShippingMethod(cart.ShippingAddress.Country);
+            ShippingMethod shippingMethod = this.cartFixture.CreateShippingMethod(cart.ShippingAddress.Country, cart.ShippingAddress.State);
 
             SetShippingMethodUpdateAction setShippingMethodUpdateAction = new SetShippingMethodUpdateAction()
             {
@@ -496,7 +496,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             TaxMode newTaxMode = TaxMode.ExternalAmount;
 
             //Create update actions (make the cart with shippingMethod and externalAmount TaxMode)
-            ShippingMethod shippingMethod = this.cartFixture.CreateShippingMethod(cart.ShippingAddress.Country);
+            ShippingMethod shippingMethod = this.cartFixture.CreateShippingMethod(cart.ShippingAddress.Country, cart.ShippingAddress.State);
             SetShippingMethodUpdateAction setShippingMethodUpdateAction = new SetShippingMethodUpdateAction()
             {
                 ShippingMethod = new Reference<ShippingMethod>() {Id = shippingMethod.Id}
@@ -548,7 +548,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             TaxMode newTaxMode = TaxMode.External;
 
             //Create update actions (make the cart with shippingMethod and external TaxMode)
-            ShippingMethod shippingMethod = this.cartFixture.CreateShippingMethod(cart.ShippingAddress.Country);
+            ShippingMethod shippingMethod = this.cartFixture.CreateShippingMethod(cart.ShippingAddress.Country, cart.ShippingAddress.State);
             SetShippingMethodUpdateAction setShippingMethodUpdateAction = new SetShippingMethodUpdateAction()
             {
                 ShippingMethod = new Reference<ShippingMethod>()
