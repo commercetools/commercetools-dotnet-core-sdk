@@ -27,49 +27,6 @@
             <typeparam name="T">A type.</typeparam>
             <returns>The list of types.</returns>
         </member>
-        <member name="T:commercetools.Sdk.Registration.ServiceLocator">
-            <summary>
-            This class implements the service locator pattern.
-            </summary>
-            <remarks>
-            Since some objects are created directly by the implementors of the SDK, dependencies cannot be automatically injected via constructor.
-            Therefore, the service locator pattern is used to retrieve the needed implementations.
-            </remarks>
-        </member>
-        <member name="M:commercetools.Sdk.Registration.ServiceLocator.#ctor(Microsoft.Extensions.DependencyInjection.ServiceProvider)">
-            <summary>
-            Initializes a new instance of the <see cref="T:commercetools.Sdk.Registration.ServiceLocator"/> class.
-            </summary>
-            <param name="currentServiceProvider">The current service provider.</param>
-        </member>
-        <member name="P:commercetools.Sdk.Registration.ServiceLocator.Current">
-            <summary>
-            Gets the <see cref="T:commercetools.Sdk.Registration.ServiceLocator"/> instance for the static service provider.
-            </summary>
-            <value>
-            The <see cref="T:commercetools.Sdk.Registration.ServiceLocator"/> instance.
-            </value>
-        </member>
-        <member name="M:commercetools.Sdk.Registration.ServiceLocator.SetServiceLocatorProvider(Microsoft.Extensions.DependencyInjection.ServiceProvider)">
-            <summary>
-            Sets the static service provider.
-            </summary>
-            <param name="serviceProvider">The service provider.</param>
-        </member>
-        <member name="M:commercetools.Sdk.Registration.ServiceLocator.GetService(System.Type)">
-            <summary>
-            Gets the service object of the specified service type.
-            </summary>
-            <param name="serviceType">The service type.</param>
-            <returns>The service object of the specified service type.</returns>
-        </member>
-        <member name="M:commercetools.Sdk.Registration.ServiceLocator.GetService``1">
-            <summary>
-            Gets the service object of the specified service type.
-            </summary>
-            <typeparam name="TService">The service type.</typeparam>
-            <returns>The service object of the specified service type.</returns>
-        </member>
         <member name="T:commercetools.Sdk.Registration.TypeRetriever">
             <summary>
             Retrieves the types from an assembly.

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http;
+using System.Xml;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.HttpApi.AdditionalParameters;
 using commercetools.Sdk.HttpApi.DelegatingHandlers;
@@ -60,6 +62,8 @@ namespace commercetools.Sdk.HttpApi
         private static void SetupClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
         {
             IClientConfiguration clientConfiguration = configuration.GetSection(clientName).Get<ClientConfiguration>();
+            Validator.ValidateObject(clientConfiguration, new ValidationContext(clientConfiguration), true);
+
             services.AddSingleton(clientConfiguration);
             ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
             tokenFlowRegister.TokenFlow = tokenFlow;

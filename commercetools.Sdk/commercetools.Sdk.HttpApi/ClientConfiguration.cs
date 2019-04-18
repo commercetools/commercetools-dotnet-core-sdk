@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.HttpApi
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace commercetools.Sdk.HttpApi
 {
     public class ClientConfiguration : IClientConfiguration
     {
@@ -10,8 +12,10 @@
 
         public string Scope { get; set; }
 
-        public string AuthorizationBaseAddress { get; set; }
+        [RegularExpression(@"^.*/$", ErrorMessage = "ClientConfiguration AuthorizationBaseAddress URI should end with slash.")]
+        public string AuthorizationBaseAddress { get; set; } = "https://auth.sphere.io/";
 
-        public string ApiBaseAddress { get; set; }
+        [RegularExpression(@"^.*/$", ErrorMessage = "ClientConfiguration ApiBaseAddress URI should end with slash.")]
+        public string ApiBaseAddress { get; set; } = "https://api.sphere.io/";
     }
 }
