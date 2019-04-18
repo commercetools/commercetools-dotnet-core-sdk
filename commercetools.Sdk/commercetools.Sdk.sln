@@ -46,9 +46,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Anonymous
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.FlowChangeExample", "commercetools.Sdk.FlowChangeExample\commercetools.Sdk.FlowChangeExample.csproj", "{A50C27D8-0126-4D02-A34C-18A1FD529912}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.MultipleClients", "commercetools.Sdk.MultipleClients\commercetools.Sdk.MultipleClients.csproj", "{1ED86710-A7A6-4E63-AAC6-A98A1EEB46D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.MultipleClients", "commercetools.Sdk.MultipleClients\commercetools.Sdk.MultipleClients.csproj", "{1ED86710-A7A6-4E63-AAC6-A98A1EEB46D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.All", "commercetools.Sdk.All\commercetools.Sdk.All.csproj", "{264AEBC5-2534-4D04-BE64-2069B7343CCE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.All", "commercetools.Sdk.All\commercetools.Sdk.All.csproj", "{264AEBC5-2534-4D04-BE64-2069B7343CCE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.DependencyInjection.SimpleInjector", "commercetools.Sdk.DependencyInjection.SimpleInjector\commercetools.Sdk.DependencyInjection.SimpleInjector.csproj", "{4D98D5C7-E962-4D78-AEC5-FCB2099EA7F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -132,6 +134,10 @@ Global
 		{264AEBC5-2534-4D04-BE64-2069B7343CCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{264AEBC5-2534-4D04-BE64-2069B7343CCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{264AEBC5-2534-4D04-BE64-2069B7343CCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D98D5C7-E962-4D78-AEC5-FCB2099EA7F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D98D5C7-E962-4D78-AEC5-FCB2099EA7F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D98D5C7-E962-4D78-AEC5-FCB2099EA7F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D98D5C7-E962-4D78-AEC5-FCB2099EA7F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
