@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.Domain;
+﻿using System;
+using commercetools.Sdk.Domain;
 using commercetools.Sdk.HttpApi;
 using commercetools.Sdk.HttpApi.Tokens;
 using commercetools.Sdk.Linq;
@@ -7,6 +8,7 @@ using commercetools.Sdk.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace commercetools.Sdk.DependencyInjection
 {
@@ -24,7 +26,7 @@ namespace commercetools.Sdk.DependencyInjection
         /// <param name="tokenFlow">The token flow.</param>
         public static IHttpClientBuilder UseCommercetools(this IServiceCollection services, IConfiguration configuration, string clientName = DefaultClientNames.Api, TokenFlow tokenFlow = TokenFlow.ClientCredentials)
         {
-            return services.UseCommercetools(configuration, new Dictionary<string, TokenFlow>() { { clientName, tokenFlow } });
+            return services.UseCommercetools(configuration, new Dictionary<string, TokenFlow>() { { clientName, tokenFlow } }).Single().Value;
         }
 
         /// <summary>
@@ -33,13 +35,30 @@ namespace commercetools.Sdk.DependencyInjection
         /// <param name="services">The service collection.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="clients">The clients with the client name as the key and the token flow as they value.</param>
-        public static IHttpClientBuilder UseCommercetools(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
+        public static IDictionary<string, IHttpClientBuilder> UseCommercetools(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
             services.UseRegistration();
             services.UseLinq();
             services.UseDomain();
             services.UseSerialization();
             return services.UseHttpApi(configuration, clients);
+        }
+
+        public static IDictionary<string, IHttpClientBuilder> ConfigureAllClients(this IDictionary<string, IHttpClientBuilder> httpClientBuilders,
+            Func<IHttpClientBuilder, IHttpClientBuilder> configureAction)
+        {
+            httpClientBuilders.Select(pair => configureAction.Invoke(pair.Value)).Count();
+            return httpClientBuilders;
+        }
+
+        public static IDictionary<string, IHttpClientBuilder> ConfigureClient(this IDictionary<string, IHttpClientBuilder> httpClientBuilders,
+            string clientName, Func<IHttpClientBuilder, IHttpClientBuilder> configureAction)
+        {
+            if (httpClientBuilders.TryGetValue(clientName, out IHttpClientBuilder httpClientBuilder))
+            {
+                configureAction.Invoke(httpClientBuilder);
+            }
+            return httpClientBuilders;
         }
     }
 }

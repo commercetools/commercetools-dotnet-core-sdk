@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using commercetools.Sdk.DependencyInjection;
@@ -26,13 +27,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 AddUserSecrets<ClientFixture>().
                 Build();
 
-            var registry = services.AddPolicyRegistry();
-            var policy = HttpPolicyExtensions
-                .HandleTransientHttpError()
-                .RetryAsync(3);
-            registry.Add("retry", policy);
-
-            services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials).AddPolicyHandlerFromRegistry("retry");
+            services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials);
             this.serviceProvider = services.BuildServiceProvider();
         }
 
