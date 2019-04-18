@@ -21,16 +21,15 @@ namespace commercetools.Sdk.HttpApi
 {
     public static class DependencyInjectionSetup
     {
-        public static void UseHttpApi(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
+        public static IHttpClientBuilder UseHttpApi(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
             if (clients.Count() == 1)
             {
-                services.UseSingleClient(configuration, clients.First().Key, clients.First().Value);
+                return services.UseSingleClient(configuration, clients.First().Key, clients.First().Value);
             }
-            else
-            {
-                services.UseMultipleClients(configuration, clients);
-            }
+
+            services.UseMultipleClients(configuration, clients);
+            return null;
         }
 
         private static void UseMultipleClients(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
@@ -52,14 +51,15 @@ namespace commercetools.Sdk.HttpApi
             services.AddSingleton<ITokenFlowMapper>(tokenFlowMapper);
         }
 
-        private static void UseSingleClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
+        private static IHttpClientBuilder UseSingleClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
         {
             services.UseHttpApiDefaults();
-            services.SetupClient(configuration, clientName, tokenFlow);
+            IHttpClientBuilder httpClientBuilder = services.SetupClient(configuration, clientName, tokenFlow);
             services.AddSingleton<IClient>(c => new Client(c.GetService<IHttpClientFactory>(), c.GetService<IHttpApiCommandFactory>(), c.GetService<ISerializerService>()) { Name = clientName });
+            return httpClientBuilder;
         }
 
-        private static void SetupClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
+        private static IHttpClientBuilder SetupClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
         {
             IClientConfiguration clientConfiguration = configuration.GetSection(clientName).Get<ClientConfiguration>();
             Validator.ValidateObject(clientConfiguration, new ValidationContext(clientConfiguration), true);
@@ -72,6 +72,7 @@ namespace commercetools.Sdk.HttpApi
                 .AddHttpMessageHandler<AuthorizationHandler>().AddHttpMessageHandler<CorrelationIdHandler>()
                 .AddHttpMessageHandler<LoggerHandler>()
                 .AddHttpMessageHandler<ErrorHandler>();
+            return httpClientBuilder;
         }
 
         private static void AddClient(this IServiceCollection services, string clientName, TokenFlowMapper tokenFlowMapper)

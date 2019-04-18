@@ -108,8 +108,8 @@ var policy = HttpPolicyExtensions
     .RetryAsync(3);
 registry.Add("retry", policy);
 
-services.AddHttpClient("Client").AddPolicyHandlerFromRegistry("retry");
-services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials);
+services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials)
+    .AddPolicyHandlerFromRegistry("retry");
 ```
 
 ### Configuration

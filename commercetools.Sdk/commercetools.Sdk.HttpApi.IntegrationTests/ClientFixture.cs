@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using commercetools.Sdk.DependencyInjection;
 using commercetools.Sdk.HttpApi.Tokens;
+using Polly;
+using Polly.Extensions.Http;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
@@ -24,7 +26,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 AddUserSecrets<ClientFixture>().
                 Build();
 
-            services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials);
+            var registry = services.AddPolicyRegistry();
+            var policy = HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .RetryAsync(3);
+            registry.Add("retry", policy);
+
+            services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials).AddPolicyHandlerFromRegistry("retry");
             this.serviceProvider = services.BuildServiceProvider();
         }
 
