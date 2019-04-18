@@ -1,6 +1,6 @@
 ﻿using commercetools.Sdk.Domain.Validation.Attributes;
 
-namespace commercetools.Sdk.Domain.Products
+namespace commercetools.Sdk.Domain.Products.UpdateActions
 {
     public class ChangeSlugUpdateAction : UpdateAction<Product>
     {

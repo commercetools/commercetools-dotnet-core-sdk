@@ -14,6 +14,7 @@ using commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups;
 using commercetools.Sdk.HttpApi.IntegrationTests.Customers;
 using commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes;
 using commercetools.Sdk.HttpApi.IntegrationTests.Payments;
+using commercetools.Sdk.HttpApi.IntegrationTests.Products;
 using commercetools.Sdk.HttpApi.IntegrationTests.Project;
 using commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods;
 using commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists;
@@ -63,6 +64,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                     .ExecuteAsync(new DeleteByIdCommand<Cart>(new Guid(cart.Id),
                         cart.Version)).Result;
             }
+            this.paymentsFixture.Dispose();
             this.customerFixture.Dispose();
             this.productFixture.Dispose();
             this.shippingMethodsFixture.Dispose();
@@ -75,9 +77,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
         public CartDraft GetCartDraft(bool withCustomer = true, bool withDefaultShippingCountry = true, bool withItemShippingAddress = false)
         {
-            string country = withDefaultShippingCountry ? "DE" : this.GetRandomEuropeCountry();
-
-            var address = new Address { Country = country, Key = this.RandomString(10)};
+            string country = withDefaultShippingCountry ? "DE" : TestingUtility.GetRandomEuropeCountry();
+            string state = withDefaultShippingCountry ? null : $"{country}_State_{TestingUtility.RandomInt()}";
+            var address = new Address { Country = country, State = state, Key = TestingUtility.RandomString(10)};
 
             CartDraft cartDraft = new CartDraft();
             cartDraft.Currency = "EUR";
@@ -152,7 +154,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         {
             LineItemDraft lineItemDraft = new LineItemDraft();
             lineItemDraft.ProductId = productId;
-            lineItemDraft.VariantId = variantId.ToString();
+            lineItemDraft.VariantId = variantId;
             lineItemDraft.Quantity = quantity;
             return lineItemDraft;
         }
@@ -186,9 +188,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return customer;
         }
 
-        public ShippingMethod CreateShippingMethod(string shippingCountry = null)
+        public ShippingMethod CreateShippingMethod(string shippingCountry = null, string shippingState = null)
         {
-            ShippingMethod shippingMethod = this.shippingMethodsFixture.CreateShippingMethod(shippingCountry);
+            ShippingMethod shippingMethod = this.shippingMethodsFixture.CreateShippingMethod(shippingCountry, shippingState);
             this.shippingMethodsFixture.ShippingMethodsToDelete.Add(shippingMethod);
             return shippingMethod;
         }
@@ -305,7 +307,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         {
             var externalTaxRateDraft = new ExternalTaxRateDraft
             {
-                Amount = this.RandomDouble(),
+                Amount = TestingUtility.RandomDouble(),
                 Name = "Test tax",
                 Country = "DE"
 
@@ -318,9 +320,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             var shippingAddress = new Address()
             {
                 Country = "DE",
-                PostalCode = this.RandomInt().ToString(),
-                StreetName = this.RandomString(10),
-                Key = this.RandomString(10)
+                PostalCode = TestingUtility.RandomInt().ToString(),
+                StreetName = TestingUtility.RandomString(10),
+                Key = TestingUtility.RandomString(10)
             };
             return shippingAddress;
         }
@@ -335,10 +337,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             TaxCategory taxCategory = this.CreateNewTaxCategory();
             var customLineItemDraft = new CustomLineItemDraft
             {
-                Name = new LocalizedString() {{"en", this.RandomString(10)}},
-                Slug = this.RandomString(10),
-                Quantity = this.RandomInt(1,10),
-                Money = Money.Parse($"{this.RandomInt(100,10000)} EUR"),
+                Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}},
+                Slug = TestingUtility.RandomString(10),
+                Quantity = TestingUtility.RandomInt(1,10),
+                Money = Money.Parse($"{TestingUtility.RandomInt(100,10000)} EUR"),
                 TaxCategory = new Reference<TaxCategory>() {Id = taxCategory.Id}
             };
             return customLineItemDraft;
@@ -365,7 +367,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         {
             ItemShippingTarget itemShippingTarget = new ItemShippingTarget
             {
-                Quantity = this.RandomInt(1,20),
+                Quantity = TestingUtility.RandomInt(1,20),
                 AddressKey = addressKey
             };
             return itemShippingTarget;

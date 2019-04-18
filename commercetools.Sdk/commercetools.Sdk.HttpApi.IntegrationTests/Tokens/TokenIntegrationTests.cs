@@ -83,7 +83,7 @@
         {
             IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithAnonymousScope");
             InMemoryAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
-            anonymousStoreManager.AnonymousId = this.clientFixture.RandomString(10);
+            anonymousStoreManager.AnonymousId = TestingUtility.RandomString(10);
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(
                 this.clientFixture.GetService<IHttpClientFactory>(),
                 clientConfiguration,

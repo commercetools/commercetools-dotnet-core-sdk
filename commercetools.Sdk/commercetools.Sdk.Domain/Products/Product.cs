@@ -1,4 +1,6 @@
 ﻿using System;
+using commercetools.Sdk.Domain.Reviews;
+using commercetools.Sdk.Domain.States;
 
 namespace commercetools.Sdk.Domain
 {

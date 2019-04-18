@@ -11,6 +11,7 @@ using commercetools.Sdk.Domain.Payments;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Products;
 using commercetools.Sdk.Domain.Products.Attributes;
+using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.Domain.Project;
 using commercetools.Sdk.Domain.Query;
 using commercetools.Sdk.Domain.ShippingMethods;
@@ -127,7 +128,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             Cart cart = this.cartFixture.CreateCart();
 
-            string email = $"{this.cartFixture.RandomString(6)}@test.com";
+            string email = $"{TestingUtility.RandomString(6)}@test.com";
 
             SetCustomerEmailUpdateAction setCustomerEmailUpdateAction = new SetCustomerEmailUpdateAction()
             {
@@ -228,7 +229,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             //create cart with shipping address in random Europe country
             Cart cart = this.cartFixture.CreateCart(withDefaultShippingCountry: false);
-            ShippingMethod shippingMethod = this.cartFixture.CreateShippingMethod(cart.ShippingAddress.Country);
+            ShippingMethod shippingMethod = this.cartFixture.CreateShippingMethod(cart.ShippingAddress.Country, cart.ShippingAddress.State);
 
             SetShippingMethodUpdateAction setShippingMethodUpdateAction = new SetShippingMethodUpdateAction()
             {
@@ -253,7 +254,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             //Arrange
             IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
             Cart cart = this.cartFixture.CreateCart();
-            int rand = this.cartFixture.RandomInt();
+            int rand = TestingUtility.RandomInt();
             string customShippingMethod = $"CustomShipping_{rand}";
             var taxCategory = this.cartFixture.CreateNewTaxCategory();
             var shippingRate = this.cartFixture.GetShippingRateDraft();
@@ -285,7 +286,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         {
             IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
             Cart cart = this.cartFixture.CreateCart();
-            string code = this.cartFixture.RandomString(10);
+            string code = TestingUtility.RandomString(10);
             DiscountCode discountCode = this.cartFixture.CreateDiscountCode(code);
 
             AddDiscountCodeUpdateAction addDiscountCodeUpdateAction = new AddDiscountCodeUpdateAction()
@@ -318,7 +319,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         {
             IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
             Cart cart = this.cartFixture.CreateCart();
-            string code = this.cartFixture.RandomString(10);
+            string code = TestingUtility.RandomString(10);
             DiscountCode discountCode = this.cartFixture.CreateDiscountCode(code);
 
             //Adding the discount code
@@ -440,7 +441,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             Assert.Equal(customType.Id, retrievedCart.Custom.Type.Id);
 
             //Then update the custom field
-            string stringFieldValue = this.cartFixture.RandomString(5);
+            string stringFieldValue = TestingUtility.RandomString(5);
             updateActions.Clear();
             SetCustomFieldUpdateAction setCustomFieldUpdateAction = new SetCustomFieldUpdateAction()
             {
@@ -495,7 +496,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             TaxMode newTaxMode = TaxMode.ExternalAmount;
 
             //Create update actions (make the cart with shippingMethod and externalAmount TaxMode)
-            ShippingMethod shippingMethod = this.cartFixture.CreateShippingMethod(cart.ShippingAddress.Country);
+            ShippingMethod shippingMethod = this.cartFixture.CreateShippingMethod(cart.ShippingAddress.Country, cart.ShippingAddress.State);
             SetShippingMethodUpdateAction setShippingMethodUpdateAction = new SetShippingMethodUpdateAction()
             {
                 ShippingMethod = new Reference<ShippingMethod>() {Id = shippingMethod.Id}
@@ -547,7 +548,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             TaxMode newTaxMode = TaxMode.External;
 
             //Create update actions (make the cart with shippingMethod and external TaxMode)
-            ShippingMethod shippingMethod = this.cartFixture.CreateShippingMethod(cart.ShippingAddress.Country);
+            ShippingMethod shippingMethod = this.cartFixture.CreateShippingMethod(cart.ShippingAddress.Country, cart.ShippingAddress.State);
             SetShippingMethodUpdateAction setShippingMethodUpdateAction = new SetShippingMethodUpdateAction()
             {
                 ShippingMethod = new Reference<ShippingMethod>()
@@ -636,7 +637,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 taxMode: TaxMode.External);
             var externalTaxRateDraft = this.cartFixture.GetExternalTaxRateDraft();
             var shippingRateDraft = this.cartFixture.GetShippingRateDraftWithPriceTiers();
-            string customShippingMethod = $"CustomShipping_{this.cartFixture.RandomInt()}";
+            string customShippingMethod = $"CustomShipping_{TestingUtility.RandomInt()}";
             var secondScorePrice = (shippingRateDraft.Tiers[1] as CartScoreShippingRatePriceTier)?.Price;
 
             // set custom shipping method
@@ -686,7 +687,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             //update the project's add shippingRateInputType to CartClassification
             var classificationValues =
-                this.cartFixture.GetCartClassificationTestValues(); //Small, Medium and Heavy classifications
+                TestingUtility.GetCartClassificationTestValues(); //Small, Medium and Heavy classifications
             var currentProject =
                 this.cartFixture.SetShippingRateInputTypeToCartClassificationForCurrentProject(classificationValues);
             Assert.NotNull(currentProject);
@@ -698,7 +699,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 taxMode: TaxMode.External);
             var externalTaxRateDraft = this.cartFixture.GetExternalTaxRateDraft();
             var shippingRateDraft = this.cartFixture.GetShippingRateDraftWithCartClassifications();
-            string customShippingMethod = $"CustomShipping_{this.cartFixture.RandomInt()}";
+            string customShippingMethod = $"CustomShipping_{TestingUtility.RandomInt()}";
             var smallClassificationPrice =
                 (shippingRateDraft.Tiers[0] as CartClassificationShippingRatePriceTier)?.Price;
 
@@ -863,10 +864,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             LineItemDraft lineItemDraft = this.cartFixture.GetLineItemDraftBySku(sku, 1);
             Cart cart = this.cartFixture.CreateCart(withCustomer: false);
 
-            AddLineItemBySkuUpdateAction addLineItemUpdateAction = new AddLineItemBySkuUpdateAction()
+            AddLineItemUpdateAction addLineItemUpdateAction = new AddLineItemUpdateAction()
             {
-                LineItem = lineItemDraft,
-                Sku = sku,
+                Sku = lineItemDraft.Sku,
                 Quantity = lineItemDraft.Quantity
             };
 
@@ -884,7 +884,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             var oldPrice = cartWithLineItem.LineItems[0].Price;
             PriceDraft newPriceDraft = new PriceDraft()
             {
-                Value = this.cartFixture.MultiplyMoney(oldPrice.Value, 2)
+                Value = TestingUtility.MultiplyMoney(oldPrice.Value, 2)
             };
 
             var changedPriceUpdateAction = new ChangePriceUpdateAction
@@ -945,10 +945,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             LineItemDraft lineItemDraft = this.cartFixture.GetLineItemDraftBySku(sku, 1);
             Cart cart = this.cartFixture.CreateCart(withCustomer: false);
 
-            AddLineItemBySkuUpdateAction addLineItemUpdateAction = new AddLineItemBySkuUpdateAction()
+            AddLineItemUpdateAction addLineItemUpdateAction = new AddLineItemUpdateAction()
             {
-                LineItem = lineItemDraft,
-                Sku = sku,
+                Sku = lineItemDraft.Sku,
                 Quantity = lineItemDraft.Quantity
             };
 
@@ -963,7 +962,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             Assert.Single(cartWithLineItem.LineItems);
 
             //update the product, change it's textAttributeValue
-            var newTextAttributeValue = this.cartFixture.RandomString(10);
+            var newTextAttributeValue = TestingUtility.RandomString(10);
             var setAttributeUpdateAction = new SetAttributeInAllVariantsUpdateAction
             {
                 Name = textAttributeName,
@@ -1112,7 +1111,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             Assert.Equal(newTaxMode, retrievedCart.TaxMode);
 
             // Then Set Cart Total Tax
-            var totalTax = Money.Parse($"{this.cartFixture.RandomInt(100, 1000)} EUR");
+            var totalTax = Money.Parse($"{TestingUtility.RandomInt(100, 1000)} EUR");
             SetCartTotalTaxUpdateAction setCartTotalTaxUpdateAction = new SetCartTotalTaxUpdateAction()
             {
                 ExternalTotalGross = totalTax
@@ -1165,7 +1164,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
             Cart cart = this.cartFixture.CreateCart(withCustomer: false);
             int deleteDays =
-                this.cartFixture.RandomInt(40, 100); // the created cart with DeleteDaysAfterLastModification = 30
+                TestingUtility.RandomInt(40, 100); // the created cart with DeleteDaysAfterLastModification = 30
 
             SetDeleteDaysAfterLastModificationUpdateAction setDeleteDaysUpdateAction =
                 new SetDeleteDaysAfterLastModificationUpdateAction()
@@ -1290,7 +1289,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             Assert.Single(retrievedCart.ItemShippingAddresses);
 
             // then update it
-            itemShippingAddress.StreetName = this.cartFixture.RandomString(10);
+            itemShippingAddress.StreetName = TestingUtility.RandomString(10);
             UpdateItemShippingAddressUpdateAction updateItemShippingAddressUpdateAction =
                 new UpdateItemShippingAddressUpdateAction()
                 {
@@ -1326,10 +1325,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             Cart cart = this.cartFixture.CreateCart();
 
 
-            AddLineItemByProductIdUpdateAction addLineItemUpdateAction = new AddLineItemByProductIdUpdateAction()
+            AddLineItemUpdateAction addLineItemUpdateAction = new AddLineItemUpdateAction()
             {
-                LineItem = lineItemDraft,
                 ProductId = product.Id,
+                VariantId = lineItemDraft.VariantId,
                 Quantity = lineItemDraft.Quantity
             };
 
@@ -1360,10 +1359,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             Cart cart = this.cartFixture.CreateCart();
 
 
-            AddLineItemBySkuUpdateAction addLineItemUpdateAction = new AddLineItemBySkuUpdateAction()
+            AddLineItemUpdateAction addLineItemUpdateAction = new AddLineItemUpdateAction()
             {
-                LineItem = lineItemDraft,
-                Sku = sku,
+                Sku = lineItemDraft.Sku,
                 Quantity = lineItemDraft.Quantity
             };
 
@@ -1553,7 +1551,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             // Then update Price of it
             string lineItemId = retrievedCart.LineItems[0].Id;
-            Money newPriceValue = this.cartFixture.MultiplyMoney(retrievedCart.LineItems[0].Price.Value, 2);
+            Money newPriceValue = TestingUtility.MultiplyMoney(retrievedCart.LineItems[0].Price.Value, 2);
             SetLineItemPriceUpdateAction setLineItemPriceUpdateAction = new SetLineItemPriceUpdateAction
             {
                 LineItemId = lineItemId,
@@ -1588,8 +1586,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             // Then update total Price of it
             string lineItemId = retrievedCart.LineItems[0].Id;
 
-            Money newPriceValue = this.cartFixture.MultiplyMoney(retrievedCart.LineItems[0].Price.Value, 2);
-            Money newTotalPriceValue = this.cartFixture.MultiplyMoney(retrievedCart.LineItems[0].TotalPrice, 2);
+            Money newPriceValue = TestingUtility.MultiplyMoney(retrievedCart.LineItems[0].Price.Value, 2);
+            Money newTotalPriceValue = TestingUtility.MultiplyMoney(retrievedCart.LineItems[0].TotalPrice, 2);
             SetLineItemTotalPriceUpdateAction setLineItemTotalPriceUpdateAction = new SetLineItemTotalPriceUpdateAction
             {
                 LineItemId = lineItemId,
@@ -1690,7 +1688,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             // then update it's fields
 
-            string stringFieldValue = this.cartFixture.RandomString(5);
+            string stringFieldValue = TestingUtility.RandomString(5);
             SetLineItemCustomFieldUpdateAction setCustomFieldUpdateAction =
                 new SetLineItemCustomFieldUpdateAction()
                 {
@@ -1896,7 +1894,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             // Then update Money of it
             string customLineItemId = retrievedCart.CustomLineItems[0].Id;
-            Money newMoney = this.cartFixture.MultiplyMoney(retrievedCart.CustomLineItems[0].Money, 2);
+            Money newMoney = TestingUtility.MultiplyMoney(retrievedCart.CustomLineItems[0].Money, 2);
             ChangeCustomLineItemMoneyUpdateAction changeMoneyUpdateAction = new ChangeCustomLineItemMoneyUpdateAction
             {
                 CustomLineItemId = customLineItemId,
@@ -1988,7 +1986,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 
             // then update it's fields
 
-            string stringFieldValue = this.cartFixture.RandomString(5);
+            string stringFieldValue = TestingUtility.RandomString(5);
             SetCustomLineItemCustomFieldUpdateAction setCustomFieldUpdateAction =
                 new SetCustomLineItemCustomFieldUpdateAction()
                 {

@@ -186,7 +186,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
             IClient commerceToolsClient = this.cartDiscountFixture.GetService<IClient>();
             CartDiscount cartDiscount = this.cartDiscountFixture.CreateCartDiscount();
 
-            string name = this.cartDiscountFixture.RandomString(10);
+            string name = TestingUtility.RandomString(10);
             List<UpdateAction<CartDiscount>> updateActions = new List<UpdateAction<CartDiscount>>();
             ChangeNameUpdateAction changeNameUpdateAction = new ChangeNameUpdateAction()
             {
@@ -209,7 +209,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
             IClient commerceToolsClient = this.cartDiscountFixture.GetService<IClient>();
             CartDiscount cartDiscount = this.cartDiscountFixture.CreateCartDiscount();
 
-            string newDescription = this.cartDiscountFixture.RandomString(20);
+            string newDescription = TestingUtility.RandomString(20);
             List<UpdateAction<CartDiscount>> updateActions = new List<UpdateAction<CartDiscount>>();
             SetDescriptionUpdateAction setDescriptionUpdateAction = new SetDescriptionUpdateAction()
             {
@@ -235,7 +235,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
             List<UpdateAction<CartDiscount>> updateActions = new List<UpdateAction<CartDiscount>>();
             ChangeSortOrderUpdateAction changeSortOrderUpdateAction = new ChangeSortOrderUpdateAction()
             {
-                SortOrder = this.cartDiscountFixture.RandomSortOrder()
+                SortOrder = TestingUtility.RandomSortOrder()
             };
             updateActions.Add(changeSortOrderUpdateAction);
 

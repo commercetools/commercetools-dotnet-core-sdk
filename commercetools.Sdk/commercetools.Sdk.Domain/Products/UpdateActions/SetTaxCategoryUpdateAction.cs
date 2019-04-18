@@ -1,8 +1,8 @@
-﻿namespace commercetools.Sdk.Domain.Products
+﻿namespace commercetools.Sdk.Domain.Products.UpdateActions
 {
     public class SetTaxCategoryUpdateAction : UpdateAction<Product>
     {
         public string Action => "setTaxCategory";
-        public Reference<TaxCategory> TaxCategory { get; set; }
+        public ResourceIdentifier<TaxCategory> TaxCategory { get; set; }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using commercetools.Sdk.Domain.Customers;
 using System;
+using commercetools.Sdk.Domain.States;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.Reviews
 {
     [Endpoint("reviews")]
     public class Review
