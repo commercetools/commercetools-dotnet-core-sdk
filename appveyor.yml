@@ -11,8 +11,6 @@ install:
 before_build:
   - pandoc -v
   - pandoc README.md -f markdown -t plain --wrap=none -o readme.txt
-  - ps: Invoke-WebRequest -Uri "https://api.sphere.io"
-  - ps: Invoke-WebRequest -Uri "https://auth.sphere.io"
   - ps: cd commercetools.Sdk
   - ps: dotnet restore --packages ..\packages
   - ps: dotnet user-secrets set "Client:ClientId" $env:CTP_CLIENT_ID --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1
@@ -40,7 +38,7 @@ after_build:
 
 test_script:
   - ps: dotnet test Tests --no-build -c Release
-  - ps: dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release -v n --logger:Appveyor
+  - ps: dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
 
 artifacts:
 - path: commercetools.Sdk/**/*.nupkg
