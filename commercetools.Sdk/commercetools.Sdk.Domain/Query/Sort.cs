@@ -13,7 +13,7 @@ namespace commercetools.Sdk.Domain.Query
         private readonly string sortPath;
 
         public Sort(Expression<Func<T, IComparable>> expression, SortDirection sortDirection = Query.SortDirection.Ascending)
-            : this(ServiceLocator.Current.GetService<ISortExpressionVisitor>().Render(expression), sortDirection)
+            : this(expression.RenderSort(), sortDirection)
         {
             this.Expression = expression;
         }

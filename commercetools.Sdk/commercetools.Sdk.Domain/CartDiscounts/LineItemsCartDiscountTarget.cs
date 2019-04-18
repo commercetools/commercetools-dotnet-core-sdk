@@ -10,10 +10,5 @@ namespace commercetools.Sdk.Domain.CartDiscounts
     public class LineItemsCartDiscountTarget : CartDiscountTarget
     {
         public string Predicate { get; set; }
-
-        public void SetPredicate(Expression<Func<LineItem, bool>> expression)
-        {
-            this.Predicate = ServiceLocator.Current.GetService<IDiscountPredicateExpressionVisitor>().Render(expression);
-        }
     }
 }

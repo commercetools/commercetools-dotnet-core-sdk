@@ -16,7 +16,7 @@ namespace commercetools.Sdk.Domain.ProductProjections
 
         public override string ToString()
         {
-            return ServiceLocator.Current.GetService<IFilterPredicateExpressionVisitor>().Render(this.Expression);
+            return this.Expression.RenderFilterPredicate();
         }
     }
 }

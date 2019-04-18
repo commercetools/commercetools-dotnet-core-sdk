@@ -14,7 +14,7 @@ namespace commercetools.Sdk.Domain
         public string Title { get; set; }
         public string Text { get; set; }
         public IReferenceable Target { get; set; }
-        public double Rating { get; set; }
+        public double? Rating { get; set; }
         public IReferenceable<State> State { get; set; }
         public IReferenceable<Customer> Customer { get; set; }
         public CustomFields Custom { get; set; }

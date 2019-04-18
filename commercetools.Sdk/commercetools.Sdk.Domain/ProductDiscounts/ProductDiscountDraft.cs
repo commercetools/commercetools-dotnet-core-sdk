@@ -15,10 +15,5 @@ namespace commercetools.Sdk.Domain.ProductDiscounts
         public bool IsActive { get; set; }
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
-
-        public void SetPredicate(Expression<Func<Product, bool>> expression)
-        {
-            this.Predicate = ServiceLocator.Current.GetService<IDiscountPredicateExpressionVisitor>().Render(expression);
-        }
     }
 }

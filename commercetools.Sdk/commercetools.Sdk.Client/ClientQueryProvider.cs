@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using commercetools.Sdk.Domain;
 using commercetools.Sdk.Linq;
 using commercetools.Sdk.Registration;
 
@@ -86,7 +87,7 @@ namespace commercetools.Sdk.Client
                             direction = SortDirection.Descending;
                         }
 
-                        var render = ServiceLocator.Current.GetService<ISortExpressionVisitor>().Render(sort.Operand);
+                        var render = sort.Operand.RenderSort();
                         cmd.Sort.Add(new Sort<T>(render, direction).ToString());
                     }
 
