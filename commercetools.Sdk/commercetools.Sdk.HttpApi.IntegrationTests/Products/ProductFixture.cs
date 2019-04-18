@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
-using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.ProductDiscounts;
-using commercetools.Sdk.Domain.Products;
-using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.Domain.States;
-using commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts;
 using commercetools.Sdk.HttpApi.IntegrationTests.States;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
-using Xunit.Abstractions;
-using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
+using Xunit;
 using Type = commercetools.Sdk.Domain.Type;
+
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
 {
@@ -42,7 +39,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         {
             Product toBeDeleted = null;
             IClient commerceToolsClient = this.GetService<IClient>();
-            //this.ClearAllProductDiscounts();//Delete All Product discounts first if exists
+            this.ClearAllProductDiscounts();//Delete All Product discounts first if exists
             this.ProductsToDelete.Reverse();
             foreach (Product product in this.ProductsToDelete)
             {
