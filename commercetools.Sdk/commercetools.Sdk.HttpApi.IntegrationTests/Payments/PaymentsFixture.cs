@@ -35,10 +35,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
 
         public PaymentDraft GetPaymentDraft()
         {
-            int centAmount = this.RandomInt(100, 10000);
+            int centAmount = TestingUtility.RandomInt(100, 10000);
             PaymentDraft paymentDraft = new PaymentDraft
             {
-                Key = this.RandomString(10),
+                Key = TestingUtility.RandomString(10),
                 AmountPlanned = Money.Parse($"{centAmount} EUR")
             };
             return paymentDraft;

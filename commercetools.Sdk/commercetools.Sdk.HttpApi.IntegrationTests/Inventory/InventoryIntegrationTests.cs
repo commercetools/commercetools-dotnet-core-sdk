@@ -83,7 +83,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             IClient commerceToolsClient = this.inventoryFixture.GetService<IClient>();
             InventoryEntry inventoryEntry = this.inventoryFixture.CreateInventoryEntry();
 
-            long newAddedQuantity = this.inventoryFixture.RandomInt(1, 10);
+            long newAddedQuantity = TestingUtility.RandomInt(1, 10);
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
 
             AddQuantityUpdateAction addQuantityUpdateAction = new AddQuantityUpdateAction()
@@ -110,7 +110,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             IClient commerceToolsClient = this.inventoryFixture.GetService<IClient>();
             InventoryEntry inventoryEntry = this.inventoryFixture.CreateInventoryEntry();
 
-            long newRemovedQuantity = this.inventoryFixture.RandomInt(1, 10);
+            long newRemovedQuantity = TestingUtility.RandomInt(1, 10);
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
 
             RemoveQuantityUpdateAction removeQuantityUpdateAction = new RemoveQuantityUpdateAction()
@@ -137,7 +137,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             IClient commerceToolsClient = this.inventoryFixture.GetService<IClient>();
             InventoryEntry inventoryEntry = this.inventoryFixture.CreateInventoryEntry();
 
-            long newQuantity = this.inventoryFixture.RandomInt(100, 1000);
+            long newQuantity = TestingUtility.RandomInt(100, 1000);
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
 
             ChangeQuantityUpdateAction changeQuantityUpdateAction = new ChangeQuantityUpdateAction()
@@ -163,7 +163,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             IClient commerceToolsClient = this.inventoryFixture.GetService<IClient>();
             InventoryEntry inventoryEntry = this.inventoryFixture.CreateInventoryEntry();
 
-            int newRestockableInDays = this.inventoryFixture.RandomInt(1, 100);
+            int newRestockableInDays = TestingUtility.RandomInt(1, 100);
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
 
             SetRestockableInDaysUpdateAction setRestockableInDaysUpdateAction = new SetRestockableInDaysUpdateAction()
@@ -188,7 +188,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             IClient commerceToolsClient = this.inventoryFixture.GetService<IClient>();
             InventoryEntry inventoryEntry = this.inventoryFixture.CreateInventoryEntry();
 
-            DateTime newExpectedDelivery = DateTime.Today.AddDays(this.inventoryFixture.RandomInt(1, 100)).ToUniversalTime();
+            DateTime newExpectedDelivery = DateTime.Today.AddDays(TestingUtility.RandomInt(1, 100)).ToUniversalTime();
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
 
             SetExpectedDeliveryUpdateAction setExpectedDeliveryUpdateAction = new SetExpectedDeliveryUpdateAction()
@@ -268,7 +268,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             InventoryEntry inventoryEntry = this.inventoryFixture.CreateInventoryEntryWithCustomFields();
 
             List<UpdateAction<InventoryEntry>> updateActions = new List<UpdateAction<InventoryEntry>>();
-            string newValue = this.inventoryFixture.RandomString(10);
+            string newValue = TestingUtility.RandomString(10);
             SetCustomFieldUpdateAction setCustomFieldUpdateAction = new SetCustomFieldUpdateAction()
             {
                 Name = "string-field", Value = newValue

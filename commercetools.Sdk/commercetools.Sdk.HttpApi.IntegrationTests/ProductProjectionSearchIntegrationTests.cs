@@ -6,6 +6,7 @@ using System.Net.Http;
 using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.HttpApi.HttpApiCommands;
+using commercetools.Sdk.HttpApi.IntegrationTests.Products;
 using commercetools.Sdk.Registration;
 using Xunit;
 

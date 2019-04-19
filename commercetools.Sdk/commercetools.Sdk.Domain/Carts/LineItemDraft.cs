@@ -4,7 +4,7 @@ namespace commercetools.Sdk.Domain.Carts
 {
     public class LineItemDraft : IDraft<LineItem>
     {
-        public string VariantId { get; set; }
+        public int? VariantId { get; set; }
 
         public string ProductId { get; set; }
 

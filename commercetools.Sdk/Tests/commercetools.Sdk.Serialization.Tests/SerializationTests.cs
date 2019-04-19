@@ -3,6 +3,8 @@ using System.IO;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.Domain.Reviews;
+using commercetools.Sdk.Domain.States;
 using commercetools.Sdk.Registration;
 using FluentAssertions;
 using FluentValidation;

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using commercetools.Sdk.Domain.States;
 
 namespace commercetools.Sdk.Domain.Payments.UpdateActions
 {

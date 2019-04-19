@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.Domain.States;
 using commercetools.Sdk.Domain.Validation.Attributes;
 
 namespace commercetools.Sdk.Domain

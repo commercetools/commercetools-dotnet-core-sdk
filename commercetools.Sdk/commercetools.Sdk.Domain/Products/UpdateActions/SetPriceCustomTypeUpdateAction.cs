@@ -1,7 +1,7 @@
-﻿namespace commercetools.Sdk.Domain.Products
-{
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
+namespace commercetools.Sdk.Domain.Products.UpdateActions
+{
     public class SetPriceCustomTypeUpdateAction : UpdateAction<Product>
     {
         public string Action => "setProductPriceCustomType";

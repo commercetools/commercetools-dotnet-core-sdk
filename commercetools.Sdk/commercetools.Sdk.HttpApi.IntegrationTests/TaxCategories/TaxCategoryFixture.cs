@@ -25,20 +25,20 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories
             }
         }
 
-        public TaxCategoryDraft GetTaxCategoryDraft(string country = null)
+        public TaxCategoryDraft GetTaxCategoryDraft(string country = null, string state = null)
         {
             TaxCategoryDraft taxCategoryDraft = new TaxCategoryDraft()
             {
-                Name = this.RandomString(5),
-                Key = this.RandomString(4),
-                Rates = new List<TaxRate>(){ this.GetTaxRate(country)}
+                Name = TestingUtility.RandomString(5),
+                Key = TestingUtility.RandomString(4),
+                Rates = new List<TaxRate>(){ this.GetTaxRate(country, state)}
             };
             return taxCategoryDraft;
         }
 
-        public TaxCategory CreateTaxCategory(string country = null)
+        public TaxCategory CreateTaxCategory(string country = null, string state = null)
         {
-            return this.CreateTaxCategory(this.GetTaxCategoryDraft(country));
+            return this.CreateTaxCategory(this.GetTaxCategoryDraft(country, state));
         }
 
         public TaxCategory CreateTaxCategory(TaxCategoryDraft taxCategoryDraft)
@@ -52,13 +52,14 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories
         /// Get Tax Rate
         /// </summary>
         /// <returns></returns>
-        private TaxRate GetTaxRate(string country = null)
+        private TaxRate GetTaxRate(string country = null, string state = null)
         {
             TaxRate taxRate = new TaxRate()
             {
-                Name = this.RandomString(4),
+                Name = TestingUtility.RandomString(4),
                 Country = country?? "DE",
-                Amount = this.RandomDouble()
+                State = state,
+                Amount = TestingUtility.RandomDouble()
             };
             return taxRate;
         }

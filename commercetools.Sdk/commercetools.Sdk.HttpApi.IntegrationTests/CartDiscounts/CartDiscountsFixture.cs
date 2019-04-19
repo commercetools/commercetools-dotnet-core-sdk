@@ -32,11 +32,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
         public CartDiscountDraft GetCartDiscountDraft(bool requireDiscountCode = false)
         {
             CartDiscountDraft cartDiscountDraft = new CartDiscountDraft();
-            cartDiscountDraft.Name = new LocalizedString() {{"en", this.RandomString(10)}};
-            cartDiscountDraft.Description = new LocalizedString() {{"en", this.RandomString(20)}};
+            cartDiscountDraft.Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}};
+            cartDiscountDraft.Description = new LocalizedString() {{"en", TestingUtility.RandomString(20)}};
             cartDiscountDraft.Value = this.GetCartDiscountValueAsAbsolute();
             cartDiscountDraft.CartPredicate = "1 = 1"; //match all carts
-            cartDiscountDraft.SortOrder = this.RandomSortOrder();
+            cartDiscountDraft.SortOrder = TestingUtility.RandomSortOrder();
             cartDiscountDraft.Target = GetCartDiscountTargetAsLineItems();
             cartDiscountDraft.ValidFrom = DateTime.Today;
             cartDiscountDraft.ValidUntil = DateTime.Today.AddMonths(1);
@@ -63,7 +63,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
             var money = new Money()
             {
                 CurrencyCode = "EUR",
-                CentAmount = this.RandomInt(100, 1000)
+                CentAmount = TestingUtility.RandomInt(100, 1000)
             };
             var cartDiscountValue = new AbsoluteCartDiscountValue()
             {

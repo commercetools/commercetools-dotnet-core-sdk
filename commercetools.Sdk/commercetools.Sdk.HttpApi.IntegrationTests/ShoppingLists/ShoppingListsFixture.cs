@@ -5,6 +5,7 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.ShoppingLists;
 using commercetools.Sdk.HttpApi.IntegrationTests.Customers;
+using commercetools.Sdk.HttpApi.IntegrationTests.Products;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists
 {
@@ -41,10 +42,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists
 
         public ShoppingListDraft GetShoppingListDraft(bool withCustomer = true, bool withLineItem = false)
         {
-            string name = $"ShoppingList_{this.RandomInt()}";
+            string name = $"ShoppingList_{TestingUtility.RandomInt()}";
             ShoppingListDraft shoppingListDraft = new ShoppingListDraft
             {
-                Key = this.RandomString(10),
+                Key = TestingUtility.RandomString(10),
                 Slug = new LocalizedString(){{"en", name}},
                 Name = new LocalizedString(){{"en", name}},
                 DeleteDaysAfterLastModification = 30

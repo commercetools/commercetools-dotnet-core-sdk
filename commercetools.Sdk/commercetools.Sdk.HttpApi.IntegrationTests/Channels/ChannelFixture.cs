@@ -6,15 +6,15 @@ using commercetools.Sdk.Domain.Channels;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Channels
 {
-    public class ChannelFixture : ClientFixture, IDisposable 
+    public class ChannelFixture : ClientFixture, IDisposable
     {
         public List<Channel> Channels { get; }
-        
+
         public ChannelFixture() : base()
         {
             this.Channels = new List<Channel>();
         }
-        
+
         public void Dispose()
         {
             IClient commerceToolsClient = this.GetService<IClient>();
@@ -28,7 +28,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Channels
         public ChannelDraft GetChannelDraft()
         {
             ChannelDraft channelDraft = new ChannelDraft();
-            channelDraft.Key = this.RandomString(10);
+            channelDraft.Key = TestingUtility.RandomString(10);
             return channelDraft;
         }
 

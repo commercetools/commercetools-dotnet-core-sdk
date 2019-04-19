@@ -14,7 +14,7 @@ namespace commercetools.Sdk.Client
         /// <value>
         /// The additional parameters.
         /// </value>
-        public IAdditionalParameters AdditionalParameters { get; protected set; }
+        public IAdditionalParameters AdditionalParameters { get; set; }
 
         /// <summary>
         /// Gets the type of the resource.

@@ -1,4 +1,5 @@
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Reviews;
 
 namespace commercetools.Sdk.Validation
 {

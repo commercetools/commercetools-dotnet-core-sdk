@@ -37,15 +37,16 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public CategoryDraft GetCategoryDraft()
         {
             CategoryDraft categoryDraft = new CategoryDraft();
-            string categoryName = this.RandomString(10);
+            string categoryName = TestingUtility.RandomString(10);
             LocalizedString localizedStringName = new LocalizedString();
             localizedStringName.Add("en", categoryName);
             categoryDraft.Name = localizedStringName;
-            string slug = this.RandomString(10);
+            string slug = TestingUtility.RandomString(10);
             LocalizedString localizedStringSlug = new LocalizedString();
             localizedStringSlug.Add("en", slug);
             categoryDraft.Slug = localizedStringSlug;
-            categoryDraft.Key = this.RandomString(10);
+            categoryDraft.Key = TestingUtility.RandomString(10);
+            categoryDraft.OrderHint = TestingUtility.RandomSortOrder();
             return categoryDraft;
         }
 
@@ -112,7 +113,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             IClient commerceToolsClient = this.GetService<IClient>();
 
             List<UpdateAction<Category>> updateActions = new List<UpdateAction<Category>>();
-            SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction() {Key = this.RandomString(10)};
+            SetKeyUpdateAction setKeyAction = new SetKeyUpdateAction() {Key = TestingUtility.RandomString(10)};
             updateActions.Add(setKeyAction);
             Category updatedCategory = commerceToolsClient
                 .ExecuteAsync(new UpdateByIdCommand<Category>(new Guid(category.Id), category.Version, updateActions))
