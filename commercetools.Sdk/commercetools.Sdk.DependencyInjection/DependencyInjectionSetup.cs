@@ -54,10 +54,7 @@ namespace commercetools.Sdk.DependencyInjection
         public static IDictionary<string, IHttpClientBuilder> ConfigureClient(this IDictionary<string, IHttpClientBuilder> httpClientBuilders,
             string clientName, Func<IHttpClientBuilder, IHttpClientBuilder> configureAction)
         {
-            if (httpClientBuilders.TryGetValue(clientName, out IHttpClientBuilder httpClientBuilder))
-            {
-                configureAction.Invoke(httpClientBuilder);
-            }
+            configureAction.Invoke(httpClientBuilders[clientName]);
             return httpClientBuilders;
         }
     }
