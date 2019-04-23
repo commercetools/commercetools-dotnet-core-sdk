@@ -45,16 +45,17 @@ namespace commercetools.Sdk.DependencyInjection
         }
 
         public static IDictionary<string, IHttpClientBuilder> ConfigureAllClients(this IDictionary<string, IHttpClientBuilder> httpClientBuilders,
-            Func<IHttpClientBuilder, IHttpClientBuilder> configureAction)
+            Action<IHttpClientBuilder> configureAction)
         {
-            httpClientBuilders.Select(pair => configureAction.Invoke(pair.Value)).Count();
+            foreach (var clientBuilder in httpClientBuilders.Values) { configureAction(clientBuilder); }
+
             return httpClientBuilders;
         }
 
         public static IDictionary<string, IHttpClientBuilder> ConfigureClient(this IDictionary<string, IHttpClientBuilder> httpClientBuilders,
-            string clientName, Func<IHttpClientBuilder, IHttpClientBuilder> configureAction)
+            string clientName, Action<IHttpClientBuilder> configureAction)
         {
-            configureAction.Invoke(httpClientBuilders[clientName]);
+            configureAction(httpClientBuilders[clientName]);
             return httpClientBuilders;
         }
     }
