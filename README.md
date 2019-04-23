@@ -108,8 +108,20 @@ var policy = HttpPolicyExtensions
     .RetryAsync(3);
 registry.Add("retry", policy);
 
-services.AddHttpClient("Client").AddPolicyHandlerFromRegistry("retry");
-services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials);
+services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials)
+    .AddPolicyHandlerFromRegistry("retry");
+
+// for multiple clients
+services.UseCommercetools(configuration, new Dictionary<string, TokenFlow>()
+    {
+        {"client1", TokenFlow.AnonymousSession},
+        {"client2", TokenFlow.ClientCredentials}
+    })
+    // configure single client
+    .ConfigureClient("client1", builder => builder.AddPolicyHandlerFromRegistry("retry"))
+    // configure all clients
+    .ConfigureAllClients(builder => builder.AddPolicyHandlerFromRegistry("retry"));
+
 ```
 
 ### Configuration

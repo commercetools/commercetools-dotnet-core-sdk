@@ -21,22 +21,22 @@ namespace commercetools.Sdk.HttpApi
 {
     public static class DependencyInjectionSetup
     {
-        public static void UseHttpApi(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
+        public static IDictionary<string, IHttpClientBuilder> UseHttpApi(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
             if (clients.Count() == 1)
             {
-                services.UseSingleClient(configuration, clients.First().Key, clients.First().Value);
+                return services.UseSingleClient(configuration, clients.First().Key, clients.First().Value);
             }
-            else
-            {
-                services.UseMultipleClients(configuration, clients);
-            }
+
+            return services.UseMultipleClients(configuration, clients);
+
         }
 
-        private static void UseMultipleClients(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
+        private static IDictionary<string, IHttpClientBuilder> UseMultipleClients(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
             services.UseHttpApiDefaults();
             TokenFlowMapper tokenFlowMapper = new TokenFlowMapper();
+            var builders = new Dictionary<string, IHttpClientBuilder>();
             foreach (KeyValuePair<string, TokenFlow> client in clients)
             {
                 string clientName = client.Key;
@@ -45,21 +45,25 @@ namespace commercetools.Sdk.HttpApi
                 services.Remove(clientConfigurationToRemove);
                 var tokenFlowRegisterToRemove = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(ITokenFlowRegister));
                 services.Remove(tokenFlowRegisterToRemove);
-                services.SetupClient(configuration, clientName, tokenFlow);
+                builders.Add(clientName, services.SetupClient(configuration, clientName, tokenFlow));
                 services.AddClient(clientName, tokenFlowMapper);
             }
 
             services.AddSingleton<ITokenFlowMapper>(tokenFlowMapper);
+
+            return builders;
         }
 
-        private static void UseSingleClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
+        private static IDictionary<string, IHttpClientBuilder> UseSingleClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
         {
+            var builders = new Dictionary<string, IHttpClientBuilder>();
             services.UseHttpApiDefaults();
-            services.SetupClient(configuration, clientName, tokenFlow);
+            builders.Add(clientName, services.SetupClient(configuration, clientName, tokenFlow));
             services.AddSingleton<IClient>(c => new Client(c.GetService<IHttpClientFactory>(), c.GetService<IHttpApiCommandFactory>(), c.GetService<ISerializerService>()) { Name = clientName });
+            return builders;
         }
 
-        private static void SetupClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
+        private static IHttpClientBuilder SetupClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
         {
             IClientConfiguration clientConfiguration = configuration.GetSection(clientName).Get<ClientConfiguration>();
             Validator.ValidateObject(clientConfiguration, new ValidationContext(clientConfiguration), true);
@@ -72,6 +76,7 @@ namespace commercetools.Sdk.HttpApi
                 .AddHttpMessageHandler<AuthorizationHandler>().AddHttpMessageHandler<CorrelationIdHandler>()
                 .AddHttpMessageHandler<LoggerHandler>()
                 .AddHttpMessageHandler<ErrorHandler>();
+            return httpClientBuilder;
         }
 
         private static void AddClient(this IServiceCollection services, string clientName, TokenFlowMapper tokenFlowMapper)

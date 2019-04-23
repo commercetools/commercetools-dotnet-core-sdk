@@ -1,8 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using commercetools.Sdk.DependencyInjection;
 using commercetools.Sdk.HttpApi.Tokens;
+using Polly;
+using Polly.Extensions.Http;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
