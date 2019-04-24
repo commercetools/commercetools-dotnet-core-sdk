@@ -29,7 +29,6 @@ namespace commercetools.Sdk.HttpApi
             }
 
             return services.UseMultipleClients(configuration, clients);
-
         }
 
         private static IDictionary<string, IHttpClientBuilder> UseMultipleClients(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)

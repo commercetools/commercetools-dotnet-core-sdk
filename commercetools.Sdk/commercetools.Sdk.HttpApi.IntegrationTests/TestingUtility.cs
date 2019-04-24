@@ -21,6 +21,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 
         public static readonly string ExternalImageUrl = "https://commercetools.com/wp-content/uploads/2018/06/Feature_Guide.png";
         public static readonly string AssetUrl = "https://commercetools.com/wp-content/uploads/2018/07/rewe-logo-1.gif";
+        public const string DefaultContainerName = "CustomObjectFixtures";
         #endregion
 
         #region Functions
