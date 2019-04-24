@@ -1,8 +1,10 @@
-﻿namespace commercetools.Sdk.Domain
+﻿using commercetools.Sdk.Domain.Common;
+
+namespace commercetools.Sdk.Domain
 {
     public class CustomFieldsDraft : IDraft<CustomFields>
     {
-        public IReferenceable<Type> Type { get; set; }
+        public IReference<Type> Type { get; set; }
         public Fields Fields { get; set; }
     }
 }

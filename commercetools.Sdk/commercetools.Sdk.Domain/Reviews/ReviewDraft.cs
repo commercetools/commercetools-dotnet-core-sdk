@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.Domain.Customers;
+﻿using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.States;
 
 namespace commercetools.Sdk.Domain.Reviews
@@ -14,10 +15,10 @@ namespace commercetools.Sdk.Domain.Reviews
         public string AuthorName { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
-        public IReferenceable Target { get; set; }
+        public IReference Target { get; set; }
         public double? Rating { get; set; }
-        public IReferenceable<State> State { get; set; }
-        public IReferenceable<Customer> Customer { get; set; }
+        public IReference<State> State { get; set; }
+        public IReference<Customer> Customer { get; set; }
         public CustomFields Custom { get; set; }
     }
 }

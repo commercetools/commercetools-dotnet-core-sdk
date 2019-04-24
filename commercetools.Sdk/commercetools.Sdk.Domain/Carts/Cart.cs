@@ -1,17 +1,16 @@
-﻿using commercetools.Sdk.Domain.Orders;
-
+﻿
 namespace commercetools.Sdk.Domain.Carts
 {
-    using commercetools.Sdk.Domain.CustomerGroups;
+    using Common;
+    using Orders;
+    using CustomerGroups;
     using System;
     using System.Collections.Generic;
 
     [Endpoint("carts")]
     [ResourceType(ReferenceTypeId.Cart)]
-    public class Cart
+    public class Cart : Resource<Cart>
     {
-        public string Id { get; set; }
-        public int Version { get; set; }
         public string CustomerId { get; set; }
         public string CustomerEmail { get; set; }
         public string AnonymousId { get; set; }
@@ -37,8 +36,6 @@ namespace commercetools.Sdk.Domain.Carts
         public int DeleteDaysAfterLastModification { get; set; }
         public IShippingRateInput ShippingRateInput { get; set; }
         public CartOrigin Origin { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime LastModifiedAt { get; set; }
         public List<Address> ItemShippingAddresses { get; set; }
         public ItemShippingDetails ShippingDetails { get; set; }
     }

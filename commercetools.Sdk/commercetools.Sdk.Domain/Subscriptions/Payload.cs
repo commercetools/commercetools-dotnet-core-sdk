@@ -1,3 +1,4 @@
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Messages;
 
 namespace commercetools.Sdk.Domain.Subscriptions
@@ -8,7 +9,7 @@ namespace commercetools.Sdk.Domain.Subscriptions
 
         public string NotificationType { get; set; }
 
-        public IReferenceable Resource { get; set; }
+        public IReference Resource { get; set; }
 
         public UserProvidedIdentifiers ResourceUserProvidedIdentifiers { get; set; }
     }
