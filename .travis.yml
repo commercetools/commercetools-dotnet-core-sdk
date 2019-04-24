@@ -26,9 +26,26 @@ matrix:
           dotnet user-secrets set "TokenClientWithAnonymousScope:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
           dotnet user-secrets set "TokenClientWithAnonymousScope:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
     - os: windows
+      filter_secrets: false
       install:
         - choco install dotnetcore-sdk --version 2.1.603
         - dotnet restore
+        - powershell -c 'dotnet user-secrets set "Client:ClientId" $env:CTP_CLIENT_ID --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
+        - powershell -c 'dotnet user-secrets set "Client:ClientSecret" $env:CTP_CLIENT_SECRET --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
+        - powershell -c 'dotnet user-secrets set "Client:Scope" $env:CTP_CLIENT_SCOPE --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
+        - powershell -c 'dotnet user-secrets set "Client:ProjectKey" $env:CTP_PROJECTKEY --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
+        - powershell -c 'dotnet user-secrets set "TokenClient:ClientId" $env:CTP_CLIENT_ID --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
+        - powershell -c 'dotnet user-secrets set "TokenClient:ClientSecret" $env:CTP_CLIENT_SECRET --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
+        - powershell -c 'dotnet user-secrets set "TokenClient:Scope" $env:CTP_CLIENT_SCOPE --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
+        - powershell -c 'dotnet user-secrets set "TokenClient:ProjectKey" $env:CTP_PROJECTKEY --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
+        - powershell -c 'dotnet user-secrets set "TokenClientWithSmallerScope:ClientId" $env:CTP_CLIENT_ID --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
+        - powershell -c 'dotnet user-secrets set "TokenClientWithSmallerScope:ClientSecret" $env:CTP_CLIENT_SECRET --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
+        - powershell -c 'dotnet user-secrets set "TokenClientWithSmallerScope:Scope" $env:CTP_CLIENT_SCOPE --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
+        - powershell -c 'dotnet user-secrets set "TokenClientWithSmallerScope:ProjectKey" $env:CTP_PROJECTKEY --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
+        - powershell -c 'dotnet user-secrets set "TokenClientWithAnonymousScope:ClientId" $env:CTP_CLIENT_ID --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
+        - powershell -c 'dotnet user-secrets set "TokenClientWithAnonymousScope:ClientSecret" $env:CTP_CLIENT_SECRET --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
+        - powershell -c 'dotnet user-secrets set "TokenClientWithAnonymousScope:Scope" $env:CTP_CLIENT_SCOPE --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
+        - powershell -c 'dotnet user-secrets set "TokenClientWithAnonymousScope:ProjectKey" $env:CTP_PROJECTKEY --project commercetools.Sdk.HttpApi.IntegrationTests >$null 2>&1'
 
 before_install:
  - cd commercetools.Sdk
