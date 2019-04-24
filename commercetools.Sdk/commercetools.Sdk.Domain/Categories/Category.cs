@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using commercetools.Sdk.Domain.Common;
 
 namespace commercetools.Sdk.Domain.Categories
 {
     [Endpoint("categories")]
     [ResourceType(ReferenceTypeId.Category)]
-    public class Category
+    public class Category : Resource<Category>
     {
-        public string Id { get; set; }
-
         public string Key { get; set; }
-
-        public int Version { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-
-        public DateTime LastModifiedAt { get; set; }
 
         public LocalizedString Name { get; set; }
 

@@ -1,9 +1,7 @@
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.Common
 {
-    public interface IReferenceable
+    public interface IReferenceable<T>
     {
-        string Id { get; }
-        ReferenceTypeId? TypeId { get; }
-        string Key { get; }
+        IReference<T> ToReference();
     }
 }

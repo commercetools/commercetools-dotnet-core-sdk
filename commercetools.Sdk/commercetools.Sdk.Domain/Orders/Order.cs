@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.States;
 
@@ -9,12 +10,8 @@ namespace commercetools.Sdk.Domain.Orders
 {
     [Endpoint("orders")]
     [ResourceType(ReferenceTypeId.Order)]
-    public class Order
+    public class Order : Resource<Order>
     {
-        public string Id { get; set; }
-        public int Version { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime LastModifiedAt { get; set; }
         public DateTime? CompletedAt { get; set; }
         public string OrderNumber { get; set; }
         public string CustomerId { get; set; }

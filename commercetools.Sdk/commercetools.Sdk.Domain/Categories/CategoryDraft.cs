@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain.Categories
+﻿using commercetools.Sdk.Domain.Common;
+
+namespace commercetools.Sdk.Domain.Categories
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -12,7 +14,7 @@
 
         public LocalizedString Description { get; set; }
 
-        public Reference Parent { get; set; }
+        public IReference<Category> Parent { get; set; }
 
         [Required]
         public LocalizedString Slug { get; set; }

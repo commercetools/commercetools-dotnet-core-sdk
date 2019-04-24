@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Reviews;
 
 namespace commercetools.Sdk.Domain.Channels
@@ -9,17 +10,9 @@ namespace commercetools.Sdk.Domain.Channels
     /// </summary>
     [Endpoint("channels")]
     [ResourceType(ReferenceTypeId.Channel)]
-    public class Channel
+    public class Channel: Resource<Channel>
     {
-        public string Id { get; set; }
-
         public string Key { get; set; }
-
-        public int Version { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-
-        public DateTime LastModifiedAt { get; set; }
 
         public List<ChannelRole> Roles { get; set; }
 

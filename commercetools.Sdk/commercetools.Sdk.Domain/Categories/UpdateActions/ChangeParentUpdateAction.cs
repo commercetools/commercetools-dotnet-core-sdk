@@ -6,6 +6,6 @@ namespace commercetools.Sdk.Domain.Categories.UpdateActions
     {
         public string Action => "changeParent";
         [Required]
-        public ResourceIdentifier Slug { get; set; }
+        public ResourceIdentifier Parent { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.Domain.States;
@@ -100,7 +101,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
                 TestingUtility.GetRandomProductVariantDraft(category.Id, ReferenceTypeId.Category);
             productDraft.MasterVariant = productMasterVariant;
 
-            productDraft.Categories = new List<IReferenceable<Category>>
+            productDraft.Categories = new List<IReference<Category>>
             {
                 new ResourceIdentifier<Category> {Key = category.Key}
             };

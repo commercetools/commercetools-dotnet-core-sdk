@@ -1,19 +1,16 @@
 ﻿using commercetools.Sdk.Domain.Categories;
 using System;
 using System.Collections.Generic;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Reviews;
 using commercetools.Sdk.Domain.States;
 
 namespace commercetools.Sdk.Domain.ProductProjections
 {
     [Endpoint("product-projections")]
-    public class ProductProjection
+    public class ProductProjection : Resource<ProductProjection>
     {
-        public string Id { get; set; }
         public string Key { get; set; }
-        public int Version { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime LastModifiedAt { get; set; }
         public Reference<ProductType> ProductType { get; set; }
         public LocalizedString Name { get; set; }
         public LocalizedString Description { get; set; }

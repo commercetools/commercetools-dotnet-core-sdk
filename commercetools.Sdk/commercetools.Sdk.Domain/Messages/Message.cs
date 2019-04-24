@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using commercetools.Sdk.Domain.Common;
 
 namespace commercetools.Sdk.Domain.Messages
 {
@@ -8,19 +9,11 @@ namespace commercetools.Sdk.Domain.Messages
     /// A message represents a change or an action performed on a resource (like an Order or a Product).
     /// </summary>
     [Endpoint("messages")]
-    public abstract class Message
+    public abstract class Message: Resource<Message>
     {
-        public string Id { get; set; }
-
-        public int Version { get; set; }
-
         public int SequenceNumber { get; set; }
 
         public int ResourceVersion { get; set; }
-        public DateTime CreatedAt { get; set; }
-
-        public DateTime LastModifiedAt { get; set; }
-
         public ResourceIdentifier Resource { get; set; }
 
         public UserProvidedIdentifiers ResourceUserProvidedIdentifiers { get; set; }
