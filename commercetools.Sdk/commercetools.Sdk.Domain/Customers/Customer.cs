@@ -9,12 +9,8 @@ namespace commercetools.Sdk.Domain.Customers
     [ResourceType(ReferenceTypeId.Customer)]
     public class Customer : Resource<Customer>
     {
-        public string Id { get; set; }
-        public int Version { get; set; }
         public string CustomerNumber { get; set; }
         public string Key { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime LastModifiedAt { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string FirstName { get; set; }
