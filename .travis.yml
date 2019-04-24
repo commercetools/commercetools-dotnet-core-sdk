@@ -30,7 +30,7 @@ matrix:
         - dotnet test Tests --no-build -c Release
         - dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
     - os: osx
-      dotnet: 2.1
+      dotnet: 2.1.603
       install:
         - dotnet restore
       script:
