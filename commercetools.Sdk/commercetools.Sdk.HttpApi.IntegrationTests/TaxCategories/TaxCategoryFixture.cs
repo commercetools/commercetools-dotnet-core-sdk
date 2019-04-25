@@ -29,8 +29,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories
         {
             TaxCategoryDraft taxCategoryDraft = new TaxCategoryDraft()
             {
-                Name = TestingUtility.RandomString(5),
-                Key = TestingUtility.RandomString(4),
+                Name = TestingUtility.RandomString(10),
+                Key = TestingUtility.RandomString(10),
                 Rates = new List<TaxRate>(){ this.GetTaxRate(country, state)}
             };
             return taxCategoryDraft;
@@ -56,7 +56,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories
         {
             TaxRate taxRate = new TaxRate()
             {
-                Name = TestingUtility.RandomString(4),
+                Name = TestingUtility.RandomString(10),
                 Country = country?? "DE",
                 State = state,
                 Amount = TestingUtility.RandomDouble()

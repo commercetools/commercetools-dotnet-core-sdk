@@ -30,7 +30,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Zones
         }
 
         /// <summary>
-        /// Create Zone Draft
+        /// Create Zone Draft, set default country and default state if they're not provided in params
         /// </summary>
         /// <returns></returns>
 
@@ -38,7 +38,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Zones
         {
             int ran = TestingUtility.RandomInt();
             string zoneCountry = country ?? TestingUtility.GetRandomEuropeCountry();
-            var locations = new List<Location>() { new Location() { Country =  zoneCountry, State = state}};
+            string zoneState = state ?? $"{zoneCountry}_State_{TestingUtility.RandomInt()}";
+            var locations = new List<Location>() { new Location() { Country =  zoneCountry, State = zoneState}};
             ZoneDraft zoneDraft = new ZoneDraft()
             {
                 Name = $"EuropeZone_{ran}",
