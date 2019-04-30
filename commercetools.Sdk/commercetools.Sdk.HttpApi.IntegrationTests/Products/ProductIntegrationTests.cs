@@ -599,7 +599,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
                 .Result;
 
             //Then update the custom field
-            string stringFieldValue = TestingUtility.RandomString(5);
+            string stringFieldValue = TestingUtility.RandomString(10);
             updateActions.Clear();
             SetPriceCustomFieldUpdateAction setCustomFieldUpdateAction = new SetPriceCustomFieldUpdateAction()
             {

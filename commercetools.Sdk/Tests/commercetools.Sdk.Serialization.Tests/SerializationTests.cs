@@ -3,6 +3,7 @@ using System.IO;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Reviews;
 using commercetools.Sdk.Domain.States;
 using commercetools.Sdk.Registration;
@@ -145,7 +146,7 @@ namespace commercetools.Sdk.Serialization.Tests
                 {
                     Key = "TaxCategoryKey"
                 },
-                Categories = new List<IReferenceable<Category>>()
+                Categories = new List<IReference<Category>>()
                 {
                     new ResourceIdentifier<Category>
                     {
@@ -182,7 +183,7 @@ namespace commercetools.Sdk.Serialization.Tests
                 {
                     Id = "TaxCategoryId"
                 },
-                Categories = new List<IReferenceable<Category>>()
+                Categories = new List<IReference<Category>>()
                 {
                     new Reference<Category>
                     {

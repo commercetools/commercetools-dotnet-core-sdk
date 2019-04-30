@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using commercetools.Sdk.Domain.Common;
 
 namespace commercetools.Sdk.Domain.States
 {
@@ -11,6 +12,6 @@ namespace commercetools.Sdk.Domain.States
         public LocalizedString Description { get; set; }
         public bool Initial { get; set; }
         public List<StateRole> Roles { get; set; }
-        public List<IReferenceable<State>> Transitions { get; set; }
+        public List<IReference<State>> Transitions { get; set; }
     }
 }

@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using commercetools.Sdk.Domain.Common;
 
 namespace commercetools.Sdk.Domain.ShippingMethods
 {
     [Endpoint("shipping-methods")]
     [ResourceType(ReferenceTypeId.ShippingMethod)]
-    public class ShippingMethod
+    public class ShippingMethod : Resource<ShippingMethod>
     {
-        public string Id { get; set; }
         public string Key { get; set; }
-        public int Version { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime LastModifiedAt { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public Reference<TaxCategory> TaxCategory { get; set; }

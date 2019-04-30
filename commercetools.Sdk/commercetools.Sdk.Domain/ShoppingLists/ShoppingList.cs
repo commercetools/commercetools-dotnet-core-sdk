@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain.ShoppingLists
+﻿using commercetools.Sdk.Domain.Common;
+
+namespace commercetools.Sdk.Domain.ShoppingLists
 {
     using commercetools.Sdk.Domain.Customers;
     using System;
@@ -6,13 +8,9 @@
 
     [Endpoint("shopping-lists")]
     [ResourceType(ReferenceTypeId.ShoppingList)]
-    public class ShoppingList
+    public class ShoppingList : Resource<ShoppingList>
     {
-        public string Id { get; set; }
         public string Key { get; set; }
-        public int Version { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime LastModifiedAt { get; set; }
         public LocalizedString Slug { get; set; }
         public LocalizedString Name { get; set; }
         public LocalizedString Description { get; set; }

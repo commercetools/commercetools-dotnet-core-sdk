@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.HttpApi;
 using commercetools.Sdk.HttpApi.Tokens;
@@ -6,6 +7,7 @@ using commercetools.Sdk.Linq;
 using commercetools.Sdk.Registration;
 using commercetools.Sdk.Serialization;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -21,9 +23,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="configuration">The configuration.</param>
         /// <param name="clientName">The name of the client.</param>
         /// <param name="tokenFlow">The token flow.</param>
-        public static void UseCommercetools(this IServiceCollection services, IConfiguration configuration, string clientName = DefaultClientNames.Api, TokenFlow tokenFlow = TokenFlow.ClientCredentials)
+        public static IHttpClientBuilder UseCommercetools(this IServiceCollection services, IConfiguration configuration, string clientName = DefaultClientNames.Api, TokenFlow tokenFlow = TokenFlow.ClientCredentials)
         {
-            services.UseCommercetools(configuration, new Dictionary<string, TokenFlow>() { { clientName, tokenFlow } });
+            return services.UseCommercetools(configuration, new Dictionary<string, TokenFlow>() { { clientName, tokenFlow } }).Single().Value;
         }
 
         /// <summary>
@@ -32,13 +34,28 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The service collection.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="clients">The clients with the client name as the key and the token flow as they value.</param>
-        public static void UseCommercetools(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
+        public static IDictionary<string, IHttpClientBuilder> UseCommercetools(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
             services.UseRegistration();
             services.UseLinq();
             services.UseDomain();
             services.UseSerialization();
-            services.UseHttpApi(configuration, clients);
+            return services.UseHttpApi(configuration, clients);
+        }
+
+        public static IDictionary<string, IHttpClientBuilder> ConfigureAllClients(this IDictionary<string, IHttpClientBuilder> httpClientBuilders,
+            Action<IHttpClientBuilder> configureAction)
+        {
+            foreach (var clientBuilder in httpClientBuilders.Values) { configureAction(clientBuilder); }
+
+            return httpClientBuilders;
+        }
+
+        public static IDictionary<string, IHttpClientBuilder> ConfigureClient(this IDictionary<string, IHttpClientBuilder> httpClientBuilders,
+            string clientName, Action<IHttpClientBuilder> configureAction)
+        {
+            configureAction(httpClientBuilders[clientName]);
+            return httpClientBuilders;
         }
     }
 }

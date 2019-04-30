@@ -1,16 +1,13 @@
 ﻿using commercetools.Sdk.Domain.Customers;
 using System;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.States;
 
 namespace commercetools.Sdk.Domain.Reviews
 {
     [Endpoint("reviews")]
-    public class Review
+    public class Review : Resource<Review>
     {
-        public string Id { get; set; }
-        public int Version { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime LastModifiedAt { get; set; }
         public string Key { get; set; }
         public string UniquenessValue { get; set; }
         public string Locale { get; set; }

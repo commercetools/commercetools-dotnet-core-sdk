@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain.ShoppingLists
+﻿using commercetools.Sdk.Domain.Common;
+
+namespace commercetools.Sdk.Domain.ShoppingLists
 {
 
     using System.Collections.Generic;
@@ -14,7 +16,7 @@
         [Required]
         public LocalizedString Name { get; set; }
         public LocalizedString Description { get; set; }
-        public IReferenceable<Customer> Customer { get; set; }
+        public IReference<Customer> Customer { get; set; }
         public string AnonymousId { get; set; }
         public List<LineItemDraft> LineItems { get; set; }
         public List<TextLineItem> TextLineItems { get; set; }

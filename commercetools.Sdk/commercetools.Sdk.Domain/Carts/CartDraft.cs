@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.Domain.CustomerGroups;
+﻿using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.ShippingMethods;
 
 namespace commercetools.Sdk.Domain.Carts
@@ -17,7 +18,7 @@ namespace commercetools.Sdk.Domain.Carts
 
         public string CustomerEmail { get; set; }
 
-        public IReferenceable<CustomerGroup> CustomerGroup { get; set; }
+        public IReference<CustomerGroup> CustomerGroup { get; set; }
 
         public string AnonymousId { get; set; }
 

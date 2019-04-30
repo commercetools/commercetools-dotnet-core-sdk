@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using commercetools.Sdk.Domain.Common;
 
 namespace commercetools.Sdk.Domain
 {
     [Endpoint("types")]
     [ResourceType(ReferenceTypeId.Type)]
-    public class Type
+    public class Type : Resource<Type>
     {
-        public string Id { get; set; }
-        public int Version { get; set; }
         public string Key { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime LastModifiedAt { get; set; }
         public LocalizedString Name { get; set; }
         public LocalizedString Description { get; set; }
         public List<ResourceTypeId> ResourceTypeIds { get; set; }

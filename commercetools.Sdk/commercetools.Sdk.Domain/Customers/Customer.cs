@@ -1,19 +1,16 @@
 ﻿using commercetools.Sdk.Domain.CustomerGroups;
 using System;
 using System.Collections.Generic;
+using commercetools.Sdk.Domain.Common;
 
 namespace commercetools.Sdk.Domain.Customers
 {
     [Endpoint("customers")]
     [ResourceType(ReferenceTypeId.Customer)]
-    public class Customer
+    public class Customer : Resource<Customer>
     {
-        public string Id { get; set; }
-        public int Version { get; set; }
         public string CustomerNumber { get; set; }
         public string Key { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime LastModifiedAt { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string FirstName { get; set; }

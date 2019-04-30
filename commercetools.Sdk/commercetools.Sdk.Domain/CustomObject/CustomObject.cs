@@ -6,7 +6,8 @@ namespace commercetools.Sdk.Domain.CustomObject
 {
     [Endpoint("custom-objects")]
     [ResourceType(ReferenceTypeId.KeyValueDocument)]
-    public class CustomObject
+    public class CustomObject : CustomObjectBase
     {
+        public object Value { get; set; }
     }
 }
