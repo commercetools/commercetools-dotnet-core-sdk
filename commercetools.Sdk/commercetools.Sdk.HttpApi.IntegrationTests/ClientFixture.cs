@@ -1,8 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using commercetools.Sdk.HttpApi.Tokens;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using commercetools.Sdk.DependencyInjection;
-using commercetools.Sdk.HttpApi.Tokens;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {

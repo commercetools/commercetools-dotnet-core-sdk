@@ -1,14 +1,13 @@
-﻿using commercetools.Sdk.Domain;
+﻿using System.Collections.Generic;
+using commercetools.Sdk.Domain;
 using commercetools.Sdk.HttpApi;
 using commercetools.Sdk.HttpApi.Tokens;
 using commercetools.Sdk.Linq;
 using commercetools.Sdk.Registration;
 using commercetools.Sdk.Serialization;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
 
-namespace commercetools.Sdk.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
     /// Contains extensions methods to use when setting up commercetools dependencies.

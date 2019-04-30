@@ -1,10 +1,9 @@
-﻿using commercetools.Sdk.DependencyInjection;
+﻿using System.Collections.Generic;
 using commercetools.Sdk.HttpApi.Tokens;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
 
 namespace commercetools.Sdk.MultipleClients
 {

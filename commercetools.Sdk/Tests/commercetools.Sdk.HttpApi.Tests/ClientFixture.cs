@@ -1,18 +1,13 @@
-﻿using commercetools.Sdk.Serialization;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using commercetools.Sdk.Registration;
-using commercetools.Sdk.Domain;
-using commercetools.Sdk.Linq;
 using commercetools.Sdk.HttpApi.Tokens;
-using commercetools.Sdk.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Moq.Protected;
 
@@ -69,7 +64,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         {
             string apiUrl = "";
             var clientSection = this.configuration.GetSection(name).Get<ClientConfiguration>();
-            if(clientSection != null)
+            if (clientSection != null)
             {
                 apiUrl = clientSection.ApiBaseAddress + clientSection.ProjectKey;
             }
