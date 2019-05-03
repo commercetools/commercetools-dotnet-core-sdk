@@ -53,3 +53,6 @@ matrix:
       script:
         - dotnet build -c Release
         - dotnet test Tests --no-build -c Release
+notifications:
+  slack:
+    secure: ucO5netbEp+coh9HRHPKr3Qi52Fz0w+KMHuqmNg1gL/4MWXvTB3GI8L5RBnEFuJ8eTc2wH/mRr4JoBpOJ5hqaaC3u7eeD8PqKeNiFU+ixC33wJcFWO70c74pdEFkd0PbVpdjKOhdcHF2ekMzTcQMt39dWEvvMR76qHxvEkalsq+sqjk+79l9ewCjz6MBFpzGgEtTJ1UVjZIyvMt6/dVdcF9eaGSHoEKTuDxCJgPTUGvEfL094oKBNBC6jnnG4Ro5nnnM+YvPEZVMcUwqwDo2SKTNfhCEHauLPOAbJANpGEjBGMxNURDfaktuDFTjHYm8zhR9GmeEeF8GJq0/e7UDhDjVXoX5p2HEUiFrlY7kSjw8wUtzBjIOZWCvZPcO8UQslrcqolrkZnM8vrP/T7qU/MuQw/pNUYKuX7oO7r2x1TkM3o5Csh46C/nvUkTMZwdbIIveGTd1sY00funTG6lOClVnUN8oQRdALaxznH8v1yf9ywtkeEgNldsX6tZ1pK13MB/qQTNbhvtA85aM2C4iaTUn0cmZ31SVQtF/2LSud+Btui0qQNsPmlHPGrVjhayDDNWzpMqpUI7QrGwjHDh04JjNCQB6lXlEjJ3kll6H7wzQ5nfaQSFPwNtk4+W1oTtR9sozWEQXcCpyxtOZQPwNU9hRvmeDZMVEwjyWhUhqyD4=
