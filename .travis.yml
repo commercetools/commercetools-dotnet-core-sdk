@@ -3,45 +3,45 @@ mono: none
 
 matrix:
   include:
-#    - os: linux
-#      dist: xenial
-#      dotnet: 2.1
-#      before_install:
-#        - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
-#        - cd commercetools.Sdk
-#      install:
-#        - dotnet restore
-#        - |
-#          dotnet user-secrets set "Client:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#          dotnet user-secrets set "Client:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#          dotnet user-secrets set "Client:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#          dotnet user-secrets set "Client:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#          dotnet user-secrets set "TokenClient:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#          dotnet user-secrets set "TokenClient:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#          dotnet user-secrets set "TokenClient:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#          dotnet user-secrets set "TokenClient:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#          dotnet user-secrets set "TokenClientWithSmallerScope:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#          dotnet user-secrets set "TokenClientWithSmallerScope:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#          dotnet user-secrets set "TokenClientWithSmallerScope:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#          dotnet user-secrets set "TokenClientWithSmallerScope:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#          dotnet user-secrets set "TokenClientWithAnonymousScope:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#          dotnet user-secrets set "TokenClientWithAnonymousScope:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#          dotnet user-secrets set "TokenClientWithAnonymousScope:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#          dotnet user-secrets set "TokenClientWithAnonymousScope:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-#      script:
-#        - dotnet build -c Release
-#        - dotnet test Tests --no-build -c Release
-#        - dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
-#    - os: osx
-#      dotnet: 2.1.603
-#      before_install:
-#        - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
-#        - cd commercetools.Sdk
-#      install:
-#        - dotnet restore
-#      script:
-#        - dotnet build -c Release
-#        - dotnet test Tests --no-build -c Release
+    - os: linux
+      dist: xenial
+      dotnet: 2.1
+      before_install:
+        - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
+        - cd commercetools.Sdk
+      install:
+        - dotnet restore
+        - |
+          dotnet user-secrets set "Client:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+          dotnet user-secrets set "Client:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+          dotnet user-secrets set "Client:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+          dotnet user-secrets set "Client:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+          dotnet user-secrets set "TokenClient:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+          dotnet user-secrets set "TokenClient:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+          dotnet user-secrets set "TokenClient:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+          dotnet user-secrets set "TokenClient:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+          dotnet user-secrets set "TokenClientWithSmallerScope:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+          dotnet user-secrets set "TokenClientWithSmallerScope:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+          dotnet user-secrets set "TokenClientWithSmallerScope:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+          dotnet user-secrets set "TokenClientWithSmallerScope:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+          dotnet user-secrets set "TokenClientWithAnonymousScope:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+          dotnet user-secrets set "TokenClientWithAnonymousScope:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+          dotnet user-secrets set "TokenClientWithAnonymousScope:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+          dotnet user-secrets set "TokenClientWithAnonymousScope:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      script:
+        - dotnet build -c Release
+        - dotnet test Tests --no-build -c Release
+        - dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
+    - os: osx
+      dotnet: 2.1.603
+      before_install:
+        - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
+        - cd commercetools.Sdk
+      install:
+        - dotnet restore
+      script:
+        - dotnet build -c Release
+        - dotnet test Tests --no-build -c Release
     - os: windows
       filter_secrets: false
       before_install:
