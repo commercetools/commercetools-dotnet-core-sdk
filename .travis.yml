@@ -6,6 +6,9 @@ matrix:
     - os: linux
       dist: xenial
       dotnet: 2.1
+      before_install:
+        - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
+        - cd commercetools.Sdk
       install:
         - dotnet restore
         - |
@@ -31,6 +34,9 @@ matrix:
         - dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
     - os: osx
       dotnet: 2.1.603
+      before_install:
+        - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
+        - cd commercetools.Sdk
       install:
         - dotnet restore
       script:
@@ -38,13 +44,12 @@ matrix:
         - dotnet test Tests --no-build -c Release
     - os: windows
       filter_secrets: false
+      before_install:
+        - powershell -c '.\patch_csproj.ps1 -Version 1.0.0.${TRAVIS_BUILD_NUMBER} -Patch -File **\*.csproj'
+        - cd commercetools.Sdk
       install:
         - choco install dotnetcore-sdk --version 2.1.603
         - dotnet restore
       script:
         - dotnet build -c Release
         - dotnet test Tests --no-build -c Release
-
-before_install:
-  - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
-  - cd commercetools.Sdk

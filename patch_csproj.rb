@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -w
+#!/usr/bin/env ruby -w
 
 require 'rexml/document'
 require 'optparse'
@@ -34,6 +34,7 @@ files.each do |filePattern|
         fileModified = false
         for versionNode in versionNodes do
             XPath.each(xmlDoc, "//" + versionNode) do|node|
+                p "#{projFile}[#{versionNode}]: #{params[versionNode.to_sym]}"
                 if params[:patch] && params[versionNode.to_sym]
                     node.text = params[versionNode.to_sym]
                     fileModified = true
@@ -42,7 +43,6 @@ files.each do |filePattern|
         end
 
         if params[:patch] && fileModified
-            p "Patching #{projFile}"
             xmlDoc.write(File.open(projFile, "w"))
         end
     end

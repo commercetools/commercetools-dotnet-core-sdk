@@ -41,11 +41,10 @@ foreach($patchFile in $files) {
         if (![string]::IsNullOrWhitespace($paramValue)) {
             $elements = $xml.SelectNodes("//$versionNode")
             foreach ($element in $elements) {
+                Write-Output "$patchFile[$versionNode]: $paramValue"
                 if ($Patch) {
                     $element.InnerText = $paramValue
                     $fileModified = $true;
-                } else {
-                    echo "$patchFile[$versionNode]: $paramValue"
                 }
             }
         }
