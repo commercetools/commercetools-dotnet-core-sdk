@@ -1,58 +1,57 @@
 language: csharp
 mono: none
-
 matrix:
   include:
-    - os: linux
-      dist: xenial
-      dotnet: 2.1
-      before_install:
-        - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
-        - cd commercetools.Sdk
-      install:
-        - dotnet restore
-        - |
-          dotnet user-secrets set "Client:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-          dotnet user-secrets set "Client:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-          dotnet user-secrets set "Client:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-          dotnet user-secrets set "Client:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-          dotnet user-secrets set "TokenClient:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-          dotnet user-secrets set "TokenClient:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-          dotnet user-secrets set "TokenClient:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-          dotnet user-secrets set "TokenClient:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-          dotnet user-secrets set "TokenClientWithSmallerScope:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-          dotnet user-secrets set "TokenClientWithSmallerScope:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-          dotnet user-secrets set "TokenClientWithSmallerScope:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-          dotnet user-secrets set "TokenClientWithSmallerScope:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-          dotnet user-secrets set "TokenClientWithAnonymousScope:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-          dotnet user-secrets set "TokenClientWithAnonymousScope:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-          dotnet user-secrets set "TokenClientWithAnonymousScope:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-          dotnet user-secrets set "TokenClientWithAnonymousScope:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      script:
-        - dotnet build -c Release
-        - dotnet test Tests --no-build -c Release
-        - dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
-    - os: osx
-      dotnet: 2.1.603
-      before_install:
-        - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
-        - cd commercetools.Sdk
-      install:
-        - dotnet restore
-      script:
-        - dotnet build -c Release
-        - dotnet test Tests --no-build -c Release
-    - os: windows
-      filter_secrets: false
-      before_install:
-        - powershell -ExecutionPolicy Bypass -c ".\patch_csproj.ps1 -Version 1.0.0.${TRAVIS_BUILD_NUMBER} -Patch -File **\*.csproj"
-        - cd commercetools.Sdk
-      install:
-        - choco install dotnetcore-sdk --version 2.1.603
-        - dotnet restore
-      script:
-        - dotnet build -c Release
-        - dotnet test Tests --no-build -c Release
+  - os: linux
+    dist: xenial
+    dotnet: 2.1
+    before_install:
+    - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
+    - cd commercetools.Sdk
+    install:
+    - dotnet restore
+    - |
+      dotnet user-secrets set "Client:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "Client:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "Client:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "Client:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClient:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClient:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClient:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClient:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithSmallerScope:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithSmallerScope:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithSmallerScope:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithSmallerScope:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithAnonymousScope:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithAnonymousScope:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithAnonymousScope:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithAnonymousScope:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+    script:
+    - dotnet build -c Release
+    - dotnet test Tests --no-build -c Release
+    - dotnet test commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
+  - os: osx
+    dotnet: 2.1.603
+    before_install:
+    - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
+    - cd commercetools.Sdk
+    install:
+    - dotnet restore
+    script:
+    - dotnet build -c Release
+    - dotnet test Tests --no-build -c Release
+  - os: windows
+    filter_secrets: false
+    before_install:
+    - powershell -ExecutionPolicy Bypass -c ".\patch_csproj.ps1 -Version 1.0.0.${TRAVIS_BUILD_NUMBER} -Patch -File **\*.csproj"
+    - cd commercetools.Sdk
+    install:
+    - choco install dotnetcore-sdk --version 2.1.603
+    - dotnet restore
+    script:
+    - dotnet build -c Release
+    - dotnet test Tests --no-build -c Release
 notifications:
   slack:
-    secure: ucO5netbEp+coh9HRHPKr3Qi52Fz0w+KMHuqmNg1gL/4MWXvTB3GI8L5RBnEFuJ8eTc2wH/mRr4JoBpOJ5hqaaC3u7eeD8PqKeNiFU+ixC33wJcFWO70c74pdEFkd0PbVpdjKOhdcHF2ekMzTcQMt39dWEvvMR76qHxvEkalsq+sqjk+79l9ewCjz6MBFpzGgEtTJ1UVjZIyvMt6/dVdcF9eaGSHoEKTuDxCJgPTUGvEfL094oKBNBC6jnnG4Ro5nnnM+YvPEZVMcUwqwDo2SKTNfhCEHauLPOAbJANpGEjBGMxNURDfaktuDFTjHYm8zhR9GmeEeF8GJq0/e7UDhDjVXoX5p2HEUiFrlY7kSjw8wUtzBjIOZWCvZPcO8UQslrcqolrkZnM8vrP/T7qU/MuQw/pNUYKuX7oO7r2x1TkM3o5Csh46C/nvUkTMZwdbIIveGTd1sY00funTG6lOClVnUN8oQRdALaxznH8v1yf9ywtkeEgNldsX6tZ1pK13MB/qQTNbhvtA85aM2C4iaTUn0cmZ31SVQtF/2LSud+Btui0qQNsPmlHPGrVjhayDDNWzpMqpUI7QrGwjHDh04JjNCQB6lXlEjJ3kll6H7wzQ5nfaQSFPwNtk4+W1oTtR9sozWEQXcCpyxtOZQPwNU9hRvmeDZMVEwjyWhUhqyD4=
+    secure: USADFPY5vH2r1cSj/Ors6ItpBihrUNFXWFoHhDNe3FL0XVvMFCspiAC/n4WgnXRNpGCmWwBcFTQ2g12EkAuWLSipNLDNEn51gyBu+ZCbO+PwDWJggmTG15bhmrnFpg8/Vw4e4DJC1KNdETZGZF3MYrLo+VLpGXlSi48SXxjLyoa9vqF41b2DNUEiymymXGUMNYBkd1yhYwtwxRetKwp7aEmjP56bT/LYCuRNO6zdctSZ3mp7Ac+lO/jlUx2qggckG3RVJ71lrquLBI0Q93PjWIPNLmDAl1e3//nOepw6gPnMaLcgFb7rQfuoG3qwRrLJW+bgZZO7PS9edlFwvixQ/Z2AHxKYpbl3XKMJGBXyW6z1McmW2NHgtIr3B2ewHDXi/jFSBvdLCGqlOf89YrGtSzLOM5TqBCM6+zPiXuyGAO9SCRvVoXfjFy9R0lch8dGPVlJByHl9oHb+erBgQPth9NGvM0M8pAq1zOO2KKhWGcml2/CueGA4HRLWDvafOIG7T3oZg1Hqyv9ZyUqDQAkCzZlssbTisDReIs9fKEwuveo3WOt6VCDpDOmAX1eq+nx6uJzIUbh/4q/5mgCMmL3DgAySbjXUOw7GVIeLSmG+T8YVq9SOLOP/ObKQ57A1g8Ebq1s/kiIDBioo1FgCgV6GyO4CeBsSoNbJJHBpQZNo/YU=
