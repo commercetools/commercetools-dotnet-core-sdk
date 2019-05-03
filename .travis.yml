@@ -7,6 +7,7 @@ matrix:
       dist: xenial
       dotnet: 2.1
       install:
+        - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
         - dotnet restore
         - |
           dotnet user-secrets set "Client:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
@@ -32,6 +33,7 @@ matrix:
     - os: osx
       dotnet: 2.1.603
       install:
+        - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
         - dotnet restore
       script:
         - dotnet build -c Release
@@ -39,6 +41,7 @@ matrix:
     - os: windows
       filter_secrets: false
       install:
+        - .\patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
         - choco install dotnetcore-sdk --version 2.1.603
         - dotnet restore
       script:
