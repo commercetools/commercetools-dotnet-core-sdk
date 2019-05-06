@@ -1,26 +1,31 @@
-﻿using System.Net.Http;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using commercetools.Sdk.Client;
-using commercetools.Sdk.HttpApi.Domain.Exceptions;
-using commercetools.Sdk.Serialization;
-
-namespace commercetools.Sdk.HttpApi
+﻿namespace commercetools.Sdk.HttpApi
 {
+    using System.Net.Http;
+    using System.Threading.Tasks;
+    using commercetools.Sdk.Client;
+    using DelegatingHandlers;
+    using Domain.Exceptions;
+    using Serialization;
+
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1724", Justification = "there is no better name")]
     public class Client : IClient
     {
         private readonly IHttpApiCommandFactory httpApiCommandFactory;
         private readonly IHttpClientFactory httpClientFactory;
         private readonly ISerializerService serializerService;
+        private readonly IUserAgentProvider userAgentProvider;
         private HttpClient httpClient;
 
-        public Client(IHttpClientFactory httpClientFactory, IHttpApiCommandFactory httpApiCommandFactory, ISerializerService serializerService)
+        public Client(
+            IHttpClientFactory httpClientFactory,
+            IHttpApiCommandFactory httpApiCommandFactory,
+            ISerializerService serializerService,
+            IUserAgentProvider userAgentProvider)
         {
             this.httpClientFactory = httpClientFactory;
             this.serializerService = serializerService;
             this.httpApiCommandFactory = httpApiCommandFactory;
+            this.userAgentProvider = userAgentProvider;
         }
 
         public string Name { get; set; } = DefaultClientNames.Api;
@@ -32,7 +37,7 @@ namespace commercetools.Sdk.HttpApi
                 if (this.httpClient == null)
                 {
                     this.httpClient = this.httpClientFactory.CreateClient(this.Name);
-                    this.httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(GetClientUserAgent());
+                    this.httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(this.userAgentProvider.UserAgent);
                 }
 
                 return this.httpClient;
@@ -41,29 +46,14 @@ namespace commercetools.Sdk.HttpApi
 
         public async Task<T> ExecuteAsync<T>(Command<T> command)
         {
-            IHttpApiCommand httpApiCommand = this.httpApiCommandFactory.Create(command);
+            var httpApiCommand = this.httpApiCommandFactory.Create(command);
             return await this.SendRequest<T>(httpApiCommand.HttpRequestMessage).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Get UserAgent which we will set in the http client
-        /// </summary>
-        /// <returns>user agent with assembly version and .Net version</returns>
-        private static string GetClientUserAgent()
-        {
-            string assemblyVersion = Assembly
-                .GetExecutingAssembly().GetName().Version.ToString();
-
-            // TODO: Make dotnet version string in better way, it now return (commercetools-dotnet-core-sdk/1.0.0.0 .NET Core 4.6.27317.03) and should return something like ( commercetools-dotnet-core-sdk/1.0.0.0 .NET-Core/4.6.27317.03)
-            string dotNetVersion = RuntimeInformation.FrameworkDescription;
-            string userAgent = $"commercetools-dotnet-core-sdk/{assemblyVersion}";
-            return userAgent;
         }
 
         private async Task<T> SendRequest<T>(HttpRequestMessage requestMessage)
         {
             var result = await this.HttpClient.SendAsync(requestMessage).ConfigureAwait(false);
-            string content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
             if (result.IsSuccessStatusCode)
             {
                 return this.serializerService.Deserialize<T>(content);

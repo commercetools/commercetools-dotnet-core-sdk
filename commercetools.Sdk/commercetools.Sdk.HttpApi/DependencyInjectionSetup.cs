@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http;
-using System.Xml;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.HttpApi.AdditionalParameters;
 using commercetools.Sdk.HttpApi.DelegatingHandlers;
@@ -58,7 +56,7 @@ namespace commercetools.Sdk.HttpApi
             var builders = new Dictionary<string, IHttpClientBuilder>();
             services.UseHttpApiDefaults();
             builders.Add(clientName, services.SetupClient(configuration, clientName, tokenFlow));
-            services.AddSingleton<IClient>(c => new Client(c.GetService<IHttpClientFactory>(), c.GetService<IHttpApiCommandFactory>(), c.GetService<ISerializerService>()) { Name = clientName });
+            services.AddSingleton<IClient>(c => new Client(c.GetService<IHttpClientFactory>(), c.GetService<IHttpApiCommandFactory>(), c.GetService<ISerializerService>(), c.GetService<IUserAgentProvider>()) { Name = clientName });
             return builders;
         }
 
@@ -82,7 +80,7 @@ namespace commercetools.Sdk.HttpApi
         {
             ServiceProvider serviceProvider = services.BuildServiceProvider();
             tokenFlowMapper.Clients.Add(clientName, serviceProvider.GetService<ITokenFlowRegister>());
-            IClient client = new Client(serviceProvider.GetService<IHttpClientFactory>(), serviceProvider.GetService<IHttpApiCommandFactory>(), serviceProvider.GetService<ISerializerService>()) { Name = clientName };
+            IClient client = new Client(serviceProvider.GetService<IHttpClientFactory>(), serviceProvider.GetService<IHttpApiCommandFactory>(), serviceProvider.GetService<ISerializerService>(), serviceProvider.GetService<IUserAgentProvider>()) { Name = clientName };
             services.AddSingleton(client);
         }
 
@@ -113,6 +111,7 @@ namespace commercetools.Sdk.HttpApi
             services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
             services.AddSingleton<IApiExceptionFactory, ApiExceptionFactory>();
+            services.AddSingleton<IUserAgentProvider, UserAgentProvider>();
         }
     }
 }
