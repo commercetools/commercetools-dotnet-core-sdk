@@ -28,19 +28,19 @@ namespace commercetools.Sdk.HttpApi.DelegatingHandlers
             var osPlatform = string.Empty;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                osPlatform = "(" + OSPlatform.OSX + "/" + Environment.OSVersion.Version + ")";
+                osPlatform = " (" + OSPlatform.OSX + "/" + Environment.OSVersion.Version + ")";
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                osPlatform = "(" + OSPlatform.Windows + "/" + Environment.OSVersion.Version + ")";
+                osPlatform = " (" + OSPlatform.Windows + "/" + Environment.OSVersion.Version + ")";
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                osPlatform = "(" + OSPlatform.Linux + "/" + Environment.OSVersion.Version + ")";
+                osPlatform = " (" + OSPlatform.Linux + "/" + Environment.OSVersion.Version + ")";
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Create("FreeBSD")))
             {
-                osPlatform = "(FreeBSD/" + Environment.OSVersion.Version + ")";
+                osPlatform = " (FreeBSD/" + Environment.OSVersion.Version + ")";
             }
 
             this.UserAgent = $"commercetools-dotnet-core-sdk/{assemblyVersion} {frameworkName}/{attr.Version}{osPlatform}";
