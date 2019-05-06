@@ -12,8 +12,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using commercetools.Sdk.HttpApi.DelegatingHandlers;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
@@ -47,36 +49,25 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Content = new StringContent(serialized)
             })
             .Verifiable();
-            IClient commerceToolsClient = new Client(mockHttpClientFactory.Object, this.clientFixture.GetService<IHttpApiCommandFactory>(), this.clientFixture.GetService<ISerializerService>());
+            IClient commerceToolsClient = new ApiClient(
+                mockHttpClientFactory.Object,
+                this.clientFixture.GetService<IHttpApiCommandFactory>(),
+                this.clientFixture.GetService<ISerializerService>(),
+                this.clientFixture.GetService<IUserAgentProvider>()
+                );
             string categoryId = "2bafc816-4223-4ff0-ac8a-0f08a8f29fd6";
             Category category = commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(new Guid(categoryId))).Result;
             Assert.Equal(categoryId, category.Id.ToString());
         }
 
-        [Fact(Skip = "Need to be refactored and written in better way")]
+        [Fact]
         public void TestUserAgent()
         {
-            var mockHttpClientFactory = new Mock<IHttpClientFactory>();
-            var mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            mockHttpClientFactory.Setup(x => x.CreateClient(DefaultClientNames.Api)).Returns(new HttpClient(mockHandler.Object));
-            mockHandler
-                .Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.IsAny<HttpRequestMessage>(),
-                    ItExpr.IsAny<CancellationToken>()
-                )
-                .ReturnsAsync(new HttpResponseMessage()
-                {
-                    StatusCode = HttpStatusCode.OK
-                })
-                .Verifiable();
-            Client commerceToolsClient = new Client(mockHttpClientFactory.Object, this.clientFixture.GetService<IHttpApiCommandFactory>(), this.clientFixture.GetService<ISerializerService>());
-            //var userAgent = commerceToolsClient.GetClientUserAgent();
-            var userAgent = "";
-            //TODO: Check UserAgent with Regular Expression
-            //Assert.Equal("commercetools-dotnet-core-sdk/1.0.0.0 .NET-core/4.6.45454", userAgent.DefaultRequestHeaders.UserAgent.First().ToString());
-            Assert.Equal("commercetools-dotnet-core-sdk/1.0.0.0 .NET-core/4.6.45454", userAgent);
+            var userAgent = this.clientFixture.GetService<IUserAgentProvider>().UserAgent;
+            Assert.Matches(@"commercetools-dotnet-core-sdk/[1-9]{1,4}(\.[0-9]{1,6}){3} dotnetCore/[1-9]{1,3}(\.[0-9]{1,6}){3}( \((WINDOWS|OSX|LINUX|FreeBSD)/[1-9]{1,3}(\.[0-9]{1,6}){3}\))?", userAgent);
+
+            var c = new HttpRequestMessage(HttpMethod.Get, "/");
+            c.Headers.UserAgent.ParseAdd(userAgent);
         }
     }
 }

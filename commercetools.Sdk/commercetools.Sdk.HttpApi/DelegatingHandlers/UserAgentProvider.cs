@@ -1,0 +1,51 @@
+namespace commercetools.Sdk.HttpApi.DelegatingHandlers
+{
+    using System;
+    using System.Reflection;
+    using System.Runtime.InteropServices;
+
+    public class UserAgentProvider : IUserAgentProvider
+    {
+        public UserAgentProvider()
+        {
+            var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+            var attr = (AssemblyFileVersionAttribute)typeof(object).GetTypeInfo().Assembly.GetCustomAttribute(typeof(AssemblyFileVersionAttribute));
+            var frameworkName = "dotnet";
+            if (RuntimeInformation.FrameworkDescription.StartsWith(".NET Core", StringComparison.OrdinalIgnoreCase))
+            {
+                frameworkName += "Core";
+            }
+            else if (RuntimeInformation.FrameworkDescription.StartsWith(".NET Native", StringComparison.OrdinalIgnoreCase))
+            {
+                frameworkName = "Native";
+            }
+            else if (RuntimeInformation.FrameworkDescription.StartsWith(".NET Framework", StringComparison.OrdinalIgnoreCase))
+            {
+                frameworkName = "Framework";
+            }
+
+            var osPlatform = string.Empty;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                osPlatform = " (" + OSPlatform.OSX + "/" + Environment.OSVersion.Version + ")";
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                osPlatform = " (" + OSPlatform.Windows + "/" + Environment.OSVersion.Version + ")";
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                osPlatform = " (" + OSPlatform.Linux + "/" + Environment.OSVersion.Version + ")";
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Create("FreeBSD")))
+            {
+                osPlatform = " (FreeBSD/" + Environment.OSVersion.Version + ")";
+            }
+
+            this.UserAgent = $"commercetools-dotnet-core-sdk/{assemblyVersion} {frameworkName}/{attr.Version}{osPlatform}";
+        }
+
+        public string UserAgent { get; set; }
+    }
+}
