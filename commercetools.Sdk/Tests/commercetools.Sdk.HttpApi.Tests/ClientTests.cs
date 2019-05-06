@@ -49,7 +49,7 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Content = new StringContent(serialized)
             })
             .Verifiable();
-            IClient commerceToolsClient = new Client(
+            IClient commerceToolsClient = new ApiClient(
                 mockHttpClientFactory.Object,
                 this.clientFixture.GetService<IHttpApiCommandFactory>(),
                 this.clientFixture.GetService<ISerializerService>(),

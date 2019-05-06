@@ -2,13 +2,12 @@
 {
     using System.Net.Http;
     using System.Threading.Tasks;
-    using commercetools.Sdk.Client;
+    using Client;
     using DelegatingHandlers;
     using Domain.Exceptions;
     using Serialization;
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1724", Justification = "there is no better name")]
-    public class Client : IClient
+    public class ApiClient : IClient
     {
         private readonly IHttpApiCommandFactory httpApiCommandFactory;
         private readonly IHttpClientFactory httpClientFactory;
@@ -16,7 +15,7 @@
         private readonly IUserAgentProvider userAgentProvider;
         private HttpClient httpClient;
 
-        public Client(
+        public ApiClient(
             IHttpClientFactory httpClientFactory,
             IHttpApiCommandFactory httpApiCommandFactory,
             ISerializerService serializerService,
