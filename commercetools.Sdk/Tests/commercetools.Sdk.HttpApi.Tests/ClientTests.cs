@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using commercetools.Sdk.HttpApi.DelegatingHandlers;
@@ -65,8 +66,8 @@ namespace commercetools.Sdk.HttpApi.Tests
             var userAgent = this.clientFixture.GetService<IUserAgentProvider>().UserAgent;
             Assert.Matches(@"commercetools-dotnet-core-sdk/[1-9]{1,4}(\.[0-9]{1,6}){3} dotnetCore/[1-9]{1,3}(\.[0-9]{1,6}){3}( \((WINDOWS|OSX|LINUX|FreeBSD)/[1-9]{1,3}(\.[0-9]{1,6}){3}\))?", userAgent);
 
-            var client = this.clientFixture.GetService<IHttpClientFactory>().CreateClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
+            var c = new HttpRequestMessage(HttpMethod.Get, "/");
+            c.Headers.UserAgent.ParseAdd(userAgent);
         }
     }
 }
