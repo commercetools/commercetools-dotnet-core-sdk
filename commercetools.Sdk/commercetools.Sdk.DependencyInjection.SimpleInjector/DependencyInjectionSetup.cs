@@ -16,7 +16,7 @@ namespace SimpleInjector
         /// <summary>
         /// Adds concrete implementations necessary for running of the application to the service collection for a single client.
         /// </summary>
-        /// <param name="services">The service collection.</param>
+        /// <param name="container">The service collection.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="clientName">The name of the client.</param>
         /// <param name="tokenFlow">The token flow.</param>
@@ -28,14 +28,14 @@ namespace SimpleInjector
         /// <summary>
         /// Adds concrete implementations necessary for running of the application to the service collection for multiple client.
         /// </summary>
-        /// <param name="services">The service collection.</param>
+        /// <param name="container">The service collection.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="clients">The clients with the client name as the key and the token flow as they value.</param>
         public static void UseCommercetools(this Container container, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
             IServiceCollection services = new ServiceCollection();
 
-            Microsoft.Extensions.DependencyInjection.DependencyInjectionSetup.UseCommercetools(services, configuration, clients);
+            services.UseCommercetools(configuration, clients);
 
             if (container.Options.DefaultScopedLifestyle == null)
             {
