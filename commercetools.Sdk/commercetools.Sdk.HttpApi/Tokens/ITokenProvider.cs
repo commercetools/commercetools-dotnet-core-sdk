@@ -7,5 +7,7 @@ namespace commercetools.Sdk.HttpApi.Tokens
         Token Token { get; }
 
         TokenFlow TokenFlow { get; }
+
+        IClientConfiguration ClientConfiguration { get; set; }
     }
 }

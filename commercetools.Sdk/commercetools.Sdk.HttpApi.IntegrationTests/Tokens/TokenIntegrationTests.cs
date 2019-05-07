@@ -26,9 +26,9 @@
             ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
             ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(
                 this.clientFixture.GetService<IHttpClientFactory>(),
-                clientConfiguration,
                 tokenStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
+            tokenProvider.ClientConfiguration = clientConfiguration;
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
         }
@@ -40,9 +40,9 @@
             ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
             ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(
                 this.clientFixture.GetService<IHttpClientFactory>(),
-                clientConfiguration,
                 tokenStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
+            tokenProvider.ClientConfiguration = clientConfiguration;
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
             Assert.Equal(clientConfiguration.Scope, token.Scope);
@@ -57,9 +57,9 @@
             userCredentialsStoreManager.Password = "st54e9m4";
             ITokenProvider tokenProvider = new PasswordTokenProvider(
                 this.clientFixture.GetService<IHttpClientFactory>(),
-                clientConfiguration,
                 userCredentialsStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
+            tokenProvider.ClientConfiguration = clientConfiguration;
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
         }
@@ -71,9 +71,9 @@
             IAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(
                 this.clientFixture.GetService<IHttpClientFactory>(),
-                clientConfiguration,
                 anonymousStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
+            tokenProvider.ClientConfiguration = clientConfiguration;
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
         }
@@ -86,9 +86,9 @@
             anonymousStoreManager.AnonymousId = TestingUtility.RandomString(10);
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(
                 this.clientFixture.GetService<IHttpClientFactory>(),
-                clientConfiguration,
                 anonymousStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
+            tokenProvider.ClientConfiguration = clientConfiguration;
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
         }
@@ -102,9 +102,9 @@
             userCredentialsStoreManager.Password = "st54e9m4";
             ITokenProvider tokenProvider = new PasswordTokenProvider(
                 this.clientFixture.GetService<IHttpClientFactory>(),
-                clientConfiguration,
                 userCredentialsStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
+            tokenProvider.ClientConfiguration = clientConfiguration;
             Token token = tokenProvider.Token;
             string initialAccessToken = token.AccessToken;
             // TODO Find a better way to test this (with mock objects perhaps)

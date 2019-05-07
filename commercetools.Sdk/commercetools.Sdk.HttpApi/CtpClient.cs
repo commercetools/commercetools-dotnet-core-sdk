@@ -7,7 +7,7 @@
     using Domain.Exceptions;
     using Serialization;
 
-    public class ApiClient : IClient
+    public class CtpClient : IClient
     {
         private readonly IHttpApiCommandFactory httpApiCommandFactory;
         private readonly IHttpClientFactory httpClientFactory;
@@ -15,7 +15,7 @@
         private readonly IUserAgentProvider userAgentProvider;
         private HttpClient httpClient;
 
-        public ApiClient(
+        public CtpClient(
             IHttpClientFactory httpClientFactory,
             IHttpApiCommandFactory httpApiCommandFactory,
             ISerializerService serializerService,

@@ -30,7 +30,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             string serialized = File.ReadAllText("Resources/Responses/CategoryCreatedMessage.json");
             var mockHttpClientFactory = new Mock<IHttpClientFactory>();
             var mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            mockHttpClientFactory.Setup(x => x.CreateClient(DefaultClientNames.Api)).Returns(new HttpClient(mockHandler.Object));
+            mockHttpClientFactory.Setup(x => x.CreateClient(DefaultClientNames.Api)).Returns(new HttpClient(mockHandler.Object){ BaseAddress = new Uri("https://api.sphere.io/test-project/") });
             mockHandler
             .Protected()
             .Setup<Task<HttpResponseMessage>>(
@@ -44,7 +44,7 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Content = new StringContent(serialized)
             })
             .Verifiable();
-            IClient commerceToolsClient = new ApiClient(
+            IClient commerceToolsClient = new CtpClient(
                 mockHttpClientFactory.Object,
                 this.clientFixture.GetService<IHttpApiCommandFactory>(),
                 this.clientFixture.GetService<ISerializerService>(),

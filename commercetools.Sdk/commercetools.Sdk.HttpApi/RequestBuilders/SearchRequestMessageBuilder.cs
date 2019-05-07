@@ -13,11 +13,10 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
         private readonly IParametersBuilderFactory<ISearchParametersBuilder> searchParametersBuilderFactory;
 
         public SearchRequestMessageBuilder(
-            IClientConfiguration clientConfiguration,
             IEndpointRetriever endpointRetriever,
             IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory,
             IParametersBuilderFactory<ISearchParametersBuilder> searchParametersBuilderFactory)
-            : base(clientConfiguration, endpointRetriever, parametersBuilderFactory)
+            : base(endpointRetriever, parametersBuilderFactory)
         {
             this.searchParametersBuilderFactory = searchParametersBuilderFactory;
         }
@@ -50,7 +49,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
         private Uri GetRequestUri<T>()
         {
             string requestUri = this.GetMessageBase<T>() + "/search";
-            return new Uri(requestUri);
+            return new Uri(requestUri, UriKind.Relative);
         }
     }
 }

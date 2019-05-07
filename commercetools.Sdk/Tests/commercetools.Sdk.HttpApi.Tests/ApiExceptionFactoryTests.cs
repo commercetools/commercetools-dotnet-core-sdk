@@ -32,7 +32,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void TestCreateApiExceptionTheory(int statusCode, string responseContent, bool isJsonResponse, Type expectedExceptionType)
         {
             //Arrange
-            var clientConfiguration = this.clientFixture.GetService<IClientConfiguration>();
+            var clientConfiguration = this.clientFixture.GetClientConfiguration("Client");
             var serializerService = this.clientFixture.GetService<ISerializerService>();
             var mockHttpRequestMessage = GetHttpRequestMessageMock(); //same request for all
             var exceptionFactory = new ApiExceptionFactory(clientConfiguration,serializerService);

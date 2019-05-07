@@ -29,11 +29,11 @@ namespace commercetools.Sdk.HttpApi.Tests
             var tokenStoreManager = this.clientFixture.GetService<ITokenStoreManager>();
 
             var clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(
-              mockHttpClientFactory.Object,
-                this.clientFixture.GetService<IClientConfiguration>(),
+                mockHttpClientFactory.Object,
                 tokenStoreManager,
                 this.clientFixture.GetService<ISerializerService>()
             );
+            clientCredentialsTokenProvider.ClientConfiguration = this.clientFixture.GetClientConfiguration("Client");
 
             //Assert
             Assert.Equal(TokenFlow.ClientCredentials, clientCredentialsTokenProvider.TokenFlow);
@@ -70,10 +70,10 @@ namespace commercetools.Sdk.HttpApi.Tests
             //Create ClientCredentialsTokenProvider
             var clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(
                 mockHttpClientFactory.Object,
-                this.clientFixture.GetService<IClientConfiguration>(),
                 tokenStoreManager,
                 this.clientFixture.GetService<ISerializerService>()
             );
+            clientCredentialsTokenProvider.ClientConfiguration = this.clientFixture.GetClientConfiguration("Client");
 
             //Assert
             Assert.True(tokenStoreManager.Token.Expired);
@@ -116,10 +116,10 @@ namespace commercetools.Sdk.HttpApi.Tests
             //Create ClientCredentialsTokenProvider
             var clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(
                 mockHttpClientFactory.Object,
-                this.clientFixture.GetService<IClientConfiguration>(),
                 tokenStoreManager,
                 this.clientFixture.GetService<ISerializerService>()
             );
+            clientCredentialsTokenProvider.ClientConfiguration = this.clientFixture.GetClientConfiguration("Client");
 
             //Assert
             Assert.True(tokenStoreManager.Token.Expired);

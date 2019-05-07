@@ -14,11 +14,10 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
         private readonly IParametersBuilderFactory<IUploadImageParametersBuilder> uploadParametersBuilderFactory;
 
         public UploadImageRequestMessageBuilder(
-            IClientConfiguration clientConfiguration,
             IEndpointRetriever endpointRetriever,
             IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory,
             IParametersBuilderFactory<IUploadImageParametersBuilder> uploadParametersBuilderFactory)
-            : base(clientConfiguration, endpointRetriever, parametersBuilderFactory)
+            : base(endpointRetriever, parametersBuilderFactory)
         {
             this.uploadParametersBuilderFactory = uploadParametersBuilderFactory;
         }
@@ -50,7 +49,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             }
 
             queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
-            return new Uri(requestUri);
+            return new Uri(requestUri, UriKind.Relative);
         }
     }
 }

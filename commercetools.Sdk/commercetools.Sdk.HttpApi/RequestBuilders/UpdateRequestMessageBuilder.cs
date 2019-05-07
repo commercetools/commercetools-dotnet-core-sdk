@@ -16,10 +16,9 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
 
         public UpdateRequestMessageBuilder(
             ISerializerService serializerService,
-            IClientConfiguration clientConfiguration,
             IEndpointRetriever endpointRetriever,
             IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory)
-            : base(clientConfiguration, endpointRetriever, parametersBuilderFactory)
+            : base(endpointRetriever, parametersBuilderFactory)
         {
             this.serializerService = serializerService;
         }
@@ -63,7 +62,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
 
             queryStringParameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));
             queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
-            return new Uri(requestUri);
+            return new Uri(requestUri, UriKind.Relative);
         }
     }
 }

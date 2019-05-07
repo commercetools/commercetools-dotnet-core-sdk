@@ -25,12 +25,11 @@ namespace commercetools.Sdk.HttpApi.Tests
             string apiBaseAddressWithProjectKey = this.clientFixture.GetAPIBaseAddressWithProjectKey("Client");
             GetByIdCommand<Category> command = new GetByIdCommand<Category>(new Guid("2bafc816-4223-4ff0-ac8a-0f08a8f29fd6"));
             GetRequestMessageBuilder requestMessageBuilder = new GetRequestMessageBuilder(
-                this.clientFixture.GetService<IClientConfiguration>(), 
-                this.clientFixture.GetService<IEndpointRetriever>(), 
+                this.clientFixture.GetService<IEndpointRetriever>(),
                 this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = requestMessageBuilder.GetRequestMessage(command);
             Assert.Equal(HttpMethod.Get, httpRequestMessage.Method);
-            Assert.Equal(apiBaseAddressWithProjectKey+"/categories/2bafc816-4223-4ff0-ac8a-0f08a8f29fd6", httpRequestMessage.RequestUri.ToString());
+            Assert.Equal("categories/2bafc816-4223-4ff0-ac8a-0f08a8f29fd6", httpRequestMessage.RequestUri.ToString());
         }
     }
 }

@@ -1,20 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.HttpApi.Tokens
 {
     internal class TokenProviderFactory : ITokenProviderFactory
     {
-        private readonly IEnumerable<ITokenProvider> tokenProviders;
+        private IDictionary<TokenFlow, Type> tokenProviderTypes;
 
-        public TokenProviderFactory(IEnumerable<ITokenProvider> tokenProviders)
+        public TokenProviderFactory(ITypeRetriever retriever)
         {
-            this.tokenProviders = tokenProviders;
+            this.tokenProviderTypes = new Dictionary<TokenFlow, Type>();
+            foreach (var provider in retriever.GetTypes<ITokenProvider>())
+            {
+                var flow = ((FlowAttribute)provider.GetCustomAttribute(typeof(FlowAttribute))).TokenFlow;
+                this.tokenProviderTypes.Add(flow, provider);
+            }
         }
 
-        public ITokenProvider GetTokenProviderByFlow(TokenFlow tokenFlow)
+        public Type GetTokenProviderByFlow(TokenFlow tokenFlow)
         {
-            return this.tokenProviders.FirstOrDefault(x => x.TokenFlow == tokenFlow);
+            return this.tokenProviderTypes.FirstOrDefault(pair => pair.Key == tokenFlow).Value;
         }
     }
 }
