@@ -20,7 +20,7 @@ namespace commercetools.Sdk.HttpApi.Tests
 {
     public class ClientFixture
     {
-        private readonly ServiceProvider serviceProvider;
+        private readonly IServiceProvider serviceProvider;
         private readonly IConfiguration configuration;
 
         /// <summary>

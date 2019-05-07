@@ -1,17 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using commercetools.Sdk.DependencyInjection;
+using commercetools.Sdk.Domain;
 using commercetools.Sdk.HttpApi.Tokens;
-using Polly;
-using Polly.Extensions.Http;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     public class ClientFixture
     {
-        private readonly ServiceProvider serviceProvider;
+        private readonly IServiceProvider serviceProvider;
         private readonly IConfiguration configuration;
 
         public ClientFixture()

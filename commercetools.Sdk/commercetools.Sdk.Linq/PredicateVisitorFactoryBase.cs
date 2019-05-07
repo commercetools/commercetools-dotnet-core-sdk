@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Linq
 {
@@ -12,6 +13,15 @@ namespace commercetools.Sdk.Linq
         protected PredicateVisitorFactoryBase(IEnumerable<IPredicateVisitorConverter> registeredConverters)
         {
             this.registeredConverters = registeredConverters;
+        }
+
+        public static IEnumerable<IPredicateVisitorConverter> GetPredicateVisitorConverters<T>()
+            where T : IPredicateVisitorConverter
+        {
+            var retriever = new TypeRetriever();
+            var types = retriever.GetTypes<T>();
+
+            return types.Select(type => (IPredicateVisitorConverter)Activator.CreateInstance(type));
         }
 
         public IPredicateVisitor Create(Expression expression)

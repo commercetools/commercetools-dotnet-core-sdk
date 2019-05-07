@@ -2,8 +2,8 @@
 {
     public class FilterPredicateExpressionVisitor : PredicateExpressionVisitorBase, IFilterPredicateExpressionVisitor
     {
-        public FilterPredicateExpressionVisitor(FilterPredicateVisitorFactory predicateVisitorFactory)
-            : base(predicateVisitorFactory)
+        public FilterPredicateExpressionVisitor()
+            : base(new FilterPredicateVisitorFactory())
         {
         }
     }

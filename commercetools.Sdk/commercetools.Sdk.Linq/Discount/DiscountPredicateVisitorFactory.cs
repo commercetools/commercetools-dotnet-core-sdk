@@ -6,8 +6,8 @@ namespace commercetools.Sdk.Linq.Discount
 {
     public class DiscountPredicateVisitorFactory : PredicateVisitorFactoryBase
     {
-        public DiscountPredicateVisitorFactory(IEnumerable<IDiscountPredicateVisitorConverter> registeredConverters)
-            : base(registeredConverters)
+        public DiscountPredicateVisitorFactory()
+            : base(GetPredicateVisitorConverters<IDiscountPredicateVisitorConverter>())
         {
         }
     }
