@@ -4,12 +4,12 @@ namespace commercetools.Sdk.Serialization
 {
     using Newtonsoft.Json;
 
-    internal class SerializerService : ISerializerService
+    public class SerializerService : ISerializerService
     {
         private readonly JsonSerializerSettingsFactory jsonSerializerSettingsFactory;
         private readonly IModelValidator modelValidator;
 
-        public SerializerService(JsonSerializerSettingsFactory jsonSerializerSettingsFactory, IModelValidator modelValidator = null)
+        public SerializerService(JsonSerializerSettingsFactory jsonSerializerSettingsFactory, IModelValidator modelValidator)
         {
             this.jsonSerializerSettingsFactory = jsonSerializerSettingsFactory;
             this.modelValidator = modelValidator;
@@ -24,7 +24,7 @@ namespace commercetools.Sdk.Serialization
         public string Serialize<T>(T input)
         {
             var settings = this.jsonSerializerSettingsFactory.CreateSerializationSettings(typeof(T));
-            this.modelValidator?.Validate(input);
+            this.modelValidator.Validate(input);
 
             return JsonConvert.SerializeObject(input, settings);
         }

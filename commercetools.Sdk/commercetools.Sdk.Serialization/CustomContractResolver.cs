@@ -6,7 +6,7 @@
     using System.Linq;
     using Type = System.Type;
 
-    internal abstract class CustomContractResolver : CamelCasePropertyNamesContractResolver
+    public abstract class CustomContractResolver : CamelCasePropertyNamesContractResolver
     {
         private readonly IEnumerable<JsonConverterBase> registeredConverters;
 

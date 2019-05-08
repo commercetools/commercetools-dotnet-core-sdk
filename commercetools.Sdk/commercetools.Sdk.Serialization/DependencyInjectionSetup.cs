@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Serialization
+﻿using commercetools.Sdk.Domain.Validation;
+
+namespace commercetools.Sdk.Serialization
 {
     using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +18,7 @@
             services.AddSingleton<DeserializationContractResolver>();
             services.AddSingleton<SerializationContractResolver>();
             services.AddSingleton<JsonSerializerSettingsFactory>();
+            services.AddSingleton<IModelValidator, NullModelValidator>();
             services.AddSingleton<ISerializerService, SerializerService>();
         }
     }
