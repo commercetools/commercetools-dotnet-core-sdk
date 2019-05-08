@@ -10,10 +10,9 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
         private readonly ISerializerService serializerService;
 
         public CreateTokenForPasswordResetRequestMessageBuilder(
-            IClientConfiguration clientConfiguration,
             IEndpointRetriever endpointRetriever,
             ISerializerService serializerService)
-            : base(clientConfiguration, endpointRetriever, null)
+            : base(endpointRetriever, null)
         {
             this.serializerService = serializerService;
         }
@@ -38,7 +37,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
         private Uri GetRequestUri<T>()
         {
             string requestUri = this.GetMessageBase<T>() + "/password-token";
-            return new Uri(requestUri);
+            return new Uri(requestUri, UriKind.Relative);
         }
     }
 }

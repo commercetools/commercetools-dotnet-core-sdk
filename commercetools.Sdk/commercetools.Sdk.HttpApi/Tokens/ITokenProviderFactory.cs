@@ -1,7 +1,9 @@
-﻿namespace commercetools.Sdk.HttpApi.Tokens
+﻿using System;
+
+namespace commercetools.Sdk.HttpApi.Tokens
 {
     public interface ITokenProviderFactory
     {
-        ITokenProvider GetTokenProviderByFlow(TokenFlow tokenFlow);
+        Type GetTokenProviderByFlow(TokenFlow tokenFlow);
     }
 }

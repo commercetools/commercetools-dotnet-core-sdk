@@ -12,10 +12,9 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
         private readonly ISerializerService serializerService;
 
         public GraphQLRequestMessageBuilder(
-            IClientConfiguration clientConfiguration,
             IEndpointRetriever endpointRetriever,
             ISerializerService serializerService)
-            : base(clientConfiguration, endpointRetriever, null)
+            : base(endpointRetriever, null)
         {
             this.serializerService = serializerService;
         }
@@ -40,12 +39,12 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
 
         private Uri GetRequestUri<T>(GraphQLCommand<T> command)
         {
-            string requestUri = this.GetMessageBaseWithoutEndpoint() + "/graphql";
+            string requestUri = "graphql";
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
             queryStringParameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));
             queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
 
-            return new Uri(requestUri);
+            return new Uri(requestUri, UriKind.Relative);
         }
     }
 }

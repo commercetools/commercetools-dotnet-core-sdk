@@ -16,10 +16,9 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
 
         public DeleteByContainerAndKeyMessageBuilder(
             ISerializerService serializerService,
-            IClientConfiguration clientConfiguration,
             IEndpointRetriever endpointRetriever,
             IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory)
-            : base(clientConfiguration, endpointRetriever, parametersBuilderFactory)
+            : base(endpointRetriever, parametersBuilderFactory)
         {
             this.serializerService = serializerService;
         }
@@ -49,7 +48,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             }
 
             queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
-            return new Uri(requestUri);
+            return new Uri(requestUri, UriKind.Relative);
         }
     }
 }

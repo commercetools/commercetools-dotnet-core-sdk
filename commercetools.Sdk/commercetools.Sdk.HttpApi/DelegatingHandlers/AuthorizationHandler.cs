@@ -8,19 +8,16 @@ namespace commercetools.Sdk.HttpApi.DelegatingHandlers
 {
     public class AuthorizationHandler : DelegatingHandler
     {
-        private readonly ITokenProviderFactory tokenProviderFactory;
-        private readonly ITokenFlowRegister tokenFlowRegister;
+        private readonly ITokenProvider tokenProvider;
 
-        public AuthorizationHandler(ITokenProviderFactory tokenProviderFactory, ITokenFlowRegister tokenFlowRegister)
+        public AuthorizationHandler(ITokenProvider tokenProvider)
         {
-            this.tokenProviderFactory = tokenProviderFactory;
-            this.tokenFlowRegister = tokenFlowRegister;
+            this.tokenProvider = tokenProvider;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            ITokenProvider tokenProvider = this.tokenProviderFactory.GetTokenProviderByFlow(this.tokenFlowRegister.TokenFlow);
-            Token token = tokenProvider.Token;
+            Token token = this.tokenProvider.Token;
             request.Headers.Add("Authorization", $"Bearer {token.AccessToken}");
             return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
         }

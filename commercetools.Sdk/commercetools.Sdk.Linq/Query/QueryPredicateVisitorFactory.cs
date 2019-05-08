@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Linq.Query
 {
     public class QueryPredicateVisitorFactory : PredicateVisitorFactoryBase
     {
-        public QueryPredicateVisitorFactory(IEnumerable<IQueryPredicateVisitorConverter> registeredConverters)
-            : base(registeredConverters)
+        public QueryPredicateVisitorFactory()
+            : base(GetPredicateVisitorConverters<IQueryPredicateVisitorConverter>())
         {
         }
     }

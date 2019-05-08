@@ -15,7 +15,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using commercetools.Sdk.DependencyInjection;
+using commercetools.Sdk.Domain.Project;
 using commercetools.Sdk.HttpApi.DelegatingHandlers;
+using commercetools.Sdk.HttpApi.Tokens;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
@@ -35,7 +40,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             string serialized = File.ReadAllText("Resources/Responses/GetCategoryById.json");
             var mockHttpClientFactory = new Mock<IHttpClientFactory>();
             var mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            mockHttpClientFactory.Setup(x => x.CreateClient(DefaultClientNames.Api)).Returns(new HttpClient(mockHandler.Object));
+            mockHttpClientFactory.Setup(x => x.CreateClient(DefaultClientNames.Api)).Returns(new HttpClient(mockHandler.Object){ BaseAddress = new Uri("https://api.sphere.io/test-project/") });
             mockHandler
             .Protected()
             .Setup<Task<HttpResponseMessage>>(
@@ -49,7 +54,7 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Content = new StringContent(serialized)
             })
             .Verifiable();
-            IClient commerceToolsClient = new ApiClient(
+            IClient commerceToolsClient = new CtpClient(
                 mockHttpClientFactory.Object,
                 this.clientFixture.GetService<IHttpApiCommandFactory>(),
                 this.clientFixture.GetService<ISerializerService>(),

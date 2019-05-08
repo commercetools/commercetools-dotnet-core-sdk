@@ -8,8 +8,11 @@ namespace commercetools.Sdk.HttpApi.Tokens
     {
         private readonly IUserCredentialsStoreManager userCredentialsManager;
 
-        public PasswordTokenProvider(IHttpClientFactory httpClientFactory, IClientConfiguration clientConfiguration, IUserCredentialsStoreManager userCredentialsStoreManager, ISerializerService serializerService)
-            : base(httpClientFactory, clientConfiguration, userCredentialsStoreManager, serializerService)
+        public PasswordTokenProvider(
+            IHttpClientFactory httpClientFactory,
+            IUserCredentialsStoreManager userCredentialsStoreManager,
+            ISerializerService serializerService)
+            : base(httpClientFactory, userCredentialsStoreManager, serializerService)
         {
             this.userCredentialsManager = userCredentialsStoreManager;
         }

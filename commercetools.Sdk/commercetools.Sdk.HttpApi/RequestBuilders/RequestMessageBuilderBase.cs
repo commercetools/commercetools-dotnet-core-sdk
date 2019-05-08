@@ -8,28 +8,20 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
 {
     public abstract class RequestMessageBuilderBase
     {
-        private readonly IClientConfiguration clientConfiguration;
         private readonly IEndpointRetriever endpointRetriever;
         private readonly IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory;
 
         protected RequestMessageBuilderBase(
-            IClientConfiguration clientConfiguration,
             IEndpointRetriever endpointRetriever,
             IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory)
         {
-            this.clientConfiguration = clientConfiguration;
             this.endpointRetriever = endpointRetriever;
             this.parametersBuilderFactory = parametersBuilderFactory;
         }
 
         protected string GetMessageBase<T>()
         {
-            return this.clientConfiguration.ApiBaseAddress + $"{this.clientConfiguration.ProjectKey}/{this.endpointRetriever.GetEndpoint<T>()}";
-        }
-
-        protected string GetMessageBaseWithoutEndpoint()
-        {
-            return this.clientConfiguration.ApiBaseAddress + $"{this.clientConfiguration.ProjectKey}";
+            return $"{this.endpointRetriever.GetEndpoint<T>()}";
         }
 
         protected List<KeyValuePair<string, string>> GetAdditionalParameters(IAdditionalParameters additionalParameters)

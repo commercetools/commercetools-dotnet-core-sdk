@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using commercetools.Sdk.Client;
@@ -32,79 +34,71 @@ namespace commercetools.Sdk.HttpApi
         private static IDictionary<string, IHttpClientBuilder> UseMultipleClients(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
             services.UseHttpApiDefaults();
-            TokenFlowMapper tokenFlowMapper = new TokenFlowMapper();
             var builders = new Dictionary<string, IHttpClientBuilder>();
             foreach (KeyValuePair<string, TokenFlow> client in clients)
             {
                 string clientName = client.Key;
                 TokenFlow tokenFlow = client.Value;
-                var clientConfigurationToRemove = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(IClientConfiguration));
-                services.Remove(clientConfigurationToRemove);
-                var tokenFlowRegisterToRemove = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(ITokenFlowRegister));
-                services.Remove(tokenFlowRegisterToRemove);
-                builders.Add(clientName, services.SetupClient(configuration, clientName, tokenFlow));
-                services.AddClient(clientName, tokenFlowMapper);
-            }
 
-            services.AddSingleton<ITokenFlowMapper>(tokenFlowMapper);
+                IClientConfiguration clientConfiguration = configuration.GetSection(clientName).Get<ClientConfiguration>();
+                Validator.ValidateObject(clientConfiguration, new ValidationContext(clientConfiguration), true);
+
+                builders.Add(clientName, services.SetupClient(clientName, clientConfiguration, tokenFlow));
+                services.AddSingleton<IClient>(c => new CtpClient(c.GetService<IHttpClientFactory>(), c.GetService<IHttpApiCommandFactory>(), c.GetService<ISerializerService>(), c.GetService<IUserAgentProvider>()) { Name = clientName });
+            }
 
             return builders;
         }
 
         private static IDictionary<string, IHttpClientBuilder> UseSingleClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
         {
-            var builders = new Dictionary<string, IHttpClientBuilder>();
-            services.UseHttpApiDefaults();
-            builders.Add(clientName, services.SetupClient(configuration, clientName, tokenFlow));
-            services.AddSingleton<IClient>(c => new ApiClient(c.GetService<IHttpClientFactory>(), c.GetService<IHttpApiCommandFactory>(), c.GetService<ISerializerService>(), c.GetService<IUserAgentProvider>()) { Name = clientName });
-            return builders;
-        }
-
-        private static IHttpClientBuilder SetupClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
-        {
             IClientConfiguration clientConfiguration = configuration.GetSection(clientName).Get<ClientConfiguration>();
             Validator.ValidateObject(clientConfiguration, new ValidationContext(clientConfiguration), true);
 
-            services.AddSingleton(clientConfiguration);
-            ITokenFlowRegister tokenFlowRegister = new InMemoryTokenFlowRegister();
-            tokenFlowRegister.TokenFlow = tokenFlow;
-            services.AddSingleton(tokenFlowRegister);
-            IHttpClientBuilder httpClientBuilder = services.AddHttpClient(clientName)
-                .AddHttpMessageHandler<AuthorizationHandler>().AddHttpMessageHandler<CorrelationIdHandler>()
-                .AddHttpMessageHandler<LoggerHandler>()
-                .AddHttpMessageHandler<ErrorHandler>();
-            return httpClientBuilder;
+            services.UseHttpApiDefaults();
+            services.AddSingleton<IClient>(c => new CtpClient(c.GetService<IHttpClientFactory>(), c.GetService<IHttpApiCommandFactory>(), c.GetService<ISerializerService>(), c.GetService<IUserAgentProvider>()) { Name = clientName });
+
+            var builders = new Dictionary<string, IHttpClientBuilder>();
+            builders.Add(clientName, services.SetupClient(clientName, clientConfiguration, tokenFlow));
+
+            return builders;
         }
 
-        private static void AddClient(this IServiceCollection services, string clientName, TokenFlowMapper tokenFlowMapper)
+        private static IHttpClientBuilder SetupClient(this IServiceCollection services, string clientName, IClientConfiguration clientConfiguration, TokenFlow tokenFlow)
         {
-            ServiceProvider serviceProvider = services.BuildServiceProvider();
-            tokenFlowMapper.Clients.Add(clientName, serviceProvider.GetService<ITokenFlowRegister>());
-            IClient client = new ApiClient(serviceProvider.GetService<IHttpClientFactory>(), serviceProvider.GetService<IHttpApiCommandFactory>(), serviceProvider.GetService<ISerializerService>(), serviceProvider.GetService<IUserAgentProvider>()) { Name = clientName };
-            services.AddSingleton(client);
+            var httpClientBuilder = services.AddHttpClient(clientName)
+                .ConfigureHttpClient(client =>
+                    client.BaseAddress = new Uri(clientConfiguration.ApiBaseAddress + clientConfiguration.ProjectKey + "/"))
+                .AddHttpMessageHandler(c =>
+                {
+                    var providers = c.GetServices<ITokenProvider>();
+                    var provider = providers.FirstOrDefault(tokenProvider => tokenProvider.TokenFlow == tokenFlow);
+                    provider.ClientConfiguration = clientConfiguration;
+                    return new AuthorizationHandler(provider);
+                })
+                .AddHttpMessageHandler(c =>
+                    new CorrelationIdHandler(new DefaultCorrelationIdProvider(clientConfiguration)))
+                .AddHttpMessageHandler(c =>
+                    new ErrorHandler(new ApiExceptionFactory(clientConfiguration, c.GetService<ISerializerService>())))
+                .AddHttpMessageHandler<LoggerHandler>();
+
+            return httpClientBuilder;
         }
 
         private static void UseHttpApiDefaults(this IServiceCollection services)
         {
-            services.AddSingleton<ITokenStoreManager, InMemoryTokenStoreManager>();
-            services.AddSingleton<IUserCredentialsStoreManager, InMemoryUserCredentialsStoreManager>();
-            services.AddSingleton<IAnonymousCredentialsStoreManager, InMemoryAnonymousCredentialsStoreManager>();
-            services.AddSingleton<ITokenProvider, ClientCredentialsTokenProvider>();
-            services.AddSingleton<ITokenProvider, PasswordTokenProvider>();
-            services.AddSingleton<ITokenProvider, AnonymousSessionTokenProvider>();
-            services.AddSingleton<ITokenProviderFactory, TokenProviderFactory>();
-            services.AddSingleton<ILoggerFactory, LoggerFactory>();
-            services.AddSingleton<ICorrelationIdProvider, DefaultCorrelationIdProvider>();
-            services.AddSingleton<CorrelationIdHandler>();
-            services.AddSingleton<LoggerHandler>();
-            services.AddSingleton<ErrorHandler>();
-            services.AddSingleton<AuthorizationHandler>();
             services.AddHttpClient(DefaultClientNames.Authorization);
-            services.AddSingleton<IEndpointRetriever, EndpointRetriever>();
+            services.AddTransient<ITokenStoreManager, InMemoryTokenStoreManager>();
+            services.AddTransient<IUserCredentialsStoreManager, InMemoryUserCredentialsStoreManager>();
+            services.AddTransient<IAnonymousCredentialsStoreManager, InMemoryAnonymousCredentialsStoreManager>();
+            services.AddTransient<LoggerHandler>();
+            services.RegisterAllTypes<ITokenProvider>(ServiceLifetime.Transient);
             services.RegisterAllTypes<IRequestMessageBuilder>(ServiceLifetime.Singleton);
             services.RegisterAllTypes<IAdditionalParametersBuilder>(ServiceLifetime.Singleton);
             services.RegisterAllTypes<ISearchParametersBuilder>(ServiceLifetime.Singleton);
             services.RegisterAllTypes<IUploadImageParametersBuilder>(ServiceLifetime.Singleton);
+            services.AddSingleton<ILoggerFactory, LoggerFactory>();
+            services.AddSingleton<IEndpointRetriever, EndpointRetriever>();
             services.AddSingleton<IParametersBuilderFactory<IAdditionalParametersBuilder>, ParametersBuilderFactory<IAdditionalParametersBuilder>>();
             services.AddSingleton<IParametersBuilderFactory<ISearchParametersBuilder>, ParametersBuilderFactory<ISearchParametersBuilder>>();
             services.AddSingleton<IParametersBuilderFactory<IUploadImageParametersBuilder>, ParametersBuilderFactory<IUploadImageParametersBuilder>>();
