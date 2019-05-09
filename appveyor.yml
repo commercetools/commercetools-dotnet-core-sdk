@@ -39,13 +39,13 @@ after_build:
 
 test_script:
   - ps: |
-    dotnet test Tests/commercetools.Sdk.Domain.Tests --no-build -c Release
-    dotnet test Tests/commercetools.Sdk.HttpApi.Tests --no-build -c Release
-    dotnet test Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
-    dotnet test Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
+      dotnet test Tests/commercetools.Sdk.Domain.Tests --no-build -c Release
+      dotnet test Tests/commercetools.Sdk.HttpApi.Tests --no-build -c Release
+      dotnet test Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
+      dotnet test Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
   - ps: |
-    dotnet test IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
-    dotnet test IntegrationTests/commercetools.Sdk.SimpleInjector.Tests --no-build -c Release
+      dotnet test IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
+      dotnet test IntegrationTests/commercetools.Sdk.SimpleInjector.Tests --no-build -c Release
 
 artifacts:
 - path: commercetools.Sdk/**/*.nupkg
