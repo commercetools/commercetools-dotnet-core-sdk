@@ -36,6 +36,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 case ContainerType.SimpleInjector:
                     var container = new Container();
                     container.UseCommercetools(Configuration, "Client", TokenFlow.ClientCredentials);
+                    container.Verify();
                     this.ServiceProvider = container;
                     break;
             }

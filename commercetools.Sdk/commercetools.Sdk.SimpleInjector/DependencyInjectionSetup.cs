@@ -200,7 +200,7 @@ namespace SimpleInjector
             services.Register<ITokenStoreManager, InMemoryTokenStoreManager>(Lifestyle.Transient);
             services.Register<IUserCredentialsStoreManager, InMemoryUserCredentialsStoreManager>(Lifestyle.Transient);
             services.Register<IAnonymousCredentialsStoreManager, InMemoryAnonymousCredentialsStoreManager>(Lifestyle.Transient);
-            services.Register<LoggerHandler>(Lifestyle.Transient);
+            services.Register<LoggerHandler>(Lifestyle.Singleton);
             services.RegisterCollection(typeof(ITokenProvider), typeof(ITokenProvider).Assembly);
             services.RegisterCollection(typeof(IRequestMessageBuilder), typeof(IRequestMessageBuilder).Assembly);
             services.RegisterCollection(typeof(IAdditionalParametersBuilder), typeof(IAdditionalParametersBuilder).Assembly);
@@ -213,7 +213,6 @@ namespace SimpleInjector
             services.Register<IParametersBuilderFactory<IUploadImageParametersBuilder>, ParametersBuilderFactory<IUploadImageParametersBuilder>>(Lifestyle.Singleton);
             services.Register<IHttpApiCommandFactory, HttpApiCommandFactory>(Lifestyle.Singleton);
             services.Register<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>(Lifestyle.Singleton);
-            services.Register<IApiExceptionFactory, ApiExceptionFactory>(Lifestyle.Singleton);
             services.Register<IUserAgentProvider, UserAgentProvider>(Lifestyle.Singleton);
         }
     }
