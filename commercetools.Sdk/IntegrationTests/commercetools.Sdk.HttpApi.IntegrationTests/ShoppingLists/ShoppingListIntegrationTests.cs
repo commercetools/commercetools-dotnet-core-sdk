@@ -6,13 +6,13 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists
 {
     [Collection("Integration Tests")]
-    public class ShoppingListIntegrationTests : IClassFixture<ShoppingListFixture>
+    public class ShoppingListIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly ShoppingListFixture shoppingListFixture;
 
-        public ShoppingListIntegrationTests(ShoppingListFixture shoppingListFixture)
+        public ShoppingListIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.shoppingListFixture = shoppingListFixture;
+            this.shoppingListFixture = new ShoppingListFixture(serviceProviderFixture);
         }
 
         [Fact]

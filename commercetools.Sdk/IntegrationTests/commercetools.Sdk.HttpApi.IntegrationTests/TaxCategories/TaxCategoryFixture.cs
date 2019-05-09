@@ -11,7 +11,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories
     {
         public List<TaxCategory> TaxCategoriesToDelete { get; private set; }
 
-        public TaxCategoryFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public TaxCategoryFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.TaxCategoriesToDelete = new List<TaxCategory>();
         }

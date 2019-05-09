@@ -14,10 +14,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
         private readonly CartFixture cartFixture;
         public List<Order> OrdersToDelete { get; }
 
-        public OrdersFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public OrdersFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.OrdersToDelete = new List<Order>();
-            this.cartFixture = new CartFixture(diagnosticMessageSink);
+            this.cartFixture = new CartFixture(serviceProviderFixture);
         }
 
         public void Dispose()

@@ -13,10 +13,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
     {
         private TypeFixture typeFixture;
 
-        public CategoryFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public CategoryFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.CategoriesToDelete = new List<Category>();
-            this.typeFixture = new TypeFixture(diagnosticMessageSink);
+            this.typeFixture = new TypeFixture(serviceProviderFixture);
         }
 
         public List<Category> CategoriesToDelete { get; private set; }

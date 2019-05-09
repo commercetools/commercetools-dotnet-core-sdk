@@ -6,13 +6,13 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
 {
     [Collection("Integration Tests")]
-    public class ShippingMethodIntegrationTests : IClassFixture<ShippingMethodsFixture>
+    public class ShippingMethodIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly ShippingMethodsFixture shippingMethodsFixture;
 
-        public ShippingMethodIntegrationTests(ShippingMethodsFixture shippingMethodsFixture)
+        public ShippingMethodIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.shippingMethodsFixture = shippingMethodsFixture;
+            this.shippingMethodsFixture = new ShippingMethodsFixture(serviceProviderFixture);
         }
 
         [Fact]

@@ -12,13 +12,13 @@ using Xunit;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
-    public class ProductProjectionSearchIntegrationTests : IClassFixture<ProductFixture>
+    public class ProductProjectionSearchIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly ProductFixture productFixture;
 
-        public ProductProjectionSearchIntegrationTests(ProductFixture productFixture)
+        public ProductProjectionSearchIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.productFixture = productFixture;
+            this.productFixture = new ProductFixture(serviceProviderFixture);
         }
 
         [Fact(Skip = "Depends on the indexed products which might not be there.")]

@@ -16,13 +16,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     // All integration tests need to have the same collection name.
     [Collection("Integration Tests")]
-    public class CategoryIntegrationTests : IClassFixture<CategoryFixture>
+    public class CategoryIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly CategoryFixture categoryFixture;
 
-        public CategoryIntegrationTests(CategoryFixture categoryFixture)
+        public CategoryIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.categoryFixture = categoryFixture;
+            this.categoryFixture = new CategoryFixture(serviceProviderFixture);
         }
 
         [Fact]

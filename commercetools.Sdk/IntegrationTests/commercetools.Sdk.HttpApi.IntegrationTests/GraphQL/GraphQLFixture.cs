@@ -13,9 +13,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
     {
         private CategoryFixture categoryFixture;
 
-        public GraphQLFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public GraphQLFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
-            this.categoryFixture = new CategoryFixture(diagnosticMessageSink);
+            this.categoryFixture = new CategoryFixture(serviceProviderFixture);
         }
 
         public Category CreateCategory()

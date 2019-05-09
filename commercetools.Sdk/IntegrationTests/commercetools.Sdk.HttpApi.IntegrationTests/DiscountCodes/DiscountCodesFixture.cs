@@ -16,10 +16,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes
 
         private readonly CartDiscountsFixture cartDiscountsFixture;
 
-        public DiscountCodeFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public DiscountCodeFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.DiscountCodesToDelete = new List<DiscountCode>();
-            this.cartDiscountsFixture = new CartDiscountsFixture(diagnosticMessageSink);
+            this.cartDiscountsFixture = new CartDiscountsFixture(serviceProviderFixture);
         }
 
         public void Dispose()

@@ -12,7 +12,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Project
 {
     public class ProjectFixture : ClientFixture, IDisposable
     {
-        public ProjectFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public ProjectFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
 
         }

@@ -12,13 +12,13 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Errors
 {
     [Collection("Integration Tests")]
-    public class ErrorsIntegrationTests : IClassFixture<ErrorsFixture>
+    public class ErrorsIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly ErrorsFixture errorsFixture;
 
-        public ErrorsIntegrationTests(ErrorsFixture errorsFixture)
+        public ErrorsIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.errorsFixture = errorsFixture;
+            this.errorsFixture = new ErrorsFixture(serviceProviderFixture);
         }
 
         [Fact]

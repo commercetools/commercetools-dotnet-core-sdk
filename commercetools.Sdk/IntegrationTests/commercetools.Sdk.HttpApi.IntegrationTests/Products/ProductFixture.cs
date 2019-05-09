@@ -27,14 +27,14 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         public CategoryFixture CategoryFixture { get; }
         public List<Product> ProductsToDelete { get; }
 
-        public ProductFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public ProductFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.ProductsToDelete = new List<Product>();
-            this.productTypeFixture = new ProductTypeFixture(diagnosticMessageSink);
-            this.CategoryFixture = new CategoryFixture(diagnosticMessageSink);
-            this.taxCategoryFixture = new TaxCategoryFixture(diagnosticMessageSink);
-            this.typeFixture = new TypeFixture(diagnosticMessageSink);
-            this.statesFixture = new StatesFixture(diagnosticMessageSink);
+            this.productTypeFixture = new ProductTypeFixture(serviceProviderFixture);
+            this.CategoryFixture = new CategoryFixture(serviceProviderFixture);
+            this.taxCategoryFixture = new TaxCategoryFixture(serviceProviderFixture);
+            this.typeFixture = new TypeFixture(serviceProviderFixture);
+            this.statesFixture = new StatesFixture(serviceProviderFixture);
         }
 
         public void Dispose()

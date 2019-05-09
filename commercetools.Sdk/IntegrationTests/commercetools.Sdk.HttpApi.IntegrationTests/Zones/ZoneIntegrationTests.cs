@@ -5,13 +5,13 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Zones
 {
     [Collection("Integration Tests")]
-    public class ZoneIntegrationTests : IClassFixture<ZonesFixture>
+    public class ZoneIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly ZonesFixture zonesFixture;
 
-        public ZoneIntegrationTests(ZonesFixture zonesFixture)
+        public ZoneIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.zonesFixture = zonesFixture;
+            this.zonesFixture = new ZonesFixture(serviceProviderFixture);
         }
 
         [Fact]

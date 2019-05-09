@@ -8,13 +8,13 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
 {
     [Collection("Integration Tests")]
-    public class OrdersIntegrationTests : IClassFixture<OrdersFixture>
+    public class OrdersIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly OrdersFixture ordersFixture;
 
-        public OrdersIntegrationTests(OrdersFixture ordersFixture)
+        public OrdersIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.ordersFixture = ordersFixture;
+            this.ordersFixture = new OrdersFixture(serviceProviderFixture);
         }
 
         //[Fact]

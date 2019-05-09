@@ -7,13 +7,13 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
 {
     [Collection("Integration Tests")]
-    public class PaymentsIntegrationTests : IClassFixture<PaymentsFixture>
+    public class PaymentsIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly PaymentsFixture paymentsFixture;
 
-        public PaymentsIntegrationTests(PaymentsFixture paymentsFixture)
+        public PaymentsIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.paymentsFixture = paymentsFixture;
+            this.paymentsFixture = new PaymentsFixture(serviceProviderFixture);
         }
 
         [Fact]

@@ -17,7 +17,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.States
 
         public List<State> StatesToDelete { get; private set; }
 
-        public StatesFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public StatesFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.StatesToDelete = new List<State>();
         }

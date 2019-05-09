@@ -12,7 +12,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
     {
         public List<ProductType> ProductTypesToDelete;
 
-        public ProductTypeFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public ProductTypeFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.ProductTypesToDelete = new List<ProductType>();
         }

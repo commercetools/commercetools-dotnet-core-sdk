@@ -10,13 +10,13 @@ using Type = System.Type;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Project
 {
     [Collection("Integration Tests")]
-    public class ProjectIntegrationTests : IClassFixture<ProjectFixture>
+    public class ProjectIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly ProjectFixture projectFixture;
 
-        public ProjectIntegrationTests(ProjectFixture typeFixture)
+        public ProjectIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.projectFixture = typeFixture;
+            this.projectFixture = new ProjectFixture(serviceProviderFixture);
         }
 
         [Fact]

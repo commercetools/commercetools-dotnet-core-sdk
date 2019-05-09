@@ -10,7 +10,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Customers
     {
         public static readonly string Password = "1234";
 
-        public CustomerFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public CustomerFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.CustomersToDelete = new List<Customer>();
         }

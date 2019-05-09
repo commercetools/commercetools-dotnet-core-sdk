@@ -15,7 +15,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Zones
 
         public List<Zone> ZonesToDelete { get; private set; }
 
-        public ZonesFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public ZonesFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.ZonesToDelete = new List<Zone>();
         }

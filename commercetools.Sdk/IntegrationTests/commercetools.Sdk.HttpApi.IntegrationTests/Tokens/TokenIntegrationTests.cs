@@ -8,13 +8,13 @@
     using Xunit;
 
     [Collection("Integration Tests")]
-    public class TokenIntegrationTests : IClassFixture<ClientFixture>
+    public class TokenIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly ClientFixture clientFixture;
 
-        public TokenIntegrationTests(ClientFixture clientFixture)
+        public TokenIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.clientFixture = clientFixture;
+            this.clientFixture = new ClientFixture(serviceProviderFixture);
         }
 
         [Fact]

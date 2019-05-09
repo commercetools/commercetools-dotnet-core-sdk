@@ -13,7 +13,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
     {
         public List<CartDiscount> CartDiscountsToDelete { get; }
 
-        public CartDiscountsFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public CartDiscountsFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.CartDiscountsToDelete = new List<CartDiscount>();
         }

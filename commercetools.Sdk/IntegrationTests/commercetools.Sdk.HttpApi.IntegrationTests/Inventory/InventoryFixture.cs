@@ -17,12 +17,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
 
         public List<InventoryEntry> InventoryEntries { get; }
 
-        public InventoryFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public InventoryFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.InventoryEntries = new List<InventoryEntry>();
-            this.productFixture = new ProductFixture(diagnosticMessageSink);
-            this.channelFixture = new ChannelFixture(diagnosticMessageSink);
-            this.typeFixture = new TypeFixture(diagnosticMessageSink);
+            this.productFixture = new ProductFixture(serviceProviderFixture);
+            this.channelFixture = new ChannelFixture(serviceProviderFixture);
+            this.typeFixture = new TypeFixture(serviceProviderFixture);
         }
 
         public void Dispose()

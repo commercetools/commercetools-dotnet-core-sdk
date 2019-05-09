@@ -11,7 +11,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Channels
     {
         public List<Channel> Channels { get; }
 
-        public ChannelFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public ChannelFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.Channels = new List<Channel>();
         }

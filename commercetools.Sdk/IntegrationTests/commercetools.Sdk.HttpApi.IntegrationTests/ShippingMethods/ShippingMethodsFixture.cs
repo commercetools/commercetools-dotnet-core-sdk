@@ -17,11 +17,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
         private readonly TaxCategoryFixture taxCategoryFixture;
         private readonly ZonesFixture zonesFixture;
 
-        public ShippingMethodsFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public ShippingMethodsFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.ShippingMethodsToDelete = new List<ShippingMethod>();
-            this.taxCategoryFixture = new TaxCategoryFixture(diagnosticMessageSink);
-            this.zonesFixture = new ZonesFixture(diagnosticMessageSink);
+            this.taxCategoryFixture = new TaxCategoryFixture(serviceProviderFixture);
+            this.zonesFixture = new ZonesFixture(serviceProviderFixture);
         }
 
         public void Dispose()

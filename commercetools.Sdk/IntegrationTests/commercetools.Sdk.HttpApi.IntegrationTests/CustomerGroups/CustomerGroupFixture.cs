@@ -12,10 +12,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
     {
         private TypeFixture typeFixture;
 
-        public CustomerGroupFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public CustomerGroupFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.CustomerGroupsToDelete = new List<CustomerGroup>();
-            this.typeFixture = new TypeFixture(diagnosticMessageSink);
+            this.typeFixture = new TypeFixture(serviceProviderFixture);
         }
 
         public List<CustomerGroup> CustomerGroupsToDelete { get; private set; }

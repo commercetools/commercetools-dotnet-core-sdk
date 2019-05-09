@@ -5,13 +5,13 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Customers
 {
     [Collection("Integration Tests")]
-    public class CustomerIntegrationTests : IClassFixture<CustomerFixture>
+    public class CustomerIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly CustomerFixture customerFixture;
 
-        public CustomerIntegrationTests(CustomerFixture customerFixture)
+        public CustomerIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.customerFixture = customerFixture;
+            this.customerFixture = new CustomerFixture(serviceProviderFixture);
         }
 
         [Fact]

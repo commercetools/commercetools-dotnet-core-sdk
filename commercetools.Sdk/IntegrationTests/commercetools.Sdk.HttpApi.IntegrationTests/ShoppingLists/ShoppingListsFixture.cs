@@ -17,11 +17,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists
         private readonly CustomerFixture customerFixture;
         private readonly ProductFixture productFixture;
 
-        public ShoppingListFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public ShoppingListFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.ShoppingListToDelete = new List<ShoppingList>();
-            this.customerFixture = new CustomerFixture(diagnosticMessageSink);
-            this.productFixture = new ProductFixture(diagnosticMessageSink);
+            this.customerFixture = new CustomerFixture(serviceProviderFixture);
+            this.productFixture = new ProductFixture(serviceProviderFixture);
         }
 
         public void Dispose()

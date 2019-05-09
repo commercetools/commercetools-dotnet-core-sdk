@@ -12,7 +12,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
     {
         public List<Type> TypesToDelete;
 
-        public TypeFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public TypeFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.TypesToDelete = new List<Type>();
         }

@@ -12,9 +12,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
     {
         public readonly ProductFixture productFixture;
 
-        public ProductProjectionsFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public ProductProjectionsFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
-            this.productFixture = new ProductFixture(diagnosticMessageSink);
+            this.productFixture = new ProductFixture(serviceProviderFixture);
         }
 
         public void Dispose()

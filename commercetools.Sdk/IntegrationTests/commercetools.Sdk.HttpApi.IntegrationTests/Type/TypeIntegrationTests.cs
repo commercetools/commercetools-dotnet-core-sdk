@@ -9,13 +9,13 @@ using commercetools.Sdk.Domain.Types.UpdateActions;
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     [Collection("Integration Tests")]
-    public class TypeIntegrationTests : IClassFixture<TypeFixture>
+    public class TypeIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly TypeFixture typeFixture;
 
-        public TypeIntegrationTests(TypeFixture typeFixture)
+        public TypeIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.typeFixture = typeFixture;
+            this.typeFixture = new TypeFixture(serviceProviderFixture);
         }
 
         [Fact]

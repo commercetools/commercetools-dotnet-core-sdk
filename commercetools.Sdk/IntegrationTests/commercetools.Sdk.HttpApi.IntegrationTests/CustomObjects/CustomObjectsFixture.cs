@@ -16,7 +16,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomObjects
     {
         public List<CustomObjectBase> CustomObjectsToDelete { get; private set; }
 
-        public CustomObjectsFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public CustomObjectsFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.CustomObjectsToDelete = new List<CustomObjectBase>();
         }

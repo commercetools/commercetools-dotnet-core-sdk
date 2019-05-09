@@ -11,13 +11,13 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomObjects
 {
     [Collection("Integration Tests")]
-    public class CustomObjectsIntegrationTests : IClassFixture<CustomObjectsFixture>
+    public class CustomObjectsIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly CustomObjectsFixture customObjectsFixture;
 
-        public CustomObjectsIntegrationTests(CustomObjectsFixture customObjectsFixture)
+        public CustomObjectsIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.customObjectsFixture = customObjectsFixture;
+            this.customObjectsFixture = new CustomObjectsFixture(serviceProviderFixture);
         }
 
         [Fact]

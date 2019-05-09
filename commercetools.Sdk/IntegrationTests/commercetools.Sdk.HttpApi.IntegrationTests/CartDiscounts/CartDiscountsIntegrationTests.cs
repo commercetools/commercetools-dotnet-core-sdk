@@ -13,13 +13,13 @@ using SetDescriptionUpdateAction = commercetools.Sdk.Domain.CartDiscounts.SetDes
 namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
 {
     [Collection("Integration Tests")]
-    public class CartDiscountsIntegrationTests : IClassFixture<CartDiscountsFixture>
+    public class CartDiscountsIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly CartDiscountsFixture cartDiscountFixture;
 
-        public CartDiscountsIntegrationTests(CartDiscountsFixture cartDiscountsFixture)
+        public CartDiscountsIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.cartDiscountFixture = cartDiscountsFixture;
+            this.cartDiscountFixture = new CartDiscountsFixture(serviceProviderFixture);
         }
 
         [Fact]

@@ -15,11 +15,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
         private readonly ProductFixture productFixture;
         public List<ProductDiscount> ProductDiscountsToDelete { get; }
 
-        public ProductDiscountsFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public ProductDiscountsFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.ProductDiscountsToDelete = new List<ProductDiscount>();
-            this.productTypeFixture = new ProductTypeFixture(diagnosticMessageSink);
-            this.productFixture = new ProductFixture(diagnosticMessageSink);
+            this.productTypeFixture = new ProductTypeFixture(serviceProviderFixture);
+            this.productFixture = new ProductFixture(serviceProviderFixture);
         }
 
         public void Dispose()

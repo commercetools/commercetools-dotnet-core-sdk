@@ -40,19 +40,19 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         private readonly PaymentsFixture paymentsFixture;
         private readonly ProjectFixture projectFixture;
 
-        public CartFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public CartFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.CartToDelete = new List<Cart>();
-            this.customerFixture = new CustomerFixture(diagnosticMessageSink);
-            this.productFixture = new ProductFixture(diagnosticMessageSink);
-            this.shippingMethodsFixture = new ShippingMethodsFixture(diagnosticMessageSink);
-            this.taxCategoryFixture = new TaxCategoryFixture(diagnosticMessageSink);
-            this.discountCodeFixture = new DiscountCodeFixture(diagnosticMessageSink);
-            this.customerGroupFixture = new CustomerGroupFixture(diagnosticMessageSink);
-            this.typeFixture = new TypeFixture(diagnosticMessageSink);
-            this.shoppingListFixture = new ShoppingListFixture(diagnosticMessageSink);
-            this.paymentsFixture = new PaymentsFixture(diagnosticMessageSink);
-            this.projectFixture = new ProjectFixture(diagnosticMessageSink);
+            this.customerFixture = new CustomerFixture(serviceProviderFixture);
+            this.productFixture = new ProductFixture(serviceProviderFixture);
+            this.shippingMethodsFixture = new ShippingMethodsFixture(serviceProviderFixture);
+            this.taxCategoryFixture = new TaxCategoryFixture(serviceProviderFixture);
+            this.discountCodeFixture = new DiscountCodeFixture(serviceProviderFixture);
+            this.customerGroupFixture = new CustomerGroupFixture(serviceProviderFixture);
+            this.typeFixture = new TypeFixture(serviceProviderFixture);
+            this.shoppingListFixture = new ShoppingListFixture(serviceProviderFixture);
+            this.paymentsFixture = new PaymentsFixture(serviceProviderFixture);
+            this.projectFixture = new ProjectFixture(serviceProviderFixture);
         }
 
         public void Dispose()

@@ -12,13 +12,13 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
 {
     [Collection("Integration Tests")]
-    public class ProductProjectionsIntegrationTests : IClassFixture<ProductProjectionsFixture>
+    public class ProductProjectionsIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly ProductProjectionsFixture productProjectionsFixture;
 
-        public ProductProjectionsIntegrationTests(ProductProjectionsFixture productProjectionsFixture)
+        public ProductProjectionsIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.productProjectionsFixture = productProjectionsFixture;
+            this.productProjectionsFixture = new ProductProjectionsFixture(serviceProviderFixture);
         }
 
         [Fact]

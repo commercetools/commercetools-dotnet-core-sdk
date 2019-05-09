@@ -7,13 +7,13 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.States
 {
     [Collection("Integration Tests")]
-    public class StatesIntegrationTests : IClassFixture<StatesFixture>
+    public class StatesIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly StatesFixture statesFixture;
 
-        public StatesIntegrationTests(StatesFixture statesFixture)
+        public StatesIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.statesFixture = statesFixture;
+            this.statesFixture = new StatesFixture(serviceProviderFixture);
         }
 
         [Fact]

@@ -31,13 +31,13 @@ using Type = commercetools.Sdk.Domain.Type;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 {
     [Collection("Integration Tests")]
-    public class CartIntegrationTests : IClassFixture<CartFixture>
+    public class CartIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly CartFixture cartFixture;
 
-        public CartIntegrationTests(CartFixture cartFixture)
+        public CartIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.cartFixture = cartFixture;
+            this.cartFixture = new CartFixture(serviceProviderFixture);
         }
 
         [Fact]

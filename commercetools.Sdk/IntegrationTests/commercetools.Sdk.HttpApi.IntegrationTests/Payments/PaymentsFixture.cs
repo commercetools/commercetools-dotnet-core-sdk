@@ -14,7 +14,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
     {
         public List<Payment> PaymentsToDelete { get; private set; }
 
-        public PaymentsFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+        public PaymentsFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.PaymentsToDelete = new List<Payment>();
         }

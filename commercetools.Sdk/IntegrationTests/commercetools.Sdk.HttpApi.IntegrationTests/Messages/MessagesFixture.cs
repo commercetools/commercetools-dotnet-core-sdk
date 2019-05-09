@@ -10,8 +10,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Messages
 {
     public class MessagesFixture : ClientFixture, IDisposable
     {
-        
-        public MessagesFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
+
+        public MessagesFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
         }
 

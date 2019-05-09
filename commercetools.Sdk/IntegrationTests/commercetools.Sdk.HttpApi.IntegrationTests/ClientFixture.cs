@@ -12,45 +12,21 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     public class ClientFixture
     {
-        private readonly IServiceProvider serviceProvider;
-        private readonly IConfiguration configuration;
+        public ServiceProviderFixture ServiceProviderFixture { get; }
 
-        public ClientFixture(IMessageSink diagnosticMessageSink)
+        public ClientFixture(ServiceProviderFixture serviceProviderFixture)
         {
-            //services.AddLogging(configure => configure.AddConsole());
-            this.configuration = new ConfigurationBuilder().
-                AddJsonFile("appsettings.test.json").
-                AddJsonFile("appsettings.test.Development.json", true).
-                // https://www.jerriepelser.com/blog/aspnet-core-no-more-worries-about-checking-in-secrets/
-                AddEnvironmentVariables().
-                AddUserSecrets<ClientFixture>().
-                Build();
-
-            var containerType = Enum.Parse<ContainerType>(configuration.GetValue("Container", "BuiltIn"));
-            diagnosticMessageSink.OnMessage(new DiagnosticMessage("Use container {0}", containerType.ToString()));
-            switch (containerType)
-            {
-                case ContainerType.BuiltIn:
-                    var services = new ServiceCollection();
-                    services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials);
-                    this.serviceProvider = services.BuildServiceProvider();
-                    break;
-                case ContainerType.SimpleInjector:
-                    var container = new Container();
-                    container.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials);
-                    this.serviceProvider = container;
-                    break;
-            }
+            this.ServiceProviderFixture = serviceProviderFixture;
         }
 
         public T GetService<T>()
         {
-            return this.serviceProvider.GetService<T>();
+            return this.ServiceProviderFixture.GetService<T>();
         }
 
         public IClientConfiguration GetClientConfiguration(string name)
         {
-            return this.configuration.GetSection(name).Get<ClientConfiguration>();
+            return this.ServiceProviderFixture.GetClientConfiguration(name);
         }
     }
 }

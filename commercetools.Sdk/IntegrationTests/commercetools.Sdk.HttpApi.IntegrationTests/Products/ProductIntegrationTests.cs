@@ -21,13 +21,13 @@ using Type = commercetools.Sdk.Domain.Type;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
 {
     [Collection("Integration Tests")]
-    public class ProductIntegrationTests : IClassFixture<ProductFixture>
+    public class ProductIntegrationTests : IClassFixture<ServiceProviderFixture>
     {
         private readonly ProductFixture productFixture;
 
-        public ProductIntegrationTests(ProductFixture productFixture)
+        public ProductIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
-            this.productFixture = productFixture;
+            this.productFixture = new ProductFixture(serviceProviderFixture);
         }
 
         [Fact]
