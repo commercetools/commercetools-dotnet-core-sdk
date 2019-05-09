@@ -1,14 +1,4 @@
-﻿﻿using System;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using commercetools.Sdk.DependencyInjection;
-using commercetools.Sdk.HttpApi.Tokens;
-using commercetools.Sdk.SimpleInjector;
-using SimpleInjector;
-using Xunit.Abstractions;
-using Xunit.Sdk;
-
-namespace commercetools.Sdk.HttpApi.IntegrationTests
+﻿namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     public class ClientFixture
     {

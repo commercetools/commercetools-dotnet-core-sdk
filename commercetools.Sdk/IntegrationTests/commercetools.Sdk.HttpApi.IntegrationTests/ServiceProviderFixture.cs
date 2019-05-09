@@ -1,7 +1,5 @@
 using System;
-using commercetools.Sdk.DependencyInjection;
 using commercetools.Sdk.HttpApi.Tokens;
-using commercetools.Sdk.SimpleInjector;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleInjector;
