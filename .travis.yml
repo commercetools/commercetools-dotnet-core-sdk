@@ -11,26 +11,32 @@ matrix:
     install:
     - dotnet restore
     - |
-      dotnet user-secrets set "Client:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "Client:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "Client:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "Client:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClient:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClient:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClient:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClient:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithSmallerScope:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithSmallerScope:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithSmallerScope:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithSmallerScope:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithAnonymousScope:ClientId" ${CTP_CLIENT_ID} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithAnonymousScope:ClientSecret" ${CTP_CLIENT_SECRET} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithAnonymousScope:Scope" ${CTP_CLIENT_SCOPE} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithAnonymousScope:ProjectKey" ${CTP_PROJECTKEY} --project commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "Client:ClientId" ${CTP_CLIENT_ID} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "Client:ClientSecret" ${CTP_CLIENT_SECRET} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "Client:Scope" ${CTP_CLIENT_SCOPE} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "Client:ProjectKey" ${CTP_PROJECTKEY} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClient:ClientId" ${CTP_CLIENT_ID} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClient:ClientSecret" ${CTP_CLIENT_SECRET} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClient:Scope" ${CTP_CLIENT_SCOPE} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClient:ProjectKey" ${CTP_PROJECTKEY} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithSmallerScope:ClientId" ${CTP_CLIENT_ID} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithSmallerScope:ClientSecret" ${CTP_CLIENT_SECRET} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithSmallerScope:Scope" ${CTP_CLIENT_SCOPE} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithSmallerScope:ProjectKey" ${CTP_PROJECTKEY} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithAnonymousScope:ClientId" ${CTP_CLIENT_ID} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithAnonymousScope:ClientSecret" ${CTP_CLIENT_SECRET} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithAnonymousScope:Scope" ${CTP_CLIENT_SCOPE} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
+      dotnet user-secrets set "TokenClientWithAnonymousScope:ProjectKey" ${CTP_PROJECTKEY} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
     script:
     - dotnet build -c Release
-    - dotnet test Tests --no-build -c Release
-    - dotnet test IntegrationTests --no-build -c Release
+    - |
+      dotnet test Tests/commercetools.Sdk.Domain.Tests --no-build -c Release
+      dotnet test Tests/commercetools.Sdk.HttpApi.Tests --no-build -c Release
+      dotnet test Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
+      dotnet test Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
+    - |
+      dotnet test IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
+      dotnet test IntegrationTests/commercetools.Sdk.SimpleInjector.Tests --no-build -c Release
   - os: osx
     dotnet: 2.1.603
     before_install:
@@ -40,7 +46,11 @@ matrix:
     - dotnet restore
     script:
     - dotnet build -c Release
-    - dotnet test Tests --no-build -c Release
+    - |
+      dotnet test Tests/commercetools.Sdk.Domain.Tests --no-build -c Release
+      dotnet test Tests/commercetools.Sdk.HttpApi.Tests --no-build -c Release
+      dotnet test Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
+      dotnet test Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
   - os: windows
     filter_secrets: false
     before_install:
@@ -51,7 +61,11 @@ matrix:
     - dotnet restore
     script:
     - dotnet build -c Release
-    - dotnet test Tests --no-build -c Release
+    - |
+      dotnet test Tests/commercetools.Sdk.Domain.Tests --no-build -c Release
+      dotnet test Tests/commercetools.Sdk.HttpApi.Tests --no-build -c Release
+      dotnet test Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
+      dotnet test Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
 notifications:
   slack:
     secure: xFDzAubIlJuEE59nTWxw4U2B/z6fL+Ds8Z0keWNAMuVnS/omKzSiYteuAIH8qygMETC+09fd3uQijIWID8Rgkp8dy9gvF30a71q0W3Wxi7sJrHnmRsuhU6c3ZvdxwkKGPFk9eXkUgUJpUEvLj8MQ33R3K2vfqs+3bdSa0Gkw7wC8YyWGMJgNK2l0RspxkjgmDQ7pLuFRQASGXay65lM64GmWEmFAqKEN9zO4/jQNS012XIg/0WFD1RkQ8rJsJsWqcc0CC81vA2Mn6R4pPy85QrQ/DQ0zQYKCDOTbaodhl72hzhYEyxbUhuWONpwbXdQ7kHQVVWuj5HpwKkIY9XoPATkbNQLY0Tw0wtCc9GrCx+53YNPZYEo3BCKKoR5c0AfvnbYkxxlPXh7u4xY78CGs19/wxREhkhuqh83RS4X46a6LOLfhVCHCjaXCpQ59/uRCa8jSyEC09CW5alTS8yjKzuUza8INLywZxP+jmYsdtSrlBx4TvMvfDsWhqOgY0qnXhdL+kCGb/YZjTnDZ4pTL5OyMJNwyeLzKw1vIMOM+TOR2fSeK9sWxNNAvy1aoHgeWFfTuBwpr5WlEFNTfFLTFUs5EHKr/EP1na/M3MBWWjKI7CDv5L6XDaroXJ7IMZcxRD8yY1Kr8GHc53Quu0s5TLoYbangNCWlnKpwm417id8I=
