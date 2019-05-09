@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace commercetools.Sdk.HttpApi.IntegrationTests.Tokens
+﻿namespace commercetools.Sdk.HttpApi.IntegrationTests.Tokens
 {
     using commercetools.Sdk.HttpApi;
     using commercetools.Sdk.HttpApi.Domain;
