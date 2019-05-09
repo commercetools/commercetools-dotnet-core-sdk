@@ -27,7 +27,7 @@ using Microsoft.Extensions.Logging;
 using SimpleInjector;
 using CultureValidator = commercetools.Sdk.Domain.Validation.CultureValidator;
 
-namespace commercetools.Sdk.SimpleInjector
+namespace SimpleInjector
 {
     public static class DependencyInjectionSetup
     {
