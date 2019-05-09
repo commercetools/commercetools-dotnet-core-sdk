@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http;
 using commercetools.Sdk.Client;
-using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Validation;
 using commercetools.Sdk.HttpApi;
 using commercetools.Sdk.HttpApi.AdditionalParameters;
@@ -34,10 +33,10 @@ namespace commercetools.Sdk.SimpleInjector
     {
         public static void UseSerialization(this Container services)
         {
-            services.RegisterAllTypes(typeof(ICustomJsonMapper<>), Lifestyle.Singleton);
+            services.RegisterCollection(typeof(ICustomJsonMapper<>), typeof(ICustomJsonMapper<>).Assembly);
             services.Register(typeof(IMapperTypeRetriever<>), new [] {typeof(IMapperTypeRetriever<>).Assembly});
 
-            services.RegisterAllTypes<JsonConverterBase>(Lifestyle.Singleton);
+            services.RegisterCollection(typeof(JsonConverterBase), typeof(JsonConverterBase).Assembly);
 
             services.Register(typeof(IDecoratorTypeRetriever<>), new [] {typeof(IMapperTypeRetriever<>).Assembly});
 
@@ -60,7 +59,7 @@ namespace commercetools.Sdk.SimpleInjector
         public static void UseValidation(this Container services)
         {
             services.Options.AllowOverridingRegistrations = true;
-            services.RegisterAllTypes<IResourceValidator>(Lifestyle.Singleton);
+            services.RegisterCollection(typeof(IResourceValidator), typeof(IResourceValidator).Assembly);
             services.Register<IModelValidator, ModelValidator>(Lifestyle.Singleton);
         }
 
@@ -202,11 +201,11 @@ namespace commercetools.Sdk.SimpleInjector
             services.Register<IUserCredentialsStoreManager, InMemoryUserCredentialsStoreManager>(Lifestyle.Transient);
             services.Register<IAnonymousCredentialsStoreManager, InMemoryAnonymousCredentialsStoreManager>(Lifestyle.Transient);
             services.Register<LoggerHandler>(Lifestyle.Transient);
-            services.RegisterAllTypes<ITokenProvider>(Lifestyle.Transient);
-            services.RegisterAllTypes<IRequestMessageBuilder>(Lifestyle.Singleton);
-            services.RegisterAllTypes<IAdditionalParametersBuilder>(Lifestyle.Singleton);
-            services.RegisterAllTypes<ISearchParametersBuilder>(Lifestyle.Singleton);
-            services.RegisterAllTypes<IUploadImageParametersBuilder>(Lifestyle.Singleton);
+            services.RegisterCollection(typeof(ITokenProvider), typeof(ITokenProvider).Assembly);
+            services.RegisterCollection(typeof(IRequestMessageBuilder), typeof(IRequestMessageBuilder).Assembly);
+            services.RegisterCollection(typeof(IAdditionalParametersBuilder), typeof(IAdditionalParametersBuilder).Assembly);
+            services.RegisterCollection(typeof(ISearchParametersBuilder), typeof(ISearchParametersBuilder).Assembly);
+            services.RegisterCollection(typeof(IUploadImageParametersBuilder), typeof(IUploadImageParametersBuilder).Assembly);
             services.RegisterSingleton<ILoggerFactory>(new LoggerFactory());
             services.Register<IEndpointRetriever, EndpointRetriever>(Lifestyle.Singleton);
             services.Register<IParametersBuilderFactory<IAdditionalParametersBuilder>, ParametersBuilderFactory<IAdditionalParametersBuilder>>(Lifestyle.Singleton);
