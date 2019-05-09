@@ -5,6 +5,7 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.HttpApi.IntegrationTests.Carts;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
 {
@@ -13,10 +14,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
         private readonly CartFixture cartFixture;
         public List<Order> OrdersToDelete { get; }
 
-        public OrdersFixture() : base()
+        public OrdersFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.OrdersToDelete = new List<Order>();
-            this.cartFixture = new CartFixture();
+            this.cartFixture = new CartFixture(diagnosticMessageSink);
         }
 
         public void Dispose()

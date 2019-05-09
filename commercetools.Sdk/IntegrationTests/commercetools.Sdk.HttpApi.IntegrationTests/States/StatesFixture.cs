@@ -8,6 +8,7 @@ using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.States;
 using commercetools.Sdk.Domain.Zones;
 using commercetools.Sdk.Registration;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.States
 {
@@ -16,7 +17,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.States
 
         public List<State> StatesToDelete { get; private set; }
 
-        public StatesFixture() : base()
+        public StatesFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.StatesToDelete = new List<State>();
         }

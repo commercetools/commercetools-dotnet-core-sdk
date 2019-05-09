@@ -1,9 +1,10 @@
-﻿using commercetools.Sdk.Client;
+﻿﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using System;
 using System.Collections.Generic;
 using commercetools.Sdk.Domain.Categories.UpdateActions;
+using Xunit.Abstractions;
 using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
@@ -12,10 +13,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
     {
         private TypeFixture typeFixture;
 
-        public CategoryFixture() : base()
+        public CategoryFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.CategoriesToDelete = new List<Category>();
-            this.typeFixture = new TypeFixture();
+            this.typeFixture = new TypeFixture(diagnosticMessageSink);
         }
 
         public List<Category> CategoriesToDelete { get; private set; }

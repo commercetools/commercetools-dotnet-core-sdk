@@ -6,6 +6,7 @@ using commercetools.Sdk.Domain.CartDiscounts;
 using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes
 {
@@ -15,10 +16,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes
 
         private readonly CartDiscountsFixture cartDiscountsFixture;
 
-        public DiscountCodeFixture() : base()
+        public DiscountCodeFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.DiscountCodesToDelete = new List<DiscountCode>();
-            this.cartDiscountsFixture = new CartDiscountsFixture();
+            this.cartDiscountsFixture = new CartDiscountsFixture(diagnosticMessageSink);
         }
 
         public void Dispose()

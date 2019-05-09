@@ -45,7 +45,9 @@ test_script:
       dotnet test Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
   - ps: |
       dotnet test IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
-      dotnet test IntegrationTests/commercetools.Sdk.SimpleInjector.Tests --no-build -c Release
+  - ps: |
+      $env:Container="SimpleInjector"
+      dotnet test IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
 
 artifacts:
 - path: commercetools.Sdk/**/*.nupkg

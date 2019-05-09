@@ -34,9 +34,8 @@ matrix:
       dotnet test Tests/commercetools.Sdk.HttpApi.Tests --no-build -c Release
       dotnet test Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
       dotnet test Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
-    - |
-      dotnet test IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
-      dotnet test IntegrationTests/commercetools.Sdk.SimpleInjector.Tests --no-build -c Release
+    - dotnet test IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
+    - Container="SimpleInjector" dotnet test IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
   - os: osx
     dotnet: 2.1.603
     before_install:

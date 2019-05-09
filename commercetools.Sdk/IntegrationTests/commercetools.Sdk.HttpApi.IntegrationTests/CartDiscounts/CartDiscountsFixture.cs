@@ -5,6 +5,7 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.CartDiscounts;
 using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.ProductDiscounts;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
 {
@@ -12,7 +13,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
     {
         public List<CartDiscount> CartDiscountsToDelete { get; }
 
-        public CartDiscountsFixture() : base()
+        public CartDiscountsFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.CartDiscountsToDelete = new List<CartDiscount>();
         }

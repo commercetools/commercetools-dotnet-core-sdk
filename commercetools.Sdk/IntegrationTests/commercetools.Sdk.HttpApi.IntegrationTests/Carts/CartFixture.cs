@@ -19,6 +19,7 @@ using commercetools.Sdk.HttpApi.IntegrationTests.Project;
 using commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods;
 using commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
+using Xunit.Abstractions;
 using LineItemDraft = commercetools.Sdk.Domain.Carts.LineItemDraft;
 using Type = commercetools.Sdk.Domain.Type;
 
@@ -39,19 +40,19 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         private readonly PaymentsFixture paymentsFixture;
         private readonly ProjectFixture projectFixture;
 
-        public CartFixture() : base()
+        public CartFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.CartToDelete = new List<Cart>();
-            this.customerFixture = new CustomerFixture();
-            this.productFixture = new ProductFixture();
-            this.shippingMethodsFixture = new ShippingMethodsFixture();
-            this.taxCategoryFixture = new TaxCategoryFixture();
-            this.discountCodeFixture = new DiscountCodeFixture();
-            this.customerGroupFixture = new CustomerGroupFixture();
-            this.typeFixture = new TypeFixture();
-            this.shoppingListFixture = new ShoppingListFixture();
-            this.paymentsFixture = new PaymentsFixture();
-            this.projectFixture = new ProjectFixture();
+            this.customerFixture = new CustomerFixture(diagnosticMessageSink);
+            this.productFixture = new ProductFixture(diagnosticMessageSink);
+            this.shippingMethodsFixture = new ShippingMethodsFixture(diagnosticMessageSink);
+            this.taxCategoryFixture = new TaxCategoryFixture(diagnosticMessageSink);
+            this.discountCodeFixture = new DiscountCodeFixture(diagnosticMessageSink);
+            this.customerGroupFixture = new CustomerGroupFixture(diagnosticMessageSink);
+            this.typeFixture = new TypeFixture(diagnosticMessageSink);
+            this.shoppingListFixture = new ShoppingListFixture(diagnosticMessageSink);
+            this.paymentsFixture = new PaymentsFixture(diagnosticMessageSink);
+            this.projectFixture = new ProjectFixture(diagnosticMessageSink);
         }
 
         public void Dispose()

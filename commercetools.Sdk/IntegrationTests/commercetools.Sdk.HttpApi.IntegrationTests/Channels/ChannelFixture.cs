@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Channels;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Channels
 {
@@ -10,7 +11,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Channels
     {
         public List<Channel> Channels { get; }
 
-        public ChannelFixture() : base()
+        public ChannelFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.Channels = new List<Channel>();
         }

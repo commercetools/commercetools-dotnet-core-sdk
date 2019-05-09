@@ -1,17 +1,18 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Project;
 using commercetools.Sdk.Domain.Project.UpdateActions;
+using Xunit.Abstractions;
 using LocalizedEnumValue = commercetools.Sdk.Domain.Common.LocalizedEnumValue;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Project
 {
     public class ProjectFixture : ClientFixture, IDisposable
     {
-        public ProjectFixture(): base()
+        public ProjectFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
 
         }

@@ -1,5 +1,6 @@
 using System;
 using commercetools.Sdk.Domain.ProductDiscounts;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Errors
 {
@@ -7,9 +8,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Errors
     {
         public CategoryFixture CategoryFixture { get; private set; }
 
-        public ErrorsFixture() :base()
+        public ErrorsFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
-            this.CategoryFixture = new CategoryFixture();
+            this.CategoryFixture = new CategoryFixture(diagnosticMessageSink);
         }
         public void Dispose()
         {

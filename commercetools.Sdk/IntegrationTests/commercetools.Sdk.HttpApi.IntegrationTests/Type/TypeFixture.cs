@@ -1,4 +1,4 @@
-﻿using commercetools.Sdk.Client;
+﻿﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
     {
         public List<Type> TypesToDelete;
 
-        public TypeFixture():base()
+        public TypeFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.TypesToDelete = new List<Type>();
         }

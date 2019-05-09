@@ -1,10 +1,11 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.HttpApi.IntegrationTests.Products;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
 {
@@ -14,11 +15,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
         private readonly ProductFixture productFixture;
         public List<ProductDiscount> ProductDiscountsToDelete { get; }
 
-        public ProductDiscountsFixture() : base()
+        public ProductDiscountsFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.ProductDiscountsToDelete = new List<ProductDiscount>();
-            this.productTypeFixture = new ProductTypeFixture();
-            this.productFixture = new ProductFixture();
+            this.productTypeFixture = new ProductTypeFixture(diagnosticMessageSink);
+            this.productFixture = new ProductFixture(diagnosticMessageSink);
         }
 
         public void Dispose()

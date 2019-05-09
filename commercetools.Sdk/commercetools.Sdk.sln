@@ -54,8 +54,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.SimpleInj
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{199CAB4C-C38A-47B7-AB72-CCFCCA06C31D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.SimpleInjector.Tests", "IntegrationTests\commercetools.Sdk.SimpleInjector.Tests\commercetools.Sdk.SimpleInjector.Tests.csproj", "{3C623338-237C-4D73-B44F-E7FDE8ECD231}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.HttpApi.IntegrationTests", "IntegrationTests\commercetools.Sdk.HttpApi.IntegrationTests\commercetools.Sdk.HttpApi.IntegrationTests.csproj", "{F838D9C1-D921-43B2-B36E-09A741D36633}"
 EndProject
 Global
@@ -144,10 +142,6 @@ Global
 		{86B1EBCD-DE57-42C1-8388-6E72B4E5C510}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86B1EBCD-DE57-42C1-8388-6E72B4E5C510}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86B1EBCD-DE57-42C1-8388-6E72B4E5C510}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3C623338-237C-4D73-B44F-E7FDE8ECD231}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C623338-237C-4D73-B44F-E7FDE8ECD231}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C623338-237C-4D73-B44F-E7FDE8ECD231}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C623338-237C-4D73-B44F-E7FDE8ECD231}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F838D9C1-D921-43B2-B36E-09A741D36633}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F838D9C1-D921-43B2-B36E-09A741D36633}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F838D9C1-D921-43B2-B36E-09A741D36633}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -166,7 +160,6 @@ Global
 		{D1F9B222-7CE0-461F-9BA6-B177D9203B4E} = {246B3DBC-CE94-4B32-AEFB-8C42A0D8F502}
 		{A50C27D8-0126-4D02-A34C-18A1FD529912} = {246B3DBC-CE94-4B32-AEFB-8C42A0D8F502}
 		{1ED86710-A7A6-4E63-AAC6-A98A1EEB46D2} = {246B3DBC-CE94-4B32-AEFB-8C42A0D8F502}
-		{3C623338-237C-4D73-B44F-E7FDE8ECD231} = {199CAB4C-C38A-47B7-AB72-CCFCCA06C31D}
 		{F838D9C1-D921-43B2-B36E-09A741D36633} = {199CAB4C-C38A-47B7-AB72-CCFCCA06C31D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

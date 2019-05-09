@@ -6,6 +6,7 @@ using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.Payments;
 using commercetools.Sdk.Domain.ShoppingLists;
 using commercetools.Sdk.HttpApi.IntegrationTests.Customers;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
 {
@@ -13,7 +14,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
     {
         public List<Payment> PaymentsToDelete { get; private set; }
 
-        public PaymentsFixture() : base()
+        public PaymentsFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.PaymentsToDelete = new List<Payment>();
         }

@@ -1,7 +1,8 @@
-﻿using commercetools.Sdk.Client;
+﻿﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain.Customers;
 using System;
 using System.Collections.Generic;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Customers
 {
@@ -9,7 +10,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Customers
     {
         public static readonly string Password = "1234";
 
-        public CustomerFixture() : base()
+        public CustomerFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.CustomersToDelete = new List<Customer>();
         }

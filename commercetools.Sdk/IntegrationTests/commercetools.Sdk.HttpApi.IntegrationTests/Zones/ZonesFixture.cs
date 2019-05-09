@@ -6,6 +6,7 @@ using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Messages;
 using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.Zones;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Zones
 {
@@ -14,7 +15,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Zones
 
         public List<Zone> ZonesToDelete { get; private set; }
 
-        public ZonesFixture() : base()
+        public ZonesFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.ZonesToDelete = new List<Zone>();
         }

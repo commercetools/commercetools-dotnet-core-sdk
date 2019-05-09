@@ -6,6 +6,7 @@ using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.Zones;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
 using commercetools.Sdk.HttpApi.IntegrationTests.Zones;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
 {
@@ -16,11 +17,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
         private readonly TaxCategoryFixture taxCategoryFixture;
         private readonly ZonesFixture zonesFixture;
 
-        public ShippingMethodsFixture() : base()
+        public ShippingMethodsFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.ShippingMethodsToDelete = new List<ShippingMethod>();
-            this.taxCategoryFixture = new TaxCategoryFixture();
-            this.zonesFixture = new ZonesFixture();
+            this.taxCategoryFixture = new TaxCategoryFixture(diagnosticMessageSink);
+            this.zonesFixture = new ZonesFixture(diagnosticMessageSink);
         }
 
         public void Dispose()

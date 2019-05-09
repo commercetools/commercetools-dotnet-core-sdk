@@ -7,6 +7,7 @@ using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Query;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;
+using Xunit.Abstractions;
 using SetDescriptionUpdateAction = commercetools.Sdk.Domain.CartDiscounts.SetDescriptionUpdateAction;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts

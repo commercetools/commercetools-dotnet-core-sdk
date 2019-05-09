@@ -1,8 +1,9 @@
-﻿using commercetools.Sdk.Client;
+﻿﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.CustomerGroups;
 using System;
 using System.Collections.Generic;
+using Xunit.Abstractions;
 using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
@@ -11,10 +12,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
     {
         private TypeFixture typeFixture;
 
-        public CustomerGroupFixture() : base()
+        public CustomerGroupFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.CustomerGroupsToDelete = new List<CustomerGroup>();
-            this.typeFixture = new TypeFixture();
+            this.typeFixture = new TypeFixture(diagnosticMessageSink);
         }
 
         public List<CustomerGroup> CustomerGroupsToDelete { get; private set; }

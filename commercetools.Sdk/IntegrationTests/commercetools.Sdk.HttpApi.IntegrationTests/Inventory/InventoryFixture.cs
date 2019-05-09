@@ -4,6 +4,7 @@ using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.HttpApi.IntegrationTests.Channels;
 using commercetools.Sdk.HttpApi.IntegrationTests.Products;
+using Xunit.Abstractions;
 using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
@@ -16,12 +17,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
 
         public List<InventoryEntry> InventoryEntries { get; }
 
-        public InventoryFixture() : base()
+        public InventoryFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.InventoryEntries = new List<InventoryEntry>();
-            this.productFixture = new ProductFixture();
-            this.channelFixture = new ChannelFixture();
-            this.typeFixture = new TypeFixture();
+            this.productFixture = new ProductFixture(diagnosticMessageSink);
+            this.channelFixture = new ChannelFixture(diagnosticMessageSink);
+            this.typeFixture = new TypeFixture(diagnosticMessageSink);
         }
 
         public void Dispose()

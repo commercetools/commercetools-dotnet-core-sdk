@@ -6,6 +6,7 @@ using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.ShoppingLists;
 using commercetools.Sdk.HttpApi.IntegrationTests.Customers;
 using commercetools.Sdk.HttpApi.IntegrationTests.Products;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists
 {
@@ -16,11 +17,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists
         private readonly CustomerFixture customerFixture;
         private readonly ProductFixture productFixture;
 
-        public ShoppingListFixture() : base()
+        public ShoppingListFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.ShoppingListToDelete = new List<ShoppingList>();
-            this.customerFixture = new CustomerFixture();
-            this.productFixture = new ProductFixture();
+            this.customerFixture = new CustomerFixture(diagnosticMessageSink);
+            this.productFixture = new ProductFixture(diagnosticMessageSink);
         }
 
         public void Dispose()

@@ -8,6 +8,7 @@ using commercetools.Sdk.Domain.Messages;
 using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.Zones;
 using commercetools.Sdk.Registration;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomObjects
 {
@@ -15,7 +16,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomObjects
     {
         public List<CustomObjectBase> CustomObjectsToDelete { get; private set; }
 
-        public CustomObjectsFixture() : base()
+        public CustomObjectsFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.CustomObjectsToDelete = new List<CustomObjectBase>();
         }

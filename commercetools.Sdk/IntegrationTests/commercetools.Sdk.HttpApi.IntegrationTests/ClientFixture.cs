@@ -1,9 +1,12 @@
-﻿using System;
+﻿﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using commercetools.Sdk.DependencyInjection;
-using commercetools.Sdk.Domain;
 using commercetools.Sdk.HttpApi.Tokens;
+using commercetools.Sdk.SimpleInjector;
+using SimpleInjector;
+using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
@@ -12,10 +15,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         private readonly IServiceProvider serviceProvider;
         private readonly IConfiguration configuration;
 
-        public ClientFixture()
+        public ClientFixture(IMessageSink diagnosticMessageSink)
         {
-            var services = new ServiceCollection();
-
             //services.AddLogging(configure => configure.AddConsole());
             this.configuration = new ConfigurationBuilder().
                 AddJsonFile("appsettings.test.json").
@@ -25,8 +26,21 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 AddUserSecrets<ClientFixture>().
                 Build();
 
-            services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials);
-            this.serviceProvider = services.BuildServiceProvider();
+            var containerType = Enum.Parse<ContainerType>(configuration.GetValue("Container", "BuiltIn"));
+            diagnosticMessageSink.OnMessage(new DiagnosticMessage("Use container {0}", containerType.ToString()));
+            switch (containerType)
+            {
+                case ContainerType.BuiltIn:
+                    var services = new ServiceCollection();
+                    services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials);
+                    this.serviceProvider = services.BuildServiceProvider();
+                    break;
+                case ContainerType.SimpleInjector:
+                    var container = new Container();
+                    container.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials);
+                    this.serviceProvider = container;
+                    break;
+            }
         }
 
         public T GetService<T>()

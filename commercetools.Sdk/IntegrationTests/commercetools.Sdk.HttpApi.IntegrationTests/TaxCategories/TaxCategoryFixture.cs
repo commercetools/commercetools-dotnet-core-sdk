@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories
 {
@@ -10,7 +11,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories
     {
         public List<TaxCategory> TaxCategoriesToDelete { get; private set; }
 
-        public TaxCategoryFixture() : base()
+        public TaxCategoryFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.TaxCategoriesToDelete = new List<TaxCategory>();
         }

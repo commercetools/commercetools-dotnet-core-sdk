@@ -1,9 +1,10 @@
-﻿using commercetools.Sdk.Client;
+﻿﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using System;
 using System.Collections.Generic;
 using commercetools.Sdk.Domain.Categories.UpdateActions;
+using Xunit.Abstractions;
 using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
@@ -12,9 +13,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
     {
         private CategoryFixture categoryFixture;
 
-        public GraphQLFixture() : base()
+        public GraphQLFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
-            this.categoryFixture = new CategoryFixture();
+            this.categoryFixture = new CategoryFixture(diagnosticMessageSink);
         }
 
         public Category CreateCategory()

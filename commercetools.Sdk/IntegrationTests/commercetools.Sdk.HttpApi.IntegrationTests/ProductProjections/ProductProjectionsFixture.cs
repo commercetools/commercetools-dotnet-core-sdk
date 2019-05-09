@@ -4,6 +4,7 @@ using System.Linq;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.HttpApi.IntegrationTests.Products;
+using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
 {
@@ -11,9 +12,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
     {
         public readonly ProductFixture productFixture;
 
-        public ProductProjectionsFixture() : base()
+        public ProductProjectionsFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
-            this.productFixture = new ProductFixture();
+            this.productFixture = new ProductFixture(diagnosticMessageSink);
         }
 
         public void Dispose()

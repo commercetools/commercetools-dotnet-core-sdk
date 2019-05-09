@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
@@ -10,6 +10,7 @@ using commercetools.Sdk.Domain.States;
 using commercetools.Sdk.HttpApi.IntegrationTests.States;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
 using Xunit;
+using Xunit.Abstractions;
 using Type = commercetools.Sdk.Domain.Type;
 
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
@@ -26,14 +27,14 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         public CategoryFixture CategoryFixture { get; }
         public List<Product> ProductsToDelete { get; }
 
-        public ProductFixture() : base()
+        public ProductFixture(IMessageSink diagnosticMessageSink) : base(diagnosticMessageSink)
         {
             this.ProductsToDelete = new List<Product>();
-            this.productTypeFixture = new ProductTypeFixture();
-            this.CategoryFixture = new CategoryFixture();
-            this.taxCategoryFixture = new TaxCategoryFixture();
-            this.typeFixture = new TypeFixture();
-            this.statesFixture = new StatesFixture();
+            this.productTypeFixture = new ProductTypeFixture(diagnosticMessageSink);
+            this.CategoryFixture = new CategoryFixture(diagnosticMessageSink);
+            this.taxCategoryFixture = new TaxCategoryFixture(diagnosticMessageSink);
+            this.typeFixture = new TypeFixture(diagnosticMessageSink);
+            this.statesFixture = new StatesFixture(diagnosticMessageSink);
         }
 
         public void Dispose()
