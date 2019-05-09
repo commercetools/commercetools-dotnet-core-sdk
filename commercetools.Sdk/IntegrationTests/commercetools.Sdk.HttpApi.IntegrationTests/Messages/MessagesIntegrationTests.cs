@@ -10,13 +10,18 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Messages
 {
     [Collection("Integration Tests")]
-    public class MessagesIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class MessagesIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
     {
         private readonly MessagesFixture messagesFixture;
 
         public MessagesIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.messagesFixture = new MessagesFixture(serviceProviderFixture);
+        }
+
+        public void Dispose()
+        {
+            this.messagesFixture.Dispose();
         }
 
         //TODO check if the messages enable in danger zone and add at least one category for example to insert at least one message in the queue

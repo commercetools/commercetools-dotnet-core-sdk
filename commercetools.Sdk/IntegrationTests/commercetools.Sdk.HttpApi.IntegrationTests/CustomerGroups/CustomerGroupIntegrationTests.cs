@@ -12,13 +12,18 @@ using Type = commercetools.Sdk.Domain.Type;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
 {
     [Collection("Integration Tests")]
-    public class CustomerGroupIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class CustomerGroupIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
     {
         private readonly CustomerGroupFixture customerGroupFixture;
 
         public CustomerGroupIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.customerGroupFixture = new CustomerGroupFixture(serviceProviderFixture);
+        }
+
+        public void Dispose()
+        {
+            this.customerGroupFixture.Dispose();
         }
 
         [Fact]

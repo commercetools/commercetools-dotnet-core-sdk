@@ -11,13 +11,18 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomObjects
 {
     [Collection("Integration Tests")]
-    public class CustomObjectsIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class CustomObjectsIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
     {
         private readonly CustomObjectsFixture customObjectsFixture;
 
         public CustomObjectsIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.customObjectsFixture = new CustomObjectsFixture(serviceProviderFixture);
+        }
+
+        public void Dispose()
+        {
+            this.customObjectsFixture.Dispose();
         }
 
         [Fact]

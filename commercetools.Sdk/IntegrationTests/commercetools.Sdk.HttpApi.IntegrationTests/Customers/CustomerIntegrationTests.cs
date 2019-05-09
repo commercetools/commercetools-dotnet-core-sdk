@@ -1,17 +1,23 @@
-﻿using commercetools.Sdk.Client;
+﻿using System;
+using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain.Customers;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Customers
 {
     [Collection("Integration Tests")]
-    public class CustomerIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class CustomerIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
     {
         private readonly CustomerFixture customerFixture;
 
         public CustomerIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.customerFixture = new CustomerFixture(serviceProviderFixture);
+        }
+
+        public void Dispose()
+        {
+            this.customerFixture.Dispose();
         }
 
         [Fact]

@@ -40,6 +40,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             this.cartFixture = new CartFixture(serviceProviderFixture);
         }
 
+        public void Dispose()
+        {
+            this.cartFixture.Dispose();
+        }
+
         [Fact]
         public void CreateCart()
         {

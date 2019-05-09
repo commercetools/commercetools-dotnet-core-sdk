@@ -1,3 +1,4 @@
+using System;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain.Payments;
 using commercetools.Sdk.Domain.ShoppingLists;
@@ -7,13 +8,18 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
 {
     [Collection("Integration Tests")]
-    public class PaymentsIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class PaymentsIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
     {
         private readonly PaymentsFixture paymentsFixture;
 
         public PaymentsIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.paymentsFixture = new PaymentsFixture(serviceProviderFixture);
+        }
+
+        public void Dispose()
+        {
+            this.paymentsFixture.Dispose();
         }
 
         [Fact]

@@ -1,3 +1,4 @@
+using System;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain.ShoppingLists;
 using commercetools.Sdk.Domain.Zones;
@@ -6,13 +7,18 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists
 {
     [Collection("Integration Tests")]
-    public class ShoppingListIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class ShoppingListIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
     {
         private readonly ShoppingListFixture shoppingListFixture;
 
         public ShoppingListIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.shoppingListFixture = new ShoppingListFixture(serviceProviderFixture);
+        }
+
+        public void Dispose()
+        {
+            this.shoppingListFixture.Dispose();
         }
 
         [Fact]

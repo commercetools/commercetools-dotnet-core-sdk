@@ -25,6 +25,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             this.categoryFixture = new CategoryFixture(serviceProviderFixture);
         }
 
+        public void Dispose()
+        {
+            this.categoryFixture.Dispose();
+        }
+
         [Fact]
         public void GetCategoryById()
         {

@@ -12,13 +12,18 @@ using SetDescriptionUpdateAction = commercetools.Sdk.Domain.CartDiscounts.SetDes
 namespace commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes
 {
     [Collection("Integration Tests")]
-    public class DiscountCodeIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class DiscountCodeIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
     {
         private readonly DiscountCodeFixture discountCodeFixture;
 
         public DiscountCodeIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.discountCodeFixture = new DiscountCodeFixture(serviceProviderFixture);
+        }
+
+        public void Dispose()
+        {
+            this.discountCodeFixture.Dispose();
         }
 
         [Fact]

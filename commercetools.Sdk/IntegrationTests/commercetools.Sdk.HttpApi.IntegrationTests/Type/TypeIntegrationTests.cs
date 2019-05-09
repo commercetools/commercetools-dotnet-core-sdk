@@ -9,13 +9,18 @@ using commercetools.Sdk.Domain.Types.UpdateActions;
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     [Collection("Integration Tests")]
-    public class TypeIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class TypeIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
     {
         private readonly TypeFixture typeFixture;
 
         public TypeIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.typeFixture = new TypeFixture(serviceProviderFixture);
+        }
+
+        public void Dispose()
+        {
+            this.typeFixture.Dispose();
         }
 
         [Fact]

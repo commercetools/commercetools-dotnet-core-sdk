@@ -1,3 +1,4 @@
+using System;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain.States;
 using commercetools.Sdk.Domain.Zones;
@@ -7,13 +8,18 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.States
 {
     [Collection("Integration Tests")]
-    public class StatesIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class StatesIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
     {
         private readonly StatesFixture statesFixture;
 
         public StatesIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.statesFixture = new StatesFixture(serviceProviderFixture);
+        }
+
+        public void Dispose()
+        {
+            this.statesFixture.Dispose();
         }
 
         [Fact]

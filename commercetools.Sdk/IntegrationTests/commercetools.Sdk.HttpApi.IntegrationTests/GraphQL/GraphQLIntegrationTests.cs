@@ -17,13 +17,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     // All integration tests need to have the same collection name.
     [Collection("Integration Tests")]
-    public class GraphQLIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class GraphQLIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
     {
         private readonly GraphQLFixture graphqlFixture;
 
         public GraphQLIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.graphqlFixture = new GraphQLFixture(serviceProviderFixture);
+        }
+
+        public void Dispose()
+        {
+            this.graphqlFixture.Dispose();
         }
 
         [Fact]

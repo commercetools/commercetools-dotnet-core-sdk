@@ -8,13 +8,18 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
 {
     [Collection("Integration Tests")]
-    public class OrdersIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class OrdersIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
     {
         private readonly OrdersFixture ordersFixture;
 
         public OrdersIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.ordersFixture = new OrdersFixture(serviceProviderFixture);
+        }
+
+        public void Dispose()
+        {
+            this.ordersFixture.Dispose();
         }
 
         //[Fact]

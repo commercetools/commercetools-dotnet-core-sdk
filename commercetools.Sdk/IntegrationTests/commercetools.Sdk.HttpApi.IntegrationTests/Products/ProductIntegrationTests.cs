@@ -21,13 +21,18 @@ using Type = commercetools.Sdk.Domain.Type;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
 {
     [Collection("Integration Tests")]
-    public class ProductIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class ProductIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
     {
         private readonly ProductFixture productFixture;
 
         public ProductIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.productFixture = new ProductFixture(serviceProviderFixture);
+        }
+
+        public void Dispose()
+        {
+            this.productFixture.Dispose();
         }
 
         [Fact]

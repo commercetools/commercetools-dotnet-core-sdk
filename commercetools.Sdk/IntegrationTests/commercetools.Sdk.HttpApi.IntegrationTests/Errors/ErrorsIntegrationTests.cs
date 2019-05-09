@@ -12,13 +12,18 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Errors
 {
     [Collection("Integration Tests")]
-    public class ErrorsIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class ErrorsIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
     {
         private readonly ErrorsFixture errorsFixture;
 
         public ErrorsIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.errorsFixture = new ErrorsFixture(serviceProviderFixture);
+        }
+
+        public void Dispose()
+        {
+            this.errorsFixture.Dispose();
         }
 
         [Fact]

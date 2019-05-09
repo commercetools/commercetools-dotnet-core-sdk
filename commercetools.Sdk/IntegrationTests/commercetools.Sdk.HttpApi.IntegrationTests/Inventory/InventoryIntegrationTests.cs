@@ -15,13 +15,18 @@ using Type = commercetools.Sdk.Domain.Type;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
 {
     [Collection("Integration Tests")]
-    public class InventoryIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class InventoryIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
     {
         private readonly InventoryFixture inventoryFixture;
 
         public InventoryIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.inventoryFixture = new InventoryFixture(serviceProviderFixture);
+        }
+
+        public void Dispose()
+        {
+            this.inventoryFixture.Dispose();
         }
 
         [Fact]
