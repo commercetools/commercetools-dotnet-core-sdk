@@ -42,8 +42,8 @@ namespace SimpleInjector
 
             services.Register<DeserializationContractResolver>(Lifestyle.Singleton);
             services.Register<SerializationContractResolver>(Lifestyle.Singleton);
-            services.Register<JsonSerializerSettingsFactory>(Lifestyle.Singleton);
             services.Register<IModelValidator, NullModelValidator>(Lifestyle.Singleton);
+            services.Register<JsonSerializerSettingsFactory>(Lifestyle.Singleton);
             services.Register<ISerializerService, SerializerService>(Lifestyle.Singleton);
         }
 
@@ -149,7 +149,7 @@ namespace SimpleInjector
                 builders.Add(clientName, services.SetupClient(collection, clientName, clientConfiguration, tokenFlow));
                 services.Register<IClient>(() => new CtpClient(services.GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName });
             }
-            services.RegisterSingleton(collection.BuildServiceProvider().GetService<IHttpClientFactory>());
+            services.Register<IHttpClientFactory>(() => collection.BuildServiceProvider().GetService<IHttpClientFactory>(), Lifestyle.Singleton);
 
             return builders;
         }
@@ -168,7 +168,7 @@ namespace SimpleInjector
             {
                 {clientName, services.SetupClient(collection, clientName, clientConfiguration, tokenFlow)}
             };
-            services.RegisterSingleton(collection.BuildServiceProvider().GetService<IHttpClientFactory>());
+            services.Register<IHttpClientFactory>(() => collection.BuildServiceProvider().GetService<IHttpClientFactory>(), Lifestyle.Singleton);
 
             return builders;
         }

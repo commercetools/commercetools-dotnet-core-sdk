@@ -17,8 +17,8 @@ namespace commercetools.Sdk.Serialization
 
             services.AddSingleton<DeserializationContractResolver>();
             services.AddSingleton<SerializationContractResolver>();
-            services.AddSingleton<JsonSerializerSettingsFactory>();
             services.AddSingleton<IModelValidator, NullModelValidator>();
+            services.AddSingleton<JsonSerializerSettingsFactory>();
             services.AddSingleton<ISerializerService, SerializerService>();
         }
     }
