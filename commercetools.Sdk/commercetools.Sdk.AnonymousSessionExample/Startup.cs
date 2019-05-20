@@ -1,5 +1,4 @@
-﻿using commercetools.Sdk.DependencyInjection;
-using commercetools.Sdk.HttpApi.Tokens;
+﻿using commercetools.Sdk.HttpApi.Tokens;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

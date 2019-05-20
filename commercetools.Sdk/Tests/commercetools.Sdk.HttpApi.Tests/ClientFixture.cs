@@ -1,5 +1,4 @@
-﻿using commercetools.Sdk.Serialization;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
@@ -8,11 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using commercetools.Sdk.Registration;
-using commercetools.Sdk.Domain;
-using commercetools.Sdk.Linq;
 using commercetools.Sdk.HttpApi.Tokens;
-using commercetools.Sdk.DependencyInjection;
 using Moq;
 using Moq.Protected;
 

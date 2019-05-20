@@ -1,26 +1,15 @@
 ﻿using commercetools.Sdk.Client;
-using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
-using commercetools.Sdk.Domain.Categories.UpdateActions;
-using commercetools.Sdk.HttpApi.Domain;
 using commercetools.Sdk.Serialization;
 using Moq;
 using Moq.Protected;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using commercetools.Sdk.DependencyInjection;
-using commercetools.Sdk.Domain.Project;
 using commercetools.Sdk.HttpApi.DelegatingHandlers;
-using commercetools.Sdk.HttpApi.Tokens;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
