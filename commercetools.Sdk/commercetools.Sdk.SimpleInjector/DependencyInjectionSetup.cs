@@ -205,11 +205,13 @@ namespace SimpleInjector
             services.RegisterCollection(typeof(IRequestMessageBuilder), typeof(IRequestMessageBuilder).Assembly);
             services.RegisterCollection(typeof(IAdditionalParametersBuilder), typeof(IAdditionalParametersBuilder).Assembly);
             services.RegisterCollection(typeof(ISearchParametersBuilder), typeof(ISearchParametersBuilder).Assembly);
+            services.RegisterCollection(typeof(IQueryParametersBuilder), typeof(IQueryParametersBuilder).Assembly);
             services.RegisterCollection(typeof(IUploadImageParametersBuilder), typeof(IUploadImageParametersBuilder).Assembly);
             services.RegisterSingleton<ILoggerFactory>(new LoggerFactory());
             services.Register<IEndpointRetriever, EndpointRetriever>(Lifestyle.Singleton);
             services.Register<IParametersBuilderFactory<IAdditionalParametersBuilder>, ParametersBuilderFactory<IAdditionalParametersBuilder>>(Lifestyle.Singleton);
             services.Register<IParametersBuilderFactory<ISearchParametersBuilder>, ParametersBuilderFactory<ISearchParametersBuilder>>(Lifestyle.Singleton);
+            services.Register<IParametersBuilderFactory<IQueryParametersBuilder>, ParametersBuilderFactory<IQueryParametersBuilder>>(Lifestyle.Singleton);
             services.Register<IParametersBuilderFactory<IUploadImageParametersBuilder>, ParametersBuilderFactory<IUploadImageParametersBuilder>>(Lifestyle.Singleton);
             services.Register<IHttpApiCommandFactory, HttpApiCommandFactory>(Lifestyle.Singleton);
             services.Register<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>(Lifestyle.Singleton);
