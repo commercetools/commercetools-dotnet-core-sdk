@@ -1,4 +1,5 @@
 using commercetools.Sdk.Domain.Validation;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace commercetools.Sdk.Validation
 {
@@ -9,7 +10,12 @@ namespace commercetools.Sdk.Validation
         public static void UseValidation(this IServiceCollection services)
         {
             services.RegisterAllTypes(typeof(IResourceValidator), ServiceLifetime.Singleton);
-            services.AddSingleton<IModelValidator, ModelValidator>();
+            services.Replace(
+                new ServiceDescriptor(
+                    typeof(IModelValidator),
+                    typeof(ModelValidator),
+                    ServiceLifetime.Singleton)
+                );
         }
     }
 }

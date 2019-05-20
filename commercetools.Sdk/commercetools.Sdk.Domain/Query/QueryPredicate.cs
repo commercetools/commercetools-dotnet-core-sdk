@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using commercetools.Sdk.Linq;
 using commercetools.Sdk.Registration;
 using commercetools.Sdk.Linq.Query;
 

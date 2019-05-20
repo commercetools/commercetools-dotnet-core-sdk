@@ -3,7 +3,7 @@ using System;
 
 namespace commercetools.Sdk.Serialization
 {
-    internal interface ICustomJsonMapper<T>
+    public interface ICustomJsonMapper<T>
     {
         bool CanConvert(JToken property);
 

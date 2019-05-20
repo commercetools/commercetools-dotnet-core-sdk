@@ -11,10 +11,9 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
     public class DeleteRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
         public DeleteRequestMessageBuilder(
-            IClientConfiguration clientConfiguration,
             IEndpointRetriever endpointRetriever,
             IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory)
-            : base(clientConfiguration, endpointRetriever, parametersBuilderFactory)
+            : base(endpointRetriever, parametersBuilderFactory)
         {
         }
 
@@ -52,7 +51,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             }
 
             queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
-            return new Uri(requestUri);
+            return new Uri(requestUri, UriKind.Relative);
         }
     }
 }

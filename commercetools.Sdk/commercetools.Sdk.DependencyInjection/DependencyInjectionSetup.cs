@@ -6,11 +6,10 @@ using commercetools.Sdk.Linq;
 using commercetools.Sdk.Registration;
 using commercetools.Sdk.Serialization;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace commercetools.Sdk.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
     /// Contains extensions methods to use when setting up commercetools dependencies.

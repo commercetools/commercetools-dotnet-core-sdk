@@ -2,8 +2,8 @@
 {
     public class DiscountPredicateExpressionVisitor : PredicateExpressionVisitorBase, IDiscountPredicateExpressionVisitor
     {
-        public DiscountPredicateExpressionVisitor(DiscountPredicateVisitorFactory predicateVisitorFactory)
-            : base(predicateVisitorFactory)
+        public DiscountPredicateExpressionVisitor()
+            : base(new DiscountPredicateVisitorFactory())
         {
         }
     }

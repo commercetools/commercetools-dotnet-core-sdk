@@ -53,7 +53,6 @@ namespace commercetools.Sdk.HttpApi.Tests
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
             queryCommand.SetExpand(expansions);
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
-                this.clientFixture.GetService<IClientConfiguration>(),
                 this.clientFixture.GetService<IEndpointRetriever>(),
                 this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>(),
                 this.clientFixture.GetService<IParametersBuilderFactory<IQueryParametersBuilder>>()
@@ -73,7 +72,6 @@ namespace commercetools.Sdk.HttpApi.Tests
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
             queryCommand.SetExpand(expansions);
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
-                this.clientFixture.GetService<IClientConfiguration>(),
                 this.clientFixture.GetService<IEndpointRetriever>(),
                 this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>(),
                 this.clientFixture.GetService<IParametersBuilderFactory<IQueryParametersBuilder>>());
@@ -125,7 +123,6 @@ namespace commercetools.Sdk.HttpApi.Tests
             GetMatchingProductDiscountCommand matchingCommand = new GetMatchingProductDiscountCommand(parameters);
             GetMatchingRequestMessageBuilder requestMessageBuilder = new GetMatchingRequestMessageBuilder(
                 this.clientFixture.GetService<ISerializerService>(),
-                this.clientFixture.GetService<IClientConfiguration>(),
                 this.clientFixture.GetService<IEndpointRetriever>(),
                 this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = requestMessageBuilder.GetRequestMessage(matchingCommand);
@@ -138,7 +135,6 @@ namespace commercetools.Sdk.HttpApi.Tests
             var c = new QueryCommand<Category>();
             c.Where(category => category.Id == "abc").Where(category => category.Key == "def");
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
-                this.clientFixture.GetService<IClientConfiguration>(),
                 this.clientFixture.GetService<IEndpointRetriever>(),
                 this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>(),
                 this.clientFixture.GetService<IParametersBuilderFactory<IQueryParametersBuilder>>());

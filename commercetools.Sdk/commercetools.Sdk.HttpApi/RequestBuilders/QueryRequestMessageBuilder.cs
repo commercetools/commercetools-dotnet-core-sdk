@@ -15,11 +15,10 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
         private readonly IParametersBuilderFactory<IQueryParametersBuilder> queryParametersBuilderFactory;
 
         public QueryRequestMessageBuilder(
-            IClientConfiguration clientConfiguration,
             IEndpointRetriever endpointRetriever,
             IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory,
             IParametersBuilderFactory<IQueryParametersBuilder> queryParametersBuilderFactory)
-            : base(clientConfiguration, endpointRetriever, parametersBuilderFactory)
+            : base(endpointRetriever, parametersBuilderFactory)
         {
             this.queryParametersBuilderFactory = queryParametersBuilderFactory;
         }
@@ -44,7 +43,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
 
             queryStringParameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));
             queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
-            return new Uri(requestUri);
+            return new Uri(requestUri, UriKind.Relative);
         }
     }
 }

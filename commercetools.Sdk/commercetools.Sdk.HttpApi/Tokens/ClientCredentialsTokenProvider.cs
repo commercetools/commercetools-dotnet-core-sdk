@@ -8,10 +8,9 @@ namespace commercetools.Sdk.HttpApi.Tokens
     {
         public ClientCredentialsTokenProvider(
             IHttpClientFactory httpClientFactory,
-            IClientConfiguration clientConfiguration,
             ITokenStoreManager tokenStoreManager,
             ISerializerService serializerService)
-            : base(httpClientFactory, clientConfiguration, tokenStoreManager, serializerService)
+            : base(httpClientFactory, tokenStoreManager, serializerService)
         {
         }
 

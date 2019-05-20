@@ -8,6 +8,7 @@ using commercetools.Sdk.Linq;
 using commercetools.Sdk.Linq.Discount;
 using commercetools.Sdk.Linq.Filter;
 using commercetools.Sdk.Linq.Query;
+using commercetools.Sdk.Linq.Sort;
 using commercetools.Sdk.Registration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,36 +16,6 @@ namespace commercetools.Sdk.Domain
 {
     public static class ExpressionExtensions
     {
-        public static IDiscountPredicateExpressionVisitor DiscountPredicateExpressionVisitor { get; set; }
-        public static IFilterPredicateExpressionVisitor FilterPredicateExpressionVisitor { get; set; }
-        public static IQueryPredicateExpressionVisitor QueryPredicateExpressionVisitor { get; set; }
-        public static ISortExpressionVisitor SortExpressionVisitor { get; set; }
-        public static IExpansionExpressionVisitor ExpansionExpressionVisitor { get; set; }
-
-        public static string RenderDiscountPredicate(this Expression expression)
-        {
-            return DiscountPredicateExpressionVisitor.Render(expression);
-        }
-
-        public static string RenderFilterPredicate(this Expression expression)
-        {
-            return FilterPredicateExpressionVisitor.Render(expression);
-        }
-
-        public static string RenderQueryPredicate(this Expression expression)
-        {
-            return QueryPredicateExpressionVisitor.Render(expression);
-        }
-        public static string RenderSort(this Expression expression)
-        {
-            return SortExpressionVisitor.Render(expression);
-        }
-
-        public static string RenderExpand(this Expression expression)
-        {
-            return ExpansionExpressionVisitor.GetPath(expression);
-        }
-
         public static void SetPredicate(this ProductDiscountDraft productDiscountDraft, Expression<Func<Product, bool>> expression)
         {
             productDiscountDraft.Predicate = expression.RenderDiscountPredicate();

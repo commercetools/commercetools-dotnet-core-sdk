@@ -10,10 +10,9 @@ namespace commercetools.Sdk.HttpApi.Tokens
 
         public AnonymousSessionTokenProvider(
             IHttpClientFactory httpClientFactory,
-            IClientConfiguration clientConfiguration,
             IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager,
             ISerializerService serializerService)
-            : base(httpClientFactory, clientConfiguration, anonymousCredentialsStoreManager, serializerService)
+            : base(httpClientFactory, anonymousCredentialsStoreManager, serializerService)
         {
             this.anonymousCredentialsStoreManager = anonymousCredentialsStoreManager;
         }

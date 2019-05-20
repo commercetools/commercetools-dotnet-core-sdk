@@ -2,8 +2,8 @@
 {
     public class QueryPredicateExpressionVisitor : PredicateExpressionVisitorBase, IQueryPredicateExpressionVisitor
     {
-        public QueryPredicateExpressionVisitor(QueryPredicateVisitorFactory queryPredicateVisitorFactory)
-            : base(queryPredicateVisitorFactory)
+        public QueryPredicateExpressionVisitor()
+            : base(new QueryPredicateVisitorFactory())
         {
         }
     }

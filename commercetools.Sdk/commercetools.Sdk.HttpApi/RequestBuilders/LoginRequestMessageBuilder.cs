@@ -10,10 +10,9 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
         private readonly ISerializerService serializerService;
 
         public LoginRequestMessageBuilder(
-            IClientConfiguration clientConfiguration,
             IEndpointRetriever endpointRetriever,
             ISerializerService serializerService)
-            : base(clientConfiguration, endpointRetriever, null)
+            : base(endpointRetriever, null)
         {
             this.serializerService = serializerService;
         }
@@ -22,7 +21,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
 
         public HttpRequestMessage GetRequestMessage<T>(LoginCommand<T> command)
         {
-            return this.GetRequestMessage<T>(this.GetRequestUri(), this.GetHttpContent(command), HttpMethod);
+            return this.GetRequestMessage<T>(new Uri("login", UriKind.Relative), this.GetHttpContent(command), HttpMethod);
         }
 
         private HttpContent GetHttpContent<T>(LoginCommand<T> command)
@@ -37,12 +36,6 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
                 UpdateProductData = command.UpdateProductData
             };
             return new StringContent(this.serializerService.Serialize(requestBody));
-        }
-
-        private Uri GetRequestUri()
-        {
-            string requestUri = this.GetMessageBaseWithoutEndpoint() + "/login";
-            return new Uri(requestUri);
         }
     }
 }

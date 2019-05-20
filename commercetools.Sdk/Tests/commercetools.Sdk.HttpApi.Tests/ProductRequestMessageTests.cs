@@ -26,12 +26,11 @@ namespace commercetools.Sdk.HttpApi.Tests
             // This object cannot be retrieved with GetService method directly.
             // GetRequestMessageBuilder is registered as IRequestMessageBuilder among other request builders.
             GetRequestMessageBuilder requestMessageBuilder = new GetRequestMessageBuilder(
-                this.clientFixture.GetService<IClientConfiguration>(),
                 this.clientFixture.GetService<IEndpointRetriever>(),
                 this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = requestMessageBuilder.GetRequestMessage(command);
             Assert.Equal(HttpMethod.Get, httpRequestMessage.Method);
-            Assert.Equal(this.clientFixture.APIBaseAddressWithProjectKey + "/products/2bafc816-4223-4ff0-ac8a-0f08a8f29fd6?priceCurrency=EUR", httpRequestMessage.RequestUri.ToString());
+            Assert.Equal("products/2bafc816-4223-4ff0-ac8a-0f08a8f29fd6?priceCurrency=EUR", httpRequestMessage.RequestUri.ToString());
         }
     }
 }

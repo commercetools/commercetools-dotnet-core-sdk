@@ -3,7 +3,7 @@ using System;
 
 namespace commercetools.Sdk.Serialization
 {
-    internal interface IMapperTypeRetriever<T>
+    public interface IMapperTypeRetriever<T>
     {
         Type GetTypeForToken(JToken token);
     }

@@ -1,13 +1,8 @@
 ﻿using commercetools.Sdk.Client;
-using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.Categories;
-using commercetools.Sdk.Domain.Categories.UpdateActions;
-using commercetools.Sdk.HttpApi.Domain;
 using commercetools.Sdk.Serialization;
 using Moq;
 using Moq.Protected;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -15,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using commercetools.Sdk.Domain.Messages;
 using commercetools.Sdk.Domain.Messages.Categories;
+using commercetools.Sdk.HttpApi.DelegatingHandlers;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
@@ -34,7 +30,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             string serialized = File.ReadAllText("Resources/Responses/CategoryCreatedMessage.json");
             var mockHttpClientFactory = new Mock<IHttpClientFactory>();
             var mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            mockHttpClientFactory.Setup(x => x.CreateClient(DefaultClientNames.Api)).Returns(new HttpClient(mockHandler.Object));
+            mockHttpClientFactory.Setup(x => x.CreateClient(DefaultClientNames.Api)).Returns(new HttpClient(mockHandler.Object){ BaseAddress = new Uri("https://api.sphere.io/test-project/") });
             mockHandler
             .Protected()
             .Setup<Task<HttpResponseMessage>>(
@@ -48,7 +44,12 @@ namespace commercetools.Sdk.HttpApi.Tests
                 Content = new StringContent(serialized)
             })
             .Verifiable();
-            IClient commerceToolsClient = new Client(mockHttpClientFactory.Object, this.clientFixture.GetService<IHttpApiCommandFactory>(), this.clientFixture.GetService<ISerializerService>());
+            IClient commerceToolsClient = new CtpClient(
+                mockHttpClientFactory.Object,
+                this.clientFixture.GetService<IHttpApiCommandFactory>(),
+                this.clientFixture.GetService<ISerializerService>(),
+                this.clientFixture.GetService<IUserAgentProvider>()
+                );
             string messageId = "174adf2f-783f-4ce5-a2d5-ee7d3ee7caf4";
             CategoryCreatedMessage categoryCreatedMessage = commerceToolsClient.ExecuteAsync(new GetByIdCommand<Message>(new Guid(messageId))).Result as CategoryCreatedMessage;
             Assert.Equal(messageId, categoryCreatedMessage.Id);
