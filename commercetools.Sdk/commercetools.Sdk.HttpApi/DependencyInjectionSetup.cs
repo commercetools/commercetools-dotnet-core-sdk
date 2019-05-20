@@ -105,10 +105,12 @@ namespace commercetools.Sdk.HttpApi
             services.AddSingleton<IEndpointRetriever, EndpointRetriever>();
             services.RegisterAllTypes<IRequestMessageBuilder>(ServiceLifetime.Singleton);
             services.RegisterAllTypes<IAdditionalParametersBuilder>(ServiceLifetime.Singleton);
+            services.RegisterAllTypes<IQueryParametersBuilder>(ServiceLifetime.Singleton);
             services.RegisterAllTypes<ISearchParametersBuilder>(ServiceLifetime.Singleton);
             services.RegisterAllTypes<IUploadImageParametersBuilder>(ServiceLifetime.Singleton);
             services.AddSingleton<IParametersBuilderFactory<IAdditionalParametersBuilder>, ParametersBuilderFactory<IAdditionalParametersBuilder>>();
             services.AddSingleton<IParametersBuilderFactory<ISearchParametersBuilder>, ParametersBuilderFactory<ISearchParametersBuilder>>();
+            services.AddSingleton<IParametersBuilderFactory<IQueryParametersBuilder>, ParametersBuilderFactory<IQueryParametersBuilder>>();
             services.AddSingleton<IParametersBuilderFactory<IUploadImageParametersBuilder>, ParametersBuilderFactory<IUploadImageParametersBuilder>>();
             services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();

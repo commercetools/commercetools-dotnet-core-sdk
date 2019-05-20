@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.ProductProjections;
 using Type = System.Type;
@@ -27,6 +28,7 @@ namespace commercetools.Sdk.HttpApi.SearchParameters
             parameters.AddRange(AddParameters(productProjectionSearchParameters.FilterFacets, "filter.facets"));
             parameters.AddRange(AddParameters(productProjectionSearchParameters.Facets, "facet"));
             parameters.AddRange(AddParameters(productProjectionSearchParameters.Sort, "sort"));
+            parameters.AddRange(AddParameters(productProjectionSearchParameters.Expand, "expand"));
             if (productProjectionSearchParameters.Fuzzy != null)
             {
                 parameters.Add(new KeyValuePair<string, string>("fuzzy", productProjectionSearchParameters.Fuzzy.ToString()));
@@ -51,6 +53,9 @@ namespace commercetools.Sdk.HttpApi.SearchParameters
             {
                 parameters.Add(new KeyValuePair<string, string>("markMatchingVariants", productProjectionSearchParameters.MarkMatchingVariants.ToString()));
             }
+
+            var withTotal = productProjectionSearchParameters.WithTotal ? "true" : "false";
+            parameters.Add(new KeyValuePair<string, string>("withTotal", withTotal));
 
             return parameters;
         }

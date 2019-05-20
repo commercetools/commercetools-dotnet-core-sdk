@@ -6,116 +6,24 @@ using commercetools.Sdk.Domain.Query;
 
 namespace commercetools.Sdk.Client
 {
-    public static class CommandsExtensions
+    public static class SearchCommandExtensions
     {
-        public static QueryCommand<T> Where<T>(this QueryCommand<T> command, Expression<Func<T, bool>> expression)
-        {
-            command.Where.Add(new QueryPredicate<T>(expression).ToString());
-
-            return command;
-        }
-
-        public static QueryCommand<T> Where<T>(this QueryCommand<T> command, string expression)
-        {
-            command.Where.Add(expression);
-
-            return command;
-        }
-
-        public static GetCommand<T> Expand<T>(this GetCommand<T> command, Expression<Func<T, Reference>> expression)
-        {
-            command.Expand.Add(new Expansion<T>(expression).ToString());
-
-            return command;
-        }
-
-        public static QueryCommand<T> Expand<T>(this QueryCommand<T> command, Expression<Func<T, Reference>> expression)
-        {
-            command.Expand.Add(new Expansion<T>(expression).ToString());
-
-            return command;
-        }
-
-        public static UpdateCommand<T> Expand<T>(this UpdateCommand<T> command, Expression<Func<T, Reference>> expression)
-        {
-            command.Expand.Add(new Expansion<T>(expression).ToString());
-
-            return command;
-        }
-
-        public static DeleteCommand<T> Expand<T>(this DeleteCommand<T> command, Expression<Func<T, Reference>> expression)
-        {
-            command.Expand.Add(new Expansion<T>(expression).ToString());
-
-            return command;
-        }
-
         public static SearchCommand<T> Expand<T>(this SearchCommand<T> command, Expression<Func<T, Reference>> expression)
         {
-            command.Expand.Add(new Expansion<T>(expression).ToString());
-
-            return command;
-        }
-
-        public static GetCommand<T> Expand<T>(this GetCommand<T> command, string expression)
-        {
-            command.Expand.Add(expression);
-
-            return command;
-        }
-
-        public static QueryCommand<T> Expand<T>(this QueryCommand<T> command, string expression)
-        {
-            command.Expand.Add(expression);
-
-            return command;
-        }
-
-        public static UpdateCommand<T> Expand<T>(this UpdateCommand<T> command, string expression)
-        {
-            command.Expand.Add(expression);
-
-            return command;
-        }
-
-        public static DeleteCommand<T> Expand<T>(this DeleteCommand<T> command, string expression)
-        {
-            command.Expand.Add(expression);
+            if (command.SearchParameters != null && command.SearchParameters is IExpandable expandableParams)
+            {
+                expandableParams.Expand.Add(new Expansion<T>(expression).ToString());
+            }
 
             return command;
         }
 
         public static SearchCommand<T> Expand<T>(this SearchCommand<T> command, string expression)
         {
-            command.Expand.Add(expression);
-
-            return command;
-        }
-
-        public static QueryCommand<T> Limit<T>(this QueryCommand<T> command, int limit)
-        {
-            command.Limit = limit;
-
-            return command;
-        }
-
-        public static QueryCommand<T> Offset<T>(this QueryCommand<T> command, int offset)
-        {
-            command.Offset = offset;
-
-            return command;
-        }
-
-        public static QueryCommand<T> Sort<T>(this QueryCommand<T> command, string expression)
-        {
-            command.Sort.Add(expression);
-
-            return command;
-        }
-
-        public static QueryCommand<T> Sort<T>(this QueryCommand<T> command, Expression<Func<T, IComparable>> expression, SortDirection sortDirection = SortDirection.Ascending)
-        {
-            command.Sort.Add(new Sort<T>(expression, sortDirection).ToString());
+            if (command.SearchParameters != null && command.SearchParameters is IExpandable expandableParams)
+            {
+                expandableParams.Expand.Add(expression);
+            }
 
             return command;
         }
@@ -222,16 +130,20 @@ namespace commercetools.Sdk.Client
 
         public static SearchProductProjectionsCommand Sort(this SearchProductProjectionsCommand command, string expression)
         {
-            var p = command.SearchParameters as ProductProjectionSearchParameters;
-            p.Sort.Add(expression);
+            if (command.SearchParameters != null && command.SearchParameters is ISortable sortableParams)
+            {
+                sortableParams.Sort.Add(expression);
+            }
 
             return command;
         }
 
         public static SearchProductProjectionsCommand Sort(this SearchProductProjectionsCommand command, Expression<Func<ProductProjection, IComparable>> expression, SortDirection sortDirection = SortDirection.Ascending)
         {
-            var p = command.SearchParameters as ProductProjectionSearchParameters;
-            p.Sort.Add(new Sort<ProductProjection>(expression, sortDirection).ToString());
+            if (command.SearchParameters != null && command.SearchParameters is ISortable sortableParams)
+            {
+                sortableParams.Sort.Add(new Sort<ProductProjection>(expression, sortDirection).ToString());
+            }
 
             return command;
         }
@@ -263,16 +175,30 @@ namespace commercetools.Sdk.Client
 
         public static SearchProductProjectionsCommand Limit(this SearchProductProjectionsCommand command, int limit)
         {
-            var p = command.SearchParameters as ProductProjectionSearchParameters;
-            p.Limit = limit;
+            if (command.SearchParameters != null && command.SearchParameters is IPageable pageableParams)
+            {
+                pageableParams.Limit = limit;
+            }
 
             return command;
         }
 
         public static SearchProductProjectionsCommand Offset(this SearchProductProjectionsCommand command, int offset)
         {
-            var p = command.SearchParameters as ProductProjectionSearchParameters;
-            p.Offset = offset;
+            if (command.SearchParameters != null && command.SearchParameters is IPageable pageableParams)
+            {
+                pageableParams.Offset = offset;
+            }
+
+            return command;
+        }
+
+        public static SearchProductProjectionsCommand WithTotal(this SearchProductProjectionsCommand command, bool withTotal)
+        {
+            if (command.SearchParameters != null && command.SearchParameters is IPageable pageableParams)
+            {
+                pageableParams.WithTotal = withTotal;
+            }
 
             return command;
         }

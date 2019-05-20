@@ -109,27 +109,32 @@ namespace commercetools.Sdk.Client
                 case "ThenByDescending":
                     if (mc.Arguments[1] is UnaryExpression sort)
                     {
-                        var parameters = cmd.SearchParameters as ProductProjectionSearchParameters;
-                        if (mc.Method.Name.StartsWith("OrderBy", StringComparison.Ordinal))
+                        if (cmd.SearchParameters != null && cmd.SearchParameters is ISortable parameters)
                         {
-                            parameters.Sort.Clear();
-                        }
+                            if (mc.Method.Name.StartsWith("OrderBy", StringComparison.Ordinal))
+                            {
+                                parameters.Sort.Clear();
+                            }
 
-                        var direction = SortDirection.Ascending;
-                        if (mc.Method.Name.EndsWith("Descending", StringComparison.Ordinal))
-                        {
-                            direction = SortDirection.Descending;
-                        }
+                            var direction = SortDirection.Ascending;
+                            if (mc.Method.Name.EndsWith("Descending", StringComparison.Ordinal))
+                            {
+                                direction = SortDirection.Descending;
+                            }
 
-                        var render = sort.Operand.RenderSort();
-                        parameters.Sort.Add(new Sort<ProductProjection>(render, direction).ToString());
+                            var render = sort.Operand.RenderSort();
+                            parameters.Sort.Add(new Sort<ProductProjection>(render, direction).ToString());
+                        }
                     }
 
                     break;
                 case "Expand":
                     if (mc.Arguments[1] is UnaryExpression expand)
                     {
-                        cmd.Expand.Add(new Expansion<ProductProjection>(expand.Operand).ToString());
+                        if (cmd.SearchParameters != null && cmd.SearchParameters is IExpandable parameters)
+                        {
+                            parameters.Expand.Add(new Expansion<ProductProjection>(expand.Operand).ToString());
+                        }
                     }
 
                     break;

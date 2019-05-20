@@ -296,10 +296,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             }
 
             string id = parentCategory.Id;
-            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == id);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
-            queryCommand.SetWhere(queryPredicate);
-            queryCommand.Limit = 2;
+            queryCommand.Where(c => c.Parent.Id == id);
+            queryCommand.Limit(2);
+            queryCommand.WithTotal(true);
+
             PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.Equal(2, returnedSet.Results.Count);
             Assert.Equal(3, returnedSet.Total);
@@ -320,7 +321,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             string id = parentCategory.Id;
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
             queryCommand.Where(c => c.Parent.Id == id);
-            queryCommand.Offset = 2;
+            queryCommand.Offset(2);
+            queryCommand.WithTotal(true);
             PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.Single(returnedSet.Results);
             Assert.Equal(3, returnedSet.Total);
@@ -377,9 +379,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             query.Expand(c => c.Parent).Expand(c => c.Ancestors.ExpandAll());
 
             var command = ((ClientQueryProvider<Category>) query.Provider).Command;
-            Assert.Equal($"key = \"{category.Key}\"", string.Join(", ",command.Where));
-            Assert.Equal("key desc", string.Join(", ", command.Sort));
-            Assert.Equal("parent, ancestors[*]", string.Join(", ", command.Expand));
+            if (command.QueryParameters is QueryCommandParameters commandParams)
+            {
+                Assert.Equal($"key = \"{category.Key}\"", string.Join(", ", commandParams.Where));
+                Assert.Equal("key desc", string.Join(", ", commandParams.Sort));
+                Assert.Equal("parent, ancestors[*]", string.Join(", ", commandParams.Expand));
+            }
 
             var categories = query.ToList();
             Assert.Single(categories);

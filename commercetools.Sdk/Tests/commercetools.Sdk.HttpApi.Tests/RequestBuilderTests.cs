@@ -55,9 +55,11 @@ namespace commercetools.Sdk.HttpApi.Tests
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
                 this.clientFixture.GetService<IClientConfiguration>(),
                 this.clientFixture.GetService<IEndpointRetriever>(),
-                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>(),
+                this.clientFixture.GetService<IParametersBuilderFactory<IQueryParametersBuilder>>()
+                );
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
-            Assert.Equal(this.clientFixture.APIBaseAddressWithProjectKey+"/categories?expand=parent", httpRequestMessage.RequestUri.ToString());
+            Assert.Equal(this.clientFixture.APIBaseAddressWithProjectKey+"/categories?expand=parent&withTotal=false", httpRequestMessage.RequestUri.ToString());
         }
 
         [Fact]
@@ -73,9 +75,10 @@ namespace commercetools.Sdk.HttpApi.Tests
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
                 this.clientFixture.GetService<IClientConfiguration>(),
                 this.clientFixture.GetService<IEndpointRetriever>(),
-                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>(),
+                this.clientFixture.GetService<IParametersBuilderFactory<IQueryParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
-            Assert.Equal(this.clientFixture.APIBaseAddressWithProjectKey + "/categories?expand=parent&expand=ancestors%5B0%5D", httpRequestMessage.RequestUri.ToString());
+            Assert.Equal(this.clientFixture.APIBaseAddressWithProjectKey + "/categories?expand=parent&expand=ancestors%5B0%5D&withTotal=false", httpRequestMessage.RequestUri.ToString());
         }
 
         [Fact]
@@ -137,9 +140,10 @@ namespace commercetools.Sdk.HttpApi.Tests
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
                 this.clientFixture.GetService<IClientConfiguration>(),
                 this.clientFixture.GetService<IEndpointRetriever>(),
-                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>(),
+                this.clientFixture.GetService<IParametersBuilderFactory<IQueryParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(c);
-            Assert.Equal("?where=id%20%3D%20%22abc%22&where=key%20%3D%20%22def%22", httpRequestMessage.RequestUri.Query);
+            Assert.Equal("?where=id%20%3D%20%22abc%22&where=key%20%3D%20%22def%22&withTotal=false", httpRequestMessage.RequestUri.Query);
         }
     }
 }
