@@ -141,5 +141,22 @@ namespace commercetools.Sdk.HttpApi.Tests
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(c);
             Assert.Equal("categories?where=id%20%3D%20%22abc%22&where=key%20%3D%20%22def%22&withTotal=false", httpRequestMessage.RequestUri.ToString());
         }
+
+        [Fact]
+        public void MultipleWhereParametersUsingSetWhere()
+        {
+            var c = new QueryCommand<Category>();
+            c.SetWhere(new List<QueryPredicate<Category>>
+            {
+                new QueryPredicate<Category>(category => category.Id == "abc"),
+                new QueryPredicate<Category>(category => category.Key == "def")
+            });
+            QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
+                this.clientFixture.GetService<IEndpointRetriever>(),
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>(),
+                this.clientFixture.GetService<IParametersBuilderFactory<IQueryParametersBuilder>>());
+            HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(c);
+            Assert.Equal("categories?where=id%20%3D%20%22abc%22&where=key%20%3D%20%22def%22&withTotal=false", httpRequestMessage.RequestUri.ToString());
+        }
     }
 }

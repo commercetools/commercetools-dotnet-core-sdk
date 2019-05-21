@@ -225,6 +225,33 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         }
 
         [Fact]
+        public void QueryCategoryWithMultiplePredicates()
+        {
+            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
+
+            Category parentCategory = this.categoryFixture.CreateCategory();
+            this.categoryFixture.CategoriesToDelete.Add(parentCategory);
+
+            Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent(parentCategory));
+            this.categoryFixture.CategoriesToDelete.Add(category);
+
+            var queryPredicates = new List<QueryPredicate<Category>>
+            {
+                new QueryPredicate<Category>(c => c.Key == category.Key.valueOf()),
+                new QueryPredicate<Category>(c => c.Parent.Id == parentCategory.Id.valueOf())
+            };
+
+            QueryCommand<Category> queryCommand = new QueryCommand<Category>();
+            queryCommand.SetWhere(queryPredicates);
+
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
+
+            Assert.Single(returnedSet.Results);
+            Assert.Equal(returnedSet.Results[0].Key, category.Key);
+            Assert.Equal(returnedSet.Results[0].Parent.Id, parentCategory.Id);
+        }
+
+        [Fact]
         public void QueryAndExpandParentCategory()
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();

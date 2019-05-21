@@ -130,7 +130,7 @@ namespace commercetools.Sdk.Client
         {
             if (command.QueryParameters is IPredicateQueryable queryParameters && queryPredicates != null)
             {
-                return command.SetWhere(queryPredicates);
+                return command.SetWhere(queryPredicates.Select(predicate => predicate.ToString()));
             }
 
             return command;
