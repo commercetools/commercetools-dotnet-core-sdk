@@ -52,7 +52,7 @@ namespace commercetools.Sdk.Client
             return command;
         }
 
-        public static QueryCommand<T> Limit<T>(this QueryCommand<T> command, int limit)
+        public static QueryCommand<T> SetLimit<T>(this QueryCommand<T> command, int limit)
         {
             if (command.QueryParameters is IPageable queryParameters)
             {
@@ -62,7 +62,7 @@ namespace commercetools.Sdk.Client
             return command;
         }
 
-        public static QueryCommand<T> Offset<T>(this QueryCommand<T> command, int offset)
+        public static QueryCommand<T> SetOffset<T>(this QueryCommand<T> command, int offset)
         {
             if (command.QueryParameters is IPageable queryParameters)
             {
@@ -72,7 +72,7 @@ namespace commercetools.Sdk.Client
             return command;
         }
 
-        public static QueryCommand<T> WithTotal<T>(this QueryCommand<T> command, bool withTotal)
+        public static QueryCommand<T> SetWithTotal<T>(this QueryCommand<T> command, bool withTotal)
         {
             if (command.QueryParameters is IPageable queryParameters)
             {

@@ -330,8 +330,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             string id = parentCategory.Id;
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
             queryCommand.Where(c => c.Parent.Id == id);
-            queryCommand.Limit(2);
-            queryCommand.WithTotal(true);
+            queryCommand.SetLimit(2);
+            queryCommand.SetWithTotal(true);
 
             PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.Equal(2, returnedSet.Results.Count);
@@ -353,8 +353,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             string id = parentCategory.Id;
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
             queryCommand.Where(c => c.Parent.Id == id);
-            queryCommand.Offset(2);
-            queryCommand.WithTotal(true);
+            queryCommand.SetOffset(2);
+            queryCommand.SetWithTotal(true);
             PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.Single(returnedSet.Results);
             Assert.Equal(3, returnedSet.Total);
