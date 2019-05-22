@@ -114,7 +114,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             //Retrieve Products with created productType
             QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>(stagedAdditionalParameters);
             queryCommand.Where(productProjection => productProjection.ProductType.Id == productType.Id.valueOf());
-            queryCommand.Offset = 2;
+            queryCommand.SetOffset(2);
+            queryCommand.SetWithTotal(true);
             PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
 
             //Assert
@@ -143,7 +144,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
             //Retrieve Products with created productType limited by 2
             QueryCommand<ProductProjection> queryCommand = new QueryCommand<ProductProjection>(stagedAdditionalParameters);
             queryCommand.Where(productProjection => productProjection.ProductType.Id == productType.Id.valueOf());
-            queryCommand.Limit = 2;
+            queryCommand.SetLimit(2);
+            queryCommand.SetWithTotal(true);
             PagedQueryResult<ProductProjection> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
 
             //Assert

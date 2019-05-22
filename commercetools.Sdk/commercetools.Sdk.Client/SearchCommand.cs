@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Domain.Query;
 
 namespace commercetools.Sdk.Client
@@ -8,7 +9,6 @@ namespace commercetools.Sdk.Client
     {
         protected SearchCommand()
         {
-            this.Expand = new List<string>();
         }
 
         protected SearchCommand(ISearchParameters<T> searchParameters)
@@ -32,8 +32,6 @@ namespace commercetools.Sdk.Client
             this.AdditionalParameters = additionalParameters;
         }
 
-        public List<string> Expand { get; }
-
         public ISearchParameters<T> SearchParameters { get; }
 
         public override System.Type ResourceType => typeof(T);
@@ -45,9 +43,12 @@ namespace commercetools.Sdk.Client
                 return;
             }
 
-            foreach (var expand in expandPredicates)
+            if (this.SearchParameters != null && this.SearchParameters is IExpandable expandableParams)
             {
-                this.Expand.Add(expand.ToString());
+                foreach (var expand in expandPredicates)
+                {
+                    expandableParams.Expand.Add(expand.ToString());
+                }
             }
         }
     }

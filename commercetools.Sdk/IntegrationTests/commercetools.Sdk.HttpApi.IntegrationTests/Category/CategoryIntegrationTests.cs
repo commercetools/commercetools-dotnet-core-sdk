@@ -225,6 +225,33 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         }
 
         [Fact]
+        public void QueryCategoryWithMultiplePredicates()
+        {
+            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
+
+            Category parentCategory = this.categoryFixture.CreateCategory();
+            this.categoryFixture.CategoriesToDelete.Add(parentCategory);
+
+            Category category = this.categoryFixture.CreateCategory(this.categoryFixture.GetCategoryDraftWithParent(parentCategory));
+            this.categoryFixture.CategoriesToDelete.Add(category);
+
+            var queryPredicates = new List<QueryPredicate<Category>>
+            {
+                new QueryPredicate<Category>(c => c.Key == category.Key.valueOf()),
+                new QueryPredicate<Category>(c => c.Parent.Id == parentCategory.Id.valueOf())
+            };
+
+            QueryCommand<Category> queryCommand = new QueryCommand<Category>();
+            queryCommand.SetWhere(queryPredicates);
+
+            PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
+
+            Assert.Single(returnedSet.Results);
+            Assert.Equal(returnedSet.Results[0].Key, category.Key);
+            Assert.Equal(returnedSet.Results[0].Parent.Id, parentCategory.Id);
+        }
+
+        [Fact]
         public void QueryAndExpandParentCategory()
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
@@ -301,10 +328,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             }
 
             string id = parentCategory.Id;
-            QueryPredicate<Category> queryPredicate = new QueryPredicate<Category>(c => c.Parent.Id == id);
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
-            queryCommand.SetWhere(queryPredicate);
-            queryCommand.Limit = 2;
+            queryCommand.Where(c => c.Parent.Id == id);
+            queryCommand.SetLimit(2);
+            queryCommand.SetWithTotal(true);
+
             PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.Equal(2, returnedSet.Results.Count);
             Assert.Equal(3, returnedSet.Total);
@@ -325,7 +353,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             string id = parentCategory.Id;
             QueryCommand<Category> queryCommand = new QueryCommand<Category>();
             queryCommand.Where(c => c.Parent.Id == id);
-            queryCommand.Offset = 2;
+            queryCommand.SetOffset(2);
+            queryCommand.SetWithTotal(true);
             PagedQueryResult<Category> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
             Assert.Single(returnedSet.Results);
             Assert.Equal(3, returnedSet.Total);
@@ -382,9 +411,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             query.Expand(c => c.Parent).Expand(c => c.Ancestors.ExpandAll());
 
             var command = ((ClientQueryProvider<Category>) query.Provider).Command;
-            Assert.Equal($"key = \"{category.Key}\"", string.Join(", ",command.Where));
-            Assert.Equal("key desc", string.Join(", ", command.Sort));
-            Assert.Equal("parent, ancestors[*]", string.Join(", ", command.Expand));
+            if (command.QueryParameters is QueryCommandParameters commandParams)
+            {
+                Assert.Equal($"key = \"{category.Key}\"", string.Join(", ", commandParams.Where));
+                Assert.Equal("key desc", string.Join(", ", commandParams.Sort));
+                Assert.Equal("parent, ancestors[*]", string.Join(", ", commandParams.Expand));
+            }
 
             var categories = query.ToList();
             Assert.Single(categories);

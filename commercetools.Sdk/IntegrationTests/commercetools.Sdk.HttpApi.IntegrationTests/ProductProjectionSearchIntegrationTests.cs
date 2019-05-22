@@ -118,7 +118,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 
             var request = httpApiCommand.HttpRequestMessage;
             Assert.Equal(HttpMethod.Post, request.Method);
-            Assert.Equal("filter=variants.attributes.color%3A%22red%22&filter.query=categories.id%3A%22abc%22&filter.query=variants.attributes.size%3A%2248%22&facet=key&expand=productType&expand=taxCategory", request.Content.ReadAsStringAsync().Result);
+            Assert.Equal("filter=variants.attributes.color%3A%22red%22&filter.query=categories.id%3A%22abc%22&filter.query=variants.attributes.size%3A%2248%22&facet=key&expand=productType&expand=taxCategory&withTotal=false", request.Content.ReadAsStringAsync().Result);
         }
     }
 }

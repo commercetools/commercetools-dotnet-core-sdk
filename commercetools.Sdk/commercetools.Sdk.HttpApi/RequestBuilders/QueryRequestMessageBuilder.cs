@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.HttpApi.RequestBuilders
+﻿using commercetools.Sdk.HttpApi.SearchParameters;
+
+namespace commercetools.Sdk.HttpApi.RequestBuilders
 {
     using System;
     using System.Collections.Generic;
@@ -10,11 +12,15 @@
 
     public class QueryRequestMessageBuilder : RequestMessageBuilderBase, IRequestMessageBuilder
     {
+        private readonly IParametersBuilderFactory<IQueryParametersBuilder> queryParametersBuilderFactory;
+
         public QueryRequestMessageBuilder(
             IEndpointRetriever endpointRetriever,
-            IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory)
+            IParametersBuilderFactory<IAdditionalParametersBuilder> parametersBuilderFactory,
+            IParametersBuilderFactory<IQueryParametersBuilder> queryParametersBuilderFactory)
             : base(endpointRetriever, parametersBuilderFactory)
         {
+            this.queryParametersBuilderFactory = queryParametersBuilderFactory;
         }
 
         private static HttpMethod HttpMethod => HttpMethod.Get;
@@ -28,29 +34,11 @@
         {
             string requestUri = this.GetMessageBase<T>();
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
-            if (command.Where != null)
-            {
-                queryStringParameters.AddRange(command.Where.Select(x => new KeyValuePair<string, string>("where", x)));
-            }
 
-            if (command.Expand != null)
+            if (command.QueryParameters != null)
             {
-                queryStringParameters.AddRange(command.Expand.Select(x => new KeyValuePair<string, string>("expand", x)));
-            }
-
-            if (command.Sort != null)
-            {
-                queryStringParameters.AddRange(command.Sort.Select(x => new KeyValuePair<string, string>("sort", x)));
-            }
-
-            if (command.Limit != null)
-            {
-                queryStringParameters.Add(new KeyValuePair<string, string>("limit", command.Limit.ToString()));
-            }
-
-            if (command.Offset != null)
-            {
-                queryStringParameters.Add(new KeyValuePair<string, string>("offset", command.Offset.ToString()));
+                IQueryParametersBuilder queryParametersBuilder = this.queryParametersBuilderFactory.GetParameterBuilder(command.QueryParameters);
+                queryStringParameters.AddRange(queryParametersBuilder.GetQueryParameters(command.QueryParameters));
             }
 
             queryStringParameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));

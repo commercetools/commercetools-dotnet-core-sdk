@@ -37,11 +37,6 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
                 parameters.AddRange(searchParametersBuilder.GetSearchParameters(command.SearchParameters));
             }
 
-            if (command.Expand != null)
-            {
-                parameters.AddRange(command.Expand.Select(x => new KeyValuePair<string, string>("expand", x)));
-            }
-
             parameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));
             return new FormUrlEncodedContent(parameters);
         }

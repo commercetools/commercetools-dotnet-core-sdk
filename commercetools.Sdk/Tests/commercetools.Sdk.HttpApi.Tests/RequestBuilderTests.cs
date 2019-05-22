@@ -54,9 +54,11 @@ namespace commercetools.Sdk.HttpApi.Tests
             queryCommand.SetExpand(expansions);
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
                 this.clientFixture.GetService<IEndpointRetriever>(),
-                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>(),
+                this.clientFixture.GetService<IParametersBuilderFactory<IQueryParametersBuilder>>()
+                );
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
-            Assert.Equal("categories?expand=parent", httpRequestMessage.RequestUri.ToString());
+            Assert.Equal("categories?expand=parent&withTotal=false", httpRequestMessage.RequestUri.ToString());
         }
 
         [Fact]
@@ -71,9 +73,10 @@ namespace commercetools.Sdk.HttpApi.Tests
             queryCommand.SetExpand(expansions);
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
                 this.clientFixture.GetService<IEndpointRetriever>(),
-                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>(),
+                this.clientFixture.GetService<IParametersBuilderFactory<IQueryParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
-            Assert.Equal( "categories?expand=parent&expand=ancestors%5B0%5D", httpRequestMessage.RequestUri.ToString());
+            Assert.Equal("categories?expand=parent&expand=ancestors%5B0%5D&withTotal=false", httpRequestMessage.RequestUri.ToString());
         }
 
         [Fact]
@@ -133,9 +136,27 @@ namespace commercetools.Sdk.HttpApi.Tests
             c.Where(category => category.Id == "abc").Where(category => category.Key == "def");
             QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
                 this.clientFixture.GetService<IEndpointRetriever>(),
-                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>());
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>(),
+                this.clientFixture.GetService<IParametersBuilderFactory<IQueryParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(c);
-            Assert.Equal("categories?where=id%20%3D%20%22abc%22&where=key%20%3D%20%22def%22", httpRequestMessage.RequestUri.ToString());
+            Assert.Equal("categories?where=id%20%3D%20%22abc%22&where=key%20%3D%20%22def%22&withTotal=false", httpRequestMessage.RequestUri.ToString());
+        }
+
+        [Fact]
+        public void MultipleWhereParametersUsingSetWhere()
+        {
+            var c = new QueryCommand<Category>();
+            c.SetWhere(new List<QueryPredicate<Category>>
+            {
+                new QueryPredicate<Category>(category => category.Id == "abc"),
+                new QueryPredicate<Category>(category => category.Key == "def")
+            });
+            QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
+                this.clientFixture.GetService<IEndpointRetriever>(),
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>(),
+                this.clientFixture.GetService<IParametersBuilderFactory<IQueryParametersBuilder>>());
+            HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(c);
+            Assert.Equal("categories?where=id%20%3D%20%22abc%22&where=key%20%3D%20%22def%22&withTotal=false", httpRequestMessage.RequestUri.ToString());
         }
     }
 }

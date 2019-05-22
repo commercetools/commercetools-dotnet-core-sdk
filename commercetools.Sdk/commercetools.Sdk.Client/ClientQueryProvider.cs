@@ -52,21 +52,30 @@ namespace commercetools.Sdk.Client
                     {
                         var t = where.Operand as Expression<Func<TElement, bool>>;
                         var queryPredicate = new QueryPredicate<TElement>(t);
-                        cmd.Where.Add(queryPredicate.ToString());
+                        if (cmd != null && cmd.QueryParameters is IPredicateQueryable queryParameters)
+                        {
+                            queryParameters.Where.Add(queryPredicate.ToString());
+                        }
                     }
 
                     break;
                 case "Take":
                     if (mc.Arguments[1] is ConstantExpression limit)
                     {
-                        cmd.Limit = (int)limit.Value;
+                        if (cmd != null && cmd.QueryParameters is IPageable queryParameters)
+                        {
+                            queryParameters.Limit = (int)limit.Value;
+                        }
                     }
 
                     break;
                 case "Skip":
                     if (mc.Arguments[1] is ConstantExpression offset)
                     {
-                        cmd.Offset = (int)offset.Value;
+                        if (cmd != null && cmd.QueryParameters is IPageable queryParameters)
+                        {
+                            queryParameters.Offset = (int)offset.Value;
+                        }
                     }
 
                     break;
@@ -76,26 +85,32 @@ namespace commercetools.Sdk.Client
                 case "ThenByDescending":
                     if (mc.Arguments[1] is UnaryExpression sort)
                     {
-                        if (mc.Method.Name.StartsWith("OrderBy", StringComparison.Ordinal))
+                        if (cmd != null && cmd.QueryParameters is ISortable queryParameters)
                         {
-                            cmd.Sort.Clear();
-                        }
+                            if (mc.Method.Name.StartsWith("OrderBy", StringComparison.Ordinal))
+                            {
+                                queryParameters.Sort.Clear();
+                            }
 
-                        var direction = SortDirection.Ascending;
-                        if (mc.Method.Name.EndsWith("Descending", StringComparison.Ordinal))
-                        {
-                            direction = SortDirection.Descending;
-                        }
+                            var direction = SortDirection.Ascending;
+                            if (mc.Method.Name.EndsWith("Descending", StringComparison.Ordinal))
+                            {
+                                direction = SortDirection.Descending;
+                            }
 
-                        var render = sort.Operand.RenderSort();
-                        cmd.Sort.Add(new Sort<T>(render, direction).ToString());
+                            var render = sort.Operand.RenderSort();
+                            queryParameters.Sort.Add(new Sort<T>(render, direction).ToString());
+                        }
                     }
 
                     break;
                 case "Expand":
                     if (mc.Arguments[1] is UnaryExpression expand)
                     {
-                        cmd.Expand.Add(new Expansion<TElement>(expand.Operand).ToString());
+                        if (cmd != null && cmd.QueryParameters is IExpandable queryParameters)
+                        {
+                            queryParameters.Expand.Add(new Expansion<TElement>(expand.Operand).ToString());
+                        }
                     }
 
                     break;
