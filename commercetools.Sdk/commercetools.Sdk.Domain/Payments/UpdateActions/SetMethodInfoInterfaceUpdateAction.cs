@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Domain.Payments.UpdateActions
 {
-    public class SetMethodInterfaceIdUpdateAction : UpdateAction<Payment>
+    public class SetMethodInfoInterfaceUpdateAction : UpdateAction<Payment>
     {
         public string Action => "setMethodInfoInterface";
         [Required]

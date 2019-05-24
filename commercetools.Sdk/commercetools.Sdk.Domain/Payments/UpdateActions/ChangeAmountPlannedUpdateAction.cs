@@ -6,6 +6,6 @@ namespace commercetools.Sdk.Domain.Payments.UpdateActions
     {
         public string Action => "changeAmountPlanned";
         [Required]
-        public Money AmountPlanned { get; set; }
+        public Money Amount { get; set; }
     }
 }
