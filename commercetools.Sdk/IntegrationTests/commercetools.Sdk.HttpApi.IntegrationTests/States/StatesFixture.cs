@@ -54,7 +54,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.States
 
         public State CreateState(StateType stateType = StateType.ProductState,bool initial = true)
         {
-            return this.CreateState(this.GetStateDraft());
+            return this.CreateState(this.GetStateDraft(stateType, initial));
         }
 
         public State CreateState(StateDraft stateDraft)
