@@ -4,7 +4,7 @@
     {
         NotActive,
         NotValid,
-        DoesNotMatch,
+        DoesNotMatchCart,
         MatchesCart,
         MaxApplicationReached,
         ApplicationStoppedByPreviousDiscount

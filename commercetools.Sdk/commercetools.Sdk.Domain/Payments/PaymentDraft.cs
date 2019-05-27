@@ -16,6 +16,6 @@ namespace commercetools.Sdk.Domain.Payments
         public PaymentStatus PaymentStatus { get; set; }
         public List<TransactionDraft> Transactions { get; set; }
         public List<CustomFieldsDraft> InterfaceInteractions { get; set; }
-        public CustomFields Custom { get; set; }
+        public CustomFieldsDraft Custom { get; set; }
     }
 }
