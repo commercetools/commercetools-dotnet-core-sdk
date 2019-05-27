@@ -149,6 +149,7 @@ namespace SimpleInjector
 
                 builders.Add(clientName, services.SetupClient(collection, clientName, clientConfiguration, tokenFlow));
 
+
                 clientBuilders.Add(Lifestyle.Singleton.CreateRegistration(() => new CtpClient(services.GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName }, services));
             }
             services.RegisterCollection<IClient>(clientBuilders);
@@ -192,7 +193,7 @@ namespace SimpleInjector
                     new CorrelationIdHandler(new DefaultCorrelationIdProvider(clientConfiguration)))
                 .AddHttpMessageHandler(c =>
                     new ErrorHandler(new ApiExceptionFactory(clientConfiguration, services.GetService<ISerializerService>())))
-                .AddHttpMessageHandler(c => services.GetService<LoggerHandler>());
+                .AddHttpMessageHandler(c => new LoggerHandler(services.GetService<ILoggerFactory>()));
 
             return httpClientBuilder;
         }
@@ -203,7 +204,6 @@ namespace SimpleInjector
             services.Register<ITokenStoreManager, InMemoryTokenStoreManager>(Lifestyle.Transient);
             services.Register<IUserCredentialsStoreManager, InMemoryUserCredentialsStoreManager>(Lifestyle.Transient);
             services.Register<IAnonymousCredentialsStoreManager, InMemoryAnonymousCredentialsStoreManager>(Lifestyle.Transient);
-            services.Register<LoggerHandler>(Lifestyle.Transient);
             services.RegisterCollection(typeof(ITokenProvider), typeof(ITokenProvider).Assembly);
             services.RegisterCollection(typeof(IRequestMessageBuilder), typeof(IRequestMessageBuilder).Assembly);
             services.RegisterCollection(typeof(IAdditionalParametersBuilder), typeof(IAdditionalParametersBuilder).Assembly);
