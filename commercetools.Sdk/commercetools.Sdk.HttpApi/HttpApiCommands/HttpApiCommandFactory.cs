@@ -54,15 +54,26 @@
 
             // Trying to find the compiled constructor for the HttpApiCommand class.
             ObjectActivator createdActivator;
+
             if (this.activators.ContainsKey(requestedType))
             {
                 createdActivator = this.activators[requestedType];
             }
             else
             {
-                ConstructorInfo ctor = requestedType.GetConstructors().First();
-                createdActivator = GetActivator(ctor);
-                activators[requestedType] = createdActivator;
+                lock (this.activators)
+                {
+                    if (this.activators.ContainsKey(requestedType))
+                    {
+                        createdActivator = this.activators[requestedType];
+                    }
+                    else
+                    {
+                        ConstructorInfo ctor = requestedType.GetConstructors().First();
+                        createdActivator = GetActivator(ctor);
+                        this.activators[requestedType] = createdActivator;
+                    }
+                }
             }
 
             object instance = createdActivator(command, requestMessageBuilderFactory);

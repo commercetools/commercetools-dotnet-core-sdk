@@ -22,25 +22,45 @@ namespace commercetools.Sdk.HttpApi.Tokens
         {
             get
             {
-                Token token = this.tokenStoreManager.Token;
+                var token = this.tokenStoreManager.Token;
                 if (token == null)
                 {
-                    token = this.GetTokenAsync(this.GetRequestMessage()).Result;
-                    this.tokenStoreManager.Token = token;
+                    lock (this.tokenStoreManager)
+                    {
+                        token = this.tokenStoreManager.Token;
+                        if (token != null)
+                        {
+                            return token;
+                        }
+
+                        token = this.GetTokenAsync(this.GetRequestMessage()).Result;
+                        this.tokenStoreManager.Token = token;
+                    }
+
                     return token;
                 }
 
-                if (token.Expired)
+                if (!token.Expired)
                 {
+                    return token;
+                }
+
+                lock (this.tokenStoreManager)
+                {
+                    token = this.tokenStoreManager.Token;
+                    if (!token.Expired)
+                    {
+                        return token;
+                    }
+
                     var requestMessage = string.IsNullOrEmpty(token.RefreshToken)
                         ? this.GetRequestMessage()
                         : this.GetRefreshTokenRequestMessage();
+
                     token = this.GetTokenAsync(requestMessage).Result;
                     this.tokenStoreManager.Token = token;
                     return token;
                 }
-
-                return token;
             }
         }
 

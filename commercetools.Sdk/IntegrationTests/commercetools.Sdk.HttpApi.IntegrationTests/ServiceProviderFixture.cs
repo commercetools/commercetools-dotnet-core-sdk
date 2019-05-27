@@ -15,7 +15,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 
         public ServiceProviderFixture(IMessageSink diagnosticMessageSink)
         {
-            //services.AddLogging(configure => configure.AddConsole());
             this.Configuration = new ConfigurationBuilder().
                 AddJsonFile("appsettings.test.json").
                 AddJsonFile("appsettings.test.Development.json", true).
