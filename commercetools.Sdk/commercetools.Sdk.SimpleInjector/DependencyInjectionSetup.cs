@@ -138,6 +138,7 @@ namespace SimpleInjector
             var collection = new ServiceCollection();
             services.UseHttpApiDefaults(collection);
             var builders = new Dictionary<string, IHttpClientBuilder>();
+            var clientBuilders = new List<Registration>();
             foreach (KeyValuePair<string, TokenFlow> client in clients)
             {
                 string clientName = client.Key;
@@ -147,8 +148,10 @@ namespace SimpleInjector
                 Validator.ValidateObject(clientConfiguration, new ValidationContext(clientConfiguration), true);
 
                 builders.Add(clientName, services.SetupClient(collection, clientName, clientConfiguration, tokenFlow));
-                services.Register<IClient>(() => new CtpClient(services.GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName });
+
+                clientBuilders.Add(Lifestyle.Singleton.CreateRegistration(() => new CtpClient(services.GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName }, services));
             }
+            services.RegisterCollection<IClient>(clientBuilders);
             services.Register<IHttpClientFactory>(() => collection.BuildServiceProvider().GetService<IHttpClientFactory>(), Lifestyle.Singleton);
 
             return builders;
@@ -200,7 +203,7 @@ namespace SimpleInjector
             services.Register<ITokenStoreManager, InMemoryTokenStoreManager>(Lifestyle.Transient);
             services.Register<IUserCredentialsStoreManager, InMemoryUserCredentialsStoreManager>(Lifestyle.Transient);
             services.Register<IAnonymousCredentialsStoreManager, InMemoryAnonymousCredentialsStoreManager>(Lifestyle.Transient);
-            services.Register<LoggerHandler>(Lifestyle.Singleton);
+            services.Register<LoggerHandler>(Lifestyle.Transient);
             services.RegisterCollection(typeof(ITokenProvider), typeof(ITokenProvider).Assembly);
             services.RegisterCollection(typeof(IRequestMessageBuilder), typeof(IRequestMessageBuilder).Assembly);
             services.RegisterCollection(typeof(IAdditionalParametersBuilder), typeof(IAdditionalParametersBuilder).Assembly);
