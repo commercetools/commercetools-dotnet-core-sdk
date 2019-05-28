@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Common;
@@ -34,13 +35,13 @@ namespace commercetools.Sdk.Domain.Predicates
             return list.FirstOrDefault().DiscountCode;
         }
 
-        public static Reference<T> ExpandField<T>(this Dictionary<string, object> dictionary, string fieldName)
+        public static Reference<T> ExpandReferenceField<T>(this Dictionary<string, object> dictionary, string fieldName)
         {
             dictionary.TryGetValue(fieldName, out object value);
             return (Reference<T>)value;
         }
 
-        public static Reference ExpandField(this Dictionary<string, object> dictionary, string fieldName)
+        public static Reference ExpandReferenceField(this Dictionary<string, object> dictionary, string fieldName)
         {
             dictionary.TryGetValue(fieldName, out object value);
             return (Reference)value;

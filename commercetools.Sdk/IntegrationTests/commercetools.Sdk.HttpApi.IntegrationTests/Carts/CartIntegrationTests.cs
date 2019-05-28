@@ -458,7 +458,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             // update the cart and expand the custom object reference
             var updateByIdCommand = new UpdateByIdCommand<Cart>(new Guid(cart.Id),
                 cart.Version, updateActions);
-            updateByIdCommand.Expand(cart1 => cart1.Custom.Fields.ExpandField("customobjectfield"));
+            updateByIdCommand.Expand(cart1 => cart1.Custom.Fields.ExpandReferenceField("customobjectfield"));
 
             Cart retrievedCart = commerceToolsClient
                 .ExecuteAsync(updateByIdCommand)

@@ -98,7 +98,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void ExpandTypedCustomFieldsReference()
         {
-            Expression<Func<Cart, Reference>> expression = cart => cart.Custom.Fields.ExpandField<Product>("customobjectfield").Obj.ProductType;
+            Expression<Func<Cart, Reference>> expression = cart => cart.Custom.Fields.ExpandReferenceField<Product>("customobjectfield").Obj.ProductType;
             ExpansionExpressionVisitor expansionVisitor = new ExpansionExpressionVisitor();
             string result = expansionVisitor.GetPath(expression);
             Assert.Equal("custom.fields.customobjectfield.productType", result);
@@ -107,7 +107,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void ExpandCustomFieldsReference()
         {
-            Expression<Func<Cart, Reference>> expression = cart => cart.Custom.Fields.ExpandField("customobjectfield");
+            Expression<Func<Cart, Reference>> expression = cart => cart.Custom.Fields.ExpandReferenceField("customobjectfield");
             ExpansionExpressionVisitor expansionVisitor = new ExpansionExpressionVisitor();
             string result = expansionVisitor.GetPath(expression);
             Assert.Equal("custom.fields.customobjectfield", result);
