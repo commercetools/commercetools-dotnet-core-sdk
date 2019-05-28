@@ -79,7 +79,7 @@ namespace commercetools.Sdk.Linq
                 return GetPath(expression.Object) + $"[{index}]";
             }
 
-            if (expression.Method.Name == "ExpandField")
+            if (expression.Method.Name == "ExpandReferenceField")
             {
                 if (expression.Arguments.Count == 2 && expression.Arguments[1] is ConstantExpression argument)
                 {
