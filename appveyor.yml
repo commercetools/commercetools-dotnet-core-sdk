@@ -83,4 +83,3 @@ deploy:
     skip_symbols: true
     on:
       branch: master
-      APPVEYOR_REPO_TAG: true
