@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.Common;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 using LineItem = commercetools.Sdk.Domain.ShoppingLists.LineItem;
 
@@ -31,6 +32,18 @@ namespace commercetools.Sdk.Domain.Predicates
         public static Reference<DiscountCode> ExpandDiscountCodes(this List<DiscountCodeInfo> list)
         {
             return list.FirstOrDefault().DiscountCode;
+        }
+
+        public static Reference<T> ExpandField<T>(this Dictionary<string, object> dictionary, string fieldName)
+        {
+            dictionary.TryGetValue(fieldName, out object value);
+            return (Reference<T>)value;
+        }
+
+        public static Reference ExpandField(this Dictionary<string, object> dictionary, string fieldName)
+        {
+            dictionary.TryGetValue(fieldName, out object value);
+            return (Reference)value;
         }
     }
 }

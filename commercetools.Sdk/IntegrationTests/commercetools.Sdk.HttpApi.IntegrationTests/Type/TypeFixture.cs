@@ -56,6 +56,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             typeDraft.FieldDefinitions.Add(this.CreateTimeFieldDefinition());
             typeDraft.FieldDefinitions.Add(this.CreateDateTimeFieldDefinition());
             typeDraft.FieldDefinitions.Add(this.CreateReferenceFieldDefinition());
+            typeDraft.FieldDefinitions.Add(this.CreateCustomObjectReferenceFieldDefinition());
             typeDraft.FieldDefinitions.Add(this.CreateSetFieldDefinition());
             return typeDraft;
         }
@@ -203,6 +204,19 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             fieldDefinition.Label.Add("en", "reference description");
             ReferenceFieldType fieldType = new ReferenceFieldType();
             fieldType.ReferenceTypeId = ReferenceFieldTypeId.Category;
+            fieldDefinition.Type = fieldType;
+            return fieldDefinition;
+        }
+
+        private FieldDefinition CreateCustomObjectReferenceFieldDefinition()
+        {
+            FieldDefinition fieldDefinition = new FieldDefinition();
+            fieldDefinition.Name = "customobjectfield";
+            fieldDefinition.Required = false;
+            fieldDefinition.Label = new LocalizedString();
+            fieldDefinition.Label.Add("en", "reference description");
+            ReferenceFieldType fieldType = new ReferenceFieldType();
+            fieldType.ReferenceTypeId = ReferenceFieldTypeId.KeyValueDocument;
             fieldDefinition.Type = fieldType;
             return fieldDefinition;
         }

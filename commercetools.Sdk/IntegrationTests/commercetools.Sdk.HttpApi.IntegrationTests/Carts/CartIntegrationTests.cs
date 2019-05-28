@@ -5,8 +5,10 @@ using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Carts.UpdateActions;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.Customers;
+using commercetools.Sdk.Domain.CustomObject;
 using commercetools.Sdk.Domain.Payments;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Products;
@@ -415,6 +417,60 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             this.cartFixture.CartToDelete.Add(retrievedCart);
 
             Assert.Equal(customType.Id, retrievedCart.Custom.Type.Id);
+        }
+
+        [Fact]
+        public void UpdateCartCustomField()
+        {
+            IClient commerceToolsClient = this.cartFixture.GetService<IClient>();
+            Cart cart = this.cartFixture.CreateCart(withCustomer: false);
+
+            // create the custom object
+            var customObjectDraft = new CustomObjectDraft<string>
+            {
+                Container = "test",
+                Key = "test",
+                Value = "foo"
+            };
+            var customObject = commerceToolsClient.ExecuteAsync(new CustomObjectUpsertCommand<string>(customObjectDraft)).Result;
+
+            // instantiate a reference to the custom object
+            var reference = customObject.ToReference();
+
+            //Update the Cart first to add custom type to it
+            var customType = this.cartFixture.CreateCustomType();
+            var fields = this.cartFixture.CreateNewFields();
+
+            // add the reference to the carts custom field
+            fields.Add("customobjectfield", reference);
+
+            SetCustomTypeUpdateAction setCustomTypeUpdateAction = new SetCustomTypeUpdateAction()
+            {
+                Type = new ResourceIdentifier<Type>
+                {
+                    Key = customType.Key
+                },
+                Fields = fields
+            };
+
+            List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {setCustomTypeUpdateAction};
+
+            // update the cart and expand the custom object reference
+            var updateByIdCommand = new UpdateByIdCommand<Cart>(new Guid(cart.Id),
+                cart.Version, updateActions);
+            updateByIdCommand.Expand(cart1 => cart1.Custom.Fields.ExpandField("customobjectfield"));
+
+            Cart retrievedCart = commerceToolsClient
+                .ExecuteAsync(updateByIdCommand)
+                .Result;
+
+            Assert.Equal(customType.Id, retrievedCart.Custom.Type.Id);
+
+
+            this.cartFixture.CartToDelete.Add(retrievedCart);
+
+            var customFieldReference = (Reference<CustomObject>)retrievedCart.Custom.Fields["customobjectfield"];
+            Assert.Equal(customObject.Value, customFieldReference.Obj.Value);
         }
 
         [Fact]

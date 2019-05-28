@@ -2,10 +2,13 @@
 using commercetools.Sdk.Domain.ShoppingLists;
 using System;
 using System.Linq.Expressions;
+using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Predicates;
 using Xunit;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.Domain.CustomObject;
+using LineItem = commercetools.Sdk.Domain.ShoppingLists.LineItem;
 
 namespace commercetools.Sdk.Linq.Tests
 {
@@ -90,6 +93,24 @@ namespace commercetools.Sdk.Linq.Tests
             ExpansionExpressionVisitor expansionVisitor = new ExpansionExpressionVisitor();
             string result = expansionVisitor.GetPath(expression);
             Assert.Equal("lineItems[*].variant", result);
+        }
+
+        [Fact]
+        public void ExpandTypedCustomFieldsReference()
+        {
+            Expression<Func<Cart, Reference>> expression = cart => cart.Custom.Fields.ExpandField<Product>("customobjectfield").Obj.ProductType;
+            ExpansionExpressionVisitor expansionVisitor = new ExpansionExpressionVisitor();
+            string result = expansionVisitor.GetPath(expression);
+            Assert.Equal("custom.fields.customobjectfield.productType", result);
+        }
+
+        [Fact]
+        public void ExpandCustomFieldsReference()
+        {
+            Expression<Func<Cart, Reference>> expression = cart => cart.Custom.Fields.ExpandField("customobjectfield");
+            ExpansionExpressionVisitor expansionVisitor = new ExpansionExpressionVisitor();
+            string result = expansionVisitor.GetPath(expression);
+            Assert.Equal("custom.fields.customobjectfield", result);
         }
     }
 }
