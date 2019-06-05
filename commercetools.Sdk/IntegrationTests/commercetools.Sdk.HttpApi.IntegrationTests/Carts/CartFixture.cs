@@ -74,9 +74,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             this.customerGroupFixture.Dispose();
             this.typeFixture.Dispose();
             this.shoppingListFixture.Dispose();
+            this.projectFixture.Dispose();
         }
 
-        public CartDraft GetCartDraft(bool withCustomer = true, bool withDefaultShippingCountry = true, bool withItemShippingAddress = false)
+        public CartDraft GetCartDraft(bool withCustomer = true, bool withDefaultShippingCountry = true, bool withItemShippingAddress = false, bool withShippingMethod = false)
         {
             string country = withDefaultShippingCountry ? "DE" : TestingUtility.GetRandomEuropeCountry();
             string state = withDefaultShippingCountry ? null : $"{country}_State_{TestingUtility.RandomInt()}";
@@ -97,6 +98,16 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 this.customerFixture.CustomersToDelete.Add(customer);
                 cartDraft.CustomerId = customer.Id;
             }
+
+            if (withShippingMethod)
+            {
+                var shippingMethod = this.shippingMethodsFixture.CreateShippingMethod(country, state);
+                this.shippingMethodsFixture.ShippingMethodsToDelete.Add(shippingMethod);
+                cartDraft.ShippingMethod = new ResourceIdentifier<ShippingMethod>
+                {
+                    Key = shippingMethod.Key
+                };
+            }
             return cartDraft;
         }
 
@@ -107,11 +118,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return this.CreateCart(cartDraft);
         }
 
-        public Cart CreateCartWithLineItem(TaxMode taxMode = TaxMode.Platform,bool withCustomer = true, bool withDefaultShippingCountry = true,  bool withItemShippingAddress = false)
+        public Cart CreateCartWithLineItem(TaxMode taxMode = TaxMode.Platform,bool withCustomer = true, bool withDefaultShippingCountry = true,  bool withItemShippingAddress = false, bool withShippingMethod = false)
         {
-            Product product = this.CreateProduct();
+            CartDraft cartDraft = this.GetCartDraft(withCustomer, withDefaultShippingCountry, withItemShippingAddress, withShippingMethod);
+
+            var taxCategoryReference = withShippingMethod
+                ? this.shippingMethodsFixture.GetShippingMethodTaxCategoryByKey(cartDraft.ShippingMethod.Key)
+                : null;
+            Product product = this.CreateProduct(taxCategoryReference:taxCategoryReference);
             LineItemDraft lineItemDraft = this.GetLineItemDraftBySku(product.MasterData.Current.MasterVariant.Sku, quantity: 6);
-            CartDraft cartDraft = this.GetCartDraft(withCustomer, withDefaultShippingCountry, withItemShippingAddress);
             cartDraft.LineItems = new List<LineItemDraft>{ lineItemDraft };
             cartDraft.TaxMode = taxMode;
             Cart cart = this.CreateCart(cartDraft);
@@ -167,9 +182,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return lineItemDraft;
         }
 
-        public Product CreateProduct(bool cleanOnDispose = true)
+        public Product CreateProduct(bool cleanOnDispose = true, IReference<TaxCategory> taxCategoryReference = null)
         {
-            Product product = this.productFixture.CreateProduct(withVariants:false, publish:true);
+            var product = this.productFixture.CreateProduct(withVariants: false, publish: true,
+                taxCategoryReference: taxCategoryReference);
             if (cleanOnDispose) // if you're not going to update this product
             {
                 this.productFixture.ProductsToDelete.Add(product);
@@ -196,9 +212,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return shippingMethod;
         }
 
-        public TaxCategory CreateNewTaxCategory()
+        public TaxCategory CreateNewTaxCategory(string taxCategoryCountry = null, string taxCategoryState = null)
         {
-            TaxCategory taxCategory = this.taxCategoryFixture.CreateTaxCategory();
+            TaxCategory taxCategory = this.taxCategoryFixture.CreateTaxCategory(taxCategoryCountry, taxCategoryState);
             this.taxCategoryFixture.TaxCategoriesToDelete.Add(taxCategory);
             return taxCategory;
         }
@@ -347,9 +363,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return customLineItemDraft;
         }
 
-        public ItemShippingDetailsDraft GetItemShippingDetailsDraft(string addressKey)
+        public ItemShippingDetailsDraft GetItemShippingDetailsDraft(string addressKey, long quantity)
         {
-            var itemShippingTarget = this.GetItemShippingTarget(addressKey);
+            var itemShippingTarget = this.GetItemShippingTarget(addressKey, quantity);
             ItemShippingDetailsDraft itemShippingDetailsDraft = new ItemShippingDetailsDraft
             {
                 Targets = new List<ItemShippingTarget>{itemShippingTarget}
@@ -357,18 +373,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return itemShippingDetailsDraft;
         }
 
-        public List<ItemShippingTarget> GetTargetsDelta(string addressKey)
+        public List<ItemShippingTarget> GetTargetsDelta(string addressKey, long quantity)
         {
-            var itemShippingTarget = this.GetItemShippingTarget(addressKey);
+            var itemShippingTarget = this.GetItemShippingTarget(addressKey, quantity);
             List<ItemShippingTarget> targetsDelta = new List<ItemShippingTarget> {itemShippingTarget};
             return targetsDelta;
         }
 
-        public ItemShippingTarget GetItemShippingTarget(string addressKey)
+        public ItemShippingTarget GetItemShippingTarget(string addressKey, long quantity)
         {
             ItemShippingTarget itemShippingTarget = new ItemShippingTarget
             {
-                Quantity = TestingUtility.RandomInt(1,20),
+                Quantity = quantity,
                 AddressKey = addressKey
             };
             return itemShippingTarget;

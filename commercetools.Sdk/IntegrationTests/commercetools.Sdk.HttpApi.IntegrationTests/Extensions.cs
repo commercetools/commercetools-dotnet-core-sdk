@@ -22,5 +22,17 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             }
             return attributeValue;
         }
+
+        public static Money ToMoney(this BaseMoney baseMoney)
+        {
+            var money = new Money
+            {
+                Type = baseMoney.Type,
+                CentAmount = baseMoney.CentAmount,
+                CurrencyCode = baseMoney.CurrencyCode,
+                FractionDigits = baseMoney.FractionDigits
+            };
+            return money;
+        }
     }
 }

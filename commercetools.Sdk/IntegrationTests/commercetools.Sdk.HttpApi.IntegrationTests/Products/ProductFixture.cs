@@ -4,7 +4,8 @@ using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Common;
-using commercetools.Sdk.Domain.ProductDiscounts;
+ using commercetools.Sdk.Domain.Orders;
+ using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.Domain.States;
 using commercetools.Sdk.HttpApi.IntegrationTests.States;
@@ -90,7 +91,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         }
 
         public ProductDraft GetProductDraft(Category category, ProductType productType, bool withVariants = false,
-            bool publish = false, bool withImages = false, bool withAssets = false)
+            bool publish = false, bool withImages = false, bool withAssets = false, IReference<TaxCategory> taxCategoryReference = null)
         {
             ProductDraft productDraft = new ProductDraft();
             productDraft.Key = TestingUtility.RandomString(10);
@@ -129,12 +130,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
                 productDraft.MasterVariant.Assets = TestingUtility.GetListOfAssetsDrafts(3);
             }
 
-            //Add taxCategory to product
-            var taxCategory = CreateNewTaxCategory();
-            productDraft.TaxCategory = new Reference<TaxCategory>()
-            {
-                Id = taxCategory.Id
-            };
+            //Add taxCategory to product (if taxCategoryReference is null, then create new TaxCategory)
+            var taxCategory = taxCategoryReference?? CreateNewTaxCategory().ToReference();
+            productDraft.TaxCategory = taxCategory;
 
             return productDraft;
         }
@@ -146,14 +144,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         /// <param name="publish">if true, this product is published immediately.</param>
         /// <param name="withImages">if true, this master product variant will have list of images.</param>
         /// <param name="withAssets">if true, this master product variant will have list of assets.</param>
+        /// <param name="taxCategoryReference">if not null, then product will created with this taxCategory</param>
         /// <returns></returns>
         public Product CreateProduct(bool withVariants = false, bool publish = false, bool withImages = false,
-            bool withAssets = false)
+            bool withAssets = false, IReference<TaxCategory> taxCategoryReference = null)
         {
             Category category = this.CreateNewCategory();
             ProductType productType = this.CreateNewProductType();
             return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish, withImages,
-                withAssets));
+                withAssets, taxCategoryReference));
         }
 
         public Product CreateProduct(Category category, ProductType productType, bool withVariants = false,
@@ -221,7 +220,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
 
         public State CreateNewState(StateType stateType = StateType.ProductState,bool initial = true)
         {
-            State state = this.statesFixture.CreateState(stateType, initial);
+            string stateKey = $"Key-{TestingUtility.RandomInt()}";
+            State state = this.statesFixture.CreateState(stateKey, stateType, initial);
             this.statesFixture.StatesToDelete.Add(state);
             return state;
         }
@@ -265,6 +265,45 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
                     .ExecuteAsync(
                         new DeleteByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version)).Result;
             }
+        }
+
+        public ProductVariantImportDraft GetProductVariantImportDraftBySku(string sku = null)
+        {
+            var productVariantImportDraft = new ProductVariantImportDraft(sku);
+            return productVariantImportDraft;
+        }
+        public ProductVariantImportDraft GetProductVariantImportDraftByProductId(string productId, int variantId)
+        {
+            var productVariantImportDraft = new ProductVariantImportDraft(productId, variantId);
+            return productVariantImportDraft;
+        }
+
+        public LineItemImportDraft GetLineItemImportDraftByProductId(string productId, int variantId = 1)
+        {
+            var productVariantImportDraft = GetProductVariantImportDraftByProductId(productId, variantId);
+            var lineItemImportDraft = this.GetLineItemImportDraft();
+            lineItemImportDraft.Variant = productVariantImportDraft;
+            lineItemImportDraft.ProductId = productId;
+            return lineItemImportDraft;
+        }
+
+        public LineItemImportDraft GetLineItemImportDraftBySku(string sku)
+        {
+            var productVariantImportDraft = GetProductVariantImportDraftBySku(sku);
+            var lineItemImportDraft = this.GetLineItemImportDraft();
+            lineItemImportDraft.Variant = productVariantImportDraft;
+            return lineItemImportDraft;
+        }
+
+        private LineItemImportDraft GetLineItemImportDraft()
+        {
+            var lineItemImportDraft = new LineItemImportDraft
+            {
+                Quantity = 1,
+                Price = TestingUtility.GetRandomPrice(),
+                Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}}
+            };
+            return lineItemImportDraft;
         }
     }
 }

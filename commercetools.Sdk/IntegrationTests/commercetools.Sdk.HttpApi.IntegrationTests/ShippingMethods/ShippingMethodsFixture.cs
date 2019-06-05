@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.Zones;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
@@ -120,6 +121,14 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
             Zone zone = this.zonesFixture.CreateZone(country, state);
             this.zonesFixture.ZonesToDelete.Add(zone);
             return zone;
+        }
+
+        public IReference<TaxCategory> GetShippingMethodTaxCategoryByKey(string shippingMethodKey)
+        {
+            IClient commerceToolsClient = this.GetService<IClient>();
+            var shippingMethod = commerceToolsClient
+                .ExecuteAsync(new GetByKeyCommand<ShippingMethod>(shippingMethodKey)).Result;
+            return shippingMethod.TaxCategory;
         }
     }
 }

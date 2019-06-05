@@ -26,7 +26,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.States
         public void CreateState()
         {
             IClient commerceToolsClient = this.statesFixture.GetService<IClient>();
-            StateDraft stateDraft = this.statesFixture.GetStateDraft();
+            string stateKey = $"Key-{TestingUtility.RandomInt()}";
+            StateDraft stateDraft = this.statesFixture.GetStateDraft(stateKey);
             State state = commerceToolsClient
                 .ExecuteAsync(new CreateCommand<State>(stateDraft)).Result;
             this.statesFixture.StatesToDelete.Add(state);

@@ -128,7 +128,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
         }
         public State CreateNewState(StateType stateType = StateType.ProductState,bool initial = true)
         {
-            State state = this.statesFixture.CreateState(stateType, initial);
+            string stateKey = $"Key-{TestingUtility.RandomInt()}";
+            State state = this.statesFixture.CreateState(stateKey, stateType, initial);
             this.statesFixture.StatesToDelete.Add(state);
             return state;
         }
