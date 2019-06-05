@@ -13,7 +13,7 @@ namespace commercetools.Sdk.Domain.Carts
         public Money TotalPrice { get; set; }
         public long Quantity { get; set; }
         public string Slug { get; set; }
-        public ItemState[] State { get; set; }
+        public List<ItemState> State { get; set; }
         public Reference<TaxCategory> TaxCategory { get; set; }
         public TaxRate TaxRate { get; set; }
         public List<DiscountedLineItemPriceForQuantity> DiscountedPricePerQuantity { get; set; }

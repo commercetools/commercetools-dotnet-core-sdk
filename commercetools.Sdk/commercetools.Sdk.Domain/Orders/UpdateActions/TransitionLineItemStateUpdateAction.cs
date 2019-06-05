@@ -9,7 +9,7 @@ namespace commercetools.Sdk.Domain.Orders.UpdateActions
         public string Action => "transitionLineItemState";
         [Required]
         public string LineItemId { get; set; }
-        public double Quantity { get; set; }
+        public long Quantity { get; set; }
         public Reference<State> FromState { get; set; }
         public Reference<State> ToState { get; set; }
         public DateTime? ActualTransitionDate { get; set; }

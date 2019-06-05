@@ -10,7 +10,7 @@ namespace commercetools.Sdk.Domain.Orders
         public LocalizedString Name { get; set; }
         public ProductVariantImportDraft Variant { get; set; }
         public Price Price { get; set; }
-        public double Quantity { get; set; }
+        public long Quantity { get; set; }
         public List<ItemState> State { get; set; }
         public Reference<Channel> SupplyChannel { get; set; }
         public TaxRate TaxRate { get; set; }
