@@ -40,26 +40,30 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
 
         public void Dispose()
         {
-            Product toBeDeleted = null;
-            IClient commerceToolsClient = this.GetService<IClient>();
-            this.ProductsToDelete.Reverse();
-            foreach (Product product in this.ProductsToDelete)
-            {
-                toBeDeleted = product;
-                if (product.MasterData.Published) // unpublish it before delete
-                {
-                    toBeDeleted = Unpublish(product);
-                }
-
-                Product deletedType = commerceToolsClient
-                    .ExecuteAsync(new DeleteByIdCommand<Product>(new Guid(toBeDeleted.Id), toBeDeleted.Version)).Result;
-            }
-
+            this.ClearAllProducts();
             this.productTypeFixture.Dispose();
             this.CategoryFixture.Dispose();
             this.taxCategoryFixture.Dispose();
             this.typeFixture.Dispose();
             this.statesFixture.Dispose();
+        }
+
+        private void ClearAllProducts()
+        {
+            IClient commerceToolsClient = this.GetService<IClient>();
+            var queryCommand = new QueryCommand<Product>();
+            var returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
+            foreach (var product in returnedSet.Results)
+            {
+                var toBeDeleted = product;
+                if (product.MasterData.Published) // unpublish it before delete
+                {
+                    toBeDeleted = Unpublish(product);
+                }
+
+                var deletedProduct = commerceToolsClient
+                    .ExecuteAsync(new DeleteByIdCommand<Product>(new Guid(toBeDeleted.Id), toBeDeleted.Version)).Result;
+            }
         }
 
         public Product Publish(Product product, PublishScope scope = PublishScope.All)
