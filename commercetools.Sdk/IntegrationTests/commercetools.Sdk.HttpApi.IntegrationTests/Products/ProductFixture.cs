@@ -42,7 +42,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         {
             Product toBeDeleted = null;
             IClient commerceToolsClient = this.GetService<IClient>();
-            this.ClearAllProductDiscounts();//Delete All Product discounts first if exists
             this.ProductsToDelete.Reverse();
             foreach (Product product in this.ProductsToDelete)
             {
@@ -251,20 +250,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             ProductDiscount productDiscount = commerceToolsClient
                 .ExecuteAsync(new CreateCommand<ProductDiscount>(productDiscountDraft)).Result;
             return productDiscount;
-        }
-
-        private void ClearAllProductDiscounts()
-        {
-            IClient commerceToolsClient = this.GetService<IClient>();
-            //Query All Product Discounts first
-            QueryCommand<ProductDiscount> queryCommand = new QueryCommand<ProductDiscount>();
-            PagedQueryResult<ProductDiscount> returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
-            foreach (var productDiscount in returnedSet.Results)
-            {
-                var deletedType=commerceToolsClient
-                    .ExecuteAsync(
-                        new DeleteByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version)).Result;
-            }
         }
 
         public ProductVariantImportDraft GetProductVariantImportDraftBySku(string sku = null)

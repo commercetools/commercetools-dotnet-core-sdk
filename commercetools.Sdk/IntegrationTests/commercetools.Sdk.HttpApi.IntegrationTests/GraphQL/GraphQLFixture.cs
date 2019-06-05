@@ -20,7 +20,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 
         public Category CreateCategory()
         {
-            return this.categoryFixture.CreateCategory();
+            var category = this.categoryFixture.CreateCategory();
+            this.categoryFixture.CategoriesToDelete.Add(category);
+            return category;
         }
 
         public void Dispose()
