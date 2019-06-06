@@ -75,7 +75,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             this.projectFixture.Dispose();
         }
 
-        public CartDraft GetCartDraft(bool withCustomer = true, bool withDefaultShippingCountry = true, bool withItemShippingAddress = false, bool withShippingMethod = false)
+        public CartDraft GetCartDraft(bool withCustomer = true, bool withDefaultShippingCountry = true, bool withItemShippingAddress = false, bool withShippingMethod = false, string customerEmail = null)
         {
             string country = withDefaultShippingCountry ? "DE" : TestingUtility.GetRandomEuropeCountry();
             string state = withDefaultShippingCountry ? null : $"{country}_State_{TestingUtility.RandomInt()}";
@@ -95,6 +95,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 Customer customer = this.customerFixture.CreateCustomer();
                 this.customerFixture.CustomersToDelete.Add(customer);
                 cartDraft.CustomerId = customer.Id;
+                cartDraft.CustomerEmail = customerEmail;
             }
 
             if (withShippingMethod)
@@ -116,9 +117,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return this.CreateCart(cartDraft);
         }
 
-        public Cart CreateCartWithLineItem(TaxMode taxMode = TaxMode.Platform,bool withCustomer = true, bool withDefaultShippingCountry = true,  bool withItemShippingAddress = false, bool withShippingMethod = false)
+        public Cart CreateCartWithLineItem(TaxMode taxMode = TaxMode.Platform,bool withCustomer = true, bool withDefaultShippingCountry = true,  bool withItemShippingAddress = false, bool withShippingMethod = false,  string customerEmail = null)
         {
-            CartDraft cartDraft = this.GetCartDraft(withCustomer, withDefaultShippingCountry, withItemShippingAddress, withShippingMethod);
+            CartDraft cartDraft = this.GetCartDraft(withCustomer, withDefaultShippingCountry, withItemShippingAddress, withShippingMethod, customerEmail);
 
             var taxCategoryReference = withShippingMethod
                 ? this.shippingMethodsFixture.GetShippingMethodTaxCategoryByKey(cartDraft.ShippingMethod.Key)
@@ -131,10 +132,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return cart;
         }
 
-        public Cart CreateCartWithCustomLineItem(bool withCustomer = true, bool withDefaultShippingCountry = true,  bool withItemShippingAddress = false)
+        public Cart CreateCartWithCustomLineItem(bool withCustomer = true, bool withDefaultShippingCountry = true,  bool withItemShippingAddress = false, bool withShippingMethod = false,  string customerEmail = null)
         {
             var customLineItemDraft = this.GetCustomLineItemDraft();
-            CartDraft cartDraft = this.GetCartDraft(withCustomer, withDefaultShippingCountry, withItemShippingAddress);
+            CartDraft cartDraft = this.GetCartDraft(withCustomer, withDefaultShippingCountry, withItemShippingAddress, withShippingMethod, customerEmail);
             cartDraft.CustomLineItems = new List<CustomLineItemDraft>{ customLineItemDraft };
             Cart cart = this.CreateCart(cartDraft);
             return cart;

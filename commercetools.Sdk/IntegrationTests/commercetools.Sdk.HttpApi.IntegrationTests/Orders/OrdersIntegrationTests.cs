@@ -141,17 +141,20 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
         [Fact]
         public void QueryAndSortOrders()
         {
+            var email = $"joe{TestingUtility.RandomString()}@example.com";
             IClient commerceToolsClient = this.ordersFixture.GetService<IClient>();
             for (var i = 0; i < 3; i++)
             {
-                Order order = this.ordersFixture.CreateOrderFromCart();
+                Order order = this.ordersFixture.CreateOrderFromCart(withCustomer: true, customerEmail: email);
                 this.ordersFixture.OrdersToDelete.Add(order);
             }
 
             var queryCommand = new QueryCommand<Order>();
+            queryCommand.Where(order => order.CustomerEmail == email);
             queryCommand.Sort(o => o.OrderNumber);
             var returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
 
+            Assert.Equal(3, returnedSet.Count);
             var sortedList = returnedSet.Results.OrderBy(o => o.OrderNumber);
             Assert.True(sortedList.SequenceEqual(returnedSet.Results));
         }
@@ -159,20 +162,22 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
         [Fact]
         public void QueryAndLimitOrders()
         {
+            var email = $"joe{TestingUtility.RandomString()}@example.com";
             IClient commerceToolsClient = this.ordersFixture.GetService<IClient>();
             for (var i = 0; i < 3; i++)
             {
-                Order order = this.ordersFixture.CreateOrderFromCart();
+                Order order = this.ordersFixture.CreateOrderFromCart(withCustomer: true, customerEmail: email);
                 this.ordersFixture.OrdersToDelete.Add(order);
             }
 
             var queryCommand = new QueryCommand<Order>();
             queryCommand.SetLimit(2);
             queryCommand.SetWithTotal(true);
+            queryCommand.Where(order => order.CustomerEmail == email);
             var returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
 
             Assert.Equal(2, returnedSet.Results.Count);
-            Assert.True(returnedSet.Total > 0);
+            Assert.Equal(3, returnedSet.Total);
         }
 
         [Fact]

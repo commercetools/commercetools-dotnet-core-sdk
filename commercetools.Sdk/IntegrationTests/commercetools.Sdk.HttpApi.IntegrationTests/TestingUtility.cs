@@ -27,7 +27,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 
         #region Functions
 
-        public static string RandomString(int length)
+        public static string RandomString(int length = 10)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)

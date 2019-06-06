@@ -64,7 +64,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
             this.projectFixture.Dispose();
         }
 
-        public OrderFromCartDraft GetOrderFromCartDraft(bool withDefaultShippingCountry = true, bool withShippingMethod = false, bool withOrderNumber = true, bool withCustomer = true, bool withCustomLineItem = false, bool withItemShippingAddress = false)
+        public OrderFromCartDraft GetOrderFromCartDraft(bool withDefaultShippingCountry = true, bool withShippingMethod = false, bool withOrderNumber = true, bool withCustomer = true, bool withCustomLineItem = false, bool withItemShippingAddress = false, string customerEmail = null)
         {
             //Create A Cart
             Cart cart = null;
@@ -72,13 +72,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
             {
                 cart = this.cartFixture.CreateCartWithCustomLineItem(
                     withDefaultShippingCountry: withDefaultShippingCountry,
-                    withCustomer: withCustomer, withItemShippingAddress: withItemShippingAddress);
+                    withCustomer: withCustomer, withItemShippingAddress: withItemShippingAddress, customerEmail: customerEmail);
             }
             else
             {
                 cart = this.cartFixture.CreateCartWithLineItem(withDefaultShippingCountry: withDefaultShippingCountry,
                     withShippingMethod: withShippingMethod, withCustomer: withCustomer,
-                    withItemShippingAddress: withItemShippingAddress);
+                    withItemShippingAddress: withItemShippingAddress, customerEmail: customerEmail);
             }
 
             //Then Create Order from this Cart
@@ -106,10 +106,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
         /// <param name="withCustomer">if yes, create the order with customer</param>
         /// <param name="withCustomLineItem">if yes, create the order with Custom LineItem</param>
         /// <param name="withItemShippingAddress">if yes, create the order with itemShippingAddresses</param>
+        /// <param name="customerEmail">customer email address</param>
         /// <returns></returns>
-        public Order CreateOrderFromCart(bool withReturnInfo = false, bool withDefaultShippingCountry = true, bool withShippingMethod = false, bool withOrderNumber = true, bool withCustomer = true, bool withCustomLineItem = false, bool withItemShippingAddress = false)
+        public Order CreateOrderFromCart(bool withReturnInfo = false, bool withDefaultShippingCountry = true, bool withShippingMethod = false, bool withOrderNumber = true, bool withCustomer = true, bool withCustomLineItem = false, bool withItemShippingAddress = false, string customerEmail = null)
         {
-            var order = this.CreateOrderFromCart(this.GetOrderFromCartDraft(withDefaultShippingCountry, withShippingMethod, withOrderNumber, withCustomer, withCustomLineItem, withItemShippingAddress));
+            var order = this.CreateOrderFromCart(this.GetOrderFromCartDraft(withDefaultShippingCountry, withShippingMethod, withOrderNumber, withCustomer, withCustomLineItem, withItemShippingAddress, customerEmail));
             if (withReturnInfo)
             {
                 IClient commerceToolsClient = this.GetService<IClient>();
