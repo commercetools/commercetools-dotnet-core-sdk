@@ -61,9 +61,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             this.CartToDelete.Reverse();
             foreach (Cart cart in this.CartToDelete)
             {
-                Cart deletedType = commerceToolsClient
-                    .ExecuteAsync(new DeleteByIdCommand<Cart>(new Guid(cart.Id),
-                        cart.Version)).Result;
+                var deletedType = this.TryDeleteResource(cart).Result;
             }
             this.paymentsFixture.Dispose();
             this.customerFixture.Dispose();

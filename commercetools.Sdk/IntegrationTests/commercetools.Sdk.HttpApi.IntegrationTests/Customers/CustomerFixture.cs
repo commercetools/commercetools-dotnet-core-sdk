@@ -23,7 +23,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Customers
             this.CustomersToDelete.Reverse();
             foreach (Customer customer in this.CustomersToDelete)
             {
-                Customer deletedCustomer = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<Customer>(new Guid(customer.Id), customer.Version)).Result;
+                var deletedType = this.TryDeleteResource(customer).Result;
             }
         }
 

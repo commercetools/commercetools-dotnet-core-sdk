@@ -52,9 +52,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
             this.OrdersToDelete.Reverse();
             foreach (Order order in this.OrdersToDelete)
             {
-                Order deletedType = commerceToolsClient
-                    .ExecuteAsync(new DeleteByIdCommand<Order>(new Guid(order.Id),
-                        order.Version)).Result;
+                var deletedType = this.TryDeleteResource(order).Result;
             }
             this.cartFixture.Dispose();
             this.productFixture.Dispose();

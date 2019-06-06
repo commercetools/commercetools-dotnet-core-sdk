@@ -31,7 +31,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.States
             this.StatesToDelete = this.StatesToDelete.OrderByDescending(state => state.Initial).ToList();
             foreach (var state in this.StatesToDelete)
             {
-                State deletedState = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<State>(new Guid(state.Id), state.Version)).Result;
+                var deletedType = this.TryDeleteResource(state).Result;
             }
         }
 

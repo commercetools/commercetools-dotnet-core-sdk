@@ -22,8 +22,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Channels
             this.ChannelsToDelete.Reverse();
             foreach (Channel channel in this.ChannelsToDelete)
             {
-                Channel deletedEntry = commerceToolsClient
-                    .ExecuteAsync(new DeleteByIdCommand<Channel>(new Guid(channel.Id), channel.Version)).Result;
+                var deletedType = this.TryDeleteResource(channel).Result;
             }
         }
         public ChannelDraft GetChannelDraft(ChannelRole role)

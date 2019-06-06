@@ -32,7 +32,7 @@ namespace commercetools.Sdk.Client
 
         public string ParameterKey { get; protected set; }
 
-        public object ParameterValue { get; protected set; }
+        public string ParameterValue { get; protected set; }
 
         public int Version { get; protected set; }
 

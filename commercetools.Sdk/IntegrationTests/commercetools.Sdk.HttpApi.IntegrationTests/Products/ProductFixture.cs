@@ -1,6 +1,7 @@
 ﻿﻿using System;
 using System.Collections.Generic;
-using commercetools.Sdk.Client;
+ using System.Threading.Tasks;
+ using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Common;
@@ -8,7 +9,8 @@ using commercetools.Sdk.Domain.Common;
  using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.Domain.States;
-using commercetools.Sdk.HttpApi.IntegrationTests.States;
+ using commercetools.Sdk.HttpApi.Domain.Exceptions;
+ using commercetools.Sdk.HttpApi.IntegrationTests.States;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
 using Xunit;
 using Xunit.Abstractions;
@@ -40,30 +42,17 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
 
         public void Dispose()
         {
-            this.ClearAllProducts();
+            this.ProductsToDelete.Reverse();
+            foreach (Product product in this.ProductsToDelete)
+            {
+                this.DeleteProduct(product);
+            }
+
             this.productTypeFixture.Dispose();
             this.CategoryFixture.Dispose();
             this.taxCategoryFixture.Dispose();
             this.typeFixture.Dispose();
             this.statesFixture.Dispose();
-        }
-
-        private void ClearAllProducts()
-        {
-            IClient commerceToolsClient = this.GetService<IClient>();
-            var queryCommand = new QueryCommand<Product>();
-            var returnedSet = commerceToolsClient.ExecuteAsync(queryCommand).Result;
-            foreach (var product in returnedSet.Results)
-            {
-                var toBeDeleted = product;
-                if (product.MasterData.Published) // unpublish it before delete
-                {
-                    toBeDeleted = Unpublish(product);
-                }
-
-                var deletedProduct = commerceToolsClient
-                    .ExecuteAsync(new DeleteByIdCommand<Product>(new Guid(toBeDeleted.Id), toBeDeleted.Version)).Result;
-            }
         }
 
         public Product Publish(Product product, PublishScope scope = PublishScope.All)
@@ -293,6 +282,23 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
                 Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}}
             };
             return lineItemImportDraft;
+        }
+
+        /// <summary>
+        /// Delete Product
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns>return the deleted product</returns>
+        private Product DeleteProduct(Product product)
+        {
+            IClient commerceToolsClient = this.GetService<IClient>();
+            var toBeDeleted = product;
+            if (product.MasterData.Published) // unpublish it before delete
+            {
+                toBeDeleted = Unpublish(product);
+            }
+
+            return this.TryDeleteResource(toBeDeleted).Result;
         }
     }
 }

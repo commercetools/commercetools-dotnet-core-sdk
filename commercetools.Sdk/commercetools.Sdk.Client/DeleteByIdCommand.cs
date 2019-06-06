@@ -25,7 +25,11 @@ namespace commercetools.Sdk.Client
             this.Init(id, version);
         }
 
-        public DeleteByIdCommand(string id, int version, List<Expansion<T>> expandPredicates, IAdditionalParameters<T> additionalParameters)
+        public DeleteByIdCommand(
+            string id,
+            int version,
+            List<Expansion<T>> expandPredicates,
+            IAdditionalParameters<T> additionalParameters)
             : base(expandPredicates, additionalParameters)
         {
             this.Init(id, version);
@@ -48,7 +52,10 @@ namespace commercetools.Sdk.Client
             this.Init(versioned.Id, versioned.Version);
         }
 
-        public DeleteByIdCommand(IVersioned<T> versioned, List<Expansion<T>> expandPredicates, IAdditionalParameters<T> additionalParameters)
+        public DeleteByIdCommand(
+            IVersioned<T> versioned,
+            List<Expansion<T>> expandPredicates,
+            IAdditionalParameters<T> additionalParameters)
             : base(expandPredicates, additionalParameters)
         {
             this.Init(versioned.Id, versioned.Version);
@@ -60,7 +67,7 @@ namespace commercetools.Sdk.Client
         }
 
         public DeleteByIdCommand(Guid id, int version, IAdditionalParameters<T> additionalParameters)
-        : base(additionalParameters)
+            : base(additionalParameters)
         {
             this.Init(id.ToString(), version);
         }
@@ -71,7 +78,11 @@ namespace commercetools.Sdk.Client
             this.Init(id.ToString(), version);
         }
 
-        public DeleteByIdCommand(Guid id, int version, List<Expansion<T>> expandPredicates, IAdditionalParameters<T> additionalParameters)
+        public DeleteByIdCommand(
+            Guid id,
+            int version,
+            List<Expansion<T>> expandPredicates,
+            IAdditionalParameters<T> additionalParameters)
             : base(expandPredicates, additionalParameters)
         {
             this.Init(id.ToString(), version);

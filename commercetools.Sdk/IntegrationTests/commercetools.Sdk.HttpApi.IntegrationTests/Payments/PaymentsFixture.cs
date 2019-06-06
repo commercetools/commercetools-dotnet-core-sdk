@@ -36,7 +36,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
             this.PaymentsToDelete.Reverse();
             foreach (Payment payment in this.PaymentsToDelete)
             {
-                Payment deletedType = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<Payment>(new Guid(payment.Id), payment.Version)).Result;
+                var deletedType = this.TryDeleteResource(payment).Result;
             }
             this.customerFixture.Dispose();
             this.typeFixture.Dispose();

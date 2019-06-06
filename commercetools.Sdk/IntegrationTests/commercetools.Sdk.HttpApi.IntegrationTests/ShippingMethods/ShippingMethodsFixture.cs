@@ -31,9 +31,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
             this.ShippingMethodsToDelete.Reverse();
             foreach (ShippingMethod shippingMethod in this.ShippingMethodsToDelete)
             {
-                ShippingMethod deletedShippingMethod = commerceToolsClient
-                    .ExecuteAsync(new DeleteByIdCommand<ShippingMethod>(new Guid(shippingMethod.Id),
-                        shippingMethod.Version)).Result;
+                var deletedType = this.TryDeleteResource(shippingMethod).Result;
             }
 
             this.taxCategoryFixture.Dispose();
