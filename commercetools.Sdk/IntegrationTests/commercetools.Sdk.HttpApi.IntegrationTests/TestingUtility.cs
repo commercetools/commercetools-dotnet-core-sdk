@@ -143,11 +143,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public static Price GetRandomPrice()
         {
             var randomAmount = RandomInt(1000, 10000);
-            var price = GetPrice(randomAmount, DateTime.Now, DateTime.Now.AddMonths(1));
+            var price = GetPrice(randomAmount);
             return price;
         }
 
-        public static PriceDraft GetPriceDraft(int centAmount,  DateTime validFrom, DateTime validUntil, string currency = "EUR")
+        public static PriceDraft GetPriceDraft(int centAmount,  DateTime? validFrom = null, DateTime? validUntil = null, string currency = "EUR")
         {
             var money = new Money()
             {
@@ -163,7 +163,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             return priceDraft;
         }
 
-        public static Price GetPrice(int centAmount,  DateTime validFrom, DateTime validUntil, string currency = "EUR")
+        public static Price GetPrice(int centAmount,  DateTime? validFrom = null, DateTime? validUntil = null, string currency = "EUR")
         {
             var money = new Money()
             {
@@ -184,7 +184,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             List<PriceDraft> prices = new List<PriceDraft>();
 
             //first Add valid price for now
-            prices.Add(GetPriceDraft(RandomInt(1000, 10000), DateTime.Now, DateTime.Now.AddMonths(1)));
+            prices.Add(GetPriceDraft(RandomInt(1000, 10000)));
             //then add future prices
             for (int i = 2; i <= count; i++)
             {
