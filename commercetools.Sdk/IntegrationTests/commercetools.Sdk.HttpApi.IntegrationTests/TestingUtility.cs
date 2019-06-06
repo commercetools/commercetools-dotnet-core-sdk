@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.Products.Attributes;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 using LocalizedEnumValue = commercetools.Sdk.Domain.Common.LocalizedEnumValue;
@@ -26,7 +27,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 
         #region Functions
 
-        public static string RandomString(int length)
+        public static string RandomString(int length = 10)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
@@ -139,7 +140,14 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             return priceDraft;
         }
 
-        public static PriceDraft GetPriceDraft(int centAmount,  DateTime validFrom, DateTime validUntil, string currency = "EUR")
+        public static Price GetRandomPrice()
+        {
+            var randomAmount = RandomInt(1000, 10000);
+            var price = GetPrice(randomAmount);
+            return price;
+        }
+
+        public static PriceDraft GetPriceDraft(int centAmount,  DateTime? validFrom = null, DateTime? validUntil = null, string currency = "EUR")
         {
             var money = new Money()
             {
@@ -155,12 +163,28 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             return priceDraft;
         }
 
+        public static Price GetPrice(int centAmount,  DateTime? validFrom = null, DateTime? validUntil = null, string currency = "EUR")
+        {
+            var money = new Money()
+            {
+                CentAmount = centAmount,
+                CurrencyCode = currency
+            };
+            var price = new Price()
+            {
+                Value = money,
+                ValidFrom = validFrom,
+                ValidUntil = validUntil
+            };
+            return price;
+        }
+
         public static List<PriceDraft> GetRandomListOfPriceDraft(int count = 2)
         {
             List<PriceDraft> prices = new List<PriceDraft>();
 
             //first Add valid price for now
-            prices.Add(GetPriceDraft(RandomInt(1000, 10000), DateTime.Now, DateTime.Now.AddMonths(1)));
+            prices.Add(GetPriceDraft(RandomInt(1000, 10000)));
             //then add future prices
             for (int i = 2; i <= count; i++)
             {

@@ -26,7 +26,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Zones
             this.ZonesToDelete.Reverse();
             foreach (Zone zone in this.ZonesToDelete)
             {
-                Zone deletedZone = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<Zone>(new Guid(zone.Id), zone.Version)).Result;
+                var deletedType = this.TryDeleteResource(zone).Result;
             }
         }
 

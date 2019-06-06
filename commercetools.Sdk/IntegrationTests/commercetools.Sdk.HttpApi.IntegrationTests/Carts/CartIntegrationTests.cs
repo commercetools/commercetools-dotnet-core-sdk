@@ -1786,7 +1786,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             string lineItemId = retrievedCart.LineItems[0].Id;
             string addressKey = retrievedCart.ItemShippingAddresses[0].Key;
             ItemShippingDetailsDraft itemShippingDetailsDraft =
-                this.cartFixture.GetItemShippingDetailsDraft(addressKey);
+                this.cartFixture.GetItemShippingDetailsDraft(addressKey,retrievedCart.LineItems[0].Quantity);
             SetLineItemShippingDetailsUpdateAction setShippingDetailsUpdateAction =
                 new SetLineItemShippingDetailsUpdateAction
                 {
@@ -1824,7 +1824,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             // Then ApplyDeltaToLineItem
             string lineItemId = retrievedCart.LineItems[0].Id;
             string addressKey = retrievedCart.ItemShippingAddresses[0].Key;
-            var targetsDelta = this.cartFixture.GetTargetsDelta(addressKey);
+            var targetsDelta = this.cartFixture.GetTargetsDelta(addressKey,retrievedCart.LineItems[0].Quantity);
             ApplyDeltaToLineItemShippingDetailsTargetsUpdateAction applyDeltaUpdateAction =
                 new ApplyDeltaToLineItemShippingDetailsTargetsUpdateAction
                 {
@@ -2150,7 +2150,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             string customLineItemId = retrievedCart.CustomLineItems[0].Id;
             string addressKey = retrievedCart.ItemShippingAddresses[0].Key;
             ItemShippingDetailsDraft itemShippingDetailsDraft =
-                this.cartFixture.GetItemShippingDetailsDraft(addressKey);
+                this.cartFixture.GetItemShippingDetailsDraft(addressKey,retrievedCart.CustomLineItems[0].Quantity);
             SetCustomLineItemShippingDetailsUpdateAction setShippingDetailsUpdateAction =
                 new SetCustomLineItemShippingDetailsUpdateAction
                 {
@@ -2188,7 +2188,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             // Then ApplyDeltaToCustomLineItem
             string customLineItemId = retrievedCart.CustomLineItems[0].Id;
             string addressKey = retrievedCart.ItemShippingAddresses[0].Key;
-            var targetsDelta = this.cartFixture.GetTargetsDelta(addressKey);
+            var targetsDelta = this.cartFixture.GetTargetsDelta(addressKey,retrievedCart.CustomLineItems[0].Quantity);
             ApplyDeltaToCustomLineItemShippingDetailsTargetsUpdateAction applyDeltaUpdateAction =
                 new ApplyDeltaToCustomLineItemShippingDetailsTargetsUpdateAction
                 {

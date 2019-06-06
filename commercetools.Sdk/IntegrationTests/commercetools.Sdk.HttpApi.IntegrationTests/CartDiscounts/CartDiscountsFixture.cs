@@ -24,9 +24,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
             this.CartDiscountsToDelete.Reverse();
             foreach (CartDiscount cartDiscount in this.CartDiscountsToDelete)
             {
-                CartDiscount deletedType = commerceToolsClient
-                    .ExecuteAsync(new DeleteByIdCommand<CartDiscount>(new Guid(cartDiscount.Id),
-                        cartDiscount.Version)).Result;
+                var deletedType = this.TryDeleteResource(cartDiscount).Result;
             }
         }
 

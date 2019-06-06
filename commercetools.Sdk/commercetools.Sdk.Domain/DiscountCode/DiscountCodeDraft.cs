@@ -19,8 +19,8 @@ namespace commercetools.Sdk.Domain
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
         public List<Reference> References { get; set; }
-        public long MaxApplications { get; set; }
-        public long MaxApplicationsPerCustomer { get; set; }
+        public long? MaxApplications { get; set; }
+        public long? MaxApplicationsPerCustomer { get; set; }
         public CustomFields Custom { get; set; }
     }
 }

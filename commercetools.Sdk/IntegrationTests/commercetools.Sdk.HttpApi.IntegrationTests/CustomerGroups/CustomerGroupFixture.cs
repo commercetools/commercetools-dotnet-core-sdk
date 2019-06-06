@@ -26,7 +26,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
             this.CustomerGroupsToDelete.Reverse();
             foreach (CustomerGroup customerGroup in this.CustomerGroupsToDelete)
             {
-                CustomerGroup deletedCustomerGroup = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<CustomerGroup>(new Guid(customerGroup.Id), customerGroup.Version)).Result;
+                var deletedType = this.TryDeleteResource(customerGroup).Result;
             }
             this.typeFixture.Dispose();
         }

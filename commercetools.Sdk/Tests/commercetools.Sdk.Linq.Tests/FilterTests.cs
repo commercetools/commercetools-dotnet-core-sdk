@@ -159,6 +159,15 @@ namespace commercetools.Sdk.Linq.Tests
         }
 
         [Fact]
+        public void FilterByLocalizedTextAttributeValue()
+        {
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "color" && ((LocalizedTextAttribute)a).Value["en"] == "red"));
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("variants.attributes.color.en:\"red\"", result);
+        }
+
+        [Fact]
         public void FilterByNumberAttributeRange()
         {
             Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "size" && ((NumberAttribute)a).Value.Range(36, 42)));

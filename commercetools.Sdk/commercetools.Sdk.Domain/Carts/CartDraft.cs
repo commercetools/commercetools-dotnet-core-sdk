@@ -41,7 +41,7 @@ namespace commercetools.Sdk.Domain.Carts
 
         public Address BillingAddress { get; set; }
 
-        public Reference<ShippingMethod> ShippingMethod { get; set; }
+        public IReference<ShippingMethod> ShippingMethod { get; set; }
 
         public ExternalTaxRateDraft ExternalTaxRateForShippingMethod { get; set; }
 

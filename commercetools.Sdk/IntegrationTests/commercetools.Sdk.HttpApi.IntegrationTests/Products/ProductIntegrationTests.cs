@@ -653,7 +653,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
                 .ExecuteAsync(new UpdateByIdCommand<Product>(new Guid(product.Id),
                     product.Version, updateActions))
                 .Result;
+
+            //delete product discount
+            productDiscount =commerceToolsClient.ExecuteAsync(
+                new DeleteByIdCommand<ProductDiscount>(new Guid(productDiscount.Id), productDiscount.Version)).Result;
             this.productFixture.ProductsToDelete.Add(retrievedProduct);
+
+
             Assert.Equal(discountedPrice.Value, retrievedProduct.MasterData.Staged.MasterVariant.Prices[0].Discounted.Value);
             Assert.Equal(discountedPrice.Discount.Id, retrievedProduct.MasterData.Staged.MasterVariant.Prices[0].Discounted.Discount.Id);
         }

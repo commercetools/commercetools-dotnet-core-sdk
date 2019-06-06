@@ -23,7 +23,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             this.TypesToDelete.Reverse();
             foreach (Type type in this.TypesToDelete)
             {
-                Type deletedType = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<Type>(new Guid(type.Id), type.Version)).Result;
+                var deletedType = this.TryDeleteResource(type).Result;
             }
         }
 

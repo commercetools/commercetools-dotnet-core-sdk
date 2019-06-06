@@ -30,7 +30,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists
             this.ShoppingListToDelete.Reverse();
             foreach (ShoppingList shoppingList in this.ShoppingListToDelete)
             {
-                ShoppingList deletedShoppingList = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<ShoppingList>(new Guid(shoppingList.Id), shoppingList.Version)).Result;
+                var deletedType = this.TryDeleteResource(shoppingList).Result;
             }
             this.customerFixture.Dispose();
             this.productFixture.Dispose();

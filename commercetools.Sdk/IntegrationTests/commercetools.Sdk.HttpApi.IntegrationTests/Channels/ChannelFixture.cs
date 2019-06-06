@@ -9,33 +9,35 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Channels
 {
     public class ChannelFixture : ClientFixture, IDisposable
     {
-        public List<Channel> Channels { get; }
+        public List<Channel> ChannelsToDelete { get; }
 
         public ChannelFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
-            this.Channels = new List<Channel>();
+            this.ChannelsToDelete = new List<Channel>();
         }
 
         public void Dispose()
         {
             IClient commerceToolsClient = this.GetService<IClient>();
-            this.Channels.Reverse();
-            foreach (Channel channel in this.Channels)
+            this.ChannelsToDelete.Reverse();
+            foreach (Channel channel in this.ChannelsToDelete)
             {
-                Channel deletedEntry = commerceToolsClient
-                    .ExecuteAsync(new DeleteByIdCommand<Channel>(new Guid(channel.Id), channel.Version)).Result;
+                var deletedType = this.TryDeleteResource(channel).Result;
             }
         }
-        public ChannelDraft GetChannelDraft()
+        public ChannelDraft GetChannelDraft(ChannelRole role)
         {
-            ChannelDraft channelDraft = new ChannelDraft();
-            channelDraft.Key = TestingUtility.RandomString(10);
+            ChannelDraft channelDraft = new ChannelDraft
+            {
+                Key = TestingUtility.RandomString(10),
+                Roles = new List<ChannelRole> {role}
+            };
             return channelDraft;
         }
 
-        public Channel CreateChannel()
+        public Channel CreateChannel(ChannelRole role = ChannelRole.Primary)
         {
-            return this.CreateChannel(this.GetChannelDraft());
+            return this.CreateChannel(this.GetChannelDraft(role));
         }
 
         public Channel CreateChannel(ChannelDraft channelDraft)

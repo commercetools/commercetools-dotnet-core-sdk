@@ -28,9 +28,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             this.ProductDiscountsToDelete.Reverse();
             foreach (ProductDiscount productDiscount in this.ProductDiscountsToDelete)
             {
-                ProductDiscount deletedType = commerceToolsClient
-                    .ExecuteAsync(new DeleteByIdCommand<ProductDiscount>(new Guid(productDiscount.Id),
-                        productDiscount.Version)).Result;
+                var deletedType = this.TryDeleteResource(productDiscount).Result;
             }
             this.productFixture.Dispose();
             this.productTypeFixture.Dispose();

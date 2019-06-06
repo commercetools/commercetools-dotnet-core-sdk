@@ -11,6 +11,6 @@ namespace commercetools.Sdk.Domain.Orders.UpdateActions
         public string Action => "setParcelMeasurements";
         [Required]
         public string ParcelId { get; set; }
-        public ParcelMeasurements ParcelMeasurements { get; set; }
+        public ParcelMeasurements Measurements { get; set; }
     }
 }

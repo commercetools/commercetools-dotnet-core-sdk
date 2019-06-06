@@ -28,8 +28,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             this.CategoriesToDelete.Reverse();
             foreach (Category category in this.CategoriesToDelete)
             {
-                Category deletedCategory = commerceToolsClient
-                    .ExecuteAsync(new DeleteByIdCommand<Category>(new Guid(category.Id), category.Version)).Result;
+                var deletedType = this.TryDeleteResource(category).Result;
             }
 
             this.typeFixture.Dispose();

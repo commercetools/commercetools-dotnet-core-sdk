@@ -86,6 +86,7 @@ namespace commercetools.Sdk.Linq
                     return GetPath(expression.Arguments[0]) + "." + argument.Value;
                 }
             }
+
             // c.Ancestors.ExpandAll()
             if (this.expandMethodMapping.ContainsKey(expression.Method.Name))
             {

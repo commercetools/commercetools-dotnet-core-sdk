@@ -28,7 +28,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomObjects
 
             foreach (var customObject in this.CustomObjectsToDelete)
             {
-                CustomObject deletedType = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<CustomObject>(new Guid(customObject.Id), customObject.Version)).Result;
+                var deletedType = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<CustomObject>(new Guid(customObject.Id), customObject.Version)).Result;
             }
         }
 

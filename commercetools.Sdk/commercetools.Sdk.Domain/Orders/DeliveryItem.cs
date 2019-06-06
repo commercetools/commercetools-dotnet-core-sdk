@@ -3,6 +3,6 @@
     public class DeliveryItem
     {
         public string Id { get; set; }
-        public double Quantity { get; set; }
+        public long Quantity { get; set; }
     }
 }

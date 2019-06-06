@@ -217,7 +217,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             IClient commerceToolsClient = this.inventoryFixture.GetService<IClient>();
             InventoryEntry inventoryEntry = this.inventoryFixture.CreateInventoryEntry();
 
-            Channel supplyChannel = this.inventoryFixture.channelFixture.CreateChannel();
+            Channel supplyChannel = this.inventoryFixture.channelFixture.CreateChannel(ChannelRole.InventorySupply);
+            this.inventoryFixture.channelFixture.ChannelsToDelete.Add(supplyChannel);
+
             Reference<Channel> channelReference = new Reference<Channel>()
             {
                 Id = supplyChannel.Id

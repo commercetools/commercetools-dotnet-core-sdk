@@ -22,7 +22,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories
             this.TaxCategoriesToDelete.Reverse();
             foreach (TaxCategory category in this.TaxCategoriesToDelete)
             {
-                TaxCategory deletedCategory = commerceToolsClient.ExecuteAsync(new DeleteByIdCommand<TaxCategory>(new Guid(category.Id), category.Version)).Result;
+                var deletedType = this.TryDeleteResource(category).Result;
             }
         }
 

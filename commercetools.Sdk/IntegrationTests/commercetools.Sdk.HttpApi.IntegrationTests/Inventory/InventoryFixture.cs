@@ -31,9 +31,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
             this.InventoryEntries.Reverse();
             foreach (InventoryEntry inventoryEntry in this.InventoryEntries)
             {
-                InventoryEntry deletedEntry = commerceToolsClient
-                    .ExecuteAsync(new DeleteByIdCommand<InventoryEntry>(new Guid(inventoryEntry.Id),
-                        inventoryEntry.Version)).Result;
+                var deletedType = this.TryDeleteResource(inventoryEntry).Result;
             }
 
             this.productFixture.Dispose();
