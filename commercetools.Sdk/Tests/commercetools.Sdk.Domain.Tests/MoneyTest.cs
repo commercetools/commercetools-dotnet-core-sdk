@@ -1,3 +1,4 @@
+using NodaMoney;
 using Xunit;
 
 namespace commercetools.Sdk.Domain.Tests
@@ -35,6 +36,32 @@ namespace commercetools.Sdk.Domain.Tests
             var nm = m.Convert();
             Assert.IsType<NodaMoney.Money>(nm);
             Assert.Equal(1234.5678M, nm.Amount);
+        }
+
+        [Fact]
+        public void ConvertToHighPrecisionMoney()
+        {
+            var builder = new CurrencyBuilder("EUR", "HighPrecision");
+            builder.LoadDataFromCurrency(Currency.FromCode("EUR"));
+            builder.DecimalDigits = 4;
+
+            var nm = new NodaMoney.Money(1234.5678m, builder.Build());
+            var m = nm.ConvertToHighPrecision();
+            Assert.IsType<HighPrecisionMoney>(m);
+            Assert.Equal(12345678, m.PreciseAmount);
+        }
+
+        [Fact]
+        public void ConvertToMoney()
+        {
+            var builder = new CurrencyBuilder("EUR", "HighPrecision");
+            builder.LoadDataFromCurrency(Currency.FromCode("EUR"));
+            builder.DecimalDigits = 4;
+
+            var nm = new NodaMoney.Money(1234.5678m, builder.Build());
+            var m = nm.Convert();
+            Assert.IsType<Money>(m);
+            Assert.Equal(123457, m.CentAmount);
         }
     }
 }

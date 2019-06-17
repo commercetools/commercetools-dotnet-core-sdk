@@ -25,9 +25,9 @@ namespace commercetools.Sdk.Domain
             return Money.FromDecimal(money.Currency.Code, money.Amount, midpointRounding);
         }
 
-        public static HighPrecisionMoney Convert(this NodaMoney.Money money, int fractionDigits, MidpointRounding midpointRounding = MidpointRounding.ToEven)
+        public static HighPrecisionMoney ConvertToHighPrecision(this NodaMoney.Money money, MidpointRounding midpointRounding = MidpointRounding.ToEven)
         {
-            return HighPrecisionMoney.FromDecimal(money.Currency.Code, money.Amount, fractionDigits, midpointRounding);
+            return HighPrecisionMoney.FromDecimal(money.Currency.Code, money.Amount, (int)money.Currency.DecimalDigits, midpointRounding);
         }
     }
 }
