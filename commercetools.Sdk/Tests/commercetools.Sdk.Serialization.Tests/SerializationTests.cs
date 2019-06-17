@@ -7,7 +7,7 @@ using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Reviews;
 using commercetools.Sdk.Domain.States;
 using commercetools.Sdk.Registration;
-using FluentAssertions;
+using FluentAssertions.Json;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;

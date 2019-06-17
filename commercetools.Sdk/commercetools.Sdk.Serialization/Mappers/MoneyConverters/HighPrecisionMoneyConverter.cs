@@ -1,4 +1,6 @@
-﻿using commercetools.Sdk.Domain;
+﻿using System;
+using System.Linq;
+using commercetools.Sdk.Domain;
 using Newtonsoft.Json.Linq;
 using Type = System.Type;
 
@@ -16,8 +18,10 @@ namespace commercetools.Sdk.Serialization
             {
                 var currencyCodeProperty = property["currencyCode"];
                 var typeProperty = property["type"];
-                // TODO Take highPrecision string from annotation attribute from HighPrecisionMoney
-                if (currencyCodeProperty != null && typeProperty != null && typeProperty.Value<string>() == "highPrecision")
+                var typeAttribute =
+                    typeof(HighPrecisionMoney).GetCustomAttributes(typeof(MoneyTypeAttribute), false).First() as
+                        MoneyTypeAttribute;
+                if (currencyCodeProperty != null && typeProperty != null && typeProperty.Value<string>() == typeAttribute.Type.GetDescription())
                 {
                     return true;
                 }

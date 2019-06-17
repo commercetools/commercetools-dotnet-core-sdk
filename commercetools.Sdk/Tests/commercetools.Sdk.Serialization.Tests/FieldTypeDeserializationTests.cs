@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
-using FluentAssertions;
 using FluentAssertions.Json;
 using Xunit;
 using Type = commercetools.Sdk.Domain.Type;
