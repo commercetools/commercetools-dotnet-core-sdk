@@ -120,7 +120,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ResourceIdentifier<ProductType> productType = new ResourceIdentifier<ProductType>
             {
                 Key = "Key12",
-                Id = "1"
+                Id = "f40fcd15-b1c2-4279-9cfa-f6083e6a2988"
             };
             string result = serializerService.Serialize(productType);
             JToken resultFormatted = JValue.Parse(result);
