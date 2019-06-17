@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\commercetools.Sdk.Domain\commercetools.Sdk.Domain.csproj" />
+    <ProjectReference Include="..\..\commercetools.Sdk.NodaMoney\commercetools.Sdk.NodaMoney.csproj" />
   </ItemGroup>
 
 </Project>

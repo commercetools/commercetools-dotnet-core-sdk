@@ -13,7 +13,7 @@ namespace commercetools.Sdk.Domain
             return (decimal)PreciseAmount / (decimal)Math.Pow(10, FractionDigits.GetValueOrDefault() );
         }
 
-        public static HighPrecisionMoney FromDecimal(string currencyCode, decimal value, int fractionDigits, MidpointRounding midpointRounding = MidpointRounding.AwayFromZero)
+        public static HighPrecisionMoney FromDecimal(string currencyCode, decimal value, int fractionDigits, MidpointRounding midpointRounding = MidpointRounding.ToEven)
         {
             var amount = Math.Round(value * (decimal) Math.Pow(10, fractionDigits), 0, midpointRounding);
             var centAmount = Math.Round(value * 100, 0, midpointRounding);

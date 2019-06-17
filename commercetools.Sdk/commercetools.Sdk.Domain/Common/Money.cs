@@ -32,7 +32,7 @@ namespace commercetools.Sdk.Domain
             return new Money() { CentAmount = (int)amount * 100, CurrencyCode = currencyCode };
         }
 
-        public static Money FromDecimal(string currencyCode, decimal value, MidpointRounding midpointRounding = MidpointRounding.AwayFromZero)
+        public static Money FromDecimal(string currencyCode, decimal value, MidpointRounding midpointRounding = MidpointRounding.ToEven)
         {
             var amount = Math.Round(value * 100M, 0, midpointRounding);
             return new Money
