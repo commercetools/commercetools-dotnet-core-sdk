@@ -49,6 +49,8 @@ namespace commercetools.Sdk.Domain.Tests
             var m = nm.ToCtpHighPrecisionMoney();
             Assert.IsType<HighPrecisionMoney>(m);
             Assert.Equal(12345678, m.PreciseAmount);
+            Assert.Equal(4, m.FractionDigits);
+            Assert.Equal("EUR", m.CurrencyCode);
         }
 
         [Fact]
@@ -62,6 +64,7 @@ namespace commercetools.Sdk.Domain.Tests
             var m = nm.ToCtpMoney();
             Assert.IsType<Money>(m);
             Assert.Equal(123457, m.CentAmount);
+            Assert.Equal("EUR", m.CurrencyCode);
         }
     }
 }
