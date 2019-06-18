@@ -25,7 +25,7 @@ namespace commercetools.Sdk.Domain.Tests
         public void ConvertMoney()
         {
             var m = new Money() { CurrencyCode = "EUR", FractionDigits = 4 };
-            var nm = m.Convert();
+            var nm = m.ToNodaMoney();
             Assert.IsType<NodaMoney.Money>(nm);
         }
 
@@ -33,7 +33,7 @@ namespace commercetools.Sdk.Domain.Tests
         public void ConvertHighPrecisionMoney()
         {
             var m = new HighPrecisionMoney() { CurrencyCode = "EUR", PreciseAmount = 12345678, FractionDigits = 4 };
-            var nm = m.Convert();
+            var nm = m.ToNodaMoney();
             Assert.IsType<NodaMoney.Money>(nm);
             Assert.Equal(1234.5678M, nm.Amount);
         }
@@ -46,7 +46,7 @@ namespace commercetools.Sdk.Domain.Tests
             builder.DecimalDigits = 4;
 
             var nm = new NodaMoney.Money(1234.5678m, builder.Build());
-            var m = nm.ConvertToHighPrecision();
+            var m = nm.ToCtpHighPrecisionMoney();
             Assert.IsType<HighPrecisionMoney>(m);
             Assert.Equal(12345678, m.PreciseAmount);
         }
@@ -59,7 +59,7 @@ namespace commercetools.Sdk.Domain.Tests
             builder.DecimalDigits = 4;
 
             var nm = new NodaMoney.Money(1234.5678m, builder.Build());
-            var m = nm.Convert();
+            var m = nm.ToCtpMoney();
             Assert.IsType<Money>(m);
             Assert.Equal(123457, m.CentAmount);
         }
