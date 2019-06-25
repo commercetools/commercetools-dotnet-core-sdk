@@ -5,10 +5,12 @@ using commercetools.Sdk.HttpApi.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using commercetools.Sdk.Domain.Query;
 using Xunit;
 using commercetools.Sdk.Domain.Categories.UpdateActions;
 using commercetools.Sdk.Domain.Predicates;
+using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using ChangeNameUpdateAction = commercetools.Sdk.Domain.Categories.UpdateActions.ChangeNameUpdateAction;
 
@@ -423,6 +425,30 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Assert.Equal(category.Key, categories.First().Key);
             Assert.Equal(category.Parent.Id, categories.First().Parent.Obj.Id);
             Assert.Equal(category.Parent.Id, categories.First().Ancestors.First().Id);
+        }
+        
+        [Fact]
+        public void UseLinqProvider()
+        {
+            var commerceToolsClient = this.categoryFixture.GetService<IClient>();
+
+            var search = from p in commerceToolsClient.SearchProducts()
+                where p.Categories.Any(reference => reference.Id == "abc")
+                select p;
+
+            search.Expand(p => p.ProductType)
+                .Expand(p => p.TaxCategory)
+                .Filter(p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "color" && ((TextAttribute)a).Value == "red")))
+                .FilterQuery(p => p.Variants.Any(v => v.Attributes.Any(a => a.Name == "size" && ((TextAttribute)a).Value == "48")))
+                .TermFacet(projection => projection.Key);
+
+            var command = ((ClientProductProjectionSearchProvider) search.Provider).Command;
+            var commandFactory = this.categoryFixture.GetService<IHttpApiCommandFactory>();;
+            var httpApiCommand = commandFactory.Create(command);
+
+            var request = httpApiCommand.HttpRequestMessage;
+            Assert.Equal(HttpMethod.Post, request.Method);
+            Assert.Equal("filter=variants.attributes.color%3A%22red%22&filter.query=categories.id%3A%22abc%22&filter.query=variants.attributes.size%3A%2248%22&facet=key&expand=productType&expand=taxCategory&withTotal=false", request.Content.ReadAsStringAsync().Result);
         }
     }
 }

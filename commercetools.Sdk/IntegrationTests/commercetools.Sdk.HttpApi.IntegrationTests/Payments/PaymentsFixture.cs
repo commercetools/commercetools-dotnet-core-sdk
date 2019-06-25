@@ -54,7 +54,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
             PaymentDraft paymentDraft = new PaymentDraft
             {
                 Key = TestingUtility.RandomString(10),
-                AmountPlanned = Money.Parse($"{centAmount} EUR"),
+                AmountPlanned = Money.FromDecimal("EUR",centAmount),
                 Transactions = new List<TransactionDraft>()
             };
             return paymentDraft;
@@ -67,7 +67,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
             PaymentDraft paymentDraft = new PaymentDraft
             {
                 Key = TestingUtility.RandomString(10),
-                AmountPlanned = Money.Parse($"{centAmount} EUR"),
+                AmountPlanned = Money.FromDecimal("EUR", centAmount),
                 Custom = customFieldsDraft,
                 Transactions = new List<TransactionDraft>()
             };
@@ -91,7 +91,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
         public Payment CreatePaymentWithTransaction()
         {
             var refundTransaction = this.GetTransactionDraft(DateTime.Now, TransactionType.Refund,
-                Money.Parse($"{TestingUtility.RandomInt(100, 10000)} EUR"), TestingUtility.RandomString(10), TransactionState.Initial);
+                Money.FromDecimal("EUR", TestingUtility.RandomInt(100, 10000)), TestingUtility.RandomString(10), TransactionState.Initial);
             var paymentDraft = this.GetPaymentDraft();
             paymentDraft.Transactions.Add(refundTransaction);
             return this.CreatePayment(paymentDraft);

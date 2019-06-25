@@ -11,6 +11,11 @@ namespace commercetools.Sdk.Domain.Predicates
             return source;
         }
 
+        public static T moneyString<T>(this T source)
+        {
+            return source;
+        }
+
         public static bool In<T>(this T source, params T[] values)
         {
             throw new NotImplementedException();

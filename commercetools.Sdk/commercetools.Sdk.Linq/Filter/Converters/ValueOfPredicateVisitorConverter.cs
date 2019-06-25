@@ -1,23 +1,23 @@
+using System;
 using System.Linq.Expressions;
 using commercetools.Sdk.Linq.Filter.Visitors;
 
 namespace commercetools.Sdk.Linq.Filter.Converters
 {
     /// <summary>
-    /// For comparison of non local values like (c.key == category.key.valueOf())
+    /// For comparison of non local values like (c.key == category.key.valueOf()) or (c.createdAt == date.valueOf())
     /// </summary>
     public class ValueOfPredicateVisitorConverter : IFilterPredicateVisitorConverter
     {
+        private const string MethodName = "valueOf";
+
         public int Priority { get; } = 3;
 
         public bool CanConvert(Expression expression)
         {
-            if (expression is MethodCallExpression methodCallExpression)
+            if (expression is MethodCallExpression methodCallExpression && methodCallExpression.Method.Name == MethodName)
             {
-                if (methodCallExpression.Method.Name == "valueOf")
-                {
-                    return true;
-                }
+                return true;
             }
 
             return false;
@@ -25,7 +25,13 @@ namespace commercetools.Sdk.Linq.Filter.Converters
 
         public IPredicateVisitor Convert(Expression expression, IPredicateVisitorFactory predicateVisitorFactory)
         {
-            var compiledValue = Expression.Lambda(expression, null).Compile().DynamicInvoke(null).ToString();
+            var dynamicInvoke = Expression.Lambda(expression, null).Compile().DynamicInvoke(null);
+            if (dynamicInvoke is DateTime dt)
+            {
+                return new ConstantPredicateVisitor(dt.ToUtcIso8601().WrapInQuotes());
+            }
+
+            var compiledValue = dynamicInvoke.ToString();
             if ((expression as MethodCallExpression)?.Arguments[0].Type == typeof(string))
             {
                 compiledValue = compiledValue.WrapInQuotes();

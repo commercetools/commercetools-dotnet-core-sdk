@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using commercetools.Sdk.Domain;
@@ -319,8 +320,19 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void FilterByCreatedAtParseVar()
         {
-            string date = "2015-06-04T12:27:55.344Z";
-            Expression<Func<ProductProjection, bool>> expression = p => p.CreatedAt.Range(DateTime.Parse(date), DateTime.Parse("2016-06-04T12:27:55.344Z"));
+            string date1 = "2015-06-04T12:27:55.344Z";
+            string date2 = "2016-06-04T12:27:55.344Z";
+            Expression<Func<ProductProjection, bool>> expression = p => p.CreatedAt.Range(DateTime.Parse(date1, CultureInfo.GetCultureInfo("de-DE")), DateTime.Parse(date2, CultureInfo.GetCultureInfo("de-DE")));
+            IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
+            var result = filterExpressionVisitor.Render(expression);
+            Assert.Equal("createdAt:range (\"2015-06-04T12:27:55.344Z\" to \"2016-06-04T12:27:55.344Z\")", result);
+        }
+
+        [Fact]
+        public void FilterByCreatedAtDateTimeVar()
+        {
+            var date = DateTime.Parse("2015-06-04T12:27:55.344Z", CultureInfo.GetCultureInfo("de-DE"));
+            Expression<Func<ProductProjection, bool>> expression = p => p.CreatedAt.Range(date.valueOf(), DateTime.Parse("2016-06-04T12:27:55.344Z"));
             IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             var result = filterExpressionVisitor.Render(expression);
             Assert.Equal("createdAt:range (\"2015-06-04T12:27:55.344Z\" to \"2016-06-04T12:27:55.344Z\")", result);

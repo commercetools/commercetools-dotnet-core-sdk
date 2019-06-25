@@ -1,15 +1,16 @@
-﻿using System;
 using System.Linq.Expressions;
-using commercetools.Sdk.Linq.Discount.Visitors;
-using commercetools.Sdk.Linq.Filter;
+using commercetools.Sdk.Linq.Filter.Visitors;
 
 namespace commercetools.Sdk.Linq.Filter.Converters
 {
-    public class ParsePredicateVisitorConverter : IFilterPredicateVisitorConverter
+    /// <summary>
+    /// For comparison of money like (c.TotalPrice == money.moneyString())
+    /// </summary>
+    public class MoneyStringPredicateVisitorConverter : IFilterPredicateVisitorConverter
     {
-        private const string MethodName = "Parse";
+        private const string MethodName = "moneyString";
 
-        public int Priority => 3;
+        public int Priority { get; } = 3;
 
         public bool CanConvert(Expression expression)
         {
@@ -24,17 +25,7 @@ namespace commercetools.Sdk.Linq.Filter.Converters
         public IPredicateVisitor Convert(Expression expression, IPredicateVisitorFactory predicateVisitorFactory)
         {
             var dynamicInvoke = Expression.Lambda(expression, null).Compile().DynamicInvoke(null);
-            if (dynamicInvoke is DateTime dt)
-            {
-                return new ConstantPredicateVisitor(dt.ToUtcIso8601().WrapInQuotes());
-            }
-
-            var compiledValue = dynamicInvoke.ToString();
-            if ((expression as MethodCallExpression)?.Arguments[0].Type == typeof(string))
-            {
-                compiledValue = compiledValue.WrapInQuotes();
-            }
-
+            var compiledValue = dynamicInvoke.ToString().WrapInQuotes();
             return new ConstantPredicateVisitor(compiledValue);
         }
     }

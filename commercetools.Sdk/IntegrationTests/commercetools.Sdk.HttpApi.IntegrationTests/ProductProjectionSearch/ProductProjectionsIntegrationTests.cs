@@ -947,14 +947,17 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
                 this.productProjectionsFixture.CreateCustomizedProduct(taxCategory: taxCategory);
             var productWithoutTaxCategory = this.productProjectionsFixture.CreateCustomizedProduct(taxCategory: null);
 
+            var productIds = new[] {productWithTaxCategory.Id, productWithoutTaxCategory.Id};
             //Act (filter only the product which have TaxCategory not set)
             var searchRequest = new SearchProductProjectionsCommand();
             searchRequest.SetStaged(true);
             searchRequest.FilterQuery(p => p.TaxCategory.Missing());
+            searchRequest.FilterQuery(p => p.Id.In(productIds));
 
             var searchRequestUsingFilter = new SearchProductProjectionsCommand();
             searchRequestUsingFilter.SetStaged(true);
             searchRequestUsingFilter.Filter(p => p.TaxCategory.Missing());
+            searchRequestUsingFilter.Filter(p => p.Id.In(productIds));
 
             //Assert
             this.productProjectionsFixture.AssertEventually(() =>
@@ -980,14 +983,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
                 this.productProjectionsFixture.CreateCustomizedProduct(taxCategory: taxCategory);
             var productWithoutTaxCategory = this.productProjectionsFixture.CreateCustomizedProduct(taxCategory: null);
 
+            var productIds = new[] {productWithTaxCategory.Id, productWithoutTaxCategory.Id};
+
             //Act (filter only the product which have TaxCategory not set)
             var searchRequest = new SearchProductProjectionsCommand();
             searchRequest.SetStaged(true);
             searchRequest.FilterQuery(p => p.TaxCategory.Exists());
+            searchRequest.FilterQuery(p => p.Id.In(productIds));
 
             var searchRequestUsingFilter = new SearchProductProjectionsCommand();
             searchRequestUsingFilter.SetStaged(true);
             searchRequestUsingFilter.Filter(p => p.TaxCategory.Exists());
+            searchRequestUsingFilter.Filter(p => p.Id.In(productIds));
 
             //Assert
             this.productProjectionsFixture.AssertEventually(() =>
@@ -1044,13 +1051,17 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             var productWithState = this.productProjectionsFixture.CreateCustomizedProduct(state: state);
             var productWithoutState = this.productProjectionsFixture.CreateCustomizedProduct(state: null);
 
+            var productIds = new[] { productWithState.Id, productWithoutState.Id };
+
             //Act (filter only the product which matches the specified state)
             var searchRequest = new SearchProductProjectionsCommand();
             searchRequest.SetStaged(true);
+            searchRequest.FilterQuery(p => p.Id.In(productIds));
             searchRequest.FilterQuery(p => p.State.Missing());
 
             var searchRequestUsingFilter = new SearchProductProjectionsCommand();
             searchRequestUsingFilter.SetStaged(true);
+            searchRequestUsingFilter.Filter(p => p.Id.In(productIds));
             searchRequestUsingFilter.Filter(p => p.State.Missing());
 
             //Assert
@@ -1076,14 +1087,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             var productWithState = this.productProjectionsFixture.CreateCustomizedProduct(state: state);
             var productWithoutState = this.productProjectionsFixture.CreateCustomizedProduct(state: null);
 
+            var productIds = new[] { productWithState.Id, productWithoutState.Id };
+
             //Act (filter only the product which matches the specified state)
             var searchRequest = new SearchProductProjectionsCommand();
             searchRequest.SetStaged(true);
             searchRequest.FilterQuery(p => p.State.Exists());
+            searchRequest.FilterQuery(p => p.Id.In(productIds));
 
             var searchRequestUsingFilter = new SearchProductProjectionsCommand();
             searchRequestUsingFilter.SetStaged(true);
             searchRequestUsingFilter.Filter(p => p.State.Exists());
+            searchRequestUsingFilter.Filter(p => p.Id.In(productIds));
 
             //Assert
             this.productProjectionsFixture.AssertEventually(() =>
@@ -1110,9 +1125,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             var review1 = this.productProjectionsFixture.CreateProductReview(product.Key, 1);
             var review2 = this.productProjectionsFixture.CreateProductReview(product.Key, 3);
 
+            var productIds = new[] {product.Id};
+
             //Act
             var searchRequest = new SearchProductProjectionsCommand();
             searchRequest.SetStaged(true);
+            searchRequest.FilterQuery(p => p.Id.In(productIds));
             searchRequest.FilterQuery(p => p.ReviewRatingStatistics.AverageRating == 2D);
             searchRequest.FilterQuery(p => p.ReviewRatingStatistics.LowestRating == 1);
             searchRequest.FilterQuery(p => p.ReviewRatingStatistics.HighestRating == 3);

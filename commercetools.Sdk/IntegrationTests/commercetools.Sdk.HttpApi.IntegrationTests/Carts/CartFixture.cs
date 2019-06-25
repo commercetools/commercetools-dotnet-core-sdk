@@ -222,8 +222,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         {
             ShippingRateDraft rate = new ShippingRateDraft()
             {
-                Price = Money.Parse("1.00 EUR"),
-                FreeAbove = Money.Parse("100.00 EUR")
+                Price = Money.FromDecimal("EUR", 1),
+                FreeAbove = Money.FromDecimal("EUR", 100)
             };
             return rate;
         }
@@ -232,7 +232,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         {
             ShippingRateDraft rate = new ShippingRateDraft()
             {
-                Price = Money.Parse("10.00 EUR"),
+                Price = Money.FromDecimal("EUR", 10),
                 Tiers = this.GetShippingRatePriceTiersAsCartScore()
             };
             return rate;
@@ -242,7 +242,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         {
             ShippingRateDraft rate = new ShippingRateDraft()
             {
-                Price = Money.Parse("10.00 EUR"),
+                Price = Money.FromDecimal("EUR", 10),
                 Tiers = GetShippingRatePriceTiersAsClassification()
             };
             return rate;
@@ -251,16 +251,16 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         private List<ShippingRatePriceTier> GetShippingRatePriceTiersAsCartScore()
         {
             var shippingRatePriceTiers = new List<ShippingRatePriceTier>();
-            shippingRatePriceTiers.Add(new CartScoreShippingRatePriceTier{Score = 0, Price = Money.Parse("10.00 EUR")});
-            shippingRatePriceTiers.Add(new CartScoreShippingRatePriceTier{Score = 1, Price = Money.Parse("20.00 EUR")});
-            shippingRatePriceTiers.Add(new CartScoreShippingRatePriceTier{Score = 2, Price = Money.Parse("30.00 EUR")});
+            shippingRatePriceTiers.Add(new CartScoreShippingRatePriceTier{Score = 0, Price = Money.FromDecimal("EUR", 10)});
+            shippingRatePriceTiers.Add(new CartScoreShippingRatePriceTier{Score = 1, Price = Money.FromDecimal("EUR", 20)});
+            shippingRatePriceTiers.Add(new CartScoreShippingRatePriceTier{Score = 2, Price = Money.FromDecimal("EUR", 30)});
             return shippingRatePriceTiers;
         }
         private List<ShippingRatePriceTier> GetShippingRatePriceTiersAsClassification()
         {
             var shippingRatePriceTiers = new List<ShippingRatePriceTier>();
-            shippingRatePriceTiers.Add(new CartClassificationShippingRatePriceTier{Value = "Small", Price = Money.Parse("20.00 EUR")});
-            shippingRatePriceTiers.Add(new CartClassificationShippingRatePriceTier{Value = "Heavy", Price = Money.Parse("30.00 EUR")});
+            shippingRatePriceTiers.Add(new CartClassificationShippingRatePriceTier{Value = "Small", Price = Money.FromDecimal("EUR", 20)});
+            shippingRatePriceTiers.Add(new CartClassificationShippingRatePriceTier{Value = "Heavy", Price = Money.FromDecimal("EUR", 30)});
             return shippingRatePriceTiers;
         }
         public ShippingRate GetShippingRate()
@@ -313,7 +313,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
         {
             var externalTaxAmount = new ExternalTaxAmountDraft()
             {
-                TotalGross = Money.Parse("100 EUR"),
+                TotalGross = Money.FromDecimal("EUR", 100),
                 TaxRate = this.GetExternalTaxRateDraft()
             };
             return externalTaxAmount;
@@ -356,7 +356,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                 Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}},
                 Slug = TestingUtility.RandomString(10),
                 Quantity = TestingUtility.RandomInt(1,10),
-                Money = Money.Parse($"{TestingUtility.RandomInt(100,10000)} EUR"),
+                Money = Money.FromDecimal("EUR", TestingUtility.RandomInt(100,10000)),
                 TaxCategory = new Reference<TaxCategory>() {Id = taxCategory.Id}
             };
             return customLineItemDraft;

@@ -637,7 +637,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             var productDiscount = this.productFixture.CreateProductDiscount();
             var discountedPrice = new DiscountedPrice
             {
-                Value = Money.Parse("100 EUR"),
+                Value = Money.FromDecimal("EUR",100),
                 Discount = new Reference<ProductDiscount> {Id = productDiscount.Id}
             };
             SetDiscountedPriceUpdateAction setDiscountedPriceUpdateAction = new SetDiscountedPriceUpdateAction

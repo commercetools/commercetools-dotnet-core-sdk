@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq.Expressions;
 using commercetools.Sdk.Linq.Discount.Visitors;
-using commercetools.Sdk.Linq.Filter;
 
-namespace commercetools.Sdk.Linq.Filter.Converters
+namespace commercetools.Sdk.Linq.Query.Converters
 {
-    public class ParsePredicateVisitorConverter : IFilterPredicateVisitorConverter
+    public class ParsePredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
         private const string MethodName = "Parse";
 

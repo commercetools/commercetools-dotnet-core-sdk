@@ -134,7 +134,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
         {
             IClient commerceToolsClient = this.paymentsFixture.GetService<IClient>();
             Payment payment = this.paymentsFixture.CreatePayment();
-            var newAmountPlanned = Money.Parse($"{TestingUtility.RandomInt(100, 10000)} EUR");
+            var newAmountPlanned = Money.FromDecimal("EUR",TestingUtility.RandomInt(100,10000));
 
             var updateActions = new List<UpdateAction<Payment>>();
             ChangeAmountPlannedUpdateAction changeAmountPlannedUpdateAction = new ChangeAmountPlannedUpdateAction() {Amount = newAmountPlanned};
@@ -396,7 +396,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
 
             Assert.Empty(payment.Transactions);
 
-            var refundMoney = Money.Parse($"{TestingUtility.RandomInt(100, 10000)} EUR");
+            var refundMoney = Money.FromDecimal("EUR", TestingUtility.RandomInt(100, 10000));
             var refundTransaction = this.paymentsFixture.GetTransactionDraft(DateTime.Now, TransactionType.Refund,
                 refundMoney, TestingUtility.RandomString(10), TransactionState.Initial);
 

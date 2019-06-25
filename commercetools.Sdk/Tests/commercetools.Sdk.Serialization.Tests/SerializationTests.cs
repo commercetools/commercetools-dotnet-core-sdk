@@ -137,14 +137,14 @@ namespace commercetools.Sdk.Serialization.Tests
             var productType = new ResourceIdentifier
             {
                 Key = "Key12",
-                Id = "1",
+                Id = "f40fcd15-b1c2-4279-9cfa-f6083e6a2988",
                 TypeId = ReferenceTypeId.ProductType
             };
             string result = serializerService.Serialize(productType);
             JToken resultFormatted = JValue.Parse(result);
             string serialized = File.ReadAllText("Resources/Types/ResourceIdentifier.json");
             JToken serializedFormatted = JValue.Parse(serialized);
-            serializedFormatted.ToString().Should().BeEquivalentTo(resultFormatted.ToString());
+            serializedFormatted.Should().BeEquivalentTo(resultFormatted.ToString());
         }
 
         [Fact]
