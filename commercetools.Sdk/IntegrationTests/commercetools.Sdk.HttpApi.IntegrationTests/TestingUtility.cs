@@ -113,21 +113,24 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
          /// <summary>
         /// Get Random Product Variant Draft with attributes
         /// </summary>
-        /// <param name="referenceAttributeId"></param>
+        /// <param name="referenceId"></param>
         /// <param name="referenceTypeId"></param>
+        /// <param name="prices"></param>
+        /// <param name="attributes"></param>
         /// <returns></returns>
-        public static ProductVariantDraft GetRandomProductVariantDraft(string referenceAttributeId = "",
-            ReferenceTypeId? referenceTypeId = null)
+        public static ProductVariantDraft GetRandomProductVariantDraft(string referenceId = "",
+            ReferenceTypeId? referenceTypeId = null, List<PriceDraft> prices = null, List<Attribute> attributes = null)
         {
             var productVariantDraft = new ProductVariantDraft()
             {
                 Key = RandomString(10),
                 Sku = RandomString(10),
-                Prices = GetRandomListOfPriceDraft(),//two prices
-                Attributes = GetListOfRandomAttributes(referenceAttributeId, referenceTypeId)
+                Prices = prices ?? GetRandomListOfPriceDraft(),//two prices
+                Attributes = attributes?? GetListOfRandomAttributes(referenceId, referenceTypeId)
             };
             return productVariantDraft;
         }
+
 
         /// <summary>
         /// Get Random Price Draft
@@ -147,7 +150,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             return price;
         }
 
-        public static PriceDraft GetPriceDraft(int centAmount,  DateTime? validFrom = null, DateTime? validUntil = null, string currency = "EUR")
+        public static PriceDraft GetPriceDraft(int centAmount,  DateTime? validFrom = null, DateTime? validUntil = null, string currency = "EUR", string country = null)
         {
             var money = new Money()
             {
@@ -158,7 +161,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             {
                 Value = money,
                 ValidFrom = validFrom,
-                ValidUntil = validUntil
+                ValidUntil = validUntil,
+                Country = country
             };
             return priceDraft;
         }
@@ -197,10 +201,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         /// <summary>
         /// Get list of Random attributes with reference attribute if passed
         /// </summary>
-        /// <param name="referenceAttributeId"></param>
+        /// <param name="referenceId"></param>
         /// <param name="referenceTypeId"></param>
         /// <returns></returns>
-        public static List<Attribute> GetListOfRandomAttributes(string referenceAttributeId = "",
+        public static List<Attribute> GetListOfRandomAttributes(string referenceId = "",
             ReferenceTypeId? referenceTypeId = null)
         {
             List<Attribute> attributes = new List<Attribute>();
@@ -221,14 +225,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             attributes.Add(new TimeAttribute() {Name = "time-attribute-name", Value = new TimeSpan(23, 43, 10)});
             attributes.Add(new MoneyAttribute()
                 {Name = "money-attribute-name", Value = new Money() {CentAmount = 4000, CurrencyCode = "EUR"}});
-            if (!string.IsNullOrEmpty(referenceAttributeId) && referenceTypeId != null)
+            if (!string.IsNullOrEmpty(referenceId) && referenceTypeId != null)
             {
                 attributes.Add(new ReferenceAttribute()
                 {
                     Name = "reference-attribute-name",
-                    Value = new Reference<Category>()
+                    Value = new Reference
                     {
-                        Id = referenceAttributeId
+                        Id = referenceId,
+                        TypeId = referenceTypeId
                     }
                 });
             }

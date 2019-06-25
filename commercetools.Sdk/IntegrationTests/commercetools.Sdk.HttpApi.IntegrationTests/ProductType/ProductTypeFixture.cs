@@ -62,7 +62,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             AttributeDefinitionDraft attributeDefinitionDraft = new AttributeDefinitionDraft();
             attributeDefinitionDraft.Name = "text-attribute-name";
             attributeDefinitionDraft.Label = new LocalizedString() { { "en", "text-attribute-label" } };
-            attributeDefinitionDraft.IsRequired = true;
+            attributeDefinitionDraft.IsRequired = false;
             attributeDefinitionDraft.Type = new TextAttributeType();
             return attributeDefinitionDraft;
         }
@@ -72,7 +72,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             AttributeDefinitionDraft attributeDefinitionDraft = new AttributeDefinitionDraft();
             attributeDefinitionDraft.Name = "localized-text-attribute-name";
             attributeDefinitionDraft.Label = new LocalizedString() { { "en", "localized-text-attribute-label" } };
-            attributeDefinitionDraft.IsRequired = true;
+            attributeDefinitionDraft.IsRequired = false;
             attributeDefinitionDraft.Type = new LocalizableTextAttributeType();
             return attributeDefinitionDraft;
         }
@@ -82,7 +82,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             AttributeDefinitionDraft attributeDefinitionDraft = new AttributeDefinitionDraft();
             attributeDefinitionDraft.Name = "boolean-attribute-name";
             attributeDefinitionDraft.Label = new LocalizedString() { { "en", "boolean-attribute-label" } };
-            attributeDefinitionDraft.IsRequired = true;
+            attributeDefinitionDraft.IsRequired = false;
             attributeDefinitionDraft.Type = new BooleanAttributeType();
             return attributeDefinitionDraft;
         }
@@ -92,8 +92,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             AttributeDefinitionDraft attributeDefinitionDraft = new AttributeDefinitionDraft();
             attributeDefinitionDraft.Name = "number-attribute-name";
             attributeDefinitionDraft.Label = new LocalizedString() { { "en", "number-attribute-label" } };
-            attributeDefinitionDraft.IsRequired = true;
+            attributeDefinitionDraft.IsRequired = false;
             attributeDefinitionDraft.Type = new NumberAttributeType();
+            attributeDefinitionDraft.IsSearchable = true;
             return attributeDefinitionDraft;
         }
 
@@ -102,7 +103,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             AttributeDefinitionDraft attributeDefinitionDraft = new AttributeDefinitionDraft();
             attributeDefinitionDraft.Name = "date-attribute-name";
             attributeDefinitionDraft.Label = new LocalizedString() { { "en", "date-attribute-label" } };
-            attributeDefinitionDraft.IsRequired = true;
+            attributeDefinitionDraft.IsRequired = false;
             attributeDefinitionDraft.Type = new DateAttributeType();
             return attributeDefinitionDraft;
         }
@@ -112,7 +113,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             AttributeDefinitionDraft attributeDefinitionDraft = new AttributeDefinitionDraft();
             attributeDefinitionDraft.Name = "date-time-attribute-name";
             attributeDefinitionDraft.Label = new LocalizedString() { { "en", "date-time-attribute-label" } };
-            attributeDefinitionDraft.IsRequired = true;
+            attributeDefinitionDraft.IsRequired = false;
             attributeDefinitionDraft.Type = new DateTimeAttributeType();
             return attributeDefinitionDraft;
         }
@@ -122,7 +123,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             AttributeDefinitionDraft attributeDefinitionDraft = new AttributeDefinitionDraft();
             attributeDefinitionDraft.Name = "time-attribute-name";
             attributeDefinitionDraft.Label = new LocalizedString() { { "en", "time-attribute-label" } };
-            attributeDefinitionDraft.IsRequired = true;
+            attributeDefinitionDraft.IsRequired = false;
             attributeDefinitionDraft.Type = new TimeAttributeType();
             return attributeDefinitionDraft;
         }
@@ -132,10 +133,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             AttributeDefinitionDraft attributeDefinitionDraft = new AttributeDefinitionDraft();
             attributeDefinitionDraft.Name = "reference-attribute-name";
             attributeDefinitionDraft.Label = new LocalizedString() { { "en", "reference-attribute-label" } };
-            attributeDefinitionDraft.IsRequired = true;
+            attributeDefinitionDraft.IsRequired = false;
             ReferenceAttributeType referenceAttributeType = new ReferenceAttributeType();
-            referenceAttributeType.ReferenceTypeId = ReferenceFieldTypeId.Category;
+            referenceAttributeType.ReferenceTypeId = ReferenceFieldTypeId.ProductType;
             attributeDefinitionDraft.Type = referenceAttributeType;
+            attributeDefinitionDraft.IsSearchable = true;
             return attributeDefinitionDraft;
         }
 
@@ -144,12 +146,14 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             AttributeDefinitionDraft attributeDefinitionDraft = new AttributeDefinitionDraft();
             attributeDefinitionDraft.Name = "enum-attribute-name";
             attributeDefinitionDraft.Label = new LocalizedString() { { "en", "enum-attribute-label" } };
-            attributeDefinitionDraft.IsRequired = true;
+            attributeDefinitionDraft.IsRequired = false;
             EnumAttributeType enumAttributeType = new EnumAttributeType();
             enumAttributeType.Values = new List<PlainEnumValue>();
             enumAttributeType.Values.Add(new PlainEnumValue() { Key = "enum-key-1", Label = "enum-label-1" });
             enumAttributeType.Values.Add(new PlainEnumValue() { Key = "enum-key-2", Label = "enum-label-2" });
+            enumAttributeType.Values.Add(new PlainEnumValue() { Key = "enum-key-3", Label = "enum-label-3" });
             attributeDefinitionDraft.Type = enumAttributeType;
+            attributeDefinitionDraft.IsSearchable = true;
             return attributeDefinitionDraft;
         }
 
@@ -158,7 +162,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             AttributeDefinitionDraft attributeDefinitionDraft = new AttributeDefinitionDraft();
             attributeDefinitionDraft.Name = "localized-enum-attribute-name";
             attributeDefinitionDraft.Label = new LocalizedString() { { "en", "localized-enum-attribute-label" } };
-            attributeDefinitionDraft.IsRequired = true;
+            attributeDefinitionDraft.IsRequired = false;
             LocalizableEnumAttributeType localizableEnumAttributeType = new LocalizableEnumAttributeType();
             localizableEnumAttributeType.Values = new List<LocalizedEnumValue>();
             localizableEnumAttributeType.Values.Add(new LocalizedEnumValue() { Key = "enum-key-1", Label = new LocalizedString() { { "en", "enum-label-1" } } });
@@ -172,8 +176,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             AttributeDefinitionDraft attributeDefinitionDraft = new AttributeDefinitionDraft();
             attributeDefinitionDraft.Name = "money-attribute-name";
             attributeDefinitionDraft.Label = new LocalizedString() { { "en", "money-attribute-label" } };
-            attributeDefinitionDraft.IsRequired = true;
+            attributeDefinitionDraft.IsRequired = false;
             attributeDefinitionDraft.Type = new MoneyAttributeType();
+            attributeDefinitionDraft.IsSearchable = true;
             return attributeDefinitionDraft;
         }
 
