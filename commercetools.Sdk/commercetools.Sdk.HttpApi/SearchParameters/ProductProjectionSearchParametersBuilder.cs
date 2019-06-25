@@ -54,6 +54,26 @@ namespace commercetools.Sdk.HttpApi.SearchParameters
                 parameters.Add(new KeyValuePair<string, string>("markMatchingVariants", productProjectionSearchParameters.MarkMatchingVariants.ToString()));
             }
 
+            if (productProjectionSearchParameters.PriceCurrency != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("priceCurrency", productProjectionSearchParameters.PriceCurrency));
+            }
+
+            if (productProjectionSearchParameters.PriceCountry != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("priceCountry", productProjectionSearchParameters.PriceCountry));
+            }
+
+            if (productProjectionSearchParameters.PriceCustomerGroup != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("priceCustomerGroup", productProjectionSearchParameters.PriceCustomerGroup));
+            }
+
+            if (productProjectionSearchParameters.PriceChannel != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("priceChannel", productProjectionSearchParameters.PriceChannel));
+            }
+
             var withTotal = productProjectionSearchParameters.WithTotal ? "true" : "false";
             parameters.Add(new KeyValuePair<string, string>("withTotal", withTotal));
 

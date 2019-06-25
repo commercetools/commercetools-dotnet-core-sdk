@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
-using commercetools.Sdk.Linq.Query;
-using commercetools.Sdk.Linq.Query.Visitors;
+using commercetools.Sdk.Linq.Discount.Visitors;
 
 namespace commercetools.Sdk.Linq.Discount.Converters
 {

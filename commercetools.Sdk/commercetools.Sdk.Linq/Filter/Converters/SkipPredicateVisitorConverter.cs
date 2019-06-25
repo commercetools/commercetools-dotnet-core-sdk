@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq.Expressions;
-using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Filter.Converters
 {

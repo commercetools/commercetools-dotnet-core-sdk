@@ -70,7 +70,7 @@ namespace SimpleInjector
             services.Register<IDiscountPredicateExpressionVisitor, DiscountPredicateExpressionVisitor>(Lifestyle.Singleton);
 
             services.Register<IExpansionExpressionVisitor, ExpansionExpressionVisitor>(Lifestyle.Singleton);
-            services.Register<ISortExpressionVisitor, SortExpressionVisitor>(Lifestyle.Singleton);
+            services.Register<ISortPredicateExpressionVisitor, SortPredicateExpressionVisitor>(Lifestyle.Singleton);
         }
 
         public static void UseDomain(this Container services)

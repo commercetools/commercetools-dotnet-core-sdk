@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 using commercetools.Sdk.Linq.Filter.Visitors;
 
 namespace commercetools.Sdk.Linq.Filter.Converters
 {
-    public class InMethodPredicateVisitorConverter : IFilterPredicateVisitorConverter
+    public class InMethodWithMemberAccessPredicateVisitorConverter : IFilterPredicateVisitorConverter
     {
         public int Priority { get; } = 3;
 
@@ -13,7 +12,7 @@ namespace commercetools.Sdk.Linq.Filter.Converters
         {
             if (expression is MethodCallExpression methodCallExpression)
             {
-                if (methodCallExpression.Method.Name == "In" && methodCallExpression.Arguments[1].NodeType == ExpressionType.NewArrayInit)
+                if (methodCallExpression.Method.Name == "In" && methodCallExpression.Arguments[1].NodeType == ExpressionType.MemberAccess)
                 {
                     return true;
                 }
@@ -32,9 +31,17 @@ namespace commercetools.Sdk.Linq.Filter.Converters
 
             IPredicateVisitor parent = predicateVisitorFactory.Create(methodCallExpression.Arguments[0]);
             List<IPredicateVisitor> parameters = new List<IPredicateVisitor>();
-            foreach (Expression part in ((NewArrayExpression)methodCallExpression.Arguments[1]).Expressions)
+
+            var memberExpression =
+                (MemberExpression)methodCallExpression.Arguments[1];
+
+            if (Expression.Lambda(memberExpression).Compile().DynamicInvoke() is IEnumerable<object> arr)
             {
-                parameters.Add(predicateVisitorFactory.Create(part));
+                foreach (var element in arr)
+                {
+                    parameters.Add(
+                        new ConstantPredicateVisitor(element.ToString().WrapInQuotes()));
+                }
             }
 
             CollectionPredicateVisitor collection = new CollectionPredicateVisitor(parameters);

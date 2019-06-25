@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Globalization;
+using System.Linq.Expressions;
 using commercetools.Sdk.Linq.Filter.Visitors;
 
 namespace commercetools.Sdk.Linq.Filter.Converters
@@ -21,7 +22,8 @@ namespace commercetools.Sdk.Linq.Filter.Converters
             }
 
             string currentName = memberExpression.Member.Name;
-            if (FilterMapping.MembersToSkip.Contains(currentName))
+            if (FilterMapping.MembersToSkip.Contains(currentName) &&
+                !memberExpression.ToString().Contains("ScopedPrice"))
             {
                 return predicateVisitorFactory.Create(memberExpression.Expression);
             }
