@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Globalization;
 
 namespace commercetools.Sdk.Domain
 {
     public abstract class BaseMoney : IComparable
     {
-        public string Type { get; set; }
+        public virtual MoneyType Type { get; set; }
         public string CurrencyCode { get; set; }
-        public int CentAmount { get; set; }
-        public int FractionDigits { get; set; }
+        public long CentAmount { get; set; }
+        public int? FractionDigits { get; set; }
+
+        public abstract decimal AmountToDecimal();
 
         public int CompareTo(object obj)
         {
