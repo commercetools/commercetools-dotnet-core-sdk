@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using commercetools.Sdk.Domain.Common;
 
 namespace commercetools.Sdk.Domain.ProductProjections
 {
     public static class ProductProjectionSearchExtension
     {
-        public static bool Missing<T>(this IEnumerable<T> source)
+        public static bool Missing<T>(this T source)
         {
             throw new NotImplementedException();
         }
 
-        public static bool Exists<T>(this IEnumerable<T> source)
+        public static bool Exists<T>(this T source)
         {
             throw new NotImplementedException();
         }
