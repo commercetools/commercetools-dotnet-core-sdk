@@ -28,6 +28,22 @@ namespace commercetools.Sdk.Client
             return command;
         }
 
+        public static void SetStaged<T>(this SearchCommand<T> command, bool staged)
+        {
+            if (command.AdditionalParameters == null)
+            {
+                command.AdditionalParameters = new ProductProjectionAdditionalParameters();
+            }
+
+            if (command.AdditionalParameters is ProductProjectionAdditionalParameters parameters)
+            {
+                parameters.Staged = staged;
+                return;
+            }
+
+            throw new ArgumentException("AdditionalParameters not of type ProductProjectionAdditionalParameters");
+        }
+
         public static SearchProductProjectionsCommand FilterQuery(this SearchProductProjectionsCommand command, Expression<Func<ProductProjection, bool>> expression)
         {
             var p = command.SearchParameters as ProductProjectionSearchParameters;
@@ -52,37 +68,51 @@ namespace commercetools.Sdk.Client
             return command;
         }
 
-        public static SearchProductProjectionsCommand TermFacet(this SearchProductProjectionsCommand command, Expression<Func<ProductProjection, IComparable>> expression)
+        public static SearchProductProjectionsCommand TermFacet(this SearchProductProjectionsCommand command, Expression<Func<ProductProjection, IComparable>> expression, bool isCountingProducts = false)
         {
             var p = command.SearchParameters as ProductProjectionSearchParameters;
-            p.Facets.Add(new TermFacet<ProductProjection>(expression).ToString());
+            p.Facets.Add(new TermFacet<ProductProjection>(expression) { IsCountingProducts = isCountingProducts }.ToString());
 
             return command;
         }
 
-        public static SearchProductProjectionsCommand RangeFacet(this SearchProductProjectionsCommand command, Expression<Func<ProductProjection, bool>> expression)
+        public static SearchProductProjectionsCommand RangeFacet(this SearchProductProjectionsCommand command, Expression<Func<ProductProjection, bool>> expression, bool isCountingProducts = false)
         {
             var p = command.SearchParameters as ProductProjectionSearchParameters;
-            p.Facets.Add(new RangeFacet<ProductProjection>(expression).ToString());
+            p.Facets.Add(new RangeFacet<ProductProjection>(expression) { IsCountingProducts = isCountingProducts }.ToString());
 
             return command;
         }
 
-        public static SearchProductProjectionsCommand TermFacet(this SearchProductProjectionsCommand command, string alias, Expression<Func<ProductProjection, IComparable>> expression)
+        public static SearchProductProjectionsCommand TermFacet(this SearchProductProjectionsCommand command, string alias, Expression<Func<ProductProjection, IComparable>> expression, bool isCountingProducts = false)
         {
             var p = command.SearchParameters as ProductProjectionSearchParameters;
-            var termFacet = new TermFacet<ProductProjection>(expression);
-            termFacet.Alias = alias;
+            var termFacet = new TermFacet<ProductProjection>(expression) { Alias = alias, IsCountingProducts = isCountingProducts };
             p.Facets.Add(termFacet.ToString());
 
             return command;
         }
 
-        public static SearchProductProjectionsCommand RangeFacet(this SearchProductProjectionsCommand command, string alias, Expression<Func<ProductProjection, bool>> expression)
+        public static SearchProductProjectionsCommand FilteredFacet(this SearchProductProjectionsCommand command, Expression<Func<ProductProjection, bool>> expression, bool isCountingProducts = false)
         {
             var p = command.SearchParameters as ProductProjectionSearchParameters;
-            var rangeFacet = new RangeFacet<ProductProjection>(expression);
-            rangeFacet.Alias = alias;
+            p.Facets.Add(new FilterFacet<ProductProjection>(expression) { IsCountingProducts = isCountingProducts }.ToString());
+
+            return command;
+        }
+
+        public static SearchProductProjectionsCommand FilteredFacet(this SearchProductProjectionsCommand command, string alias, Expression<Func<ProductProjection, bool>> expression, bool isCountingProducts = false)
+        {
+            var p = command.SearchParameters as ProductProjectionSearchParameters;
+            var filteredFacet = new FilterFacet<ProductProjection>(expression) { Alias = alias, IsCountingProducts = isCountingProducts };
+            p.Facets.Add(filteredFacet.ToString());
+            return command;
+        }
+
+        public static SearchProductProjectionsCommand RangeFacet(this SearchProductProjectionsCommand command, string alias, Expression<Func<ProductProjection, bool>> expression, bool isCountingProducts = false)
+        {
+            var p = command.SearchParameters as ProductProjectionSearchParameters;
+            var rangeFacet = new RangeFacet<ProductProjection>(expression) { Alias = alias, IsCountingProducts = isCountingProducts };
             p.Facets.Add(rangeFacet.ToString());
 
             return command;
@@ -199,6 +229,38 @@ namespace commercetools.Sdk.Client
             {
                 pageableParams.WithTotal = withTotal;
             }
+
+            return command;
+        }
+
+        public static SearchProductProjectionsCommand SetPriceCurrency(this SearchProductProjectionsCommand command, string priceCurrency)
+        {
+            var p = command.SearchParameters as ProductProjectionSearchParameters;
+            p.PriceCurrency = priceCurrency;
+
+            return command;
+        }
+
+        public static SearchProductProjectionsCommand SetPriceCountry(this SearchProductProjectionsCommand command, string priceCountry)
+        {
+            var p = command.SearchParameters as ProductProjectionSearchParameters;
+            p.PriceCountry = priceCountry;
+
+            return command;
+        }
+
+        public static SearchProductProjectionsCommand SetPriceCustomerGroup(this SearchProductProjectionsCommand command, string priceCustomerGroup)
+        {
+            var p = command.SearchParameters as ProductProjectionSearchParameters;
+            p.PriceCustomerGroup = priceCustomerGroup;
+
+            return command;
+        }
+
+        public static SearchProductProjectionsCommand SetPriceChannel(this SearchProductProjectionsCommand command, string priceChannel)
+        {
+            var p = command.SearchParameters as ProductProjectionSearchParameters;
+            p.PriceChannel = priceChannel;
 
             return command;
         }
