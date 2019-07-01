@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.Products.Attributes;
+using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 using LocalizedEnumValue = commercetools.Sdk.Domain.Common.LocalizedEnumValue;
 
@@ -23,6 +26,21 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public static readonly string ExternalImageUrl = "https://commercetools.com/wp-content/uploads/2018/06/Feature_Guide.png";
         public static readonly string AssetUrl = "https://commercetools.com/wp-content/uploads/2018/07/rewe-logo-1.gif";
         public const string DefaultContainerName = "CustomObjectFixtures";
+
+        public static readonly PriceDraft Euro30 = GetPriceDraft(30);
+        public static readonly PriceDraft Euro50 = GetPriceDraft(50);
+        public static readonly PriceDraft Euro70 = GetPriceDraft(70);
+        public static readonly PriceDraft Euro90 = GetPriceDraft(90);
+        public static readonly PriceDraft EuroScoped40 = GetPriceDraft(40, country:"DE");
+        public static readonly PriceDraft EuroScoped60 = GetPriceDraft(60, country:"DE");
+        public static readonly PriceDraft EuroScoped80 = GetPriceDraft(80, country:"DE");
+        public static readonly PriceDraft EuroScoped100 = GetPriceDraft(100, country:"DE");
+
+        public static readonly Money Money30 = new Money {CentAmount = 30, CurrencyCode = "EUR"};
+        public static readonly Money Money50 = new Money {CentAmount = 50, CurrencyCode = "EUR"};
+        public static readonly Money Money70 = new Money {CentAmount = 70, CurrencyCode = "USD"};
+
+        public static readonly int DiscountOf5Euro = 5;
         #endregion
 
         #region Functions
@@ -345,5 +363,42 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         }
 
         #endregion
+
+        public static void AssertEventually(TimeSpan maxWaitTime, TimeSpan waitBeforeRetry, Action runnableBlock)
+        {
+            long timeOutAt = (int) DateTime.Now.TimeOfDay.TotalMilliseconds + (int) maxWaitTime.TotalMilliseconds;
+            while (true)
+            {
+                try
+                {
+                    runnableBlock.Invoke();
+                    // the block executed without throwing an exception, return
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    if ((int) DateTime.Now.TimeOfDay.TotalMilliseconds > timeOutAt) //if it's timeout
+                    {
+                        throw;
+                    }
+
+                    if (ex is ErrorResponseException errorResponseException &&
+                        errorResponseException.ErrorResponse.Errors.Any(err =>
+                            err.Code.Equals("SearchFacetPathNotFound")))
+                    {
+                        throw;
+                    }
+                }
+
+                try
+                {
+                    Task.Delay((int) waitBeforeRetry.TotalMilliseconds).Wait();
+                }
+                catch (ThreadInterruptedException e)
+                {
+                    throw new SystemException(e.Message);
+                }
+            }
+        }
     }
 }

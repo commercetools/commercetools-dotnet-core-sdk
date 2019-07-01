@@ -2,6 +2,7 @@ using System;
 using commercetools.Sdk.HttpApi.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
 using SimpleInjector;
 using Xunit.Abstractions;
 using Xunit.Sdk;
@@ -10,11 +11,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     public class ServiceProviderFixture
     {
+        public readonly Guid TestId;
         public IServiceProvider ServiceProvider { get; private set; }
         public IConfiguration Configuration { get; private set; }
 
         public ServiceProviderFixture(IMessageSink diagnosticMessageSink)
         {
+            this.TestId = Guid.NewGuid();
             this.Configuration = new ConfigurationBuilder().
                 AddJsonFile("appsettings.test.json").
                 AddJsonFile("appsettings.test.Development.json", true).
