@@ -43,6 +43,14 @@ namespace commercetools.Sdk.Domain.ProductProjections
 
         public bool? MarkMatchingVariants { get; set; }
 
+        public string PriceCurrency { get; set; }
+
+        public string PriceCountry { get; set; }
+
+        public string PriceCustomerGroup { get; set; }
+
+        public string PriceChannel { get; set; }
+
         public void SetFilter(List<Filter<ProductProjection>> filterPredicates)
         {
             if (filterPredicates != null)

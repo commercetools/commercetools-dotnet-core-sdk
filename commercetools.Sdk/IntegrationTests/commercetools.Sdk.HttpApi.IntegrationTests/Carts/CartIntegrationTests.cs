@@ -1172,7 +1172,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             Assert.Equal(newTaxMode, retrievedCart.TaxMode);
 
             // Then Set Cart Total Tax
-            var totalTax = Money.Parse($"{TestingUtility.RandomInt(100, 1000)} EUR");
+            var totalTax = Money.FromDecimal("EUR", TestingUtility.RandomInt(100,1000));
             SetCartTotalTaxUpdateAction setCartTotalTaxUpdateAction = new SetCartTotalTaxUpdateAction()
             {
                 ExternalTotalGross = totalTax

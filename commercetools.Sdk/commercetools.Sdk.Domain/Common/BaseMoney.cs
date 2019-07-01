@@ -12,6 +12,11 @@ namespace commercetools.Sdk.Domain
 
         public abstract decimal AmountToDecimal();
 
+        public override string ToString()
+        {
+            return $"{this.AmountToDecimal()} {CurrencyCode}";
+        }
+
         public int CompareTo(object obj)
         {
             BaseMoney money = obj as BaseMoney;

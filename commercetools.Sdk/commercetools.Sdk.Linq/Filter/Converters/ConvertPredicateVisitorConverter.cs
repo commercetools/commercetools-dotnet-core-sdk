@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
-using commercetools.Sdk.Linq.Query.Visitors;
+﻿using System.Linq.Expressions;
 
 namespace commercetools.Sdk.Linq.Filter.Converters
 {

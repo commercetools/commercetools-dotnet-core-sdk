@@ -106,7 +106,8 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void CartPredicateTotalPrice()
         {
-            Expression<Func<Cart, bool>> expression = c => c.TotalPrice == Money.Parse("10 USD");
+            var money = Money.FromDecimal("USD", 10);
+            Expression<Func<Cart, bool>> expression = c => c.TotalPrice == money.moneyString();
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("totalPrice = \"10 USD\"", result);
@@ -115,8 +116,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void CartPredicateTotalPriceVar()
         {
-            string money = "10 USD";
-            Expression<Func<Cart, bool>> expression = c => c.TotalPrice == Money.Parse(money);
+            Expression<Func<Cart, bool>> expression = c => c.TotalPrice == Money.FromDecimal("USD", 10, MidpointRounding.ToEven).moneyString();
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("totalPrice = \"10 USD\"", result);
@@ -125,7 +125,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void CartPredicateTotalNet()
         {
-            Expression<Func<Cart, bool>> expression = c => c.TaxedPrice.TotalNet > Money.Parse("10 USD");
+            Expression<Func<Cart, bool>> expression = c => c.TaxedPrice.TotalNet > Money.FromDecimal("USD", 10, MidpointRounding.ToEven).moneyString();
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("taxedPrice.net > \"10 USD\"", result);
@@ -134,7 +134,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void CartPredicateTotalGross()
         {
-            Expression<Func<Cart, bool>> expression = c => c.TaxedPrice.TotalGross <= Money.Parse("10 USD");
+            Expression<Func<Cart, bool>> expression = c => c.TaxedPrice.TotalGross <= Money.FromDecimal("USD", 10, MidpointRounding.ToEven).moneyString();
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("taxedPrice.gross <= \"10 USD\"", result);
@@ -232,29 +232,29 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void LineItemPredicateMoneyAttribute()
         {
-            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "money" && ((MoneyAttribute)a).Value >= Money.Parse("18.00 EUR"));
+            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "money" && ((MoneyAttribute)a).Value >= Money.FromDecimal("EUR", 18, MidpointRounding.ToEven).moneyString());
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
-            Assert.Equal("attributes.money >= \"18.00 EUR\"", result);
+            Assert.Equal("attributes.money >= \"18 EUR\"", result);
         }
 
         [Fact]
         public void LineItemPredicateMoneyAttributeVar()
         {
             string money = "money";
-            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == money && ((MoneyAttribute)a).Value >= Money.Parse("18.00 EUR"));
+            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == money && ((MoneyAttribute)a).Value >= Money.FromDecimal("EUR", 18, MidpointRounding.ToEven).moneyString());
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
-            Assert.Equal("attributes.money >= \"18.00 EUR\"", result);
+            Assert.Equal("attributes.money >= \"18 EUR\"", result);
         }
 
         [Fact]
         public void LineItemPredicateMoneyAttributeCast()
         {
-            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "money" && a.ToMoneyAttribute().Value >= Money.Parse("18.00 EUR"));
+            Expression<Func<LineItem, bool>> expression = l => l.Attributes().Any(a => a.Name == "money" && a.ToMoneyAttribute().Value >= Money.FromDecimal("EUR", 18, MidpointRounding.ToEven).moneyString());
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
-            Assert.Equal("attributes.money >= \"18.00 EUR\"", result);
+            Assert.Equal("attributes.money >= \"18 EUR\"", result);
         }
 
         [Fact]
@@ -336,10 +336,10 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void LineItemPredicatePrice()
         {
-            Expression<Func<LineItem, bool>> expression = l => l.Price.Value == Money.Parse("10.00 EUR");
+            Expression<Func<LineItem, bool>> expression = l => l.Price.Value == Money.FromDecimal("EUR", 10, MidpointRounding.ToEven).moneyString();
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
-            Assert.Equal("price = \"10.00 EUR\"", result);
+            Assert.Equal("price = \"10 EUR\"", result);
         }
 
         [Fact]
@@ -399,10 +399,10 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void CustomLineItemPredicateMoneyAndTaxRate()
         {
-            Expression<Func<CustomLineItem, bool>> expression = c => c.Money > Money.Parse("10.50 EUR") && c.TaxRate.IncludedInPrice == false;
+            Expression<Func<CustomLineItem, bool>> expression = c => c.Money > Money.FromDecimal("EUR", 10.51M, MidpointRounding.ToEven).moneyString() && c.TaxRate.IncludedInPrice == false;
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
-            Assert.Equal("money > \"10.50 EUR\" and taxRate.includedInPrice = false", result);
+            Assert.Equal("money > \"10.51 EUR\" and taxRate.includedInPrice = false", result);
         }
 
         [Fact]
@@ -445,10 +445,10 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void LineItemPredicatePriceNot()
         {
-            Expression<Func<LineItem, bool>> expression = l => !(l.Price.Value == Money.Parse("10.00 EUR"));
+            Expression<Func<LineItem, bool>> expression = l => !(l.Price.Value == Money.FromDecimal("EUR", 10, MidpointRounding.ToEven).moneyString());
             IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = cartPredicateExpressionVisitor.Render(expression);
-            Assert.Equal("not(price = \"10.00 EUR\")", result);
+            Assert.Equal("not(price = \"10 EUR\")", result);
         }
     }
 }

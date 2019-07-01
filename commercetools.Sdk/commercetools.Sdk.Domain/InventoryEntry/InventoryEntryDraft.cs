@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.Domain.Channels;
+using commercetools.Sdk.Domain.Common;
 
 namespace commercetools.Sdk.Domain
 {
@@ -9,7 +10,7 @@ namespace commercetools.Sdk.Domain
     {
         [Required]
         public string Sku { get; set; }
-        public Reference<Channel> SupplyChannel { get; set; }
+        public IReference<Channel> SupplyChannel { get; set; }
         public long QuantityOnStock { get; set; }
         public int RestockableInDays { get; set; }
         public DateTime? ExpectedDelivery { get; set; }

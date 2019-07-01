@@ -88,8 +88,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
         {
             ShippingRate rate = new ShippingRate()
             {
-                Price = Money.Parse("1.00 EUR"),
-                FreeAbove = Money.Parse("100.00 EUR")
+                Price = Money.FromDecimal("EUR", 1),
+                FreeAbove = Money.FromDecimal("EUR", 100)
             };
             return rate;
         }

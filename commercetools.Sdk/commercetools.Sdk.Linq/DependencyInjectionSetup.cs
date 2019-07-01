@@ -15,7 +15,7 @@ namespace commercetools.Sdk.Linq
             services.AddSingleton<IDiscountPredicateExpressionVisitor, DiscountPredicateExpressionVisitor>();
 
             services.AddSingleton<IExpansionExpressionVisitor, ExpansionExpressionVisitor>();
-            services.AddSingleton<ISortExpressionVisitor, SortExpressionVisitor>();
+            services.AddSingleton<ISortPredicateExpressionVisitor, SortPredicateExpressionVisitor>();
         }
     }
 }

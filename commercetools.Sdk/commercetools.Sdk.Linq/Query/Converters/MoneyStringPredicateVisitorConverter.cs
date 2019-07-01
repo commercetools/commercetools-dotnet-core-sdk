@@ -1,15 +1,14 @@
-using System;
 using System.Linq.Expressions;
 using commercetools.Sdk.Linq.Filter.Visitors;
 
-namespace commercetools.Sdk.Linq.Discount.Converters
+namespace commercetools.Sdk.Linq.Query.Converters
 {
     /// <summary>
-    /// For comparison of non local values like (c.key == category.key.valueOf()) or (c.createdAt == date.valueOf())
+    /// For comparison of money like (c.TotalPrice == money.moneyString())
     /// </summary>
-    public class ValueOfPredicateVisitorConverter : IDiscountPredicateVisitorConverter
+    public class MoneyStringPredicateVisitorConverter : IQueryPredicateVisitorConverter
     {
-        private const string MethodName = "valueOf";
+        private const string MethodName = "moneyString";
 
         public int Priority { get; } = 3;
 
@@ -26,17 +25,7 @@ namespace commercetools.Sdk.Linq.Discount.Converters
         public IPredicateVisitor Convert(Expression expression, IPredicateVisitorFactory predicateVisitorFactory)
         {
             var dynamicInvoke = Expression.Lambda(expression, null).Compile().DynamicInvoke(null);
-            if (dynamicInvoke is DateTime dt)
-            {
-                return new ConstantPredicateVisitor(dt.ToUtcIso8601().WrapInQuotes());
-            }
-
-            var compiledValue = dynamicInvoke.ToString();
-            if ((expression as MethodCallExpression)?.Arguments[0].Type == typeof(string))
-            {
-                compiledValue = compiledValue.WrapInQuotes();
-            }
-
+            var compiledValue = dynamicInvoke.ToString().WrapInQuotes();
             return new ConstantPredicateVisitor(compiledValue);
         }
     }

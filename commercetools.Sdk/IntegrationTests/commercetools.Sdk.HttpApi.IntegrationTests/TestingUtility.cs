@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.Products.Attributes;
+using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 using LocalizedEnumValue = commercetools.Sdk.Domain.Common.LocalizedEnumValue;
 
@@ -23,6 +26,21 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         public static readonly string ExternalImageUrl = "https://commercetools.com/wp-content/uploads/2018/06/Feature_Guide.png";
         public static readonly string AssetUrl = "https://commercetools.com/wp-content/uploads/2018/07/rewe-logo-1.gif";
         public const string DefaultContainerName = "CustomObjectFixtures";
+
+        public static readonly PriceDraft Euro30 = GetPriceDraft(30);
+        public static readonly PriceDraft Euro50 = GetPriceDraft(50);
+        public static readonly PriceDraft Euro70 = GetPriceDraft(70);
+        public static readonly PriceDraft Euro90 = GetPriceDraft(90);
+        public static readonly PriceDraft EuroScoped40 = GetPriceDraft(40, country:"DE");
+        public static readonly PriceDraft EuroScoped60 = GetPriceDraft(60, country:"DE");
+        public static readonly PriceDraft EuroScoped80 = GetPriceDraft(80, country:"DE");
+        public static readonly PriceDraft EuroScoped100 = GetPriceDraft(100, country:"DE");
+
+        public static readonly Money Money30 = new Money {CentAmount = 30, CurrencyCode = "EUR"};
+        public static readonly Money Money50 = new Money {CentAmount = 50, CurrencyCode = "EUR"};
+        public static readonly Money Money70 = new Money {CentAmount = 70, CurrencyCode = "USD"};
+
+        public static readonly int DiscountOf5Euro = 5;
         #endregion
 
         #region Functions
@@ -113,21 +131,24 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
          /// <summary>
         /// Get Random Product Variant Draft with attributes
         /// </summary>
-        /// <param name="referenceAttributeId"></param>
+        /// <param name="referenceId"></param>
         /// <param name="referenceTypeId"></param>
+        /// <param name="prices"></param>
+        /// <param name="attributes"></param>
         /// <returns></returns>
-        public static ProductVariantDraft GetRandomProductVariantDraft(string referenceAttributeId = "",
-            ReferenceTypeId? referenceTypeId = null)
+        public static ProductVariantDraft GetRandomProductVariantDraft(string referenceId = "",
+            ReferenceTypeId? referenceTypeId = null, List<PriceDraft> prices = null, List<Attribute> attributes = null)
         {
             var productVariantDraft = new ProductVariantDraft()
             {
                 Key = RandomString(10),
                 Sku = RandomString(10),
-                Prices = GetRandomListOfPriceDraft(),//two prices
-                Attributes = GetListOfRandomAttributes(referenceAttributeId, referenceTypeId)
+                Prices = prices ?? GetRandomListOfPriceDraft(),//two prices
+                Attributes = attributes?? GetListOfRandomAttributes(referenceId, referenceTypeId)
             };
             return productVariantDraft;
         }
+
 
         /// <summary>
         /// Get Random Price Draft
@@ -147,7 +168,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             return price;
         }
 
-        public static PriceDraft GetPriceDraft(int centAmount,  DateTime? validFrom = null, DateTime? validUntil = null, string currency = "EUR")
+        public static PriceDraft GetPriceDraft(int centAmount,  DateTime? validFrom = null, DateTime? validUntil = null, string currency = "EUR", string country = null)
         {
             var money = new Money()
             {
@@ -158,7 +179,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             {
                 Value = money,
                 ValidFrom = validFrom,
-                ValidUntil = validUntil
+                ValidUntil = validUntil,
+                Country = country
             };
             return priceDraft;
         }
@@ -197,10 +219,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         /// <summary>
         /// Get list of Random attributes with reference attribute if passed
         /// </summary>
-        /// <param name="referenceAttributeId"></param>
+        /// <param name="referenceId"></param>
         /// <param name="referenceTypeId"></param>
         /// <returns></returns>
-        public static List<Attribute> GetListOfRandomAttributes(string referenceAttributeId = "",
+        public static List<Attribute> GetListOfRandomAttributes(string referenceId = "",
             ReferenceTypeId? referenceTypeId = null)
         {
             List<Attribute> attributes = new List<Attribute>();
@@ -221,14 +243,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             attributes.Add(new TimeAttribute() {Name = "time-attribute-name", Value = new TimeSpan(23, 43, 10)});
             attributes.Add(new MoneyAttribute()
                 {Name = "money-attribute-name", Value = new Money() {CentAmount = 4000, CurrencyCode = "EUR"}});
-            if (!string.IsNullOrEmpty(referenceAttributeId) && referenceTypeId != null)
+            if (!string.IsNullOrEmpty(referenceId) && referenceTypeId != null)
             {
                 attributes.Add(new ReferenceAttribute()
                 {
                     Name = "reference-attribute-name",
-                    Value = new Reference<Category>()
+                    Value = new Reference
                     {
-                        Id = referenceAttributeId
+                        Id = referenceId,
+                        TypeId = referenceTypeId
                     }
                 });
             }
@@ -340,5 +363,42 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         }
 
         #endregion
+
+        public static void AssertEventually(TimeSpan maxWaitTime, TimeSpan waitBeforeRetry, Action runnableBlock)
+        {
+            long timeOutAt = (int) DateTime.Now.TimeOfDay.TotalMilliseconds + (int) maxWaitTime.TotalMilliseconds;
+            while (true)
+            {
+                try
+                {
+                    runnableBlock.Invoke();
+                    // the block executed without throwing an exception, return
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    if ((int) DateTime.Now.TimeOfDay.TotalMilliseconds > timeOutAt) //if it's timeout
+                    {
+                        throw;
+                    }
+
+                    if (ex is ErrorResponseException errorResponseException &&
+                        errorResponseException.ErrorResponse.Errors.Any(err =>
+                            err.Code.Equals("SearchFacetPathNotFound")))
+                    {
+                        throw;
+                    }
+                }
+
+                try
+                {
+                    Task.Delay((int) waitBeforeRetry.TotalMilliseconds).Wait();
+                }
+                catch (ThreadInterruptedException e)
+                {
+                    throw new SystemException(e.Message);
+                }
+            }
+        }
     }
 }

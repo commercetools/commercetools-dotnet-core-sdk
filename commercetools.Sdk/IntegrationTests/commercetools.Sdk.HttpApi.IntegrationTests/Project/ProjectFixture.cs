@@ -90,5 +90,23 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Project
 
             return updatedProject;
         }
+
+        public Sdk.Domain.Project.Project ChangeProjectLanguages(List<string> languages)
+        {
+            IClient commerceToolsClient = this.GetService<IClient>();
+            var project = commerceToolsClient.ExecuteAsync(new GetProjectCommand()).Result;
+
+            var changeLanguagesUpdateAction = new ChangeLanguagesUpdateAction
+            {
+                Languages = languages
+            };
+            var updateActions = new List<UpdateAction<Sdk.Domain.Project.Project>> {changeLanguagesUpdateAction};
+
+            var updatedProject = commerceToolsClient
+                .ExecuteAsync(new UpdateProjectCommand(project.Version, updateActions))
+                .Result;
+
+            return updatedProject;
+        }
     }
 }

@@ -38,14 +38,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
         /// Create Product Discount for specific product - put the product Id inside predicate of the product discount
         /// </summary>
         /// <param name="productId"></param>
+        /// <param name="discountCentAmount"></param>
         /// <returns></returns>
-        public ProductDiscountDraft GetProductDiscountDraft(string productId)
+        public ProductDiscountDraft GetProductDiscountDraft(string productId, int? discountCentAmount = null)
         {
             string predicate = this.GetProductDiscountPredicateBasedonProduct(productId);
             ProductDiscountDraft productDiscountDraft = new ProductDiscountDraft();
             productDiscountDraft.Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}};
             productDiscountDraft.Description = new LocalizedString() {{"en", TestingUtility.RandomString(20)}};
-            productDiscountDraft.Value = GetProductDiscountValueAsAbsolute();
+            productDiscountDraft.Value = GetProductDiscountValueAsAbsolute(discountCentAmount);
             productDiscountDraft.Predicate = predicate;
             productDiscountDraft.SortOrder = TestingUtility.RandomSortOrder();
             productDiscountDraft.ValidFrom = DateTime.Today;
@@ -102,12 +103,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
         /// Return Absolute Product Discount
         /// </summary>
         /// <returns></returns>
-        public AbsoluteProductDiscountValue GetProductDiscountValueAsAbsolute()
+        public AbsoluteProductDiscountValue GetProductDiscountValueAsAbsolute(int? discountCentAmount = null)
         {
             var money = new Money()
             {
                 CurrencyCode = "EUR",
-                CentAmount = TestingUtility.RandomInt(1, 10000)
+                CentAmount = discountCentAmount ?? TestingUtility.RandomInt(1, 10000)
             };
             var productDiscountValue = new AbsoluteProductDiscountValue()
             {

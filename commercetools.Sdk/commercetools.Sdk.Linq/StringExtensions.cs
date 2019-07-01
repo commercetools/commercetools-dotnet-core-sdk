@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using System.Xml;
 
 namespace commercetools.Sdk.Linq
 {
@@ -22,6 +24,12 @@ namespace commercetools.Sdk.Linq
         public static string RemoveQuotes(this string value)
         {
             return value.Replace("\"", string.Empty);
+        }
+
+        public static string ToUtcIso8601(this DateTime dt)
+        {
+            return dt.ToUniversalTime()
+                .ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffK", CultureInfo.InvariantCulture);
         }
     }
 }

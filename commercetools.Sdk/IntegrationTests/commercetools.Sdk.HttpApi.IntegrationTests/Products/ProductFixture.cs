@@ -26,15 +26,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         private readonly TaxCategoryFixture taxCategoryFixture;
         private readonly TypeFixture typeFixture;
         private readonly StatesFixture statesFixture;
+        private readonly CategoryFixture categoryFixture;
 
-        public CategoryFixture CategoryFixture { get; }
         public List<Product> ProductsToDelete { get; }
 
         public ProductFixture(ServiceProviderFixture serviceProviderFixture) : base(serviceProviderFixture)
         {
             this.ProductsToDelete = new List<Product>();
             this.productTypeFixture = new ProductTypeFixture(serviceProviderFixture);
-            this.CategoryFixture = new CategoryFixture(serviceProviderFixture);
+            this.categoryFixture = new CategoryFixture(serviceProviderFixture);
             this.taxCategoryFixture = new TaxCategoryFixture(serviceProviderFixture);
             this.typeFixture = new TypeFixture(serviceProviderFixture);
             this.statesFixture = new StatesFixture(serviceProviderFixture);
@@ -49,7 +49,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             }
 
             this.productTypeFixture.Dispose();
-            this.CategoryFixture.Dispose();
+            this.categoryFixture.Dispose();
             this.taxCategoryFixture.Dispose();
             this.typeFixture.Dispose();
             this.statesFixture.Dispose();
@@ -82,23 +82,28 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             return retrievedProduct;
         }
 
-        public ProductDraft GetProductDraft(Category category, ProductType productType, bool withVariants = false,
-            bool publish = false, bool withImages = false, bool withAssets = false, IReference<TaxCategory> taxCategoryReference = null)
+        public ProductDraft GetProductDraft(ProductType productType, Category category = null, bool withVariants = false,
+            bool publish = false, bool withImages = false, bool withAssets = false, IReference<TaxCategory> taxCategoryReference = null, LocalizedString productName = null)
         {
             ProductDraft productDraft = new ProductDraft();
             productDraft.Key = TestingUtility.RandomString(10);
-            productDraft.Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}};
+            productDraft.Name = productName?? new LocalizedString() {{"en", TestingUtility.RandomString(10)}};
             productDraft.Description = new LocalizedString() {{"en", TestingUtility.RandomString(20)}};
             productDraft.Slug = new LocalizedString() {{"en", TestingUtility.RandomString(10)}};
             productDraft.ProductType = new ResourceIdentifier<ProductType> {Key = productType.Key};
-            ProductVariantDraft productMasterVariant =
-                TestingUtility.GetRandomProductVariantDraft(category.Id, ReferenceTypeId.Category);
+
+            var productMasterVariant =
+                TestingUtility.GetRandomProductVariantDraft(productType.Id, ReferenceTypeId.ProductType);
             productDraft.MasterVariant = productMasterVariant;
 
-            productDraft.Categories = new List<IReference<Category>>
+            if (category != null)
             {
-                new ResourceIdentifier<Category> {Key = category.Key}
-            };
+                productDraft.Categories = new List<IReference<Category>>
+                {
+                    new ResourceIdentifier<Category> {Key = category.Key}
+                };
+            }
+
             productDraft.Publish = publish; //if true, the product is published immediately
 
             if (withVariants) //then create variants for this product
@@ -106,8 +111,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
                 productDraft.Variants = new List<ProductVariantDraft>();
                 for (var i = 0; i < 3; i++) // add 3 variants
                 {
-                    var productVariantDraft =
-                        TestingUtility.GetRandomProductVariantDraft(category.Id, ReferenceTypeId.Category);
+                    var productVariantDraft = TestingUtility.GetRandomProductVariantDraft(productType.Id, ReferenceTypeId.ProductType);
                     productDraft.Variants.Add(productVariantDraft);
                 }
             }
@@ -137,20 +141,23 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         /// <param name="withImages">if true, this master product variant will have list of images.</param>
         /// <param name="withAssets">if true, this master product variant will have list of assets.</param>
         /// <param name="taxCategoryReference">if not null, then product will created with this taxCategory</param>
+        /// <param name="productName">if not null, then product will created with this localized name</param>
+        /// <param name="productCategory">if not null, then product will created with this productCategory</param>
+        /// <param name="productType">if not null, then product will created with this productType</param>
         /// <returns></returns>
         public Product CreateProduct(bool withVariants = false, bool publish = false, bool withImages = false,
-            bool withAssets = false, IReference<TaxCategory> taxCategoryReference = null)
+            bool withAssets = false, IReference<TaxCategory> taxCategoryReference = null, LocalizedString productName = null, Category productCategory = null, ProductType productType = null)
         {
-            Category category = this.CreateNewCategory();
-            ProductType productType = this.CreateNewProductType();
-            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish, withImages,
-                withAssets, taxCategoryReference));
+            Category category = productCategory;
+            ProductType pType = productType?? this.CreateNewProductType();
+            return this.CreateProduct(this.GetProductDraft(pType, category, withVariants, publish, withImages,
+                withAssets, taxCategoryReference, productName));
         }
 
         public Product CreateProduct(Category category, ProductType productType, bool withVariants = false,
             bool publish = false, bool withImages = false, bool withAssets = false)
         {
-            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish, withImages,
+            return this.CreateProduct(this.GetProductDraft(productType, category, withVariants, publish, withImages,
                 withAssets));
         }
 
@@ -158,7 +165,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             bool withImages = false, bool withAssets = false)
         {
             Category category = this.CreateNewCategory();
-            return this.CreateProduct(this.GetProductDraft(category, productType, withVariants, publish, withImages,
+            return this.CreateProduct(this.GetProductDraft(productType, category, withVariants, publish, withImages,
                 withAssets));
         }
 
@@ -166,7 +173,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         {
             Category category = this.CreateNewCategory();
             ProductType productType = this.CreateNewProductType();
-            return this.GetProductDraft(category, productType);
+            return this.GetProductDraft(productType, category);
         }
 
         public Product CreateProduct(ProductDraft productDraft)
@@ -178,8 +185,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
 
         public Category CreateNewCategory()
         {
-            Category category = this.CategoryFixture.CreateCategory();
-            this.CategoryFixture.CategoriesToDelete.Add(category);
+            Category category = this.categoryFixture.CreateCategory();
+            this.categoryFixture.CategoriesToDelete.Add(category);
             return category;
         }
 
@@ -299,6 +306,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             }
 
             return this.TryDeleteResource(toBeDeleted).Result;
+        }
+
+        public Product GetProductById(string id)
+        {
+            IClient commerceToolsClient = this.GetService<IClient>();
+            return commerceToolsClient.ExecuteAsync(new GetByIdCommand<Product>(id)).Result;
         }
     }
 }

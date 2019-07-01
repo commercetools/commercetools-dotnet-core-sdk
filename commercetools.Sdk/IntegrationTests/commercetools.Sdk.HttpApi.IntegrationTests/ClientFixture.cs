@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
@@ -46,5 +49,6 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 
             return deletedResource;
         }
+
     }
 }

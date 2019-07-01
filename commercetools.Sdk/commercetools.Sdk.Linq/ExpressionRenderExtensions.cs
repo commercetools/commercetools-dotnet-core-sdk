@@ -14,7 +14,7 @@ namespace commercetools.Sdk.Linq
 
         private static IQueryPredicateExpressionVisitor QueryPredicateExpressionVisitor => new QueryPredicateExpressionVisitor();
 
-        private static ISortExpressionVisitor SortExpressionVisitor => new SortExpressionVisitor();
+        private static ISortPredicateExpressionVisitor SortExpressionVisitor => new SortPredicateExpressionVisitor();
 
         private static IExpansionExpressionVisitor ExpansionExpressionVisitor => new ExpansionExpressionVisitor();
 

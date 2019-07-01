@@ -97,6 +97,7 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.Equal(ReferenceTypeId.Product, res.TypeId);
         }
 
+
         [Fact]
         public void ResourceIdentifiersDeserialization()
         {
@@ -114,7 +115,7 @@ namespace commercetools.Sdk.Serialization.Tests
         }
 
         [Fact]
-        public void ResourceIdentifierSerialization()
+        public void ResourceIdentifierSerializationAsGeneric()
         {
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             ResourceIdentifier<ProductType> productType = new ResourceIdentifier<ProductType>
@@ -127,6 +128,23 @@ namespace commercetools.Sdk.Serialization.Tests
             string serialized = File.ReadAllText("Resources/Types/ResourceIdentifier.json");
             JToken serializedFormatted = JValue.Parse(serialized);
             serializedFormatted.Should().BeEquivalentTo(resultFormatted);
+        }
+
+        [Fact]
+        public void ResourceIdentifierSerialization()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            var productType = new ResourceIdentifier
+            {
+                Key = "Key12",
+                Id = "f40fcd15-b1c2-4279-9cfa-f6083e6a2988",
+                TypeId = ReferenceTypeId.ProductType
+            };
+            string result = serializerService.Serialize(productType);
+            JToken resultFormatted = JValue.Parse(result);
+            string serialized = File.ReadAllText("Resources/Types/ResourceIdentifier.json");
+            JToken serializedFormatted = JValue.Parse(serialized);
+            serializedFormatted.Should().BeEquivalentTo(resultFormatted.ToString());
         }
 
         [Fact]

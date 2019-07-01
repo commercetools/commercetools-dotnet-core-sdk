@@ -321,12 +321,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             Product product = this.productFixture.CreateProduct();
             List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
 
-            var productCategory = product.MasterData.Staged.Categories[0];
             AddProductVariantUpdateAction addProductVariantUpdateAction = new AddProductVariantUpdateAction()
             {
                 Sku = TestingUtility.RandomString(10),
                 Key = TestingUtility.RandomString(10),
-                Attributes = TestingUtility.GetListOfRandomAttributes(productCategory.Id, ReferenceTypeId.Category)
+                Attributes = TestingUtility.GetListOfRandomAttributes(product.ProductType.Id, ReferenceTypeId.ProductType)
             };
 
             updateActions.Add(addProductVariantUpdateAction);
@@ -638,7 +637,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             var productDiscount = this.productFixture.CreateProductDiscount();
             var discountedPrice = new DiscountedPrice
             {
-                Value = Money.Parse("100 EUR"),
+                Value = Money.FromDecimal("EUR",100),
                 Discount = new Reference<ProductDiscount> {Id = productDiscount.Id}
             };
             SetDiscountedPriceUpdateAction setDiscountedPriceUpdateAction = new SetDiscountedPriceUpdateAction
@@ -754,7 +753,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         public void UpdateProductSetCategoryOrderHint()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
-            Product product = this.productFixture.CreateProduct();
+            var productCategory = this.productFixture.CreateNewCategory();
+            Product product = this.productFixture.CreateProduct(productCategory:productCategory);
 
             Assert.Single(product.MasterData.Staged.Categories);
 
@@ -788,7 +788,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
         public void UpdateProductRemoveFromCategory()
         {
             IClient commerceToolsClient = this.productFixture.GetService<IClient>();
-            Product product = this.productFixture.CreateProduct();
+            var productCategory = this.productFixture.CreateNewCategory();
+            Product product = this.productFixture.CreateProduct(productCategory:productCategory);
 
             Assert.Single(product.MasterData.Staged.Categories);
 

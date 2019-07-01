@@ -15,7 +15,7 @@ namespace commercetools.Sdk.Domain.Reviews
         public string Title { get; set; }
         public string Text { get; set; }
         public Reference Target { get; set; }
-        public double Rating { get; set; }
+        public int? Rating { get; set; }
         public Reference<State> State { get; set; }
         public bool IncludedInStatistics { get; set; }
         public Reference<Customer> Customer { get; set; }

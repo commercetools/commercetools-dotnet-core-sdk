@@ -4,8 +4,8 @@ using commercetools.Sdk.Domain.Categories;
 using System;
 using System.Collections.Generic;
 using commercetools.Sdk.Domain.Categories.UpdateActions;
-using Xunit.Abstractions;
-using Type = commercetools.Sdk.Domain.Type;
+ using commercetools.Sdk.Domain.Common;
+ using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
@@ -47,6 +47,21 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             categoryDraft.Slug = localizedStringSlug;
             categoryDraft.Key = TestingUtility.RandomString(10);
             categoryDraft.OrderHint = TestingUtility.RandomSortOrder();
+            return categoryDraft;
+        }
+
+        public CategoryDraft GetCategoryDraft(LocalizedString name, LocalizedString slug, string key = null, string orderHint = null, string externalId = null, LocalizedString description = null, IReference<Category> parent = null)
+        {
+            var categoryDraft = new CategoryDraft
+            {
+                Name = name,
+                Slug = slug,
+                Key = key,
+                OrderHint = orderHint,
+                Description = description,
+                Parent = parent,
+                ExternalId = externalId
+            };
             return categoryDraft;
         }
 
