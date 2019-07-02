@@ -294,3 +294,38 @@ Accessing the command built using LINQ
 ```c#
 var command = ((ClientQueryProvider<Category>) query.Provider).Command;
 ```
+
+## Custom Services
+If you want to support services endpoints that still not covered by the SDK like [Stores](https://docs.commercetools.com/http-api-projects-stores#stores ) endpoint for example, all what you need is to create the domain models like described
+```c#
+    [Endpoint("stores")]
+    public class Store : Resource<Store>
+    {
+        public string Key { get; set; }
+        public LocalizedString Name { get; set; }
+    }
+    
+    public class StoreDraft : IDraft<Store>
+    {
+        public string Key { get; set; }
+        public LocalizedString Name { get; set; }
+    }
+```
+Please notice that, you have to add the Endpoint attribute above the main domain model, make it inherit from Resource class, and make the draft model implement IDraft interface.
+
+After this you can use them in different commands like this:
+
+```c#
+ var storeDraft = new StoreDraft
+            {
+                Name = new LocalizedString {{"en", $"Store1"}},
+                Key = $"StoreKey"
+            };
+ var store = this.client.ExecuteAsync(new CreateCommand<Store>(storeDraft)).Result;
+```
+
+or like this:
+ ```c#
+  var store = this.client..ExecuteAsync(new GetByIdCommand<Store>(id)).Result;
+ ```
+ you can also create custom Commands, HttpApiCommands, Request Builders and Additional Parameters builders for them, but don't forget to inject them into services container before calling services.UseCommercetools
