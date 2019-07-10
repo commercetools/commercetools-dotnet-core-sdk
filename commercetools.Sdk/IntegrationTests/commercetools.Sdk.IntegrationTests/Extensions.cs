@@ -1,0 +1,38 @@
+using System;
+using System.Linq;
+using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Products.Attributes;
+
+namespace commercetools.Sdk.IntegrationTests
+{
+    public static class Extensions
+    {
+        public static double NextDouble(this Random rnd, double min, double max)
+        {
+            return rnd.NextDouble() * (max-min) + min;
+        }
+
+        public static string GetTextAttributeValue(this ProductVariant variant, string textAttributeName)
+        {
+            string attributeValue = null;
+            var attribute = variant.Attributes.FirstOrDefault(a => a.Name.Equals(textAttributeName));
+            if (attribute != null)//if there is attribute with name = textAttributeName
+            {
+                attributeValue = (attribute as Attribute<string>)?.Value;
+            }
+            return attributeValue;
+        }
+
+        public static Money ToMoney(this BaseMoney baseMoney)
+        {
+            var money = new Money
+            {
+                Type = baseMoney.Type,
+                CentAmount = baseMoney.CentAmount,
+                CurrencyCode = baseMoney.CurrencyCode,
+                FractionDigits = baseMoney.FractionDigits
+            };
+            return money;
+        }
+    }
+}

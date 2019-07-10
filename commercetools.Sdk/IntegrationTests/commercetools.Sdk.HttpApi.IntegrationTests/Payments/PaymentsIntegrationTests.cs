@@ -104,7 +104,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
                 .Result;
             NotFoundException exception = await Assert.ThrowsAsync<NotFoundException>(() =>
                 commerceToolsClient.ExecuteAsync(
-                    new GetByIdCommand<Cart>(deletedPayment.Id)));
+                    new GetByIdCommand<Payment>(deletedPayment.Id)));
             Assert.Equal(404, exception.StatusCode);
         }
 

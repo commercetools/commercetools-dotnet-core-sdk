@@ -46,6 +46,8 @@ test_script:
   - ps: |
       dotnet test IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
   - ps: |
+      dotnet test IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
+  - ps: |
       $env:Container="SimpleInjector"
       dotnet test IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
 
