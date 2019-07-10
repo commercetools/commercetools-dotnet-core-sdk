@@ -3,6 +3,6 @@
     public class SetRatingUpdateAction : UpdateAction<Review>
     {
         public string Action => "setRating";
-        public double Rating { get; set; }
+        public int? Rating { get; set; }
     }
 }

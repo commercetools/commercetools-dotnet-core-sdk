@@ -19,6 +19,6 @@ namespace commercetools.Sdk.Domain.Reviews
         public int? Rating { get; set; }
         public IReference<State> State { get; set; }
         public IReference<Customer> Customer { get; set; }
-        public CustomFields Custom { get; set; }
+        public CustomFieldsDraft Custom { get; set; }
     }
 }
