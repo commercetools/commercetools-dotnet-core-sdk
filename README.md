@@ -296,7 +296,8 @@ var command = ((ClientQueryProvider<Category>) query.Provider).Command;
 ```
 
 ## Custom Services
-If you want to support services endpoints that still not covered by the SDK like [Stores](https://docs.commercetools.com/http-api-projects-stores#stores ) endpoint for example, all what you need is to create the domain models like described
+To support services endpoints the SDK does not currently support, like the [Stores](https://docs.commercetools.com/http-api-projects-stores#stores ) endpoint, create the domain models as follows: 
+
 ```c#
     [Endpoint("stores")]
     public class Store : Resource<Store>
@@ -311,9 +312,9 @@ If you want to support services endpoints that still not covered by the SDK like
         public LocalizedString Name { get; set; }
     }
 ```
-Please notice that, you have to add the Endpoint attribute above the main domain model, make it inherit from Resource class, and make the draft model implement IDraft interface.
+Note that you have to add the Endpoint attribute **above** the main domain model. The Endpoint attribute then must inherit from the `Resource` class, and the draft model should implement the `IDraft` interface.
 
-After this you can use them in different commands like this:
+After this you can use the custom services in different commands as follows:
 
 ```c#
  var storeDraft = new StoreDraft
@@ -328,4 +329,4 @@ or like this:
  ```c#
   var store = this.client..ExecuteAsync(new GetByIdCommand<Store>(id)).Result;
  ```
- you can also create custom Commands, HttpApiCommands, Request Builders and Additional Parameters builders for them, but don't forget to inject them into services container before calling services.UseCommercetools
+ You can also create custom Commands, HttpApiCommands, Request Builders and Additional Parameters builders for them, but don't forget to inject them into services container before calling `services.UseCommercetools()`.
