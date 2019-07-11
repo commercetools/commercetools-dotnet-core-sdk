@@ -13,13 +13,22 @@ function getVersion() {
 
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
-        if (($env:APPVEYOR_REPO_TAG_NAME).Indexof("-") -gt 0)
+        if ($env:APPVEYOR_REPO_TAG_NAME -match "^[1-9]+(\.[0-9]+){2}-")
         {
-            $packageVersion = $env:APPVEYOR_REPO_TAG_NAME + "-" + $buildNumber;
+            $tag = $env:APPVEYOR_REPO_TAG_NAME.Split("-", 2);
+            $packageVersion = $tag[0] + "." + $buildNumber + "-" + $tag[1];
+        }
+        elseif ($env:APPVEYOR_REPO_TAG_NAME -match "^[1-9]+(\.[0-9]+){2}$")
+        {
+            $packageVersion = $env:APPVEYOR_REPO_TAG_NAME + "." + $buildNumber;
+        }
+        elseif ($env:APPVEYOR_REPO_TAG_NAME -match "^[1-9]+(\.[0-9]+){3}$")
+        {
+            $packageVersion = $env:APPVEYOR_REPO_TAG_NAME;
         }
         else
         {
-            $packageVersion = $env:APPVEYOR_REPO_TAG_NAME + "." + $buildNumber;
+            $packageVersion = $version + "-" + $env:APPVEYOR_REPO_TAG_NAME;
         }
     }
     else
