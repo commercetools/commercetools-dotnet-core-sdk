@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace commercetools.Sdk.HttpApi.DelegatingHandlers
 {
     using System;
@@ -8,7 +10,8 @@ namespace commercetools.Sdk.HttpApi.DelegatingHandlers
     {
         public UserAgentProvider()
         {
-            var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            var assemblyVersion = FileVersionInfo.GetVersionInfo(executingAssembly.Location).ProductVersion;
 
             var attr = (AssemblyFileVersionAttribute)typeof(object).GetTypeInfo().Assembly.GetCustomAttribute(typeof(AssemblyFileVersionAttribute));
             var frameworkName = "dotnet";
