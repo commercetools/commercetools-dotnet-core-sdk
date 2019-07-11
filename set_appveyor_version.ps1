@@ -13,7 +13,14 @@ function getVersion() {
 
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
-        $packageVersion = $env:APPVEYOR_REPO_TAG_NAME + "." + $buildNumber;
+        if (($env:APPVEYOR_REPO_TAG_NAME).Indexof("-") -gt 0)
+        {
+            $packageVersion = $env:APPVEYOR_REPO_TAG_NAME + "-" + $buildNumber;
+        }
+        else
+        {
+            $packageVersion = $env:APPVEYOR_REPO_TAG_NAME + "." + $buildNumber;
+        }
     }
     else
     {
