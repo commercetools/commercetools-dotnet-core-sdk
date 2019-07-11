@@ -8,27 +8,38 @@
 
 function getVersion() {
     $version = $env:APPVEYOR_BUILD_VERSION;
-    $dbgSuffix = If ($env:CONFIGURATION -eq "Debug") { "-dbg" } else { "" };
     $buildNumber = $env:APPVEYOR_BUILD_NUMBER;
+    if ($version -match "^[1-9]+(\.[0-9]+){3}$")
+    {
+        $versionParts = $version.Split(".");
+        $version = $versionParts[0] + "." + $versionParts[1] + "." + $versionParts[2] + "-" + $versionParts[3];
+    }
+    elseif ($version -match "^[1-9]+(\.[0-9]+){2}$")
+    {
+        $version = $version + "-" + $buildNumber;
+    }
+
+    $dbgSuffix = If ($env:CONFIGURATION -eq "Debug") { "-dbg" } else { "" };
 
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
-        if ($env:APPVEYOR_REPO_TAG_NAME -match "^[1-9]+(\.[0-9]+){2}-")
+        if ($env:APPVEYOR_REPO_TAG_NAME -match "^[1-9]+(\.[0-9]+){3}$")
         {
-            $tag = $env:APPVEYOR_REPO_TAG_NAME.Split("-", 2);
-            $packageVersion = $tag[0] + "." + $buildNumber + "-" + $tag[1];
+            $versionParts = $env:APPVEYOR_REPO_TAG_NAME.Split(".");
+            $mainVersion = $versionParts[0] + "." + $versionParts[1] + "." + $versionParts[2] + "-" + $versionParts[3];
+            $packageVersion = $mainVersion + "-" + $buildNumber;
+        }
+        elseif ($env:APPVEYOR_REPO_TAG_NAME -match "^[1-9]+(\.[0-9]+){2}-")
+        {
+            $packageVersion = $env:APPVEYOR_REPO_TAG_NAME + "-" + $buildNumber;
         }
         elseif ($env:APPVEYOR_REPO_TAG_NAME -match "^[1-9]+(\.[0-9]+){2}$")
-        {
-            $packageVersion = $env:APPVEYOR_REPO_TAG_NAME + "." + $buildNumber;
-        }
-        elseif ($env:APPVEYOR_REPO_TAG_NAME -match "^[1-9]+(\.[0-9]+){3}$")
         {
             $packageVersion = $env:APPVEYOR_REPO_TAG_NAME;
         }
         else
         {
-            $packageVersion = $version + "-" + $env:APPVEYOR_REPO_TAG_NAME;
+            $packageVersion = $version + "-" + $env:APPVEYOR_REPO_TAG_NAME + "-" + $buildNumber;
         }
     }
     else
