@@ -85,3 +85,10 @@ deploy:
     skip_symbols: true
     on:
       branch: master
+  - provider: NuGet
+    name: NuGet
+    api_key:
+      secure: zpns6hWNaoiUBSIOV3VWC3ZUpBGOtEmKdFcEYAal/oFbhw5oXeqBIJRwt3qsb6MH
+    skip_symbols: true
+    on:
+      APPVEYOR_REPO_TAG: true
