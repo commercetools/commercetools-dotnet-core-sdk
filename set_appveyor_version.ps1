@@ -12,11 +12,11 @@ function getVersion() {
     if ($version -match "^[1-9]+(\.[0-9]+){3}$")
     {
         $versionParts = $version.Split(".");
-        $version = $versionParts[0] + "." + $versionParts[1] + "." + $versionParts[2] + "-" + $versionParts[3];
+        $version = $versionParts[0] + "." + $versionParts[1] + "." + $versionParts[2] + "-alpha-" + $versionParts[3];
     }
     elseif ($version -match "^[1-9]+(\.[0-9]+){2}$")
     {
-        $version = $version + "-" + $buildNumber;
+        $version = $version + "-alpha-" + $buildNumber;
     }
 
     $dbgSuffix = If ($env:CONFIGURATION -eq "Debug") { "-dbg" } else { "" };
@@ -39,7 +39,7 @@ function getVersion() {
         }
         else
         {
-            $packageVersion = $version + "-" + $env:APPVEYOR_REPO_TAG_NAME + "-" + $buildNumber;
+            $packageVersion = $version + "-" + $env:APPVEYOR_REPO_TAG_NAME;
         }
     }
     else
@@ -49,7 +49,7 @@ function getVersion() {
 
         if ($branch -eq "master" -And $noPR)
         {
-            $packageVersion = $version + "-dev"  + $dbgSuffix;
+            $packageVersion = $version + $dbgSuffix;
         }
         else
         {
