@@ -36,44 +36,67 @@ namespace commercetools.Sdk.IntegrationTests.Types
             typeDraft.FieldDefinitions.Add(CreateSetFieldDefinition());
             return typeDraft;
         }
+        public static TypeDraft DefaultTypeDraftWithKey(TypeDraft draft, string key)
+        {
+            var customDraft = DefaultTypeDraft(draft);
+            customDraft.Key = key;
+            return customDraft;
+        }
+
+        public static TypeDraft DefaultTypeDraftWithoutFields(TypeDraft draft)
+        {
+            var customDraft = DefaultTypeDraft(draft);
+            customDraft.FieldDefinitions.Clear();
+            return customDraft;
+        }
+        public static TypeDraft DefaultTypeDraftWithOneStringField(TypeDraft draft)
+        {
+            var customDraft = DefaultTypeDraft(draft);
+            customDraft.FieldDefinitions.RemoveAll(field => field.Type.Name != "String");
+            return customDraft;
+        }
         #endregion
 
 
         #region WithType
-        public static async Task WithType(
-            IClient client,
-            Action<Type> func,
-            Func<TypeDraft, TypeDraft> draftAction = null,
-            Func<IClient, IDraft<Type>, Task<Type>> createFunc = null,
-            Func<IClient, Type, Task> deleteFunc = null)
+
+        public static async Task WithType( IClient client, Action<Type> func)
         {
-            draftAction = draftAction ?? DefaultTypeDraft;
-            await With(client, new TypeDraft(), draftAction, func, createFunc,deleteFunc);
+            await With(client, new TypeDraft(), DefaultTypeDraft, func);
+        }
+        public static async Task WithType( IClient client, Func<TypeDraft, TypeDraft> draftAction, Action<Type> func)
+        {
+            await With(client, new TypeDraft(), draftAction, func);
         }
 
-        public static async Task WithType(
-            IClient client,
-            Func<Type, Task> func,
-            Func<TypeDraft, TypeDraft> draftAction = null,
-            Func<IClient, IDraft<Type>, Task<Type>> createFunc = null,
-            Func<IClient, Type, Task> deleteFunc = null)
+        public static async Task WithType( IClient client, Func<Type, Task> func)
         {
-            draftAction = draftAction ?? DefaultTypeDraft;
-            await WithAsync(client, new TypeDraft(), draftAction, func, createFunc,deleteFunc);
+            await WithAsync(client, new TypeDraft(), DefaultTypeDraft, func);
+        }
+        public static async Task WithType( IClient client, Func<TypeDraft, TypeDraft> draftAction, Func<Type, Task> func)
+        {
+            await WithAsync(client, new TypeDraft(), draftAction, func);
         }
         #endregion
 
         #region WithUpdateableType
 
-        public static async Task WithUpdateableType(IClient client, Func<Type, Type> func, Func<TypeDraft, TypeDraft> draftAction = null)
+        public static async Task WithUpdateableType(IClient client, Func<Type, Type> func)
         {
-            draftAction = draftAction ?? DefaultTypeDraft;
+            await WithUpdateable(client, new TypeDraft(), DefaultTypeDraft, func);
+        }
+
+        public static async Task WithUpdateableType(IClient client, Func<TypeDraft, TypeDraft> draftAction, Func<Type, Type> func)
+        {
             await WithUpdateable(client, new TypeDraft(), draftAction, func);
         }
 
-        public static async Task WithUpdateableType(IClient client, Func<Type, Task<Type>> func, Func<TypeDraft, TypeDraft> draftAction = null)
+        public static async Task WithUpdateableType(IClient client, Func<Type, Task<Type>> func)
         {
-            draftAction = draftAction ?? DefaultTypeDraft;
+            await WithUpdateableAsync(client, new TypeDraft(), DefaultTypeDraft, func);
+        }
+        public static async Task WithUpdateableType(IClient client, Func<TypeDraft, TypeDraft> draftAction, Func<Type, Task<Type>> func)
+        {
             await WithUpdateableAsync(client, new TypeDraft(), draftAction, func);
         }
 
@@ -82,12 +105,7 @@ namespace commercetools.Sdk.IntegrationTests.Types
 
         #region HelperFunctions
 
-        private static FieldDefinition CreateNewStringFieldDefinition()
-        {
-            return CreateStringFieldDefinition("new-string-field");
-        }
-
-        private static FieldDefinition CreateStringFieldDefinition()
+        public static FieldDefinition CreateStringFieldDefinition()
         {
             return CreateStringFieldDefinition("string-field");
         }

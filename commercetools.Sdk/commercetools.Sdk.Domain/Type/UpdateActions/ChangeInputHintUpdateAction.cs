@@ -2,12 +2,14 @@
 
 namespace commercetools.Sdk.Domain
 {
-    public class AddEnumToFieldDefinitionUpdateAction : UpdateAction<Type>
+    public class ChangeInputHintUpdateAction : UpdateAction<Type>
     {
-        public string Action => "addEnumValue";
+        public string Action => "changeInputHint";
+
         [Required]
         public string FieldName { get; set; }
+
         [Required]
-        public EnumValue Value { get; set; }
+        public TextInputHint InputHint { get; set; }
     }
 }

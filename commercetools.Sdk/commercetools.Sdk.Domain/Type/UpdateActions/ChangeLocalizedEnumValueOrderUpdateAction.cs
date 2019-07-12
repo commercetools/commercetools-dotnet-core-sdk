@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace commercetools.Sdk.Domain
 {
     public class ChangeLocalizedEnumValueOrderUpdateAction : UpdateAction<Type>
     {
         public string Action => "changeLocalizedEnumValueOrder";
-        public string FieldNames { get; set; }
+        [Required]
+        public string FieldName { get; set; }
+        [Required]
         public List<string> Keys { get; set; }
     }
 }

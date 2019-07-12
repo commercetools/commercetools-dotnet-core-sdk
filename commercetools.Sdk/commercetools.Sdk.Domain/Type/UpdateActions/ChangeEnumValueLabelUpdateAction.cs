@@ -2,9 +2,9 @@
 
 namespace commercetools.Sdk.Domain
 {
-    public class AddEnumToFieldDefinitionUpdateAction : UpdateAction<Type>
+    public class ChangeEnumValueLabelUpdateAction : UpdateAction<Type>
     {
-        public string Action => "addEnumValue";
+        public string Action => "changeEnumValueLabel";
         [Required]
         public string FieldName { get; set; }
         [Required]
