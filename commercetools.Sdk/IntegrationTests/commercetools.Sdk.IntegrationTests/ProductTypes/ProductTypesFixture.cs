@@ -10,6 +10,8 @@ namespace commercetools.Sdk.IntegrationTests.ProductTypes
 {
     public static class ProductTypesFixture
     {
+        #region DraftBuilds
+
         public static ProductTypeDraft DefaultProductTypeDraft(ProductTypeDraft productTypeDraft)
         {
             productTypeDraft.Key = TestingUtility.RandomString(10);
@@ -31,6 +33,35 @@ namespace commercetools.Sdk.IntegrationTests.ProductTypes
             return productTypeDraft;
         }
 
+        public static ProductTypeDraft DefaultProductTypeDraftWithKey(ProductTypeDraft draft, string key)
+        {
+            var productTypeDraft = DefaultProductTypeDraft(draft);
+            productTypeDraft.Key = key;
+            return productTypeDraft;
+        }
+
+        public static ProductTypeDraft DefaultProductTypeDraftWithEmptyAttributes(ProductTypeDraft draft)
+        {
+            var productTypeDraft = DefaultProductTypeDraft(draft);
+            productTypeDraft.Attributes.Clear();
+            return productTypeDraft;
+        }
+        public static ProductTypeDraft DefaultProductTypeDraftWithOnlyTextAttribute(ProductTypeDraft draft)
+        {
+            var productTypeDraft = DefaultProductTypeDraft(draft);
+            productTypeDraft.Attributes.RemoveAll(attribute => attribute.Type.GetType() != typeof(TextAttributeType));
+            return productTypeDraft;
+        }
+
+        public static ProductTypeDraft DefaultProductTypeDraftWithOnlyTextAttributeWithConstraint(ProductTypeDraft draft, AttributeConstraint constraint)
+        {
+            var productTypeDraft = DefaultProductTypeDraft(draft);
+            productTypeDraft.Attributes.RemoveAll(attribute => attribute.Type.GetType() != typeof(TextAttributeType));
+            productTypeDraft.Attributes[0].AttributeConstraint = constraint;
+            return productTypeDraft;
+        }
+
+        #endregion
 
         #region WithProductType
 
@@ -79,7 +110,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductTypes
 
         #region HelperFunctions
 
-        private static AttributeDefinitionDraft CreateTextAttributeDefinitionDraft()
+        public static AttributeDefinitionDraft CreateTextAttributeDefinitionDraft()
         {
             AttributeDefinitionDraft attributeDefinitionDraft = new AttributeDefinitionDraft();
             attributeDefinitionDraft.Name = "text-attribute-name";

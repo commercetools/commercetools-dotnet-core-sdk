@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace commercetools.Sdk.Domain.ProductTypes
+namespace commercetools.Sdk.Domain.ProductTypes.UpdateActions
 {
     public class ChangeDescriptionUpdateAction : UpdateAction<ProductType>
     {
         public string Action => "changeDescription";
         [Required]
-        public LocalizedString Name { get; set; }
+        public string Description { get; set; }
     }
 }

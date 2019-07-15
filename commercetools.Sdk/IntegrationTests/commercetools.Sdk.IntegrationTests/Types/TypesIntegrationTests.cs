@@ -118,11 +118,11 @@ namespace commercetools.Sdk.IntegrationTests.Types
                 var changeKeyAction = new ChangeKeyUpdateAction {Key = newKey};
                 updateActions.Add(changeKeyAction);
 
-                var updatedReview = await client
+                var updatedType = await client
                     .ExecuteAsync(new UpdateByIdCommand<Type>(type, updateActions));
 
-                Assert.Equal(newKey, updatedReview.Key);
-                return updatedReview;
+                Assert.Equal(newKey, updatedType.Key);
+                return updatedType;
             });
         }
 

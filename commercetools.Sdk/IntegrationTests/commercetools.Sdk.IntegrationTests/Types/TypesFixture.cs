@@ -52,7 +52,7 @@ namespace commercetools.Sdk.IntegrationTests.Types
         public static TypeDraft DefaultTypeDraftWithOneStringField(TypeDraft draft)
         {
             var customDraft = DefaultTypeDraft(draft);
-            customDraft.FieldDefinitions.RemoveAll(field => field.Type.Name != "String");
+            customDraft.FieldDefinitions.RemoveAll(field => field.Type.GetType() != typeof(StringFieldType));
             return customDraft;
         }
         #endregion
