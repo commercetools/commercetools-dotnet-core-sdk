@@ -18,6 +18,7 @@ using commercetools.Sdk.Domain.Project;
 using commercetools.Sdk.Domain.Query;
 using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.ShoppingLists;
+using commercetools.Sdk.Domain.TaxCategories;
 using commercetools.Sdk.Domain.Zones;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using commercetools.Sdk.HttpApi.HttpApiCommands;

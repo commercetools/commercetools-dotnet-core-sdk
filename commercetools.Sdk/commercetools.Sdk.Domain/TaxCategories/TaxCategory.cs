@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using commercetools.Sdk.Domain.Common;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.TaxCategories
 {
     [Endpoint("tax-categories")]
     [ResourceType(ReferenceTypeId.TaxCategory)]

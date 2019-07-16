@@ -12,6 +12,7 @@ using commercetools.Sdk.Domain.Products;
 using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.Domain.Query;
 using commercetools.Sdk.Domain.States;
+using commercetools.Sdk.Domain.TaxCategories;
 using commercetools.Sdk.HttpApi.Domain;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;

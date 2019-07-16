@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.Domain.ShippingMethods;
+using commercetools.Sdk.Domain.TaxCategories;
 
 namespace commercetools.Sdk.Domain.Carts.UpdateActions
 {

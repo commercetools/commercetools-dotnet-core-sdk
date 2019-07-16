@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace commercetools.Sdk.Domain.TaxRates
+namespace commercetools.Sdk.Domain.TaxCategories.UpdateActions
 {
-    public class AddTaxRateUpdateAction : UpdateAction<TaxRate>
+    public class AddTaxRateUpdateAction : UpdateAction<TaxCategory>
     {
         public string Action => "addTaxRate";
         [Required]

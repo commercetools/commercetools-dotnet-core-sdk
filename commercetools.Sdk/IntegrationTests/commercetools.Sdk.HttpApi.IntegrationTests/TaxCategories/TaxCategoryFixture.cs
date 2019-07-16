@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.Domain.TaxCategories;
 using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories
@@ -32,7 +33,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories
             {
                 Name = TestingUtility.RandomString(10),
                 Key = TestingUtility.RandomString(10),
-                Rates = new List<TaxRate>(){ this.GetTaxRate(country, state)}
+                Rates = new List<TaxRateDraft>(){ this.GetTaxRateDraft(country, state)}
             };
             return taxCategoryDraft;
         }
@@ -63,6 +64,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories
                 Amount = TestingUtility.RandomDouble()
             };
             return taxRate;
+        }
+
+        private TaxRateDraft GetTaxRateDraft(string country = null, string state = null)
+        {
+            var taxRateDraft = new TaxRateDraft
+            {
+                Name = TestingUtility.RandomString(10),
+                Country = country?? "DE",
+                State = state,
+                Amount = TestingUtility.RandomDouble()
+            };
+            return taxRateDraft;
         }
     }
 }

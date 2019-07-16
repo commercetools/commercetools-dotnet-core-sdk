@@ -1,6 +1,7 @@
 ﻿using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.States;
+using commercetools.Sdk.Domain.TaxCategories;
 using commercetools.Sdk.Domain.Validation.Attributes;
 
 namespace commercetools.Sdk.Domain

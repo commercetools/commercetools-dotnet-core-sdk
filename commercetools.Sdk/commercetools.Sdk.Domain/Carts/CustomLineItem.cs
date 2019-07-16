@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.Domain.Orders;
+using commercetools.Sdk.Domain.TaxCategories;
 
 namespace commercetools.Sdk.Domain.Carts
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.TaxCategories;
 using commercetools.Sdk.Linq.Discount;
 using commercetools.Sdk.Registration;
 

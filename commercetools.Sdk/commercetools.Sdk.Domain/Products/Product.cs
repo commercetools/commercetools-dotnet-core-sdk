@@ -2,6 +2,7 @@
 using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Reviews;
 using commercetools.Sdk.Domain.States;
+using commercetools.Sdk.Domain.TaxCategories;
 
 namespace commercetools.Sdk.Domain
 {

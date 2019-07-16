@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain.Products.UpdateActions
+﻿using commercetools.Sdk.Domain.TaxCategories;
+
+namespace commercetools.Sdk.Domain.Products.UpdateActions
 {
     public class SetTaxCategoryUpdateAction : UpdateAction<Product>
     {

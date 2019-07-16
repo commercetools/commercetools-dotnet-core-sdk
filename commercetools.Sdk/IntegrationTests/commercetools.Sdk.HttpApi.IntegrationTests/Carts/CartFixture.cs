@@ -10,6 +10,7 @@ using commercetools.Sdk.Domain.Messages;
 using commercetools.Sdk.Domain.Payments;
 using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.ShoppingLists;
+using commercetools.Sdk.Domain.TaxCategories;
 using commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups;
 using commercetools.Sdk.HttpApi.IntegrationTests.Customers;
 using commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes;

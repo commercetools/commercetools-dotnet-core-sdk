@@ -4,6 +4,7 @@ using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.ShippingMethods;
+using commercetools.Sdk.Domain.TaxCategories;
 using commercetools.Sdk.Domain.Zones;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
 using commercetools.Sdk.HttpApi.IntegrationTests.Zones;

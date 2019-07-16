@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using commercetools.Sdk.Domain.Validation.Attributes;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.TaxCategories
 {
-    public class TaxRate
+    public class TaxRateDraft
     {
-        public string Id { get; set; }
         public string Name { get; set; }
         public double Amount { get; set; }
         public bool IncludedInPrice { get; set; }

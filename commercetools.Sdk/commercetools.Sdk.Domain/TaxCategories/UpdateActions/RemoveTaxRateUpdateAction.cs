@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace commercetools.Sdk.Domain.TaxRates
+namespace commercetools.Sdk.Domain.TaxCategories.UpdateActions
 {
-    public class RemoveTaxRateUpdateAction : UpdateAction<TaxRate>
+    public class RemoveTaxRateUpdateAction : UpdateAction<TaxCategory>
     {
         public string Action => "removeTaxRate";
         [Required]

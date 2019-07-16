@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain.Carts
+﻿using commercetools.Sdk.Domain.TaxCategories;
+
+namespace commercetools.Sdk.Domain.Carts
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;

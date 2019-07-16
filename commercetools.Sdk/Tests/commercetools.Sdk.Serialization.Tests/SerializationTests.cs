@@ -6,6 +6,7 @@ using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Reviews;
 using commercetools.Sdk.Domain.States;
+using commercetools.Sdk.Domain.TaxCategories;
 using commercetools.Sdk.Registration;
 using FluentAssertions.Json;
 using FluentValidation;
