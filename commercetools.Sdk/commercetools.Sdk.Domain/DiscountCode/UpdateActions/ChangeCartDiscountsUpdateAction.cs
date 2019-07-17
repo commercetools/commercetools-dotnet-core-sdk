@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using commercetools.Sdk.Domain.CartDiscounts;
 
 namespace commercetools.Sdk.Domain.DiscountCodes
 {

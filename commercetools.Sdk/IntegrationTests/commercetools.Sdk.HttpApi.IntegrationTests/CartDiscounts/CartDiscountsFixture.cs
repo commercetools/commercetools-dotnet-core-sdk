@@ -31,6 +31,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts
         public CartDiscountDraft GetCartDiscountDraft(bool requireDiscountCode = false)
         {
             CartDiscountDraft cartDiscountDraft = new CartDiscountDraft();
+            cartDiscountDraft.Key = TestingUtility.RandomString();
             cartDiscountDraft.Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}};
             cartDiscountDraft.Description = new LocalizedString() {{"en", TestingUtility.RandomString(20)}};
             cartDiscountDraft.Value = this.GetCartDiscountValueAsAbsolute();

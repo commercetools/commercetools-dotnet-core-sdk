@@ -1,8 +1,7 @@
-﻿using System.Linq;
-using commercetools.Sdk.Domain.Channels;
+﻿using commercetools.Sdk.Domain.Channels;
 using commercetools.Sdk.Domain.Common;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.CartDiscounts
 {
     [TypeMarker("giftLineItem")]
     public class GiftLineItemCartDiscountValue : CartDiscountValue

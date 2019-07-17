@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.Domain.CartDiscounts
+﻿namespace commercetools.Sdk.Domain.CartDiscounts.UpdateActions
 {
     public class ChangeCartPredicateUpdateAction : UpdateAction<CartDiscount>
     {

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using commercetools.Sdk.Domain.CartDiscounts;
+using commercetools.Sdk.Domain.Common;
 
 namespace commercetools.Sdk.Domain
 {

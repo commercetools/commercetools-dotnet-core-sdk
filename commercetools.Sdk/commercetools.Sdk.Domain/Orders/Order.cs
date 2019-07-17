@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using commercetools.Sdk.Domain.CartDiscounts;
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.CustomerGroups;
