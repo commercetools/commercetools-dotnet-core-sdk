@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace commercetools.Sdk.Domain.DiscountCodes
+namespace commercetools.Sdk.Domain.DiscountCodes.UpdateActions
 {
     public class ChangeIsActiveUpdateAction : UpdateAction<DiscountCode>
     {

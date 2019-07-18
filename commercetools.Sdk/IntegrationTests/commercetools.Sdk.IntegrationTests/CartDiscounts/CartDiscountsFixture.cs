@@ -35,6 +35,12 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             cartDiscountDraft.Key = key;
             return cartDiscountDraft;
         }
+        public static CartDiscountDraft DefaultCartDiscountDraftRequireDiscountCode(CartDiscountDraft draft)
+        {
+            var cartDiscountDraft = DefaultCartDiscountDraft(draft);
+            cartDiscountDraft.RequiresDiscountCode = true;
+            return cartDiscountDraft;
+        }
         public static CartDiscountDraft DefaultCartDiscountDraftWithCustomType(CartDiscountDraft draft, Type type, Fields fields)
         {
             var customFieldsDraft = new CustomFieldsDraft

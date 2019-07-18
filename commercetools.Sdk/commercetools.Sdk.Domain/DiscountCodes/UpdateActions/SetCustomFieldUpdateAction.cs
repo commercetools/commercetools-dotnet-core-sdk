@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace commercetools.Sdk.Domain.DiscountCodes
+namespace commercetools.Sdk.Domain.DiscountCodes.UpdateActions
 {
     public class SetCustomFieldUpdateAction : UpdateAction<DiscountCode>
     {

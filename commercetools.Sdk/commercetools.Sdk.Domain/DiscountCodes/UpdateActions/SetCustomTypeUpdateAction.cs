@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.Domain.DiscountCodes
+﻿namespace commercetools.Sdk.Domain.DiscountCodes.UpdateActions
 {
     public class SetCustomTypeUpdateAction : UpdateAction<DiscountCode>
     {

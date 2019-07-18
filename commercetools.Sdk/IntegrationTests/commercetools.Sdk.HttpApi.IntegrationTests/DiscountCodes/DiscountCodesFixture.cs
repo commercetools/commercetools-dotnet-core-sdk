@@ -4,6 +4,7 @@ using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.CartDiscounts;
 using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.DiscountCodes;
 using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.HttpApi.IntegrationTests.CartDiscounts;

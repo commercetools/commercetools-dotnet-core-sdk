@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.DiscountCodes;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 using LineItem = commercetools.Sdk.Domain.ShoppingLists.LineItem;
 

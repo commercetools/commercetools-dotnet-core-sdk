@@ -1,8 +1,8 @@
-﻿namespace commercetools.Sdk.Domain.DiscountCodes
+﻿namespace commercetools.Sdk.Domain.DiscountCodes.UpdateActions
 {
     public class SetMaxApplicationsPerCustomerUpdateAction : UpdateAction<DiscountCode>
     {
         public string Action => "setMaxApplicationsPerCustomer";
-        public double MaxApplicationsPerCustomer { get; set; }
+        public long MaxApplicationsPerCustomer { get; set; }
     }
 }
