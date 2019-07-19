@@ -22,7 +22,7 @@ namespace commercetools.Sdk.Domain.Carts
 
         public ExternalLineItemTotalPrice ExternalTotalPrice { get; set; }
 
-        public CustomFields Custom { get; set; }
+        public CustomFieldsDraft Custom { get; set; }
 
         public ItemShippingDetailsDraft ShippingDetails { get; set; }
     }

@@ -20,7 +20,7 @@ namespace commercetools.Sdk.Domain.ShoppingLists
         public string AnonymousId { get; set; }
         public List<LineItemDraft> LineItems { get; set; }
         public List<TextLineItem> TextLineItems { get; set; }
-        public CustomFields Custom { get; set; }
+        public CustomFieldsDraft Custom { get; set; }
         public int DeleteDaysAfterLastModification { get; set; }
     }
 }

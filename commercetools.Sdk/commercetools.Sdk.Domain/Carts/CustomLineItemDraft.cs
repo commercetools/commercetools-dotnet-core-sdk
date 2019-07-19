@@ -21,7 +21,7 @@ namespace commercetools.Sdk.Domain.Carts
 
         public ExternalTaxRateDraft ExternalTaxRate { get; set; }
 
-        public CustomFields Custom { get; set; }
+        public CustomFieldsDraft Custom { get; set; }
 
         public ItemShippingDetails ShippingDetails { get; set; }
     }
