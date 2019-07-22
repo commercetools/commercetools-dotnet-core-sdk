@@ -23,9 +23,9 @@ namespace commercetools.Sdk.IntegrationTests.Customers
 
         public static async Task<Customer> CreateCustomer(IClient client, IDraft<Customer> buildDraft)
         {
-            var signUpTask = client
+            var signInResult = (CustomerSignInResult) await client
                 .ExecuteAsync(new SignUpCustomerCommand(buildDraft));
-            return await signUpTask.ContinueWith(task => ((CustomerSignInResult) task.Result).Customer);
+            return signInResult.Customer;
         }
 
         #region WithCustomer
