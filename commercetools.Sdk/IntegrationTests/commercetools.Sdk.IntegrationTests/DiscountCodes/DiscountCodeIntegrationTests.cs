@@ -16,7 +16,7 @@ using SetDescriptionUpdateAction = commercetools.Sdk.Domain.DiscountCodes.Update
 namespace commercetools.Sdk.IntegrationTests.DiscountCodes
 {
     [Collection("Integration Tests")]
-    public class DiscountCodeIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class DiscountCodeIntegrationTests
     {
         private readonly IClient client;
 

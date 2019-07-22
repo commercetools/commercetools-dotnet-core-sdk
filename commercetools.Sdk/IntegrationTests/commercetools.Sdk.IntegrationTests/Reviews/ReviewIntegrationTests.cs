@@ -17,7 +17,7 @@ using static commercetools.Sdk.IntegrationTests.Products.ProductsFixture;
 namespace commercetools.Sdk.IntegrationTests.Reviews
 {
     [Collection("Integration Tests")]
-    public class ReviewIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class ReviewIntegrationTests
     {
         private readonly IClient client;
 

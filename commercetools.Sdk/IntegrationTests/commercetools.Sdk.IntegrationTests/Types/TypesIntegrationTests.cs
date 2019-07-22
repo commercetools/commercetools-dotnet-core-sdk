@@ -14,7 +14,7 @@ using Type = commercetools.Sdk.Domain.Type;
 namespace commercetools.Sdk.IntegrationTests.Types
 {
     [Collection("Integration Tests")]
-    public class TypesIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class TypesIntegrationTests
     {
         private readonly IClient client;
 

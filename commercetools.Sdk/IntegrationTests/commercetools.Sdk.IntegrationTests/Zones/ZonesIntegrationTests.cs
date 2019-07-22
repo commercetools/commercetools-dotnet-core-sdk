@@ -13,7 +13,7 @@ using SetDescriptionUpdateAction = commercetools.Sdk.Domain.Zones.UpdateActions.
 namespace commercetools.Sdk.IntegrationTests.Zones
 {
     [Collection("Integration Tests")]
-    public class ZonesIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class ZonesIntegrationTests
     {
         private readonly IClient client;
 

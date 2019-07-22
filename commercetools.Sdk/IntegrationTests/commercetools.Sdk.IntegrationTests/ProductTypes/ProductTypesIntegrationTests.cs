@@ -17,7 +17,7 @@ using LocalizedEnumValue = commercetools.Sdk.Domain.Products.Attributes.Localize
 namespace commercetools.Sdk.IntegrationTests.ProductTypes
 {
     [Collection("Integration Tests")]
-    public class ProductTypesIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class ProductTypesIntegrationTests
     {
         private readonly IClient client;
 
