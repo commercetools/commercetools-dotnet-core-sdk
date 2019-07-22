@@ -14,7 +14,7 @@ using ChangeKeyUpdateAction = commercetools.Sdk.Domain.Channels.UpdateActions.Ch
 namespace commercetools.Sdk.IntegrationTests.Channels
 {
     [Collection("Integration Tests")]
-    public class ChannelIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class ChannelIntegrationTests
     {
         private readonly IClient client;
 
