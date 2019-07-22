@@ -13,7 +13,7 @@ using SetDescriptionUpdateAction = commercetools.Sdk.Domain.TaxCategories.Update
 namespace commercetools.Sdk.IntegrationTests.TaxCategories
 {
     [Collection("Integration Tests")]
-    public class TaxCategoriesIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class TaxCategoriesIntegrationTests
     {
         private readonly IClient client;
 
