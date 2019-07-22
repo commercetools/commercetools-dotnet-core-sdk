@@ -333,6 +333,19 @@ namespace commercetools.Sdk.IntegrationTests
             return searchKeywords;
         }
 
+        public static Address GetRandomAddress()
+        {
+            var random = RandomInt();
+            var country = GetRandomEuropeCountry();
+            var state = $"{country}_State_{random}";
+            var address = new Address
+            {
+                Country = country, State = state,
+                Key = $"Key_{random}"
+            };
+            return address;
+        }
+
         private static List<SearchKeywords> GetSearchKeywordList()
         {
             var searchKeywordsList = new List<SearchKeywords>
