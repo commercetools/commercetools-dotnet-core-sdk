@@ -4,9 +4,11 @@ using commercetools.Sdk.HttpApi.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleInjector;
+using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 namespace commercetools.Sdk.IntegrationTests
 {
     public class ServiceProviderFixture
