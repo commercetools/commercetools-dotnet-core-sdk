@@ -10,7 +10,7 @@ using Type = System.Type;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Project
 {
     [Collection("Integration Tests")]
-    public class ProjectIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class ProjectIntegrationTests : IDisposable
     {
         private readonly ProjectFixture projectFixture;
 

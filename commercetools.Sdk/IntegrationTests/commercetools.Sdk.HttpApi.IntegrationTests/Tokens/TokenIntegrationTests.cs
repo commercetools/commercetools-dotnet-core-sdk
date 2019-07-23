@@ -8,7 +8,7 @@
     using Xunit;
 
     [Collection("Integration Tests")]
-    public class TokenIntegrationTests : IClassFixture<ServiceProviderFixture>
+    public class TokenIntegrationTests
     {
         private readonly ClientFixture clientFixture;
 

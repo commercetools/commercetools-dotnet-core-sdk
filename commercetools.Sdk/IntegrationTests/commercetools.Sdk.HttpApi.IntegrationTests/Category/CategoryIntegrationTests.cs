@@ -18,7 +18,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     // All integration tests need to have the same collection name.
     [Collection("Integration Tests")]
-    public class CategoryIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class CategoryIntegrationTests : IDisposable
     {
         private readonly CategoryFixture categoryFixture;
 
@@ -426,7 +426,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             Assert.Equal(category.Parent.Id, categories.First().Parent.Obj.Id);
             Assert.Equal(category.Parent.Id, categories.First().Ancestors.First().Id);
         }
-        
+
         [Fact]
         public void UseLinqProvider()
         {

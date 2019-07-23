@@ -7,7 +7,7 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
 {
     [Collection("Integration Tests")]
-    public class ShippingMethodIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class ShippingMethodIntegrationTests : IDisposable
     {
         private readonly ShippingMethodsFixture shippingMethodsFixture;
 

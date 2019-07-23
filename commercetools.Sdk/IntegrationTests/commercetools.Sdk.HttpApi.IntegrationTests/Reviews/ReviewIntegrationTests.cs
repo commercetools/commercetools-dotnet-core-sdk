@@ -5,7 +5,7 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Reviews
 {
     [Collection("Integration Tests")]
-    public class ReviewIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class ReviewIntegrationTests : IDisposable
     {
         private readonly ReviewFixture reviewFixture;
 

@@ -8,7 +8,7 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.States
 {
     [Collection("Integration Tests")]
-    public class StatesIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class StatesIntegrationTests : IDisposable
     {
         private readonly StatesFixture statesFixture;
 

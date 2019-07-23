@@ -14,7 +14,7 @@ using SetDescriptionUpdateAction = commercetools.Sdk.Domain.ProductDiscounts.Upd
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
 {
     [Collection("Integration Tests")]
-    public class ProductDiscountsIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class ProductDiscountsIntegrationTests : IDisposable
     {
         private readonly ProductDiscountsFixture productDiscountFixture;
 

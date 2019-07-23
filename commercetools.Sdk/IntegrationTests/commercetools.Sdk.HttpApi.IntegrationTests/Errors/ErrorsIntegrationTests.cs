@@ -12,7 +12,7 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Errors
 {
     [Collection("Integration Tests")]
-    public class ErrorsIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class ErrorsIntegrationTests : IDisposable
     {
         private readonly ErrorsFixture errorsFixture;
 
