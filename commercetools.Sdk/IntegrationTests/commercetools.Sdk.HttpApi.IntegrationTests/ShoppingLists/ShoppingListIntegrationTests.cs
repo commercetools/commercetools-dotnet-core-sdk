@@ -7,7 +7,7 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists
 {
     [Collection("Integration Tests")]
-    public class ShoppingListIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class ShoppingListIntegrationTests : IDisposable
     {
         private readonly ShoppingListFixture shoppingListFixture;
 

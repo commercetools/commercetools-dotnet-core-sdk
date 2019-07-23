@@ -8,7 +8,7 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     [Collection("Integration Tests")]
-    public class ProductTypeIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class ProductTypeIntegrationTests : IDisposable
     {
         private readonly ProductTypeFixture productTypeFixture;
 

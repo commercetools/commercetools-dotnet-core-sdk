@@ -15,7 +15,7 @@ using Type = commercetools.Sdk.Domain.Type;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
 {
     [Collection("Integration Tests")]
-    public class PaymentsIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class PaymentsIntegrationTests : IDisposable
     {
         private readonly PaymentsFixture paymentsFixture;
 

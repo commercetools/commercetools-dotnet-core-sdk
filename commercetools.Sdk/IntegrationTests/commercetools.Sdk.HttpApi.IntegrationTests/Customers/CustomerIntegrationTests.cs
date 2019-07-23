@@ -6,7 +6,7 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Customers
 {
     [Collection("Integration Tests")]
-    public class CustomerIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class CustomerIntegrationTests : IDisposable
     {
         private readonly CustomerFixture customerFixture;
 

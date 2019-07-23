@@ -13,7 +13,7 @@ using SetDescriptionUpdateAction = commercetools.Sdk.Domain.CartDiscounts.Update
 namespace commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes
 {
     [Collection("Integration Tests")]
-    public class DiscountCodeIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class DiscountCodeIntegrationTests : IDisposable
     {
         private readonly DiscountCodeFixture discountCodeFixture;
 

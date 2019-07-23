@@ -12,7 +12,7 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjections
 {
     [Collection("Integration Tests")]
-    public class ProductProjectionsIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class ProductProjectionsIntegrationTests : IDisposable
     {
         private readonly ProductProjectionsFixture productProjectionsFixture;
 

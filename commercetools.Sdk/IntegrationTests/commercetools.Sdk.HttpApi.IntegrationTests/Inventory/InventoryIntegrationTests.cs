@@ -15,7 +15,7 @@ using Type = commercetools.Sdk.Domain.Type;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
 {
     [Collection("Integration Tests")]
-    public class InventoryIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class InventoryIntegrationTests : IDisposable
     {
         private readonly InventoryFixture inventoryFixture;
 

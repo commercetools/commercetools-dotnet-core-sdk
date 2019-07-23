@@ -11,7 +11,7 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomObjects
 {
     [Collection("Integration Tests")]
-    public class CustomObjectsIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class CustomObjectsIntegrationTests : IDisposable
     {
         private readonly CustomObjectsFixture customObjectsFixture;
 
