@@ -11,9 +11,10 @@ The commercetools .NET Core SDK enables developers to easily communicate with th
 
 ## Installation
 
- - [ ] TODO Add the package name once it has been published. 
- - Download from Nuget
- 
+- Download from [Nuget](https://www.nuget.org/profiles/commercetools)
+
+  ```dotnet add package commercetools.Sdk.All --version 1.0.0-beta```
+  
 ## Technical Overview
 
 The SDK consists of the following projects:
