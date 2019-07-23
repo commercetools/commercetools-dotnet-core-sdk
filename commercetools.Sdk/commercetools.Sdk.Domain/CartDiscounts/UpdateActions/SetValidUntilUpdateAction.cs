@@ -1,7 +1,6 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace commercetools.Sdk.Domain.CartDiscounts
+namespace commercetools.Sdk.Domain.CartDiscounts.UpdateActions
 {
     public class SetValidUntilUpdateAction : UpdateAction<CartDiscount>
     {

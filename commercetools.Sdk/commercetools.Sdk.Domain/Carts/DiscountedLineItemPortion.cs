@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain.Carts
+﻿using commercetools.Sdk.Domain.CartDiscounts;
+
+namespace commercetools.Sdk.Domain.Carts
 {
     public class DiscountedLineItemPortion
     {

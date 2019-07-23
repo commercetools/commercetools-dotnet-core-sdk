@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace commercetools.Sdk.Domain.ProductTypes
+namespace commercetools.Sdk.Domain.ProductTypes.UpdateActions
 {
     public class AddAttributeDefinitionUpdateAction : UpdateAction<ProductType>
     {

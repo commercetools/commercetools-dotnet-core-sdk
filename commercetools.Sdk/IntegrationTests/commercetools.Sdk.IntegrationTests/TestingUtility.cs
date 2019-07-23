@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.CartDiscounts;
 using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
@@ -332,6 +333,19 @@ namespace commercetools.Sdk.IntegrationTests
             return searchKeywords;
         }
 
+        public static Address GetRandomAddress()
+        {
+            var random = RandomInt();
+            var country = GetRandomEuropeCountry();
+            var state = $"{country}_State_{random}";
+            var address = new Address
+            {
+                Country = country, State = state,
+                Key = $"Key_{random}"
+            };
+            return address;
+        }
+
         private static List<SearchKeywords> GetSearchKeywordList()
         {
             var searchKeywordsList = new List<SearchKeywords>
@@ -358,6 +372,16 @@ namespace commercetools.Sdk.IntegrationTests
                 Dimensions = new AssetDimensions{ H= 100, W = 100}
             };
             return assetSource;
+        }
+
+        public static AbsoluteCartDiscountValue GetRandomAbsoluteCartDiscountValue()
+        {
+            var money = new Money {CurrencyCode = "EUR", CentAmount = RandomInt(100, 1000)};
+            var cartDiscountValue = new AbsoluteCartDiscountValue()
+            {
+                Money = new List<Money>() { money }
+            };
+            return cartDiscountValue;
         }
 
         #endregion

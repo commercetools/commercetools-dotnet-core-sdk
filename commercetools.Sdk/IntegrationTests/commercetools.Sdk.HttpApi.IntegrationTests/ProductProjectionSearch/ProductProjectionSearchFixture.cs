@@ -14,6 +14,7 @@ using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.Domain.Reviews;
 using commercetools.Sdk.Domain.States;
+using commercetools.Sdk.Domain.TaxCategories;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using commercetools.Sdk.HttpApi.IntegrationTests.Channels;
 using commercetools.Sdk.HttpApi.IntegrationTests.Inventory;

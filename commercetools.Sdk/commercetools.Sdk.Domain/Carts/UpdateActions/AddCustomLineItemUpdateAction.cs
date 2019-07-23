@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain.Carts.UpdateActions
+﻿using commercetools.Sdk.Domain.TaxCategories;
+
+namespace commercetools.Sdk.Domain.Carts.UpdateActions
 {
     using System;
     using System.ComponentModel.DataAnnotations;

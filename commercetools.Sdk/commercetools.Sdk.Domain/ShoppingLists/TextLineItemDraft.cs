@@ -9,7 +9,7 @@
         public LocalizedString Name { get; set; }
         public LocalizedString Description { get; set; }
         public double Quantity { get; set; }
-        public CustomFields Custom { get; set; }
+        public CustomFieldsDraft Custom { get; set; }
         public DateTime? AddedAt { get; set; }
     }
 }

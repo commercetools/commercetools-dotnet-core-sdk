@@ -45,7 +45,7 @@ namespace commercetools.Sdk.Domain.Carts
 
         public ExternalTaxRateDraft ExternalTaxRateForShippingMethod { get; set; }
 
-        public CustomFields Custom { get; set; }
+        public CustomFieldsDraft Custom { get; set; }
 
         [Language]
         public string Locale { get; set; }

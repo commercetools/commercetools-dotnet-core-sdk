@@ -14,7 +14,7 @@ namespace commercetools.Sdk.IntegrationTests
     public class ClientsTest
     {
         [Fact]
-        public void MultipleClientsSimpleInjector()
+        public async Task MultipleClientsSimpleInjector()
         {
             var services = new Container();
             var configuration = new ConfigurationBuilder().
@@ -36,16 +36,14 @@ namespace commercetools.Sdk.IntegrationTests
             var client1 = enumerable.FirstOrDefault(client=> client.Name == "Client");
             var client2 = enumerable.FirstOrDefault(client => client.Name == "TokenClient");
 
-            var result1 = client1.ExecuteAsync(new GetProjectCommand());
-            var t1 = result1.Result;
+            var t1 = await client1.ExecuteAsync(new GetProjectCommand());
             Assert.IsType<Sdk.Domain.Project.Project>(t1);
-            var result2 = client2.ExecuteAsync(new GetProjectCommand());
-            var t2 = result2.Result;
+            var t2 = await client2.ExecuteAsync(new GetProjectCommand());
             Assert.IsType<Sdk.Domain.Project.Project>(t2);
         }
 
         [Fact]
-        public void MultipleClientsBuiltIn()
+        public async Task MultipleClientsBuiltIn()
         {
             var services = new ServiceCollection();
             var configuration = new ConfigurationBuilder().
@@ -68,11 +66,9 @@ namespace commercetools.Sdk.IntegrationTests
             var client1 = enumerable.FirstOrDefault(client=> client.Name == "Client");
             var client2 = enumerable.FirstOrDefault(client => client.Name == "TokenClient");
 
-            var result1 = client1.ExecuteAsync(new GetProjectCommand());
-            var t1 = result1.Result;
+            var t1 = await client1.ExecuteAsync(new GetProjectCommand());
             Assert.IsType<Sdk.Domain.Project.Project>(t1);
-            var result2 = client2.ExecuteAsync(new GetProjectCommand());
-            var t2 = result2.Result;
+            var t2 = await client2.ExecuteAsync(new GetProjectCommand());
             Assert.IsType<Sdk.Domain.Project.Project>(t2);
         }
 

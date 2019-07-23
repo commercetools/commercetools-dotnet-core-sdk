@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain.Carts
+﻿using commercetools.Sdk.Domain.TaxCategories;
+
+namespace commercetools.Sdk.Domain.Carts
 {
     using System.ComponentModel.DataAnnotations;
 
@@ -19,7 +21,7 @@
 
         public ExternalTaxRateDraft ExternalTaxRate { get; set; }
 
-        public CustomFields Custom { get; set; }
+        public CustomFieldsDraft Custom { get; set; }
 
         public ItemShippingDetails ShippingDetails { get; set; }
     }

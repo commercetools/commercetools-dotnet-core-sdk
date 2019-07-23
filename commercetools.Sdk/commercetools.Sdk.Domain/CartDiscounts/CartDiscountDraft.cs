@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using commercetools.Sdk.Registration;
-using commercetools.Sdk.Domain.Carts;
-using commercetools.Sdk.Linq.Discount;
 
 namespace commercetools.Sdk.Domain.CartDiscounts
 {
     public class CartDiscountDraft : IDraft<CartDiscount>
     {
+        public string Key { get; set; }
         public LocalizedString Name { get; set; }
         public LocalizedString Description { get; set; }
         public CartDiscountValue Value { get; set; }
@@ -21,6 +18,6 @@ namespace commercetools.Sdk.Domain.CartDiscounts
         public bool RequiresDiscountCode { get; set; }
         public List<Reference> References { get; set; }
         public StackingMode StackingMode { get; set; }
-        public CustomFields Custom { get; set; }
+        public CustomFieldsDraft Custom { get; set; }
     }
 }

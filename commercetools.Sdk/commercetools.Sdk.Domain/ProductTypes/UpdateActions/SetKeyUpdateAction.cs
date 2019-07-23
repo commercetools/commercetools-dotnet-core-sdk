@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.Domain.ProductTypes
+﻿namespace commercetools.Sdk.Domain.ProductTypes.UpdateActions
 {
     public class SetKeyUpdateAction : UpdateAction<ProductType>
     {

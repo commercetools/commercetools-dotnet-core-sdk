@@ -1,4 +1,6 @@
 ﻿
+using commercetools.Sdk.Domain.CartDiscounts;
+
 namespace commercetools.Sdk.Domain.Carts
 {
     using Common;

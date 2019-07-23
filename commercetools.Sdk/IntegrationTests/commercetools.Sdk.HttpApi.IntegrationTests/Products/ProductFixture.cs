@@ -9,6 +9,7 @@ using commercetools.Sdk.Domain.Common;
  using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.Domain.States;
+ using commercetools.Sdk.Domain.TaxCategories;
  using commercetools.Sdk.HttpApi.Domain.Exceptions;
  using commercetools.Sdk.HttpApi.IntegrationTests.States;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;

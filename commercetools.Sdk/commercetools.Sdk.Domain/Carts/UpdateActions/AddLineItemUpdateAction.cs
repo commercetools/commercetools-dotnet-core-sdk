@@ -24,7 +24,7 @@ namespace commercetools.Sdk.Domain.Carts.UpdateActions
 
         public ExternalLineItemTotalPrice ExternalTotalPrice { get; set; }
 
-        public CustomFields Custom { get; set; }
+        public CustomFieldsDraft Custom { get; set; }
 
         public ItemShippingDetailsDraft ShippingDetails { get; set; }
     }

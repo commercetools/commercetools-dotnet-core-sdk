@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.CartDiscounts;
+using commercetools.Sdk.Domain.DiscountCodes;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Query;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;
-using SetDescriptionUpdateAction = commercetools.Sdk.Domain.CartDiscounts.SetDescriptionUpdateAction;
+using SetDescriptionUpdateAction = commercetools.Sdk.Domain.CartDiscounts.UpdateActions.SetDescriptionUpdateAction;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes
 {
