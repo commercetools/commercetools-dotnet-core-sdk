@@ -6,7 +6,7 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Zones
 {
     [Collection("Integration Tests")]
-    public class ZoneIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class ZoneIntegrationTests : IDisposable
     {
         private readonly ZonesFixture zonesFixture;
 

@@ -9,7 +9,7 @@ using commercetools.Sdk.Domain.Types.UpdateActions;
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {
     [Collection("Integration Tests")]
-    public class TypeIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class TypeIntegrationTests : IDisposable
     {
         private readonly TypeFixture typeFixture;
 

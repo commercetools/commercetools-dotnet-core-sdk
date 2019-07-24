@@ -10,7 +10,7 @@ using Xunit;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Messages
 {
     [Collection("Integration Tests")]
-    public class MessagesIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class MessagesIntegrationTests : IDisposable
     {
         private readonly MessagesFixture messagesFixture;
 

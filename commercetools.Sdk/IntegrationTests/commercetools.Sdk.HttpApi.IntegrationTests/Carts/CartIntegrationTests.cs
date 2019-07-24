@@ -28,7 +28,7 @@ using Type = commercetools.Sdk.Domain.Type;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 {
     [Collection("Integration Tests")]
-    public class CartIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class CartIntegrationTests : IDisposable
     {
         private readonly CartFixture cartFixture;
 

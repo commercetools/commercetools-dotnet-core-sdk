@@ -22,7 +22,7 @@ using Type = commercetools.Sdk.Domain.Type;
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
 {
     [Collection("Integration Tests")]
-    public class ProductIntegrationTests : IClassFixture<ServiceProviderFixture>, IDisposable
+    public class ProductIntegrationTests : IDisposable
     {
         private readonly ProductFixture productFixture;
 
