@@ -6,6 +6,6 @@ namespace commercetools.Sdk.Domain.ShippingMethods.UpdateActions
     {
         public string Action => "changeName";
         [Required]
-        public LocalizedString Name { get; set; }
+        public string Name { get; set; }
     }
 }

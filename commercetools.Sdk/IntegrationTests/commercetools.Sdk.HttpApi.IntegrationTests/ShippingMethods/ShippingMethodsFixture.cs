@@ -73,14 +73,14 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
         private ZoneRateDraft GetNewZoneRateDraft(string country = null, string state = null)
         {
             Zone zone = this.CreateNewZone(country, state);
-            ShippingRate shippingRate = this.GetShippingRate();
+            var shippingRate = this.GetShippingRateDraft();
             ZoneRateDraft zoneRateDraft = new ZoneRateDraft()
             {
                 Zone = new ResourceIdentifier<Zone>
                 {
                     Key = zone.Key
                 },
-                ShippingRates = new List<ShippingRate>() {shippingRate}
+                ShippingRates = new List<ShippingRateDraft>() {shippingRate}
             };
             return zoneRateDraft;
         }
@@ -90,6 +90,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods
             ShippingRate rate = new ShippingRate()
             {
                 Price = Money.FromDecimal("EUR", 1),
+                FreeAbove = Money.FromDecimal("EUR", 100)
+            };
+            return rate;
+        }
+        public ShippingRateDraft GetShippingRateDraft()
+        {
+            var rate = new ShippingRateDraft
+            {
+                Price = Money.FromDecimal("EUR", 10),
                 FreeAbove = Money.FromDecimal("EUR", 100)
             };
             return rate;

@@ -10,6 +10,6 @@ namespace commercetools.Sdk.Domain.ShippingMethods
         [Required]
         public IReference<Zone> Zone { get; set; }
         [Required]
-        public List<ShippingRate> ShippingRates { get; set; }
+        public List<ShippingRateDraft> ShippingRates { get; set; }
     }
 }
