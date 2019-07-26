@@ -74,23 +74,6 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                 });
         }
 
-        [Fact(Skip = "Skipped as it may be new endpoint for this")]
-        public async Task GetShippingMethodForLocation()
-        {
-            await WithShippingMethodInUsaZone(client,
-                async shippingMethod =>
-                {
-//                    var expands = new List<Expansion<ShippingMethod>>()
-//                    {
-//                        new ReferenceExpansion<ShippingMethod>(shippingMethod => shippingMethod.ZoneRates.ExpandAll())
-//                    };
-                    var getShippingMethodsForLocation =
-                        new GetShippingMethodsForLocationCommand(country: "US", expand: null);
-                    var retrievedShippingMethods = await client
-                        .ExecuteAsync(getShippingMethodsForLocation);
-                });
-        }
-
         [Fact]
         public async Task QueryShippingMethods()
         {
