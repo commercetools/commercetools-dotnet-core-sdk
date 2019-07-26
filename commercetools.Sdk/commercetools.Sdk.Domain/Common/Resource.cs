@@ -2,7 +2,7 @@ using System;
 
 namespace commercetools.Sdk.Domain.Common
 {
-    public class Resource<T>: IReferenceable<T>, IVersioned<T> where T : Resource<T>
+    public class Resource<T>: IReferenceable<T>, IVersioned<T>, IIdReferencable<T> where T : Resource<T>
     {
         public string Id { get; set; }
         public int Version { get; set; }

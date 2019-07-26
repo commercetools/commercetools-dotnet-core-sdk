@@ -5,7 +5,7 @@ namespace commercetools.Sdk.Domain.TaxCategories
 {
     [Endpoint("tax-categories")]
     [ResourceType(ReferenceTypeId.TaxCategory)]
-    public class TaxCategory : Resource<TaxCategory>
+    public class TaxCategory : Resource<TaxCategory>, IKeyReferencable<TaxCategory>
     {
         public string Key { get; set; }
         public string Name { get; set; }
