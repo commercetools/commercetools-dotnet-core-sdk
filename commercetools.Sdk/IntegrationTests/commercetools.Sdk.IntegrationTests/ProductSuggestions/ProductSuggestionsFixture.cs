@@ -20,11 +20,11 @@ namespace commercetools.Sdk.IntegrationTests.ProductSuggestions
 
         #region WithSuggestProduct
 
-        public static async Task WithSuggestProduct( IClient client, Action<Product> func)
+        public static async Task WithSuggestProduct(IClient client, Action<Product> func)
         {
             await WithProduct(client,DefaultProductDraftWithSearchKeywords, func);
         }
-        public static async Task WithSuggestProduct( IClient client, Func<Product, Task> func)
+        public static async Task WithSuggestProduct(IClient client, Func<Product, Task> func)
         {
             await WithProduct(client,DefaultProductDraftWithSearchKeywords, func);
         }

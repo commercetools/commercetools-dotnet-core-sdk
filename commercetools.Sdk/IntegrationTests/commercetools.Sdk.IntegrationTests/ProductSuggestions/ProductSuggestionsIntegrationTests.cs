@@ -4,6 +4,7 @@ using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Suggestions;
 using static commercetools.Sdk.IntegrationTests.ProductSuggestions.ProductSuggestionsFixture;
+using static commercetools.Sdk.IntegrationTests.GenericFixture;
 using Xunit;
 
 namespace commercetools.Sdk.IntegrationTests.ProductSuggestions
@@ -35,14 +36,18 @@ namespace commercetools.Sdk.IntegrationTests.ProductSuggestions
                 var suggestParams = new SuggestQueryCommandParameters(searchKeyword);
                 var suggestCommand = new SuggestQueryCommand<ProductSuggestion>(suggestParams);
 
-                //Act
-                var suggestionResult = await client.ExecuteAsync(suggestCommand);
+                await AssertEventually(async () =>
+                    {
+                        //Act
+                        var suggestionResult = await client.ExecuteAsync(suggestCommand);
 
-                //Assert
-                Assert.Single(suggestionResult.Suggestions);
-                var productSuggestions = suggestionResult.Suggestions["en"];
-                Assert.Single(productSuggestions);
-                Assert.Equal(multiToolSearchKeyword.Text, productSuggestions[0].Text);
+                        //Assert
+                        Assert.Single(suggestionResult.Suggestions);
+                        var productSuggestions = suggestionResult.Suggestions["en"];
+                        Assert.Single(productSuggestions);
+                        Assert.Equal(multiToolSearchKeyword.Text, productSuggestions[0].Text);
+                    }
+                );
             });
         }
 
@@ -63,12 +68,16 @@ namespace commercetools.Sdk.IntegrationTests.ProductSuggestions
                 var suggestParams = new SuggestQueryCommandParameters(searchKeyword);
                 var suggestCommand = new SuggestQueryCommand<ProductSuggestion>(suggestParams);
 
-                //Act
-                var suggestionResult = await client.ExecuteAsync(suggestCommand);
+                await AssertEventually(async () =>
+                    {
+                        //Act
+                        var suggestionResult = await client.ExecuteAsync(suggestCommand);
 
-                //Assert
-                Assert.Single(suggestionResult.Suggestions);
-                Assert.Empty(suggestionResult.Suggestions["en"]);
+                        //Assert
+                        Assert.Single(suggestionResult.Suggestions);
+                        Assert.Empty(suggestionResult.Suggestions["en"]);
+                    }
+                );
             });
         }
 
@@ -92,14 +101,18 @@ namespace commercetools.Sdk.IntegrationTests.ProductSuggestions
                 var suggestParams = new SuggestQueryCommandParameters(searchKeyword);
                 var suggestCommand = new SuggestQueryCommand<ProductSuggestion>(suggestParams);
 
-                //Act
-                var suggestionResult = await client.ExecuteAsync(suggestCommand);
+                await AssertEventually(async () =>
+                    {
+                        //Act
+                        var suggestionResult = await client.ExecuteAsync(suggestCommand);
 
-                //Assert
-                Assert.Single(suggestionResult.Suggestions);
-                var productSuggestions = suggestionResult.Suggestions["en"];
-                Assert.Single(productSuggestions);
-                Assert.Equal(swissArmyKnifeSearchKeyword.Text, productSuggestions[0].Text);
+                        //Assert
+                        Assert.Single(suggestionResult.Suggestions);
+                        var productSuggestions = suggestionResult.Suggestions["en"];
+                        Assert.Single(productSuggestions);
+                        Assert.Equal(swissArmyKnifeSearchKeyword.Text, productSuggestions[0].Text);
+                    }
+                );
             });
         }
 
@@ -120,14 +133,18 @@ namespace commercetools.Sdk.IntegrationTests.ProductSuggestions
                 var suggestParams = new SuggestQueryCommandParameters(searchKeyword);
                 var suggestCommand = new SuggestQueryCommand<ProductSuggestion>(suggestParams);
 
-                //Act
-                var suggestionResult = await client.ExecuteAsync(suggestCommand);
+                await AssertEventually(async () =>
+                    {
+                        //Act
+                        var suggestionResult = await client.ExecuteAsync(suggestCommand);
 
-                //Assert
-                Assert.Single(suggestionResult.Suggestions);
-                var productSuggestions = suggestionResult.Suggestions["de"];
-                Assert.Single(productSuggestions);
-                Assert.Equal(schweizerSearchKeyword.Text, productSuggestions[0].Text);
+                        //Assert
+                        Assert.Single(suggestionResult.Suggestions);
+                        var productSuggestions = suggestionResult.Suggestions["de"];
+                        Assert.Single(productSuggestions);
+                        Assert.Equal(schweizerSearchKeyword.Text, productSuggestions[0].Text);
+                    }
+                );
             });
         }
 
@@ -153,19 +170,23 @@ namespace commercetools.Sdk.IntegrationTests.ProductSuggestions
                 var suggestParams = new SuggestQueryCommandParameters(searchKeyword);
                 var suggestCommand = new SuggestQueryCommand<ProductSuggestion>(suggestParams);
 
-                //Act
-                var suggestionResult = await client.ExecuteAsync(suggestCommand);
+                await AssertEventually(async () =>
+                    {
+                        //Act
+                        var suggestionResult = await client.ExecuteAsync(suggestCommand);
 
-                //Assert
-                Assert.Equal(2,suggestionResult.Suggestions.Count);
+                        //Assert
+                        Assert.Equal(2, suggestionResult.Suggestions.Count);
 
-                var englishProductSuggestions = suggestionResult.Suggestions["en"];
-                var germanyProductSuggestions = suggestionResult.Suggestions["de"];
+                        var englishProductSuggestions = suggestionResult.Suggestions["en"];
+                        var germanyProductSuggestions = suggestionResult.Suggestions["de"];
 
-                Assert.Single(englishProductSuggestions);
-                Assert.Single(germanyProductSuggestions);
-                Assert.Equal(schweizerSearchKeyword.Text, germanyProductSuggestions[0].Text);
-                Assert.Equal(multiToolSearchKeyword.Text, englishProductSuggestions[0].Text);
+                        Assert.Single(englishProductSuggestions);
+                        Assert.Single(germanyProductSuggestions);
+                        Assert.Equal(schweizerSearchKeyword.Text, germanyProductSuggestions[0].Text);
+                        Assert.Equal(multiToolSearchKeyword.Text, englishProductSuggestions[0].Text);
+                    }
+                );
             });
         }
     }
