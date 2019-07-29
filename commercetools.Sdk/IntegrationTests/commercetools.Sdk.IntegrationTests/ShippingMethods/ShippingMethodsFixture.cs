@@ -54,7 +54,7 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                 {
                     Key = taxCategory.Key
                 };
-                var draftWithTaxCategory = new ShippingMethodDraft {TaxCategory = taxCategoryRef};
+                var draftWithTaxCategory = new ShippingMethodDraft {TaxCategory = taxCategory.ToKeyResourceIdentifier()};
                 await With(client, draftWithTaxCategory, DefaultShippingMethodDraft, func);
             });
         }
