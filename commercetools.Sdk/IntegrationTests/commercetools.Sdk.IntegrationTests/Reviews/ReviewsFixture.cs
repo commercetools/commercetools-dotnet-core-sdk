@@ -37,7 +37,7 @@ namespace commercetools.Sdk.IntegrationTests.Reviews
         {
             var customFieldsDraft = new CustomFieldsDraft
             {
-                Type = new ResourceIdentifier<Type> {Key = type.Key},
+                Type = type.ToKeyResourceIdentifier(),
                 Fields = fields
             };
 

@@ -33,14 +33,10 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
             var key = $"CreateShippingMethod-{TestingUtility.RandomString()}";
             await WithTaxCategory(client, async taxCategory =>
             {
-                var taxCategoryRef = new ResourceIdentifier<TaxCategory>
-                {
-                    Key = taxCategory.Key
-                };
                 await WithShippingMethod(
                     client,
                     shippingMethodDraft =>
-                        DefaultShippingMethodDraftWithKeyWithTaxCategory(shippingMethodDraft, taxCategoryRef, key),
+                        DefaultShippingMethodDraftWithKeyWithTaxCategory(shippingMethodDraft, taxCategory.ToKeyResourceIdentifier(), key),
                     shippingMethod =>
                     {
                         Assert.Equal(key, shippingMethod.Key);
@@ -183,9 +179,8 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                 await WithUpdateableShippingMethod(client, async shippingMethod =>
                 {
                     Assert.NotEqual(taxCategory.Id, shippingMethod.TaxCategory.Id);
-                    var taxCategoryReference = new ResourceIdentifier<TaxCategory>{ Key = taxCategory.Key };
                     var updateActions = new List<UpdateAction<ShippingMethod>>();
-                    var action = new ChangeTaxCategoryUpdateAction { TaxCategory = taxCategoryReference };
+                    var action = new ChangeTaxCategoryUpdateAction { TaxCategory = taxCategory.ToKeyResourceIdentifier() };
                     updateActions.Add(action);
 
                     var updatedShippingMethod = await client
@@ -294,7 +289,7 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                     var updateActions = new List<UpdateAction<ShippingMethod>>();
                     var action = new AddZoneUpdateAction
                     {
-                        Zone = new ResourceIdentifier<Zone> { Key = zone.Key }
+                        Zone = zone.ToKeyResourceIdentifier()
                     };
                     updateActions.Add(action);
 

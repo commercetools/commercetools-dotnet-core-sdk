@@ -258,10 +258,7 @@ namespace commercetools.Sdk.IntegrationTests.Channels
                         var updateActions = new List<UpdateAction<Channel>>();
                         var setTypeAction = new SetCustomTypeUpdateAction
                         {
-                            Type = new ResourceIdentifier<Type>
-                            {
-                                Key = type.Key
-                            },
+                            Type = type.ToKeyResourceIdentifier(),
                             Fields = fields
                         };
                         updateActions.Add(setTypeAction);

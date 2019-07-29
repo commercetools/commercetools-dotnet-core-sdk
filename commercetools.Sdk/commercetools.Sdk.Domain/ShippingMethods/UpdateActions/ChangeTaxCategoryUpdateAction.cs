@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.TaxCategories;
 
 namespace commercetools.Sdk.Domain.ShippingMethods.UpdateActions
 {
@@ -6,6 +8,6 @@ namespace commercetools.Sdk.Domain.ShippingMethods.UpdateActions
     {
         public string Action => "changeTaxCategory";
         [Required]
-        public ResourceIdentifier TaxCategory { get; set; }
+        public IReference<TaxCategory> TaxCategory { get; set; }
     }
 }

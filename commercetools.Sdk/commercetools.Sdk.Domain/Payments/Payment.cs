@@ -8,7 +8,7 @@ namespace commercetools.Sdk.Domain.Payments
 {
     [Endpoint("payments")]
     [ResourceType(ReferenceTypeId.Payment)]
-    public class Payment : Resource<Payment>
+    public class Payment : Resource<Payment>, IKeyReferencable<Payment>
     {
         public string Key { get; set; }
         public Reference<Customer> Customer { get; set; }

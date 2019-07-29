@@ -6,7 +6,7 @@ namespace commercetools.Sdk.Domain
 {
     [Endpoint("product-types")]
     [ResourceType(ReferenceTypeId.ProductType)]
-    public class ProductType : Resource<ProductType>
+    public class ProductType : Resource<ProductType>, IKeyReferencable<ProductType>
     {
         public string Key { get; set; }
         public string Name { get; set; }

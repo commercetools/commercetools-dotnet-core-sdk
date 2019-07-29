@@ -9,7 +9,7 @@ using commercetools.Sdk.Domain.TaxCategories;
 namespace commercetools.Sdk.Domain.ProductProjections
 {
     [Endpoint("product-projections")]
-    public class ProductProjection : Resource<ProductProjection>
+    public class ProductProjection : Resource<ProductProjection>, IKeyReferencable<ProductProjection>
     {
         public string Key { get; set; }
         public Reference<ProductType> ProductType { get; set; }

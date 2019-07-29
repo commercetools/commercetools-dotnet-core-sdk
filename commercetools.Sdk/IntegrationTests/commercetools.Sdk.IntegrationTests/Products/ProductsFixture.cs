@@ -33,10 +33,7 @@ namespace commercetools.Sdk.IntegrationTests.Products
             {
                 var productDraftWithProductType = new ProductDraft
                 {
-                    ProductType = new ResourceIdentifier<ProductType>
-                    {
-                        Key = productType.Key
-                    }
+                    ProductType = productType.ToKeyResourceIdentifier()
                 };
                 await With(client, productDraftWithProductType,
                     DefaultProductDraft, func, null, DeleteProduct);
@@ -48,10 +45,7 @@ namespace commercetools.Sdk.IntegrationTests.Products
             {
                 var productDraftWithProductType = new ProductDraft
                 {
-                    ProductType = new ResourceIdentifier<ProductType>
-                    {
-                        Key = productType.Key
-                    }
+                    ProductType = productType.ToKeyResourceIdentifier()
                 };
 
                 await With(client, productDraftWithProductType, draftAction, func, null, DeleteProduct);
@@ -64,10 +58,7 @@ namespace commercetools.Sdk.IntegrationTests.Products
             {
                 var productDraftWithProductType = new ProductDraft
                 {
-                    ProductType = new ResourceIdentifier<ProductType>
-                    {
-                        Key = productType.Key
-                    }
+                    ProductType = productType.ToKeyResourceIdentifier()
                 };
                 await WithAsync(client, productDraftWithProductType,
                     DefaultProductDraft, func, null, DeleteProduct);
@@ -79,10 +70,7 @@ namespace commercetools.Sdk.IntegrationTests.Products
             {
                 var productDraftWithProductType = new ProductDraft
                 {
-                    ProductType = new ResourceIdentifier<ProductType>
-                    {
-                        Key = productType.Key
-                    }
+                    ProductType = productType.ToKeyResourceIdentifier()
                 };
 
                 await WithAsync(client, productDraftWithProductType, draftAction, func, null, DeleteProduct);
@@ -98,10 +86,7 @@ namespace commercetools.Sdk.IntegrationTests.Products
             {
                 var productDraftWithProductType = new ProductDraft
                 {
-                    ProductType = new ResourceIdentifier<ProductType>
-                    {
-                        Key = productType.Key
-                    }
+                    ProductType = productType.ToKeyResourceIdentifier()
                 };
                 await WithUpdateable(client, productDraftWithProductType,
                     DefaultProductDraft, func, null, DeleteProduct);
@@ -119,10 +104,7 @@ namespace commercetools.Sdk.IntegrationTests.Products
             {
                 var productDraftWithProductType = new ProductDraft
                 {
-                    ProductType = new ResourceIdentifier<ProductType>
-                    {
-                        Key = productType.Key
-                    }
+                    ProductType = productType.ToKeyResourceIdentifier()
                 };
                 await WithUpdateableAsync(client, productDraftWithProductType,
                     DefaultProductDraft, func, null, DeleteProduct);

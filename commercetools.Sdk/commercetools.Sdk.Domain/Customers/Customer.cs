@@ -7,7 +7,7 @@ namespace commercetools.Sdk.Domain.Customers
 {
     [Endpoint("customers")]
     [ResourceType(ReferenceTypeId.Customer)]
-    public class Customer : Resource<Customer>
+    public class Customer : Resource<Customer>, IKeyReferencable<Customer>
     {
         public string CustomerNumber { get; set; }
         public string Key { get; set; }

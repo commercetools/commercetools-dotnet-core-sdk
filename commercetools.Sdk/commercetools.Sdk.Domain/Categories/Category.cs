@@ -6,7 +6,7 @@ namespace commercetools.Sdk.Domain.Categories
 {
     [Endpoint("categories")]
     [ResourceType(ReferenceTypeId.Category)]
-    public class Category : Resource<Category>
+    public class Category : Resource<Category>, IKeyReferencable<Category>
     {
         public string Key { get; set; }
 

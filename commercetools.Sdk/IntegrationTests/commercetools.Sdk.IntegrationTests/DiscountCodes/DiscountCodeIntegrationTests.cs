@@ -194,10 +194,7 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
                         var updateActions = new List<UpdateAction<DiscountCode>>();
                         var setTypeAction = new SetCustomTypeUpdateAction
                         {
-                            Type = new ResourceIdentifier<Type>
-                            {
-                                Key = type.Key
-                            },
+                            Type = type.ToKeyResourceIdentifier(),
                             Fields = fields
                         };
                         updateActions.Add(setTypeAction);

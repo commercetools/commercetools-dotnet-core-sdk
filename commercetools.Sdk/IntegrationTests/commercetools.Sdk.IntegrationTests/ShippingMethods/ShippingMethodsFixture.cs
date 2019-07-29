@@ -50,11 +50,10 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
         {
             await WithTaxCategory(client, async taxCategory =>
             {
-                var taxCategoryRef = new ResourceIdentifier<TaxCategory>
+                var draftWithTaxCategory = new ShippingMethodDraft
                 {
-                    Key = taxCategory.Key
+                    TaxCategory = taxCategory.ToKeyResourceIdentifier()
                 };
-                var draftWithTaxCategory = new ShippingMethodDraft {TaxCategory = taxCategory.ToKeyResourceIdentifier()};
                 await With(client, draftWithTaxCategory, DefaultShippingMethodDraft, func);
             });
         }
@@ -69,11 +68,10 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
         {
             await WithTaxCategory(client, async taxCategory =>
             {
-                var taxCategoryRef = new ResourceIdentifier<TaxCategory>
+                var draftWithTaxCategory = new ShippingMethodDraft
                 {
-                    Key = taxCategory.Key
+                    TaxCategory = taxCategory.ToKeyResourceIdentifier()
                 };
-                var draftWithTaxCategory = new ShippingMethodDraft {TaxCategory = taxCategoryRef};
                 await WithAsync(client, draftWithTaxCategory, DefaultShippingMethodDraft, func);
             });
         }
@@ -89,7 +87,7 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                     {
                         new ZoneRateDraft
                         {
-                            Zone = new ResourceIdentifier<Zone> {Key = zone.Key},
+                            Zone = zone.ToKeyResourceIdentifier(),
                             ShippingRates = new List<ShippingRateDraft>
                             {
                                 new ShippingRateDraft
@@ -100,10 +98,9 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                             }
                         }
                     };
-                    var taxCategoryRef = new ResourceIdentifier<TaxCategory> {Key = taxCategory.Key};
                     var draftWithTaxCategory = new ShippingMethodDraft
                     {
-                        TaxCategory = taxCategoryRef,
+                        TaxCategory = taxCategory.ToKeyResourceIdentifier(),
                         ZoneRates = zoneRates
                     };
                     await WithAsync(client, draftWithTaxCategory, DefaultShippingMethodDraft, func);
@@ -125,11 +122,7 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
         {
             await WithTaxCategory(client, async taxCategory =>
             {
-                var taxCategoryRef = new ResourceIdentifier<TaxCategory>
-                {
-                    Key = taxCategory.Key
-                };
-                var draftWithTaxCategory = new ShippingMethodDraft {TaxCategory = taxCategoryRef};
+                var draftWithTaxCategory = new ShippingMethodDraft {TaxCategory = taxCategory.ToKeyResourceIdentifier()};
                 await WithUpdateable(client, draftWithTaxCategory, DefaultShippingMethodDraft, func);
             });
         }
@@ -145,11 +138,7 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
         {
             await WithTaxCategory(client, async taxCategory =>
             {
-                var taxCategoryRef = new ResourceIdentifier<TaxCategory>
-                {
-                    Key = taxCategory.Key
-                };
-                var draftWithTaxCategory = new ShippingMethodDraft {TaxCategory = taxCategoryRef};
+                var draftWithTaxCategory = new ShippingMethodDraft {TaxCategory = taxCategory.ToKeyResourceIdentifier()};
                 await WithUpdateableAsync(client, draftWithTaxCategory, DefaultShippingMethodDraft, func);
             });
         }
@@ -165,7 +154,7 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                     {
                         new ZoneRateDraft
                         {
-                            Zone = new ResourceIdentifier<Zone> {Key = zone.Key},
+                            Zone = zone.ToKeyResourceIdentifier(),
                             ShippingRates = new List<ShippingRateDraft>
                             {
                                 new ShippingRateDraft
@@ -176,10 +165,9 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                             }
                         }
                     };
-                    var taxCategoryRef = new ResourceIdentifier<TaxCategory> {Key = taxCategory.Key};
                     var draftWithTaxCategory = new ShippingMethodDraft
                     {
-                        TaxCategory = taxCategoryRef,
+                        TaxCategory = taxCategory.ToKeyResourceIdentifier(),
                         ZoneRates = zoneRates
                     };
                     await WithUpdateableAsync(client, draftWithTaxCategory, DefaultShippingMethodDraft, func);
@@ -197,13 +185,12 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                     {
                         new ZoneRateDraft
                         {
-                            Zone = new ResourceIdentifier<Zone> {Key = zone.Key}
+                            Zone = zone.ToKeyResourceIdentifier()
                         }
                     };
-                    var taxCategoryRef = new ResourceIdentifier<TaxCategory> {Key = taxCategory.Key};
                     var draftWithTaxCategory = new ShippingMethodDraft
                     {
-                        TaxCategory = taxCategoryRef,
+                        TaxCategory = taxCategory.ToKeyResourceIdentifier(),
                         ZoneRates = zoneRates
                     };
                     await WithUpdateableAsync(client, draftWithTaxCategory, DefaultShippingMethodDraft, func);
