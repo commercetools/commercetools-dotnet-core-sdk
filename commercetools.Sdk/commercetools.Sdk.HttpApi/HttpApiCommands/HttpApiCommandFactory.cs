@@ -31,16 +31,25 @@
             Type typeOfGeneric = command.ResourceType;
             Type httApiCommandType = null;
 
-            foreach (Type type in this.registeredHttpApiCommandTypes)
+            foreach (var type in this.registeredHttpApiCommandTypes)
             {
                 // retrieving the command type from IHttpApiCommand, e.g. GetHttpApiCommand<T>: IHttpApiCommand<GetCommand<T>, T>
                 var httpApiCommandGenericType = type.GetInterfaces().First().GetGenericArguments().First();
 
-                // IsAssignableFrom does not work on open generic types <>, which means the type of T needs to be passed first
-                if (httpApiCommandGenericType.GetGenericTypeDefinition().MakeGenericType(typeOfGeneric).IsAssignableFrom(command.GetType()))
+                try
                 {
+                    // IsAssignableFrom does not work on open generic types <>, which means the type of T needs to be passed first
+                    if (!httpApiCommandGenericType.GetGenericTypeDefinition().MakeGenericType(typeOfGeneric)
+                        .IsInstanceOfType(command))
+                    {
+                        continue;
+                    }
+
                     httApiCommandType = type;
                     break;
+                }
+                catch (ArgumentException)
+                {
                 }
             }
 
@@ -55,8 +64,10 @@
             // Trying to find the compiled constructor for the HttpApiCommand class.
             ObjectActivator createdActivator;
 
+            // ReSharper disable once InconsistentlySynchronizedField
             if (this.activators.ContainsKey(requestedType))
             {
+                // ReSharper disable once InconsistentlySynchronizedField
                 createdActivator = this.activators[requestedType];
             }
             else
@@ -76,7 +87,7 @@
                 }
             }
 
-            object instance = createdActivator(command, requestMessageBuilderFactory);
+            object instance = createdActivator(command, this.requestMessageBuilderFactory);
             return instance as IHttpApiCommand;
         }
 

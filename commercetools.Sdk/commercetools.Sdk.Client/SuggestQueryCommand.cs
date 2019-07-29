@@ -4,6 +4,7 @@ using commercetools.Sdk.Domain.Suggestions;
 namespace commercetools.Sdk.Client
 {
     public class SuggestQueryCommand<T> : Command<SuggestionResult<T>>
+        where T : ISuggestion
     {
         public SuggestQueryCommand()
         {

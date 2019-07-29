@@ -43,9 +43,9 @@ namespace commercetools.Sdk.IntegrationTests.ProductSuggestions
 
                         //Assert
                         Assert.Single(suggestionResult.Suggestions);
-                        var productSuggestions = suggestionResult.Suggestions["en"];
+                        var productSuggestions = suggestionResult.ToSuggestionList("en").ToList();
                         Assert.Single(productSuggestions);
-                        Assert.Equal(multiToolSearchKeyword.Text, productSuggestions[0].Text);
+                        Assert.Equal(multiToolSearchKeyword.Text, productSuggestions[0]);
                     }
                 );
             });
@@ -140,9 +140,9 @@ namespace commercetools.Sdk.IntegrationTests.ProductSuggestions
 
                         //Assert
                         Assert.Single(suggestionResult.Suggestions);
-                        var productSuggestions = suggestionResult.Suggestions["de"];
+                        var productSuggestions = suggestionResult.ToSuggestionList("de").ToList();
                         Assert.Single(productSuggestions);
-                        Assert.Equal(schweizerSearchKeyword.Text, productSuggestions[0].Text);
+                        Assert.Equal(schweizerSearchKeyword.Text, productSuggestions[0]);
                     }
                 );
             });

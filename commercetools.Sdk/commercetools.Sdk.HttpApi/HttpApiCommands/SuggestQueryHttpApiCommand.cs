@@ -6,6 +6,7 @@ using commercetools.Sdk.HttpApi.RequestBuilders;
 namespace commercetools.Sdk.HttpApi.HttpApiCommands
 {
     public class SuggestQueryHttpApiCommand<T> : IHttpApiCommandGeneric<SuggestQueryCommand<T>, T>
+        where T : ISuggestion
     {
         private readonly SuggestQueryCommand<T> command;
         private readonly SuggestQueryRequestMessageBuilder requestBuilder;

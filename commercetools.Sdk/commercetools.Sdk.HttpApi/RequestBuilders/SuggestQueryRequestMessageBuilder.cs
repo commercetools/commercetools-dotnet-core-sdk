@@ -5,7 +5,6 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Net.Http;
     using AdditionalParameters;
     using commercetools.Sdk.Client;
@@ -27,11 +26,13 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
         private static HttpMethod HttpMethod => HttpMethod.Get;
 
         public HttpRequestMessage GetRequestMessage<T>(SuggestQueryCommand<T> command)
+            where T : ISuggestion
         {
             return this.GetRequestMessage<T>(this.GetRequestUri<T>(command), null, HttpMethod);
         }
 
         private Uri GetRequestUri<T>(SuggestQueryCommand<T> command)
+            where T : ISuggestion
         {
             string requestUri = this.GetMessageBase<T>();
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();

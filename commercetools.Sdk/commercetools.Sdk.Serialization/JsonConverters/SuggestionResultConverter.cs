@@ -14,7 +14,7 @@ namespace commercetools.Sdk.Serialization
 
         public override bool CanConvert(Type objectType)
         {
-            if (objectType == typeof(SuggestionResult<ProductSuggestion>))
+            if (objectType.IsGenericType && objectType.GetGenericTypeDefinition() == typeof(SuggestionResult<>))
             {
                 return true;
             }
@@ -24,7 +24,11 @@ namespace commercetools.Sdk.Serialization
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var result = new SuggestionResult<ProductSuggestion>();
+            var suggestionType = objectType.GenericTypeArguments[0];
+            var listType = typeof(List<>).MakeGenericType(suggestionType);
+            var resultType = typeof(SuggestionResult<>).MakeGenericType(suggestionType);
+            var result = Activator.CreateInstance(resultType);
+
             JObject jsonObject = JObject.Load(reader);
             if (jsonObject != null)
             {
@@ -34,8 +38,10 @@ namespace commercetools.Sdk.Serialization
                     string name = property.Name.Replace(ConstSearchKeywordsText, "");
                     JToken value = property.Value;
 
-                    var suggestions = serializer.Deserialize<List<ProductSuggestion>>(value.CreateReader());
-                    result.Suggestions.Add(name, suggestions);
+                    var suggestions = serializer.Deserialize(value.CreateReader(), listType);
+                    var addSuggestionsMethod = result.GetType().GetMethod("AddSuggestions");
+                    if (addSuggestionsMethod != null)
+                        addSuggestionsMethod.Invoke(result, new object[] {name, suggestions});
                 }
             }
             return result;
