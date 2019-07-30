@@ -13,16 +13,11 @@ namespace commercetools.Sdk.IntegrationTests.Products
     {
         #region DraftBuilds
 
-        public static ProductDraft DefaultProductDraft(ProductDraft productDraft, ProductType productType)
+        public static ProductDraft DefaultProductDraft(ProductDraft productDraft)
         {
-            var randomInt = TestingUtility.RandomInt(1, 100);
+            var randomInt = TestingUtility.RandomInt();
             productDraft.Name = new LocalizedString {{"en", $"Name_{randomInt}"}};
             productDraft.Slug = new LocalizedString {{"en", $"Slug_{randomInt}"}};
-            productDraft.ProductType = new ResourceIdentifier<ProductType>
-            {
-                Key = productType.Key
-            };
-
             productDraft.Key = $"Key_{randomInt}";
             productDraft.Publish = true;
             return productDraft;
@@ -35,27 +30,51 @@ namespace commercetools.Sdk.IntegrationTests.Products
         public static async Task WithProduct( IClient client, Action<Product> func)
         {
             await WithProductType(client, async productType =>
+            {
+                var productDraftWithProductType = new ProductDraft
                 {
-                    await With(client, new ProductDraft(),
-                        productDraft => DefaultProductDraft(productDraft, productType), func, null, DeleteProduct);
-                });
+                    ProductType = productType.ToKeyResourceIdentifier()
+                };
+                await With(client, productDraftWithProductType,
+                    DefaultProductDraft, func, null, DeleteProduct);
+            });
         }
         public static async Task WithProduct( IClient client, Func<ProductDraft, ProductDraft> draftAction, Action<Product> func)
         {
-            await With(client, new ProductDraft(), draftAction, func, null, DeleteProduct);
+            await WithProductType(client, async productType =>
+            {
+                var productDraftWithProductType = new ProductDraft
+                {
+                    ProductType = productType.ToKeyResourceIdentifier()
+                };
+
+                await With(client, productDraftWithProductType, draftAction, func, null, DeleteProduct);
+            });
         }
 
         public static async Task WithProduct( IClient client, Func<Product, Task> func)
         {
             await WithProductType(client, async productType =>
             {
-                await WithAsync(client, new ProductDraft(),
-                    productDraft => DefaultProductDraft(productDraft, productType), func, null, DeleteProduct);
+                var productDraftWithProductType = new ProductDraft
+                {
+                    ProductType = productType.ToKeyResourceIdentifier()
+                };
+                await WithAsync(client, productDraftWithProductType,
+                    DefaultProductDraft, func, null, DeleteProduct);
             });
         }
         public static async Task WithProduct( IClient client, Func<ProductDraft, ProductDraft> draftAction, Func<Product, Task> func)
         {
-            await WithAsync(client, new ProductDraft(), draftAction, func, null, DeleteProduct);
+            await WithProductType(client, async productType =>
+            {
+                var productDraftWithProductType = new ProductDraft
+                {
+                    ProductType = productType.ToKeyResourceIdentifier()
+                };
+
+                await WithAsync(client, productDraftWithProductType, draftAction, func, null, DeleteProduct);
+            });
         }
         #endregion
 
@@ -65,8 +84,12 @@ namespace commercetools.Sdk.IntegrationTests.Products
         {
             await WithProductType(client, async productType =>
             {
-                await WithUpdateable(client, new ProductDraft(),
-                    productDraft => DefaultProductDraft(productDraft, productType), func, null, DeleteProduct);
+                var productDraftWithProductType = new ProductDraft
+                {
+                    ProductType = productType.ToKeyResourceIdentifier()
+                };
+                await WithUpdateable(client, productDraftWithProductType,
+                    DefaultProductDraft, func, null, DeleteProduct);
             });
         }
 
@@ -79,8 +102,12 @@ namespace commercetools.Sdk.IntegrationTests.Products
         {
             await WithProductType(client, async productType =>
             {
-                await WithUpdateableAsync(client, new ProductDraft(),
-                    productDraft => DefaultProductDraft(productDraft, productType), func, null, DeleteProduct);
+                var productDraftWithProductType = new ProductDraft
+                {
+                    ProductType = productType.ToKeyResourceIdentifier()
+                };
+                await WithUpdateableAsync(client, productDraftWithProductType,
+                    DefaultProductDraft, func, null, DeleteProduct);
             });
         }
         public static async Task WithUpdateableProduct(IClient client, Func<ProductDraft, ProductDraft> draftAction, Func<Product, Task<Product>> func)

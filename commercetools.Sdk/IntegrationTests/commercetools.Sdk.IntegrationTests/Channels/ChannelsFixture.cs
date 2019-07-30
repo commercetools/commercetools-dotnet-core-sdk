@@ -41,7 +41,7 @@ namespace commercetools.Sdk.IntegrationTests.Channels
         {
             var customFieldsDraft = new CustomFieldsDraft
             {
-                Type = new ResourceIdentifier<Type> {Key = type.Key},
+                Type = type.ToKeyResourceIdentifier(),
                 Fields = fields
             };
 

@@ -1,9 +1,11 @@
-﻿namespace commercetools.Sdk.Domain.CartDiscounts.UpdateActions
+﻿using commercetools.Sdk.Domain.Common;
+
+namespace commercetools.Sdk.Domain.CartDiscounts.UpdateActions
 {
     public class SetCustomTypeUpdateAction : UpdateAction<CartDiscount>
     {
         public string Action => "setCustomType";
-        public ResourceIdentifier Type { get; set; }
+        public IReference<Type> Type { get; set; }
         public Fields Fields { get; set; }
     }
 }

@@ -14,5 +14,15 @@ namespace commercetools.Sdk.Domain
                 return ((ResourceTypeAttribute) attr).Value;
             throw new ArgumentException($"Missing ResourceTypeAttribute for type {typeof(T)}" );
         }
+
+        public static IReference<T> ToIdResourceIdentifier<T>(this IIdReferencable<T> obj) where T : Resource<T>
+        {
+            return new ResourceIdentifier<T>() { Id = obj.Id};
+        }
+
+        public static IReference<T> ToKeyResourceIdentifier<T>(this IKeyReferencable<T> obj) where T : Resource<T>
+        {
+            return new ResourceIdentifier<T>() { Key = obj.Key};
+        }
     }
 }

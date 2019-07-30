@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
@@ -139,6 +141,52 @@ namespace commercetools.Sdk.IntegrationTests
             finally
             {
                 await deleteFunc(client, updatedResource ?? resource);
+            }
+        }
+
+
+        public static async Task AssertEventually(Func<Task> runnableBlock, int maxWaitTimeSecond = 180,
+            int waitBeforeRetryMilliseconds = 100)
+        {
+            var maxWaitTime = TimeSpan.FromSeconds(maxWaitTimeSecond);
+            var waitBeforeRetry = TimeSpan.FromMilliseconds(waitBeforeRetryMilliseconds);
+            await AssertEventually(maxWaitTime, waitBeforeRetry, runnableBlock);
+        }
+
+        private static async Task AssertEventually(TimeSpan maxWaitTime, TimeSpan waitBeforeRetry, Func<Task> runnableBlock)
+        {
+            long timeOutAt = (int) DateTime.Now.TimeOfDay.TotalMilliseconds + (int) maxWaitTime.TotalMilliseconds;
+            while (true)
+            {
+                try
+                {
+                    await runnableBlock.Invoke();
+                    // the block executed without throwing an exception, return
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    if ((int) DateTime.Now.TimeOfDay.TotalMilliseconds > timeOutAt) //if it's timeout
+                    {
+                        throw;
+                    }
+
+                    if (ex is ErrorResponseException errorResponseException &&
+                        errorResponseException.ErrorResponse.Errors.Any(err =>
+                            err.Code.Equals("SearchFacetPathNotFound")))
+                    {
+                        throw;
+                    }
+                }
+
+                try
+                {
+                    Task.Delay((int) waitBeforeRetry.TotalMilliseconds).Wait();
+                }
+                catch (ThreadInterruptedException e)
+                {
+                    throw new SystemException(e.Message);
+                }
             }
         }
 

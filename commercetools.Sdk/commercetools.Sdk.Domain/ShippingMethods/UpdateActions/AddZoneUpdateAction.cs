@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.Zones;
 
 namespace commercetools.Sdk.Domain.ShippingMethods.UpdateActions
 {
@@ -6,6 +8,6 @@ namespace commercetools.Sdk.Domain.ShippingMethods.UpdateActions
     {
         public string Action => "addZone";
         [Required]
-        public ResourceIdentifier Zone { get; set; }
+        public IReference<Zone> Zone { get; set; }
     }
 }

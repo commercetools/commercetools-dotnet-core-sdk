@@ -179,7 +179,7 @@ namespace commercetools.Sdk.IntegrationTests.Reviews
                         var updateActions = new List<UpdateAction<Review>>();
                         var setCustomerAction = new SetCustomerUpdateAction
                         {
-                            Customer = new ResourceIdentifier {Key = customer.Key}
+                            Customer = customer.ToKeyResourceIdentifier()
                         };
                         updateActions.Add(setCustomerAction);
                         var updateCommand = new UpdateByKeyCommand<Review>(key, review.Version, updateActions);
@@ -306,10 +306,7 @@ namespace commercetools.Sdk.IntegrationTests.Reviews
                             var updateActions = new List<UpdateAction<Review>>();
                             var transitionStateAction = new TransitionStateUpdateAction
                             {
-                                State = new ResourceIdentifier<State>
-                                {
-                                    Key = state.Key
-                                }
+                                State = state.ToKeyResourceIdentifier()
                             };
                             updateActions.Add(transitionStateAction);
 
@@ -334,7 +331,7 @@ namespace commercetools.Sdk.IntegrationTests.Reviews
                         var updateActions = new List<UpdateAction<Review>>();
                         var setTypeAction = new SetCustomTypeUpdateAction
                         {
-                            Type = new ResourceIdentifier<Type> {Key = type.Key},
+                            Type = type.ToKeyResourceIdentifier(),
                             Fields = fields
                         };
                         updateActions.Add(setTypeAction);

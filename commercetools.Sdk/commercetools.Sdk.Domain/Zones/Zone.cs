@@ -7,7 +7,7 @@ namespace commercetools.Sdk.Domain.Zones
 {
     [Endpoint("zones")]
     [ResourceType(ReferenceTypeId.Zone)]
-    public class Zone : Resource<Zone>
+    public class Zone : Resource<Zone>, IKeyReferencable<Zone>
     {
         public string Key { get; set; }
         public string Name { get; set; }

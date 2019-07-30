@@ -7,7 +7,7 @@ namespace commercetools.Sdk.Domain
 {
     [Endpoint("types")]
     [ResourceType(ReferenceTypeId.Type)]
-    public class Type : Resource<Type>
+    public class Type : Resource<Type>, IKeyReferencable<Type>
     {
         public string Key { get; set; }
         public LocalizedString Name { get; set; }

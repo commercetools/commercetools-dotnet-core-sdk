@@ -6,7 +6,7 @@ namespace commercetools.Sdk.Domain.CartDiscounts
 {
     [Endpoint("cart-discounts")]
     [ResourceType(ReferenceTypeId.CartDiscount)]
-    public class CartDiscount : Resource<CartDiscount>
+    public class CartDiscount : Resource<CartDiscount>, IKeyReferencable<CartDiscount>
     {
         public string Key { get; set; }
         public LocalizedString Name { get; set; }

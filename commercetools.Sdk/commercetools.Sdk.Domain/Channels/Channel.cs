@@ -10,7 +10,7 @@ namespace commercetools.Sdk.Domain.Channels
     /// </summary>
     [Endpoint("channels")]
     [ResourceType(ReferenceTypeId.Channel)]
-    public class Channel: Resource<Channel>
+    public class Channel: Resource<Channel>, IKeyReferencable<Channel>
     {
         public string Key { get; set; }
 

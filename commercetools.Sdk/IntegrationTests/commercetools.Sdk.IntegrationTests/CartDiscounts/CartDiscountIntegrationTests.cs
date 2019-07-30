@@ -381,10 +381,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                         var updateActions = new List<UpdateAction<CartDiscount>>();
                         var setTypeAction = new SetCustomTypeUpdateAction
                         {
-                            Type = new ResourceIdentifier<Type>
-                            {
-                                Key = type.Key
-                            },
+                            Type = type.ToKeyResourceIdentifier(),
                             Fields = fields
                         };
                         updateActions.Add(setTypeAction);

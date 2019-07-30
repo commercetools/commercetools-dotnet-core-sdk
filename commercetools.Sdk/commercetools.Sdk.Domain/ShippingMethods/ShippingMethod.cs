@@ -7,7 +7,7 @@ namespace commercetools.Sdk.Domain.ShippingMethods
 {
     [Endpoint("shipping-methods")]
     [ResourceType(ReferenceTypeId.ShippingMethod)]
-    public class ShippingMethod : Resource<ShippingMethod>
+    public class ShippingMethod : Resource<ShippingMethod>, IKeyReferencable<ShippingMethod>
     {
         public string Key { get; set; }
         public string Name { get; set; }
