@@ -8,8 +8,8 @@
         public string Action => "addLineItem";
         [Required]
         public string ProductId { get; set; }
-        public string VariantId { get; set; }
-        public double Quantity { get; set; }
+        public int? VariantId { get; set; }
+        public long Quantity { get; set; }
         public DateTime? AddedAt { get; set; }
         public CustomFieldsDraft Custom { get; set; }
     }

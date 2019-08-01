@@ -19,7 +19,7 @@ namespace commercetools.Sdk.IntegrationTests.Types
             typeDraft.Name.Add("en", TestingUtility.RandomString(10));
             typeDraft.Description = new LocalizedString();
             typeDraft.Description.Add("en", TestingUtility.RandomString(10));
-            typeDraft.ResourceTypeIds = new List<ResourceTypeId>() { ResourceTypeId.Category, ResourceTypeId.CustomerGroup, ResourceTypeId.InventoryEntry, ResourceTypeId.Order, ResourceTypeId.LineItem, ResourceTypeId.CustomLineItem, ResourceTypeId.ProductPrice, ResourceTypeId.Asset, ResourceTypeId.Payment, ResourceTypeId.PaymentInterfaceInteraction, ResourceTypeId.Review, ResourceTypeId.CartDiscount, ResourceTypeId.DiscountCode, ResourceTypeId.Channel };
+            typeDraft.ResourceTypeIds = new List<ResourceTypeId>() { ResourceTypeId.Category, ResourceTypeId.CustomerGroup, ResourceTypeId.InventoryEntry, ResourceTypeId.Order, ResourceTypeId.LineItem, ResourceTypeId.CustomLineItem, ResourceTypeId.ProductPrice, ResourceTypeId.Asset, ResourceTypeId.Payment, ResourceTypeId.PaymentInterfaceInteraction, ResourceTypeId.Review, ResourceTypeId.CartDiscount, ResourceTypeId.DiscountCode, ResourceTypeId.Channel, ResourceTypeId.ShoppingList, ResourceTypeId.ShoppingListTextLineItem };
             typeDraft.FieldDefinitions = new List<FieldDefinition>();
             typeDraft.FieldDefinitions.Add(CreateStringFieldDefinition());
             typeDraft.FieldDefinitions.Add(CreateLocalizedStringFieldDefinition());

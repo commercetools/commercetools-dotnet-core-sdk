@@ -11,8 +11,8 @@ namespace commercetools.Sdk.Domain.Messages.Orders
 
         public DateTime TransitionDate { get; set; }
 
-        public int Quantity { get; set; }
-        
+        public long Quantity { get; set; }
+
         public Reference<State> FromState { get; set; }
 
         public Reference<State> ToState { get; set; }

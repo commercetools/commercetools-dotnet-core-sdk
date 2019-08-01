@@ -87,7 +87,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void TermFacetAvailableQuantity()
         {
-            Expression<Func<ProductProjection, int>> expression = p => p.Variants.Select(v => v.Availability.AvailableQuantity).FirstOrDefault();
+            Expression<Func<ProductProjection, long>> expression = p => p.Variants.Select(v => v.Availability.AvailableQuantity).FirstOrDefault();
             IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             string result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.availability.availableQuantity", result);
@@ -96,7 +96,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void TermFacetChannelAvailableQuantity()
         {
-            Expression<Func<ProductProjection, int>> expression = p => p.Variants.Select(v => v.Availability.Channels["1a3c451e-792a-43b5-8def-88d0db22eca8"].AvailableQuantity).FirstOrDefault();
+            Expression<Func<ProductProjection, long>> expression = p => p.Variants.Select(v => v.Availability.Channels["1a3c451e-792a-43b5-8def-88d0db22eca8"].AvailableQuantity).FirstOrDefault();
             IFilterPredicateExpressionVisitor filterExpressionVisitor = this.linqFixture.GetService<IFilterPredicateExpressionVisitor>();
             string result = filterExpressionVisitor.Render(expression);
             Assert.Equal("variants.availability.channels.1a3c451e-792a-43b5-8def-88d0db22eca8.availableQuantity", result);

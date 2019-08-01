@@ -35,7 +35,7 @@ namespace commercetools.Sdk.Domain.Carts
         public CustomFields Custom { get; set; }
         public PaymentInfo PaymentInfo { get; set; }
         public string Locale { get; set; }
-        public int DeleteDaysAfterLastModification { get; set; }
+        public int? DeleteDaysAfterLastModification { get; set; }
         public IShippingRateInput ShippingRateInput { get; set; }
         public CartOrigin Origin { get; set; }
         public List<Address> ItemShippingAddresses { get; set; }

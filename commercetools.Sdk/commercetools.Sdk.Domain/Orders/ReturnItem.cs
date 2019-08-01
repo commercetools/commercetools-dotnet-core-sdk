@@ -6,7 +6,7 @@ namespace commercetools.Sdk.Domain.Orders
     {
         public string Type => this.GetType().GetTypeMarkerAttributeValue();
         public string Id { get; set; }
-        public double Quantity { get; set; }
+        public long Quantity { get; set; }
         public string Comment { get; set; }
         public ReturnShipmentState ShipmentState { get; set; }
         public ReturnPaymentState PaymentState { get; set; }

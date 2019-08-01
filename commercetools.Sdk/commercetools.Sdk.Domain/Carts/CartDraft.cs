@@ -50,7 +50,7 @@ namespace commercetools.Sdk.Domain.Carts
         [Language]
         public string Locale { get; set; }
 
-        public int DeleteDaysAfterLastModification { get; set; }
+        public int? DeleteDaysAfterLastModification { get; set; }
 
         public IShippingRateInputDraft ShippingRateInput { get; set; }
 

@@ -4,6 +4,6 @@
     {
         public bool IsOnStock { get; set; }
         public int RestockableInDays { get; set; }
-        public int AvailableQuantity { get; set; }
+        public long AvailableQuantity { get; set; }
     }
 }
