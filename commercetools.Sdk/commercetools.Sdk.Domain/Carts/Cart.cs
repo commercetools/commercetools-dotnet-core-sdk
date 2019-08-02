@@ -1,5 +1,6 @@
 ﻿
 using commercetools.Sdk.Domain.CartDiscounts;
+using commercetools.Sdk.Domain.Stores;
 
 namespace commercetools.Sdk.Domain.Carts
 {
@@ -16,6 +17,8 @@ namespace commercetools.Sdk.Domain.Carts
         public string CustomerId { get; set; }
         public string CustomerEmail { get; set; }
         public string AnonymousId { get; set; }
+
+        public ResourceIdentifier<Store> Store { get; set; }
         public List<LineItem> LineItems { get; set; }
         public List<CustomLineItem> CustomLineItems { get; set; }
         public Money TotalPrice { get; set; }

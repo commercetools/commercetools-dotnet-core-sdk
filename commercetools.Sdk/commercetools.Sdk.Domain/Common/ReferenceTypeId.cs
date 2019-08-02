@@ -73,6 +73,9 @@ namespace commercetools.Sdk.Domain
         Type,
 
         [Description("zone")]
-        Zone
+        Zone,
+
+        [Description("store")]
+        Store
     }
 }
