@@ -8,6 +8,6 @@
         public string Action => "changeTextLineItemQuantity";
         [Required]
         public string TextLineItemId { get; set; }
-        public double Quantity { get; set; }
+        public long Quantity { get; set; }
     }
 }

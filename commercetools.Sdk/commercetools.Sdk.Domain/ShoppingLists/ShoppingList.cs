@@ -19,6 +19,6 @@ namespace commercetools.Sdk.Domain.ShoppingLists
         public List<LineItem> LineItems { get; set; }
         public List<TextLineItem> TextLineItems { get; set; }
         public CustomFields Custom { get; set; }
-        public int DeleteDaysAfterLastModification { get; set; }
+        public int? DeleteDaysAfterLastModification { get; set; }
     }
 }

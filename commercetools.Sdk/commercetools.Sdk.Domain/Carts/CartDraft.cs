@@ -1,6 +1,7 @@
 ﻿using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.ShippingMethods;
+using commercetools.Sdk.Domain.Stores;
 
 namespace commercetools.Sdk.Domain.Carts
 {
@@ -21,6 +22,8 @@ namespace commercetools.Sdk.Domain.Carts
         public IReference<CustomerGroup> CustomerGroup { get; set; }
 
         public string AnonymousId { get; set; }
+
+        public IReference<Store> Store { get; set; }
 
         [Country]
         public string Country { get; set; }
@@ -50,7 +53,7 @@ namespace commercetools.Sdk.Domain.Carts
         [Language]
         public string Locale { get; set; }
 
-        public int DeleteDaysAfterLastModification { get; set; }
+        public int? DeleteDaysAfterLastModification { get; set; }
 
         public IShippingRateInputDraft ShippingRateInput { get; set; }
 

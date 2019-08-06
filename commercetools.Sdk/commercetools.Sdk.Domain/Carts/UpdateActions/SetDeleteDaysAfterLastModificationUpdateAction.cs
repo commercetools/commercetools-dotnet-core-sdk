@@ -7,6 +7,6 @@
     public class SetDeleteDaysAfterLastModificationUpdateAction : UpdateAction<Cart>
     {
         public string Action => "setDeleteDaysAfterLastModification";
-        public int DeleteDaysAfterLastModification { get; set; }
+        public int? DeleteDaysAfterLastModification { get; set; }
     }
 }

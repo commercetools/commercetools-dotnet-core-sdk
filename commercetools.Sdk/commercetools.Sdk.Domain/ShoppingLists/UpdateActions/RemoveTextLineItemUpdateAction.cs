@@ -7,6 +7,6 @@
         public string Action => "removeTextLineItem";
         [Required]
         public string TextLineItemId { get; set; }
-        public double Quantity { get; set; }
+        public long Quantity { get; set; }
     }
 }

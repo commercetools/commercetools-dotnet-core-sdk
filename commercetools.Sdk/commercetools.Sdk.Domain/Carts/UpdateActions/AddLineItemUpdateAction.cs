@@ -12,7 +12,7 @@ namespace commercetools.Sdk.Domain.Carts.UpdateActions
 
         public string Sku { get; set; }
 
-        public int Quantity { get; set; }
+        public long Quantity { get; set; }
 
         public Reference<Channel> SupplyChannel { get; set; }
 

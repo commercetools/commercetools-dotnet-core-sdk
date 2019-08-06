@@ -6,6 +6,7 @@ using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.States;
+using commercetools.Sdk.Domain.Stores;
 
 namespace commercetools.Sdk.Domain.Orders
 {
@@ -17,7 +18,10 @@ namespace commercetools.Sdk.Domain.Orders
         public string OrderNumber { get; set; }
         public string CustomerId { get; set; }
         public string CustomerEmail { get; set; }
+        
         public string AnonymousId { get; set; }
+        
+        public ResourceIdentifier<Store> Store { get; set; }
         public List<LineItem> LineItems { get; set; }
         public List<CustomLineItem> CustomLineItems { get; set; }
         public Money TotalPrice { get; set; }

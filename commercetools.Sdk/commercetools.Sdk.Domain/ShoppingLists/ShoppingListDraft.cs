@@ -19,8 +19,8 @@ namespace commercetools.Sdk.Domain.ShoppingLists
         public IReference<Customer> Customer { get; set; }
         public string AnonymousId { get; set; }
         public List<LineItemDraft> LineItems { get; set; }
-        public List<TextLineItem> TextLineItems { get; set; }
+        public List<TextLineItemDraft> TextLineItems { get; set; }
         public CustomFieldsDraft Custom { get; set; }
-        public int DeleteDaysAfterLastModification { get; set; }
+        public int? DeleteDaysAfterLastModification { get; set; }
     }
 }

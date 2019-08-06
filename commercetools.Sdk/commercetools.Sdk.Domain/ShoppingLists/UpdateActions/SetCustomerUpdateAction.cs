@@ -1,8 +1,11 @@
-﻿namespace commercetools.Sdk.Domain.ShoppingLists.UpdateActions
+﻿using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.Customers;
+
+namespace commercetools.Sdk.Domain.ShoppingLists.UpdateActions
 {
     public class SetCustomerUpdateAction : UpdateAction<ShoppingList>
     {
         public string Action => "setCustomer";
-        public ResourceIdentifier Customer { get; set; }
+        public IReference<Customer> Customer { get; set; }
     }
 }
