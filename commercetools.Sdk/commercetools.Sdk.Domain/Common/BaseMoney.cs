@@ -19,8 +19,7 @@ namespace commercetools.Sdk.Domain
 
         public int CompareTo(object obj)
         {
-            BaseMoney money = obj as BaseMoney;
-            if (money == null)
+            if (!(obj is BaseMoney money))
             {
                 throw new ArgumentException();
             }

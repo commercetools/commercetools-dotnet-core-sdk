@@ -14,7 +14,7 @@ namespace commercetools.Sdk.Domain.Orders
         public string CustomerId { get; set; }
         public string CustomerEmail { get; set; }
         public List<LineItemImportDraft> LineItems { get; set; }
-        public List<CustomLineItem> CustomLineItems { get; set; }
+        public List<CustomLineItemDraft> CustomLineItems { get; set; }
         [Required]
         public Money TotalPrice { get; set; }
         public TaxedPrice TaxedPrice { get; set; }
@@ -24,8 +24,12 @@ namespace commercetools.Sdk.Domain.Orders
         [Country]
         public string Country { get; set; }
         public OrderState OrderState { get; set; }
+
         public ShipmentState ShipmentState { get; set; }
-        public ShippingInfo ShippingInfo { get; set; }
+
+        public PaymentState PaymentState { get; set; }
+
+        public ShippingInfoImportDraft ShippingInfo { get; set; }
         public DateTime? CompletedAt { get; set; }
         public CustomFieldsDraft Custom { get; set; }
         public InventoryMode InventoryMode { get; set; }

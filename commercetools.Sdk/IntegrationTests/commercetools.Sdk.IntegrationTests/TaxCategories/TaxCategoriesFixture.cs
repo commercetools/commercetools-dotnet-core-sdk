@@ -13,7 +13,7 @@ namespace commercetools.Sdk.IntegrationTests.TaxCategories
         #region DraftBuilds
         public static TaxCategoryDraft DefaultTaxCategoryDraft(TaxCategoryDraft taxCategoryDraft)
         {
-            var random = TestingUtility.RandomInt(1, 100);
+            var random = TestingUtility.RandomInt();
             taxCategoryDraft.Name = $"TaxCategory_{random}";
             taxCategoryDraft.Key = $"key_{random}";
             return taxCategoryDraft;
@@ -26,7 +26,7 @@ namespace commercetools.Sdk.IntegrationTests.TaxCategories
         }
         public static TaxCategoryDraft DefaultTaxCategoryDraftWithTaxRate(TaxCategoryDraft taxCategoryDraft, TaxRateDraft taxRateDraft)
         {
-            var random = TestingUtility.RandomInt(1, 100);
+            var random = TestingUtility.RandomInt();
             taxCategoryDraft.Name = $"TaxCategory_{random}";
             taxCategoryDraft.Key = $"key_{random}";
             taxCategoryDraft.Rates = new List<TaxRateDraft> { taxRateDraft };

@@ -63,5 +63,15 @@
                    ", externalId=" + ExternalId +
                    "}";
         }
+
+        /// <summary>
+        /// Check if Address equal to passed address - Compare Properties and Ignore Id Property while comparing
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public bool EqualsIgnoreId(Address address)
+        {
+            return CompareObjectsUtility.CompareObjects(this, address, new[] {"Id"});
+        }
     }
 }

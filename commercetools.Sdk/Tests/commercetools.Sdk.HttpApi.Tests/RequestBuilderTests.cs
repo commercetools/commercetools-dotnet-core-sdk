@@ -2,6 +2,7 @@
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.ProductProjections;
@@ -14,6 +15,7 @@ using commercetools.Sdk.HttpApi.SearchParameters;
 using commercetools.Sdk.Serialization;
 using Xunit;
 using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.Domain.Channels;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
@@ -157,6 +159,21 @@ namespace commercetools.Sdk.HttpApi.Tests
                 this.clientFixture.GetService<IParametersBuilderFactory<IQueryParametersBuilder>>());
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(c);
             Assert.Equal("categories?where=id%20%3D%20%22abc%22&where=key%20%3D%20%22def%22&withTotal=false", httpRequestMessage.RequestUri.ToString());
+        }
+        
+        [Fact]
+        public async void SearchProductProjectionsAndFilterByScopedPriceInChannel()
+        {
+            var channel = new Channel() { Id = "dbb5a6d0-2cbb-4855-bbe7-5cf58f434a82"};
+            var searchRequest = new SearchProductProjectionsCommand();
+            searchRequest.SetPriceCurrency("USD");
+            searchRequest.SetPriceChannel(channel.Id);
+            searchRequest.Filter(p => p.Variants.Any(v => v.ScopedPrice.Value.CentAmount.Exists()));
+
+            var httpApiCommandFactory = this.clientFixture.GetService<IHttpApiCommandFactory>();
+            var httpApiCommand = httpApiCommandFactory.Create(searchRequest);
+            var content = await httpApiCommand.HttpRequestMessage.Content.ReadAsStringAsync();
+            Assert.Equal("filter=variants.scopedPrice.value.centAmount%3Aexists&priceCurrency=USD&priceChannel=dbb5a6d0-2cbb-4855-bbe7-5cf58f434a82&withTotal=false", content);
         }
     }
 }

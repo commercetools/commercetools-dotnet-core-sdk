@@ -6,7 +6,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.CartDiscounts;
+using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Products.Attributes;
+using commercetools.Sdk.Domain.ShippingMethods;
+using commercetools.Sdk.Domain.TaxCategories;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 using LocalizedEnumValue = commercetools.Sdk.Domain.Common.LocalizedEnumValue;
@@ -190,6 +193,23 @@ namespace commercetools.Sdk.IntegrationTests
             {
                 CentAmount = centAmount,
                 CurrencyCode = currency
+            };
+            var price = new Price()
+            {
+                Value = money,
+                ValidFrom = validFrom,
+                ValidUntil = validUntil
+            };
+            return price;
+        }
+
+        public static Price GetPriceFromDecimal(decimal value,string currencyCode = "EUR", MidpointRounding midpointRounding = MidpointRounding.ToEven, DateTime? validFrom = null, DateTime? validUntil = null)
+        {
+            var amount = Math.Round(value * 100M, 0, midpointRounding);
+            var money = new Money
+            {
+                CurrencyCode = currencyCode,
+                CentAmount = (long)amount
             };
             var price = new Price()
             {
@@ -384,6 +404,69 @@ namespace commercetools.Sdk.IntegrationTests
             return cartDiscountValue;
         }
 
+        public static TaxedPrice GetTaxedPrice(Money totalNet, double rate)
+        {
+            var currencyCode = totalNet.CurrencyCode;
+            var totalGross = Money.FromDecimal(currencyCode, totalNet.AmountToDecimal() * (decimal)rate);
+            var total = totalNet.AmountToDecimal() + totalGross.AmountToDecimal();
+            var totalAmount = Money.FromDecimal(currencyCode, total);
+            var taxedPrice = new TaxedPrice
+            {
+                TotalNet = totalNet,
+                TotalGross = totalGross,
+                TaxPortions = new List<TaxPortion>
+                {
+                    new TaxPortion
+                    {
+                        Name = RandomString(),
+                        Amount = totalAmount,
+                        Rate = rate
+                    }
+                }
+            };
+            return taxedPrice;
+        }
+
+        public static ShippingRate GetShippingRate()
+        {
+            ShippingRate rate = new ShippingRate()
+            {
+                Price = Money.FromDecimal("EUR", 1),
+                FreeAbove = Money.FromDecimal("EUR", 100)
+            };
+            return rate;
+        }
+        public static ShippingRateDraft GetShippingRateDraft()
+        {
+            var rate = new ShippingRateDraft
+            {
+                Price = Money.FromDecimal("EUR", 10),
+                FreeAbove = Money.FromDecimal("EUR", 100)
+            };
+            return rate;
+        }
+        public static ExternalTaxRateDraft GetExternalTaxRateDraft()
+        {
+            var country = GetRandomEuropeCountry();
+            var state = $"{country}_State_{RandomInt()}";
+            var externalTaxRateDraft = new ExternalTaxRateDraft
+            {
+                Amount = RandomDouble(),
+                Name = "Test tax",
+                Country = country,
+                State = state,
+                IncludedInPrice = false,
+                SubRates = new List<SubRate>
+                {
+                    new SubRate
+                    {
+                        Name = RandomString(),
+                        Amount = RandomDouble()
+                    }
+                }
+            };
+            return externalTaxRateDraft;
+        }
         #endregion
     }
 }

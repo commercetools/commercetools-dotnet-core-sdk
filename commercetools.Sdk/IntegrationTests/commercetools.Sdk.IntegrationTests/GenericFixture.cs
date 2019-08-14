@@ -190,5 +190,14 @@ namespace commercetools.Sdk.IntegrationTests
             }
         }
 
+        public static bool AreEquals(object object1, object object2)
+        {
+            return CompareObjectsUtility.CompareObjects(object1, object2, new string[] { });
+        }
+        public static bool AreEquals(object object1, object object2, string[] ignorePropertiesList)
+        {
+            return CompareObjectsUtility.CompareObjects(object1, object2, ignorePropertiesList);
+        }
+
     }
 }
