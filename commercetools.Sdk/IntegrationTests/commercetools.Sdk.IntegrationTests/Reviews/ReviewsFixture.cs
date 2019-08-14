@@ -14,7 +14,7 @@ namespace commercetools.Sdk.IntegrationTests.Reviews
         #region DraftBuilds
         public static ReviewDraft DefaultReviewDraft(ReviewDraft reviewDraft)
         {
-            var random = TestingUtility.RandomInt();
+            var random = TestingUtility.RandomInt(1,100);
             reviewDraft.Title = $"ReviewTitle_{random}";
             reviewDraft.Text = $"ReviewText_{random}";
             reviewDraft.Rating = random;

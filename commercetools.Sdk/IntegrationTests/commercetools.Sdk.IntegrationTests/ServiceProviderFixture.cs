@@ -3,6 +3,7 @@ using commercetools.Sdk.HttpApi;
 using commercetools.Sdk.HttpApi.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using SimpleInjector;
 using Xunit;
 using Xunit.Abstractions;
@@ -34,6 +35,7 @@ namespace commercetools.Sdk.IntegrationTests
             {
                 case ContainerType.BuiltIn:
                     var services = new ServiceCollection();
+                    services.AddLogging(builder => builder.AddConsole());
                     services.UseCommercetools(Configuration, "Client", TokenFlow.ClientCredentials);
                     this.ServiceProvider = services.BuildServiceProvider();
                     break;
