@@ -31,41 +31,39 @@ namespace commercetools.Sdk.IntegrationTests.OrdersImport
         {
             await WithProduct(client, async product =>
             {
-                //Arrange
-                var orderImportDraft = DefaultOrderImportDraftWithLineItemByProductId(new OrderImportDraft(), product.Id);
+                await WithImportOrder(
+                    client,
+                    draft => DefaultOrderImportDraftWithLineItemByProductId(draft, product.Id),
+                    (order, orderImportDraft) =>
+                    {
+                        //Assert
+                        Assert.Null(order.Cart);
 
-                //Act
-                var importOrderCommand = new ImportOrderCommand(orderImportDraft);
-                var order = await client.ExecuteAsync(importOrderCommand);
+                        Assert.Equal(orderImportDraft.TotalPrice, order.TotalPrice);
+                        Assert.Equal(orderImportDraft.Country, order.Country);
+                        Assert.Equal(orderImportDraft.ShippingAddress.ToString(), order.ShippingAddress.ToString());
+                        Assert.Equal(orderImportDraft.BillingAddress.ToString(), order.BillingAddress.ToString());
+                        Assert.Equal(orderImportDraft.OrderNumber, order.OrderNumber);
 
-                //Assert
-                Assert.Null(order.Cart);
-
-                Assert.Equal(orderImportDraft.TotalPrice, order.TotalPrice);
-                Assert.Equal(orderImportDraft.Country, order.Country);
-                Assert.True(orderImportDraft.ShippingAddress.EqualsIgnoreId(order.ShippingAddress));
-                Assert.True(orderImportDraft.BillingAddress.EqualsIgnoreId(order.BillingAddress));
-                Assert.Equal(orderImportDraft.OrderNumber, order.OrderNumber);
-
-                Assert.Equal(orderImportDraft.OrderState, order.OrderState);
-                Assert.Equal(orderImportDraft.PaymentState, order.PaymentState);
-                Assert.Equal(orderImportDraft.ShipmentState, order.ShipmentState);
-                Assert.Equal(orderImportDraft.InventoryMode, order.InventoryMode);
-                Assert.Equal(orderImportDraft.TaxRoundingMode, order.TaxRoundingMode);
-                Assert.Equal(orderImportDraft.TaxCalculationMode, order.TaxCalculationMode);
+                        Assert.Equal(orderImportDraft.OrderState, order.OrderState);
+                        Assert.Equal(orderImportDraft.PaymentState, order.PaymentState);
+                        Assert.Equal(orderImportDraft.ShipmentState, order.ShipmentState);
+                        Assert.Equal(orderImportDraft.InventoryMode, order.InventoryMode);
+                        Assert.Equal(orderImportDraft.TaxRoundingMode, order.TaxRoundingMode);
+                        Assert.Equal(orderImportDraft.TaxCalculationMode, order.TaxCalculationMode);
 
 
-                Assert.True(AreEquals(orderImportDraft.TaxedPrice, order.TaxedPrice));
+                        Assert.Equal(orderImportDraft.TaxedPrice.TotalNet, order.TaxedPrice.TotalNet);
+                        Assert.Equal(orderImportDraft.TaxedPrice.TotalGross, order.TaxedPrice.TotalGross);
 
-                Assert.Single(order.LineItems);
-                var orderLineItem = order.LineItems[0];
-                var draftLineItem = orderImportDraft.LineItems[0];
-                Assert.Equal(draftLineItem.Name, orderLineItem.Name);
-                Assert.Equal(draftLineItem.ProductId, orderLineItem.ProductId);
-                Assert.Equal(draftLineItem.Quantity, orderLineItem.Quantity);
-
-                //Delete it
-                await DeleteResource(client, order);
+                        Assert.Single(order.LineItems);
+                        var orderLineItem = order.LineItems[0];
+                        var draftLineItem = orderImportDraft.LineItems[0];
+                        Assert.True(draftLineItem.Name.DictionaryEqual(orderLineItem.Name));
+                        Assert.Equal(draftLineItem.ProductId, orderLineItem.ProductId);
+                        Assert.Equal(draftLineItem.Quantity, orderLineItem.Quantity);
+                    }
+                );
             });
         }
 
@@ -76,22 +74,24 @@ namespace commercetools.Sdk.IntegrationTests.OrdersImport
             {
                 await WithProduct(client, async product =>
                 {
-                    //Arrange
-                    var orderImportDraft = DefaultOrderImportDraftWithLineItemByProductId(new OrderImportDraft(), product.Id);
-                    orderImportDraft.CustomerId = customer.Id;
-                    orderImportDraft.CustomerEmail = customer.Email;
-
-                    //Act
-                    var importOrderCommand = new ImportOrderCommand(orderImportDraft);
-                    var order = await client.ExecuteAsync(importOrderCommand);
-
-                    //Assert
-                    Assert.Null(order.Cart);
-                    Assert.Equal(orderImportDraft.CustomerId, order.CustomerId);
-                    Assert.Equal(orderImportDraft.CustomerEmail, order.CustomerEmail);
-
-                    //Delete it
-                    await DeleteResource(client, order);
+                    await WithImportOrder(
+                        client,
+                        draft =>
+                        {
+                            var orderImportDraft = DefaultOrderImportDraftWithLineItemByProductId(draft, product.Id);
+                            orderImportDraft.CustomerId = customer.Id;
+                            orderImportDraft.CustomerEmail = customer.Email;
+                            return orderImportDraft;
+                        },
+                        (order, orderImportDraft) =>
+                        {
+                            //Assert
+                            //Assert
+                            Assert.Null(order.Cart);
+                            Assert.Equal(orderImportDraft.CustomerId, order.CustomerId);
+                            Assert.Equal(orderImportDraft.CustomerEmail, order.CustomerEmail);
+                        }
+                    );
                 });
             });
         }
@@ -105,78 +105,56 @@ namespace commercetools.Sdk.IntegrationTests.OrdersImport
                 {
                     await WithProduct(client, async product =>
                     {
-                        //Arrange
-                        var amountEuro10 = Money.FromDecimal("EUR", 10);
-                        var shippingRate = TestingUtility.GetShippingRate();
-                        var shippingInfoImportDraft = new ShippingInfoImportDraft
-                        {
-                            Price = amountEuro10,
-                            ShippingRate = shippingRate,
-                            ShippingMethodName = shippingMethod.Name,
-                            ShippingMethod = shippingMethod.ToKeyResourceIdentifier(),
-                            TaxCategory = taxCategory.ToKeyResourceIdentifier()
-                        };
-                        var orderImportDraft = DefaultOrderImportDraftWithLineItemByProductId(new OrderImportDraft(), product.Id);
-                        orderImportDraft.ShippingInfo = shippingInfoImportDraft;
+                        await WithImportOrder(
+                            client,
+                            draft => DefaultOrderImportDraftWithLineItemWithShippingInfo(draft, product.Id, taxCategory,
+                                shippingMethod),
+                            (order, orderImportDraft) =>
+                            {
+                                //Assert
+                                Assert.Null(order.Cart);
+                                Assert.NotNull(order.ShippingInfo);
+                                var shippingInfo = order.ShippingInfo;
+                                Assert.Equal(orderImportDraft.ShippingInfo.Price, shippingInfo.Price);
+                                Assert.Equal(orderImportDraft.ShippingInfo.ShippingMethodName,
+                                    shippingInfo.ShippingMethodName);
 
-                        //Act
-                        var importOrderCommand = new ImportOrderCommand(orderImportDraft);
-                        var order = await client.ExecuteAsync(importOrderCommand);
-
-                        //Assert
-                        Assert.Null(order.Cart);
-                        Assert.NotNull(order.ShippingInfo);
-                        var shippingInfo = order.ShippingInfo;
-                        Assert.Equal(orderImportDraft.ShippingInfo.Price, shippingInfo.Price);
-                        Assert.Equal(orderImportDraft.ShippingInfo.ShippingMethodName, shippingInfo.ShippingMethodName);
-
-                        Assert.Equal(shippingMethod.Id, shippingInfo.ShippingMethod.Id);
-                        Assert.Equal(taxCategory.Id, shippingInfo.TaxCategory.Id);
-                        Assert.Equal(shippingRate.Price, order.ShippingInfo.ShippingRate.Price);
-                        Assert.Equal(shippingRate.FreeAbove, order.ShippingInfo.ShippingRate.FreeAbove);
-
-                        //Delete it
-                        await DeleteResource(client, order);
+                                var shippingRate = orderImportDraft.ShippingInfo.ShippingRate;
+                                Assert.Equal(shippingMethod.Id, shippingInfo.ShippingMethod.Id);
+                                Assert.Equal(taxCategory.Id, shippingInfo.TaxCategory.Id);
+                                Assert.Equal(shippingRate.Price, order.ShippingInfo.ShippingRate.Price);
+                                Assert.Equal(shippingRate.FreeAbove, order.ShippingInfo.ShippingRate.FreeAbove);
+                            }
+                        );
                     });
                 });
             });
-
         }
+
 
         [Fact]
         public async Task TestImportOrderWithCustomLineItem()
         {
             await WithTaxCategory(client, async taxCategory =>
             {
-                //Arrange
-                var customLineItemDraft = new CustomLineItemDraft
-                {
-                    Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}},
-                    Slug = TestingUtility.RandomString(10),
-                    Quantity = TestingUtility.RandomInt(1,10),
-                    Money = Money.FromDecimal("EUR", TestingUtility.RandomInt(100,10000)),
-                    TaxCategory = taxCategory.ToKeyResourceIdentifier()
-                };
-                var orderImportDraft = DefaultOrderImportDraft(new OrderImportDraft());
-                orderImportDraft.CustomLineItems = new List<CustomLineItemDraft>{ customLineItemDraft };
-
-                //Act
-                var importOrderCommand = new ImportOrderCommand(orderImportDraft);
-                var order = await client.ExecuteAsync(importOrderCommand);
-
-                //Assert
-                Assert.Null(order.Cart);
-                var orderCustomLineItem = order.CustomLineItems.FirstOrDefault();
-                Assert.NotNull(orderCustomLineItem);
-                Assert.Equal(customLineItemDraft.Name, orderCustomLineItem.Name);
-                Assert.Equal(customLineItemDraft.Slug, orderCustomLineItem.Slug);
-                Assert.Equal(customLineItemDraft.Quantity, orderCustomLineItem.Quantity);
-                Assert.Equal(customLineItemDraft.Money, orderCustomLineItem.Money);
-                Assert.Equal(taxCategory.Id, orderCustomLineItem.TaxCategory.Id);
-                //Delete it
-                await DeleteResource(client, order);
+                await WithImportOrder(
+                    client,
+                    draft => DefaultOrderImportDraftWithCustomLineItem(draft, taxCategory),
+                    (order, orderImportDraft) =>
+                    {
+                        //Assert
+                        Assert.Null(order.Cart);
+                        var orderCustomLineItem = order.CustomLineItems.FirstOrDefault();
+                        Assert.NotNull(orderCustomLineItem);
+                        var customLineItemDraft = orderImportDraft.CustomLineItems[0];
+                        Assert.Equal(customLineItemDraft.Name, orderCustomLineItem.Name);
+                        Assert.Equal(customLineItemDraft.Slug, orderCustomLineItem.Slug);
+                        Assert.Equal(customLineItemDraft.Quantity, orderCustomLineItem.Quantity);
+                        Assert.Equal(customLineItemDraft.Money, orderCustomLineItem.Money);
+                        Assert.Equal(taxCategory.Id, orderCustomLineItem.TaxCategory.Id);
+                    }
+                );
             });
-
         }
     }
 }

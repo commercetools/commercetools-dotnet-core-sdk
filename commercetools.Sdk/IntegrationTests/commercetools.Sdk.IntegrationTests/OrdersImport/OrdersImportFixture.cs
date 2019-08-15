@@ -1,8 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.Channels;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Orders;
+using commercetools.Sdk.Domain.ShippingMethods;
+using commercetools.Sdk.Domain.TaxCategories;
+using static commercetools.Sdk.IntegrationTests.GenericFixture;
 
 namespace commercetools.Sdk.IntegrationTests.OrdersImport
 {
@@ -75,6 +83,64 @@ namespace commercetools.Sdk.IntegrationTests.OrdersImport
             return orderImportDraft;
         }
 
+        public static OrderImportDraft DefaultOrderImportDraftWithLineItemWithShippingInfo(OrderImportDraft draft,string productId, TaxCategory taxCategory, ShippingMethod shippingMethod)
+        {
+            var orderImportDraft = DefaultOrderImportDraftWithLineItemByProductId(draft, productId);
+            var amountEuro10 = Money.FromDecimal("EUR", 10);
+            var shippingRate = TestingUtility.GetShippingRate();
+            var shippingInfoImportDraft = new ShippingInfoImportDraft
+            {
+                Price = amountEuro10,
+                ShippingRate = shippingRate,
+                ShippingMethodName = shippingMethod.Name,
+                ShippingMethod = shippingMethod.ToKeyResourceIdentifier(),
+                TaxCategory = taxCategory.ToKeyResourceIdentifier()
+            };
+            orderImportDraft.ShippingInfo = shippingInfoImportDraft;
+            return orderImportDraft;
+        }
+        public static OrderImportDraft DefaultOrderImportDraftWithCustomLineItem(OrderImportDraft draft,TaxCategory taxCategory)
+        {
+            var orderImportDraft = DefaultOrderImportDraft(draft);
+            var customLineItemDraft = new CustomLineItemDraft
+            {
+                Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}},
+                Slug = TestingUtility.RandomString(10),
+                Quantity = TestingUtility.RandomInt(1, 10),
+                Money = Money.FromDecimal("EUR", TestingUtility.RandomInt(100, 10000)),
+                TaxCategory = taxCategory.ToKeyResourceIdentifier()
+            };
+            orderImportDraft.CustomLineItems = new List<CustomLineItemDraft> {customLineItemDraft};
+            return orderImportDraft;
+        }
+
+        #endregion
+
+        #region WithImportOrder
+
+        public static async Task<Order> DoImportOrder(IClient client, IImportDraft<Order> buildDraft)
+        {
+            return await client
+                .ExecuteAsync(new ImportOrderCommand(buildDraft));
+        }
+
+        public static async Task WithImportOrder( IClient client, Action<Order, OrderImportDraft> func)
+        {
+            await ImportWith(client, new OrderImportDraft(), DefaultOrderImportDraft, func, DoImportOrder);
+        }
+        public static async Task WithImportOrder( IClient client, Func<OrderImportDraft, OrderImportDraft> draftAction, Action<Order, OrderImportDraft> func)
+        {
+            await ImportWith(client, new OrderImportDraft(), draftAction, func, DoImportOrder);
+        }
+
+        public static async Task WithImportOrder( IClient client, Func<Order, OrderImportDraft, Task> func)
+        {
+            await ImportWithAsync(client, new OrderImportDraft(), DefaultOrderImportDraft, func, DoImportOrder);
+        }
+        public static async Task WithImportOrder( IClient client, Func<OrderImportDraft, OrderImportDraft> draftAction, Func<Order, OrderImportDraft, Task> func)
+        {
+            await ImportWithAsync(client, new OrderImportDraft(), draftAction, func, DoImportOrder);
+        }
         #endregion
     }
 }

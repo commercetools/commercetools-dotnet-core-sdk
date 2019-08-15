@@ -63,6 +63,55 @@ namespace commercetools.Sdk.IntegrationTests
             }
         }
 
+        public static async Task WithAsync<T, TDraft>(
+            IClient client,
+            TDraft draft,
+            Func<TDraft, TDraft> draftAction,
+            Func<T, TDraft, Task> func,
+            Func<IClient, IDraft<T>, Task<T>> createFunc = null,
+            Func<IClient, T, Task> deleteFunc = null
+        ) where T : Resource<T> where TDraft : IDraft<T>
+        {
+            createFunc = createFunc ?? CreateResource;
+            deleteFunc = deleteFunc ?? DeleteResource;
+
+            var buildDraft = draftAction.Invoke(draft);
+            var resource = await createFunc(client, buildDraft);
+
+            try
+            {
+                await func(resource, buildDraft);
+            }
+            finally
+            {
+                await deleteFunc(client, resource);
+            }
+        }
+
+        public static async Task ImportWithAsync<T, TDraft>(
+            IClient client,
+            TDraft draft,
+            Func<TDraft, TDraft> draftAction,
+            Func<T, TDraft, Task> func,
+            Func<IClient, IImportDraft<T>, Task<T>> importFunc,
+            Func<IClient, T, Task> deleteFunc = null
+        ) where T : Resource<T> where TDraft : IImportDraft<T>
+        {
+            deleteFunc = deleteFunc ?? DeleteResource;
+
+            var buildDraft = draftAction.Invoke(draft);
+            var resource = await importFunc(client, buildDraft);
+
+            try
+            {
+                await func(resource, buildDraft);
+            }
+            finally
+            {
+                await deleteFunc(client, resource);
+            }
+        }
+
         public static async Task WithUpdateableAsync<T, TDraft>(
             IClient client,
             TDraft draft,
@@ -109,6 +158,55 @@ namespace commercetools.Sdk.IntegrationTests
             try
             {
                 func(resource);
+            }
+            finally
+            {
+                await deleteFunc(client, resource);
+            }
+        }
+
+        public static async Task With<T, TDraft>(
+            IClient client,
+            TDraft draft,
+            Func<TDraft, TDraft> draftAction,
+            Action<T, TDraft> func,
+            Func<IClient, IDraft<T>, Task<T>> createFunc = null,
+            Func<IClient, T, Task> deleteFunc = null) where T : Resource<T> where TDraft : IDraft<T>
+        {
+            createFunc = createFunc ?? CreateResource;
+            deleteFunc = deleteFunc ?? DeleteResource;
+
+            var buildDraft = draftAction.Invoke(draft);
+
+            var resource = await createFunc(client, buildDraft);
+
+            try
+            {
+                func(resource, buildDraft);
+            }
+            finally
+            {
+                await deleteFunc(client, resource);
+            }
+        }
+
+        public static async Task ImportWith<T, TDraft>(
+            IClient client,
+            TDraft draft,
+            Func<TDraft, TDraft> draftAction,
+            Action<T, TDraft> func,
+            Func<IClient, IImportDraft<T>, Task<T>> importFunc,
+            Func<IClient, T, Task> deleteFunc = null) where T : Resource<T> where TDraft : IImportDraft<T>
+        {
+            deleteFunc = deleteFunc ?? DeleteResource;
+
+            var buildDraft = draftAction.Invoke(draft);
+
+            var resource = await importFunc(client, buildDraft);
+
+            try
+            {
+                func(resource, buildDraft);
             }
             finally
             {
@@ -188,15 +286,6 @@ namespace commercetools.Sdk.IntegrationTests
                     throw new SystemException(e.Message);
                 }
             }
-        }
-
-        public static bool AreEquals(object object1, object object2)
-        {
-            return CompareObjectsUtility.CompareObjects(object1, object2, new string[] { });
-        }
-        public static bool AreEquals(object object1, object object2, string[] ignorePropertiesList)
-        {
-            return CompareObjectsUtility.CompareObjects(object1, object2, ignorePropertiesList);
         }
 
     }
