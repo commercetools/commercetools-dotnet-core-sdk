@@ -18,7 +18,7 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
         public static DiscountCodeDraft DefaultDiscountCodeDraft(DiscountCodeDraft discountCodeDraft,
             List<Reference<CartDiscount>> cartDiscounts)
         {
-            var random = TestingUtility.RandomInt(1, 100);
+            var random = TestingUtility.RandomInt();
             discountCodeDraft.Name = new LocalizedString {{"en", $"DiscountCode_{random}"}};
             discountCodeDraft.Code = TestingUtility.RandomString();
             discountCodeDraft.IsActive = true;

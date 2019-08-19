@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.Domain.TaxCategories;
+﻿using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.TaxCategories;
 
 namespace commercetools.Sdk.Domain.Carts
 {
@@ -17,7 +18,7 @@ namespace commercetools.Sdk.Domain.Carts
         [Required]
         public string Slug { get; set; }
 
-        public Reference<TaxCategory> TaxCategory { get; set; }
+        public IReference<TaxCategory> TaxCategory { get; set; }
 
         public ExternalTaxRateDraft ExternalTaxRate { get; set; }
 

@@ -13,7 +13,7 @@ namespace commercetools.Sdk.IntegrationTests.States
 
         public static StateDraft DefaultStateDraft(StateDraft stateDraft)
         {
-            var randomInt = TestingUtility.RandomInt(1, 100);
+            var randomInt = TestingUtility.RandomInt();
             stateDraft.Initial = true;
             stateDraft.Name = new LocalizedString() {{"en", $"State_Name_{randomInt}"}};
             stateDraft.Description = new LocalizedString() {{"en", $"State_Description_{randomInt}"}};

@@ -3,6 +3,7 @@ using commercetools.Sdk.HttpApi;
 using commercetools.Sdk.HttpApi.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using SimpleInjector;
 using Xunit;
 using Xunit.Abstractions;

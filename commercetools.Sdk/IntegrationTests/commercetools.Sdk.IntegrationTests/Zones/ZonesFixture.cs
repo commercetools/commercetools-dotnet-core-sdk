@@ -12,7 +12,7 @@ namespace commercetools.Sdk.IntegrationTests.Zones
         #region DraftBuilds
         public static ZoneDraft DefaultZoneDraft(ZoneDraft zoneDraft)
         {
-            var random = TestingUtility.RandomInt(1, 100);
+            var random = TestingUtility.RandomInt();
             zoneDraft.Key = $"key_{random}";
             zoneDraft.Name = $"Name_{random}";
             return zoneDraft;

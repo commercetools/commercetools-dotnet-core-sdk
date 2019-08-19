@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain
+﻿using System;
+
+namespace commercetools.Sdk.Domain
 {
     using System.Collections.Generic;
 

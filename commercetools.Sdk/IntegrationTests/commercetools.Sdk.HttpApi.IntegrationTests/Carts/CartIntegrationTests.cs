@@ -1864,7 +1864,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
                     Slug = customLineItem.Slug,
                     Quantity = customLineItem.Quantity,
                     Money = customLineItem.Money,
-                    TaxCategory = customLineItem.TaxCategory
+                    TaxCategory = customLineItem.TaxCategory.ToReference()
                 };
 
             List<UpdateAction<Cart>> updateActions = new List<UpdateAction<Cart>> {addCustomLineItemUpdateAction};
