@@ -192,7 +192,11 @@ namespace commercetools.Sdk.Serialization.Tests
 
             var productDraft = new ProductDraft
             {
-                Name = new LocalizedString() {{"en", "name"}},
+                Name = new LocalizedString()
+                {
+                    {"en", "name"},
+                    {"en-US", "name"}
+                },
                 Slug = new LocalizedString() {{"en", "slug"}},
                 ProductType = new Reference<ProductType>
                 {
