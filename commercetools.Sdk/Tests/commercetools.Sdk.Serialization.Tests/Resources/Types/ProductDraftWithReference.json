@@ -1,6 +1,7 @@
 {
   "name":{
-    "en":"name"
+    "en":"name",
+    "en-US": "name"
   },
   "productType":{
     "typeId":"product-type",
