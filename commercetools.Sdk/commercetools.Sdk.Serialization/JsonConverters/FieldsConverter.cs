@@ -16,7 +16,7 @@ namespace commercetools.Sdk.Serialization
             this.mapperTypeRetriever = mapperTypeRetriever;
         }
 
-        public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization };
+        public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization, SerializerType.Serialization };
 
         public override bool CanConvert(Type objectType)
         {
@@ -50,7 +50,17 @@ namespace commercetools.Sdk.Serialization
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            if (value is Fields fields)
+            {
+                writer.WriteStartObject();
+                foreach (var field in fields)
+                {
+                    writer.WritePropertyName(field.Key);
+                    serializer.Serialize(writer, field.Value);
+                }
+                writer.WriteEndObject();
+            }
+
         }
     }
 }

@@ -51,5 +51,40 @@ namespace commercetools.Sdk.Serialization.Tests
             JToken serializedFormatted = JValue.Parse(serialized);
             serializedFormatted.Should().BeEquivalentTo(resultFormatted);
         }
+
+        [Fact]
+        public void SerializeCustomField()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            var customFieldsDraft = new CustomFieldsDraft() {
+                Fields = new Fields()
+                {
+                    {"foo", "bar"},
+                    {"Fooz", "Bars"},
+                    {"Bar", new EnumValue { Key = "BarKey", Label = "BarLabel"} }
+                }
+            };
+            string result1 = serializerService.Serialize(customFieldsDraft);
+
+            JToken resultFormatted = JValue.Parse(result1);
+            string serialized = File.ReadAllText("Resources/CustomFields/CustomFieldsDraft.json");
+            JToken serializedFormatted = JValue.Parse(serialized);
+            serializedFormatted.Should().BeEquivalentTo(resultFormatted);
+
+            var draft = new Fields()
+            {
+                {"foo", "bar"},
+                {"Fooz", "Bars"},
+                {"Bar", new EnumValue { Key = "BarKey", Label = "BarLabel"} }
+            };
+
+            string result2 = serializerService.Serialize(draft);
+
+            resultFormatted = JValue.Parse(result2);
+            serialized = File.ReadAllText("Resources/CustomFields/Fields.json");
+            serializedFormatted = JValue.Parse(serialized);
+            serializedFormatted.Should().BeEquivalentTo(resultFormatted);
+        }
+
     }
 }
