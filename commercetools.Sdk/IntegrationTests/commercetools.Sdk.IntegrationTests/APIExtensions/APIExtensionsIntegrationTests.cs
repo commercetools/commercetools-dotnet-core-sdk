@@ -117,7 +117,7 @@ namespace commercetools.Sdk.IntegrationTests.APIExtensions
                 client,
                 async extension =>
                 {
-                    await client.ExecuteAsync(new DeleteByIdCommand<Extension>(extension));
+                    await client.ExecuteAsync(new DeleteByKeyCommand<Extension>(extension.Key, extension.Version));
                     await Assert.ThrowsAsync<NotFoundException>(
                         () => client.ExecuteAsync(new GetByIdCommand<Extension>(extension))
                     );
