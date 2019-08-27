@@ -4,10 +4,10 @@ namespace commercetools.Sdk.Domain.APIExtensions
 {
     public enum TriggerType
     {
-        [Description("create")]
+        [Description("Create")]
         Create,
 
-        [Description("update")]
+        [Description("Update")]
         Update
     }
 }

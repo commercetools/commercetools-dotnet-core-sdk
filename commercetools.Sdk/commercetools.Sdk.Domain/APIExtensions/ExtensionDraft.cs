@@ -10,6 +10,6 @@ namespace commercetools.Sdk.Domain.APIExtensions
 
         public List<Trigger> Triggers { get; set; }
 
-        public long TimeoutInMs { get; set; }
+        public long? TimeoutInMs { get; set; }
     }
 }
