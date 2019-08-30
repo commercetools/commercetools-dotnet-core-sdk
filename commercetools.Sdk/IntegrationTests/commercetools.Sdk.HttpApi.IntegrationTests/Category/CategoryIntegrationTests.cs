@@ -213,6 +213,20 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
         }
 
         [Fact]
+        public void UpdateCategoryByKeyChangeSlug()
+        {
+            IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();
+            Category category = this.categoryFixture.CreateCategory();
+            var slug = TestingUtility.RandomString(10);
+            var updateActions = new List<UpdateAction<Category>>();
+            var changeSlugAction = new ChangeSlugUpdateAction { Slug = new LocalizedString() { { "en", slug } } };
+            updateActions.Add(changeSlugAction);
+            var retrievedCategory = commerceToolsClient.ExecuteAsync(new UpdateByKeyCommand<Category>(category.Key, category.Version, updateActions)).Result;
+            this.categoryFixture.CategoriesToDelete.Add(retrievedCategory);
+            Assert.Equal(slug, retrievedCategory.Slug["en"]);
+        }
+
+        [Fact]
         public void QueryCategory()
         {
             IClient commerceToolsClient = this.categoryFixture.GetService<IClient>();

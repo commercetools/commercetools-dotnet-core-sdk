@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using commercetools.Sdk.Domain.Orders;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.Carts
 {
     public class Delivery
     {

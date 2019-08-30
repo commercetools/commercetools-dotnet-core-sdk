@@ -5,7 +5,7 @@ using commercetools.Sdk.Domain.States;
 namespace commercetools.Sdk.Domain.Messages.Orders
 {
     [TypeMarker("LineItemStateTransition")]
-    public class LineItemStateTransitionMessage : Message
+    public class LineItemStateTransitionMessage : Message<Order>
     {
         public string LineItemId { get; set; }
 

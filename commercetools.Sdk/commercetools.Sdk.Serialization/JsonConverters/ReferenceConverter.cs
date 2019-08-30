@@ -38,6 +38,7 @@ namespace commercetools.Sdk.Serialization
             {
                 throw new JsonSerializationException();
             }
+
             var genericReferenceType = typeof(Reference<>).MakeGenericType(type);
             return jsonObject.ToObject(genericReferenceType, serializer);
         }
