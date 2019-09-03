@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
@@ -59,12 +60,8 @@ namespace commercetools.Sdk.IntegrationTests.Messages
             await WithCustomer(client, async customer =>
             {
                 var queryCommand = new QueryCommand<CustomerCreatedMessage>();
-                queryCommand.Where(message => message.Type == "CustomerCreated");
-                queryCommand.SetLimit(1);
-                queryCommand.SetSort(new List<Sort<CustomerCreatedMessage>>()
-                {
-                    new Sort<CustomerCreatedMessage>(message => message.CreatedAt, SortDirection.Descending)
-                });
+                queryCommand.Where(message =>
+                    message.Type == "CustomerCreated" && message.Resource.Id == customer.Id.valueOf());
 
                 await AssertEventually(async () =>
                     {
@@ -102,13 +99,7 @@ namespace commercetools.Sdk.IntegrationTests.Messages
 
 
                 var queryCommand = new QueryCommand<Message<Customer>>();
-                queryCommand.Where(message =>
-                    message.Type == "CustomerCreated" || message.Type == "CustomerAddressChanged");
-                queryCommand.SetLimit(2);
-                queryCommand.SetSort(new List<Sort<Message<Customer>>>()
-                {
-                    new Sort<Message<Customer>>(message => message.CreatedAt, SortDirection.Descending)
-                });
+                queryCommand.Where(message => message.Resource.Id == customer.Id.valueOf());
 
                 await AssertEventually(async () =>
                     {
@@ -116,10 +107,12 @@ namespace commercetools.Sdk.IntegrationTests.Messages
                         var returnedSet = await client.ExecuteAsync(queryCommand);
 
                         //Assert
-                        Assert.True(returnedSet.Results.Count > 0);
-                        var customerCreatedMessage = returnedSet.Results[1] as CustomerCreatedMessage;
+                        Assert.Equal(2, returnedSet.Results.Count);
+
+                        var customerCreatedMessage =
+                            returnedSet.Results.OfType<CustomerCreatedMessage>().FirstOrDefault();
                         var customerAddressChangedMessage =
-                            returnedSet.Results[0] as CustomerAddressChangedMessage; // this is latest message
+                            returnedSet.Results.OfType<CustomerAddressChangedMessage>().FirstOrDefault();
 
                         Assert.NotNull(customerCreatedMessage);
                         Assert.NotNull(customerCreatedMessage.Customer);
@@ -141,12 +134,8 @@ namespace commercetools.Sdk.IntegrationTests.Messages
                 await WithReview(client, async review =>
                 {
                     var queryCommand = new QueryCommand<Message>();
-                    queryCommand.Where(message => message.Type == "CustomerCreated" || message.Type == "ReviewCreated");
-                    queryCommand.SetLimit(2);
-                    queryCommand.SetSort(new List<Sort<Message>>()
-                    {
-                        new Sort<Message>(message => message.CreatedAt, SortDirection.Descending)
-                    });
+                    queryCommand.Where(message =>
+                        message.Resource.Id == customer.Id.valueOf() || message.Resource.Id == review.Id.valueOf());
 
                     await AssertEventually(async () =>
                         {
@@ -156,8 +145,10 @@ namespace commercetools.Sdk.IntegrationTests.Messages
                             //Assert
                             Assert.Equal(2, returnedSet.Results.Count);
 
-                            var reviewCreatedMessage = returnedSet.Results[0] as ReviewCreatedMessage;
-                            var customerCreatedMessage = returnedSet.Results[1] as CustomerCreatedMessage;
+                            var reviewCreatedMessage =
+                                returnedSet.Results.OfType<ReviewCreatedMessage>().FirstOrDefault();
+                            var customerCreatedMessage =
+                                returnedSet.Results.OfType<CustomerCreatedMessage>().FirstOrDefault();
                             Assert.NotNull(customerCreatedMessage);
                             Assert.NotNull(customerCreatedMessage.Customer);
                             Assert.Equal(customer.Id, customerCreatedMessage.Customer.Id);
