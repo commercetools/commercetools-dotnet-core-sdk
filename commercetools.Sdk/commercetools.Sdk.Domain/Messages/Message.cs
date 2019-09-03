@@ -18,9 +18,10 @@ namespace commercetools.Sdk.Domain.Messages
 
         public UserProvidedIdentifiers ResourceUserProvidedIdentifiers { get; set; }
 
-        public string Type
+        public virtual string Type
         {
             get => this.GetType().GetTypeMarkerAttributeValue();
+            set {}
         }
     }
 }

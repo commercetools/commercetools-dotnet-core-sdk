@@ -7,11 +7,12 @@ using commercetools.Sdk.Domain.Customers.UpdateActions;
 using commercetools.Sdk.Domain.Messages;
 using commercetools.Sdk.Domain.Messages.Customers;
 using commercetools.Sdk.Domain.Messages.Reviews;
+using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Query;
-using commercetools.Sdk.Domain.Reviews;
 using Xunit;
 using static commercetools.Sdk.IntegrationTests.Customers.CustomersFixture;
 using static commercetools.Sdk.IntegrationTests.Reviews.ReviewsFixture;
+using static commercetools.Sdk.IntegrationTests.GenericFixture;
 
 namespace commercetools.Sdk.IntegrationTests.Messages
 {
@@ -36,13 +37,18 @@ namespace commercetools.Sdk.IntegrationTests.Messages
             {
                 var queryCommand = new QueryCommand<Message>();
                 queryCommand.SetLimit(1);
-                var returnedSet = await client.ExecuteAsync(queryCommand);
-                Assert.Single(returnedSet.Results);
-                var messageId = returnedSet.Results[0].Id;
 
-                var retrievedMessage = await client
-                    .ExecuteAsync(new GetByIdCommand<Message>(messageId));
-                Assert.NotNull(retrievedMessage);
+                await AssertEventually(async () =>
+                    {
+                        var returnedSet = await client.ExecuteAsync(queryCommand);
+                        Assert.Single(returnedSet.Results);
+                        var messageId = returnedSet.Results[0].Id;
+
+                        var retrievedMessage = await client
+                            .ExecuteAsync(new GetByIdCommand<Message>(messageId));
+                        Assert.NotNull(retrievedMessage);
+                    }
+                );
             });
         }
 
@@ -59,12 +65,20 @@ namespace commercetools.Sdk.IntegrationTests.Messages
                 {
                     new Sort<CustomerCreatedMessage>(message => message.CreatedAt, SortDirection.Descending)
                 });
-                var returnedSet = await client.ExecuteAsync(queryCommand);
-                Assert.Single(returnedSet.Results);
-                var customerCreatedMessage = returnedSet.Results[0];
-                Assert.NotNull(customerCreatedMessage);
-                Assert.NotNull(customerCreatedMessage.Customer);
-                Assert.Equal(customer.Id, customerCreatedMessage.Customer.Id);
+
+                await AssertEventually(async () =>
+                    {
+                        //Act
+                        var returnedSet = await client.ExecuteAsync(queryCommand);
+
+                        //Assert
+                        Assert.Single(returnedSet.Results);
+                        var customerCreatedMessage = returnedSet.Results[0];
+                        Assert.NotNull(customerCreatedMessage);
+                        Assert.NotNull(customerCreatedMessage.Customer);
+                        Assert.Equal(customer.Id, customerCreatedMessage.Customer.Id);
+                    }
+                );
             });
         }
 
@@ -95,18 +109,26 @@ namespace commercetools.Sdk.IntegrationTests.Messages
                 {
                     new Sort<Message<Customer>>(message => message.CreatedAt, SortDirection.Descending)
                 });
-                var returnedSet = await client.ExecuteAsync(queryCommand);
-                Assert.True(returnedSet.Results.Count > 0);
-                var customerCreatedMessage = returnedSet.Results[1] as CustomerCreatedMessage;
-                var customerAddressChangedMessage =
-                    returnedSet.Results[0] as CustomerAddressChangedMessage; // this is latest message
 
-                Assert.NotNull(customerCreatedMessage);
-                Assert.NotNull(customerCreatedMessage.Customer);
-                Assert.Equal(customer.Id, customerCreatedMessage.Customer.Id);
-                Assert.NotNull(customerAddressChangedMessage);
-                Assert.NotNull(customerAddressChangedMessage.Address);
-                Assert.Equal(updatedCustomer.Addresses[0].Id, customerAddressChangedMessage.Address.Id);
+                await AssertEventually(async () =>
+                    {
+                        //Act
+                        var returnedSet = await client.ExecuteAsync(queryCommand);
+
+                        //Assert
+                        Assert.True(returnedSet.Results.Count > 0);
+                        var customerCreatedMessage = returnedSet.Results[1] as CustomerCreatedMessage;
+                        var customerAddressChangedMessage =
+                            returnedSet.Results[0] as CustomerAddressChangedMessage; // this is latest message
+
+                        Assert.NotNull(customerCreatedMessage);
+                        Assert.NotNull(customerCreatedMessage.Customer);
+                        Assert.Equal(customer.Id, customerCreatedMessage.Customer.Id);
+                        Assert.NotNull(customerAddressChangedMessage);
+                        Assert.NotNull(customerAddressChangedMessage.Address);
+                        Assert.Equal(updatedCustomer.Addresses[0].Id, customerAddressChangedMessage.Address.Id);
+                    }
+                );
             });
         }
 
@@ -125,19 +147,26 @@ namespace commercetools.Sdk.IntegrationTests.Messages
                     {
                         new Sort<Message>(message => message.CreatedAt, SortDirection.Descending)
                     });
-                    var returnedSet = await client.ExecuteAsync(queryCommand);
-                    Assert.Equal(2 ,returnedSet.Results.Count);
 
-                    var reviewCreatedMessage = returnedSet.Results[0] as ReviewCreatedMessage;
-                    var customerCreatedMessage = returnedSet.Results[1] as CustomerCreatedMessage;
-                    Assert.NotNull(customerCreatedMessage);
-                    Assert.NotNull(customerCreatedMessage.Customer);
-                    Assert.Equal(customer.Id, customerCreatedMessage.Customer.Id);
+                    await AssertEventually(async () =>
+                        {
+                            //Act
+                            var returnedSet = await client.ExecuteAsync(queryCommand);
 
-                    Assert.NotNull(reviewCreatedMessage);
-                    Assert.NotNull(reviewCreatedMessage.Review);
-                    Assert.Equal(review.Id, reviewCreatedMessage.Review.Id);
+                            //Assert
+                            Assert.Equal(2, returnedSet.Results.Count);
 
+                            var reviewCreatedMessage = returnedSet.Results[0] as ReviewCreatedMessage;
+                            var customerCreatedMessage = returnedSet.Results[1] as CustomerCreatedMessage;
+                            Assert.NotNull(customerCreatedMessage);
+                            Assert.NotNull(customerCreatedMessage.Customer);
+                            Assert.Equal(customer.Id, customerCreatedMessage.Customer.Id);
+
+                            Assert.NotNull(reviewCreatedMessage);
+                            Assert.NotNull(reviewCreatedMessage.Review);
+                            Assert.Equal(review.Id, reviewCreatedMessage.Review.Id);
+                        }
+                    );
                 });
             });
         }

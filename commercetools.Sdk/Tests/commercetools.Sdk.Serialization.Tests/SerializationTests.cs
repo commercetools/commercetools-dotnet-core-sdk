@@ -279,5 +279,17 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.IsAssignableFrom<Message<Review>>(reviewMessage);
             Assert.IsType<ReviewCreatedMessage>(reviewMessage);
         }
+
+        [Fact]
+        public void MessagesDeserializationToGeneralMessage()
+        {
+            //Deserialize 1 of messages as general message (when the message type not in the SDK)
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string serialized = File.ReadAllText("Resources/Messages/ReviewMessages.json");
+            var messages = serializerService.Deserialize<List<GeneralMessage>>(serialized);
+            Assert.Single(messages);
+            var generalMessage = messages[0];
+            Assert.NotNull(generalMessage.Type);
+        }
     }
 }
