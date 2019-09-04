@@ -41,7 +41,7 @@ namespace commercetools.Sdk.Serialization
                     propertyType = this.DefaultType;
                 }
                 else
-                { 
+                {
                     throw new JsonSerializationException();
                 }
             }

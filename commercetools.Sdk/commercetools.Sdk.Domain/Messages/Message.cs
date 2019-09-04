@@ -14,14 +14,14 @@ namespace commercetools.Sdk.Domain.Messages
         public int SequenceNumber { get; set; }
 
         public int ResourceVersion { get; set; }
-        public ResourceIdentifier Resource { get; set; }
+        public Reference Resource { get; set; }
 
         public UserProvidedIdentifiers ResourceUserProvidedIdentifiers { get; set; }
 
         public virtual string Type
         {
             get => this.GetType().GetTypeMarkerAttributeValue();
-            set { }
+            set {}
         }
     }
 }

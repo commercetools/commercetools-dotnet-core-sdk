@@ -6,6 +6,7 @@ using commercetools.Sdk.Domain.States;
 namespace commercetools.Sdk.Domain.Reviews
 {
     [Endpoint("reviews")]
+    [ResourceType(ReferenceTypeId.Review)]
     public class Review : Resource<Review>, IKeyReferencable<Review>
     {
         public string Key { get; set; }

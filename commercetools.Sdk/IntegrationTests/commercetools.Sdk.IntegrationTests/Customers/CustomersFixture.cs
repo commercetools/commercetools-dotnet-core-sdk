@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
@@ -17,6 +18,13 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             customerDraft.Email = $"{rand}@email.com";
             customerDraft.Password = "1234";
             customerDraft.Key = $"Key_{rand}";
+            return customerDraft;
+        }
+        public static CustomerDraft DefaultCustomerDraftWithAddress(CustomerDraft draft)
+        {
+            var address = TestingUtility.GetRandomAddress();
+            var customerDraft = DefaultCustomerDraft(draft);
+            customerDraft.Addresses = new List<Address> { address };
             return customerDraft;
         }
         #endregion

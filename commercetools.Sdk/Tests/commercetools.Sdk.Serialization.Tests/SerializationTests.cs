@@ -4,6 +4,11 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.Messages;
+using commercetools.Sdk.Domain.Messages.Categories;
+using commercetools.Sdk.Domain.Messages.Customers;
+using commercetools.Sdk.Domain.Messages.Orders;
+using commercetools.Sdk.Domain.Messages.Reviews;
 using commercetools.Sdk.Domain.Reviews;
 using commercetools.Sdk.Domain.States;
 using commercetools.Sdk.Domain.TaxCategories;
@@ -224,6 +229,67 @@ namespace commercetools.Sdk.Serialization.Tests
             string serialized = File.ReadAllText("Resources/Types/ProductDraftWithReference.json");
             JToken serializedFormatted = JValue.Parse(serialized);
             serializedFormatted.Should().BeEquivalentTo(resultFormatted);
+        }
+
+        [Fact]
+        public void MessagesDeserializationOfSpecificType()
+        {
+            //Deserialize 2 of messages of type category to list of Message<Category>
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string serialized = File.ReadAllText("Resources/Messages/CategoryMessages.json");
+            var messages = serializerService.Deserialize<List<Message<Category>>>(serialized);
+            var categoryCreatedMessage = messages[0] as CategoryCreatedMessage;
+            var categorySlugChangedMessage = messages[1] as CategorySlugChangedMessage;
+            Assert.NotNull(categoryCreatedMessage);
+            Assert.NotNull(categoryCreatedMessage.Category);
+            Assert.NotNull(categoryCreatedMessage.Resource);
+            Assert.NotNull(categorySlugChangedMessage);
+            Assert.NotNull(categorySlugChangedMessage.Slug);
+        }
+
+        [Fact]
+        public void MessagesDeserializationOfDifferentTypes()
+        {
+            //Deserialize 3 of messages of different types
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string serialized = File.ReadAllText("Resources/Messages/Messages.json");
+            var messages = serializerService.Deserialize<List<Message>>(serialized);
+            var categoryCreatedMessage = messages[0] as CategoryCreatedMessage;
+            var customerCreatedMessage = messages[1] as CustomerCreatedMessage;
+            var lineItemStateTransitionMessage = messages[2] as LineItemStateTransitionMessage;
+
+            Assert.NotNull(categoryCreatedMessage);
+            Assert.NotNull(categoryCreatedMessage.Category);
+
+            Assert.NotNull(customerCreatedMessage);
+            Assert.NotNull(customerCreatedMessage.Customer);
+
+            Assert.NotNull(lineItemStateTransitionMessage);
+        }
+
+        [Fact]
+        public void MessagesDeserializationOfReview()
+        {
+            //Deserialize 1 of messages of type category to list of Message<Review>
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string serialized = File.ReadAllText("Resources/Messages/ReviewMessages.json");
+            var messages = serializerService.Deserialize<List<Message>>(serialized);
+            Assert.Single(messages);
+            var reviewMessage = messages[0];
+            Assert.IsAssignableFrom<Message<Review>>(reviewMessage);
+            Assert.IsType<ReviewCreatedMessage>(reviewMessage);
+        }
+
+        [Fact]
+        public void MessagesDeserializationToGeneralMessage()
+        {
+            //Deserialize 1 of messages as general message (when the message type not in the SDK)
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string serialized = File.ReadAllText("Resources/Messages/ReviewMessages.json");
+            var messages = serializerService.Deserialize<List<GeneralMessage>>(serialized);
+            Assert.Single(messages);
+            var generalMessage = messages[0];
+            Assert.NotNull(generalMessage.Type);
         }
     }
 }
