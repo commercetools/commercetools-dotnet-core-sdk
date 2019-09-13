@@ -14,6 +14,21 @@ namespace commercetools.Sdk.Domain.Predicates
             throw new NotImplementedException();
         }
 
+        public static object AsDate(this DateTime source)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public static object AsTime(this TimeSpan source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static object AsDateTime(this DateTime source)
+        {
+            throw new NotImplementedException();
+        }
+
         public static int LineItemCount(this Cart source, bool parameter)
         {
             throw new NotImplementedException();

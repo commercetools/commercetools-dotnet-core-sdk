@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using commercetools.Sdk.Domain.Categories;
 using Xunit;
 
 namespace commercetools.Sdk.Linq.Tests
@@ -27,8 +28,7 @@ namespace commercetools.Sdk.Linq.Tests
             Expression<Func<Product, bool>> expression = p => p.ProductId() == "f6a19a23-14e3-40d0-aee2-3e612fcb1bc7" && p.VariantId() == 1;
             IDiscountPredicateExpressionVisitor predicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = predicateExpressionVisitor.Render(expression);
-            // TODO Check if variantId is correct; the documentation mentions both variantId and variant.id
-            Assert.Equal("product.id = \"f6a19a23-14e3-40d0-aee2-3e612fcb1bc7\" and variantId = 1", result);
+            Assert.Equal("product.id = \"f6a19a23-14e3-40d0-aee2-3e612fcb1bc7\" and variant.id = 1", result);
         }
 
         [Fact]
@@ -38,16 +38,6 @@ namespace commercetools.Sdk.Linq.Tests
             IDiscountPredicateExpressionVisitor predicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = predicateExpressionVisitor.Render(expression);
             Assert.Equal("categories.id = \"f6a19a23-14e3-40d0-aee2-3e612fcb1bc7\"", result);
-        }
-
-        [Fact]
-        public void CategoriesIdNotEqual()
-        {
-            Expression<Func<Product, bool>> expression = p => p.CategoryId() != "f6a19a23-14e3-40d0-aee2-3e612fcb1bc7";
-            IDiscountPredicateExpressionVisitor predicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
-            var result = predicateExpressionVisitor.Render(expression);
-            // TODO Check if we can ommit the brackets; the documention puts brackets around guid in case of !=
-            Assert.Equal("categories.id != \"f6a19a23-14e3-40d0-aee2-3e612fcb1bc7\"", result);
         }
 
         [Fact]
@@ -85,6 +75,41 @@ namespace commercetools.Sdk.Linq.Tests
             var result = predicateExpressionVisitor.Render(expression);
             Assert.Equal("categories.id = (\"f6a19a23-14e3-40d0-aee2-3e612fcb1bc7\", \"abcd9a23-14e3-40d0-aee2-3e612fcbefgh\")", result);
         }
+        
+        [Fact]
+        public void CategoriesIdEqualsSingleId()
+        {
+            Expression<Func<Product, bool>> expression = p => p.CategoriesId().IsIn("f6a19a23-14e3-40d0-aee2-3e612fcb1bc7");
+            IDiscountPredicateExpressionVisitor predicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = predicateExpressionVisitor.Render(expression);
+            Assert.Equal("categories.id = \"f6a19a23-14e3-40d0-aee2-3e612fcb1bc7\"", result);
+        }
+        
+        [Fact]
+        public void CategoriesNotEqualsMultipleIds()
+        {
+            var category = new Category
+            {
+                Id = "f6a19a23-14e3-40d0-aee2-3e612fcb1bc7"
+            };
+            Expression<Func<Product, bool>> expression = p => p.CategoriesId().IsNotIn(category.Id.valueOf(), "963cbb75-c604-4ad2-841c-890b792224ee");
+            IDiscountPredicateExpressionVisitor predicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = predicateExpressionVisitor.Render(expression);
+            Assert.Equal("categories.id != (\"f6a19a23-14e3-40d0-aee2-3e612fcb1bc7\", \"963cbb75-c604-4ad2-841c-890b792224ee\")", result);
+        }
+        
+        [Fact]
+        public void CategoriesNotEqualsSingleId()
+        {
+            var category = new Category
+            {
+                Id = "f6a19a23-14e3-40d0-aee2-3e612fcb1bc7"
+            };
+            Expression<Func<Product, bool>> expression = p => p.CategoriesId().IsNotIn(category.Id.valueOf());
+            IDiscountPredicateExpressionVisitor predicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = predicateExpressionVisitor.Render(expression);
+            Assert.Equal("categories.id != (\"f6a19a23-14e3-40d0-aee2-3e612fcb1bc7\")", result);
+        }
 
         [Fact]
         public void CategoriesWithAncestorsIdContains()
@@ -111,6 +136,24 @@ namespace commercetools.Sdk.Linq.Tests
             IDiscountPredicateExpressionVisitor predicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
             var result = predicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes.size = \"L\" and attributes.colors contains all (\"black\", \"white\")", result);
+        }
+        
+        [Fact]
+        public void AttributeNameWithDash()
+        {
+            Expression<Func<Product, bool>> expression = p => p.Attributes().Any(a => a.Name == "size-att" && a.ToTextAttribute().Value == "L") && p.Attributes().Any(a => a.Name == "colors-attr" && a.ToSetEnumAttribute().ContainsAll("black", "white"));
+            IDiscountPredicateExpressionVisitor predicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = predicateExpressionVisitor.Render(expression);
+            Assert.Equal("attributes.`size-att` = \"L\" and attributes.`colors-attr` contains all (\"black\", \"white\")", result);
+        }
+        
+        [Fact]
+        public void AttributeNameStartWithNumber()
+        {
+            Expression<Func<Product, bool>> expression = p => p.Attributes().Any(a => a.Name == "4size" && a.ToTextAttribute().Value == "L") && p.Attributes().Any(a => a.Name == "4colors" && a.ToSetEnumAttribute().ContainsAll("black", "white"));
+            IDiscountPredicateExpressionVisitor predicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = predicateExpressionVisitor.Render(expression);
+            Assert.Equal("attributes.`4size` = \"L\" and attributes.`4colors` contains all (\"black\", \"white\")", result);
         }
 
         [Fact]

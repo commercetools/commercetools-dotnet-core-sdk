@@ -43,7 +43,7 @@ namespace commercetools.Sdk.Linq.Discount.Converters
                 string operatorName = Mapping.AllowedMethods[methodCallExpression.Method.Name];
                 IPredicateVisitor cartPredicateVisitor = predicateVisitorFactory.Create(methodCallExpression.Arguments[0]);
                 IEnumerable<IPredicateVisitor> arguments = GetArguments(methodCallExpression.Arguments[1], predicateVisitorFactory);
-                if (arguments.ToList().Count > 1)
+                if (arguments.ToList().Count > 1 || methodCallExpression.Method.Name == "IsNotIn")
                 {
                     CollectionPredicateVisitor collectionPredicateVisitor = new CollectionPredicateVisitor(arguments);
                     return new ComparisonPredicateVisitor(cartPredicateVisitor, operatorName, collectionPredicateVisitor);

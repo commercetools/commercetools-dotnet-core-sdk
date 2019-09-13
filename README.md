@@ -267,7 +267,7 @@ Setting the "where" query string parameter as a string can be done in the follow
 queryCommand.Where = "key = \"c14\"";
 ```
     
-> Note! For more examples of predicates using lambda expressions, take a look at the unit tests.
+> Note! For more examples of predicates using lambda expressions check [this](linq.md) or take a look at the unit tests.
 
 There are numerous extension methods created for domain specific operations. They can also be found by importing the commercetools.Sdk.Domain.Predicates namespace. The extension WithinCircle is one of them, for example: 
 

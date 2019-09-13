@@ -11,7 +11,7 @@ namespace commercetools.Sdk.Linq.Discount
             { "CustomerGroupKey", "customerGroup.key" },
             { "CustomTypeKey", "custom.type.key" },
             { "ProductKey", "product.key" },
-            { "VariantId", "variantId" },
+            { "VariantId", "variant.id" },
             { "CatalogId", "catalog.id" },
             { "DiscountId", "discount.id" },
             { "Sku", "sku" },
@@ -55,6 +55,13 @@ namespace commercetools.Sdk.Linq.Discount
             "CustomLineItemGrossTotal",
             "LineItemExists",
             "ForAllLineItems"
+        };
+
+        public static readonly IEnumerable<string> DateTimeCustomMethods = new List<string>()
+        {
+            "AsDate",
+            "AsDateTime",
+            "AsTime"
         };
     }
 }

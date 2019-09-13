@@ -74,7 +74,7 @@ namespace commercetools.Sdk.Linq.Discount.Converters
         {
             if (inner is ConstantPredicateVisitor constantVisitor)
             {
-                ConstantPredicateVisitor constantWithoutQuotes = new ConstantPredicateVisitor(constantVisitor.Constant.RemoveQuotes(), true);
+                ConstantPredicateVisitor constantWithoutQuotes = new ConstantPredicateVisitor(constantVisitor.Constant.RemoveQuotes().WrapInBackticksIfNeeded(), true);
                 return constantWithoutQuotes;
             }
 

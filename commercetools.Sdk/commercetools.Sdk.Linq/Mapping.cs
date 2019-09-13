@@ -31,7 +31,8 @@ namespace commercetools.Sdk.Linq
             { "IsNotEmpty", "is not empty" },
             { "IsDefined", "is defined" },
             { "IsNotDefined", "is not defined" },
-            { "IsIn", "=" }
+            { "IsIn", "=" },
+            { "IsNotIn", "!=" }
         };
 
         public static Dictionary<ExpressionType, string> LogicalOperators { get; } = new Dictionary<ExpressionType, string>()
