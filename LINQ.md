@@ -26,8 +26,8 @@ categoryQueryCommand.Where(c => c.Version <= 30); // predicate: version <= 30
 
 // if value from variable use valueOf like below
 ```c#
-var categoryKey = "c14"
-var category = new Category { Key = "c14" }
+var categoryKey = "c14";
+var category = new Category { Key = "c14" };
 categoryQueryCommand.Where(c => c.Key == categoryKey.valueOf());
 categoryQueryCommand.Where(c => c.Key == category.Key.valueOf());
 ```
@@ -177,7 +177,7 @@ queryCommand.Where(p =>
         variant.Attributes.Any(a => 
             a.ToLocalizedTextAttribute().Name == "attr-name" 
                 && (a.ToLocalizedTextAttribute().Value["en"] == "eng" 
-                    || a.ToLocalizedTextAttribute().Value["de"] == "ger")
+                 || a.ToLocalizedTextAttribute().Value["de"] == "ger")
             )
         )
     );
@@ -252,7 +252,7 @@ queryCommand.Where(p =>
 
 // for DateType, TimeType or DateTimeType
 ```c#
-var dateTime1 = DateTime.Parse("2019-06-04T12:27:55.344Z")
+var dateTime1 = DateTime.Parse("2019-06-04T12:27:55.344Z");
 
 // predicate: variants(attributes(name="c-DateTime" and value="2019-06-04T12:27:55.344Z"))
 queryCommand.Where(p => 
@@ -285,8 +285,8 @@ queryCommand.Where(p =>
 // for DateType, TimeType or DateTimeType with a value within a specific range
 ```c#
 
-var dateTime1 = DateTime.Parse("2019-06-04T12:27:55.344Z")
-var dateTime2 = DateTime.Parse("2020-11-09T11:27:55.344Z")
+var dateTime1 = DateTime.Parse("2019-06-04T12:27:55.344Z");
+var dateTime2 = DateTime.Parse("2020-11-09T11:27:55.344Z");
 
 // predicate: variants(attributes(name="c-DateTime" and value > "2019-06-04T12:27:55.344Z" and value < "2020-11-09T11:27:55.344Z"))
 queryCommand.Where(p => 
@@ -384,8 +384,8 @@ productDiscountDraft.SetPredicate(p =>
     && p.CustomerGroup().Id.IsNotDefined());
 
 // match all product variants that have size "L" and have the color white and black   
-//size is an EnumType attribute for which the key is specified in the predicate,
-//color is a SetType of Enums for which the keys are listed in the predicate.
+// size is an EnumType attribute for which the key is specified in the predicate,
+// color is a SetType of Enums for which the keys are listed in the predicate.
 // predicate: attributes.size = "L" and attributes.colors contains all ("black", "white")
 productDiscountDraft.SetPredicate(p => 
     p.Attributes().Any(a => 
@@ -413,7 +413,7 @@ productDiscountDraft.SetPredicate(p =>
 
 ## Cart Predicates
 ```c#
-var cartDiscountDraft = new CartDiscountDraft()
+var cartDiscountDraft = new CartDiscountDraft();
 ```
 
 ### LineItem Predicate Examples:
@@ -437,12 +437,15 @@ lineItemsCartDiscountTarget.SetPredicate(l =>
 //             and attributes.rating > 3 and (product.id = "abcd9a23-14e3-40d0-aee2-3e612fcbefgh" 
 //                                     or product.id = "ba3e4ee7-30fa-400b-8155-46ebf423d793")
 lineItemsCartDiscountTarget.SetPredicate(l => 
-    l.ProductType.Id == "f6a19a23-14e3-40d0-aee2-3e612fcb1bc7" 
-    && l.Attributes().Any(a => 
-            a.Name == "rating" && ((NumberAttribute)a).Value > 3) 
-            && (l.ProductId == "abcd9a23-14e3-40d0-aee2-3e612fcbefgh" 
-                || l.ProductId == "ba3e4ee7-30fa-400b-8155-46ebf423d793")
-        );
+        l.ProductType.Id == "f6a19a23-14e3-40d0-aee2-3e612fcb1bc7" 
+     && l.Attributes().Any(a => 
+                                a.Name == "rating" 
+                             && ((NumberAttribute)a).Value > 3
+                          ) 
+     && (l.ProductId == "abcd9a23-14e3-40d0-aee2-3e612fcbefgh" || 
+         l.ProductId == "ba3e4ee7-30fa-400b-8155-46ebf423d793"
+        )
+    );
 
 // matches a line item that has the custom field "gender" to be "alien"
 // predicate: custom.gender = "alien"
@@ -551,8 +554,8 @@ cartDiscountDraft.SetCartPredicate(c =>
 // predicate: custom.bookingStart = "2019-09-11" and custom.bookingEnd = "2019-10-11"
 cartDiscountDraft.SetCartPredicate(c => 
         c.Custom.Fields["bookingStart"] == startDate.AsDate() 
-        && 
-        c.Custom.Fields["bookingEnd"] == DateTime.Parse("2019-10-11", CultureInfo.InvariantCulture).AsDate());
+        && c.Custom.Fields["bookingEnd"] == DateTime.Parse(
+                            "2019-10-11", CultureInfo.InvariantCulture).AsDate());
 
 // matches a cart for a family (at least 2 adults and at least one youth)
 // predicate: lineItemCount(custom.age = "adult") >=2 and lineItemCount(custom.age = "youth") >=1
