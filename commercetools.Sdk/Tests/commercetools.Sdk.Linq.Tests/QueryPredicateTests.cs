@@ -1,5 +1,6 @@
 ﻿using commercetools.Sdk.Domain;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using commercetools.Sdk.Domain.Predicates;
@@ -49,8 +50,7 @@ namespace commercetools.Sdk.Linq.Tests
             {
                 Key = "c14"
             };
-            string key = category.Key;
-            Expression<Func<Category, bool>> expression = c => c.Key == key;
+            Expression<Func<Category, bool>> expression = c => c.Key == category.Key.valueOf();
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("key = \"c14\"", result);
@@ -250,6 +250,93 @@ namespace commercetools.Sdk.Linq.Tests
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes(name = \"text-name\" and value = \"text-value\")", result);
         }
+        
+        [Fact]
+        public void ExpressionPropertyMoneyAttributeValueEqual()
+        {
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(variant => variant.Attributes.Any(a => a.ToMoneyAttribute().Name == "attribute-name" && a.ToMoneyAttribute().Value.CentAmount == 999 && a.ToMoneyAttribute().Value.CurrencyCode == "EUR"));
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("variants(attributes(name = \"attribute-name\" and value(centAmount = 999) and value(currencyCode = \"EUR\")))", result);
+        }
+        
+        [Fact]
+        public void ExpressionPropertyNumberAttributeValueWithinRange()
+        {
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(variant => variant.Attributes.Any(a => a.ToNumberAttribute().Name == "attribute-name" && a.ToNumberAttribute().Value > 999 && a.ToNumberAttribute().Value < 1001));
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("variants(attributes(name = \"attribute-name\" and value > 999 and value < 1001))", result);
+        }
+        
+        [Fact]
+        public void ExpressionPropertyDateTimeAttributeValueVariableEqual()
+        {
+            var cDateTime = DateTime.Parse("2019-09-11T15:27:55.123+02:00", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal).ToLocalTime();
+            Assert.Equal(DateTimeKind.Local, cDateTime.Kind);//local time
+            
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(variant => variant.Attributes.Any(a => a.ToDateTimeAttribute().Name == "C-DateTime" && a.ToDateTimeAttribute().Value == cDateTime.AsDateTimeAttribute()));
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("variants(attributes(name = \"C-DateTime\" and value = \"2019-09-11T13:27:55.123Z\"))", result);
+        }
+        
+        [Fact]
+        public void ExpressionPropertyDateTimeAttributeValueParseEqual()
+        {
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(variant => variant.Attributes.Any(a => a.ToDateTimeAttribute().Name == "C-DateTime" && a.ToDateTimeAttribute().Value == DateTime.Parse("2019-10-11T15:25:12.123+02:00", CultureInfo.GetCultureInfo("de-DE"), DateTimeStyles.AdjustToUniversal).AsDateTimeAttribute()));
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("variants(attributes(name = \"C-DateTime\" and value = \"2019-10-11T13:25:12.123Z\"))", result);
+        }
+        
+        [Fact]
+        public void ExpressionPropertyDateAttributeValueVariableEqual()
+        {
+            var cDate = DateTime.Parse("2019-09-11T15:00:00.000+02:00", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal).ToLocalTime();
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(variant => variant.Attributes.Any(a => a.ToDateAttribute().Name == "C-Date" && a.ToDateAttribute().Value == cDate.AsDateAttribute()));
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("variants(attributes(name = \"C-Date\" and value = \"2019-09-11\"))", result);
+        }
+        
+        [Fact]
+        public void ExpressionPropertyDateAttributeValueParseEqual()
+        {
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(variant => variant.Attributes.Any(a => a.ToDateAttribute().Name == "C-Date" && a.ToDateAttribute().Value == DateTime.Parse("2019-10-11", CultureInfo.InvariantCulture).AsDateAttribute()));
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("variants(attributes(name = \"C-Date\" and value = \"2019-10-11\"))", result);
+        }
+        
+        [Fact]
+        public void ExpressionPropertyTimeAttributeValueParseEqual()
+        {
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(variant => variant.Attributes.Any(a => a.ToTimeAttribute().Name == "C-Time" && a.ToTimeAttribute().Value == DateTime.Parse("2019-10-11T15:33:11.123+02:00", CultureInfo.GetCultureInfo("de-DE"), DateTimeStyles.AdjustToUniversal).TimeOfDay.AsTimeAttribute()));//utc time
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("variants(attributes(name = \"C-Time\" and value = \"13:33:11.123\"))", result);
+        }
+        
+        [Fact]
+        public void ExpressionPropertyTimeAttributeValueVariableEqual()
+        {
+            var cTime = new TimeSpan(0,13, 22, 12, 123 );
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(variant => variant.Attributes.Any(a => a.ToTimeAttribute().Name == "C-Time" && a.ToTimeAttribute().Value == cTime.AsTimeAttribute()));
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("variants(attributes(name = \"C-Time\" and value = \"13:22:12.123\"))", result);
+        }
+        
+        [Fact]
+        public void ExpressionPropertyReferenceTypeAttributeValueEqual()
+        {
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(variant => variant.Attributes.Any(a => a.ToReferenceAttribute().Name == "attribute-name" && a.ToReferenceAttribute().Value.TypeId == ReferenceTypeId.Category && a.ToReferenceAttribute().Value.Id == "963cbb75-c604-4ad2-841c-890b792224ee" ));
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("variants(attributes(name = \"attribute-name\" and value(typeId = \"category\") and value(id = \"963cbb75-c604-4ad2-841c-890b792224ee\")))", result);
+        }
+        
 
         [Fact]
         public void ExpressionPropertyTextAttributeValueEqualCaseSensitive()
@@ -286,6 +373,15 @@ namespace commercetools.Sdk.Linq.Tests
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes(name = \"enum-name\" and value(key = \"enum-value\"))", result);
         }
+        
+        [Fact]
+        public void ExpressionProductProjectionVariantEnumAttributeValueEqual()
+        {
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(variant => variant.Attributes.Any(a => a.ToEnumAttribute().Name == "attribute-name" && a.ToEnumAttribute().Value.Key == "enum-key"));
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("variants(attributes(name = \"attribute-name\" and value(key = \"enum-key\")))", result);
+        }
 
         [Fact]
         public void ExpressionPropertyPropertyGrouping()
@@ -321,6 +417,32 @@ namespace commercetools.Sdk.Linq.Tests
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("variants(attributes(name = \"text-name\" and value(en = \"text-value-en\" or de = \"text-value-de\")))", result);
+        }
+        
+        [Fact]
+        public void ExpressionProjectionPropertyForMissingAttribute()
+        {
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(variant => !variant.Attributes.Any(a => a.ToTextAttribute().Name == "attribute-name"));
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("variants(not(attributes(name = \"attribute-name\")))", result);
+        }
+        
+        [Fact]
+        public void ExpressionProjectionPropertyTextAttributeValueEqual()
+        {
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(variant => variant.Attributes.Any(a => a.ToTextAttribute().Name == "attribute-name" && a.ToTextAttribute().Value == "attribute-value"));
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("variants(attributes(name = \"attribute-name\" and value = \"attribute-value\"))", result);
+        }
+        [Fact]
+        public void ExpressionProjectionPropertyTextAttributeValueIn()
+        {
+            Expression<Func<ProductProjection, bool>> expression = p => p.Variants.Any(variant => variant.Attributes.Any(a => a.ToTextAttribute().Name == "attribute-name" && a.ToTextAttribute().Value.In("attribute-value-1", "attribute-value-2")));
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("variants(attributes(name = \"attribute-name\" and value in (\"attribute-value-1\", \"attribute-value-2\")))", result);
         }
 
         [Fact]

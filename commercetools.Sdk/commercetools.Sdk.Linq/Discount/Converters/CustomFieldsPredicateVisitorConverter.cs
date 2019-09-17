@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using commercetools.Sdk.Linq.Discount.Visitors;
 
 namespace commercetools.Sdk.Linq.Discount.Converters
@@ -46,7 +45,7 @@ namespace commercetools.Sdk.Linq.Discount.Converters
         {
             if (inner is ConstantPredicateVisitor constantVisitor)
             {
-                ConstantPredicateVisitor constantWithoutQuotes = new ConstantPredicateVisitor(constantVisitor.Constant.RemoveQuotes());
+                ConstantPredicateVisitor constantWithoutQuotes = new ConstantPredicateVisitor(constantVisitor.Constant.RemoveQuotes().WrapInBackticksIfNeeded(), true);
                 return constantWithoutQuotes;
             }
 

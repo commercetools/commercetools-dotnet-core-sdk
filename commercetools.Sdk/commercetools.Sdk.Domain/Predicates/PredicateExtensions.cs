@@ -35,6 +35,10 @@ namespace commercetools.Sdk.Domain.Predicates
         {
             throw new NotImplementedException();
         }
+        public static bool ContainsAny<T>(this T source, params T[] values)
+        {
+            throw new NotImplementedException();
+        }
 
         public static bool IsEmpty<T>(this ICollection<T> source)
         {
@@ -57,6 +61,19 @@ namespace commercetools.Sdk.Domain.Predicates
         }
 
         public static bool WithinCircle(this GeoJsonGeometry source, params double[] values)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public static TimeSpan AsTimeAttribute(this TimeSpan source)
+        {
+            throw new NotImplementedException();
+        }
+        public static DateTime AsDateTimeAttribute(this DateTime source)
+        {
+            throw new NotImplementedException();
+        }
+        public static DateTime AsDateAttribute(this DateTime source)
         {
             throw new NotImplementedException();
         }

@@ -31,7 +31,8 @@ namespace commercetools.Sdk.Linq
             { "IsNotEmpty", "is not empty" },
             { "IsDefined", "is defined" },
             { "IsNotDefined", "is not defined" },
-            { "IsIn", "=" }
+            { "IsIn", "=" },
+            { "IsNotIn", "!=" }
         };
 
         public static Dictionary<ExpressionType, string> LogicalOperators { get; } = new Dictionary<ExpressionType, string>()
@@ -40,6 +41,13 @@ namespace commercetools.Sdk.Linq
             { ExpressionType.AndAlso, And },
             { ExpressionType.Or, Or },
             { ExpressionType.OrElse, Or }
+        };
+
+        public static IEnumerable<string> DateTimeCustomMethods { get; } = new List<string>()
+        {
+            "AsDateTimeAttribute",
+            "AsDateAttribute",
+            "AsTimeAttribute"
         };
 
         public static string CastMethodStart { get; } = "To";

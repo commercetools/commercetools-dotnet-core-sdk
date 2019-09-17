@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.Predicates;
+ using commercetools.Sdk.Domain.Categories;
+ using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.HttpApi.IntegrationTests.Products;
 using Xunit.Abstractions;
@@ -52,7 +53,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             productDiscountDraft.ValidFrom = DateTime.Today;
             productDiscountDraft.ValidUntil = DateTime.Today.AddMonths(1);
             productDiscountDraft.IsActive = true;
-            productDiscountDraft.SetPredicate(product => product.ProductId() == productId);
+            productDiscountDraft.SetPredicate(product => product.ProductId() == productId && product.VariantId() == 1);
 
             return productDiscountDraft;
         }

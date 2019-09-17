@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using commercetools.Sdk.Linq.Filter.Visitors;
 
 namespace commercetools.Sdk.Linq.Filter.Converters

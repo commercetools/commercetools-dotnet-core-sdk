@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using commercetools.Sdk.Domain.Categories.UpdateActions;
  using commercetools.Sdk.Domain.Common;
+ using commercetools.Sdk.HttpApi.Domain.Exceptions;
  using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
@@ -28,7 +29,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
             this.CategoriesToDelete.Reverse();
             foreach (Category category in this.CategoriesToDelete)
             {
-                var deletedType = this.TryDeleteResource(category).Result;
+                try
+                {
+                    var deletedType = this.TryDeleteResource(category).Result;
+                } catch (NotFoundException) {}
             }
 
             this.typeFixture.Dispose();

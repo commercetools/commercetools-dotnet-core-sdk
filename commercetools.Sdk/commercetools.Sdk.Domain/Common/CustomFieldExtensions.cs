@@ -2,7 +2,6 @@
 
 namespace commercetools.Sdk.Domain
 {
-    // TODO Add other custom field types
     public static class CustomFieldExtensions
     {
         public static EnumValue ToEnum(this object o)
