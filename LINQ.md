@@ -212,7 +212,8 @@ queryCommand.Where(p =>
 // for MoneyType with centAmount within a specific range (currencyCode is required)
 ```c#
 
-// predicate: variants(attributes(name="att" and value(centAmount > 99 and centAmount < 101 and currencyCode="EUR")))
+// predicate: variants(attributes(name="att" and value(centAmount > 99 and 
+//                      centAmount < 101 and currencyCode="EUR")))
 queryCommand.Where(p => 
     p.Variants.Any(variant => 
         variant.Attributes.Any(a => 
@@ -288,7 +289,8 @@ queryCommand.Where(p =>
 var dateTime1 = DateTime.Parse("2019-06-04T12:27:55.344Z");
 var dateTime2 = DateTime.Parse("2020-11-09T11:27:55.344Z");
 
-// predicate: variants(attributes(name="c-DateTime" and value > "2019-06-04T12:27:55.344Z" and value < "2020-11-09T11:27:55.344Z"))
+// predicate: variants(attributes(name="c-DateTime" and 
+//      value > "2019-06-04T12:27:55.344Z" and value < "2020-11-09T11:27:55.344Z"))
 queryCommand.Where(p => 
     p.Variants.Any(variant => 
         variant.Attributes.Any(a => 
@@ -299,7 +301,8 @@ queryCommand.Where(p =>
     );
 
 
-// predicate: variants(attributes(name="c-Date" and value > "2019-06-04" and value < "2020-11-09"))
+// predicate: variants(attributes(name="c-Date" and 
+//                              value > "2019-06-04" and value < "2020-11-09"))
 queryCommand.Where(p => 
     p.Variants.Any(variant => 
         variant.Attributes.Any(a => 
@@ -394,7 +397,8 @@ productDiscountDraft.SetPredicate(p =>
         && a.ToSetEnumAttribute().ContainsAll("black", "white"))
     );
 
-// match all product variants with the given sku, the boolean attribute available set to true and the number attribute weight less than 100
+// match all product variants with the given sku, the boolean attribute available set to true and 
+// the number attribute weight less than 100
 // predicate: sku = "AB-12" and attributes.available = true and attributes.weight < 100
 productDiscountDraft.SetPredicate(p => 
     p.Sku() == "AB-12" 
@@ -405,7 +409,8 @@ productDiscountDraft.SetPredicate(p =>
                         a.Name == "weight" && a.ToNumberAttribute().Value < 100)
     );
 
-// match all products that are in the given category or in a category that is a descendant of the given category
+// match all products that are in the given category or in a category that is a descendant of 
+// the given category
 // predicate: categoriesWithAncestors.id contains "abcd9a23-14e3-40d0-aee2-3e612fcbefgh"
 productDiscountDraft.SetPredicate(p => 
           p.CategoriesWithAncestorsId().Contains("abcd9a23-14e3-40d0-aee2-3e612fcbefgh"));
@@ -469,7 +474,8 @@ customLineItemsCartDiscountTarget.Predicate = "true";
 //or
 customLineItemsCartDiscountTarget.SetPredicate(c => true);
 
-// matches custom line items with price of individual items bigger than 10.50 EUR only if the price is a net price
+// matches custom line items with price of individual items bigger than 10.51 EUR 
+// only if the price is a net price
 // predicate: money > "10.51 EUR" and taxRate.includedInPrice = false
 customLineItemsCartDiscountTarget.SetPredicate(c => 
         c.Money > Money.FromDecimal("EUR", 10.51M, MidpointRounding.ToEven).moneyString() 
@@ -521,7 +527,8 @@ var money2 = Money.FromDecimal("EUR", 10.50m);
 var totalMoney = Money.FromDecimal("EUR", 800);
 var startDate = DateTime.Parse("2019-09-11", CultureInfo.InvariantCulture);
             
-// matches a cart with total line item cost bigger or equal to 10 USD (which excludes other costs, like shipping)
+// matches a cart with total line item cost bigger or equal to 10 USD 
+// (which excludes other costs, like shipping)
 // predicate: lineItemTotal(true) > "10 USD"
 cartDiscountDraft.SetCartPredicate(c => c.LineItemTotal(true) > money.moneyString());
 
@@ -532,12 +539,14 @@ cartDiscountDraft.SetCartPredicate(c =>
                 a.Name == "size" && a.ToTextAttribute().Value.In("xxl", "xl"))) == 2);
 
 // matches a cart by customer information
-// predicate: customer.email = "john@example.com" and customer.customerGroup.id = "f6a19a23-14e3-40d0-aee2-3e612fcb1bc7"
+// predicate: customer.email = "john@example.com" and 
+// customer.customerGroup.id = "f6a19a23-14e3-40d0-aee2-3e612fcb1bc7"
 cartDiscountDraft.SetCartPredicate(c => 
         c.Customer().Email == "john@example.com" 
         && c.Customer().CustomerGroup.Id == "f6a19a23-14e3-40d0-aee2-3e612fcb1bc7");
 
-// matches a cart with a minimum total price and at least one lineItem that satisfies a price, a productType, a size attribute or a specific product
+// matches a cart with a minimum total price and at least one lineItem that satisfies a price, 
+// a productType, a size attribute or a specific product
 // predicate: totalPrice > "800 EUR" and lineItemCount(price > "10.5 EUR" 
 //          and productType.id = "f6a19a23-14e3-40d0-aee2-3e612fcb1bc7" 
 //          and attributes.size in ("xl", "xxl") 
