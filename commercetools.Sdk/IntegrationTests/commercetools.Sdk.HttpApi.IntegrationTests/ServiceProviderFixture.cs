@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using commercetools.Sdk.HttpApi.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,8 +23,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 AddJsonFile("appsettings.test.json").
                 AddJsonFile("appsettings.test.Development.json", true).
                 // https://www.jerriepelser.com/blog/aspnet-core-no-more-worries-about-checking-in-secrets/
-                AddEnvironmentVariables().
                 AddUserSecrets<ServiceProviderFixture>().
+                AddEnvironmentVariables("CTP_").
                 Build();
 
             var containerType = Enum.Parse<ContainerType>(Configuration.GetValue("Container", "BuiltIn"));

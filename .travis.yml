@@ -10,23 +10,6 @@ matrix:
     - cd commercetools.Sdk
     install:
     - dotnet restore
-    - |
-      dotnet user-secrets set "Client:ClientId" ${CTP_CLIENT_ID} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "Client:ClientSecret" ${CTP_CLIENT_SECRET} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "Client:Scope" ${CTP_CLIENT_SCOPE} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "Client:ProjectKey" ${CTP_PROJECTKEY} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClient:ClientId" ${CTP_CLIENT_ID} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClient:ClientSecret" ${CTP_CLIENT_SECRET} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClient:Scope" ${CTP_CLIENT_SCOPE} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClient:ProjectKey" ${CTP_PROJECTKEY} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithSmallerScope:ClientId" ${CTP_CLIENT_ID} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithSmallerScope:ClientSecret" ${CTP_CLIENT_SECRET} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithSmallerScope:Scope" ${CTP_CLIENT_SCOPE} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithSmallerScope:ProjectKey" ${CTP_PROJECTKEY} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithAnonymousScope:ClientId" ${CTP_CLIENT_ID} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithAnonymousScope:ClientSecret" ${CTP_CLIENT_SECRET} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithAnonymousScope:Scope" ${CTP_CLIENT_SCOPE} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
-      dotnet user-secrets set "TokenClientWithAnonymousScope:ProjectKey" ${CTP_PROJECTKEY} --project IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests > /dev/null 2>&1
     script:
     - dotnet build -c Release
     - |
