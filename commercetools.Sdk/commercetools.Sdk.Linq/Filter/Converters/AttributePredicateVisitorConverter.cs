@@ -60,7 +60,7 @@ namespace commercetools.Sdk.Linq.Filter.Converters
         {
             if (inner is ConstantPredicateVisitor constantVisitor)
             {
-                ConstantPredicateVisitor constantWithoutQuotes = new ConstantPredicateVisitor(constantVisitor.Constant.RemoveQuotes().WrapInBackticksIfNeeded(), true);
+                ConstantPredicateVisitor constantWithoutQuotes = new ConstantPredicateVisitor(constantVisitor.Constant.RemoveQuotes(), true);
                 return constantWithoutQuotes;
             }
 
