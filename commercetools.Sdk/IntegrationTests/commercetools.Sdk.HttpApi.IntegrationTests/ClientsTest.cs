@@ -22,8 +22,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 AddJsonFile("appsettings.test.json").
                 AddJsonFile("appsettings.test.Development.json", true).
                 // https://www.jerriepelser.com/blog/aspnet-core-no-more-worries-about-checking-in-secrets/
-                AddEnvironmentVariables().
                 AddUserSecrets<ServiceProviderFixture>().
+                AddEnvironmentVariables("CTP_").
                 Build();
 
             services.UseCommercetools(configuration,  new Dictionary<string, TokenFlow>()
@@ -53,8 +53,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 AddJsonFile("appsettings.test.json").
                 AddJsonFile("appsettings.test.Development.json", true).
                 // https://www.jerriepelser.com/blog/aspnet-core-no-more-worries-about-checking-in-secrets/
-                AddEnvironmentVariables().
                 AddUserSecrets<ServiceProviderFixture>().
+                AddEnvironmentVariables("CTP_").
                 Build();
 
             services.UseCommercetools(configuration,  new Dictionary<string, TokenFlow>()
@@ -85,8 +85,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 AddJsonFile("appsettings.test.json").
                 AddJsonFile("appsettings.test.Development.json", true).
                 // https://www.jerriepelser.com/blog/aspnet-core-no-more-worries-about-checking-in-secrets/
-                AddEnvironmentVariables().
                 AddUserSecrets<ServiceProviderFixture>().
+                AddEnvironmentVariables("CTP_").
                 Build();
 
             services.UseCommercetools(configuration, "Client");
@@ -125,8 +125,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                 AddJsonFile("appsettings.test.json").
                 AddJsonFile("appsettings.test.Development.json", true).
                 // https://www.jerriepelser.com/blog/aspnet-core-no-more-worries-about-checking-in-secrets/
-                AddEnvironmentVariables().
                 AddUserSecrets<ServiceProviderFixture>().
+                AddEnvironmentVariables("CTP_").
                 Build();
 
             services.UseCommercetools(configuration, "Client");

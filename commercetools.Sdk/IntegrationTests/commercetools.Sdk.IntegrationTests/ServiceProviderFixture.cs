@@ -25,8 +25,8 @@ namespace commercetools.Sdk.IntegrationTests
                 AddJsonFile("appsettings.test.json").
                 AddJsonFile("appsettings.test.Development.json", true).
                 // https://www.jerriepelser.com/blog/aspnet-core-no-more-worries-about-checking-in-secrets/
-                AddEnvironmentVariables().
                 AddUserSecrets<ServiceProviderFixture>().
+                AddEnvironmentVariables("CTP_").
                 Build();
 
             var containerType = Enum.Parse<ContainerType>(Configuration.GetValue("Container", "BuiltIn"));
