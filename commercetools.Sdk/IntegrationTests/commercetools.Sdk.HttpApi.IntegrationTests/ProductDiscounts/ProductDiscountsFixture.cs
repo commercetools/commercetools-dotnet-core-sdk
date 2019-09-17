@@ -53,10 +53,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             productDiscountDraft.ValidFrom = DateTime.Today;
             productDiscountDraft.ValidUntil = DateTime.Today.AddMonths(1);
             productDiscountDraft.IsActive = true;
-            //productDiscountDraft.SetPredicate(product => product.ProductId() == productId && product.VariantId() == 1);
-            var category = new Category {Id = "963cbb75-c604-4ad2-841c-890b792224ee"};
-            productDiscountDraft.SetPredicate(p => p.CategoriesId().IsNotIn(category.Id.valueOf()));
-            
+            productDiscountDraft.SetPredicate(product => product.ProductId() == productId && product.VariantId() == 1);
 
             return productDiscountDraft;
         }
