@@ -244,7 +244,7 @@ services.UseCommercetools(this.configuration, "Client", TokenFlow.AnonymousSessi
 services.AddSingleton<IAnonymousCredentialsStoreManager, AnonymousCredentialsStoreManager>();
 ```
 
-## Predicates
+## [Predicates](PredicateExpressions.md)
 
 There are numerous commands and objects that accept predicates. In order to facilitate the developers, allow auto-completion and reduces the amount of errors, these predicates can be defined as lambda expressions. In case a predicate definition is not supported (that is, a NotSupportedException is thrown), a manually constructed string can be passed as well. The following example shows how a query predicate can be created using lambda expressions.
 
@@ -267,7 +267,7 @@ Setting the "where" query string parameter as a string can be done in the follow
 queryCommand.Where = "key = \"c14\"";
 ```
     
-> Note! For more examples of predicates using lambda expressions check [this](linq.md) or take a look at the unit tests.
+> Note! For more examples of predicates using lambda expressions check [this](PredicateExpressions.md) or take a look at the unit tests.
 
 There are numerous extension methods created for domain specific operations. They can also be found by importing the commercetools.Sdk.Domain.Predicates namespace. The extension WithinCircle is one of them, for example: 
 
