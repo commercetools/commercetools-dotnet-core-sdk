@@ -64,5 +64,18 @@ namespace commercetools.Sdk.Domain.Predicates
         {
             throw new NotImplementedException();
         }
+        
+        public static TimeSpan AsTimeAttribute(this TimeSpan source)
+        {
+            throw new NotImplementedException();
+        }
+        public static DateTime AsDateTimeAttribute(this DateTime source)
+        {
+            throw new NotImplementedException();
+        }
+        public static DateTime AsDateAttribute(this DateTime source)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

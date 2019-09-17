@@ -43,6 +43,13 @@ namespace commercetools.Sdk.Linq
             { ExpressionType.OrElse, Or }
         };
 
+        public static IEnumerable<string> DateTimeCustomMethods { get; } = new List<string>()
+        {
+            "AsDateTimeAttribute",
+            "AsDateAttribute",
+            "AsTimeAttribute"
+        };
+
         public static string CastMethodStart { get; } = "To";
 
         public static string GetOperator(ExpressionType expressionType, Dictionary<ExpressionType, string> mapping)
