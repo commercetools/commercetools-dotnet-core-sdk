@@ -22,7 +22,7 @@ namespace commercetools.Sdk.Serialization
             }
             else
             {
-                if (token.Type == JTokenType.Array && !token.HasValues)
+                if (IsEmptyArray(token))
                 {
                     // If the array contains no elements
                     return typeof(object);
@@ -38,6 +38,15 @@ namespace commercetools.Sdk.Serialization
             if (valueProperty != null)
             {
                 return valueProperty.HasValues && valueProperty.Type == JTokenType.Array;
+            }
+            return false;
+        }
+
+        private bool IsEmptyArray(JToken valueProperty)
+        {
+            if (valueProperty != null)
+            {
+                return valueProperty.Type == JTokenType.Array && !valueProperty.HasValues;
             }
             return false;
         }
