@@ -22,6 +22,12 @@ namespace commercetools.Sdk.Serialization
             }
             else
             {
+                if (token.Type == JTokenType.Array && !token.HasValues)
+                {
+                    // If the array contains no elements
+                    return typeof(object);
+                }
+
                 type = base.GetTypeForToken(token);
             }
             return type;
