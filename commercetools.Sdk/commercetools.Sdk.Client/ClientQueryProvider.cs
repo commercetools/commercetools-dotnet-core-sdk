@@ -15,11 +15,17 @@ namespace commercetools.Sdk.Client
         private readonly IClient client;
 
         private IList<T> result = new List<T>();
+        private IEnumerator<T> enumerator;
 
-        public ClientQueryProvider(IClient client, QueryCommand<T> command)
+        public ClientQueryProvider(IClient client, QueryCommand<T> command, bool queryAll)
         {
             this.client = client;
             this.Command = command;
+
+            if (queryAll)
+            {
+                enumerator = new ClientQueryAllEnumerator<T>(client, command);
+            }
         }
 
         public QueryCommand<T> Command { get; }
@@ -128,6 +134,12 @@ namespace commercetools.Sdk.Client
 
         public TResult Execute<TResult>(Expression expression)
         {
+            if (enumerator != null)
+            {
+                enumerator.Reset();
+                return (TResult)enumerator;
+            }
+
             if (this.client == null)
             {
                 throw new FieldAccessException("Client cannot be null");

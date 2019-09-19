@@ -16,6 +16,11 @@ namespace commercetools.Sdk.Client
             return new ClientQueryableCollection<T>(client, new QueryCommand<T>());
         }
 
+        public static ClientQueryableCollection<T> QueryAll<T>(this IClient client)
+        {
+            return new ClientQueryableCollection<T>(client, new QueryCommand<T>(), true);
+        }
+
         public static ClientQueryableCollection<ProductProjection> SearchProducts(this IClient client)
         {
             return new ClientQueryableCollection<ProductProjection>(client, new SearchProductProjectionsCommand());
