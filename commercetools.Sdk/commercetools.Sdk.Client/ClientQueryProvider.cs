@@ -64,7 +64,16 @@ namespace commercetools.Sdk.Client
                     {
                         if (cmd != null && cmd.QueryParameters is IPageable queryParameters)
                         {
-                            queryParameters.Limit = (int)limit.Value;
+                            // Set limit to lowest value
+                            // Case: query.Take(5).Take(10) should still yield only 5 items
+                            if (queryParameters.Limit == null)
+                            {
+                                queryParameters.Limit = (int)limit.Value;
+                            }
+                            else
+                            {
+                                queryParameters.Limit = Math.Min(queryParameters.Limit.Value, (int)limit.Value);
+                            }
                         }
                     }
 
@@ -74,7 +83,26 @@ namespace commercetools.Sdk.Client
                     {
                         if (cmd != null && cmd.QueryParameters is IPageable queryParameters)
                         {
-                            queryParameters.Offset = (int)offset.Value;
+                            // Sum all skips together
+                            // Case: query.Skip(5).Skip(10) should result in an offset of 15
+                            if (queryParameters.Offset == null)
+                            {
+                                queryParameters.Offset = (int)offset.Value;
+                            }
+                            else
+                            {
+                                queryParameters.Offset += (int)offset.Value;
+                            }
+
+                            // Case: query.Take(3).Skip(2) should yield only 1 item
+                            // Case: query.Take(2).Skip(1).Take(2) should yield 0 items
+                            // Case: query.Skip(3).Take(1).Skip(1) should yield 0 items
+                            // This case is only of relevance if at least one Take operation was done beforehand
+                            if (queryParameters.Limit != null)
+                            {
+                                queryParameters.Limit -= (int)offset.Value;
+                                queryParameters.Limit = Math.Max(0, queryParameters.Limit.Value);
+                            }
                         }
                     }
 
