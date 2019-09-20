@@ -207,16 +207,7 @@ namespace commercetools.Sdk.Client
         {
             if (command.SearchParameters != null && command.SearchParameters is IPageable pageableParams)
             {
-                // Set limit to lowest value
-                // Case: query.Take(5).Take(10) should still yield only 5 items
-                if (pageableParams.Limit == null)
-                {
-                    pageableParams.Limit = limit;
-                }
-                else
-                {
-                    pageableParams.Limit = Math.Min(pageableParams.Limit.Value, limit);
-                }
+                pageableParams.Limit = limit;
             }
 
             return command;
@@ -226,26 +217,7 @@ namespace commercetools.Sdk.Client
         {
             if (command.SearchParameters != null && command.SearchParameters is IPageable pageableParams)
             {
-                // Sum all skips together
-                // Case: query.Skip(5).Skip(10) should result in an offset of 15
-                if (pageableParams.Offset == null)
-                {
-                    pageableParams.Offset = offset;
-                }
-                else
-                {
-                    pageableParams.Offset += offset;
-                }
-
-                // Case: query.Take(3).Skip(2) should yield only 1 item
-                // Case: query.Take(2).Skip(1).Take(2) should yield 0 items
-                // Case: query.Skip(3).Take(1).Skip(1) should yield 0 items
-                // This case is only of relevance if at least one Take operation was done beforehand
-                if (pageableParams.Limit != null)
-                {
-                    pageableParams.Limit -= offset;
-                    pageableParams.Limit = Math.Max(0, pageableParams.Limit.Value);
-                }
+                pageableParams.Offset = offset;
             }
 
             return command;

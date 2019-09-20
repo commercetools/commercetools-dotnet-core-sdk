@@ -92,14 +92,48 @@ namespace commercetools.Sdk.Client
                 case "Take":
                     if (mc.Arguments[1] is ConstantExpression limit)
                     {
-                        cmd.Limit((int)limit.Value);
+                        if (cmd.SearchParameters != null && cmd.SearchParameters is ProductProjectionSearchParameters parameters)
+                        {
+                            // Set limit to lowest value
+                            // Case: query.Take(5).Take(10) should still yield only 5 items
+                            if (parameters.Limit == null)
+                            {
+                                parameters.Limit = (int)limit.Value;
+                            }
+                            else
+                            {
+                                parameters.Limit = Math.Min(parameters.Limit.Value, (int)limit.Value);
+                            }
+                        }
                     }
 
                     break;
                 case "Skip":
                     if (mc.Arguments[1] is ConstantExpression offset)
                     {
-                        cmd.Offset((int)offset.Value);
+                        if (cmd.SearchParameters != null && cmd.SearchParameters is ProductProjectionSearchParameters parameters)
+                        {
+                            // Sum all skips together
+                            // Case: query.Skip(5).Skip(10) should result in an offset of 15
+                            if (parameters.Offset == null)
+                            {
+                                parameters.Offset = (int)offset.Value;
+                            }
+                            else
+                            {
+                                parameters.Offset += (int)offset.Value;
+                            }
+
+                            // Case: query.Take(3).Skip(2) should yield only 1 item
+                            // Case: query.Take(2).Skip(1).Take(2) should yield 0 items
+                            // Case: query.Skip(3).Take(1).Skip(1) should yield 0 items
+                            // This case is only of relevance if at least one Take operation was done beforehand
+                            if (parameters.Limit != null)
+                            {
+                                parameters.Limit -= (int)offset.Value;
+                                parameters.Limit = Math.Max(0, parameters.Limit.Value);
+                            }
+                        }
                     }
 
                     break;
