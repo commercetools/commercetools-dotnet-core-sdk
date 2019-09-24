@@ -106,13 +106,14 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductDiscounts
             {
                 Staged = true,
                 Price = masterVariantPrice,
-                ProductId = new Guid(product.Id),
+                ProductId = product.Id,
                 VariantId = masterVariant.Id
             };
-            ProductDiscount matchingProductDiscount = commerceToolsClient
+            var matchingProductDiscount = commerceToolsClient
                 .ExecuteAsync(new GetMatchingProductDiscountCommand(matchingProductDiscountParams))
                 .Result;
             Assert.NotNull(matchingProductDiscount);
+            Assert.Equal(productDiscount.Id, matchingProductDiscount.Id);
         }
 
 
