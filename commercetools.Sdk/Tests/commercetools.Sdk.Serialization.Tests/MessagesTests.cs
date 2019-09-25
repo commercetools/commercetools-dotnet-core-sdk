@@ -155,5 +155,27 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.IsType<MessageSubscriptionPayload<Category>>(payloads[0]);
             Assert.IsType<MessageSubscriptionPayload<Customer>>(payloads[1]);
         }
+        
+        [Fact]
+        public void DeserializeChangeSubscription()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+
+            string serialized1 = @"
+                {
+                    ""ResourceTypeId"": ""cart-discount""
+                }
+            ";
+            string serialized2 = @"
+                {
+                    ""ResourceTypeId"": ""new-type""
+                }
+            ";
+
+            var changeSubscription1 = serializerService.Deserialize<ChangeSubscription>(serialized1);
+            var changeSubscription2 = serializerService.Deserialize<ChangeSubscription>(serialized2);
+            Assert.Equal(SubscriptionResourceTypeId.CartDiscount, changeSubscription1.GetResourceTypeIdAsEnum());
+            Assert.Equal(SubscriptionResourceTypeId.Unknown, changeSubscription2.GetResourceTypeIdAsEnum());
+        }
     }
 }
