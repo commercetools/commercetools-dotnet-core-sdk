@@ -15,6 +15,8 @@ namespace commercetools.Sdk.Domain.Subscriptions
 
         public List<ChangeSubscription> Changes { get; set; }
 
+        public Format Format { get; set; }
+        
         public SubscriptionHealthStatus Status { get; set; }
     }
 }

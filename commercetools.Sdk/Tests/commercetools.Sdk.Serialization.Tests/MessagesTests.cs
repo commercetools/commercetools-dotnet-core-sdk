@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.APIExtensions;
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Common;
@@ -176,6 +177,29 @@ namespace commercetools.Sdk.Serialization.Tests
             var changeSubscription2 = serializerService.Deserialize<ChangeSubscription>(serialized2);
             Assert.Equal(SubscriptionResourceTypeId.CartDiscount, changeSubscription1.GetResourceTypeIdAsEnum());
             Assert.Equal(SubscriptionResourceTypeId.Unknown, changeSubscription2.GetResourceTypeIdAsEnum());
+        }
+        
+        [Fact]
+        public void DeserializeOfSubscriptions()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string serialized = File.ReadAllText("Resources/Messages/Subscriptions.json");
+            var subscriptions = serializerService.Deserialize<List<Subscription>>(serialized);
+            Assert.Equal(2,subscriptions.Count);
+            Assert.IsType<SqsDestination>(subscriptions[0].Destination);
+            Assert.IsType<SnsDestination>(subscriptions[1].Destination);
+            var subscription1 = subscriptions[0];
+            var subscription2 = subscriptions[1];
+            Assert.IsType<PlatformFormat>(subscription1.Format);
+            var subscription2Format = subscription2.Format as CloudEventsFormat;
+            Assert.NotNull(subscription2Format);
+            Assert.Equal("0.1", subscription2Format.CloudEventsVersion);
+            Assert.Equal(SubscriptionHealthStatus.Healthy, subscription1.Status);
+            Assert.Equal(SubscriptionHealthStatus.TemporaryError, subscription2.Status);
+            Assert.Single(subscription1.Messages);
+            Assert.Single(subscription2.Changes);
+            Assert.Equal(SubscriptionResourceTypeId.Product, subscription1.Messages[0].GetResourceTypeIdAsEnum());
+            Assert.Equal(SubscriptionResourceTypeId.Unknown, subscription2.Changes[0].GetResourceTypeIdAsEnum());
         }
     }
 }
