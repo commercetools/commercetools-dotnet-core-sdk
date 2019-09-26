@@ -7,7 +7,7 @@ namespace commercetools.Sdk.Domain.ProductDiscounts
 {
     public class GetMatchingProductDiscountParameters : IGetMatchingParameters<ProductDiscount>
     {
-        public Guid? ProductId { get; set; }
+        public string ProductId { get; set; }
 
         public int? VariantId { get; set; }
 

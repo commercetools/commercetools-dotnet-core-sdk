@@ -11,7 +11,7 @@ namespace commercetools.Sdk.Serialization
         private readonly IDecoratorTypeRetriever<Message> decoratorTypeRetriever;
         public string PropertyName => "type";
 
-        public Type DefaultType => typeof(Message);
+        public Type DefaultType => typeof(GeneralMessage);
 
 
         public MessageConverter(IDecoratorTypeRetriever<Message> decoratorTypeRetriever)
@@ -38,14 +38,7 @@ namespace commercetools.Sdk.Serialization
 
             if (propertyType == null)
             {
-                if (this.DefaultType != null)
-                {
-                    propertyType = this.DefaultType;
-                }
-                else
-                {
-                    throw new JsonSerializationException();
-                }
+                propertyType = this.DefaultType;
             }
 
             return jsonObject.ToObject(propertyType, serializer);

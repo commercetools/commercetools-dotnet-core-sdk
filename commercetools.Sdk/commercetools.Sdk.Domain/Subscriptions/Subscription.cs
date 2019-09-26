@@ -4,6 +4,7 @@ using commercetools.Sdk.Domain.Common;
 namespace commercetools.Sdk.Domain.Subscriptions
 {
     [Endpoint("subscriptions")]
+    [ResourceType(ReferenceTypeId.Subscription)]
     public class Subscription : Resource<Subscription>
     {
         public string Key { get; set; }
@@ -14,6 +15,8 @@ namespace commercetools.Sdk.Domain.Subscriptions
 
         public List<ChangeSubscription> Changes { get; set; }
 
+        public Format Format { get; set; }
+        
         public SubscriptionHealthStatus Status { get; set; }
     }
 }

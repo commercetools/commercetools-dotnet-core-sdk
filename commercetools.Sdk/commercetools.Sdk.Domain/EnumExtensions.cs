@@ -30,5 +30,19 @@ namespace System
 
             throw new ArgumentException();
         }
+        
+        public static T GetEnum<T>(this string value) where T : Enum
+        {
+            string[] names = Enum.GetNames(typeof(T));
+            foreach (string name in names)
+            {
+                if (GetDescription((Enum)Enum.Parse(typeof(T), name)).Equals(value))
+                {
+                    return (T)Enum.Parse(typeof(T), name);
+                }
+            }
+
+            throw new ArgumentException();
+        }
     }
 }

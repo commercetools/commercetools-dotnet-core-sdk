@@ -1,10 +1,22 @@
+using System;
 using System.Collections.Generic;
 
 namespace commercetools.Sdk.Domain.Subscriptions
 {
-    public class MessageSubscription
+    public class MessageSubscription : IResourceTypeIdAsEnum<SubscriptionResourceTypeId>
     {
-        public ResourceTypeId ResourceTypeId { get; set; }
+        public string ResourceTypeId { get; set; }
         public List<string> Types { get; set; }
+        public SubscriptionResourceTypeId GetResourceTypeIdAsEnum()
+        {
+            try
+            {
+                return ResourceTypeId.GetEnum<SubscriptionResourceTypeId>();
+            }
+            catch (ArgumentException)
+            {
+                return SubscriptionResourceTypeId.Unknown;
+            }
+        }
     }
 }

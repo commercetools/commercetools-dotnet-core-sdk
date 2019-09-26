@@ -1,12 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.Categories;
-using commercetools.Sdk.Domain.Predicates;
-using commercetools.Sdk.Registration;
 using Newtonsoft.Json.Linq;
 using Type = System.Type;
 
