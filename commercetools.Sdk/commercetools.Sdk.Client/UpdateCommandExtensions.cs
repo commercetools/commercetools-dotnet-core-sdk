@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Domain.Query;
 
@@ -20,6 +22,26 @@ namespace commercetools.Sdk.Client
             command.Expand.Add(expression);
 
             return command;
+        }
+
+        public static UpdateByIdCommand<T> Update<T>(this T resource, Func<List<UpdateAction<T>>, List<UpdateAction<T>>> updateBuilder)
+            where T : Resource<T>, IVersioned<T>
+        {
+            var actions = updateBuilder(new List<UpdateAction<T>>());
+            return new UpdateByIdCommand<T>(resource, actions);
+        }
+
+        public static UpdateByKeyCommand<T> UpdateByKey<T>(this T resource, Func<List<UpdateAction<T>>, List<UpdateAction<T>>> updateBuilder)
+            where T : Resource<T>, IKeyReferencable<T>, IVersioned<T>
+        {
+            var actions = updateBuilder(new List<UpdateAction<T>>());
+            return new UpdateByKeyCommand<T>(resource.Key, resource.Version, actions);
+        }
+
+        public static List<UpdateAction<T>> AddUpdate<T>(this List<UpdateAction<T>> updateActions, UpdateAction<T> updateAction) where T: Resource<T>
+        {
+            updateActions.Add(updateAction);
+            return updateActions;
         }
     }
 }

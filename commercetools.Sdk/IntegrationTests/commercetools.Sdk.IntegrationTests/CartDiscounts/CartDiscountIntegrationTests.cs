@@ -115,12 +115,11 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             var newKey = $"UpdateCartDiscountSetKey-{TestingUtility.RandomString()}";
             await WithUpdateableCartDiscount(client, async cartDiscount =>
             {
-                var updateActions = new List<UpdateAction<CartDiscount>>();
-                var setKeyAction = new SetKeyUpdateAction() { Key = newKey };
-                updateActions.Add(setKeyAction);
-
                 var updatedCartDiscount = await client
-                    .ExecuteAsync(new UpdateByIdCommand<CartDiscount>(cartDiscount, updateActions));
+                    .ExecuteAsync(cartDiscount.Update(
+                            actions => actions.AddUpdate(new SetKeyUpdateAction() { Key = newKey })
+                        )
+                    );
 
                 Assert.NotEqual(cartDiscount.Version, updatedCartDiscount.Version);
                 Assert.Equal(newKey, updatedCartDiscount.Key);
@@ -135,15 +134,11 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
 
             await WithUpdateableCartDiscount(client, async cartDiscount =>
             {
-                var updateActions = new List<UpdateAction<CartDiscount>>();
-                var changeValueAction = new ChangeValueUpdateAction
-                {
-                    Value = newAbsoluteValue
-                };
-                updateActions.Add(changeValueAction);
-
                 var updatedCartDiscount = await client
-                    .ExecuteAsync(new UpdateByIdCommand<CartDiscount>(cartDiscount, updateActions));
+                    .ExecuteAsync(cartDiscount.UpdateByKey(actions =>
+                            actions.AddUpdate(new ChangeValueUpdateAction { Value = newAbsoluteValue })
+                        )
+                    );
 
                 var retrievedCartDiscountAmount =
                     ((AbsoluteCartDiscountValue) updatedCartDiscount.Value).Money[0].CentAmount;
