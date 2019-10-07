@@ -1,7 +1,7 @@
 using System;
 using System.Linq.Expressions;
 using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.ProductProjections;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Query;
 
 namespace commercetools.Sdk.Client
@@ -20,6 +20,18 @@ namespace commercetools.Sdk.Client
             command.Expand.Add(expression);
 
             return command;
+        }
+
+        public static GetByIdCommand<T> GetById<T>(this IIdentifiable<T> resource)
+            where T : Resource<T>
+        {
+            return new GetByIdCommand<T>(resource);
+        }
+
+        public static GetByKeyCommand<T> GetByKey<T>(this IKeyReferencable<T> resource)
+            where T : Resource<T>
+        {
+            return new GetByKeyCommand<T>(resource.Key);
         }
     }
 }

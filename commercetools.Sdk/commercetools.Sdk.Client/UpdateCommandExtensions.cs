@@ -24,8 +24,8 @@ namespace commercetools.Sdk.Client
             return command;
         }
 
-        public static UpdateByIdCommand<T> Update<T>(this T resource, Func<List<UpdateAction<T>>, List<UpdateAction<T>>> updateBuilder)
-            where T : Resource<T>, IVersioned<T>
+        public static UpdateByIdCommand<T> UpdateById<T>(this IVersioned<T> resource, Func<List<UpdateAction<T>>, List<UpdateAction<T>>> updateBuilder)
+            where T : Resource<T>
         {
             var actions = updateBuilder(new List<UpdateAction<T>>());
             return new UpdateByIdCommand<T>(resource, actions);

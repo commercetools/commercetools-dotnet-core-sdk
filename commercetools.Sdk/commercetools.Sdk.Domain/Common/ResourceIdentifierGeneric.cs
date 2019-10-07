@@ -5,7 +5,7 @@ using commercetools.Sdk.Domain.Common;
 
 namespace commercetools.Sdk.Domain
 {
-    public class ResourceIdentifier<T>: ResourceIdentifier, IReference<T>
+    public class ResourceIdentifier<T>: ResourceIdentifier, IReference<T>, IKeyReferencable<T>
     {
         public new ReferenceTypeId TypeId => this.GetResourceType();
 

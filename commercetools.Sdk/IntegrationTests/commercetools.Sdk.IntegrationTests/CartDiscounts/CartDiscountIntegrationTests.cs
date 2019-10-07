@@ -42,7 +42,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                 async cartDiscount =>
                 {
                     var retrievedCartDiscount = await client
-                        .ExecuteAsync(new GetByIdCommand<CartDiscount>(cartDiscount.Id));
+                        .ExecuteAsync(cartDiscount.ToIdResourceIdentifier().GetById());
                     Assert.Equal(key, retrievedCartDiscount.Key);
                 });
         }
@@ -56,7 +56,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                 async cartDiscount =>
                 {
                     var retrievedCartDiscount = await client
-                        .ExecuteAsync(new GetByKeyCommand<CartDiscount>(cartDiscount.Key));
+                        .ExecuteAsync(cartDiscount.ToKeyResourceIdentifier().GetByKey());
                     Assert.Equal(key, retrievedCartDiscount.Key);
                 });
         }
@@ -85,7 +85,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                 client, cartDiscountDraft => DefaultCartDiscountDraftWithKey(cartDiscountDraft, key),
                 async cartDiscount =>
                 {
-                    await client.ExecuteAsync(new DeleteByIdCommand<CartDiscount>(cartDiscount));
+                    await client.ExecuteAsync(cartDiscount.DeleteById());
                     await Assert.ThrowsAsync<NotFoundException>(
                         () => client.ExecuteAsync(new GetByIdCommand<CartDiscount>(cartDiscount))
                     );
@@ -100,7 +100,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                 client, cartDiscountDraft => DefaultCartDiscountDraftWithKey(cartDiscountDraft, key),
                 async cartDiscount =>
                 {
-                    await client.ExecuteAsync(new DeleteByKeyCommand<CartDiscount>(cartDiscount.Key, cartDiscount.Version));
+                    await client.ExecuteAsync(cartDiscount.DeleteByKey());
                     await Assert.ThrowsAsync<NotFoundException>(
                         () => client.ExecuteAsync(new GetByIdCommand<CartDiscount>(cartDiscount))
                     );
@@ -116,7 +116,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             await WithUpdateableCartDiscount(client, async cartDiscount =>
             {
                 var updatedCartDiscount = await client
-                    .ExecuteAsync(cartDiscount.Update(
+                    .ExecuteAsync(cartDiscount.UpdateById(
                             actions => actions.AddUpdate(new SetKeyUpdateAction() { Key = newKey })
                         )
                     );

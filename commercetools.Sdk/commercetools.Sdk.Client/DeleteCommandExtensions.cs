@@ -1,7 +1,7 @@
 using System;
 using System.Linq.Expressions;
 using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.ProductProjections;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Query;
 
 namespace commercetools.Sdk.Client
@@ -20,6 +20,18 @@ namespace commercetools.Sdk.Client
             command.Expand.Add(expression);
 
             return command;
+        }
+
+        public static DeleteCommand<T> DeleteById<T>(this IVersioned<T> resource)
+            where T : Resource<T>
+        {
+            return new DeleteByIdCommand<T>(resource);
+        }
+
+        public static DeleteCommand<T> DeleteByKey<T>(this T resource)
+            where T : Resource<T>, IVersioned<T>, IKeyReferencable<T>
+        {
+            return new DeleteByKeyCommand<T>(resource.Key, resource.Version);
         }
     }
 }
