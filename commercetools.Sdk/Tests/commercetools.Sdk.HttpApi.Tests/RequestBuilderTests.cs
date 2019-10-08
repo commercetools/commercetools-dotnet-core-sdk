@@ -16,6 +16,7 @@ using commercetools.Sdk.Serialization;
 using Xunit;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Channels;
+using commercetools.Sdk.Domain.Messages;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
@@ -160,7 +161,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(c);
             Assert.Equal("categories?where=id%20%3D%20%22abc%22&where=key%20%3D%20%22def%22&withTotal=false", httpRequestMessage.RequestUri.ToString());
         }
-        
+
         [Fact]
         public async void SearchProductProjectionsAndFilterByScopedPriceInChannel()
         {
@@ -174,6 +175,20 @@ namespace commercetools.Sdk.HttpApi.Tests
             var httpApiCommand = httpApiCommandFactory.Create(searchRequest);
             var content = await httpApiCommand.HttpRequestMessage.Content.ReadAsStringAsync();
             Assert.Equal("filter=variants.scopedPrice.value.centAmount%3Aexists&priceCurrency=USD&priceChannel=dbb5a6d0-2cbb-4855-bbe7-5cf58f434a82&withTotal=false", content);
+        }
+
+        [Fact]
+        public void GetQueryRequestMessageWithSort()
+        {
+            QueryCommand<Message> queryCommand = new QueryCommand<Message>();
+            queryCommand.Sort(message => message.Id).Sort(message => message.CreatedAt, SortDirection.Descending);
+            QueryRequestMessageBuilder queryRequestMessageBuilder = new QueryRequestMessageBuilder(
+                this.clientFixture.GetService<IEndpointRetriever>(),
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>(),
+                this.clientFixture.GetService<IParametersBuilderFactory<IQueryParametersBuilder>>()
+            );
+            HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
+            Assert.Equal("messages?sort=id%20asc&sort=createdAt%20desc&withTotal=false", httpRequestMessage.RequestUri.ToString());
         }
     }
 }
