@@ -42,7 +42,7 @@ namespace commercetools.Sdk.Serialization
                 }
                 else
                 {
-                    throw new JsonSerializationException();
+                    throw new JsonSerializationException($"Couldn't get type to deserialize property {this.PropertyName}");
                 }
             }
 

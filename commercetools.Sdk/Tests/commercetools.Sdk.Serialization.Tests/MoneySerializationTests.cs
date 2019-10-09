@@ -1,5 +1,7 @@
+using System.IO;
 using commercetools.Sdk.Domain;
 using FluentAssertions.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
@@ -86,6 +88,19 @@ namespace commercetools.Sdk.Serialization.Tests
             JToken resultFormatted = JValue.Parse(serialize);
             JToken serializedFormatted = JValue.Parse(@"{""type"":""centPrecision"",""currencyCode"":""EUR"",""centAmount"":123457}");
             serializedFormatted.Should().BeEquivalentTo(resultFormatted);
+        }
+
+        [Fact]
+        public void DeserializeInvalidMoney()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string serialized = @"{
+                ""type"": ""unknown"",
+                ""centAmount"": 123456
+            }";
+
+            var exception = Assert.Throws<JsonSerializationException>(() => serializerService.Deserialize<BaseMoney>(serialized));
+            Assert.Equal("Unknown money type: {\"type\":\"unknown\",\"centAmount\":123456}", exception.Message);
         }
     }
 }

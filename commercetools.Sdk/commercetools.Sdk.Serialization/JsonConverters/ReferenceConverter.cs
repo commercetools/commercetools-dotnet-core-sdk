@@ -28,10 +28,19 @@ namespace commercetools.Sdk.Serialization
             JObject jsonObject = JObject.Load(reader);
             JToken typeId = jsonObject["typeId"];
 
-            var type = this.typeRetriever.GetTypeForToken(typeId);
+            Type type = null;
+            try
+            {
+                type = this.typeRetriever.GetTypeForToken(typeId);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
             if (type == null)
             {
-                throw new JsonSerializationException();
+                throw new JsonSerializationException($"Unknown reference typeId '{typeId}'");
             }
 
             var genericReferenceType = typeof(Reference<>).MakeGenericType(type);

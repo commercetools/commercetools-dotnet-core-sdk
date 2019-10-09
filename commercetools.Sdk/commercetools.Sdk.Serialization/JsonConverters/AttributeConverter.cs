@@ -38,7 +38,7 @@ namespace commercetools.Sdk.Serialization
 
             if (genericType == null)
             {
-                throw new JsonSerializationException($"Couldn't deserialize attribute '{nameProperty}' value: '{valueProperty}'");
+                throw new JsonSerializationException($"Couldn't deserialize attribute '{nameProperty}' value: '{valueProperty?.ToString(Formatting.None)}'");
             }
 
             Type attributeType = typeof(Attribute<>).MakeGenericType(genericType);

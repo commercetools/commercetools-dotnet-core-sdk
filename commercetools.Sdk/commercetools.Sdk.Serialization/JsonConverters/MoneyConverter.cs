@@ -34,7 +34,7 @@ namespace commercetools.Sdk.Serialization
 
             if (moneyType == null)
             {
-                throw new JsonSerializationException();
+                throw new JsonSerializationException($"Unknown money type: {jsonObject.ToString(Formatting.None)}");
             }
 
             return jsonObject.ToObject(moneyType, serializer);

@@ -147,7 +147,7 @@ namespace commercetools.Sdk.Serialization.Tests
             string serialized = File.ReadAllText("Resources/Attributes/InvalidLocalizedText.json");
 
             var exception = Assert.Throws<JsonSerializationException>(() => serializerService.Deserialize<ProductVariant>(serialized));
-            Assert.Equal("Couldn't deserialize attribute 'loc-string-attribute' value: '{\n  \"_\": \"invalid-loc-string-de\"\n}'", exception.Message);
+            Assert.Equal("Couldn't deserialize attribute 'loc-string-attribute' value: '{\"_\":\"invalid-loc-string-de\"}'", exception.Message);
         }
 
         [Fact]

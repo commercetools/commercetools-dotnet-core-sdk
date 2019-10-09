@@ -13,7 +13,7 @@ namespace commercetools.Sdk.Serialization
         private readonly IDecoratorTypeRetriever<Payload> decoratorTypeRetriever;
         private IDecoratorTypeRetriever<ResourceTypeAttribute> typeRetriever;
         public string PropertyName => "notificationType";
-        
+
         public Type DefaultType => typeof(GeneralPayload);
 
         public SubscriptionPayloadConverter(IDecoratorTypeRetriever<Payload> decoratorTypeRetriever, IDecoratorTypeRetriever<ResourceTypeAttribute> typeRetriever)
@@ -21,7 +21,7 @@ namespace commercetools.Sdk.Serialization
             this.decoratorTypeRetriever = decoratorTypeRetriever;
             this.typeRetriever = typeRetriever;
         }
-        
+
         public override bool CanConvert(Type objectType)
         {
             if (objectType == typeof(Payload) || (objectType.IsGenericType && objectType.GetGenericTypeDefinition() == typeof(Payload<>)))
@@ -31,7 +31,7 @@ namespace commercetools.Sdk.Serialization
             return false;
         }
         public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization };
-        
+
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JObject jsonObject = JObject.Load(reader);
@@ -44,18 +44,15 @@ namespace commercetools.Sdk.Serialization
                 propertyType = this.DefaultType;
                 return jsonObject.ToObject(propertyType, serializer);
             }
-            else
+            // create generic payload based on resource (like if resource is customer, then object type
+            // will be like ResourceCreatedPayload<Customer> or MessageSubscriptionPayload<Customer>
+            if (jsonObject["resource"]?["typeId"] is JToken typeIdToken)
             {
-                // create generic payload based on resource (like if resource is customer, then object type
-                // will be like ResourceCreatedPayload<Customer> or MessageSubscriptionPayload<Customer>
-                if (jsonObject["resource"]["typeId"] is JToken typeIdToken)
-                {
-                    var resourceType = this.typeRetriever.GetTypeForToken(typeIdToken);
-                    var genericPayloadType = propertyType.MakeGenericType(resourceType);
-                    return jsonObject.ToObject(genericPayloadType, serializer);
-                }
-                throw new JsonSerializationException();
+                var resourceType = this.typeRetriever.GetTypeForToken(typeIdToken);
+                var genericPayloadType = propertyType.MakeGenericType(resourceType);
+                return jsonObject.ToObject(genericPayloadType, serializer);
             }
+            throw new JsonSerializationException($"Unknown subscription payload type: {jsonObject.ToString(Formatting.None)}");
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
