@@ -33,11 +33,12 @@ namespace commercetools.Sdk.Serialization
         {
             JObject jsonObject = JObject.Load(reader);
             JToken valueProperty = jsonObject["value"];
+            JToken nameProperty = jsonObject["name"];
             Type genericType = this.mapperTypeRetriever.GetTypeForToken(valueProperty);
 
             if (genericType == null)
-            {    
-                throw new JsonSerializationException();
+            {
+                throw new JsonSerializationException($"Couldn't deserialize attribute '{nameProperty}' value: '{valueProperty?.ToString(Formatting.None)}'");
             }
 
             Type attributeType = typeof(Attribute<>).MakeGenericType(genericType);

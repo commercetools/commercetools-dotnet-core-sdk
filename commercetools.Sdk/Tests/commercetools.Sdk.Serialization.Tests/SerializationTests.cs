@@ -16,6 +16,7 @@ using commercetools.Sdk.Registration;
 using FluentAssertions.Json;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
@@ -101,6 +102,19 @@ namespace commercetools.Sdk.Serialization.Tests
 
             var res = new ResourceIdentifier<Product>();
             Assert.Equal(ReferenceTypeId.Product, res.TypeId);
+        }
+
+        [Fact]
+        public void DeserializeInvalidReference()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string serialized = @"{
+                ""typeId"": ""unknown"",
+                ""id"": ""123456""
+            }";
+
+            var exception = Assert.Throws<JsonSerializationException>(() => serializerService.Deserialize<Reference>(serialized));
+            Assert.Equal("Unknown reference typeId 'unknown'", exception.Message);
         }
 
 

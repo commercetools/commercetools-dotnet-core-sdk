@@ -21,7 +21,7 @@
 
             // Both two letter language name and full culture name can be accepted.
             // For example, zh-Hant and zh are both valid.
-            return this.cultures.Select(c => c.TwoLetterISOLanguageName).Contains(culture) || 
+            return this.cultures.Select(c => c.TwoLetterISOLanguageName).Contains(culture) ||
                 this.cultures.Select(c => c.Name).Contains(culture);
         }
     }

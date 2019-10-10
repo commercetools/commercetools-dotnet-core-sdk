@@ -19,6 +19,7 @@ using commercetools.Sdk.Registration;
 using FluentAssertions.Json;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
@@ -32,7 +33,7 @@ namespace commercetools.Sdk.Serialization.Tests
         {
             this.serializationFixture = serializationFixture;
         }
-        
+
         [Fact]
         public void MessagesDeserializationOfSpecificType()
         {
@@ -93,7 +94,7 @@ namespace commercetools.Sdk.Serialization.Tests
             var generalMessage = messages[0];
             Assert.NotNull(generalMessage.Type);
         }
-        
+
         [Fact]
         public void DeserializationOfResourceCreatedPayload()
         {
@@ -108,7 +109,7 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.NotNull(customerCreatedPayload);
             Assert.NotNull(customerCreatedPayload.Resource);
         }
-        
+
         [Fact]
         public void DeserializationOfListOfChangeSubscriptionPayloads()
         {
@@ -121,14 +122,23 @@ namespace commercetools.Sdk.Serialization.Tests
             var resourceUpdatedPayload = payloads[1] as ResourceUpdatedPayload<Category>;
             var resourceDeletedPayload = payloads[2] as ResourceDeletedPayload<Product>;
             var customerCreatedPayload = payloads[3] as MessageSubscriptionPayload<Customer>;
-            
+
             Assert.NotNull(resourceCreatedPayload);
             Assert.NotNull(resourceUpdatedPayload);
             Assert.NotNull(resourceDeletedPayload);
             Assert.NotNull(customerCreatedPayload);
             Assert.Equal(2, resourceUpdatedPayload.OldVersion);
         }
-        
+
+        [Fact]
+        public void DeserializationOfInvalidSubscriptionPayload()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string serialized = File.ReadAllText("Resources/Messages/InvalidPayload.json");
+            var exception = Assert.Throws<JsonSerializationException>(() => serializerService.Deserialize<Payload>(serialized));
+            Assert.Equal("Unknown subscription payload type: {\"notificationType\":\"ResourceCreated\",\"version\":1}", exception.Message);
+        }
+
         [Fact]
         public void DeserializationOfListOfMessageSubscriptionPayload()
         {
@@ -145,7 +155,7 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.NotNull(categoryCreatedMessage);
             Assert.Equal(expectedCategoryId,categoryCreatedMessage.Category.Id);
         }
-        
+
         [Fact]
         public void DeserializationOfListOfMessageSubscriptionPayloads()
         {
@@ -156,7 +166,7 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.IsType<MessageSubscriptionPayload<Category>>(payloads[0]);
             Assert.IsType<MessageSubscriptionPayload<Customer>>(payloads[1]);
         }
-        
+
         [Fact]
         public void DeserializeChangeSubscription()
         {
@@ -178,7 +188,7 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.Equal(SubscriptionResourceTypeId.CartDiscount, changeSubscription1.GetResourceTypeIdAsEnum());
             Assert.Equal(SubscriptionResourceTypeId.Unknown, changeSubscription2.GetResourceTypeIdAsEnum());
         }
-        
+
         [Fact]
         public void DeserializeOfSubscriptions()
         {

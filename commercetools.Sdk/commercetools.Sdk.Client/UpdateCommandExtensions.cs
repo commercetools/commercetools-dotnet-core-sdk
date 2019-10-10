@@ -38,7 +38,8 @@ namespace commercetools.Sdk.Client
             return new UpdateByKeyCommand<T>(resource.Key, resource.Version, actions);
         }
 
-        public static List<UpdateAction<T>> AddUpdate<T>(this List<UpdateAction<T>> updateActions, UpdateAction<T> updateAction) where T: Resource<T>
+        public static List<UpdateAction<T>> AddUpdate<T>(this List<UpdateAction<T>> updateActions, UpdateAction<T> updateAction)
+            where T : Resource<T>
         {
             updateActions.Add(updateAction);
             return updateActions;

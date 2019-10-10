@@ -19,7 +19,7 @@ namespace commercetools.Sdk.IntegrationTests
         }
 
         [Fact]
-        public async Task QueryTakeSkipTake()
+        public void QueryTakeSkipTake()
         {
             var query = from c in this.client.Query<Category>()
                 where c.Key == "category-foo"
@@ -34,7 +34,7 @@ namespace commercetools.Sdk.IntegrationTests
         }
 
         [Fact]
-        public async Task QuerySkipTakeSkip()
+        public void QuerySkipTakeSkip()
         {
             var query = from c in this.client.Query<Category>()
                 where c.Key == "category-foo"
@@ -50,7 +50,7 @@ namespace commercetools.Sdk.IntegrationTests
         }
 
         [Fact]
-        public async Task QueryTakeSkip()
+        public void QueryTakeSkip()
         {
             var query = from c in this.client.Query<Category>()
                 where c.Key == "category-foo"
@@ -65,7 +65,7 @@ namespace commercetools.Sdk.IntegrationTests
         }
 
         [Fact]
-        public async Task SearchTakeSkipTake()
+        public void SearchTakeSkipTake()
         {
             var query = from c in this.client.SearchProducts()
                 where c.Key == "category-foo"
@@ -80,7 +80,7 @@ namespace commercetools.Sdk.IntegrationTests
         }
 
         [Fact]
-        public async Task SearchSkipTakeSkip()
+        public void SearchSkipTakeSkip()
         {
             var query = from c in this.client.SearchProducts()
                 where c.Key == "category-foo"
@@ -96,7 +96,7 @@ namespace commercetools.Sdk.IntegrationTests
         }
 
         [Fact]
-        public async Task SearchTakeSkip()
+        public void SearchTakeSkip()
         {
             var query = from c in this.client.SearchProducts()
                 where c.Key == "category-foo"
