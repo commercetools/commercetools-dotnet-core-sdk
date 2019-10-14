@@ -77,5 +77,25 @@ namespace commercetools.Sdk.Domain.Predicates
         {
             throw new NotImplementedException();
         }
+        
+        public static bool IsGreaterThan(this string source, string value)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public static bool IsGreaterThanOrEqual(this string source, string value)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public static bool IsLessThan(this string source, string value)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public static bool IsLessThanOrEqual(this string source, string value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
