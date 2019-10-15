@@ -10,6 +10,7 @@ using Xunit;
 using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Channels;
+using commercetools.Sdk.Domain.Messages;
 using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Linq.Query.Visitors;
 
@@ -543,6 +544,45 @@ namespace commercetools.Sdk.Linq.Tests
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("masterData(current(categories(id = \"test\")))", result);
         }
+        
+        [Fact]
+        public void ExpressionIdPropertyIsGreaterThan()
+        {
+            var lastMessage = new GeneralMessage {Id = "92e3f00a-4e6d-4ad4-bd47-afe1630539f3"};
+            Expression<Func<Message, bool>> expression = m => m.Id.IsGreaterThan(lastMessage.Id.valueOf());
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("id > \"92e3f00a-4e6d-4ad4-bd47-afe1630539f3\"", result);
+        }
+        
+        [Fact]
+        public void ExpressionIdPropertyIsGreaterThanOrEqual()
+        {
+            var lastMessage = new GeneralMessage {Id = "92e3f00a-4e6d-4ad4-bd47-afe1630539f3"};
+            Expression<Func<Message, bool>> expression = m => m.Id.IsGreaterThanOrEqual(lastMessage.Id.valueOf());
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("id >= \"92e3f00a-4e6d-4ad4-bd47-afe1630539f3\"", result);
+        }
+        [Fact]
+        public void ExpressionIdPropertyIsLessThan()
+        {
+            var lastMessage = new GeneralMessage {Id = "92e3f00a-4e6d-4ad4-bd47-afe1630539f3"};
+            Expression<Func<Message, bool>> expression = m => m.Id.IsLessThan(lastMessage.Id.valueOf());
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("id < \"92e3f00a-4e6d-4ad4-bd47-afe1630539f3\"", result);
+        }
+        [Fact]
+        public void ExpressionIdPropertyIsLessThanOrEqual()
+        {
+            var lastMessage = new GeneralMessage {Id = "92e3f00a-4e6d-4ad4-bd47-afe1630539f3"};
+            Expression<Func<Message, bool>> expression = m => m.Id.IsLessThanOrEqual(lastMessage.Id.valueOf());
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("id <= \"92e3f00a-4e6d-4ad4-bd47-afe1630539f3\"", result);
+        }
+
 
     }
 }

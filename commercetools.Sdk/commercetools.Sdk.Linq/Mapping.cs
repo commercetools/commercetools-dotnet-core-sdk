@@ -20,6 +20,14 @@ namespace commercetools.Sdk.Linq
             { ExpressionType.NotEqual, "!=" }
         };
 
+        public static Dictionary<string, string> ComparisonMethodOperators { get; } = new Dictionary<string, string>()
+        {
+            { "IsGreaterThan", ">" },
+            { "IsGreaterThanOrEqual", ">=" },
+            { "IsLessThan", "<" },
+            { "IsLessThanOrEqual", "<=" }
+        };
+
         public static Dictionary<string, string> AllowedMethods { get; } = new Dictionary<string, string>()
         {
             { "In", "in" },
