@@ -114,6 +114,17 @@ namespace commercetools.Sdk.Serialization.Tests
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
             Assert.IsType<Attribute<AttributeSet<string>>>(deserialized.Attributes[0]);
         }
+        
+        [Fact]
+        public void DeserializeEmptySetAttribute()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string serialized = File.ReadAllText("Resources/Attributes/EmptySet.json");
+            ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
+            var emptySetAttribute = deserialized.Attributes[0] as Attribute<AttributeSet<object>>;
+            Assert.NotNull(emptySetAttribute);
+            Assert.Empty(emptySetAttribute.Value);
+        }
 
         [Fact]
         public void DeserializeSetEnumAttribute()
