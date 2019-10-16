@@ -582,7 +582,41 @@ namespace commercetools.Sdk.Linq.Tests
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("id <= \"92e3f00a-4e6d-4ad4-bd47-afe1630539f3\"", result);
         }
+        
+        [Fact]
+        public void ExpressionExplicitEqualTrue()
+        {
+            Expression<Func<Product, bool>> expression = p => p.MasterData.Published == true;
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("masterData(published = true)", result);
+        }
 
+        [Fact]
+        public void ExpressionExplicitEqualFalse()
+        {
+            Expression<Func<Product, bool>> expression = p => p.MasterData.Published == false;
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("masterData(published = false)", result);
+        }
 
+        [Fact]
+        public void ExpressionImplicitEqualTrue()
+        {
+            Expression<Func<Product, bool>> expression = p => p.MasterData.Published;
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("masterData(published = true)", result);
+        }
+
+        [Fact]
+        public void ExpressionImplicitEqualFalse()
+        {
+            Expression<Func<Product, bool>> expression = p => !p.MasterData.Published;
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("masterData(published = false)", result);
+        }
     }
 }
