@@ -17,8 +17,16 @@ namespace commercetools.Sdk.Serialization
             Type type;
             if (IsSetAttribute(token))
             {
-                Type firstAttributeType = base.GetTypeForToken(token[0]);
-                type = this.SetType.MakeGenericType(firstAttributeType);
+                if (token.HasValues)
+                {
+                    Type firstAttributeType = base.GetTypeForToken(token[0]);
+                    type = this.SetType.MakeGenericType(firstAttributeType);
+                }
+                else
+                {
+                    // If the array contains no elements
+                    type = this.SetType.MakeGenericType(typeof(object));
+                }
             }
             else
             {
@@ -29,11 +37,7 @@ namespace commercetools.Sdk.Serialization
 
         private bool IsSetAttribute(JToken valueProperty)
         {
-            if (valueProperty != null)
-            {
-                return valueProperty.HasValues && valueProperty.Type == JTokenType.Array;
-            }
-            return false;
+            return valueProperty != null && valueProperty.Type == JTokenType.Array;
         }
     }
 }
