@@ -12,7 +12,8 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageIconUrl>https://raw.githubusercontent.com/commercetools/commercetools-dotnet-core-sdk/master/ct-logo.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/commercetools/commercetools-dotnet-core-sdk</RepositoryUrl>
-    <PackageTags>commercetools</PackageTags>
+    <PackageReleaseNotes>Information about latest changes can be found at https://github.com/commercetools/commercetools-dotnet-core-sdk/blob/master/CHANGELOG.md</PackageReleaseNotes>
+    <PackageTags>commercetools;dotnet-core;sdk</PackageTags>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
