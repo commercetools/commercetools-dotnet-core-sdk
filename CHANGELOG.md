@@ -1,4 +1,4 @@
-## [1.0.0-beta-2 - 2019-10-22](https://github.com/commercetools/commercetools-dotnet-core-sdk/compare/1.0.0-beta-1...master)
+## [1.0.0-beta-2 - 2019-10-22](https://github.com/commercetools/commercetools-dotnet-core-sdk/compare/1.0.0-beta-1...1.0.0-beta-2)
 ### Features
 - Improve exception message for attribute deserialization error [`#66`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/66)
 - Adding models and unit tests for Subscriptions endpoint [`#63`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/63)
@@ -57,7 +57,8 @@
 - Changing Type of property `ShippingRates` to `List<ShippingRateDraft>` instead of `List<ShippingRate>` in ZoneRateDraft
 - Changing type of property `Name` in UpdateActions/ChangeNameUpdateAction from `LocalizedString` to `string`
 
-##### Replace properties of type `CustomFields` with type `CustomFieldsDraft` in these Draft Models 
+##### CustomFields
+- Replace properties of type `CustomFields` with type `CustomFieldsDraft` in these Draft Models 
 - ShoppingLists/ShoppingListDraft
 - ShoppingLists/TextLineItemDraft
 - Carts/CartDraft
@@ -65,9 +66,12 @@
 - Carts/LineItemDraft
 - Carts/UpdateActions/AddLineItemUpdateAction
 
-##### Solving type of properties in some domain models,[`3beb7eda`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/3beb7edaa8cfc938d48b12efcbc1f62bd56f1ddd)
-##### Changing namespace of Delivery model from commercetools.Sdk.Domain to commercetools.Sdk.Domain.Carts 
-##### Convert property `ProductId` in GetMatchingProductDiscountParameters model to be `string` instead of `Guid`
+##### Property type fixes
+- Solving type of properties in some domain models,[`3beb7eda`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/3beb7edaa8cfc938d48b12efcbc1f62bd56f1ddd)
+##### Carts
+- Changing namespace of Delivery model from commercetools.Sdk.Domain to commercetools.Sdk.Domain.Carts 
+##### ProductDiscounts
+- Convert property `ProductId` in GetMatchingProductDiscountParameters model to be `string` instead of `Guid`
 
 
 ## 1.0.0-beta-1 - 2019-07-11
