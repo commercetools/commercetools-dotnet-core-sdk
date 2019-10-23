@@ -54,6 +54,12 @@ namespace commercetools.Sdk.IntegrationTests
                 .Select(s => s[Random.Next(s.Length)]).ToArray());
         }
 
+        public static DateTime RandomDate()
+        {
+            var start = new DateTime(1987, 5, 5);
+            var range = (DateTime.Today - start).Days;           
+            return start.AddDays(Random.Next(range));
+        }
         public static int RandomInt(int? min = null, int? max = null)
         {
             int ran;

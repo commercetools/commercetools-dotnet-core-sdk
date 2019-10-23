@@ -22,7 +22,7 @@ namespace commercetools.Sdk.Linq
             var retriever = new TypeRetriever();
             var types = retriever.GetTypes<T>();
 
-            return types.Select(type => (IPredicateVisitorConverter) Activator.CreateInstance(type));
+            return types.Select(type => (IPredicateVisitorConverter)Activator.CreateInstance(type));
         }
 
         public IPredicateVisitor Create(Expression expression)
