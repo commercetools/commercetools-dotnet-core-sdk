@@ -18,7 +18,7 @@ namespace commercetools.Sdk.Domain.Customers
         public string MiddleName { get; set; }
         public string Title { get; set; }
         public string Salutation { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public string CompanyName { get; set; }
         public string VatId { get; set; }
         public List<Address> Addresses { get; set; }
