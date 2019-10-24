@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Client
+﻿using commercetools.Sdk.Domain.Common;
+
+namespace commercetools.Sdk.Client
 {
     public abstract class ChangePasswordCommand<T> : Command<T>
     {
@@ -6,6 +8,14 @@
         {
             this.Id = id;
             this.Version = version;
+            this.CurrentPassword = currentPassword;
+            this.NewPassword = newPassword;
+        }
+
+        public ChangePasswordCommand(IVersioned<T> versioned, string currentPassword, string newPassword)
+        {
+            this.Id = versioned.Id;
+            this.Version = versioned.Version;
             this.CurrentPassword = currentPassword;
             this.NewPassword = newPassword;
         }

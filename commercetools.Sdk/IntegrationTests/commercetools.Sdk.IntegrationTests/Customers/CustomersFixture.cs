@@ -6,6 +6,7 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
+using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.IntegrationTests.Customers
 {
@@ -20,11 +21,52 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             customerDraft.Key = $"Key_{rand}";
             return customerDraft;
         }
+        public static CustomerDraft DefaultCustomerDraftWithKey(CustomerDraft draft, string key)
+        {
+            var customerDraft = DefaultCustomerDraft(draft);
+            customerDraft.Key = key;
+            return customerDraft;
+        }
+        public static CustomerDraft DefaultCustomerDraftWithPassword(CustomerDraft draft, string password)
+        {
+            var customerDraft = DefaultCustomerDraft(draft);
+            customerDraft.Password = password;
+            return customerDraft;
+        }
         public static CustomerDraft DefaultCustomerDraftWithAddress(CustomerDraft draft)
         {
             var address = TestingUtility.GetRandomAddress();
             var customerDraft = DefaultCustomerDraft(draft);
             customerDraft.Addresses = new List<Address> { address };
+            return customerDraft;
+        }
+        public static CustomerDraft DefaultCustomerDraftWithShippingAddress(CustomerDraft draft)
+        {
+            var address = TestingUtility.GetRandomAddress();
+            var customerDraft = DefaultCustomerDraft(draft);
+            customerDraft.Addresses = new List<Address> { address };
+            customerDraft.ShippingAddresses = new List<int> { 0 };
+            return customerDraft;
+        }
+        public static CustomerDraft DefaultCustomerDraftWithBillingAddress(CustomerDraft draft)
+        {
+            var address = TestingUtility.GetRandomAddress();
+            var customerDraft = DefaultCustomerDraft(draft);
+            customerDraft.Addresses = new List<Address> { address };
+            customerDraft.BillingAddresses = new List<int> { 0 };
+            return customerDraft;
+        }
+        public static CustomerDraft DefaultCustomerDraftWithCustomType(CustomerDraft draft, Type type, Fields fields)
+        {
+            var customFieldsDraft = new CustomFieldsDraft
+            {
+                Type = type.ToKeyResourceIdentifier(),
+                Fields = fields
+            };
+
+            var customerDraft = DefaultCustomerDraft(draft);
+            customerDraft.Custom = customFieldsDraft;
+
             return customerDraft;
         }
         #endregion
