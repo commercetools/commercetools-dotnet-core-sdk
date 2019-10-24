@@ -4,6 +4,7 @@ using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.CustomerGroups;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
+using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.IntegrationTests.CustomerGroups
 {
@@ -17,6 +18,25 @@ namespace commercetools.Sdk.IntegrationTests.CustomerGroups
             customerGroupDraft.Key = $"Key{randomInt}";
             customerGroupDraft.GroupName = $"Group{randomInt}";
             return customerGroupDraft;
+        }
+        public static CustomerGroupDraft DefaultCustomerGroupDraftWithKey(CustomerGroupDraft draft, string key)
+        {
+            var customerGroupDraft = DefaultCustomerGroupDraft(draft);
+            customerGroupDraft.Key = key;
+            return customerGroupDraft;
+        }
+        public static CustomerGroupDraft DefaultCustomerGroupDraftWithCustomType(CustomerGroupDraft draft, Type type, Fields fields)
+        {
+            var customFieldsDraft = new CustomFieldsDraft
+            {
+                Type = type.ToKeyResourceIdentifier(),
+                Fields = fields
+            };
+
+            var customerDraft = DefaultCustomerGroupDraft(draft);
+            customerDraft.Custom = customFieldsDraft;
+
+            return customerDraft;
         }
         #endregion
 
