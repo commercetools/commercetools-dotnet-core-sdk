@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -60,6 +61,40 @@ namespace commercetools.Sdk.IntegrationTests
             finally
             {
                 await deleteFunc(client, resource);
+            }
+        }
+        
+        public static async Task WithListAsync<T, TDraft>(
+            IClient client,
+            TDraft draft,
+            Func<TDraft, TDraft> draftAction,
+            Func<List<T>, Task> func,
+            int count = 2,
+            Func<IClient, IDraft<T>, Task<T>> createFunc = null,
+            Func<IClient, T, Task> deleteFunc = null
+        ) where T : Resource<T> where TDraft : IDraft<T>
+        {
+            createFunc = createFunc ?? CreateResource;
+            deleteFunc = deleteFunc ?? DeleteResource;
+            
+            var resourcesList = new List<T>();
+            for (int i = 1; i <= count; i++)
+            {
+                var buildDraft = draftAction.Invoke(draft);
+                var resource = await createFunc(client, buildDraft);
+                resourcesList.Add(resource);
+            }
+
+            try
+            {
+                await func(resourcesList);
+            }
+            finally
+            {
+                foreach (var resource in resourcesList)
+                {
+                    await deleteFunc(client, resource);   
+                }
             }
         }
 
