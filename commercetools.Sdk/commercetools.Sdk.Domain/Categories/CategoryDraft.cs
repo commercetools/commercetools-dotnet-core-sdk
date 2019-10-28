@@ -31,6 +31,6 @@ namespace commercetools.Sdk.Domain.Categories
 
         public CustomFieldsDraft Custom { get; set; }
 
-        public List<Asset> Assets { get; set; }
+        public List<AssetDraft> Assets { get; set; }
     }
 }
