@@ -5,6 +5,6 @@ namespace commercetools.Sdk.Domain.Categories.UpdateActions
     public class ChangeAssetOrderUpdateAction : UpdateAction<Category>
     {
         public string Action => "changeAssetOrder";
-        public List<string> AsserOrder { get; set; }
+        public List<string> AssetOrder { get; set; }
     }
 }
