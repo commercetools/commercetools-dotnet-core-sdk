@@ -1,4 +1,7 @@
-﻿namespace commercetools.Sdk.Domain.Reviews
+﻿using System;
+using System.Collections.Generic;
+
+namespace commercetools.Sdk.Domain.Reviews
 {
     public class ReviewRatingStatistics
     {
@@ -6,7 +9,7 @@
         public int HighestRating { get; set; }
         public int LowestRating { get; set; }
         public int Count { get; set; }
-        // TODO See what type of object this should be
-        public object RatingsDistribution { get; set; }
+
+        public Dictionary<String, long> RatingsDistribution { get; set; }
     }
 }
