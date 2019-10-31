@@ -27,7 +27,7 @@ matrix:
     sudo: true
     before_install:
     - wget --retry-connrefused --waitretry=1 -O /tmp/dotnet.pkg https://dotnetcli.azureedge.net/dotnet/Sdk/3.0.100/dotnet-sdk-3.0.100-osx-x64.pkg
-    - sudo installer -package "/tmp/dotnet.pkg" -target "/" -verboseR'
+    - sudo installer -package "/tmp/dotnet.pkg" -target "/" -verboseR
     - eval $(/usr/libexec/path_helper -s)
     - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
     - cd commercetools.Sdk
