@@ -9,6 +9,8 @@ namespace commercetools.Sdk.Domain.States
     public class State : Resource<State>, IKeyReferencable<State>
     {
         public string Key { get; set; }
+        
+        public StateType Type { get; set; }
         public LocalizedString Name { get; set; }
         public LocalizedString Description { get; set; }
         public bool Initial { get; set; }
