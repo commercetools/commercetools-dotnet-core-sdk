@@ -4,9 +4,7 @@ matrix:
   include:
   - os: linux
     dist: xenial
-    dotnet:
-      - 2.1
-      - 3.0
+    dotnet: 2.1
     before_install:
     - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
     - cd commercetools.Sdk
@@ -23,9 +21,7 @@ matrix:
     - dotnet test IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
     - Container="SimpleInjector" dotnet test IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
   - os: osx
-    dotnet:
-      - 2.1.603
-      - 3.0.100
+    dotnet: 2.1.603
     before_install:
     - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
     - cd commercetools.Sdk
