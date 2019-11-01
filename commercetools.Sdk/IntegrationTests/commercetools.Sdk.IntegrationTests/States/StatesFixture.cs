@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
@@ -19,6 +20,18 @@ namespace commercetools.Sdk.IntegrationTests.States
             stateDraft.Description = new LocalizedString() {{"en", $"State_Description_{randomInt}"}};
             stateDraft.Key = $"Key{randomInt}";
             stateDraft.Type = StateType.ProductState;
+            return stateDraft;
+        }
+        public static StateDraft DefaultStateDraftWithKey(StateDraft draft, string key)
+        {
+            var stateDraft = DefaultStateDraft(draft);
+            stateDraft.Key = key;
+            return stateDraft;
+        }
+        public static StateDraft DefaultStateDraftWithRoles(StateDraft draft, List<StateRole> roles)
+        {
+            var stateDraft = DefaultStateDraftWithType(draft, StateType.LineItemState);
+            stateDraft.Roles = roles;
             return stateDraft;
         }
         public static StateDraft DefaultStateDraftWithType(StateDraft draft, StateType stateType)

@@ -7,7 +7,7 @@ namespace commercetools.Sdk.Domain.Payments.UpdateActions
     {
         public string Action => "changeTransactionState";
         [Required]
-        public Guid TransactionId { get; set; }
+        public string TransactionId { get; set; }
         [Required]
         public TransactionState State { get; set; }
     }

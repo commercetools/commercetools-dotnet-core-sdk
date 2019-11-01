@@ -1,5 +1,6 @@
 ﻿using commercetools.Sdk.Domain.Customers;
 using System.ComponentModel.DataAnnotations;
+using commercetools.Sdk.Domain.Common;
 
 namespace commercetools.Sdk.Domain.Payments.UpdateActions
 {
@@ -7,6 +8,6 @@ namespace commercetools.Sdk.Domain.Payments.UpdateActions
     {
         public string Action => "setCustomer";
         [Required]
-        public Reference<Customer> Customer { get; set; }
+        public IReference<Customer> Customer { get; set; }
     }
 }
