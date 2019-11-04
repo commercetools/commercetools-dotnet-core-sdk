@@ -136,7 +136,6 @@ namespace SimpleInjector
         private static IDictionary<string, IHttpClientBuilder> UseMultipleClients(this Container services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
             var collection = new ServiceCollection();
-            collection.AddHttpClient(DefaultClientNames.Authorization);
             services.UseHttpApiDefaults();
 
             var builders = new Dictionary<string, IHttpClientBuilder>();
@@ -154,20 +153,27 @@ namespace SimpleInjector
                 clientBuilders.Add(Lifestyle.Singleton.CreateRegistration(() => new CtpClient(collection.BuildServiceProvider().GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName }, services));
             }
             services.RegisterCollection<IClient>(clientBuilders);
-            services.ResolveUnregisteredType += (sender, args) =>
-            {
-                if (!args.UnregisteredServiceType.IsAssignableFrom(typeof(IHttpClientFactory))) return;
 
-                args.Register(() => collection.BuildServiceProvider().GetService<IHttpClientFactory>());
-            };
+            collection.AddHttpClient(DefaultClientNames.Authorization);
+            services.UseTokenProviders(collection.BuildServiceProvider().GetService<IHttpClientFactory>());
 
             return builders;
+        }
+
+        private static void UseTokenProviders(this Container services, IHttpClientFactory factory)
+        {
+            var providers = new List<Registration>();
+
+            providers.Add(Lifestyle.Transient.CreateRegistration(() => new AnonymousSessionTokenProvider(factory, services.GetService<IAnonymousCredentialsStoreManager>(), services.GetService<ISerializerService>()), services));
+            providers.Add(Lifestyle.Transient.CreateRegistration(() => new ClientCredentialsTokenProvider(factory, services.GetService<ITokenStoreManager>(), services.GetService<ISerializerService>()), services));
+            providers.Add(Lifestyle.Transient.CreateRegistration(() => new PasswordTokenProvider(factory, services.GetService<IUserCredentialsStoreManager>(), services.GetService<ISerializerService>()), services));
+
+            services.RegisterCollection<ITokenProvider>(providers);
         }
 
         private static IDictionary<string, IHttpClientBuilder> UseSingleClient(this Container services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
         {
             var collection = new ServiceCollection();
-            collection.AddHttpClient(DefaultClientNames.Authorization);
             services.UseHttpApiDefaults();
 
             var configurationSection = configuration.GetSection(clientName);
@@ -179,12 +185,9 @@ namespace SimpleInjector
                 {clientName, services.SetupClient(collection, clientName, clientConfiguration, tokenFlow)}
             };
             services.Register<IClient>(() => new CtpClient(collection.BuildServiceProvider().GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName });
-            services.ResolveUnregisteredType += (sender, args) =>
-            {
-                if (!args.UnregisteredServiceType.IsAssignableFrom(typeof(IHttpClientFactory))) return;
 
-                args.Register(() => collection.BuildServiceProvider().GetService<IHttpClientFactory>());
-            };
+            collection.AddHttpClient(DefaultClientNames.Authorization);
+            services.UseTokenProviders(collection.BuildServiceProvider().GetService<IHttpClientFactory>());
 
             return builders;
         }
@@ -209,12 +212,12 @@ namespace SimpleInjector
 
             return httpClientBuilder;
         }
+
         private static void UseHttpApiDefaults(this Container services)
         {
             services.Register<ITokenStoreManager, InMemoryTokenStoreManager>(Lifestyle.Transient);
             services.Register<IUserCredentialsStoreManager, InMemoryUserCredentialsStoreManager>(Lifestyle.Transient);
             services.Register<IAnonymousCredentialsStoreManager, InMemoryAnonymousCredentialsStoreManager>(Lifestyle.Transient);
-            services.RegisterCollection(typeof(ITokenProvider), typeof(ITokenProvider).Assembly);
             services.RegisterCollection(typeof(IRequestMessageBuilder), typeof(IRequestMessageBuilder).Assembly);
             services.RegisterCollection(typeof(IAdditionalParametersBuilder), typeof(IAdditionalParametersBuilder).Assembly);
             services.RegisterCollection(typeof(ISearchParametersBuilder), typeof(ISearchParametersBuilder).Assembly);

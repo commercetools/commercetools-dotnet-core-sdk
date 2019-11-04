@@ -6,7 +6,7 @@ using commercetools.Sdk.Serialization;
 
 namespace commercetools.Sdk.HttpApi.Tokens
 {
-    internal abstract class TokenProvider
+    public abstract class TokenProvider
     {
         private readonly ISerializerService serializerService;
         private readonly ITokenStoreManager tokenStoreManager;
