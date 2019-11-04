@@ -84,7 +84,7 @@ namespace commercetools.Sdk.HttpApi.Tokens
 
         private async Task<Token> GetTokenAsync(HttpRequestMessage requestMessage)
         {
-            HttpClient client = this.HttpClientFactory.CreateClient("auth");
+            HttpClient client = this.HttpClientFactory.CreateClient(DefaultClientNames.Authorization);
             var result = await client.SendAsync(requestMessage).ConfigureAwait(false);
             string content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
             if (result.IsSuccessStatusCode)
