@@ -162,11 +162,19 @@ namespace SimpleInjector
 
         private static void UseTokenProviders(this Container services, IHttpClientFactory factory)
         {
-            var providers = new List<Registration>();
-
-            providers.Add(Lifestyle.Transient.CreateRegistration(() => new AnonymousSessionTokenProvider(factory, services.GetService<IAnonymousCredentialsStoreManager>(), services.GetService<ISerializerService>()), services));
-            providers.Add(Lifestyle.Transient.CreateRegistration(() => new ClientCredentialsTokenProvider(factory, services.GetService<ITokenStoreManager>(), services.GetService<ISerializerService>()), services));
-            providers.Add(Lifestyle.Transient.CreateRegistration(() => new PasswordTokenProvider(factory, services.GetService<IUserCredentialsStoreManager>(), services.GetService<ISerializerService>()), services));
+            var providers = new List<Registration>
+            {
+                Lifestyle.Transient.CreateRegistration(
+                    () => new AnonymousSessionTokenProvider(factory,
+                        services.GetService<IAnonymousCredentialsStoreManager>(),
+                        services.GetService<ISerializerService>()), services),
+                Lifestyle.Transient.CreateRegistration(
+                    () => new ClientCredentialsTokenProvider(factory, services.GetService<ITokenStoreManager>(),
+                        services.GetService<ISerializerService>()), services),
+                Lifestyle.Transient.CreateRegistration(
+                    () => new PasswordTokenProvider(factory, services.GetService<IUserCredentialsStoreManager>(),
+                        services.GetService<ISerializerService>()), services)
+            };
 
             services.RegisterCollection<ITokenProvider>(providers);
         }
