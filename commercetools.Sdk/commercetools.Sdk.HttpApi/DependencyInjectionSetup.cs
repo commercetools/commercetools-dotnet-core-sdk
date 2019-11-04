@@ -45,6 +45,7 @@ namespace commercetools.Sdk.HttpApi
 
                 builders.Add(clientName, services.SetupClient(clientName, clientConfiguration, tokenFlow));
                 services.AddSingleton<IClient>(c => new CtpClient(c.GetService<IHttpClientFactory>(), c.GetService<IHttpApiCommandFactory>(), c.GetService<ISerializerService>(), c.GetService<IUserAgentProvider>()) { Name = clientName });
+                services.AddSingleton<IClientConfiguration>(clientConfiguration);
             }
 
             return builders;
@@ -57,6 +58,7 @@ namespace commercetools.Sdk.HttpApi
 
             services.UseHttpApiDefaults();
             services.AddSingleton<IClient>(c => new CtpClient(c.GetService<IHttpClientFactory>(), c.GetService<IHttpApiCommandFactory>(), c.GetService<ISerializerService>(), c.GetService<IUserAgentProvider>()) { Name = clientName });
+            services.AddSingleton<IClientConfiguration>(clientConfiguration);
 
             var builders = new Dictionary<string, IHttpClientBuilder>();
             builders.Add(clientName, services.SetupClient(clientName, clientConfiguration, tokenFlow));
