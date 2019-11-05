@@ -192,7 +192,7 @@ namespace SimpleInjector
             {
                 {clientName, services.SetupClient(collection, clientName, clientConfiguration, tokenFlow)}
             };
-            services.Register<IClient>(() => new CtpClient(collection.BuildServiceProvider().GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName });
+            services.Register<IClient>(() => new CtpClient(collection.BuildServiceProvider().GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName }, Lifestyle.Singleton);
 
             collection.AddHttpClient(DefaultClientNames.Authorization);
             services.UseTokenProviders(collection.BuildServiceProvider().GetService<IHttpClientFactory>());
