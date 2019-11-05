@@ -23,7 +23,7 @@ namespace commercetools.Sdk.HttpApi.Tests
 
             //Create httpClientFactory which return Token as json response
             var mockHttpClientFactory =
-                this.clientFixture.GetClientFactoryMockWithSpecificResponse("auth",
+                this.clientFixture.GetClientFactoryMockWithSpecificResponse(DefaultClientNames.Authorization,
                     "Resources/Responses/GetToken.json");
 
             var tokenStoreManager = this.clientFixture.GetService<ITokenStoreManager>();
@@ -52,7 +52,7 @@ namespace commercetools.Sdk.HttpApi.Tests
 
             //Create httpClientFactory which return Token as json response with refresh token
             var mockHttpClientFactory =
-                this.clientFixture.GetClientFactoryMockWithSpecificResponse("auth",
+                this.clientFixture.GetClientFactoryMockWithSpecificResponse(DefaultClientNames.Authorization,
                     "Resources/Responses/GetNewTokenWithRefresh.json");
 
             //Create tokenStoreManager with Expired Token
@@ -99,7 +99,7 @@ namespace commercetools.Sdk.HttpApi.Tests
 
             //Create httpClientFactory which return Token as json response with refresh token
             var mockHttpClientFactory =
-                this.clientFixture.GetClientFactoryMockWithSpecificResponse("auth",
+                this.clientFixture.GetClientFactoryMockWithSpecificResponse(DefaultClientNames.Authorization,
                     "Resources/Responses/GetToken.json");
 
             //Create tokenStoreManager with Expired Token and without Refresh token

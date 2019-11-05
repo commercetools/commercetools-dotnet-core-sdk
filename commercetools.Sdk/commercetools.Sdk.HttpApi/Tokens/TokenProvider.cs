@@ -6,7 +6,7 @@ using commercetools.Sdk.Serialization;
 
 namespace commercetools.Sdk.HttpApi.Tokens
 {
-    internal abstract class TokenProvider
+    public abstract class TokenProvider
     {
         private readonly ISerializerService serializerService;
         private readonly ITokenStoreManager tokenStoreManager;
@@ -84,7 +84,7 @@ namespace commercetools.Sdk.HttpApi.Tokens
 
         private async Task<Token> GetTokenAsync(HttpRequestMessage requestMessage)
         {
-            HttpClient client = this.HttpClientFactory.CreateClient("auth");
+            HttpClient client = this.HttpClientFactory.CreateClient(DefaultClientNames.Authorization);
             var result = await client.SendAsync(requestMessage).ConfigureAwait(false);
             string content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
             if (result.IsSuccessStatusCode)

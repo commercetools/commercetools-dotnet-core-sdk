@@ -46,6 +46,9 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                         .ExecuteAsync(new DeleteByIdCommand<T>(toBeDeleted.Id, currentVersion.Value));
                 }
             }
+            catch (NotFoundException exception)
+            {
+            }
 
             return deletedResource;
         }
