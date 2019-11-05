@@ -23,7 +23,11 @@ namespace commercetools.Sdk.HttpApi.Tokens
         {
             HttpRequestMessage request = new HttpRequestMessage();
             string requestUri = this.ClientConfiguration.AuthorizationBaseAddress + $"oauth/{this.ClientConfiguration.ProjectKey}/anonymous/token?grant_type=client_credentials";
-            requestUri += $"&scope={this.ClientConfiguration.Scope}";
+            if (!string.IsNullOrEmpty(this.ClientConfiguration.Scope))
+            {
+                requestUri += $"&scope={this.ClientConfiguration.Scope}";
+            }
+
             if (!string.IsNullOrEmpty(this.anonymousCredentialsStoreManager.AnonymousId))
             {
                 requestUri += $"&anonymous_id={this.anonymousCredentialsStoreManager.AnonymousId}";
