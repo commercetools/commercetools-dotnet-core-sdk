@@ -287,7 +287,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         }
 
 
-        public void AssertEventually(Action runnableBlock, int maxWaitTimeSecond = 180,
+        public void AssertEventually(Action runnableBlock, int maxWaitTimeSecond = 300,
             int waitBeforeRetryMilliseconds = 100)
         {
             var maxWaitTime = TimeSpan.FromSeconds(maxWaitTimeSecond);

@@ -136,7 +136,8 @@ namespace SimpleInjector
         private static IDictionary<string, IHttpClientBuilder> UseMultipleClients(this Container services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
             var collection = new ServiceCollection();
-            services.UseHttpApiDefaults(collection);
+            services.UseHttpApiDefaults();
+
             var builders = new Dictionary<string, IHttpClientBuilder>();
             var clientBuilders = new List<Registration>();
             foreach (KeyValuePair<string, TokenFlow> client in clients)
@@ -149,20 +150,39 @@ namespace SimpleInjector
 
                 builders.Add(clientName, services.SetupClient(collection, clientName, clientConfiguration, tokenFlow));
 
-
-                clientBuilders.Add(Lifestyle.Singleton.CreateRegistration(() => new CtpClient(services.GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName }, services));
+                clientBuilders.Add(Lifestyle.Singleton.CreateRegistration(() => new CtpClient(collection.BuildServiceProvider().GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName }, services));
             }
             services.RegisterCollection<IClient>(clientBuilders);
-            services.Register<IHttpClientFactory>(() => collection.BuildServiceProvider().GetService<IHttpClientFactory>(), Lifestyle.Singleton);
+
+            collection.AddHttpClient(DefaultClientNames.Authorization);
+            services.UseTokenProviders(collection.BuildServiceProvider().GetService<IHttpClientFactory>());
 
             return builders;
+        }
+
+        private static void UseTokenProviders(this Container services, IHttpClientFactory factory)
+        {
+            var providers = new List<Registration>
+            {
+                Lifestyle.Transient.CreateRegistration(
+                    () => new AnonymousSessionTokenProvider(factory,
+                        services.GetService<IAnonymousCredentialsStoreManager>(),
+                        services.GetService<ISerializerService>()), services),
+                Lifestyle.Transient.CreateRegistration(
+                    () => new ClientCredentialsTokenProvider(factory, services.GetService<ITokenStoreManager>(),
+                        services.GetService<ISerializerService>()), services),
+                Lifestyle.Transient.CreateRegistration(
+                    () => new PasswordTokenProvider(factory, services.GetService<IUserCredentialsStoreManager>(),
+                        services.GetService<ISerializerService>()), services)
+            };
+
+            services.RegisterCollection<ITokenProvider>(providers);
         }
 
         private static IDictionary<string, IHttpClientBuilder> UseSingleClient(this Container services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
         {
             var collection = new ServiceCollection();
-            services.UseHttpApiDefaults(collection);
-            services.Register<IClient>(() => new CtpClient(services.GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName });
+            services.UseHttpApiDefaults();
 
             var configurationSection = configuration.GetSection(clientName);
             IClientConfiguration clientConfiguration = configurationSection.Get<ClientConfiguration>();
@@ -172,7 +192,10 @@ namespace SimpleInjector
             {
                 {clientName, services.SetupClient(collection, clientName, clientConfiguration, tokenFlow)}
             };
-            services.Register<IHttpClientFactory>(() => collection.BuildServiceProvider().GetService<IHttpClientFactory>(), Lifestyle.Singleton);
+            services.Register<IClient>(() => new CtpClient(collection.BuildServiceProvider().GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName }, Lifestyle.Singleton);
+
+            collection.AddHttpClient(DefaultClientNames.Authorization);
+            services.UseTokenProviders(collection.BuildServiceProvider().GetService<IHttpClientFactory>());
 
             return builders;
         }
@@ -198,13 +221,11 @@ namespace SimpleInjector
             return httpClientBuilder;
         }
 
-        private static void UseHttpApiDefaults(this Container services, IServiceCollection collection)
+        private static void UseHttpApiDefaults(this Container services)
         {
-            collection.AddHttpClient(DefaultClientNames.Authorization);
             services.Register<ITokenStoreManager, InMemoryTokenStoreManager>(Lifestyle.Transient);
             services.Register<IUserCredentialsStoreManager, InMemoryUserCredentialsStoreManager>(Lifestyle.Transient);
             services.Register<IAnonymousCredentialsStoreManager, InMemoryAnonymousCredentialsStoreManager>(Lifestyle.Transient);
-            services.RegisterCollection(typeof(ITokenProvider), typeof(ITokenProvider).Assembly);
             services.RegisterCollection(typeof(IRequestMessageBuilder), typeof(IRequestMessageBuilder).Assembly);
             services.RegisterCollection(typeof(IAdditionalParametersBuilder), typeof(IAdditionalParametersBuilder).Assembly);
             services.RegisterCollection(typeof(ISearchParametersBuilder), typeof(ISearchParametersBuilder).Assembly);

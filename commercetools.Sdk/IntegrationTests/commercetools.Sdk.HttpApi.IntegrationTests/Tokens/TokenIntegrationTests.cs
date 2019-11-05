@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.HttpApi.IntegrationTests.Tokens
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace commercetools.Sdk.HttpApi.IntegrationTests.Tokens
 {
     using commercetools.Sdk.HttpApi;
     using commercetools.Sdk.HttpApi.Domain;
@@ -12,9 +14,15 @@
     {
         private readonly ClientFixture clientFixture;
 
+        private readonly ServiceProvider provider;
+
         public TokenIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.clientFixture = new ClientFixture(serviceProviderFixture);
+            var collection = new ServiceCollection();
+            collection.AddHttpClient(DefaultClientNames.Authorization);
+            this.provider = collection.BuildServiceProvider();
+
         }
 
         [Fact]
@@ -25,7 +33,7 @@
             clientConfiguration.Scope = "";
             ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
             ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(
-                this.clientFixture.GetService<IHttpClientFactory>(),
+                this.provider.GetService<IHttpClientFactory>(),
                 tokenStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
             tokenProvider.ClientConfiguration = clientConfiguration;
@@ -39,7 +47,7 @@
             IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithSmallerScope");
             ITokenStoreManager tokenStoreManager = new InMemoryTokenStoreManager();
             ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(
-                this.clientFixture.GetService<IHttpClientFactory>(),
+                this.provider.GetService<IHttpClientFactory>(),
                 tokenStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
             tokenProvider.ClientConfiguration = clientConfiguration;
@@ -56,7 +64,7 @@
             userCredentialsStoreManager.Username = "mick.jagger@commercetools.com";
             userCredentialsStoreManager.Password = "st54e9m4";
             ITokenProvider tokenProvider = new PasswordTokenProvider(
-                this.clientFixture.GetService<IHttpClientFactory>(),
+                this.provider.GetService<IHttpClientFactory>(),
                 userCredentialsStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
             tokenProvider.ClientConfiguration = clientConfiguration;
@@ -70,7 +78,7 @@
             IClientConfiguration clientConfiguration = this.clientFixture.GetClientConfiguration("TokenClientWithAnonymousScope");
             IAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(
-                this.clientFixture.GetService<IHttpClientFactory>(),
+                this.provider.GetService<IHttpClientFactory>(),
                 anonymousStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
             tokenProvider.ClientConfiguration = clientConfiguration;
@@ -85,7 +93,7 @@
             InMemoryAnonymousCredentialsStoreManager anonymousStoreManager = new InMemoryAnonymousCredentialsStoreManager();
             anonymousStoreManager.AnonymousId = TestingUtility.RandomString(10);
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(
-                this.clientFixture.GetService<IHttpClientFactory>(),
+                this.provider.GetService<IHttpClientFactory>(),
                 anonymousStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
             tokenProvider.ClientConfiguration = clientConfiguration;
@@ -101,7 +109,7 @@
             userCredentialsStoreManager.Username = "mick.jagger@commercetools.com";
             userCredentialsStoreManager.Password = "st54e9m4";
             ITokenProvider tokenProvider = new PasswordTokenProvider(
-                this.clientFixture.GetService<IHttpClientFactory>(),
+                this.provider.GetService<IHttpClientFactory>(),
                 userCredentialsStoreManager,
                 this.clientFixture.GetService<ISerializerService>());
             tokenProvider.ClientConfiguration = clientConfiguration;

@@ -4,7 +4,7 @@ using commercetools.Sdk.Serialization;
 
 namespace commercetools.Sdk.HttpApi.Tokens
 {
-    internal class AnonymousSessionTokenProvider : TokenProvider, ITokenProvider
+    public class AnonymousSessionTokenProvider : TokenProvider, ITokenProvider
     {
         private readonly IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager;
 

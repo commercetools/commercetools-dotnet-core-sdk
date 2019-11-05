@@ -30,7 +30,7 @@ test_script:
   - ps: |
       dotnet test IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
   - ps: |
-      $env:Container="SimpleInjector"
+      $env:CTP_Container="SimpleInjector"
       dotnet test IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
   - ps: |
       dotnet test IntegrationTests/commercetools.Sdk.Core3Tests --no-build -c Release

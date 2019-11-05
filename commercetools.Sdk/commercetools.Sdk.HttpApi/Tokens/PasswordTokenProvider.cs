@@ -4,7 +4,7 @@ using commercetools.Sdk.Serialization;
 
 namespace commercetools.Sdk.HttpApi.Tokens
 {
-    internal class PasswordTokenProvider : TokenProvider, ITokenProvider
+    public class PasswordTokenProvider : TokenProvider, ITokenProvider
     {
         private readonly IUserCredentialsStoreManager userCredentialsManager;
 
