@@ -4,7 +4,7 @@ using commercetools.Sdk.Serialization;
 
 namespace commercetools.Sdk.HttpApi.Tokens
 {
-    internal class AnonymousSessionTokenProvider : TokenProvider, ITokenProvider
+    public class AnonymousSessionTokenProvider : TokenProvider, ITokenProvider
     {
         private readonly IAnonymousCredentialsStoreManager anonymousCredentialsStoreManager;
 
@@ -23,7 +23,11 @@ namespace commercetools.Sdk.HttpApi.Tokens
         {
             HttpRequestMessage request = new HttpRequestMessage();
             string requestUri = this.ClientConfiguration.AuthorizationBaseAddress + $"oauth/{this.ClientConfiguration.ProjectKey}/anonymous/token?grant_type=client_credentials";
-            requestUri += $"&scope={this.ClientConfiguration.Scope}";
+            if (!string.IsNullOrEmpty(this.ClientConfiguration.Scope))
+            {
+                requestUri += $"&scope={this.ClientConfiguration.Scope}";
+            }
+
             if (!string.IsNullOrEmpty(this.anonymousCredentialsStoreManager.AnonymousId))
             {
                 requestUri += $"&anonymous_id={this.anonymousCredentialsStoreManager.AnonymousId}";

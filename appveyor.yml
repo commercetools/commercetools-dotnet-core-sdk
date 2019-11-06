@@ -17,7 +17,7 @@ build_script:
   - ps: dotnet build -c Release
 
 after_build:
-  - ps: dotnet pack -c Release -o ../pack/
+  - ps: dotnet pack -c Release -o ..\pack\
 
 test_script:
   - ps: |
@@ -30,13 +30,13 @@ test_script:
   - ps: |
       dotnet test IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
   - ps: |
-      $env:Container="SimpleInjector"
+      $env:CTP_Container="SimpleInjector"
       dotnet test IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
   - ps: |
       dotnet test IntegrationTests/commercetools.Sdk.Core3Tests --no-build -c Release
 
 artifacts:
-- path: commercetools.Sdk/**/*.nupkg
+- path: pack/**.nupkg
   name: NuGet Package
 
 version: 1.0.0.{build}

@@ -4,7 +4,7 @@ using commercetools.Sdk.Serialization;
 
 namespace commercetools.Sdk.HttpApi.Tokens
 {
-    internal class ClientCredentialsTokenProvider : TokenProvider, ITokenProvider
+    public class ClientCredentialsTokenProvider : TokenProvider, ITokenProvider
     {
         public ClientCredentialsTokenProvider(
             IHttpClientFactory httpClientFactory,

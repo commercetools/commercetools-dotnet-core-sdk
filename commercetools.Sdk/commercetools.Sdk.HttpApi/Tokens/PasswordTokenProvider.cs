@@ -4,7 +4,7 @@ using commercetools.Sdk.Serialization;
 
 namespace commercetools.Sdk.HttpApi.Tokens
 {
-    internal class PasswordTokenProvider : TokenProvider, ITokenProvider
+    public class PasswordTokenProvider : TokenProvider, ITokenProvider
     {
         private readonly IUserCredentialsStoreManager userCredentialsManager;
 
@@ -25,7 +25,11 @@ namespace commercetools.Sdk.HttpApi.Tokens
             string requestUri = this.ClientConfiguration.AuthorizationBaseAddress + $"oauth/{this.ClientConfiguration.ProjectKey}/customers/token?grant_type=password";
             requestUri += $"&username={this.userCredentialsManager.Username}";
             requestUri += $"&password={this.userCredentialsManager.Password}";
-            requestUri += $"&scope={this.ClientConfiguration.Scope}";
+            if (!string.IsNullOrEmpty(this.ClientConfiguration.Scope))
+            {
+                requestUri += $"&scope={this.ClientConfiguration.Scope}";
+            }
+
             request.RequestUri = new Uri(requestUri);
             string credentials = $"{this.ClientConfiguration.ClientId}:{this.ClientConfiguration.ClientSecret}";
             request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(credentials)));

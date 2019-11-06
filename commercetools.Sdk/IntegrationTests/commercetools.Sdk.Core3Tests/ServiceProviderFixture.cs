@@ -35,7 +35,11 @@ namespace commercetools.Sdk.Core3Tests
                 case ContainerType.BuiltIn:
                     var services = new ServiceCollection();
                     services.UseCommercetools(Configuration, "Client", TokenFlow.ClientCredentials);
-                    this.ServiceProvider = services.BuildServiceProvider();
+                    this.ServiceProvider = services.BuildServiceProvider(new ServiceProviderOptions()
+                    {
+                        ValidateOnBuild = true,
+                        ValidateScopes = true
+                    });
                     break;
                 case ContainerType.SimpleInjector:
                     var container = new Container();

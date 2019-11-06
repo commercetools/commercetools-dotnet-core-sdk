@@ -106,7 +106,6 @@ namespace commercetools.Sdk.HttpApi
             services.AddSingleton<IParametersBuilderFactory<IUploadImageParametersBuilder>, ParametersBuilderFactory<IUploadImageParametersBuilder>>();
             services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
-            services.AddSingleton<IApiExceptionFactory, ApiExceptionFactory>();
             services.AddSingleton<IUserAgentProvider, UserAgentProvider>();
         }
     }
