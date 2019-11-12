@@ -3,8 +3,10 @@ using commercetools.Sdk.Domain;
 using System;
 using System.Collections.Generic;
 using commercetools.Sdk.Domain.Common;
-using Xunit.Abstractions;
-using Type = commercetools.Sdk.Domain.Type;
+ using commercetools.Sdk.Domain.Types;
+ using commercetools.Sdk.Domain.Types.FieldTypes;
+ using Xunit.Abstractions;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using commercetools.Sdk.Domain.Types;
 
 namespace commercetools.Sdk.Domain.ProductTypes.UpdateActions
 {

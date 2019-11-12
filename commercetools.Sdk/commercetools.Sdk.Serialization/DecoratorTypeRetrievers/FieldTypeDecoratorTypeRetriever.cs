@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Types.FieldTypes;
 using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Serialization

@@ -6,7 +6,7 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.IntegrationTests.Customers
 {

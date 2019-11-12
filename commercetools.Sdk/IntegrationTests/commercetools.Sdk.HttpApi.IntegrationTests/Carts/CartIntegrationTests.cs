@@ -23,7 +23,7 @@ using SetCustomFieldUpdateAction = commercetools.Sdk.Domain.Carts.UpdateActions.
 using SetCustomLineItemShippingDetailsUpdateAction =
     commercetools.Sdk.Domain.Carts.UpdateActions.SetCustomLineItemShippingDetailsUpdateAction;
 using SetCustomTypeUpdateAction = commercetools.Sdk.Domain.Carts.UpdateActions.SetCustomTypeUpdateAction;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 {

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using commercetools.Sdk.Domain.Categories.UpdateActions;
  using commercetools.Sdk.Domain.Common;
  using commercetools.Sdk.HttpApi.Domain.Exceptions;
- using Type = commercetools.Sdk.Domain.Type;
+ using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {

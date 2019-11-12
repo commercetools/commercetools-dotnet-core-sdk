@@ -11,7 +11,7 @@ using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.States;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
 {

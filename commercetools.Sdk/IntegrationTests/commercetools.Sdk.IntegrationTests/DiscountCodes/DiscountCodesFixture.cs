@@ -7,7 +7,7 @@ using commercetools.Sdk.Domain.CartDiscounts;
 using commercetools.Sdk.Domain.DiscountCodes;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
 using static commercetools.Sdk.IntegrationTests.CartDiscounts.CartDiscountsFixture;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.IntegrationTests.DiscountCodes
 {

@@ -23,7 +23,7 @@ using commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
 using Xunit.Abstractions;
 using LineItemDraft = commercetools.Sdk.Domain.Carts.LineItemDraft;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 {

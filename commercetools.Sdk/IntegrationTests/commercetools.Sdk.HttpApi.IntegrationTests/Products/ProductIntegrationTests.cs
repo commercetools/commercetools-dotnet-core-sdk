@@ -17,7 +17,7 @@ using commercetools.Sdk.HttpApi.Domain;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;
 using SetDescriptionUpdateAction = commercetools.Sdk.Domain.Products.UpdateActions.SetDescriptionUpdateAction;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
 {

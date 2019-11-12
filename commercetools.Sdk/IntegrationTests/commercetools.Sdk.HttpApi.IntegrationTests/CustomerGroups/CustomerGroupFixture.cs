@@ -4,7 +4,7 @@ using commercetools.Sdk.Domain.CustomerGroups;
 using System;
 using System.Collections.Generic;
 using Xunit.Abstractions;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.CustomerGroups
 {

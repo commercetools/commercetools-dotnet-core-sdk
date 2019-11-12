@@ -11,7 +11,7 @@ using commercetools.Sdk.Domain.Query;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;
 using SetCustomFieldUpdateAction = commercetools.Sdk.Domain.InventoryEntries.UpdateActions.SetCustomFieldUpdateAction;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory
 {

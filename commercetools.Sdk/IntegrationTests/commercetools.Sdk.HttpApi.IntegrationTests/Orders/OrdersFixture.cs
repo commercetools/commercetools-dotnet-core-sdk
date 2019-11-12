@@ -16,7 +16,7 @@ using commercetools.Sdk.HttpApi.IntegrationTests.Payments;
 using commercetools.Sdk.HttpApi.IntegrationTests.Products;
 using commercetools.Sdk.HttpApi.IntegrationTests.Projects;
 using commercetools.Sdk.HttpApi.IntegrationTests.States;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Orders
 {

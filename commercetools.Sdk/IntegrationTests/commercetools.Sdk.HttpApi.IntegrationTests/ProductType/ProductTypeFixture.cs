@@ -4,7 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using commercetools.Sdk.Domain.Products.Attributes;
-using Xunit.Abstractions;
+ using commercetools.Sdk.Domain.Types;
+ using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests
 {

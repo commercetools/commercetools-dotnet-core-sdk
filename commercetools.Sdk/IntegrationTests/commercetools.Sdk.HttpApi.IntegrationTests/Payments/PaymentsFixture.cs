@@ -8,7 +8,7 @@ using commercetools.Sdk.Domain.ShoppingLists;
 using commercetools.Sdk.Domain.States;
 using commercetools.Sdk.HttpApi.IntegrationTests.Customers;
 using commercetools.Sdk.HttpApi.IntegrationTests.States;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 using Xunit.Abstractions;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Payments
