@@ -6,7 +6,7 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.Customers;
-using commercetools.Sdk.Domain.CustomObject;
+using commercetools.Sdk.Domain.CustomObjects;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
 

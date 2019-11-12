@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using commercetools.Sdk.Domain.Customers;
-using commercetools.Sdk.Domain.Orders;
-
-namespace commercetools.Sdk.Domain.CustomObject
+﻿namespace commercetools.Sdk.Domain.CustomObjects
 {
     public class CustomObjectDraft<T> : IDraft<CustomObject<T>>
     {

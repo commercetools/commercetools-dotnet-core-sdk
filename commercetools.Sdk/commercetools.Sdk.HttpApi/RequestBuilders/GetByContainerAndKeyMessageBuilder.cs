@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using commercetools.Sdk.Client;
-using commercetools.Sdk.Domain.CustomObject;
 using commercetools.Sdk.HttpApi.AdditionalParameters;
 using commercetools.Sdk.Serialization;
 using Microsoft.AspNetCore.WebUtilities;

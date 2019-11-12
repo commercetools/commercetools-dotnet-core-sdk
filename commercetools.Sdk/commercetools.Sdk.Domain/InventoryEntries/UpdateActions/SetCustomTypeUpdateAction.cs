@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.Domain.InventoryEntries
+﻿namespace commercetools.Sdk.Domain.InventoryEntries.UpdateActions
 {
     public class SetCustomTypeUpdateAction : UpdateAction<InventoryEntry>
     {

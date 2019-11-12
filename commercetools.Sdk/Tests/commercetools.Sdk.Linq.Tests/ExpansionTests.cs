@@ -7,7 +7,6 @@ using commercetools.Sdk.Domain.Predicates;
 using Xunit;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 using commercetools.Sdk.Domain.Categories;
-using commercetools.Sdk.Domain.CustomObject;
 using LineItem = commercetools.Sdk.Domain.ShoppingLists.LineItem;
 
 namespace commercetools.Sdk.Linq.Tests

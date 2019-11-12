@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using commercetools.Sdk.Domain.Channels;
+﻿using commercetools.Sdk.Domain.Channels;
 
-namespace commercetools.Sdk.Domain.InventoryEntries
+namespace commercetools.Sdk.Domain.InventoryEntries.UpdateActions
 {
     public class SetSupplyChannelUpdateAction : UpdateAction<InventoryEntry>
     {

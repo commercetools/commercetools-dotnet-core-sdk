@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.InventoryEntries;
 using commercetools.Sdk.HttpApi.IntegrationTests.Channels;
 using commercetools.Sdk.HttpApi.IntegrationTests.Products;
 using Xunit.Abstractions;

@@ -5,11 +5,12 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Channels;
 using commercetools.Sdk.Domain.InventoryEntries;
+using commercetools.Sdk.Domain.InventoryEntries.UpdateActions;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Query;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;
-using SetCustomFieldUpdateAction = commercetools.Sdk.Domain.InventoryEntries.SetCustomFieldUpdateAction;
+using SetCustomFieldUpdateAction = commercetools.Sdk.Domain.InventoryEntries.UpdateActions.SetCustomFieldUpdateAction;
 using Type = commercetools.Sdk.Domain.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Inventory

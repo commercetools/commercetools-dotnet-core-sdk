@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace commercetools.Sdk.Domain.InventoryEntries
+﻿namespace commercetools.Sdk.Domain.InventoryEntries.UpdateActions
 {
     public class SetRestockableInDaysUpdateAction : UpdateAction<InventoryEntry>
     {

@@ -1,5 +1,5 @@
 ﻿using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.CustomObject;
+using commercetools.Sdk.Domain.CustomObjects;
 
 namespace commercetools.Sdk.Client
 {

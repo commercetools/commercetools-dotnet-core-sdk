@@ -2,7 +2,7 @@
 using commercetools.Sdk.Domain.Channels;
 using commercetools.Sdk.Domain.Common;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.InventoryEntries
 {
     [Endpoint("inventory")]
     public class InventoryEntry : Resource<InventoryEntry>

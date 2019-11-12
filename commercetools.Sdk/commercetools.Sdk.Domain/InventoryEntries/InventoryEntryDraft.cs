@@ -1,11 +1,10 @@
-﻿using commercetools.Sdk.Domain.Channels;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using commercetools.Sdk.Domain.Channels;
 using commercetools.Sdk.Domain.Common;
 
-namespace commercetools.Sdk.Domain
+namespace commercetools.Sdk.Domain.InventoryEntries
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-
     public class InventoryEntryDraft : IDraft<InventoryEntry>
     {
         [Required]

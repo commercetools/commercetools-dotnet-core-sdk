@@ -24,6 +24,7 @@ using commercetools.Sdk.HttpApi.IntegrationTests.Reviews;
 using commercetools.Sdk.HttpApi.IntegrationTests.States;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
 using Castle.Components.DictionaryAdapter;
+using commercetools.Sdk.Domain.InventoryEntries;
 using commercetools.Sdk.HttpApi.IntegrationTests.Projects;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

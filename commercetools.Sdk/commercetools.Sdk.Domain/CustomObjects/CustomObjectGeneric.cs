@@ -1,6 +1,4 @@
-using System;
-
-namespace commercetools.Sdk.Domain.CustomObject
+namespace commercetools.Sdk.Domain.CustomObjects
 {
     public class CustomObject<T> : CustomObjectBase
     {

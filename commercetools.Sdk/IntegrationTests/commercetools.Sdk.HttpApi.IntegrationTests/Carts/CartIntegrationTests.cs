@@ -6,7 +6,7 @@ using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Carts.UpdateActions;
 using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.Customers;
-using commercetools.Sdk.Domain.CustomObject;
+using commercetools.Sdk.Domain.CustomObjects;
 using commercetools.Sdk.Domain.DiscountCodes;
 using commercetools.Sdk.Domain.Payments;
 using commercetools.Sdk.Domain.Predicates;

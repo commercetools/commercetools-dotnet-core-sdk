@@ -1,7 +1,6 @@
-using System;
 using commercetools.Sdk.Domain.Common;
 
-namespace commercetools.Sdk.Domain.CustomObject
+namespace commercetools.Sdk.Domain.CustomObjects
 {
     [Endpoint("custom-objects")]
     [ResourceType(ReferenceTypeId.KeyValueDocument)]
