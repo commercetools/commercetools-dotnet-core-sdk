@@ -1,4 +1,4 @@
-namespace commercetools.Sdk.Domain.Project
+namespace commercetools.Sdk.Domain.Projects
 {
     [TypeMarker("CartScore")]
     public class CartScoreShippingRateInputType : ShippingRateInputType

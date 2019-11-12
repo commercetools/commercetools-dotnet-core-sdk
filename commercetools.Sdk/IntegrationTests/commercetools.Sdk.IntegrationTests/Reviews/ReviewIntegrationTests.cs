@@ -9,7 +9,7 @@ using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;
 using static commercetools.Sdk.IntegrationTests.Reviews.ReviewsFixture;
 using static commercetools.Sdk.IntegrationTests.Customers.CustomersFixture;
-using static commercetools.Sdk.IntegrationTests.Project.ProjectFixture;
+using static commercetools.Sdk.IntegrationTests.Projects.ProjectFixture;
 using static commercetools.Sdk.IntegrationTests.States.StatesFixture;
 using static commercetools.Sdk.IntegrationTests.Types.TypesFixture;
 using static commercetools.Sdk.IntegrationTests.Products.ProductsFixture;

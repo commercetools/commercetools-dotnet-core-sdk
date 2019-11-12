@@ -11,7 +11,7 @@ using commercetools.Sdk.Domain.DiscountCodes;
 using commercetools.Sdk.Domain.Payments;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Products.UpdateActions;
-using commercetools.Sdk.Domain.Project;
+using commercetools.Sdk.Domain.Projects;
 using commercetools.Sdk.Domain.Query;
 using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.ShoppingLists;

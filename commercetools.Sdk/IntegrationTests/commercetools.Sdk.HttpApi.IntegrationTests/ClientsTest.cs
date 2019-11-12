@@ -39,10 +39,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 
             var result1 = client1.ExecuteAsync(new GetProjectCommand());
             var t1 = result1.Result;
-            Assert.IsType<Sdk.Domain.Project.Project>(t1);
+            Assert.IsType<Sdk.Domain.Projects.Project>(t1);
             var result2 = client2.ExecuteAsync(new GetProjectCommand());
             var t2 = result2.Result;
-            Assert.IsType<Sdk.Domain.Project.Project>(t2);
+            Assert.IsType<Sdk.Domain.Projects.Project>(t2);
         }
 
         [Fact]
@@ -71,10 +71,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 
             var result1 = client1.ExecuteAsync(new GetProjectCommand());
             var t1 = result1.Result;
-            Assert.IsType<Sdk.Domain.Project.Project>(t1);
+            Assert.IsType<Sdk.Domain.Projects.Project>(t1);
             var result2 = client2.ExecuteAsync(new GetProjectCommand());
             var t2 = result2.Result;
-            Assert.IsType<Sdk.Domain.Project.Project>(t2);
+            Assert.IsType<Sdk.Domain.Projects.Project>(t2);
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                         try
                         {
                             var t1 = await client.ExecuteAsync(new GetProjectCommand());
-                            Assert.IsType<Sdk.Domain.Project.Project>(t1);
+                            Assert.IsType<Sdk.Domain.Projects.Project>(t1);
                         }
                         finally
                         {
@@ -145,7 +145,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                         try
                         {
                             var t1 = await client.ExecuteAsync(new GetProjectCommand());
-                            Assert.IsType<Sdk.Domain.Project.Project>(t1);
+                            Assert.IsType<Sdk.Domain.Projects.Project>(t1);
                         }
                         finally
                         {

@@ -69,7 +69,7 @@
     <Folder Include="Customers\" />
     <Folder Include="Products\" />
     <Folder Include="ProductType\" />
-    <Folder Include="Project\" />
+    <Folder Include="Projects\" />
     <Folder Include="Properties\" />
     <Folder Include="Type\" />
     <Folder Include="Resources\" />

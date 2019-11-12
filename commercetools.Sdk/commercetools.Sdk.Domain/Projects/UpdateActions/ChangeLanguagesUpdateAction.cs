@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace commercetools.Sdk.Domain.Project.UpdateActions
+namespace commercetools.Sdk.Domain.Projects.UpdateActions
 {
     public class ChangeLanguagesUpdateAction : UpdateAction<Project>
     {

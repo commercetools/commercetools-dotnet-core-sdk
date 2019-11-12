@@ -17,7 +17,7 @@ using commercetools.Sdk.HttpApi.IntegrationTests.Customers;
 using commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes;
 using commercetools.Sdk.HttpApi.IntegrationTests.Payments;
 using commercetools.Sdk.HttpApi.IntegrationTests.Products;
-using commercetools.Sdk.HttpApi.IntegrationTests.Project;
+using commercetools.Sdk.HttpApi.IntegrationTests.Projects;
 using commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods;
 using commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
@@ -391,15 +391,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return itemShippingTarget;
         }
 
-        public Sdk.Domain.Project.Project SetShippingRateInputTypeToCartScoreForCurrentProject()
+        public Sdk.Domain.Projects.Project SetShippingRateInputTypeToCartScoreForCurrentProject()
         {
             return this.projectFixture.SetShippingRateInputTypeToCartScore();
         }
-        public Sdk.Domain.Project.Project SetShippingRateInputTypeToCartClassificationForCurrentProject(List<LocalizedEnumValue> values)
+        public Sdk.Domain.Projects.Project SetShippingRateInputTypeToCartClassificationForCurrentProject(List<LocalizedEnumValue> values)
         {
             return this.projectFixture.SetShippingRateInputTypeToCartClassification(values);
         }
-        public Sdk.Domain.Project.Project RemoveExistingShippingRateInputTypeForCurrentProject()
+        public Sdk.Domain.Projects.Project RemoveExistingShippingRateInputTypeForCurrentProject()
         {
             return this.projectFixture.RemoveExistingShippingRateInputType();
         }

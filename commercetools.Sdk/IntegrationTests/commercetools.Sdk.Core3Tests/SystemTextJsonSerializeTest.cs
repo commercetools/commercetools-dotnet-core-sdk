@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.Project;
+using commercetools.Sdk.Domain.Projects;
 using Type = System.Type;
 
 namespace commercetools.Sdk.Core3Tests
