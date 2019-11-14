@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.HttpApi",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Client", "commercetools.Sdk.Client\commercetools.Sdk.Client.csproj", "{9B105327-3D7D-4857-9811-50F355A4DC2C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.ClientCredentialsExample", "commercetools.Sdk.HttpApi.MvcExample\commercetools.Sdk.ClientCredentialsExample.csproj", "{89518E0D-DF0C-452A-B638-583BF3CB50B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.ClientCredentialsExample", "Examples\commercetools.Sdk.HttpApi.MvcExample\commercetools.Sdk.ClientCredentialsExample.csproj", "{89518E0D-DF0C-452A-B638-583BF3CB50B0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Serialization", "commercetools.Sdk.Serialization\commercetools.Sdk.Serialization.csproj", "{04694BAE-534B-44EB-89D4-C8E90B5FD59B}"
 EndProject
@@ -38,13 +38,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.Dependenc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{246B3DBC-CE94-4B32-AEFB-8C42A0D8F502}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.PasswordExample", "commercetools.Sdk.PasswordExample\commercetools.Sdk.PasswordExample.csproj", "{1AE43971-8EA5-4A41-8352-EC5B53C8AD3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.PasswordExample", "Examples\commercetools.Sdk.PasswordExample\commercetools.Sdk.PasswordExample.csproj", "{1AE43971-8EA5-4A41-8352-EC5B53C8AD3F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.AnonymousSessionExample", "commercetools.Sdk.AnonymousSessionExample\commercetools.Sdk.AnonymousSessionExample.csproj", "{D1F9B222-7CE0-461F-9BA6-B177D9203B4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.AnonymousSessionExample", "Examples\commercetools.Sdk.AnonymousSessionExample\commercetools.Sdk.AnonymousSessionExample.csproj", "{D1F9B222-7CE0-461F-9BA6-B177D9203B4E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.FlowChangeExample", "commercetools.Sdk.FlowChangeExample\commercetools.Sdk.FlowChangeExample.csproj", "{A50C27D8-0126-4D02-A34C-18A1FD529912}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "commercetools.Sdk.FlowChangeExample", "Examples\commercetools.Sdk.FlowChangeExample\commercetools.Sdk.FlowChangeExample.csproj", "{A50C27D8-0126-4D02-A34C-18A1FD529912}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.MultipleClients", "commercetools.Sdk.MultipleClients\commercetools.Sdk.MultipleClients.csproj", "{1ED86710-A7A6-4E63-AAC6-A98A1EEB46D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.MultipleClients", "Examples\commercetools.Sdk.MultipleClients\commercetools.Sdk.MultipleClients.csproj", "{1ED86710-A7A6-4E63-AAC6-A98A1EEB46D2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.All", "commercetools.Sdk.All\commercetools.Sdk.All.csproj", "{264AEBC5-2534-4D04-BE64-2069B7343CCE}"
 EndProject

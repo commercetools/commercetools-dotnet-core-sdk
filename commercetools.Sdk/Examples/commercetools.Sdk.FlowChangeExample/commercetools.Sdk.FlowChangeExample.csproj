@@ -13,13 +13,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\commercetools.Sdk.DependencyInjection\commercetools.Sdk.DependencyInjection.csproj" />
-    <ProjectReference Include="..\commercetools.Sdk.HttpApi\commercetools.Sdk.HttpApi.csproj" />
+    <ProjectReference Include="..\..\commercetools.Sdk.DependencyInjection\commercetools.Sdk.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\commercetools.Sdk.HttpApi\commercetools.Sdk.HttpApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Update="appsettings.Development.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Views\Home\Index.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>
 
