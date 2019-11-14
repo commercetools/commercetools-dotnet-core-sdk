@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -10,12 +10,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\commercetools.Sdk.Client\commercetools.Sdk.Client.csproj" />
-    <ProjectReference Include="..\commercetools.Sdk.DependencyInjection\commercetools.Sdk.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\commercetools.Sdk.DependencyInjection\commercetools.Sdk.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\commercetools.Sdk.HttpApi\commercetools.Sdk.HttpApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
