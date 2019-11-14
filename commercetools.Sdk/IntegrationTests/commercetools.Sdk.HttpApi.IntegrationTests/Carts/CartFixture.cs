@@ -9,6 +9,7 @@ using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.DiscountCodes;
 using commercetools.Sdk.Domain.Messages;
 using commercetools.Sdk.Domain.Payments;
+using commercetools.Sdk.Domain.Projects;
 using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.ShoppingLists;
 using commercetools.Sdk.Domain.TaxCategories;
@@ -391,15 +392,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return itemShippingTarget;
         }
 
-        public Sdk.Domain.Projects.Project SetShippingRateInputTypeToCartScoreForCurrentProject()
+        public Project SetShippingRateInputTypeToCartScoreForCurrentProject()
         {
             return this.projectFixture.SetShippingRateInputTypeToCartScore();
         }
-        public Sdk.Domain.Projects.Project SetShippingRateInputTypeToCartClassificationForCurrentProject(List<LocalizedEnumValue> values)
+        public Project SetShippingRateInputTypeToCartClassificationForCurrentProject(List<LocalizedEnumValue> values)
         {
             return this.projectFixture.SetShippingRateInputTypeToCartClassification(values);
         }
-        public Sdk.Domain.Projects.Project RemoveExistingShippingRateInputTypeForCurrentProject()
+        public Project RemoveExistingShippingRateInputTypeForCurrentProject()
         {
             return this.projectFixture.RemoveExistingShippingRateInputType();
         }

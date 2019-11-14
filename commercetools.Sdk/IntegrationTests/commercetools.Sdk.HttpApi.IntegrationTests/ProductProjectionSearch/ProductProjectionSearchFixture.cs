@@ -25,6 +25,7 @@ using commercetools.Sdk.HttpApi.IntegrationTests.States;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
 using Castle.Components.DictionaryAdapter;
 using commercetools.Sdk.Domain.InventoryEntries;
+using commercetools.Sdk.Domain.Projects;
 using commercetools.Sdk.HttpApi.IntegrationTests.Projects;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -218,7 +219,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             return review;
         }
 
-        public Sdk.Domain.Projects.Project ChangeProjectLanguages(List<string> languages)
+        public Project ChangeProjectLanguages(List<string> languages)
         {
             var project = this.projectFixture.ChangeProjectLanguages(languages);
             return project;

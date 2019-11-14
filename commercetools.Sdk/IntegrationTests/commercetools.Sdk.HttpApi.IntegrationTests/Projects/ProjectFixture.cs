@@ -98,7 +98,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Projects
             {
                 Languages = languages
             };
-            var updateActions = new List<UpdateAction<Sdk.Domain.Projects.Project>> {changeLanguagesUpdateAction};
+            var updateActions = new List<UpdateAction<Project>> {changeLanguagesUpdateAction};
 
             var updatedProject = commerceToolsClient
                 .ExecuteAsync(new UpdateProjectCommand(project.Version, updateActions))

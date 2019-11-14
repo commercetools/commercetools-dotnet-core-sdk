@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
-using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Projects;
 using commercetools.Sdk.Domain.Projects.UpdateActions;
 using Xunit;
