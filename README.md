@@ -30,7 +30,7 @@ The SDK consists of the following projects:
 * `commercetools.Sdk.HttpApi.Serialization`: Serialization and deserialization services for responses and requests to the HTTP API.
 
 In addition, the SDK has the following directories:
-* [Examples](/Examples): Contains examples of common SDK use cases for MVC applications. 
+* [Examples](/commercetools.Sdk/Examples): Contains examples of common SDK use cases for MVC applications. 
 * `/Tests`: Integration tests for the SDK. A good way for anyone using the .NET SDK to understand it futher.
 
 ## Getting Started with the .NET SDK
