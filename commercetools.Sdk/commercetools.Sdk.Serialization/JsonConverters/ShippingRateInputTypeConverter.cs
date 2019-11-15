@@ -1,4 +1,4 @@
-﻿using commercetools.Sdk.Domain.Project;
+﻿using commercetools.Sdk.Domain.Projects;
 
 namespace commercetools.Sdk.Serialization
 {

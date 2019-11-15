@@ -1,4 +1,5 @@
 ﻿using System;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.Domain.Products.UpdateActions
 {

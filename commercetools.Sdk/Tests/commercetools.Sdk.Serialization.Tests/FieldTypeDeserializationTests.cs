@@ -3,9 +3,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
+using commercetools.Sdk.Domain.Types;
+using commercetools.Sdk.Domain.Types.FieldTypes;
 using FluentAssertions.Json;
 using Xunit;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.Serialization.Tests
 {

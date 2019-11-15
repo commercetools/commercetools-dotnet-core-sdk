@@ -6,12 +6,12 @@ using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Carts.UpdateActions;
 using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.Customers;
-using commercetools.Sdk.Domain.CustomObject;
+using commercetools.Sdk.Domain.CustomObjects;
 using commercetools.Sdk.Domain.DiscountCodes;
 using commercetools.Sdk.Domain.Payments;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Products.UpdateActions;
-using commercetools.Sdk.Domain.Project;
+using commercetools.Sdk.Domain.Projects;
 using commercetools.Sdk.Domain.Query;
 using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.ShoppingLists;
@@ -23,7 +23,7 @@ using SetCustomFieldUpdateAction = commercetools.Sdk.Domain.Carts.UpdateActions.
 using SetCustomLineItemShippingDetailsUpdateAction =
     commercetools.Sdk.Domain.Carts.UpdateActions.SetCustomLineItemShippingDetailsUpdateAction;
 using SetCustomTypeUpdateAction = commercetools.Sdk.Domain.Carts.UpdateActions.SetCustomTypeUpdateAction;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 {

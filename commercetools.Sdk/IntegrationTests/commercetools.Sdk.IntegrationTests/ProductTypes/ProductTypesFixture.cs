@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Products.Attributes;
+using commercetools.Sdk.Domain.Types;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
 
 namespace commercetools.Sdk.IntegrationTests.ProductTypes

@@ -9,6 +9,7 @@ using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.DiscountCodes;
 using commercetools.Sdk.Domain.Messages;
 using commercetools.Sdk.Domain.Payments;
+using commercetools.Sdk.Domain.Projects;
 using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.ShoppingLists;
 using commercetools.Sdk.Domain.TaxCategories;
@@ -17,13 +18,13 @@ using commercetools.Sdk.HttpApi.IntegrationTests.Customers;
 using commercetools.Sdk.HttpApi.IntegrationTests.DiscountCodes;
 using commercetools.Sdk.HttpApi.IntegrationTests.Payments;
 using commercetools.Sdk.HttpApi.IntegrationTests.Products;
-using commercetools.Sdk.HttpApi.IntegrationTests.Project;
+using commercetools.Sdk.HttpApi.IntegrationTests.Projects;
 using commercetools.Sdk.HttpApi.IntegrationTests.ShippingMethods;
 using commercetools.Sdk.HttpApi.IntegrationTests.ShoppingLists;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
 using Xunit.Abstractions;
 using LineItemDraft = commercetools.Sdk.Domain.Carts.LineItemDraft;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
 {
@@ -391,15 +392,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Carts
             return itemShippingTarget;
         }
 
-        public Sdk.Domain.Project.Project SetShippingRateInputTypeToCartScoreForCurrentProject()
+        public Project SetShippingRateInputTypeToCartScoreForCurrentProject()
         {
             return this.projectFixture.SetShippingRateInputTypeToCartScore();
         }
-        public Sdk.Domain.Project.Project SetShippingRateInputTypeToCartClassificationForCurrentProject(List<LocalizedEnumValue> values)
+        public Project SetShippingRateInputTypeToCartClassificationForCurrentProject(List<LocalizedEnumValue> values)
         {
             return this.projectFixture.SetShippingRateInputTypeToCartClassification(values);
         }
-        public Sdk.Domain.Project.Project RemoveExistingShippingRateInputTypeForCurrentProject()
+        public Project RemoveExistingShippingRateInputTypeForCurrentProject()
         {
             return this.projectFixture.RemoveExistingShippingRateInputType();
         }

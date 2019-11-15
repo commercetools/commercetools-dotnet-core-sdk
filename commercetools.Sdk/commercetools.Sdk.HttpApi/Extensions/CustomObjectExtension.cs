@@ -1,5 +1,5 @@
 using System;
-using commercetools.Sdk.Domain.CustomObject;
+using commercetools.Sdk.Domain.CustomObjects;
 using commercetools.Sdk.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Payments;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
 
 namespace commercetools.Sdk.IntegrationTests.Payments

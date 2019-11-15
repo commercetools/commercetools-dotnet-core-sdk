@@ -46,9 +46,9 @@ namespace commercetools.Sdk.IntegrationTests
             var client2 = enumerable.FirstOrDefault(client => client.Name == "TokenClient");
 
             var t1 = await client1.ExecuteAsync(new GetProjectCommand());
-            Assert.IsType<Sdk.Domain.Project.Project>(t1);
+            Assert.IsType<Domain.Projects.Project>(t1);
             var t2 = await client2.ExecuteAsync(new GetProjectCommand());
-            Assert.IsType<Sdk.Domain.Project.Project>(t2);
+            Assert.IsType<Domain.Projects.Project>(t2);
         }
 
         [Fact]
@@ -76,9 +76,9 @@ namespace commercetools.Sdk.IntegrationTests
             var client2 = enumerable.FirstOrDefault(client => client.Name == "TokenClient");
 
             var t1 = await client1.ExecuteAsync(new GetProjectCommand());
-            Assert.IsType<Sdk.Domain.Project.Project>(t1);
+            Assert.IsType<Domain.Projects.Project>(t1);
             var t2 = await client2.ExecuteAsync(new GetProjectCommand());
-            Assert.IsType<Sdk.Domain.Project.Project>(t2);
+            Assert.IsType<Domain.Projects.Project>(t2);
         }
 
         [Fact]
@@ -109,7 +109,7 @@ namespace commercetools.Sdk.IntegrationTests
                         try
                         {
                             var t1 = await client.ExecuteAsync(new GetProjectCommand());
-                            Assert.IsType<Sdk.Domain.Project.Project>(t1);
+                            Assert.IsType<Domain.Projects.Project>(t1);
                         }
                         finally
                         {
@@ -188,7 +188,7 @@ namespace commercetools.Sdk.IntegrationTests
                         try
                         {
                             var t1 = await client.ExecuteAsync(new GetProjectCommand());
-                            Assert.IsType<Sdk.Domain.Project.Project>(t1);
+                            Assert.IsType<Domain.Projects.Project>(t1);
                         }
                         finally
                         {

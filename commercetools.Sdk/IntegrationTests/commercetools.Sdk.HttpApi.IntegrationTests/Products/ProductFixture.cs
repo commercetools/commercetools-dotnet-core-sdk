@@ -15,7 +15,7 @@ using commercetools.Sdk.Domain.States;
 using commercetools.Sdk.HttpApi.IntegrationTests.TaxCategories;
 using Xunit;
 using Xunit.Abstractions;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 

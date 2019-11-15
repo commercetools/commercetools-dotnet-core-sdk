@@ -1,4 +1,5 @@
 using commercetools.Sdk.Domain.Channels;
+using commercetools.Sdk.Domain.InventoryEntries;
 
 namespace commercetools.Sdk.Domain.Messages.InventoryEntries
 {

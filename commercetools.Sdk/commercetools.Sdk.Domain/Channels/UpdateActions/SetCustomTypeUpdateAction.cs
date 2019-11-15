@@ -1,5 +1,6 @@
 ﻿using commercetools.Sdk.Domain.CartDiscounts;
 using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.Types;
 
 namespace commercetools.Sdk.Domain.Channels.UpdateActions
 {

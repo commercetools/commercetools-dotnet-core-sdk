@@ -1,0 +1,28 @@
+﻿@model List<Product>
+@{
+    ViewData["Title"] = "Products";
+}
+<div class="text-center">
+    <h1 class="display-4">Products</h1>
+    
+    @* Listing Products *@
+    <div id="div-Products">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td> @product.MasterData.Current.Name["en"]</td>
+                    <td> @product.MasterData.Current.Description["en"]</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

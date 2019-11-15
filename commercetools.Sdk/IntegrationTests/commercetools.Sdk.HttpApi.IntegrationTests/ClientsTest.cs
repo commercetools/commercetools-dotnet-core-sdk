@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
+using commercetools.Sdk.Domain.Projects;
 using commercetools.Sdk.HttpApi.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,10 +40,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 
             var result1 = client1.ExecuteAsync(new GetProjectCommand());
             var t1 = result1.Result;
-            Assert.IsType<Sdk.Domain.Project.Project>(t1);
+            Assert.IsType<Project>(t1);
             var result2 = client2.ExecuteAsync(new GetProjectCommand());
             var t2 = result2.Result;
-            Assert.IsType<Sdk.Domain.Project.Project>(t2);
+            Assert.IsType<Project>(t2);
         }
 
         [Fact]
@@ -71,10 +72,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
 
             var result1 = client1.ExecuteAsync(new GetProjectCommand());
             var t1 = result1.Result;
-            Assert.IsType<Sdk.Domain.Project.Project>(t1);
+            Assert.IsType<Project>(t1);
             var result2 = client2.ExecuteAsync(new GetProjectCommand());
             var t2 = result2.Result;
-            Assert.IsType<Sdk.Domain.Project.Project>(t2);
+            Assert.IsType<Project>(t2);
         }
 
         [Fact]
@@ -105,7 +106,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                         try
                         {
                             var t1 = await client.ExecuteAsync(new GetProjectCommand());
-                            Assert.IsType<Sdk.Domain.Project.Project>(t1);
+                            Assert.IsType<Project>(t1);
                         }
                         finally
                         {
@@ -145,7 +146,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests
                         try
                         {
                             var t1 = await client.ExecuteAsync(new GetProjectCommand());
-                            Assert.IsType<Sdk.Domain.Project.Project>(t1);
+                            Assert.IsType<Project>(t1);
                         }
                         finally
                         {

@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.Domain.Validation.Attributes;
+﻿using commercetools.Sdk.Domain.Types;
+using commercetools.Sdk.Domain.Validation.Attributes;
 
 namespace commercetools.Sdk.Domain
 {

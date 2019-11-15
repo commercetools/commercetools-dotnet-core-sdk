@@ -1,8 +1,9 @@
-﻿namespace commercetools.Sdk.Client
+﻿using commercetools.Sdk.Domain.Projects;
+
+namespace commercetools.Sdk.Client
 {
     using System.Collections.Generic;
     using Domain;
-    using Domain.Project;
 
     public class UpdateProjectCommand : UpdateCommand<Project>
     {

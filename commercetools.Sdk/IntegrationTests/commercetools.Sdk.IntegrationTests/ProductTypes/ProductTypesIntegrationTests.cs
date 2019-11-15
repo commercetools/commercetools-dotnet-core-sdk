@@ -6,6 +6,7 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.Domain.ProductTypes.UpdateActions;
+using commercetools.Sdk.Domain.Types;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;
 using static commercetools.Sdk.IntegrationTests.ProductTypes.ProductTypesFixture;

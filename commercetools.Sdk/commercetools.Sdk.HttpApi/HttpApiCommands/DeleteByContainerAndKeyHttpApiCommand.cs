@@ -1,5 +1,4 @@
-﻿using commercetools.Sdk.Domain.CustomObject;
-using commercetools.Sdk.HttpApi.RequestBuilders;
+﻿using commercetools.Sdk.HttpApi.RequestBuilders;
 
 namespace commercetools.Sdk.HttpApi.HttpApiCommands
 {

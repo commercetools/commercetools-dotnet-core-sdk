@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Common;
-using commercetools.Sdk.Domain.ProductProjections;
+using commercetools.Sdk.Domain.Projects;
 using commercetools.Sdk.Domain.Query;
 
 namespace commercetools.Sdk.Client
@@ -43,6 +43,29 @@ namespace commercetools.Sdk.Client
         {
             updateActions.Add(updateAction);
             return updateActions;
+        }
+
+        public static List<UpdateAction<T>> ToList<T>(this UpdateAction<T> updateAction)
+        {
+            var actionsList = new List<UpdateAction<T>>();
+            if (updateAction != null)
+            {
+                actionsList.Add(updateAction);
+            }
+
+            return actionsList;
+        }
+
+        public static List<UpdateAction<Project>> AddUpdate(this List<UpdateAction<Project>> updateActions, UpdateAction<Project> updateAction)
+        {
+            updateActions.Add(updateAction);
+            return updateActions;
+        }
+
+        public static UpdateProjectCommand Update(this Project project, Func<List<UpdateAction<Project>>, List<UpdateAction<Project>>> updateBuilder)
+        {
+            var actions = updateBuilder(new List<UpdateAction<Project>>());
+            return new UpdateProjectCommand(project.Version, actions);
         }
     }
 }

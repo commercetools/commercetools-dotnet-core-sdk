@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
-using commercetools.Sdk.Domain.CustomObject;
+using commercetools.Sdk.Domain.CustomObjects;
 using commercetools.Sdk.Domain.Messages;
 using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.Zones;

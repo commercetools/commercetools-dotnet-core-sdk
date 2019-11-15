@@ -278,7 +278,7 @@ namespace commercetools.Sdk.IntegrationTests
         }
 
 
-        public static async Task AssertEventually(Func<Task> runnableBlock, int maxWaitTimeSecond = 180,
+        public static async Task AssertEventually(Func<Task> runnableBlock, int maxWaitTimeSecond = 300,
             int waitBeforeRetryMilliseconds = 100)
         {
             var maxWaitTime = TimeSpan.FromSeconds(maxWaitTimeSecond);

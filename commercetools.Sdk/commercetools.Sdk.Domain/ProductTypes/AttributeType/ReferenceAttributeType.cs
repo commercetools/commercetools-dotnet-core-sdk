@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Domain
+﻿using commercetools.Sdk.Domain.Types;
+
+namespace commercetools.Sdk.Domain
 {
     [TypeMarker("reference")]
     public class ReferenceAttributeType : AttributeType

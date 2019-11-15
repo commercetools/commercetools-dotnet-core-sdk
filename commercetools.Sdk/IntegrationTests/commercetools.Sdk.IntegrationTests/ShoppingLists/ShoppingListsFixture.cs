@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.ShoppingLists;
-using Type = commercetools.Sdk.Domain.Type;
+using Type = commercetools.Sdk.Domain.Types.Type;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
 using static commercetools.Sdk.IntegrationTests.Products.ProductsFixture;
 using static commercetools.Sdk.IntegrationTests.Types.TypesFixture;

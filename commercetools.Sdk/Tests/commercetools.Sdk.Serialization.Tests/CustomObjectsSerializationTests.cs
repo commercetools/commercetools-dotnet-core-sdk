@@ -1,6 +1,6 @@
 using Newtonsoft.Json.Linq;
 using System.IO;
-using commercetools.Sdk.Domain.CustomObject;
+using commercetools.Sdk.Domain.CustomObjects;
 using FluentAssertions.Json;
 using Xunit;
 

@@ -9,7 +9,7 @@ using Xunit;
 using static commercetools.Sdk.IntegrationTests.Customers.CustomersFixture;
 using static commercetools.Sdk.IntegrationTests.CustomerGroups.CustomerGroupsFixture;
 using static commercetools.Sdk.IntegrationTests.Types.TypesFixture;
-using static commercetools.Sdk.IntegrationTests.Project.ProjectFixture;
+using static commercetools.Sdk.IntegrationTests.Projects.ProjectFixture;
 
 namespace commercetools.Sdk.IntegrationTests.Customers
 {
