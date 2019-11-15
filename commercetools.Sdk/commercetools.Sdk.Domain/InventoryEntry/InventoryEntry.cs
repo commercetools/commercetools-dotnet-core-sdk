@@ -5,6 +5,7 @@ using commercetools.Sdk.Domain.Common;
 namespace commercetools.Sdk.Domain
 {
     [Endpoint("inventory")]
+    [ResourceType(ReferenceTypeId.InventoryEntry)]
     public class InventoryEntry : Resource<InventoryEntry>
     {
         public string Sku { get; set; }

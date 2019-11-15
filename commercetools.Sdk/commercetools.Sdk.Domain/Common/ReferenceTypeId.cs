@@ -80,8 +80,11 @@ namespace commercetools.Sdk.Domain
 
         [Description("review")]
         Review,
-        
+
         [Description("subscription")]
-        Subscription
+        Subscription,
+
+        [Description("inventory-entry")]
+        InventoryEntry
     }
 }
