@@ -152,6 +152,24 @@ namespace commercetools.Sdk.Linq.Tests
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("current(masterVariant(key = \"p15\"))", result);
         }
+        
+        [Fact]
+        public void ExpressionPropertyCustomFieldEqual()
+        {
+            Expression<Func<Category, bool>> expression = c => c.Custom.Fields["description"].ToString() == "my description";
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("custom(fields(description = \"my description\"))", result);
+        }
+
+        [Fact]
+        public void ExpressionPropertyCustomFieldEqualCaseSensitive()
+        {
+            Expression<Func<Category, bool>> expression = c => c.Custom.Fields["Description"].ToString() == "my description";
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("custom(fields(Description = \"my description\"))", result);
+        }
 
         [Fact]
         public void ExpressionPropertyIntEqual()
