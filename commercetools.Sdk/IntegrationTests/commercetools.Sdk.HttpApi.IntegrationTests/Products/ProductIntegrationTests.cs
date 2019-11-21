@@ -351,10 +351,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.Products
             List<UpdateAction<Product>> updateActions = new List<UpdateAction<Product>>();
 
             var productVariantId = product.MasterData.Staged.Variants[0].Id;
-            RemoveProductVariantUpdateAction removeProductVariantUpdateAction = new RemoveProductVariantUpdateAction()
-            {
-                Id = productVariantId
-            };
+            RemoveProductVariantUpdateAction removeProductVariantUpdateAction =
+                new RemoveProductVariantUpdateAction(productVariantId);
 
             updateActions.Add(removeProductVariantUpdateAction);
 
