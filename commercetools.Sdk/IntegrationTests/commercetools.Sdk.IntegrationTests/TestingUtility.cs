@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.CartDiscounts;
 using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.TaxCategories;
@@ -228,7 +229,7 @@ namespace commercetools.Sdk.IntegrationTests
 
         public static List<PriceDraft> GetRandomListOfPriceDraft(int count = 2)
         {
-            List<PriceDraft> prices = new List<PriceDraft>();
+            var prices = new List<PriceDraft>();
 
             //first Add valid price for now
             prices.Add(GetPriceDraft(RandomInt(1000, 10000)));
@@ -472,6 +473,24 @@ namespace commercetools.Sdk.IntegrationTests
                 }
             };
             return externalTaxRateDraft;
+        }
+        
+        /// <summary>
+        /// Return Absolute Product Discount Value
+        /// </summary>
+        /// <returns></returns>
+        public static AbsoluteProductDiscountValue GetProductDiscountValueAsAbsolute(int? discountCentAmount = null)
+        {
+            var money = new Money()
+            {
+                CurrencyCode = "EUR",
+                CentAmount = discountCentAmount ?? RandomInt(1, 10000)
+            };
+            var productDiscountValue = new AbsoluteProductDiscountValue()
+            {
+                Money = new List<Money>() {money}
+            };
+            return productDiscountValue;
         }
         #endregion
     }
