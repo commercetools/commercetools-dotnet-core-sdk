@@ -20,6 +20,7 @@ namespace commercetools.Sdk.IntegrationTests.Products
         {
             var randomInt = TestingUtility.RandomInt();
             productDraft.Name = new LocalizedString {{"en", $"Name_{randomInt}"}};
+            productDraft.Description = new LocalizedString {{"en", $"Description_{randomInt}"}};
             productDraft.Slug = new LocalizedString {{"en", $"Slug_{randomInt}"}};
             productDraft.Key = $"Key_{randomInt}";
             productDraft.Publish = true;
