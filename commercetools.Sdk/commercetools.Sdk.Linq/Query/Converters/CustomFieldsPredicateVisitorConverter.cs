@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using commercetools.Sdk.Linq.Query.Visitors;
 
-
 namespace commercetools.Sdk.Linq.Query.Converters
 {
     public class CustomFieldsPredicateVisitorConverter : IQueryPredicateVisitorConverter
