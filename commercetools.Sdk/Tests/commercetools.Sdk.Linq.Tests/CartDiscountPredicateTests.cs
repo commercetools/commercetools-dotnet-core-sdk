@@ -517,6 +517,15 @@ namespace commercetools.Sdk.Linq.Tests
         }
         
         [Fact]
+        public void CustomLineItemPredicateCustomFieldCaseSensitive()
+        {
+            Expression<Func<CustomLineItem, bool>> expression = c => c.Custom.Fields["Brand"].ToString() == "adidas";
+            IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("custom.Brand = \"adidas\"", result);
+        }
+        
+        [Fact]
         public void CustomLineItemPredicateCustomFieldWithDash()
         {
             Expression<Func<CustomLineItem, bool>> expression = c => c.Custom.Fields["item-brand"].ToString() == "adidas";
