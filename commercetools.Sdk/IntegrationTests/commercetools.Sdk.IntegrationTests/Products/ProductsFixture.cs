@@ -44,6 +44,20 @@ namespace commercetools.Sdk.IntegrationTests.Products
             return productDraft;
         }
         
+        public static ProductDraft DefaultProductDraftWithProductType(ProductDraft draft, ProductType productType)
+        {
+            var productDraft = DefaultProductDraft(draft);
+            productDraft.ProductType = productType.ToIdResourceIdentifier();
+            return productDraft;
+        }
+        
+        public static ProductDraft DefaultProductDraftWithPublish(ProductDraft draft, bool published)
+        {
+            var productDraft = DefaultProductDraft(draft);
+            productDraft.Publish = published;
+            return productDraft;
+        }
+        
         public static ProductDraft DefaultProductDraftWithImages(ProductDraft draft, List<Image> images)
         {
             var productDraft = DefaultProductDraft(draft);
@@ -139,6 +153,22 @@ namespace commercetools.Sdk.IntegrationTests.Products
 
                 await WithAsync(client, productDraftWithProductType, draftAction, func, null, DeleteProduct);
             });
+        }
+        
+        public static async Task WithListOfProducts(
+            IClient client,
+            Func<ProductDraft, ProductDraft> draftAction,
+            int count,
+            Func<List<Product>, Task> func
+        )
+        {
+            await WithProductType(client, async productType =>
+            {
+                var productDraftWithProductType = DefaultProductDraftWithProductType(new ProductDraft(), productType);
+
+                await WithListAsync(client, productDraftWithProductType, draftAction, func, count, null, DeleteProduct);
+            });
+            
         }
         #endregion
 
