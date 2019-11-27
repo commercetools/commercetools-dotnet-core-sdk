@@ -15,11 +15,26 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var product in Model)
+            @if (Model != null && Model.Count > 0)
+            {
+                var langKey = Model[0].MasterData.Current.Name.Keys.FirstOrDefault();
+                if (langKey != null)
+                {
+                    @foreach (var product in Model)
+                    {
+                        <tr>
+                            <td> @product.MasterData.Current.Name[langKey]</td>
+                            <td> @product.MasterData.Current.Description?[langKey]</td>
+                        </tr>
+                    }
+                }
+            }
+            else
             {
                 <tr>
-                    <td> @product.MasterData.Current.Name["en"]</td>
-                    <td> @product.MasterData.Current.Description["en"]</td>
+                    <td colspan="2">
+                        There are no products available for listing 
+                    </td>
                 </tr>
             }
             </tbody>
