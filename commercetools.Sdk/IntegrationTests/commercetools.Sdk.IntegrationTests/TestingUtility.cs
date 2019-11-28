@@ -500,6 +500,19 @@ namespace commercetools.Sdk.IntegrationTests
             };
             return productDiscountValue;
         }
+        
+        /// <summary>
+        /// Return Relative Product Discount
+        /// </summary>
+        /// <returns></returns>
+        public static RelativeProductDiscountValue GetProductDiscountValueAsRelative()
+        {
+            var productDiscountValue = new RelativeProductDiscountValue()
+            {
+                Permyriad = TestingUtility.RandomInt(1, 30)
+            };
+            return productDiscountValue;
+        }
         #endregion
     }
 }

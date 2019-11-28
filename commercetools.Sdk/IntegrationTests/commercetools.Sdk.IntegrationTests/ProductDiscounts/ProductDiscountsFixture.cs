@@ -28,6 +28,24 @@ namespace commercetools.Sdk.IntegrationTests.ProductDiscounts
             productDiscountDraft.Key = key;
             return productDiscountDraft;
         }
+        public static ProductDiscountDraft DefaultProductDiscountDraftWithActive(ProductDiscountDraft draft, bool isActive)
+        {
+            var productDiscountDraft = DefaultProductDiscountDraft(draft);
+            productDiscountDraft.IsActive = isActive;
+            return productDiscountDraft;
+        }
+        public static ProductDiscountDraft DefaultProductDiscountDraftWithPredicate(ProductDiscountDraft draft, string predicate)
+        {
+            var productDiscountDraft = DefaultProductDiscountDraft(draft);
+            productDiscountDraft.Predicate = predicate;
+            return productDiscountDraft;
+        }
+        public static ProductDiscountDraft DefaultProductDiscountDraftWithDiscountValue(ProductDiscountDraft draft, ProductDiscountValue value)
+        {
+            var productDiscountDraft = DefaultProductDiscountDraft(draft);
+            productDiscountDraft.Value = value;
+            return productDiscountDraft;
+        }
         #endregion
 
         #region WithProductDiscount
@@ -37,6 +55,10 @@ namespace commercetools.Sdk.IntegrationTests.ProductDiscounts
             await With(client, new ProductDiscountDraft(), DefaultProductDiscountDraft, func);
         }
         public static async Task WithProductDiscount( IClient client, Func<ProductDiscountDraft, ProductDiscountDraft> draftAction, Action<ProductDiscount> func)
+        {
+            await With(client, new ProductDiscountDraft(), draftAction, func);
+        }
+        public static async Task WithProductDiscount( IClient client, Func<ProductDiscountDraft, ProductDiscountDraft> draftAction, Action<ProductDiscount, ProductDiscountDraft> func)
         {
             await With(client, new ProductDiscountDraft(), draftAction, func);
         }
