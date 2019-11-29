@@ -33,10 +33,10 @@ namespace commercetools.Sdk.IntegrationTests.CustomerGroups
                 Fields = fields
             };
 
-            var customerDraft = DefaultCustomerGroupDraft(draft);
-            customerDraft.Custom = customFieldsDraft;
+            var customerGroupDraft = DefaultCustomerGroupDraft(draft);
+            customerGroupDraft.Custom = customFieldsDraft;
 
-            return customerDraft;
+            return customerGroupDraft;
         }
         #endregion
 
