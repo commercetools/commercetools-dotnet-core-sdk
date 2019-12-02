@@ -24,6 +24,12 @@ namespace commercetools.Sdk.Client
             return command;
         }
 
+        public static UpdateCommand<T> SetAdditionalParameters<T>(this UpdateCommand<T> command, IAdditionalParameters<T> additionalParameters)
+        {
+            command.AdditionalParameters = additionalParameters;
+            return command;
+        }
+
         public static UpdateByIdCommand<T> UpdateById<T>(this IVersioned<T> resource, Func<List<UpdateAction<T>>, List<UpdateAction<T>>> updateBuilder)
             where T : Resource<T>
         {

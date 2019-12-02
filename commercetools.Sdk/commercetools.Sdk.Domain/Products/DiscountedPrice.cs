@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.Domain.ProductDiscounts;
+﻿using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.ProductDiscounts;
 
 namespace commercetools.Sdk.Domain
 {

@@ -22,6 +22,12 @@ namespace commercetools.Sdk.Client
             return command;
         }
 
+        public static DeleteCommand<T> SetAdditionalParameters<T>(this DeleteCommand<T> command, IAdditionalParameters<T> additionalParameters)
+        {
+            command.AdditionalParameters = additionalParameters;
+            return command;
+        }
+
         public static DeleteCommand<T> DeleteById<T>(this IVersioned<T> resource)
             where T : Resource<T>
         {

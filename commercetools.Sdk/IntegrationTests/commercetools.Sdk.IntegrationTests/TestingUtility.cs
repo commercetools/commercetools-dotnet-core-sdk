@@ -2,17 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.CartDiscounts;
 using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.TaxCategories;
-using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 using LocalizedEnumValue = commercetools.Sdk.Domain.Common.LocalizedEnumValue;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.IntegrationTests
 {
@@ -228,7 +227,7 @@ namespace commercetools.Sdk.IntegrationTests
 
         public static List<PriceDraft> GetRandomListOfPriceDraft(int count = 2)
         {
-            List<PriceDraft> prices = new List<PriceDraft>();
+            var prices = new List<PriceDraft>();
 
             //first Add valid price for now
             prices.Add(GetPriceDraft(RandomInt(1000, 10000)));
@@ -313,20 +312,22 @@ namespace commercetools.Sdk.IntegrationTests
         /// Get list of Asset Drafts
         /// </summary>
         /// <param name="count"></param>
+        /// <param name="customType"></param>
+        /// <param name="fields"></param>
         /// <returns></returns>
-        public static List<AssetDraft> GetListOfAssetsDrafts(int count = 2)
+        public static List<AssetDraft> GetListOfAssetsDrafts(int count = 2, ResourceIdentifier<Type> customType = null, Fields fields = null)
         {
             var assets = new List<AssetDraft>();
             for (int i = 1; i<= count; i++)
             {
-                assets.Add(GetAssetDraft());
+                assets.Add(GetAssetDraft(customType, fields));
             }
             return assets;
         }
 
-        public static AssetDraft GetAssetDraft()
+        public static AssetDraft GetAssetDraft(ResourceIdentifier<Type> customType = null, Fields fields = null)
         {
-            var rand = TestingUtility.RandomInt();
+            var rand = RandomInt();
             var assetSource = GetAssetSource();
 
             var asset = new AssetDraft()
@@ -337,6 +338,14 @@ namespace commercetools.Sdk.IntegrationTests
                 Description = new LocalizedString() {{"en", $"Asset_Description_{rand}"}},
                 Tags = new List<string> { $"Tag_{rand}_1", $"Tag_{rand}_2"}
             };
+            if (customType != null && fields != null)
+            {
+                asset.Custom = new CustomFieldsDraft
+                {
+                    Type = customType,
+                    Fields = fields
+                };
+            }
             return asset;
         }
 
@@ -472,6 +481,37 @@ namespace commercetools.Sdk.IntegrationTests
                 }
             };
             return externalTaxRateDraft;
+        }
+        
+        /// <summary>
+        /// Return Absolute Product Discount Value
+        /// </summary>
+        /// <returns></returns>
+        public static AbsoluteProductDiscountValue GetProductDiscountValueAsAbsolute(int? discountCentAmount = null)
+        {
+            var money = new Money()
+            {
+                CurrencyCode = "EUR",
+                CentAmount = discountCentAmount ?? RandomInt(1, 10000)
+            };
+            var productDiscountValue = new AbsoluteProductDiscountValue()
+            {
+                Money = new List<Money>() {money}
+            };
+            return productDiscountValue;
+        }
+        
+        /// <summary>
+        /// Return Relative Product Discount
+        /// </summary>
+        /// <returns></returns>
+        public static RelativeProductDiscountValue GetProductDiscountValueAsRelative()
+        {
+            var productDiscountValue = new RelativeProductDiscountValue()
+            {
+                Permyriad = TestingUtility.RandomInt(1, 30)
+            };
+            return productDiscountValue;
         }
         #endregion
     }

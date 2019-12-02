@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Common;
@@ -19,6 +20,12 @@ namespace commercetools.Sdk.Client
         {
             command.Expand.Add(expression);
 
+            return command;
+        }
+
+        public static GetCommand<T> SetAdditionalParameters<T>(this GetCommand<T> command, IAdditionalParameters<T> additionalParameters)
+        {
+            command.AdditionalParameters = additionalParameters;
             return command;
         }
 

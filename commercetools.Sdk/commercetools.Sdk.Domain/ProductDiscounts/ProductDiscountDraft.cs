@@ -8,6 +8,8 @@ namespace commercetools.Sdk.Domain.ProductDiscounts
     public class ProductDiscountDraft : IDraft<ProductDiscount>
     {
         public LocalizedString Name { get; set; }
+        
+        public string Key { get; set; }
         public LocalizedString Description { get; set; }
         public ProductDiscountValue Value { get; set; }
         public string Predicate { get; set; }
