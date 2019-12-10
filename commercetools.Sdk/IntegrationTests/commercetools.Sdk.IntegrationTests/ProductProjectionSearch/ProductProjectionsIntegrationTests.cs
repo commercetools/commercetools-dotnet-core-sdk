@@ -1,43 +1,48 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.Channels;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.Domain.Query;
 using Xunit;
-using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
+using static commercetools.Sdk.IntegrationTests.GenericFixture;
 
-namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
+namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
 {
     [Collection("Integration Tests")]
-    public class ProductProjectionSearchIntegrationTests : BaseIntegrationTest,
-        IClassFixture<ProductProjectionSearchFixture>
+    public class ProductProjectionsIntegrationTests : IClassFixture<ProductProjectionSearchFixture>
     {
-        private readonly ProductProjectionSearchFixture productProjectionsFixture;
+        private readonly string NotReadyForSearchMessage = "Products still not indexed yet and not ready for search";
+        private readonly IClient client;
+        private readonly ProductProjectionSearchFixture fixture;
 
-        public ProductProjectionSearchIntegrationTests(ProductProjectionSearchFixture productProjectionsFixture)
+        public ProductProjectionsIntegrationTests(ProductProjectionSearchFixture fixture)
         {
-            this.productProjectionsFixture = productProjectionsFixture;
+            this.fixture = fixture;
+            this.client = this.fixture.ServiceProviderFixture.GetService<IClient>();
         }
 
         [Fact]
         public void SearchByFullLocale()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var product = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Name != null && !string.IsNullOrEmpty(p.MasterData.Staged.Name["de"]));
+            var product = this.fixture.FindProduct(p =>
+                p.Name?.Keys.FirstOrDefault(k => k.ToString() == "de") != null);
+
             Assert.NotNull(product);
+
             var productIds = new[] {product.Id};
 
             var searchParams = new ProductProjectionSearchParameters
             {
                 Text = new TextSearch
                 {
-                    Term = product.MasterData.Staged.Name["de"],
+                    Term = product.Name["de"],
                     Language = "de"
                 }
             };
@@ -48,27 +53,28 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
 
             //Assert
             AssertEventually(() =>
-                {
-                    IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                    var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
-                    Assert.Single(searchResults.Results);
-                    Assert.Equal(product.Id, searchResults.Results[0].Id);
-                    Assert.Equal(product.MasterData.Staged.Name["en"], searchResults.Results[0].Name["en"]);
-                }
-            );
+            {
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
+                Assert.Single(searchResults.Results);
+                Assert.Equal(product.Id, searchResults.Results[0].Id);
+                Assert.Equal(product.Name["en"], searchResults.Results[0].Name["en"]);
+            });
         }
 
         [Fact]
         public void SearchWithFuzzyLevel()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var product = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Name != null && !string.IsNullOrEmpty(p.MasterData.Staged.Name["en"]));
+            var product = this.fixture.FindProduct(p =>
+                p.Name != null && !string.IsNullOrEmpty(p.Name["en"]));
             Assert.NotNull(product);
             var productIds = new[] {product.Id};
 
             //Adding additional fuzzy character
-            var term = product.MasterData.Staged.Name["en"] + "z";
+            var term = product.Name["en"] + "z";
             var searchParams = new ProductProjectionSearchParameters
             {
                 Text = new TextSearch {Term = term, Language = "en"},
@@ -84,11 +90,10 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Equal(product.Id, searchResults.Results[0].Id);
-                Assert.Equal(product.MasterData.Staged.Name["en"], searchResults.Results[0].Name["en"]);
+                Assert.Equal(product.Name["en"], searchResults.Results[0].Name["en"]);
             });
         }
 
@@ -97,12 +102,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterBySpecificCategoriesWithReferenceExpansion()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
             var productInCategory =
-                this.productProjectionsFixture.FindProduct(p => p.MasterData.Staged.Categories.Count > 0);
+                this.fixture.FindProduct(p => p.Categories.Count > 0);
             Assert.NotNull(productInCategory);
             var productIds = new[] {productInCategory.Id};
-            var categoryId = productInCategory.MasterData.Staged.Categories.FirstOrDefault()?.Id;
+            var categoryId = productInCategory.Categories.FirstOrDefault()?.Id;
 
             //Act
             var searchRequest = new SearchProductProjectionsCommand();
@@ -114,8 +122,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Equal(productInCategory.Id, searchResults.Results[0].Id);
 
@@ -129,14 +136,17 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByCategoriesExists()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
             var productWithoutCategories =
-                this.productProjectionsFixture.FindProduct(p => p.MasterData.Staged.Categories.Count == 0);
+                this.fixture.FindProduct(p => p.Categories.Count == 0);
             var productWithCategories =
-                this.productProjectionsFixture.FindProduct(p => p.MasterData.Staged.Categories.Count > 0);
+                this.fixture.FindProduct(p => p.Categories.Count > 0);
             Assert.NotNull(productWithoutCategories);
             Assert.NotNull(productWithCategories);
-            string[] productIds = new string[]
+            var productIds = new[]
             {
                 productWithoutCategories.Id,
                 productWithCategories.Id
@@ -151,8 +161,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Equal(productWithCategories.Id, searchResults.Results[0].Id);
             });
@@ -161,14 +170,17 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByCategoriesMissing()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
             var productWithoutCategories =
-                this.productProjectionsFixture.FindProduct(p => p.MasterData.Staged.Categories.Count == 0);
+                this.fixture.FindProduct(p => p.Categories.Count == 0);
             var productWithCategories =
-                this.productProjectionsFixture.FindProduct(p => p.MasterData.Staged.Categories.Count > 0);
+                this.fixture.FindProduct(p => p.Categories.Count > 0);
             Assert.NotNull(productWithoutCategories);
             Assert.NotNull(productWithCategories);
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productWithoutCategories.Id,
                 productWithCategories.Id
@@ -183,8 +195,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Equal(productWithoutCategories.Id, searchResults.Results[0].Id);
             });
@@ -193,26 +204,29 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterBySpecificCategorySubtree()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var categoryA = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "A");
-            var categoryA1 = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "A1");
-            var categoryB = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "B");
+            var categoryA = this.fixture.FindCategory(c => c.ExternalId == "A");
+            var categoryA1 = this.fixture.FindCategory(c => c.ExternalId == "A1");
+            var categoryB = this.fixture.FindCategory(c => c.ExternalId == "B");
             Assert.NotNull(categoryA);
             Assert.NotNull(categoryA1);
             Assert.NotNull(categoryB);
 
-            var productA = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryA.Id));
-            var productA1 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryA1.Id));
-            var productB = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryB.Id));
+            var productA = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryA.Id));
+            var productA1 = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryA1.Id));
+            var productB = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryB.Id));
 
             Assert.NotNull(productA);
             Assert.NotNull(productA1);
             Assert.NotNull(productB);
 
-            string[] productIds = new[] {productA.Id, productA1.Id, productB.Id};
+            var productIds = new[] {productA.Id, productA1.Id, productB.Id};
 
             //Act (filter products that belong to categoryA or any of its descendant categories)
             var searchRequest = new SearchProductProjectionsCommand();
@@ -223,8 +237,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Equal(2, searchResults.Results.Count);
                 Assert.Contains(searchResults.Results, p => p.Id == productA.Id);
                 Assert.Contains(searchResults.Results, p => p.Id == productA1.Id);
@@ -235,27 +248,30 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByMoreThanOneCategorySubtree()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var categoryA = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "A");
-            var categoryA1 = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "A1");
-            var categoryB = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "B");
-            var categoryC = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "C");
+            var categoryA = this.fixture.FindCategory(c => c.ExternalId == "A");
+            var categoryA1 = this.fixture.FindCategory(c => c.ExternalId == "A1");
+            var categoryB = this.fixture.FindCategory(c => c.ExternalId == "B");
+            var categoryC = this.fixture.FindCategory(c => c.ExternalId == "C");
 
             Assert.NotNull(categoryA);
             Assert.NotNull(categoryA1);
             Assert.NotNull(categoryB);
             Assert.NotNull(categoryC);
 
-            var productA = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryA.Id));
-            var productA1 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryA1.Id));
-            var productB = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryB.Id));
-            var productC = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryC.Id));
+            var productA = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryA.Id));
+            var productA1 = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryA1.Id));
+            var productB = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryB.Id));
+            var productC = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryC.Id));
 
-            string[] productIds = new[] {productA.Id, productA1.Id, productB.Id, productC.Id};
+            var productIds = new[] {productA.Id, productA1.Id, productB.Id, productC.Id};
 
             //Act (filter products that belong to categoryA or categoryC or any their descendant categories)
             var searchRequest = new SearchProductProjectionsCommand();
@@ -267,8 +283,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Equal(3, searchResults.Results.Count);
                 Assert.Contains(searchResults.Results, p => p.Id == productA.Id);
                 Assert.Contains(searchResults.Results, p => p.Id == productA1.Id);
@@ -280,27 +295,30 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByOneCategorySubtreeAndTwoIds()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var categoryA = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "A");
-            var categoryA1 = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "A1");
-            var categoryB = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "B");
-            var categoryB1 = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "B1");
+            var categoryA = this.fixture.FindCategory(c => c.ExternalId == "A");
+            var categoryA1 = this.fixture.FindCategory(c => c.ExternalId == "A1");
+            var categoryB = this.fixture.FindCategory(c => c.ExternalId == "B");
+            var categoryB1 = this.fixture.FindCategory(c => c.ExternalId == "B1");
 
             Assert.NotNull(categoryA);
             Assert.NotNull(categoryA1);
             Assert.NotNull(categoryB);
             Assert.NotNull(categoryB1);
 
-            var productA = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryA.Id));
-            var productA1 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryA1.Id));
-            var productB = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryB.Id));
-            var productB1 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryB1.Id));
+            var productA = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryA.Id));
+            var productA1 = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryA1.Id));
+            var productB = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryB.Id));
+            var productB1 = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryB1.Id));
 
-            string[] productIds = new[] {productA.Id, productA1.Id, productB.Id, productB1.Id};
+            var productIds = new[] {productA.Id, productA1.Id, productB.Id, productB1.Id};
 
             //Act (filter products that belong to categoryA or any of it's descendant categories and category B1)
             var searchRequest = new SearchProductProjectionsCommand();
@@ -312,8 +330,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Equal(3, searchResults.Results.Count);
                 Assert.Contains(searchResults.Results, p => p.Id == productA.Id);
                 Assert.Contains(searchResults.Results, p => p.Id == productA1.Id);
@@ -326,15 +343,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByPrice()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var product30 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+            var product30 = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Any(price =>
                     price.Value.CentAmount == TestingUtility.Euro30.Value.CentAmount));
-            var product50 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+            var product50 = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Any(price =>
                     price.Value.CentAmount == TestingUtility.Euro50.Value.CentAmount));
-            var product70 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+            var product70 = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Any(price =>
                     price.Value.CentAmount == TestingUtility.Euro70.Value.CentAmount));
 
             Assert.NotNull(product30);
@@ -370,17 +390,16 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var filterBySpecificPriceResult = commerceToolsClient.ExecuteAsync(filterBySpecificPrice).Result;
+                var filterBySpecificPriceResult = client.ExecuteAsync(filterBySpecificPrice).Result;
                 Assert.Single(filterBySpecificPriceResult.Results);
                 Assert.Contains(filterBySpecificPriceResult.Results, p => p.Id == product30.Id);
 
-                var filterByRangeToPriceResult = commerceToolsClient.ExecuteAsync(filterByRangeToPrice).Result;
+                var filterByRangeToPriceResult = client.ExecuteAsync(filterByRangeToPrice).Result;
                 Assert.Equal(2, filterByRangeToPriceResult.Results.Count);
                 Assert.Contains(filterByRangeToPriceResult.Results, p => p.Id == product30.Id);
                 Assert.Contains(filterByRangeToPriceResult.Results, p => p.Id == product50.Id);
 
-                var filterByRangeFromToPriceResult = commerceToolsClient.ExecuteAsync(filterByRangeFromToPrice).Result;
+                var filterByRangeFromToPriceResult = client.ExecuteAsync(filterByRangeFromToPrice).Result;
                 Assert.Equal(2, filterByRangeFromToPriceResult.Results.Count);
                 Assert.Contains(filterByRangeFromToPriceResult.Results, p => p.Id == product50.Id);
                 Assert.Contains(filterByRangeFromToPriceResult.Results, p => p.Id == product70.Id);
@@ -390,15 +409,21 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByPricesMissing()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
             var productWithPrices =
-                this.productProjectionsFixture.FindProduct(p =>
-                    p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+                this.fixture.FindProduct(p =>
+                    p.MasterVariant.Prices.Any(price =>
                         price.Value.CentAmount == TestingUtility.Euro30.Value.CentAmount));
-            var productWithoutPrices = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Count == 0);
+            var productWithoutPrices = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Count == 0);
 
-            string[] productIds = new[]
+            Assert.NotNull(productWithPrices);
+            Assert.NotNull(productWithoutPrices);
+
+            var productIds = new[]
             {
                 productWithPrices.Id,
                 productWithoutPrices.Id
@@ -413,8 +438,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithoutPrices.Id);
             });
@@ -423,15 +447,21 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByPricesExists()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
             var productWithPrices =
-                this.productProjectionsFixture.FindProduct(p =>
-                    p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+                this.fixture.FindProduct(p =>
+                    p.MasterVariant.Prices.Any(price =>
                         price.Value.CentAmount == TestingUtility.Euro30.Value.CentAmount));
-            var productWithoutPrices = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Count == 0);
+            var productWithoutPrices = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Count == 0);
 
-            string[] productIds = new[]
+            Assert.NotNull(productWithPrices);
+            Assert.NotNull(productWithoutPrices);
+
+            var productIds = new[]
             {
                 productWithPrices.Id,
                 productWithoutPrices.Id
@@ -446,8 +476,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithPrices.Id);
             });
@@ -457,17 +486,20 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByScopedPriceValue()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var product1 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+            var product1 = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Any(price =>
                     price.Value.CentAmount == TestingUtility.EuroScoped40.Value.CentAmount));
-            var product2 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+            var product2 = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Any(price =>
                     price.Value.CentAmount == TestingUtility.EuroScoped60.Value.CentAmount));
 
             Assert.NotNull(product1);
             Assert.NotNull(product2);
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 product1.Id,
                 product2.Id
@@ -485,8 +517,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Equal(product1.Id, searchResults.Results[0].Id);
             });
@@ -495,9 +526,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByScopedPriceCurrentValue()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange (discount with 5 cent)
-            var productWithDiscount = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+            var productWithDiscount = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Any(price =>
                     price.Value.CentAmount == TestingUtility.EuroScoped100.Value.CentAmount));
 
             Assert.NotNull(productWithDiscount);
@@ -515,8 +549,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Equal(productWithDiscount.Id, searchResults.Results[0].Id);
 
@@ -537,9 +570,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByScopedPriceDiscountedValue()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange (discount with 5 cent)
-            var productWithDiscount = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+            var productWithDiscount = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Any(price =>
                     price.Value.CentAmount == TestingUtility.EuroScoped100.Value.CentAmount));
 
             Assert.NotNull(productWithDiscount);
@@ -557,8 +593,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Equal(productWithDiscount.Id, searchResults.Results[0].Id);
 
@@ -579,9 +614,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByScopedPriceDiscounted()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange (discount with 5 cent)
-            var productWithDiscount = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+            var productWithDiscount = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Any(price =>
                     price.Value.CentAmount == TestingUtility.EuroScoped100.Value.CentAmount));
 
             Assert.NotNull(productWithDiscount);
@@ -598,8 +636,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Equal(productWithDiscount.Id, searchResults.Results[0].Id);
 
@@ -621,10 +658,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterBySpecificSku()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
             var productWithSku =
-                this.productProjectionsFixture.FindProduct(p =>
-                    !string.IsNullOrEmpty(p.MasterData.Staged.MasterVariant.Sku));
+                this.fixture.FindProduct(p =>
+                    !string.IsNullOrEmpty(p.MasterVariant.Sku));
             Assert.NotNull(productWithSku);
             var productIds = new[] {productWithSku.Id};
 
@@ -633,13 +673,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             searchRequest.SetStaged(true);
             searchRequest.FilterQuery(p => p.Id.In(productIds));
             searchRequest.FilterQuery(p =>
-                p.Variants.Any(v => v.Sku == productWithSku.MasterData.Staged.MasterVariant.Sku.valueOf()));
+                p.Variants.Any(v => v.Sku == productWithSku.MasterVariant.Sku.valueOf()));
 
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithSku.Id);
             });
@@ -648,16 +687,19 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterBySkuMissing()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productWithSku = this.productProjectionsFixture.FindProduct(p =>
-                !string.IsNullOrEmpty(p.MasterData.Staged.MasterVariant.Sku));
-            var productWithoutSku = this.productProjectionsFixture.FindProduct(p =>
-                string.IsNullOrEmpty(p.MasterData.Staged.MasterVariant.Sku));
+            var productWithSku = this.fixture.FindProduct(p =>
+                !string.IsNullOrEmpty(p.MasterVariant.Sku));
+            var productWithoutSku = this.fixture.FindProduct(p =>
+                string.IsNullOrEmpty(p.MasterVariant.Sku));
 
             Assert.NotNull(productWithSku);
             Assert.NotNull(productWithoutSku);
 
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productWithSku.Id,
                 productWithoutSku.Id
@@ -672,8 +714,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithoutSku.Id);
             });
@@ -682,16 +723,19 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterBySkuExists()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productWithSku = this.productProjectionsFixture.FindProduct(p =>
-                !string.IsNullOrEmpty(p.MasterData.Staged.MasterVariant.Sku));
-            var productWithoutSku = this.productProjectionsFixture.FindProduct(p =>
-                string.IsNullOrEmpty(p.MasterData.Staged.MasterVariant.Sku));
+            var productWithSku = this.fixture.FindProduct(p =>
+                !string.IsNullOrEmpty(p.MasterVariant.Sku));
+            var productWithoutSku = this.fixture.FindProduct(p =>
+                string.IsNullOrEmpty(p.MasterVariant.Sku));
 
             Assert.NotNull(productWithSku);
             Assert.NotNull(productWithoutSku);
 
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productWithSku.Id,
                 productWithoutSku.Id
@@ -706,8 +750,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithSku.Id);
             });
@@ -717,9 +760,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterBySpecificProductKey()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
             var productWithKey =
-                this.productProjectionsFixture.FindProduct(p =>
+                this.fixture.FindProduct(p =>
                     !string.IsNullOrEmpty(p.Key));
             Assert.NotNull(productWithKey);
             var productIds = new[] {productWithKey.Id};
@@ -733,8 +779,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithKey.Id);
             });
@@ -743,16 +788,19 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByProductKeyMissing()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productWithKey = this.productProjectionsFixture.FindProduct(p =>
+            var productWithKey = this.fixture.FindProduct(p =>
                 !string.IsNullOrEmpty(p.Key));
-            var productWithoutKey = this.productProjectionsFixture.FindProduct(p =>
+            var productWithoutKey = this.fixture.FindProduct(p =>
                 string.IsNullOrEmpty(p.Key));
 
             Assert.NotNull(productWithKey);
             Assert.NotNull(productWithoutKey);
 
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productWithKey.Id,
                 productWithoutKey.Id
@@ -767,8 +815,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithoutKey.Id);
             });
@@ -777,16 +824,19 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByProductKeyExists()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productWithKey = this.productProjectionsFixture.FindProduct(p =>
+            var productWithKey = this.fixture.FindProduct(p =>
                 !string.IsNullOrEmpty(p.Key));
-            var productWithoutKey = this.productProjectionsFixture.FindProduct(p =>
+            var productWithoutKey = this.fixture.FindProduct(p =>
                 string.IsNullOrEmpty(p.Key));
 
             Assert.NotNull(productWithKey);
             Assert.NotNull(productWithoutKey);
 
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productWithKey.Id,
                 productWithoutKey.Id
@@ -801,8 +851,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithKey.Id);
             });
@@ -812,25 +861,27 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByProductVariantKey()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
             var productWithKey =
-                this.productProjectionsFixture.FindProduct(p =>
-                    !string.IsNullOrEmpty(p.MasterData.Staged.MasterVariant.Key));
+                this.fixture.FindProduct(p =>
+                    !string.IsNullOrEmpty(p.MasterVariant.Key));
             Assert.NotNull(productWithKey);
-            string[] productIds = new[] {productWithKey.Id};
+            var productIds = new[] {productWithKey.Id};
 
             //Act (filter by specific variant key)
             var searchRequest = new SearchProductProjectionsCommand();
             searchRequest.SetStaged(true);
             searchRequest.FilterQuery(p => p.Id.In(productIds));
             searchRequest.FilterQuery(p =>
-                p.Variants.Any(v => v.Key == productWithKey.MasterData.Staged.MasterVariant.Key.valueOf()));
+                p.Variants.Any(v => v.Key == productWithKey.MasterVariant.Key.valueOf()));
 
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithKey.Id);
             });
@@ -839,13 +890,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByProductVariantKeyMissing()
         {
-            //Arrange
-            var productWithKey = this.productProjectionsFixture.FindProduct(p =>
-                !string.IsNullOrEmpty(p.MasterData.Staged.MasterVariant.Key));
-            var productWithoutKey = this.productProjectionsFixture.FindProduct(p =>
-                string.IsNullOrEmpty(p.MasterData.Staged.MasterVariant.Key));
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
 
-            string[] productIds = new[]
+            //Arrange
+            var productWithKey = this.fixture.FindProduct(p =>
+                !string.IsNullOrEmpty(p.MasterVariant.Key));
+            var productWithoutKey = this.fixture.FindProduct(p =>
+                string.IsNullOrEmpty(p.MasterVariant.Key));
+
+            Assert.NotNull(productWithKey);
+            Assert.NotNull(productWithoutKey);
+            var productIds = new[]
             {
                 productWithKey.Id,
                 productWithoutKey.Id
@@ -860,8 +916,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithoutKey.Id);
             });
@@ -870,13 +925,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByProductVariantKeyExists()
         {
-            //Arrange
-            var productWithKey = this.productProjectionsFixture.FindProduct(p =>
-                !string.IsNullOrEmpty(p.MasterData.Staged.MasterVariant.Key));
-            var productWithoutKey = this.productProjectionsFixture.FindProduct(p =>
-                string.IsNullOrEmpty(p.MasterData.Staged.MasterVariant.Key));
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
 
-            string[] productIds = new[]
+            //Arrange
+            var productWithKey = this.fixture.FindProduct(p =>
+                !string.IsNullOrEmpty(p.MasterVariant.Key));
+            var productWithoutKey = this.fixture.FindProduct(p =>
+                string.IsNullOrEmpty(p.MasterVariant.Key));
+
+            Assert.NotNull(productWithKey);
+            Assert.NotNull(productWithoutKey);
+            var productIds = new[]
             {
                 productWithKey.Id,
                 productWithoutKey.Id
@@ -891,8 +951,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithKey.Id);
             });
@@ -902,10 +961,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByProductTypeWithReferenceExpansion()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productWithProductType = this.productProjectionsFixture.FindProduct(p => p.ProductType != null);
+            var productWithProductType = this.fixture.FindProduct(p => p.ProductType != null);
             Assert.NotNull(productWithProductType);
-            string[] productIds = new[] {productWithProductType.Id};
+            var productIds = new[] {productWithProductType.Id};
 
             //Act (filter only the product which matches the specified ProductType)
             var searchRequest = new SearchProductProjectionsCommand();
@@ -922,14 +984,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithProductType.Id);
                 Assert.NotNull(searchResults.Results[0].ProductType.Obj);
 
-                var searchResultsUsingFilter = commerceToolsClient.ExecuteAsync(searchRequestUsingFilter).Result;
+                var searchResultsUsingFilter = client.ExecuteAsync(searchRequestUsingFilter).Result;
                 Assert.Single(searchResultsUsingFilter.Results);
                 Assert.Contains(searchResultsUsingFilter.Results, p => p.Id == productWithProductType.Id);
             });
@@ -938,10 +998,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterBySpecificTaxCategory()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productWithTaxCategory = this.productProjectionsFixture.FindProduct(p => p.TaxCategory != null);
+            var productWithTaxCategory = this.fixture.FindProduct(p => p.TaxCategory != null);
             Assert.NotNull(productWithTaxCategory);
-            string[] productIds = new[] {productWithTaxCategory.Id};
+            var productIds = new[] {productWithTaxCategory.Id};
 
             //Act (filter only the product which matches the specified TaxCategory)
             var searchRequest = new SearchProductProjectionsCommand();
@@ -957,13 +1020,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithTaxCategory.Id);
 
-                var searchResultsUsingFilter = commerceToolsClient.ExecuteAsync(searchRequestUsingFilter).Result;
+                var searchResultsUsingFilter = client.ExecuteAsync(searchRequestUsingFilter).Result;
                 Assert.Single(searchResultsUsingFilter.Results);
                 Assert.Contains(searchResultsUsingFilter.Results, p => p.Id == productWithTaxCategory.Id);
             });
@@ -972,10 +1033,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByTaxCategoryMissing()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
             var productWithTaxCategory =
-                this.productProjectionsFixture.FindProduct(p => p.TaxCategory != null);
-            var productWithoutTaxCategory = this.productProjectionsFixture.FindProduct(p => p.TaxCategory == null);
+                this.fixture.FindProduct(p => p.TaxCategory != null);
+            var productWithoutTaxCategory = this.fixture.FindProduct(p => p.TaxCategory == null);
             Assert.NotNull(productWithTaxCategory);
             Assert.NotNull(productWithoutTaxCategory);
             var productIds = new[] {productWithTaxCategory.Id, productWithoutTaxCategory.Id};
@@ -994,13 +1058,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithoutTaxCategory.Id);
 
-                var searchResultsUsingFilter = commerceToolsClient.ExecuteAsync(searchRequestUsingFilter).Result;
+                var searchResultsUsingFilter = client.ExecuteAsync(searchRequestUsingFilter).Result;
                 Assert.Single(searchResultsUsingFilter.Results);
                 Assert.Contains(searchResultsUsingFilter.Results, p => p.Id == productWithoutTaxCategory.Id);
             });
@@ -1009,10 +1071,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByTaxCategoryExists()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
             var productWithTaxCategory =
-                this.productProjectionsFixture.FindProduct(p => p.TaxCategory != null);
-            var productWithoutTaxCategory = this.productProjectionsFixture.FindProduct(p => p.TaxCategory == null);
+                this.fixture.FindProduct(p => p.TaxCategory != null);
+            var productWithoutTaxCategory = this.fixture.FindProduct(p => p.TaxCategory == null);
             Assert.NotNull(productWithTaxCategory);
             Assert.NotNull(productWithoutTaxCategory);
             var productIds = new[] {productWithTaxCategory.Id, productWithoutTaxCategory.Id};
@@ -1031,13 +1096,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithTaxCategory.Id);
 
-                var searchResultsUsingFilter = commerceToolsClient.ExecuteAsync(searchRequestUsingFilter).Result;
+                var searchResultsUsingFilter = client.ExecuteAsync(searchRequestUsingFilter).Result;
                 Assert.Single(searchResultsUsingFilter.Results);
                 Assert.Contains(searchResultsUsingFilter.Results, p => p.Id == productWithTaxCategory.Id);
             });
@@ -1047,10 +1110,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterBySpecificState()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productWithState = this.productProjectionsFixture.FindProduct(p => p.State != null);
+            var productWithState = this.fixture.FindProduct(p => p.State != null);
             Assert.NotNull(productWithState);
-            string[] productIds = new[] {productWithState.Id};
+            var productIds = new[] {productWithState.Id};
 
             //Act (filter only the product which matches the specified state)
             var searchRequest = new SearchProductProjectionsCommand();
@@ -1064,26 +1130,25 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             searchRequestUsingFilter.Filter(p => p.State.Id == productWithState.State.Id.valueOf());
 
             //Assert
-            AssertEventually(() =>
-            {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
 
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
-                Assert.Single(searchResults.Results);
-                Assert.Contains(searchResults.Results, p => p.Id == productWithState.Id);
+            var searchResults = client.ExecuteAsync(searchRequest).Result;
+            Assert.Single(searchResults.Results);
+            Assert.Contains(searchResults.Results, p => p.Id == productWithState.Id);
 
-                var searchResultsUsingFilter = commerceToolsClient.ExecuteAsync(searchRequestUsingFilter).Result;
-                Assert.Single(searchResultsUsingFilter.Results);
-                Assert.Contains(searchResultsUsingFilter.Results, p => p.Id == productWithState.Id);
-            });
+            var searchResultsUsingFilter = client.ExecuteAsync(searchRequestUsingFilter).Result;
+            Assert.Single(searchResultsUsingFilter.Results);
+            Assert.Contains(searchResultsUsingFilter.Results, p => p.Id == productWithState.Id);
         }
 
         [Fact]
         public void FilterByStateMissing()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productWithState = this.productProjectionsFixture.FindProduct(p => p.State != null);
-            var productWithoutState = this.productProjectionsFixture.FindProduct(p => p.State == null);
+            var productWithState = this.fixture.FindProduct(p => p.State != null);
+            var productWithoutState = this.fixture.FindProduct(p => p.State == null);
             Assert.NotNull(productWithState);
             Assert.NotNull(productWithoutState);
             var productIds = new[] {productWithState.Id, productWithoutState.Id};
@@ -1102,13 +1167,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithoutState.Id);
 
-                var searchResultsUsingFilter = commerceToolsClient.ExecuteAsync(searchRequestUsingFilter).Result;
+                var searchResultsUsingFilter = client.ExecuteAsync(searchRequestUsingFilter).Result;
                 Assert.Single(searchResultsUsingFilter.Results);
                 Assert.Contains(searchResultsUsingFilter.Results, p => p.Id == productWithoutState.Id);
             });
@@ -1117,9 +1180,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByStateExists()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productWithState = this.productProjectionsFixture.FindProduct(p => p.State != null);
-            var productWithoutState = this.productProjectionsFixture.FindProduct(p => p.State == null);
+            var productWithState = this.fixture.FindProduct(p => p.State != null);
+            var productWithoutState = this.fixture.FindProduct(p => p.State == null);
             Assert.NotNull(productWithState);
             Assert.NotNull(productWithoutState);
             var productIds = new[] {productWithState.Id, productWithoutState.Id};
@@ -1138,13 +1204,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithState.Id);
 
-                var searchResultsUsingFilter = commerceToolsClient.ExecuteAsync(searchRequestUsingFilter).Result;
+                var searchResultsUsingFilter = client.ExecuteAsync(searchRequestUsingFilter).Result;
                 Assert.Single(searchResultsUsingFilter.Results);
                 Assert.Contains(searchResultsUsingFilter.Results, p => p.Id == productWithState.Id);
             });
@@ -1153,8 +1217,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByReviewRatingStatistics()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var product = this.productProjectionsFixture.FindProduct(p => p.ReviewRatingStatistics != null);
+            var product = this.fixture.FindProduct(p => p.ReviewRatingStatistics != null);
             Assert.NotNull(product);
             var productIds = new[] {product.Id};
             var reviewRatingStatistics = product.ReviewRatingStatistics;
@@ -1173,25 +1240,25 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == product.Id);
             });
         }
 
-
         [Fact]
         public void FilterByCustomAttributeValue()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var product30 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30_{this.productProjectionsFixture.TestId}");
-            var product50 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
-            var product70 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p70_{this.productProjectionsFixture.TestId}");
+            var product30 = this.fixture.FindProduct(p =>
+                p.Key == fixture.KeyProductWithPrice30);
+            var product50 = this.fixture.FindProduct(p =>
+                p.Key == fixture.KeyProductWithPrice50);
+            var product70 = this.fixture.FindProduct(p =>
+                p.Key == fixture.KeyProductWithPrice70);
 
             Assert.NotNull(product30);
             Assert.NotNull(product50);
@@ -1223,38 +1290,40 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == product30.Id);
 
-                var searchResultsByRange = commerceToolsClient.ExecuteAsync(searchRequestByRange).Result;
+                var searchResultsByRange = client.ExecuteAsync(searchRequestByRange).Result;
                 Assert.Equal(2, searchResultsByRange.Results.Count);
                 Assert.Contains(searchResultsByRange.Results, p => p.Id == product50.Id);
                 Assert.Contains(searchResultsByRange.Results, p => p.Id == product70.Id);
 
-                var searchResultsByRangeTo = commerceToolsClient.ExecuteAsync(searchRequestByRangeTo).Result;
+                var searchResultsByRangeTo = client.ExecuteAsync(searchRequestByRangeTo).Result;
                 Assert.Equal(2, searchResultsByRangeTo.Results.Count);
                 Assert.Contains(searchResultsByRangeTo.Results, p => p.Id == product30.Id);
                 Assert.Contains(searchResultsByRangeTo.Results, p => p.Id == product50.Id);
             });
         }
 
+
         [Fact]
         public void FilterByCustomAttributeMissing()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productWithCustomAttribute = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Attributes.Any(a => a.Name == "number-attribute-name"));
+            var productWithCustomAttribute = this.fixture.FindProduct(p =>
+                p.MasterVariant.Attributes.Any(a => a.Name == "number-attribute-name"));
             var productWithoutCustomAttribute =
-                this.productProjectionsFixture.FindProduct(p =>
-                    p.MasterData.Staged.MasterVariant.Attributes.Count == 0);
+                this.fixture.FindProduct(p =>
+                    p.MasterVariant.Attributes.Count == 0);
 
             Assert.NotNull(productWithCustomAttribute);
             Assert.NotNull(productWithoutCustomAttribute);
 
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productWithCustomAttribute.Id,
                 productWithoutCustomAttribute.Id
@@ -1270,8 +1339,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithoutCustomAttribute.Id);
             });
@@ -1280,17 +1348,20 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByCustomAttributeExists()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productWithCustomAttribute = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Attributes.Any(a => a.Name == "number-attribute-name"));
+            var productWithCustomAttribute = this.fixture.FindProduct(p =>
+                p.MasterVariant.Attributes.Any(a => a.Name == "number-attribute-name"));
             var productWithoutCustomAttribute =
-                this.productProjectionsFixture.FindProduct(p =>
-                    p.MasterData.Staged.MasterVariant.Attributes.Count == 0);
+                this.fixture.FindProduct(p =>
+                    p.MasterVariant.Attributes.Count == 0);
 
             Assert.NotNull(productWithCustomAttribute);
             Assert.NotNull(productWithoutCustomAttribute);
 
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productWithCustomAttribute.Id,
                 productWithoutCustomAttribute.Id
@@ -1306,8 +1377,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithCustomAttribute.Id);
             });
@@ -1316,14 +1386,17 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByEnumCustomAttribute()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productWithEnum1 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30_{this.productProjectionsFixture.TestId}");
-            var productWithEnum2 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
+            var productWithEnum1 = this.fixture.FindProduct(p =>
+                p.Key == fixture.KeyProductWithPrice30);
+            var productWithEnum2 = this.fixture.FindProduct(p =>
+                p.Key == fixture.KeyProductWithPrice50);
             Assert.NotNull(productWithEnum1);
             Assert.NotNull(productWithEnum2);
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productWithEnum1.Id,
                 productWithEnum2.Id
@@ -1340,8 +1413,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithEnum1.Id);
             });
@@ -1351,13 +1423,16 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByMoneyCustomAttributeValue()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var product30 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30_{this.productProjectionsFixture.TestId}");
-            var product50 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
-            var product70 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p70_{this.productProjectionsFixture.TestId}");
+            var product30 = this.fixture.FindProduct(p =>
+                p.Key == fixture.KeyProductWithPrice30);
+            var product50 = this.fixture.FindProduct(p =>
+                p.Key == fixture.KeyProductWithPrice50);
+            var product70 = this.fixture.FindProduct(p =>
+                p.Key == fixture.KeyProductWithPrice70);
 
             Assert.NotNull(product30);
             Assert.NotNull(product50);
@@ -1390,17 +1465,15 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == product30.Id);
 
-                var searchByCurrencyResults = commerceToolsClient.ExecuteAsync(searchByCurrencyRequest).Result;
+                var searchByCurrencyResults = client.ExecuteAsync(searchByCurrencyRequest).Result;
                 Assert.Single(searchByCurrencyResults.Results);
                 Assert.Contains(searchByCurrencyResults.Results, p => p.Id == product70.Id);
 
-                var searchByRangeResults = commerceToolsClient.ExecuteAsync(searchByRangeRequest).Result;
+                var searchByRangeResults = client.ExecuteAsync(searchByRangeRequest).Result;
                 Assert.Single(searchByRangeResults.Results);
                 Assert.Contains(searchByRangeResults.Results, p => p.Id == product30.Id);
             });
@@ -1410,13 +1483,16 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByReferenceCustomAttribute()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productOfType1 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30_{this.productProjectionsFixture.TestId}");
+            var productOfType1 = this.fixture.FindProduct(p =>
+                p.Key == fixture.KeyProductWithPrice30);
 
             Assert.NotNull(productOfType1);
-            string[] productIds = new[] {productOfType1.Id};
-            var productType1 = this.productProjectionsFixture.AvailableProductTypes.FirstOrDefault();
+            var productIds = new[] {productOfType1.Id};
+            var productType1 = this.fixture.AvailableProductType;
 
             //Act
             var searchRequestByReferenceTypeId = new SearchProductProjectionsCommand();
@@ -1436,14 +1512,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
                 var searchByReferenceTypeIdResults =
-                    commerceToolsClient.ExecuteAsync(searchRequestByReferenceTypeId).Result;
+                    client.ExecuteAsync(searchRequestByReferenceTypeId).Result;
                 Assert.Single(searchByReferenceTypeIdResults.Results);
                 Assert.Contains(searchByReferenceTypeIdResults.Results, p => p.Id == productOfType1.Id);
 
-                var searchByProductTypeIdResults = commerceToolsClient.ExecuteAsync(searchRequestByTypeId).Result;
+                var searchByProductTypeIdResults = client.ExecuteAsync(searchRequestByTypeId).Result;
                 Assert.Single(searchByProductTypeIdResults.Results);
                 Assert.Contains(searchByProductTypeIdResults.Results, p => p.Id == productOfType1.Id);
             });
@@ -1453,21 +1527,24 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByProductAvailability()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productNotAvailableInStock = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30NoChannel_{this.productProjectionsFixture.TestId}");
+            var productNotAvailableInStock = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice30WithoutChannel.valueOf());
 
-            var productAvailableWithQuantity3 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50NoChannel_{this.productProjectionsFixture.TestId}");
+            var productAvailableWithQuantity3 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice50WithoutChannel.valueOf());
 
-            var productAvailableWithQuantity6 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p70NoChannel_{this.productProjectionsFixture.TestId}");
+            var productAvailableWithQuantity6 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice70WithoutChannel.valueOf());
 
             Assert.NotNull(productNotAvailableInStock);
             Assert.NotNull(productAvailableWithQuantity3);
             Assert.NotNull(productAvailableWithQuantity6);
 
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productNotAvailableInStock.Id,
                 productAvailableWithQuantity3.Id,
@@ -1491,9 +1568,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchProductsOnStockResult = commerceToolsClient.ExecuteAsync(searchProductsOnStock).Result;
+                var searchProductsOnStockResult = client.ExecuteAsync(searchProductsOnStock).Result;
                 Assert.Equal(2, searchProductsOnStockResult.Results.Count);
                 Assert.DoesNotContain(searchProductsOnStockResult.Results, p => p.Id == productNotAvailableInStock.Id);
                 Assert.Contains(searchProductsOnStockResult.Results, p => p.Id == productAvailableWithQuantity3.Id);
@@ -1501,7 +1576,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
 
 
                 var searchProductsByAvailabilityResult =
-                    commerceToolsClient.ExecuteAsync(searchProductsByAvailability).Result;
+                    client.ExecuteAsync(searchProductsByAvailability).Result;
                 Assert.Single(searchProductsByAvailabilityResult.Results);
                 Assert.Equal(productAvailableWithQuantity6.Id, searchProductsByAvailabilityResult.Results[0].Id);
 
@@ -1517,19 +1592,22 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterProductsOnStockWithChannel()
         {
-            //Arrange
-            var productAvailableInChannel = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
 
-            var productNotAvailableInChannel = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30_{this.productProjectionsFixture.TestId}");
+            //Arrange
+            var productAvailableInChannel = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice50.valueOf());
+
+            var productNotAvailableInChannel = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice30.valueOf());
 
             Assert.NotNull(productAvailableInChannel);
             Assert.NotNull(productNotAvailableInChannel);
 
-            var channelId = this.productProjectionsFixture.AvailableChannels.FirstOrDefault()?.Id;
+            var channelId = this.fixture.AvailableChannels.FirstOrDefault()?.Id;
 
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productAvailableInChannel.Id,
                 productNotAvailableInChannel.Id
@@ -1551,14 +1629,12 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchProductsOnStockResult = commerceToolsClient.ExecuteAsync(searchProductsOnStock).Result;
+                var searchProductsOnStockResult = client.ExecuteAsync(searchProductsOnStock).Result;
                 Assert.Single(searchProductsOnStockResult.Results);
                 Assert.Equal(productAvailableInChannel.Id, searchProductsOnStockResult.Results[0].Id);
 
                 var searchProductsNotAvailableOnStockResult =
-                    commerceToolsClient.ExecuteAsync(searchProductsNotAvailableOnStock).Result;
+                    client.ExecuteAsync(searchProductsNotAvailableOnStock).Result;
                 Assert.Single(searchProductsNotAvailableOnStockResult.Results);
                 Assert.Equal(productNotAvailableInChannel.Id, searchProductsNotAvailableOnStockResult.Results[0].Id);
             });
@@ -1567,22 +1643,25 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterProductsByAvailabilityRangeWithChannel()
         {
-            //Arrange
-            var productAvailableWithQuantity3 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
 
-            var productAvailableWithQuantity6 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p70_{this.productProjectionsFixture.TestId}");
+            //Arrange
+            var productAvailableWithQuantity3 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice50.valueOf());
+
+            var productAvailableWithQuantity6 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice70.valueOf());
 
             Assert.NotNull(productAvailableWithQuantity3);
             Assert.NotNull(productAvailableWithQuantity6);
 
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productAvailableWithQuantity3.Id,
                 productAvailableWithQuantity6.Id
             };
-            var channelId = this.productProjectionsFixture.AvailableChannels.FirstOrDefault()?.Id;
+            var channelId = this.fixture.AvailableChannels.FirstOrDefault()?.Id;
 
             //Act
             var searchProductsByRange = new SearchProductProjectionsCommand();
@@ -1595,9 +1674,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchProductsByRangeResult = commerceToolsClient.ExecuteAsync(searchProductsByRange).Result;
+                var searchProductsByRangeResult = client.ExecuteAsync(searchProductsByRange).Result;
                 Assert.Single(searchProductsByRangeResult.Results);
                 Assert.Equal(productAvailableWithQuantity6.Id, searchProductsByRangeResult.Results[0].Id);
             });
@@ -1606,20 +1683,23 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterProductsOnStockWithSpecificChannels()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var channel1 = this.productProjectionsFixture.AvailableChannels[0];
-            var channel2 = this.productProjectionsFixture.AvailableChannels[1];
+            var channel1 = this.fixture.AvailableChannels[0];
+            var channel2 = this.fixture.AvailableChannels[1];
 
-            var productAvailableInChannel1 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
+            var productAvailableInChannel1 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice50.valueOf());
 
-            var productAvailableInChannel2 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30Channel2_{this.productProjectionsFixture.TestId}");
+            var productAvailableInChannel2 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice30InChannel2.valueOf());
 
-            var productAvailableInChannel3 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30Channel3_{this.productProjectionsFixture.TestId}");
+            var productAvailableInChannel3 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice30InChannel3.valueOf());
 
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productAvailableInChannel1.Id,
                 productAvailableInChannel2.Id,
@@ -1636,10 +1716,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
                 var searchProductsOnStockResult =
-                    commerceToolsClient.ExecuteAsync(searchProductsOnStockInSpecificChannels).Result;
+                    client.ExecuteAsync(searchProductsOnStockInSpecificChannels).Result;
                 Assert.Equal(2, searchProductsOnStockResult.Results.Count);
 
                 Assert.DoesNotContain(searchProductsOnStockResult.Results, p => p.Id == productAvailableInChannel3.Id);
@@ -1652,15 +1730,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void FilterByProductSearchKeywords()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
             var productWithoutSearchKeywords =
-                this.productProjectionsFixture.FindProduct(p => p.MasterData.Staged.SearchKeywords.Count == 0);
+                this.fixture.FindProduct(p => p.SearchKeywords.Count == 0);
             var productWithSearchKeywords =
-                this.productProjectionsFixture.FindProduct(p => p.MasterData.Staged.SearchKeywords.Count > 0);
+                this.fixture.FindProduct(p => p.SearchKeywords.Count > 0);
             Assert.NotNull(productWithSearchKeywords);
             Assert.NotNull(productWithoutSearchKeywords);
-            string[] productIds = new[] {productWithoutSearchKeywords.Id, productWithSearchKeywords.Id};
-            var searchKeywords = productWithSearchKeywords.MasterData.Staged.SearchKeywords["en"];
+            var productIds = new[] {productWithoutSearchKeywords.Id, productWithSearchKeywords.Id};
+            var searchKeywords = productWithSearchKeywords.SearchKeywords["en"];
 
             //Act (filter only the product which matches the specified state)
             var searchRequest = new SearchProductProjectionsCommand();
@@ -1671,8 +1752,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == productWithSearchKeywords.Id);
             });
@@ -1680,22 +1760,24 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
 
         #endregion
 
-
         #region Facets
 
         [Fact]
         public void TestTermFacetWithProductCategories()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var categoryA = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "A");
-            var categoryB = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "B");
+            var categoryA = this.fixture.FindCategory(c => c.ExternalId == "A");
+            var categoryB = this.fixture.FindCategory(c => c.ExternalId == "B");
             Assert.NotNull(categoryA);
             Assert.NotNull(categoryB);
 
-            var productA = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryA.Id));
-            var productB = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryB.Id));
+            var productA = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryA.Id));
+            var productB = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryB.Id));
 
             var productIds = new[] {productA.Id, productB.Id};
 
@@ -1708,8 +1790,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Equal(2, searchResults.Results.Count);
                 Assert.Single(searchResults.Facets);
 
@@ -1727,13 +1808,16 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void TestTermFacetNumberAttribute()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             var value30 = 30.0;
             var value50 = 50.0;
             //Arrange
-            var product30 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30_{this.productProjectionsFixture.TestId}");
-            var product50 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
+            var product30 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice30.valueOf());
+            var product50 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice50.valueOf());
 
             Assert.NotNull(product30);
             Assert.NotNull(product50);
@@ -1756,9 +1840,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == product30.Id);
 
@@ -1777,11 +1859,14 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void TestTermFacetCustomMoneyAttributeValue()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var product30 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30_{this.productProjectionsFixture.TestId}");
-            var product50 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
+            var product30 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice30.valueOf());
+            var product50 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice50.valueOf());
 
             Assert.NotNull(product30);
             Assert.NotNull(product50);
@@ -1805,9 +1890,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == product30.Id);
 
@@ -1829,27 +1912,30 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void TestTermFacetAvailableQuantityInChannels()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var channel1 = this.productProjectionsFixture.AvailableChannels[0];
-            var channel2 = this.productProjectionsFixture.AvailableChannels[1];
+            var channel1 = this.fixture.AvailableChannels[0];
+            var channel2 = this.fixture.AvailableChannels[1];
 
             Assert.NotNull(channel1);
             Assert.NotNull(channel2);
 
-            var productWithQuantity3InChannel1 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
+            var productWithQuantity3InChannel1 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice50.valueOf());
 
-            var productWithQuantity6InChannel1 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p70_{this.productProjectionsFixture.TestId}");
+            var productWithQuantity6InChannel1 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice70.valueOf());
 
-            var productWithQuantity2InChannel2 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30Channel2_{this.productProjectionsFixture.TestId}");
+            var productWithQuantity2InChannel2 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice30InChannel2.valueOf());
 
             Assert.NotNull(productWithQuantity3InChannel1);
             Assert.NotNull(productWithQuantity6InChannel1);
             Assert.NotNull(productWithQuantity2InChannel2);
 
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productWithQuantity3InChannel1.Id,
                 productWithQuantity6InChannel1.Id,
@@ -1870,10 +1956,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
                 var searchProductsResult =
-                    commerceToolsClient.ExecuteAsync(searchProductsRequest).Result;
+                    client.ExecuteAsync(searchProductsRequest).Result;
                 Assert.Single(searchProductsResult.Results);
                 Assert.Contains(searchProductsResult.Results, p => p.Id == productWithQuantity2InChannel2.Id);
 
@@ -1897,19 +1981,22 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void TestRangeFacetByProductAvailabilityInChannel()
         {
-            //Arrange
-            var productAvailableWithQuantity3 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
 
-            var productAvailableWithQuantity6 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p70_{this.productProjectionsFixture.TestId}");
+            //Arrange
+            var productAvailableWithQuantity3 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice50.valueOf());
+
+            var productAvailableWithQuantity6 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice70.valueOf());
 
             Assert.NotNull(productAvailableWithQuantity3);
             Assert.NotNull(productAvailableWithQuantity6);
 
-            var channelId = this.productProjectionsFixture.AvailableChannels.FirstOrDefault()?.Id;
+            var channelId = this.fixture.AvailableChannels.FirstOrDefault()?.Id;
 
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productAvailableWithQuantity3.Id,
                 productAvailableWithQuantity6.Id
@@ -1932,10 +2019,8 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
                 var searchProductsByAvailabilityResult =
-                    commerceToolsClient.ExecuteAsync(searchProductsByAvailability).Result;
+                    client.ExecuteAsync(searchProductsByAvailability).Result;
                 Assert.Single(searchProductsByAvailabilityResult.Results);
                 Assert.Equal(productAvailableWithQuantity6.Id, searchProductsByAvailabilityResult.Results[0].Id);
 
@@ -1959,15 +2044,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void TestRangeFacetByPriceCentAmount()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var product30 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+            var product30 = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Any(price =>
                     price.Value.CentAmount == TestingUtility.Euro30.Value.CentAmount));
-            var product50 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+            var product50 = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Any(price =>
                     price.Value.CentAmount == TestingUtility.Euro50.Value.CentAmount));
-            var product70 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+            var product70 = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Any(price =>
                     price.Value.CentAmount == TestingUtility.Euro70.Value.CentAmount));
 
             Assert.NotNull(product30);
@@ -1989,8 +2077,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == product30.Id);
 
@@ -2017,26 +2104,29 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void TestFilteredFacetWithProductCategories()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var categoryA = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "A");
-            var categoryA1 = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "A1");
-            var categoryB = this.productProjectionsFixture.FindCategory(c => c.ExternalId == "B");
+            var categoryA = this.fixture.FindCategory(c => c.ExternalId == "A");
+            var categoryA1 = this.fixture.FindCategory(c => c.ExternalId == "A1");
+            var categoryB = this.fixture.FindCategory(c => c.ExternalId == "B");
             Assert.NotNull(categoryA);
             Assert.NotNull(categoryA1);
             Assert.NotNull(categoryB);
 
-            var productA = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryA.Id));
-            var productA1 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryA1.Id));
-            var productB = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.Categories.Any(c => c.Id == categoryB.Id));
+            var productA = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryA.Id));
+            var productA1 = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryA1.Id));
+            var productB = this.fixture.FindProduct(p =>
+                p.Categories.Any(c => c.Id == categoryB.Id));
 
             Assert.NotNull(productA);
             Assert.NotNull(productA1);
             Assert.NotNull(productB);
 
-            string[] productIds = new[] {productA.Id, productA1.Id, productB.Id};
+            var productIds = new[] {productA.Id, productA1.Id, productB.Id};
 
             //Act
             var searchRequest = new SearchProductProjectionsCommand();
@@ -2050,8 +2140,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Equal(3, searchResults.Results.Count);
                 Assert.Equal(2, searchResults.Facets.Count);
 
@@ -2069,15 +2158,18 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void TestFilteredFacetByPriceCentAmount()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var product30 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+            var product30 = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Any(price =>
                     price.Value.CentAmount == TestingUtility.Euro30.Value.CentAmount));
-            var product50 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+            var product50 = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Any(price =>
                     price.Value.CentAmount == TestingUtility.Euro50.Value.CentAmount));
-            var product70 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Prices.Any(price =>
+            var product70 = this.fixture.FindProduct(p =>
+                p.MasterVariant.Prices.Any(price =>
                     price.Value.CentAmount == TestingUtility.Euro70.Value.CentAmount));
 
             Assert.NotNull(product30);
@@ -2102,8 +2194,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == product30.Id);
 
@@ -2124,14 +2215,17 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void TestFilteredFacetNumberAttribute()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
             var value30 = 30.0;
             var value50 = 50.0;
 
-            var product30 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30_{this.productProjectionsFixture.TestId}");
-            var product50 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
+            var product30 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice30.valueOf());
+            var product50 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice50.valueOf());
 
             Assert.NotNull(product30);
             Assert.NotNull(product50);
@@ -2154,14 +2248,11 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Single(searchResults.Results);
                 Assert.Contains(searchResults.Results, p => p.Id == product50.Id);
 
                 Assert.Single(searchResults.Facets);
-
 
                 var facetResult = searchResults.Facets["ProductsByValue30Or50"] as FilteredFacetResult;
                 Assert.NotNull(facetResult);
@@ -2171,18 +2262,20 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
 
         #endregion
 
-
         #region Sort
 
         [Fact]
         public void SortByName()
         {
-            var product30 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30_{this.productProjectionsFixture.TestId}"); //B
-            var product50 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}"); //C
-            var product70 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p70_{this.productProjectionsFixture.TestId}"); //A
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
+            var product30 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice30.valueOf()); //EntityForSearch_ProductWithPrice_30
+            var product50 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice50.valueOf()); //EntityForSearch_ProductWithPrice_50
+            var product70 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice70.valueOf()); //EntityForSearch_ProductWithPrice_70
 
             Assert.NotNull(product30);
             Assert.NotNull(product50);
@@ -2190,7 +2283,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
 
             var productIds = new[] {product30.Id, product50.Id, product70.Id};
 
-            //Act
+            //Act (sort Descending)
             var searchRequest = new SearchProductProjectionsCommand();
             searchRequest.SetStaged(true);
             searchRequest.FilterQuery(p => p.Id.In(productIds));
@@ -2199,30 +2292,31 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Equal(3, searchResults.Results.Count);
 
-                Assert.Equal(product50.Id, searchResults.Results[0].Id);
-                Assert.Equal(product30.Id, searchResults.Results[1].Id);
-                Assert.Equal(product70.Id, searchResults.Results[2].Id);
+                Assert.Equal(product70.Id, searchResults.Results[0].Id);
+                Assert.Equal(product50.Id, searchResults.Results[1].Id);
+                Assert.Equal(product30.Id, searchResults.Results[2].Id);
             });
         }
 
         [Fact]
         public void SortByProductAvailability()
         {
-            //Arrange
-            var productAvailableWithQuantity3 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50NoChannel_{this.productProjectionsFixture.TestId}");
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
 
-            var productAvailableWithQuantity6 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p70NoChannel_{this.productProjectionsFixture.TestId}");
+            //Arrange
+            var productAvailableWithQuantity3 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice50WithoutChannel.valueOf());
+
+            var productAvailableWithQuantity6 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice70WithoutChannel.valueOf());
 
             Assert.NotNull(productAvailableWithQuantity3);
             Assert.NotNull(productAvailableWithQuantity6);
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productAvailableWithQuantity3.Id,
                 productAvailableWithQuantity6.Id
@@ -2232,14 +2326,13 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             var searchRequest = new SearchProductProjectionsCommand();
             searchRequest.SetStaged(true);
             searchRequest.FilterQuery(p => p.Id.In(productIds));
-            searchRequest.Sort(p => p.Variants.Select(v => v.Availability.AvailableQuantity).FirstOrDefault(), SortDirection.Descending);
+            searchRequest.Sort(p => p.Variants.Select(v => v.Availability.AvailableQuantity).FirstOrDefault(),
+                SortDirection.Descending);
 
             //Assert
-            this.productProjectionsFixture.AssertEventually(() =>
+            AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Equal(2, searchResults.Results.Count);
                 Assert.Equal(productAvailableWithQuantity6.Id, searchResults.Results[0].Id);
             });
@@ -2248,19 +2341,22 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void SortByProductAvailabilityWithSupplyChannel()
         {
-            //Arrange
-            var productAvailableWithQuantity3 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
 
-            var productAvailableWithQuantity6 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p70_{this.productProjectionsFixture.TestId}");
+            //Arrange
+            var productAvailableWithQuantity3 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice50.valueOf());
+
+            var productAvailableWithQuantity6 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice70.valueOf());
 
             Assert.NotNull(productAvailableWithQuantity3);
             Assert.NotNull(productAvailableWithQuantity6);
 
-            var channelId = this.productProjectionsFixture.AvailableChannels.FirstOrDefault()?.Id;
+            var channelId = this.fixture.AvailableChannels.FirstOrDefault()?.Id;
 
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productAvailableWithQuantity3.Id,
                 productAvailableWithQuantity6.Id
@@ -2277,9 +2373,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Equal(2, searchResults.Results.Count);
                 Assert.Equal(productAvailableWithQuantity6.Id, searchResults.Results[0].Id);
             });
@@ -2288,16 +2382,19 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void SortByProductRestockableInDaysInChannel()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productRestockableInDays3 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
+            var productRestockableInDays3 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice50.valueOf());
 
-            var productRestockableInDays6 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p70_{this.productProjectionsFixture.TestId}");
+            var productRestockableInDays6 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice70.valueOf());
 
-            var channelId = this.productProjectionsFixture.AvailableChannels.FirstOrDefault()?.Id;
+            var channelId = this.fixture.AvailableChannels.FirstOrDefault()?.Id;
 
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productRestockableInDays3.Id,
                 productRestockableInDays6.Id
@@ -2314,9 +2411,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Equal(2, searchResults.Results.Count);
                 Assert.Equal(productRestockableInDays6.Id, searchResults.Results[0].Id);
             });
@@ -2325,35 +2420,37 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void SortByReviewAverageRating()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
             var productWithAverage2 =
-                this.productProjectionsFixture.FindProduct(p =>
-                    p.MasterData.Staged.MasterVariant.Sku == $"p30_{this.productProjectionsFixture.TestId}");
+                this.fixture.FindProduct(p =>
+                    p.Key == this.fixture.KeyProductWithPrice30.valueOf());
 
             var productWithAverage4 =
-                this.productProjectionsFixture.FindProduct(p =>
-                    p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
+                this.fixture.FindProduct(p =>
+                    p.Key == this.fixture.KeyProductWithPrice50.valueOf());
 
             var productWithAverage1 =
-                this.productProjectionsFixture.FindProduct(p =>
-                    p.MasterData.Staged.MasterVariant.Sku == $"p70_{this.productProjectionsFixture.TestId}");
+                this.fixture.FindProduct(p =>
+                    p.Key == this.fixture.KeyProductWithPrice70.valueOf());
 
             Assert.NotNull(productWithAverage2);
             Assert.NotNull(productWithAverage4);
             Assert.NotNull(productWithAverage1);
 
-            string[] productIds = new[] {productWithAverage2.Id, productWithAverage4.Id, productWithAverage1.Id};
+            var productIds = new[] {productWithAverage2.Id, productWithAverage4.Id, productWithAverage1.Id};
             //Act
             var searchRequest = new SearchProductProjectionsCommand();
             searchRequest.SetStaged(true);
             searchRequest.FilterQuery(p => p.Id.In(productIds));
             searchRequest.Sort(p => p.ReviewRatingStatistics.AverageRating, SortDirection.Descending);
+            
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Equal(3, searchResults.Results.Count);
 
                 Assert.Equal(productWithAverage4.Id, searchResults.Results[0].Id);
@@ -2370,30 +2467,28 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void SortBySku()
         {
-            //Arrange
-            var product1 =
-                this.productProjectionsFixture.FindProduct(p =>
-                    p.MasterData.Staged.MasterVariant.Sku ==
-                    $"p50_{this.productProjectionsFixture.TestId}"); // sku: p50_
-            var product2 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30_{this.productProjectionsFixture.TestId}"); // sku: p30_
-            var product3 =
-                this.productProjectionsFixture.FindProduct(p =>
-                    p.MasterData.Staged.MasterVariant.Sku ==
-                    $"p70_{this.productProjectionsFixture.TestId}"); // sku: p70_
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
 
-            string[] productIds = new[] {product1.Id, product2.Id, product3.Id};
+            //Arrange
+            var product1 = this.fixture.FindProduct(
+                p => p.Key == this.fixture.KeyProductWithPrice50.valueOf());
+            var product2 = this.fixture.FindProduct(
+                p => p.Key == this.fixture.KeyProductWithPrice30.valueOf());
+            var product3 = this.fixture.FindProduct(
+                p => p.Key == this.fixture.KeyProductWithPrice70.valueOf());
+
+            var productIds = new[] {product1.Id, product2.Id, product3.Id};
             //Act
             var searchRequest = new SearchProductProjectionsCommand();
             searchRequest.SetStaged(true);
             searchRequest.FilterQuery(p => p.Id.In(productIds));
             searchRequest.Sort(p => p.Variants.Select(v => v.Sku).FirstOrDefault(), SortDirection.Ascending);
+            
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Equal(3, searchResults.Results.Count);
 
                 Assert.Equal(product2.Id, searchResults.Results[0].Id);
@@ -2405,13 +2500,16 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void SortByCustomMoneyAttributeValue()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var product30 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30_{this.productProjectionsFixture.TestId}");
-            var product50 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
-            var product70 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p70_{this.productProjectionsFixture.TestId}");
+            var product30 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice30.valueOf());
+            var product50 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice50.valueOf());
+            var product70 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice70.valueOf());
 
             Assert.NotNull(product30);
             Assert.NotNull(product50);
@@ -2432,9 +2530,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Equal(3, searchResults.Results.Count);
 
                 Assert.Equal(product70.Id, searchResults.Results[0].Id);
@@ -2446,18 +2542,21 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
         [Fact]
         public void SortByEnumCustomAttributeLabel()
         {
+            //check if products are indexed
+            Assert.True(this.fixture.AvailableForSearch, NotReadyForSearchMessage);
+
             //Arrange
-            var productWithEnum1 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p30_{this.productProjectionsFixture.TestId}");
-            var productWithEnum2 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p50_{this.productProjectionsFixture.TestId}");
-            var productWithEnum3 = this.productProjectionsFixture.FindProduct(p =>
-                p.MasterData.Staged.MasterVariant.Sku == $"p70_{this.productProjectionsFixture.TestId}");
+            var productWithEnum1 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice30.valueOf());
+            var productWithEnum2 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice50.valueOf());
+            var productWithEnum3 = this.fixture.FindProduct(p =>
+                p.Key == this.fixture.KeyProductWithPrice70.valueOf());
 
             Assert.NotNull(productWithEnum1);
             Assert.NotNull(productWithEnum2);
             Assert.NotNull(productWithEnum3);
-            string[] productIds = new[]
+            var productIds = new[]
             {
                 productWithEnum1.Id,
                 productWithEnum2.Id,
@@ -2477,8 +2576,7 @@ namespace commercetools.Sdk.HttpApi.IntegrationTests.ProductProjectionSearch
             //Assert
             AssertEventually(() =>
             {
-                IClient commerceToolsClient = this.productProjectionsFixture.GetService<IClient>();
-                var searchResults = commerceToolsClient.ExecuteAsync(searchRequest).Result;
+                var searchResults = client.ExecuteAsync(searchRequest).Result;
                 Assert.Equal(3, searchResults.Results.Count);
 
                 Assert.Equal(productWithEnum3.Id, searchResults.Results[0].Id);

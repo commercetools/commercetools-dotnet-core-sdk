@@ -36,7 +36,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductSuggestions
                 var suggestParams = new SuggestQueryCommandParameters(searchKeyword);
                 var suggestCommand = new SuggestQueryCommand<ProductSuggestion>(suggestParams);
 
-                await AssertEventually(async () =>
+                await AssertEventuallyAsync(async () =>
                     {
                         //Act
                         var suggestionResult = await client.ExecuteAsync(suggestCommand);
@@ -68,7 +68,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductSuggestions
                 var suggestParams = new SuggestQueryCommandParameters(searchKeyword);
                 var suggestCommand = new SuggestQueryCommand<ProductSuggestion>(suggestParams);
 
-                await AssertEventually(async () =>
+                await AssertEventuallyAsync(async () =>
                     {
                         //Act
                         var suggestionResult = await client.ExecuteAsync(suggestCommand);
@@ -101,7 +101,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductSuggestions
                 var suggestParams = new SuggestQueryCommandParameters(searchKeyword);
                 var suggestCommand = new SuggestQueryCommand<ProductSuggestion>(suggestParams);
 
-                await AssertEventually(async () =>
+                await AssertEventuallyAsync(async () =>
                     {
                         //Act
                         var suggestionResult = await client.ExecuteAsync(suggestCommand);
@@ -133,7 +133,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductSuggestions
                 var suggestParams = new SuggestQueryCommandParameters(searchKeyword);
                 var suggestCommand = new SuggestQueryCommand<ProductSuggestion>(suggestParams);
 
-                await AssertEventually(async () =>
+                await AssertEventuallyAsync(async () =>
                     {
                         //Act
                         var suggestionResult = await client.ExecuteAsync(suggestCommand);
@@ -170,7 +170,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductSuggestions
                 var suggestParams = new SuggestQueryCommandParameters(searchKeyword);
                 var suggestCommand = new SuggestQueryCommand<ProductSuggestion>(suggestParams);
 
-                await AssertEventually(async () =>
+                await AssertEventuallyAsync(async () =>
                     {
                         //Act
                         var suggestionResult = await client.ExecuteAsync(suggestCommand);

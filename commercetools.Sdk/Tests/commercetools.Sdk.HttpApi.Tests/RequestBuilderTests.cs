@@ -17,6 +17,7 @@ using Xunit;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Channels;
 using commercetools.Sdk.Domain.Messages;
+using commercetools.Sdk.Domain.Predicates;
 
 namespace commercetools.Sdk.HttpApi.Tests
 {
@@ -175,6 +176,22 @@ namespace commercetools.Sdk.HttpApi.Tests
             var httpApiCommand = httpApiCommandFactory.Create(searchRequest);
             var content = await httpApiCommand.HttpRequestMessage.Content.ReadAsStringAsync();
             Assert.Equal("filter=variants.scopedPrice.value.centAmount%3Aexists&priceCurrency=USD&priceChannel=dbb5a6d0-2cbb-4855-bbe7-5cf58f434a82&withTotal=false", content);
+        }
+        
+        [Fact]
+        public async void SearchProductProjectionsAndFilterFacetProductsWithCountsInSubCategory()
+        {
+            var category = new Category() { Id = "2fa96742-5e39-48b1-95fa-ed6a936cc67f"};
+            
+            var searchRequest = new SearchProductProjectionsCommand();
+            searchRequest.FilteredFacet(p => p.Categories.Any(c => c.Id.Subtree(category.Id.valueOf())), isCountingProducts: true);
+            searchRequest.Limit(0);
+            searchRequest.Expand(p => p.Categories.ExpandAll());
+            
+            var httpApiCommandFactory = this.clientFixture.GetService<IHttpApiCommandFactory>();
+            var httpApiCommand = httpApiCommandFactory.Create(searchRequest);
+            var content = await httpApiCommand.HttpRequestMessage.Content.ReadAsStringAsync();
+            Assert.Equal("facet=categories.id%3A+subtree%28%222fa96742-5e39-48b1-95fa-ed6a936cc67f%22%29+counting+products&expand=categories%5B%2A%5D&limit=0&withTotal=false", content);
         }
 
         [Fact]

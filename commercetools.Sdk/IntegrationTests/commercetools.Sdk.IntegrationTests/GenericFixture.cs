@@ -277,16 +277,40 @@ namespace commercetools.Sdk.IntegrationTests
             }
         }
 
+        
+        public static T CreateOrRetrieveByKey<T, TDraft>(
+            IClient client,
+            string key,
+            TDraft draft,
+            Func<TDraft, TDraft> draftAction,
+            Func<IClient, IDraft<T>, Task<T>> createFunc = null
+        ) where T : Resource<T>, IKeyReferencable<T> where TDraft : IDraft<T>
+        {
+            T resource = default(T);
+            
+            try
+            {
+                resource = client.ExecuteAsync(new GetByKeyCommand<T>(key)).Result;    
+            }
+            catch (Exception) //entity not exists
+            {
+                createFunc = createFunc ?? CreateResource;
+                var buildDraft = draftAction.Invoke(draft);
+                resource = createFunc(client, buildDraft).Result;
+            }
+            
+            return resource;
+        }
 
-        public static async Task AssertEventually(Func<Task> runnableBlock, int maxWaitTimeSecond = 300,
+        public static async Task AssertEventuallyAsync(Func<Task> runnableBlock, int maxWaitTimeSecond = 300,
             int waitBeforeRetryMilliseconds = 100)
         {
             var maxWaitTime = TimeSpan.FromSeconds(maxWaitTimeSecond);
             var waitBeforeRetry = TimeSpan.FromMilliseconds(waitBeforeRetryMilliseconds);
-            await AssertEventually(maxWaitTime, waitBeforeRetry, runnableBlock);
+            await AssertEventuallyAsync(maxWaitTime, waitBeforeRetry, runnableBlock);
         }
 
-        private static async Task AssertEventually(TimeSpan maxWaitTime, TimeSpan waitBeforeRetry, Func<Task> runnableBlock)
+        private static async Task AssertEventuallyAsync(TimeSpan maxWaitTime, TimeSpan waitBeforeRetry, Func<Task> runnableBlock)
         {
             long timeOutAt = (int) DateTime.Now.TimeOfDay.TotalMilliseconds + (int) maxWaitTime.TotalMilliseconds;
             while (true)
@@ -294,6 +318,52 @@ namespace commercetools.Sdk.IntegrationTests
                 try
                 {
                     await runnableBlock.Invoke();
+                    // the block executed without throwing an exception, return
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    if ((int) DateTime.Now.TimeOfDay.TotalMilliseconds > timeOutAt) //if it's timeout
+                    {
+                        throw;
+                    }
+
+                    if (ex is ErrorResponseException errorResponseException &&
+                        errorResponseException.ErrorResponse.Errors.Any(err =>
+                            err.Code.Equals("SearchFacetPathNotFound")))
+                    {
+                        throw;
+                    }
+                }
+
+                try
+                {
+                    Task.Delay((int) waitBeforeRetry.TotalMilliseconds).Wait();
+                }
+                catch (ThreadInterruptedException e)
+                {
+                    throw new SystemException(e.Message);
+                }
+            }
+        }
+        
+      
+        public static void AssertEventually(Action runnableBlock, int maxWaitTimeSecond = 300,
+            int waitBeforeRetryMilliseconds = 100)
+        {
+            var maxWaitTime = TimeSpan.FromSeconds(maxWaitTimeSecond);
+            var waitBeforeRetry = TimeSpan.FromMilliseconds(waitBeforeRetryMilliseconds);
+            AssertEventually(maxWaitTime, waitBeforeRetry, runnableBlock);
+        }
+
+        private static void AssertEventually(TimeSpan maxWaitTime, TimeSpan waitBeforeRetry, Action runnableBlock)
+        {
+            long timeOutAt = (int) DateTime.Now.TimeOfDay.TotalMilliseconds + (int) maxWaitTime.TotalMilliseconds;
+            while (true)
+            {
+                try
+                {
+                    runnableBlock.Invoke();
                     // the block executed without throwing an exception, return
                     return;
                 }
