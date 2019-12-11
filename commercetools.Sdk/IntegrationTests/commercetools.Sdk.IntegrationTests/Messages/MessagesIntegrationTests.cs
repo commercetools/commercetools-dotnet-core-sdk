@@ -39,7 +39,7 @@ namespace commercetools.Sdk.IntegrationTests.Messages
                 var queryCommand = new QueryCommand<Message>();
                 queryCommand.SetLimit(1);
 
-                await AssertEventually(async () =>
+                await AssertEventuallyAsync(async () =>
                     {
                         var returnedSet = await client.ExecuteAsync(queryCommand);
                         Assert.Single(returnedSet.Results);
@@ -63,7 +63,7 @@ namespace commercetools.Sdk.IntegrationTests.Messages
                 queryCommand.Where(message =>
                     message.Type == "CustomerCreated" && message.Resource.Id == customer.Id.valueOf());
 
-                await AssertEventually(async () =>
+                await AssertEventuallyAsync(async () =>
                     {
                         //Act
                         var returnedSet = await client.ExecuteAsync(queryCommand);
@@ -101,7 +101,7 @@ namespace commercetools.Sdk.IntegrationTests.Messages
                 var queryCommand = new QueryCommand<Message<Customer>>();
                 queryCommand.Where(message => message.Resource.Id == customer.Id.valueOf());
 
-                await AssertEventually(async () =>
+                await AssertEventuallyAsync(async () =>
                     {
                         //Act
                         var returnedSet = await client.ExecuteAsync(queryCommand);
@@ -137,7 +137,7 @@ namespace commercetools.Sdk.IntegrationTests.Messages
                     queryCommand.Where(message =>
                         message.Resource.Id == customer.Id.valueOf() || message.Resource.Id == review.Id.valueOf());
 
-                    await AssertEventually(async () =>
+                    await AssertEventuallyAsync(async () =>
                         {
                             //Act
                             var returnedSet = await client.ExecuteAsync(queryCommand);

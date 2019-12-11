@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.InventoryEntries;
+using commercetools.Sdk.Domain.Predicates;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
 using Type = commercetools.Sdk.Domain.Types.Type;
 
@@ -91,5 +92,28 @@ namespace commercetools.Sdk.IntegrationTests.Inventory
         }
 
         #endregion
+        
+        public static InventoryEntry CreateOrRetrieveBySku(
+            IClient client,
+            string sku,
+            InventoryEntryDraft draft,
+            Func<InventoryEntryDraft, InventoryEntryDraft> draftAction
+        )
+        {
+            InventoryEntry inventoryEntry = null;
+            var queryCommand = new QueryCommand<InventoryEntry>();
+            queryCommand.Where(ie => ie.Sku == sku.valueOf());
+            var returnedSet = client.ExecuteAsync(queryCommand).Result;
+            if (returnedSet.Count == 1) //it's exists
+            {
+                inventoryEntry = returnedSet.Results[0];
+            }
+            else
+            {
+                var buildDraft = draftAction.Invoke(draft);
+                inventoryEntry = CreateResource(client, buildDraft).Result;
+            }
+            return inventoryEntry;
+        }
     }
 }
