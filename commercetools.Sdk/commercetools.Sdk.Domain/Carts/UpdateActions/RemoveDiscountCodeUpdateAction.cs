@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.Domain.DiscountCodes;
+﻿using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.DiscountCodes;
 
 namespace commercetools.Sdk.Domain.Carts.UpdateActions
 {
@@ -9,6 +10,6 @@ namespace commercetools.Sdk.Domain.Carts.UpdateActions
     {
         public string Action => "removeDiscountCode";
         [Required]
-        public Reference<DiscountCode> DiscountCode { get; set; }
+        public IReference<DiscountCode> DiscountCode { get; set; }
     }
 }
