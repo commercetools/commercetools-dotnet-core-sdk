@@ -1,10 +1,9 @@
 language: csharp
 mono: none
-dist: bionic
 matrix:
   include:
   - os: linux
-    dist: bionic
+    dist: trusty
     dotnet: 2.1
     sudo: true
     before_install:
