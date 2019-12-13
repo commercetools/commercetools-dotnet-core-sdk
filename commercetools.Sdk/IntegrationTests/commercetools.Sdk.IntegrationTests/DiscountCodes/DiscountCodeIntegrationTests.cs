@@ -40,7 +40,12 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
                 };
                 await WithDiscountCode(
                     client,
-                    discountCodeDraft => DefaultDiscountCodeDraftWithCode(discountCodeDraft, cartDiscounts, code),
+                    draft =>
+                    {
+                        var discountCodeDraft = DefaultDiscountCodeDraftWithCartDiscounts(draft, cartDiscounts);
+                        discountCodeDraft = DefaultDiscountCodeDraftWithCode(discountCodeDraft, code);
+                        return discountCodeDraft;
+                    },
                     discountCode =>
                     {
                         Assert.Equal(code, discountCode.Code);
@@ -95,7 +100,7 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
             {
                 var newName = new LocalizedString {{"en", TestingUtility.RandomString()}};
                 var updateActions = new List<UpdateAction<DiscountCode>>();
-                var action = new SetNameUpdateAction { Name = newName};
+                var action = new SetNameUpdateAction {Name = newName};
                 updateActions.Add(action);
 
                 var updatedDiscountCode = await client
@@ -113,7 +118,7 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
             {
                 var newDescription = new LocalizedString {{"en", TestingUtility.RandomString()}};
                 var updateActions = new List<UpdateAction<DiscountCode>>();
-                var action = new SetDescriptionUpdateAction { Description = newDescription};
+                var action = new SetDescriptionUpdateAction {Description = newDescription};
                 updateActions.Add(action);
 
                 var updatedDiscountCode = await client
@@ -131,7 +136,7 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
             await WithUpdateableDiscountCode(client, async discountCode =>
             {
                 var updateActions = new List<UpdateAction<DiscountCode>>();
-                var action = new SetCartPredicateUpdateAction { CartPredicate = newCartPredicate};
+                var action = new SetCartPredicateUpdateAction {CartPredicate = newCartPredicate};
                 updateActions.Add(action);
 
                 var updatedDiscountCode = await client
@@ -199,7 +204,8 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
                         };
                         updateActions.Add(setTypeAction);
 
-                        var updatedCartDiscount = await client.ExecuteAsync(new UpdateByIdCommand<DiscountCode>(discountCode, updateActions));
+                        var updatedCartDiscount =
+                            await client.ExecuteAsync(new UpdateByIdCommand<DiscountCode>(discountCode, updateActions));
 
                         Assert.Equal(type.Id, updatedCartDiscount.Custom.Type.Id);
                         return updatedCartDiscount;
@@ -239,36 +245,36 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
         public async Task UpdateDiscountCodeChangeCartDiscounts()
         {
             await WithCartDiscount(client, DefaultCartDiscountDraftRequireDiscountCode, async cartDiscount1 =>
+            {
+                await WithCartDiscount(client, DefaultCartDiscountDraftRequireDiscountCode, async cartDiscount2 =>
                 {
-                    await WithCartDiscount(client, DefaultCartDiscountDraftRequireDiscountCode, async cartDiscount2 =>
+                    await WithUpdateableDiscountCode(client, async discountCode =>
                     {
-                        await WithUpdateableDiscountCode(client, async discountCode =>
+                        Assert.Single(discountCode.CartDiscounts);
+                        var cartDiscounts = new List<Reference<CartDiscount>>()
                         {
-                            Assert.Single(discountCode.CartDiscounts);
-                            var cartDiscounts = new List<Reference<CartDiscount>>()
-                            {
-                                new Reference<CartDiscount> {Id = cartDiscount1.Id},
-                                new Reference<CartDiscount> {Id = cartDiscount2.Id},
-                            };
-                            var updateActions = new List<UpdateAction<DiscountCode>>();
-                            var action = new ChangeCartDiscountsUpdateAction
-                            {
-                                CartDiscounts = cartDiscounts
-                            };
-                            updateActions.Add(action);
+                            new Reference<CartDiscount> {Id = cartDiscount1.Id},
+                            new Reference<CartDiscount> {Id = cartDiscount2.Id},
+                        };
+                        var updateActions = new List<UpdateAction<DiscountCode>>();
+                        var action = new ChangeCartDiscountsUpdateAction
+                        {
+                            CartDiscounts = cartDiscounts
+                        };
+                        updateActions.Add(action);
 
-                            var updatedDiscountCode = await client
-                                .ExecuteAsync(new UpdateByIdCommand<DiscountCode>(discountCode, updateActions));
+                        var updatedDiscountCode = await client
+                            .ExecuteAsync(new UpdateByIdCommand<DiscountCode>(discountCode, updateActions));
 
-                            Assert.Equal(2, updatedDiscountCode.CartDiscounts.Count);
-                            Assert.Contains(updatedDiscountCode.CartDiscounts,
-                                cartDiscountRef => cartDiscountRef.Id == cartDiscount1.Id);
-                            Assert.Contains(updatedDiscountCode.CartDiscounts,
-                                cartDiscountRef => cartDiscountRef.Id == cartDiscount2.Id);
-                            return updatedDiscountCode;
-                        });
+                        Assert.Equal(2, updatedDiscountCode.CartDiscounts.Count);
+                        Assert.Contains(updatedDiscountCode.CartDiscounts,
+                            cartDiscountRef => cartDiscountRef.Id == cartDiscount1.Id);
+                        Assert.Contains(updatedDiscountCode.CartDiscounts,
+                            cartDiscountRef => cartDiscountRef.Id == cartDiscount2.Id);
+                        return updatedDiscountCode;
                     });
                 });
+            });
         }
 
         [Fact]
@@ -284,7 +290,7 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
                     $"Group2_{rand}",
                 };
                 var updateActions = new List<UpdateAction<DiscountCode>>();
-                var action = new ChangeGroupsUpdateAction { Groups = groups };
+                var action = new ChangeGroupsUpdateAction {Groups = groups};
                 updateActions.Add(action);
 
                 var updatedDiscountCode = await client
@@ -303,7 +309,7 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
             {
                 var isActive = !discountCode.IsActive;
                 var updateActions = new List<UpdateAction<DiscountCode>>();
-                var action = new ChangeIsActiveUpdateAction { IsActive = isActive };
+                var action = new ChangeIsActiveUpdateAction {IsActive = isActive};
                 updateActions.Add(action);
 
                 var updatedDiscountCode = await client
@@ -321,7 +327,7 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
             {
                 var newValidFrom = discountCode.ValidFrom.AddDays(1);
                 var updateActions = new List<UpdateAction<DiscountCode>>();
-                var action = new SetValidFromUpdateAction { ValidFrom = newValidFrom};
+                var action = new SetValidFromUpdateAction {ValidFrom = newValidFrom};
                 updateActions.Add(action);
 
                 var updatedDiscountCode = await client
@@ -339,7 +345,7 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
             {
                 var newValidUntil = discountCode.ValidUntil.AddDays(1);
                 var updateActions = new List<UpdateAction<DiscountCode>>();
-                var action = new SetValidUntilUpdateAction { ValidUntil = newValidUntil};
+                var action = new SetValidUntilUpdateAction {ValidUntil = newValidUntil};
                 updateActions.Add(action);
 
                 var updatedDiscountCode = await client
@@ -375,6 +381,7 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
                 return updatedDiscountCode;
             });
         }
+
         #endregion
     }
 }
