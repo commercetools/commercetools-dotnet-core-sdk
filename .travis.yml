@@ -10,41 +10,34 @@ matrix:
       - docker
     before_install:
     - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
-    script:
+    install:
+    - docker build -t dotnet3021 -f Dockerfile.sdk .
+    - docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk dotnet3021 dotnet restore --packages ../packages
+    - docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk dotnet3021 dotnet build --no-restore --source ../packages -c Release
     - |
-      docker build -t dotnet3021 -f Dockerfile.sdk .
-      docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk dotnet3021 dotnet restore --packages ../packages
-      docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk dotnet3021 dotnet build --no-restore --source ../packages -c Release
-      docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal Tests/commercetools.Sdk.Domain.Tests --no-build -c Release
-      docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal Tests/commercetools.Sdk.HttpApi.Tests --no-build -c Release
-      docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
-      docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
       echo "CTP_Client__ClientId=$CTP_Client__ClientId" > env.list
       echo "CTP_Client__ClientSecret=$CTP_Client__ClientSecret" >> env.list
       echo "CTP_Client__ProjectKey=$CTP_Client__ProjectKey" >> env.list
       echo "CTP_Client__Scope=$CTP_Client__Scope" >> env.list
-      echo "CTP_Client__AuthorizationBaseAddress=$CTP_Client__AuthorizationBaseAddress" >> env.list
-      echo "CTP_Client__ApiBaseAddress=$CTP_Client__ApiBaseAddress" >> env.list
       echo "CTP_TokenClient__ClientId=$CTP_TokenClient__ClientId" >> env.list
       echo "CTP_TokenClient__ClientSecret=$CTP_TokenClient__ClientSecret" >> env.list
       echo "CTP_TokenClient__ProjectKey=$CTP_TokenClient__ProjectKey" >> env.list
       echo "CTP_TokenClient__Scope=$CTP_TokenClient__Scope" >> env.list
-      echo "CTP_TokenClient__AuthorizationBaseAddress=$CTP_TokenClient__AuthorizationBaseAddress" >> env.list
-      echo "CTP_TokenClient__ApiBaseAddress=$CTP_TokenClient__ApiBaseAddress" >> env.list
       echo "CTP_TokenClientWithSmallerScope__ClientId=$CTP_TokenClientWithSmallerScope__ClientId" >> env.list
       echo "CTP_TokenClientWithSmallerScope__ClientSecret=$CTP_TokenClientWithSmallerScope__ClientSecret" >> env.list
       echo "CTP_TokenClientWithSmallerScope__ProjectKey=$CTP_TokenClientWithSmallerScope__ProjectKey" >> env.list
       echo "CTP_TokenClientWithSmallerScope__Scope=$CTP_TokenClientWithSmallerScope__Scope" >> env.list
-      echo "CTP_TokenClientWithSmallerScope__AuthorizationBaseAddress=$CTP_TokenClientWithSmallerScope__AuthorizationBaseAddress" >> env.list
-      echo "CTP_TokenClientWithSmallerScope__ApiBaseAddress=$CTP_TokenClientWithSmallerScope__ApiBaseAddress" >> env.list
       echo "CTP_TokenClientWithAnonymousScope__ClientId=$CTP_TokenClientWithAnonymousScope__ClientId" >> env.list
       echo "CTP_TokenClientWithAnonymousScope__ClientSecret=$CTP_TokenClientWithAnonymousScope__ClientSecret" >> env.list
       echo "CTP_TokenClientWithAnonymousScope__ProjectKey=$CTP_TokenClientWithAnonymousScope__ProjectKey" >> env.list
       echo "CTP_TokenClientWithAnonymousScope__Scope=$CTP_TokenClientWithAnonymousScope__Scope" >> env.list
-      echo "CTP_TokenClientWithAnonymousScope__AuthorizationBaseAddress=$CTP_TokenClientWithAnonymousScope__AuthorizationBaseAddress" >> env.list
-      echo "CTP_TokenClientWithAnonymousScope__ApiBaseAddress=$CTP_TokenClientWithAnonymousScope__ApiBaseAddress" >> env.list
-      docker run --rm --env-file=env.list -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
-      docker run --rm --env-file=env.list -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
+    script:
+    - docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal Tests/commercetools.Sdk.Domain.Tests --no-build -c Release
+    - docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal Tests/commercetools.Sdk.HttpApi.Tests --no-build -c Release
+    - docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
+    - docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
+    - docker run --rm --env-file=env.list -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
+    - docker run --rm --env-file=env.list -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
   - os: osx
     dotnet: 2.1.603
     sudo: true
