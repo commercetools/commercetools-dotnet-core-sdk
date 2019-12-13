@@ -3,7 +3,7 @@ mono: none
 matrix:
   include:
   - os: linux
-    dist: xenial
+    dist: bionic
     dotnet: 2.1
     sudo: true
     before_install:
