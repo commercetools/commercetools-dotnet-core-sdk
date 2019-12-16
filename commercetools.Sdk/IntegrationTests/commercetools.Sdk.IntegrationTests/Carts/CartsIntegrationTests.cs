@@ -643,7 +643,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                             ShippingRateInput = new ScoreShippingRateInputDraft {Score = 1}
                         };
                         var cartWithShippingMethodWithScore1 = await client
-                            .ExecuteAsync(cart.UpdateById(actions => actions.AddUpdate(setShippingRateInputAction)));
+                            .ExecuteAsync(cartWithShippingMethod.UpdateById(actions => actions.AddUpdate(setShippingRateInputAction)));
 
                         Assert.NotNull(cartWithShippingMethodWithScore1.ShippingRateInput);
                         Assert.IsType<ScoreShippingRateInput>(cartWithShippingMethodWithScore1.ShippingRateInput);
@@ -716,7 +716,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                                 ShippingRateInput = new ClassificationShippingRateInputDraft {Key = "Small"}
                             };
                             var cartWithShippingMethodWithSmallClassification = await client
-                                .ExecuteAsync(cart.UpdateById(actions =>
+                                .ExecuteAsync(cartWithShippingMethod.UpdateById(actions =>
                                     actions.AddUpdate(setShippingRateInputAction)));
 
                             Assert.NotNull(cartWithShippingMethodWithSmallClassification.ShippingRateInput);
