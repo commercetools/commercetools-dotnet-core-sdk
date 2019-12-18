@@ -6,6 +6,7 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Products.UpdateActions;
+using commercetools.Sdk.Domain.TaxCategories;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
 using static commercetools.Sdk.IntegrationTests.ProductTypes.ProductTypesFixture;
@@ -28,11 +29,13 @@ namespace commercetools.Sdk.IntegrationTests.Products
             var priceCentAmount = TestingUtility.RandomInt(1000, 5000);
             var productPrice = TestingUtility.GetPriceDraft(priceCentAmount);
            
+            var attributes = TestingUtility.GetListOfRandomAttributes();
             productDraft.MasterVariant = new ProductVariantDraft
             {
                 Key = $"MasterVariant_key_{randomInt}",
                 Sku = $"MasterVariant_Sku_{randomInt}",
-                Prices = new List<PriceDraft> { productPrice }
+                Prices = new List<PriceDraft> { productPrice },
+                Attributes = attributes 
             };
             return productDraft;
         }
@@ -79,6 +82,12 @@ namespace commercetools.Sdk.IntegrationTests.Products
             {
                 category.ToKeyResourceIdentifier()
             };
+            return productDraft;
+        }
+        public static ProductDraft DefaultProductDraftWithTaxCategory(ProductDraft draft,TaxCategory taxCategory)
+        {
+            var productDraft = DefaultProductDraft(draft);
+            productDraft.TaxCategory = taxCategory.ToKeyResourceIdentifier();
             return productDraft;
         }
         public static ProductDraft DefaultProductDraftWithMultipleVariants(ProductDraft draft, int variantsCount = 1)
