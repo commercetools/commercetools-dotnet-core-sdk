@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.Domain.ShippingMethods;
+﻿using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.ShippingMethods;
 
 namespace commercetools.Sdk.Domain.Carts.UpdateActions
 {
@@ -9,7 +10,7 @@ namespace commercetools.Sdk.Domain.Carts.UpdateActions
     public class SetShippingMethodUpdateAction : UpdateAction<Cart>
     {
         public string Action => "setShippingMethod";
-        public Reference<ShippingMethod> ShippingMethod { get; set; }
+        public IReference<ShippingMethod> ShippingMethod { get; set; }
         public ExternalTaxRateDraft ExternalTaxRate { get; set; }
     }
 }

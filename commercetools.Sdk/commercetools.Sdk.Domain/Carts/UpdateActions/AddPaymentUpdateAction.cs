@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.Domain.Payments;
+﻿using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.Payments;
 
 namespace commercetools.Sdk.Domain.Carts.UpdateActions
 {
@@ -9,6 +10,6 @@ namespace commercetools.Sdk.Domain.Carts.UpdateActions
     {
         public string Action => "addPayment";
         [Required]
-        public Reference<Payment> Payment { get; set; }
+        public IReference<Payment> Payment { get; set; }
     }
 }

@@ -27,7 +27,17 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
             shoppingListDraft.Key = key;
             return shoppingListDraft;
         }
-
+        public static ShoppingListDraft DefaultShoppingListDraftWithSingleLineItem(ShoppingListDraft draft, Product product)
+        {
+            var shoppingListDraft = DefaultShoppingListDraft(draft);
+            var lineItemDraft1 = new LineItemDraft{ ProductId = product.Id, Quantity = 1};
+            shoppingListDraft.LineItems = new List<LineItemDraft>
+            {
+                lineItemDraft1
+            };
+            return shoppingListDraft;
+        }
+        
         public static ShoppingListDraft DefaultShoppingListDraftWithLineItems(ShoppingListDraft draft, Product product)
         {
             var shoppingListDraft = DefaultShoppingListDraft(draft);

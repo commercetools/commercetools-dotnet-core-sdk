@@ -373,9 +373,12 @@ namespace commercetools.Sdk.IntegrationTests
             var random = RandomInt();
             var country = GetRandomEuropeCountry();
             var state = $"{country}_State_{random}";
+            var streetName = $"street_{random}";
             var address = new Address
             {
-                Country = country, State = state,
+                Country = country, 
+                State = state,
+                StreetName = streetName,
                 Key = $"Key_{random}"
             };
             return address;
@@ -462,25 +465,108 @@ namespace commercetools.Sdk.IntegrationTests
         }
         public static ExternalTaxRateDraft GetExternalTaxRateDraft()
         {
-            var country = GetRandomEuropeCountry();
-            var state = $"{country}_State_{RandomInt()}";
             var externalTaxRateDraft = new ExternalTaxRateDraft
             {
-                Amount = RandomDouble(),
+                Amount = TestingUtility.RandomDouble(),
                 Name = "Test tax",
-                Country = country,
-                State = state,
-                IncludedInPrice = false,
-                SubRates = new List<SubRate>
-                {
-                    new SubRate
-                    {
-                        Name = RandomString(),
-                        Amount = RandomDouble()
-                    }
-                }
+                Country = "DE"
+
             };
             return externalTaxRateDraft;
+        }
+        
+        public static ExternalTaxAmountDraft GetExternalTaxAmountDraft()
+        {
+            var externalTaxAmount = new ExternalTaxAmountDraft()
+            {
+                TotalGross = Money.FromDecimal("EUR", 100),
+                TaxRate = GetExternalTaxRateDraft()
+                
+            };
+            return externalTaxAmount;
+        }
+        public static ShippingRateDraft GetShippingRateDraftWithCartClassifications()
+        {
+            ShippingRateDraft rate = new ShippingRateDraft()
+            {
+                Price = Money.FromDecimal("EUR", 10),
+                Tiers = GetShippingRatePriceTiersAsClassification()
+            };
+            return rate;
+        }
+        public static ShippingRateDraft GetShippingRateDraftWithPriceTiers()
+        {
+            ShippingRateDraft rate = new ShippingRateDraft()
+            {
+                Price = Money.FromDecimal("EUR", 10),
+                Tiers = GetShippingRatePriceTiersAsCartScore()
+            };
+            return rate;
+        }
+        public static ItemShippingDetailsDraft GetItemShippingDetailsDraft(string addressKey, long quantity)
+        {
+            var itemShippingTarget = GetItemShippingTarget(addressKey, quantity);
+            ItemShippingDetailsDraft itemShippingDetailsDraft = new ItemShippingDetailsDraft
+            {
+                Targets = new List<ItemShippingTarget>{itemShippingTarget}
+            };
+            return itemShippingDetailsDraft;
+        }
+        public static ItemShippingTarget GetItemShippingTarget(string addressKey, long quantity)
+        {
+            ItemShippingTarget itemShippingTarget = new ItemShippingTarget
+            {
+                Quantity = quantity,
+                AddressKey = addressKey
+            };
+            return itemShippingTarget;
+        }
+        public static List<ItemShippingTarget> GetTargetsDelta(string addressKey, long quantity)
+        {
+            var itemShippingTarget = GetItemShippingTarget(addressKey, quantity);
+            List<ItemShippingTarget> targetsDelta = new List<ItemShippingTarget> {itemShippingTarget};
+            return targetsDelta;
+        }
+        
+        private static List<ShippingRatePriceTier> GetShippingRatePriceTiersAsCartScore()
+        {
+            var shippingRatePriceTiers = new List<ShippingRatePriceTier>();
+            shippingRatePriceTiers.Add(new CartScoreShippingRatePriceTier{Score = 0, Price = Money.FromDecimal("EUR", 10)});
+            shippingRatePriceTiers.Add(new CartScoreShippingRatePriceTier{Score = 1, Price = Money.FromDecimal("EUR", 20)});
+            shippingRatePriceTiers.Add(new CartScoreShippingRatePriceTier{Score = 2, Price = Money.FromDecimal("EUR", 30)});
+            return shippingRatePriceTiers;
+        }
+        private static List<ShippingRatePriceTier> GetShippingRatePriceTiersAsClassification()
+        {
+            var shippingRatePriceTiers = new List<ShippingRatePriceTier>();
+            shippingRatePriceTiers.Add(new CartClassificationShippingRatePriceTier{Value = "Small", Price = Money.FromDecimal("EUR", 20)});
+            shippingRatePriceTiers.Add(new CartClassificationShippingRatePriceTier{Value = "Heavy", Price = Money.FromDecimal("EUR", 30)});
+            return shippingRatePriceTiers;
+        }
+        
+        public static CustomLineItemDraft GetCustomLineItemDraft(TaxCategory taxCategory)
+        {
+            var customLineItemDraft = new CustomLineItemDraft
+            {
+                Name = new LocalizedString() {{"en", RandomString()}},
+                Slug = RandomString(10),
+                Quantity = RandomInt(1,10),
+                Money = Money.FromDecimal("EUR", RandomInt(100,10000)),
+                TaxCategory = taxCategory.ToReference()
+            };
+            return customLineItemDraft;
+        }
+
+        public static TaxRateDraft GetTaxRateDraft(Address address)
+        {
+            var taxRateDraft = new TaxRateDraft
+            {
+                Country = address.Country,
+                State = address.State,
+                Name = RandomString(),
+                Amount = RandomDouble()
+            };
+            return taxRateDraft;
         }
         
         /// <summary>

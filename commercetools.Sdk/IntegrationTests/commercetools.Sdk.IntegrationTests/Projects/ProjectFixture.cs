@@ -19,7 +19,7 @@ namespace commercetools.Sdk.IntegrationTests.Projects
         public static List<string> GetProjectLanguages(IClient client)
         {
             var command = new GetProjectCommand();
-            var project = client.ExecuteAsync(new GetProjectCommand()).Result;
+            var project = client.ExecuteAsync(command).Result;
             return project.Languages.ToList();
         }
 

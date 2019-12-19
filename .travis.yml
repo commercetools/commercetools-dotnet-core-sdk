@@ -3,25 +3,41 @@ mono: none
 matrix:
   include:
   - os: linux
-    dist: xenial
-    dotnet: 2.1
+    language: node
+    dist: bionic
     sudo: true
+    services:
+      - docker
     before_install:
     - ./patch_csproj.rb --version 1.0.0.${TRAVIS_BUILD_NUMBER} --patch **/*.csproj
-    - cd commercetools.Sdk
-    - sudo apt-get install -qq dotnet-sdk-3.0
     install:
-    - dotnet restore
-    script:
-    - dotnet build -c Release
+    - docker build -t dotnet3021 -f Dockerfile.sdk .
+    - docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk dotnet3021 dotnet restore --packages ../packages
+    - docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk dotnet3021 dotnet build --no-restore --source ../packages -c Release
     - |
-      dotnet test Tests/commercetools.Sdk.Domain.Tests --no-build -c Release
-      dotnet test Tests/commercetools.Sdk.HttpApi.Tests --no-build -c Release
-      dotnet test Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
-      dotnet test Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
-    - dotnet test IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
-    - dotnet test IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
-    - CTP_Container="SimpleInjector" dotnet test IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
+      echo "CTP_Client__ClientId=$CTP_Client__ClientId" > env.list
+      echo "CTP_Client__ClientSecret=$CTP_Client__ClientSecret" >> env.list
+      echo "CTP_Client__ProjectKey=$CTP_Client__ProjectKey" >> env.list
+      echo "CTP_Client__Scope=$CTP_Client__Scope" >> env.list
+      echo "CTP_TokenClient__ClientId=$CTP_TokenClient__ClientId" >> env.list
+      echo "CTP_TokenClient__ClientSecret=$CTP_TokenClient__ClientSecret" >> env.list
+      echo "CTP_TokenClient__ProjectKey=$CTP_TokenClient__ProjectKey" >> env.list
+      echo "CTP_TokenClient__Scope=$CTP_TokenClient__Scope" >> env.list
+      echo "CTP_TokenClientWithSmallerScope__ClientId=$CTP_TokenClientWithSmallerScope__ClientId" >> env.list
+      echo "CTP_TokenClientWithSmallerScope__ClientSecret=$CTP_TokenClientWithSmallerScope__ClientSecret" >> env.list
+      echo "CTP_TokenClientWithSmallerScope__ProjectKey=$CTP_TokenClientWithSmallerScope__ProjectKey" >> env.list
+      echo "CTP_TokenClientWithSmallerScope__Scope=$CTP_TokenClientWithSmallerScope__Scope" >> env.list
+      echo "CTP_TokenClientWithAnonymousScope__ClientId=$CTP_TokenClientWithAnonymousScope__ClientId" >> env.list
+      echo "CTP_TokenClientWithAnonymousScope__ClientSecret=$CTP_TokenClientWithAnonymousScope__ClientSecret" >> env.list
+      echo "CTP_TokenClientWithAnonymousScope__ProjectKey=$CTP_TokenClientWithAnonymousScope__ProjectKey" >> env.list
+      echo "CTP_TokenClientWithAnonymousScope__Scope=$CTP_TokenClientWithAnonymousScope__Scope" >> env.list
+    script:
+    - docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal Tests/commercetools.Sdk.Domain.Tests --no-build -c Release
+    - docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal Tests/commercetools.Sdk.HttpApi.Tests --no-build -c Release
+    - docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
+    - docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
+    - docker run --rm --env-file=env.list -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
+    - docker run --rm --env-file=env.list -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
   - os: osx
     dotnet: 2.1.603
     sudo: true

@@ -15,8 +15,7 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
     {
         #region DraftBuilds
 
-        public static DiscountCodeDraft DefaultDiscountCodeDraft(DiscountCodeDraft discountCodeDraft,
-            List<Reference<CartDiscount>> cartDiscounts)
+        public static DiscountCodeDraft DefaultDiscountCodeDraft(DiscountCodeDraft discountCodeDraft)
         {
             var random = TestingUtility.RandomInt();
             discountCodeDraft.Name = new LocalizedString {{"en", $"DiscountCode_{random}"}};
@@ -25,20 +24,27 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
             discountCodeDraft.CartPredicate = "1 = 1"; //for all carts
             discountCodeDraft.ValidFrom = DateTime.Today;
             discountCodeDraft.ValidUntil = DateTime.Today.AddDays(10); // valid 10 days
+            return discountCodeDraft;
+        }
+
+        public static DiscountCodeDraft DefaultDiscountCodeDraftWithCartDiscounts(DiscountCodeDraft draft,
+            List<Reference<CartDiscount>> cartDiscounts)
+        {
+            var discountCodeDraft = DefaultDiscountCodeDraft(draft);
             discountCodeDraft.CartDiscounts = cartDiscounts;
             return discountCodeDraft;
         }
 
         public static DiscountCodeDraft DefaultDiscountCodeDraftWithCode(DiscountCodeDraft draft,
-            List<Reference<CartDiscount>> cartDiscounts, string code)
+            string code)
         {
-            var discountCodeDraft = DefaultDiscountCodeDraft(draft, cartDiscounts);
+            var discountCodeDraft = DefaultDiscountCodeDraft(draft);
             discountCodeDraft.Code = code;
             return discountCodeDraft;
         }
 
         public static DiscountCodeDraft DefaultDiscountCodeDraftWithCustomType(DiscountCodeDraft draft,
-            List<Reference<CartDiscount>> cartDiscounts, Type type, Fields fields)
+            Type type, Fields fields)
         {
             var customFieldsDraft = new CustomFieldsDraft
             {
@@ -46,7 +52,7 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
                 Fields = fields
             };
 
-            var discountCodeDraft = DefaultDiscountCodeDraft(draft, cartDiscounts);
+            var discountCodeDraft = DefaultDiscountCodeDraft(draft);
             discountCodeDraft.Custom = customFieldsDraft;
 
             return discountCodeDraft;
@@ -68,14 +74,27 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
                     }
                 };
                 await With(client, new DiscountCodeDraft(),
-                    discountCodeDraft => DefaultDiscountCodeDraft(discountCodeDraft, cartDiscounts), func);
+                    discountCodeDraft => DefaultDiscountCodeDraftWithCartDiscounts(discountCodeDraft, cartDiscounts),
+                    func);
             });
         }
 
         public static async Task WithDiscountCode(IClient client,
             Func<DiscountCodeDraft, DiscountCodeDraft> draftAction, Action<DiscountCode> func)
         {
-            await With(client, new DiscountCodeDraft(), draftAction, func);
+            await WithCartDiscount(client, async cartDiscount =>
+            {
+                var cartDiscounts = new List<Reference<CartDiscount>>()
+                {
+                    new Reference<CartDiscount>
+                    {
+                        Id = cartDiscount.Id
+                    }
+                };
+                await With(client, DefaultDiscountCodeDraftWithCartDiscounts(
+                        new DiscountCodeDraft(), cartDiscounts),
+                    draftAction, func);
+            });
         }
 
         public static async Task WithDiscountCode(IClient client, Func<DiscountCode, Task> func)
@@ -87,14 +106,24 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
                     new Reference<CartDiscount> {Id = cartDiscount.Id}
                 };
                 await WithAsync(client, new DiscountCodeDraft(),
-                    discountCodeDraft => DefaultDiscountCodeDraft(discountCodeDraft, cartDiscounts), func);
+                    discountCodeDraft => DefaultDiscountCodeDraftWithCartDiscounts(discountCodeDraft, cartDiscounts),
+                    func);
             });
         }
 
         public static async Task WithDiscountCode(IClient client,
             Func<DiscountCodeDraft, DiscountCodeDraft> draftAction, Func<DiscountCode, Task> func)
         {
-            await WithAsync(client, new DiscountCodeDraft(), draftAction, func);
+            await WithCartDiscount(client, DefaultCartDiscountDraftRequireDiscountCode, async cartDiscount =>
+            {
+                var cartDiscounts = new List<Reference<CartDiscount>>()
+                {
+                    new Reference<CartDiscount> {Id = cartDiscount.Id}
+                };
+                await WithAsync(client,
+                    DefaultDiscountCodeDraftWithCartDiscounts(new DiscountCodeDraft(), cartDiscounts),
+                    draftAction, func);
+            });
         }
 
         #endregion
@@ -110,7 +139,8 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
                     new Reference<CartDiscount> {Id = cartDiscount.Id}
                 };
                 await WithUpdateable(client, new DiscountCodeDraft(),
-                    discountCodeDraft => DefaultDiscountCodeDraft(discountCodeDraft, cartDiscounts), func);
+                    discountCodeDraft => DefaultDiscountCodeDraftWithCartDiscounts(discountCodeDraft, cartDiscounts),
+                    func);
             });
         }
 
@@ -129,7 +159,8 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
                     new Reference<CartDiscount> {Id = cartDiscount.Id}
                 };
                 await WithUpdateableAsync(client, new DiscountCodeDraft(),
-                    discountCodeDraft => DefaultDiscountCodeDraft(discountCodeDraft, cartDiscounts), func);
+                    discountCodeDraft => DefaultDiscountCodeDraftWithCartDiscounts(discountCodeDraft, cartDiscounts),
+                    func);
             });
         }
 
@@ -142,16 +173,12 @@ namespace commercetools.Sdk.IntegrationTests.DiscountCodes
                 {
                     new Reference<CartDiscount> {Id = cartDiscount.Id}
                 };
-                await WithUpdateableAsync(client, new DiscountCodeDraft(),
-                    discountCodeDraft =>
-                        DefaultDiscountCodeDraftWithCustomType(discountCodeDraft, cartDiscounts, type, fields), func);
-            });
-        }
 
-        public static async Task WithUpdateableDiscountCode(IClient client,
-            Func<DiscountCodeDraft, DiscountCodeDraft> draftAction, Func<DiscountCode, Task<DiscountCode>> func)
-        {
-            await WithUpdateableAsync(client, new DiscountCodeDraft(), draftAction, func);
+                await WithUpdateableAsync(client,
+                    DefaultDiscountCodeDraftWithCartDiscounts(new DiscountCodeDraft(), cartDiscounts),
+                    discountCodeDraft =>
+                        DefaultDiscountCodeDraftWithCustomType(discountCodeDraft, type, fields), func);
+            });
         }
 
         #endregion

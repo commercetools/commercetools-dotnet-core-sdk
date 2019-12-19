@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.TaxCategories;
+using commercetools.Sdk.Domain.Zones;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
+using static commercetools.Sdk.IntegrationTests.Zones.ZonesFixture;
 
 namespace commercetools.Sdk.IntegrationTests.TaxCategories
 {
