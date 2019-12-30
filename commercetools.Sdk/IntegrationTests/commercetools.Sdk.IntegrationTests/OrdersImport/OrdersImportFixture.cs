@@ -49,10 +49,35 @@ namespace commercetools.Sdk.IntegrationTests.OrdersImport
         public static OrderImportDraft DefaultOrderImportDraftWithLineItemByProductId(OrderImportDraft draft,string productId)
         {
             var orderImportDraft = DefaultOrderImportDraft(draft);
-            var priceEuro10 = TestingUtility.GetPriceFromDecimal(10);
             var variant = new ProductVariantImportDraft(productId, 1);
 
             var addressKey = draft.ItemShippingAddresses.FirstOrDefault()?.Key;
+            var lineItemImportDraft = GetLineItemImportDraft(variant, addressKey);
+            orderImportDraft.LineItems = new List<LineItemImportDraft>
+            {
+                lineItemImportDraft
+            };
+            return orderImportDraft;
+        }
+        
+        public static OrderImportDraft DefaultOrderImportDraftWithLineItemBySku(OrderImportDraft draft,string sku)
+        {
+            var orderImportDraft = DefaultOrderImportDraft(draft);
+            var variant = new ProductVariantImportDraft(sku);
+
+            var addressKey = draft.ItemShippingAddresses.FirstOrDefault()?.Key;
+            var lineItemImportDraft = GetLineItemImportDraft(variant, addressKey);
+            orderImportDraft.LineItems = new List<LineItemImportDraft>
+            {
+                lineItemImportDraft
+            };
+            return orderImportDraft;
+        }
+
+        private static LineItemImportDraft GetLineItemImportDraft(ProductVariantImportDraft variant, string addressKey)
+        {
+            var priceEuro10 = TestingUtility.GetPriceFromDecimal(10);
+
             var lineItemImportDraft = new LineItemImportDraft
             {
                 Variant = variant,
@@ -63,7 +88,7 @@ namespace commercetools.Sdk.IntegrationTests.OrdersImport
                     {"en", "a name"},
                     {"de", "der Name"}
                 },
-                ProductId = productId,
+                ProductId = variant.ProductId,
                 ShippingDetails = new ItemShippingDetailsDraft()
                 {
                     Targets = new List<ItemShippingTarget>()
@@ -76,12 +101,9 @@ namespace commercetools.Sdk.IntegrationTests.OrdersImport
                     }
                 }
             };
-            orderImportDraft.LineItems = new List<LineItemImportDraft>
-            {
-                lineItemImportDraft
-            };
-            return orderImportDraft;
+            return lineItemImportDraft;
         }
+    
 
         public static OrderImportDraft DefaultOrderImportDraftWithLineItemWithShippingInfo(OrderImportDraft draft,string productId, TaxCategory taxCategory, ShippingMethod shippingMethod)
         {

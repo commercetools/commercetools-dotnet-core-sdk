@@ -27,6 +27,12 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             customerDraft.Key = key;
             return customerDraft;
         }
+        public static CustomerDraft DefaultCustomerDraftWithEmail(CustomerDraft draft, string email)
+        {
+            var customerDraft = DefaultCustomerDraft(draft);
+            customerDraft.Email = email;
+            return customerDraft;
+        }
         public static CustomerDraft DefaultCustomerDraftWithPassword(CustomerDraft draft, string password)
         {
             var customerDraft = DefaultCustomerDraft(draft);

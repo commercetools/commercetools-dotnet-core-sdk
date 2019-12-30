@@ -97,6 +97,41 @@ namespace commercetools.Sdk.IntegrationTests
                 }
             }
         }
+        
+        
+        public static async Task WithListAsync<T, TDraft>(
+            IClient client,
+            TDraft draft,
+            List<Func<TDraft, TDraft>> draftsActions,
+            Func<List<T>, Task> func,
+            Func<IClient, IDraft<T>, Task<T>> createFunc = null,
+            Func<IClient, T, Task> deleteFunc = null
+        ) where T : Resource<T> where TDraft : IDraft<T>
+        {
+            createFunc = createFunc ?? CreateResource;
+            deleteFunc = deleteFunc ?? DeleteResource;
+            
+            var resourcesList = new List<T>();
+            for (int i = 0; i < draftsActions.Count; i++)
+            {
+                var buildDraft = draftsActions[i].Invoke(draft);
+                var resource = await createFunc(client, buildDraft);
+                resourcesList.Add(resource);
+            }
+
+            try
+            {
+                await func(resourcesList);
+            }
+            finally
+            {
+                foreach (var resource in resourcesList)
+                {
+                    await deleteFunc(client, resource);   
+                }
+            }
+        }
+        
 
         public static async Task WithAsync<T, TDraft>(
             IClient client,
