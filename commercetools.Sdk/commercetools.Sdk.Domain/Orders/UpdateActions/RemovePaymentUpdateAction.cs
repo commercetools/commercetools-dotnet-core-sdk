@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Payments;
 
 namespace commercetools.Sdk.Domain.Orders.UpdateActions
@@ -9,6 +10,6 @@ namespace commercetools.Sdk.Domain.Orders.UpdateActions
     {
         public string Action => "removePayment";
         [Required]
-        public Reference<Payment> Payment { get; set; }
+        public IReference<Payment> Payment { get; set; }
     }
 }
