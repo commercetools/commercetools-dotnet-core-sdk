@@ -5,6 +5,7 @@ using System.Linq;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.CartDiscounts;
 using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.Products.Attributes;
 using commercetools.Sdk.Domain.ShippingMethods;
@@ -542,6 +543,17 @@ namespace commercetools.Sdk.IntegrationTests
             shippingRatePriceTiers.Add(new CartClassificationShippingRatePriceTier{Value = "Small", Price = Money.FromDecimal("EUR", 20)});
             shippingRatePriceTiers.Add(new CartClassificationShippingRatePriceTier{Value = "Heavy", Price = Money.FromDecimal("EUR", 30)});
             return shippingRatePriceTiers;
+        }
+        public static LineItemReturnItemDraft GetLineItemReturnItemDraft(string lineItemId)
+        {
+            var lineItemReturnItemDraft = new LineItemReturnItemDraft
+            {
+                Quantity = 1,
+                Comment = "comment",
+                LineItemId = lineItemId,
+                ShipmentState = ReturnShipmentState.Returned
+            };
+            return lineItemReturnItemDraft;
         }
         
         public static CustomLineItemDraft GetCustomLineItemDraft(TaxCategory taxCategory)

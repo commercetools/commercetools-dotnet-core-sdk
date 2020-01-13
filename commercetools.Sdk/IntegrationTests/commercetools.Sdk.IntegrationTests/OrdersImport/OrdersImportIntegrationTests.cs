@@ -66,6 +66,47 @@ namespace commercetools.Sdk.IntegrationTests.OrdersImport
                 );
             });
         }
+        
+        [Fact]
+        public async Task TestImportMinimalOrderBySku()
+        {
+            await WithProduct(client, async product =>
+            {
+                await WithImportOrder(
+                    client,
+                    draft => DefaultOrderImportDraftWithLineItemBySku(draft, product.MasterData.Staged.MasterVariant.Sku),
+                    (order, orderImportDraft) =>
+                    {
+                        //Assert
+                        Assert.Null(order.Cart);
+
+                        Assert.Equal(orderImportDraft.TotalPrice, order.TotalPrice);
+                        Assert.Equal(orderImportDraft.Country, order.Country);
+                        Assert.Equal(orderImportDraft.ShippingAddress.ToString(), order.ShippingAddress.ToString());
+                        Assert.Equal(orderImportDraft.BillingAddress.ToString(), order.BillingAddress.ToString());
+                        Assert.Equal(orderImportDraft.OrderNumber, order.OrderNumber);
+
+                        Assert.Equal(orderImportDraft.OrderState, order.OrderState);
+                        Assert.Equal(orderImportDraft.PaymentState, order.PaymentState);
+                        Assert.Equal(orderImportDraft.ShipmentState, order.ShipmentState);
+                        Assert.Equal(orderImportDraft.InventoryMode, order.InventoryMode);
+                        Assert.Equal(orderImportDraft.TaxRoundingMode, order.TaxRoundingMode);
+                        Assert.Equal(orderImportDraft.TaxCalculationMode, order.TaxCalculationMode);
+
+
+                        Assert.Equal(orderImportDraft.TaxedPrice.TotalNet, order.TaxedPrice.TotalNet);
+                        Assert.Equal(orderImportDraft.TaxedPrice.TotalGross, order.TaxedPrice.TotalGross);
+
+                        Assert.Single(order.LineItems);
+                        var orderLineItem = order.LineItems[0];
+                        var draftLineItem = orderImportDraft.LineItems[0];
+                        Assert.True(draftLineItem.Name.DictionaryEqual(orderLineItem.Name));
+                        Assert.Equal(draftLineItem.Variant.Sku, orderLineItem.Variant.Sku);
+                        Assert.Equal(draftLineItem.Quantity, orderLineItem.Quantity);
+                    }
+                );
+            });
+        }
 
         [Fact]
         public async Task TestImportOrderWithCustomer()

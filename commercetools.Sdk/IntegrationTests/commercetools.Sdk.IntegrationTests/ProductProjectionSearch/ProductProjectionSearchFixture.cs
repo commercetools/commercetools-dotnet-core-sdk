@@ -326,6 +326,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
                     productDraft.MasterVariant.Prices = new List<PriceDraft>(); //empty prices
                     productDraft.MasterVariant.Sku = null;
                     productDraft.MasterVariant.Key = null;
+                    productDraft.MasterVariant.Attributes = null;
                     productDraft.State = null;
                     productDraft.TaxCategory = null;
                     return productDraft;

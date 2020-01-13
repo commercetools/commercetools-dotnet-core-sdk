@@ -9,6 +9,7 @@ using commercetools.Sdk.Domain.ShippingMethods;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
 using Type = commercetools.Sdk.Domain.Types.Type;
 using static commercetools.Sdk.IntegrationTests.Products.ProductsFixture;
+using static commercetools.Sdk.IntegrationTests.ShippingMethods.ShippingMethodsFixture;
 using static commercetools.Sdk.IntegrationTests.TaxCategories.TaxCategoriesFixture;
 
 namespace commercetools.Sdk.IntegrationTests.Carts
@@ -16,6 +17,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
     public static class CartsFixture
     {
         #region Fields
+
         public const string DefaultCurrency = "EUR";
 
         #endregion
@@ -27,19 +29,24 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             cartDraft.Currency = DefaultCurrency;
             return cartDraft;
         }
-        public static CartDraft DefaultCartDraftWithItemShippingAddresses(CartDraft draft, List<Address> itemShippingAddresses)
+
+        public static CartDraft DefaultCartDraftWithItemShippingAddresses(CartDraft draft,
+            List<Address> itemShippingAddresses)
         {
             var cartDraft = DefaultCartDraft(draft);
             cartDraft.ItemShippingAddresses = itemShippingAddresses;
             return cartDraft;
         }
+
         public static CartDraft DefaultCartDraftWithLineItem(CartDraft draft, LineItemDraft lineItemDraft)
         {
             var cartDraft = DefaultCartDraft(draft);
-            cartDraft.LineItems = new List<LineItemDraft> { lineItemDraft };
+            cartDraft.LineItems = new List<LineItemDraft> {lineItemDraft};
             return cartDraft;
         }
-        public static CartDraft DefaultCartDraftWithCustomLineItem(CartDraft draft, CustomLineItemDraft customLineItemDraft)
+
+        public static CartDraft DefaultCartDraftWithCustomLineItem(CartDraft draft,
+            CustomLineItemDraft customLineItemDraft)
         {
             var cartDraft = DefaultCartDraft(draft);
             cartDraft.CustomLineItems = new List<CustomLineItemDraft>
@@ -48,26 +55,29 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             };
             return cartDraft;
         }
+
         public static CartDraft DefaultCartDraftWithTaxMode(CartDraft draft, TaxMode taxMode)
         {
             var cartDraft = DefaultCartDraft(draft);
             cartDraft.TaxMode = taxMode;
             return cartDraft;
         }
-        
+
         public static CartDraft DefaultCartDraftWithTaxRoundingMode(CartDraft draft, RoundingMode roundingMode)
         {
             var cartDraft = DefaultCartDraft(draft);
             cartDraft.TaxRoundingMode = roundingMode;
             return cartDraft;
         }
-        public static CartDraft DefaultCartDraftWithTaxCalculationMode(CartDraft draft, TaxCalculationMode taxCalculationMode)
+
+        public static CartDraft DefaultCartDraftWithTaxCalculationMode(CartDraft draft,
+            TaxCalculationMode taxCalculationMode)
         {
             var cartDraft = DefaultCartDraft(draft);
             cartDraft.TaxCalculationMode = taxCalculationMode;
             return cartDraft;
         }
-        
+
         public static CartDraft DefaultCartDraftWithCustomer(CartDraft draft, Customer customer)
         {
             var cartDraft = DefaultCartDraft(draft);
@@ -82,13 +92,14 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             cartDraft.ShippingAddress = address;
             return cartDraft;
         }
+
         public static CartDraft DefaultCartDraftWithShippingMethod(CartDraft draft, ShippingMethod shippingMethod)
         {
             var cartDraft = DefaultCartDraft(draft);
             cartDraft.ShippingMethod = shippingMethod.ToReference();
             return cartDraft;
         }
-        
+
         public static CartDraft DefaultCartDraftWithCustomType(CartDraft draft, Type type, Fields fields)
         {
             var customFieldsDraft = new CustomFieldsDraft
@@ -102,27 +113,110 @@ namespace commercetools.Sdk.IntegrationTests.Carts
 
             return cartDraft;
         }
+
         #endregion
 
         #region WithCart
 
-        public static async Task WithCart( IClient client, Action<Cart> func)
+        public static async Task WithCart(IClient client, Action<Cart> func)
         {
             await With(client, new CartDraft(), DefaultCartDraft, func);
         }
-        public static async Task WithCart( IClient client, Func<CartDraft, CartDraft> draftAction, Action<Cart> func)
+
+        public static async Task WithCart(IClient client, Func<CartDraft, CartDraft> draftAction, Action<Cart> func)
         {
             await With(client, new CartDraft(), draftAction, func);
         }
 
-        public static async Task WithCart( IClient client, Func<Cart, Task> func)
+        public static async Task WithCart(IClient client, Func<Cart, Task> func)
         {
             await WithAsync(client, new CartDraft(), DefaultCartDraft, func);
         }
-        public static async Task WithCart( IClient client, Func<CartDraft, CartDraft> draftAction, Func<Cart, Task> func)
+
+        public static async Task WithCart(IClient client, Func<CartDraft, CartDraft> draftAction, Func<Cart, Task> func)
         {
             await WithAsync(client, new CartDraft(), draftAction, func);
         }
+
+        public static async Task WithCartWithSingleLineItem(IClient client, int lineItemQuantity,
+            Func<CartDraft, CartDraft> draftAction, Func<Cart, Task> func)
+        {
+            var address = TestingUtility.GetRandomAddress();
+            var taxRateDraft = TestingUtility.GetTaxRateDraft(address);
+
+            await WithShippingMethodWithZoneRateAndTaxCategory(client,
+                DefaultShippingMethodDraft, address,
+                async shippingMethod =>
+                {
+                    await WithTaxCategory(client, draft =>
+                            DefaultTaxCategoryDraftWithTaxRate(draft, taxRateDraft),
+                        async taxCategory =>
+                        {
+                            await WithProduct(client,
+                                productDraft =>
+                                    DefaultProductDraftWithTaxCategory(productDraft, taxCategory),
+                                async product =>
+                                {
+                                    var lineItemDraft = new LineItemDraft
+                                    {
+                                        Sku = product.MasterData.Staged.MasterVariant.Sku,
+                                        Quantity = lineItemQuantity
+                                    };
+                                    var cartDraft = DefaultCartDraftWithShippingAddress(new CartDraft(), address);
+                                    cartDraft = DefaultCartDraftWithShippingMethod(cartDraft, shippingMethod);
+                                    cartDraft = DefaultCartDraftWithLineItem(cartDraft, lineItemDraft);
+
+                                    await WithAsync(client, cartDraft, draftAction, func);
+                                });
+                        });
+                });
+        }
+
+        public static async Task WithCartWithSingleCustomLineItem(IClient client,
+            Func<CartDraft, CartDraft> draftAction, Func<Cart, Task> func)
+        {
+            var address = TestingUtility.GetRandomAddress();
+            var taxRateDraft = TestingUtility.GetTaxRateDraft(address);
+
+            await WithTaxCategory(client, draft =>
+                    DefaultTaxCategoryDraftWithTaxRate(draft, taxRateDraft),
+                async taxCategory =>
+                {
+                    var customLineItemDraft = TestingUtility.GetCustomLineItemDraft(taxCategory);
+                    var cartDraft = DefaultCartDraftWithShippingAddress(new CartDraft(), address);
+                    cartDraft = DefaultCartDraftWithCustomLineItem(cartDraft, customLineItemDraft);
+                    await WithAsync(client, cartDraft, draftAction, func);
+                });
+        }
+
+        public static async Task WithListOfCartsWithSingleLineItem(IClient client, int cartsCount, int lineItemQuantity,
+            Func<CartDraft, CartDraft> draftAction, Func<List<Cart>, Task> func)
+        {
+            var address = TestingUtility.GetRandomAddress();
+            var taxRateDraft = TestingUtility.GetTaxRateDraft(address);
+
+            await WithTaxCategory(client, draft =>
+                    DefaultTaxCategoryDraftWithTaxRate(draft, taxRateDraft),
+                async taxCategory =>
+                {
+                    await WithProduct(client,
+                        productDraft =>
+                            DefaultProductDraftWithTaxCategory(productDraft, taxCategory),
+                        async product =>
+                        {
+                            var lineItemDraft = new LineItemDraft
+                            {
+                                Sku = product.MasterData.Staged.MasterVariant.Sku,
+                                Quantity = lineItemQuantity
+                            };
+                            var cartDraft = DefaultCartDraftWithShippingAddress(new CartDraft(), address);
+                            cartDraft = DefaultCartDraftWithLineItem(cartDraft, lineItemDraft);
+
+                            await WithListAsync(client, cartDraft, draftAction, func, cartsCount);
+                        });
+                });
+        }
+
         #endregion
 
         #region WithUpdateableCart
@@ -132,7 +226,8 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             await WithUpdateable(client, new CartDraft(), DefaultCartDraft, func);
         }
 
-        public static async Task WithUpdateableCart(IClient client, Func<CartDraft, CartDraft> draftAction, Func<Cart, Cart> func)
+        public static async Task WithUpdateableCart(IClient client, Func<CartDraft, CartDraft> draftAction,
+            Func<Cart, Cart> func)
         {
             await WithUpdateable(client, new CartDraft(), draftAction, func);
         }
@@ -141,11 +236,15 @@ namespace commercetools.Sdk.IntegrationTests.Carts
         {
             await WithUpdateableAsync(client, new CartDraft(), DefaultCartDraft, func);
         }
-        public static async Task WithUpdateableCart(IClient client, Func<CartDraft, CartDraft> draftAction, Func<Cart, Task<Cart>> func)
+
+        public static async Task WithUpdateableCart(IClient client, Func<CartDraft, CartDraft> draftAction,
+            Func<Cart, Task<Cart>> func)
         {
             await WithUpdateableAsync(client, new CartDraft(), draftAction, func);
         }
-        public static async Task WithUpdateableCartWithSingleLineItem(IClient client, int quantity, Func<CartDraft, CartDraft> draftAction, Func<Cart, Task<Cart>> func)
+
+        public static async Task WithUpdateableCartWithSingleLineItem(IClient client, int quantity,
+            Func<CartDraft, CartDraft> draftAction, Func<Cart, Task<Cart>> func)
         {
             await WithTaxCategory(client, async taxCategory =>
             {
@@ -161,11 +260,12 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         };
                         var cartDraft = DefaultCartDraftWithLineItem(new CartDraft(), lineItemDraft);
                         await WithUpdateableAsync(client, cartDraft, draftAction, func);
-                     
                     });
             });
         }
-        public static async Task WithUpdateableCartWithSingleCustomLineItem(IClient client, Func<CartDraft, CartDraft> draftAction, Func<Cart, Task<Cart>> func)
+
+        public static async Task WithUpdateableCartWithSingleCustomLineItem(IClient client,
+            Func<CartDraft, CartDraft> draftAction, Func<Cart, Task<Cart>> func)
         {
             await WithTaxCategory(client, async taxCategory =>
             {
@@ -175,6 +275,6 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        #endregion   
+        #endregion
     }
 }

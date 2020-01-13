@@ -37,7 +37,6 @@ matrix:
     - docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
     - docker run --rm -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
     - docker run --rm --env-file=env.list -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
-    - docker run --rm --env-file=env.list -v $PWD:/opt/sdk -w /opt/sdk/commercetools.Sdk mcr.microsoft.com/dotnet/core/sdk:2.1 dotnet test --verbosity=normal IntegrationTests/commercetools.Sdk.HttpApi.IntegrationTests --no-build -c Release
   - os: osx
     dotnet: 2.1.603
     sudo: true
