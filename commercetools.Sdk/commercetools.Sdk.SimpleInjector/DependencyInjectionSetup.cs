@@ -167,13 +167,13 @@ namespace SimpleInjector
                 Lifestyle.Transient.CreateRegistration(
                     () => new AnonymousSessionTokenProvider(factory,
                         services.GetService<IAnonymousCredentialsStoreManager>(),
-                        services.GetService<ISerializerService>()), services),
+                        services.GetService<ITokenSerializerService>()), services),
                 Lifestyle.Transient.CreateRegistration(
                     () => new ClientCredentialsTokenProvider(factory, services.GetService<ITokenStoreManager>(),
-                        services.GetService<ISerializerService>()), services),
+                        services.GetService<ITokenSerializerService>()), services),
                 Lifestyle.Transient.CreateRegistration(
                     () => new PasswordTokenProvider(factory, services.GetService<IUserCredentialsStoreManager>(),
-                        services.GetService<ISerializerService>()), services)
+                        services.GetService<ITokenSerializerService>()), services)
             };
 
             services.RegisterCollection<ITokenProvider>(providers);
@@ -240,6 +240,7 @@ namespace SimpleInjector
             services.Register<IHttpApiCommandFactory, HttpApiCommandFactory>(Lifestyle.Singleton);
             services.Register<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>(Lifestyle.Singleton);
             services.Register<IUserAgentProvider, UserAgentProvider>(Lifestyle.Singleton);
+            services.Register<ITokenSerializerService, TokenSerializerService>(Lifestyle.Singleton);
         }
     }
 }

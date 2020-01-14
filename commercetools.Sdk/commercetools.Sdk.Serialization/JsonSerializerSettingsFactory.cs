@@ -1,8 +1,6 @@
 ﻿namespace commercetools.Sdk.Serialization
 {
-    using commercetools.Sdk.HttpApi.Domain;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Serialization;
     using System;
     using System.Collections.Generic;
 
@@ -23,18 +21,7 @@
             if (!mapping.ContainsKey(type))
             {
                 JsonSerializerSettings settings = new JsonSerializerSettings();
-                if (type == typeof(Token))
-                {
-                    DefaultContractResolver contractResolver = new DefaultContractResolver
-                    {
-                        NamingStrategy = new SnakeCaseNamingStrategy()
-                    };
-                    settings.ContractResolver = contractResolver;
-                }
-                else
-                {
-                    settings.ContractResolver = this.deserializationContractResolver;
-                }
+                settings.ContractResolver = this.deserializationContractResolver;
 
                 mapping[type] = settings;
             }

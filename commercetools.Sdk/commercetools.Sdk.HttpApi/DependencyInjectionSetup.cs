@@ -107,6 +107,7 @@ namespace commercetools.Sdk.HttpApi
             services.AddSingleton<IHttpApiCommandFactory, HttpApiCommandFactory>();
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
             services.AddSingleton<IUserAgentProvider, UserAgentProvider>();
+            services.AddSingleton<ITokenSerializerService, TokenSerializerService>();
         }
     }
 }
