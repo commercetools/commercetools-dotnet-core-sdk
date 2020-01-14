@@ -25,7 +25,7 @@
     <ProjectReference Include="..\commercetools.Sdk.Domain\commercetools.Sdk.Domain.csproj" />
     <ProjectReference Include="..\commercetools.Sdk.HttpApi\commercetools.Sdk.HttpApi.csproj" />
     <ProjectReference Include="..\commercetools.Sdk.Linq\commercetools.Sdk.Linq.csproj" />
-    <ProjectReference Include="..\commercetools.Sdk.Reflection\commercetools.Sdk.Registration.csproj" />
+    <ProjectReference Include="..\commercetools.Sdk.Registration\commercetools.Sdk.Registration.csproj" />
     <ProjectReference Include="..\commercetools.Sdk.Serialization\commercetools.Sdk.Serialization.csproj" />
   </ItemGroup>
 

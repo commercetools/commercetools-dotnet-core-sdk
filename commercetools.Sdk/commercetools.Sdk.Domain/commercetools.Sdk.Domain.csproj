@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\commercetools.Sdk.Linq\commercetools.Sdk.Linq.csproj" />
-    <ProjectReference Include="..\commercetools.Sdk.Reflection\commercetools.Sdk.Registration.csproj" />
+    <ProjectReference Include="..\commercetools.Sdk.Registration\commercetools.Sdk.Registration.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,5 +31,9 @@
       <Pack>true</Pack>
       <PackagePath>\</PackagePath>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="OrderEdits\UpdateActions" />
   </ItemGroup>
 </Project>
