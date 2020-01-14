@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using commercetools.Sdk.Domain.Errors;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using commercetools.Sdk.HttpApi.Extensions;
 using commercetools.Sdk.Serialization;
@@ -50,7 +51,7 @@ namespace commercetools.Sdk.HttpApi
                 apiException.ProjectKey = this.clientConfiguration.ProjectKey;
                 if (!string.IsNullOrEmpty(content) && response.Content.Headers.ContentType.MediaType == "application/json")
                 {
-                    var errorResponse = this.serializerService.Deserialize<HttpApiErrorResponse>(content);
+                    var errorResponse = this.serializerService.Deserialize<ErrorResponse>(content);
                     if (errorResponse.Errors != null)
                     {
                         apiException.ErrorResponse = errorResponse;

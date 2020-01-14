@@ -1,4 +1,4 @@
-﻿using commercetools.Sdk.HttpApi.Domain;
+﻿using commercetools.Sdk.Domain.Errors;
 using commercetools.Sdk.Registration;
 
 namespace commercetools.Sdk.Serialization

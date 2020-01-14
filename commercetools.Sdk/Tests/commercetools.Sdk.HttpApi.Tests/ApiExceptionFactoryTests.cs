@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using commercetools.Sdk.Domain.Errors;
 using commercetools.Sdk.HttpApi.Domain;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using commercetools.Sdk.Serialization;
