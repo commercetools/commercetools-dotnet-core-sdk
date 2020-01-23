@@ -32,8 +32,4 @@
       <PackagePath>\</PackagePath>
     </Content>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="OrderEdits\UpdateActions" />
-  </ItemGroup>
 </Project>
