@@ -480,7 +480,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                             Assert.NotEqual(returnShipmentState,
                                 orderWithReturnInfo.ReturnInfo[0].Items[0].ShipmentState);
 
-                            var setReturnShipmentStateAction = new SetShipmentReturnStateUpdateAction
+                            var setReturnShipmentStateAction = new SetReturnShipmentStateUpdateAction
                             {
                                 ReturnItemId = returnItemId,
                                 ShipmentState = returnShipmentState

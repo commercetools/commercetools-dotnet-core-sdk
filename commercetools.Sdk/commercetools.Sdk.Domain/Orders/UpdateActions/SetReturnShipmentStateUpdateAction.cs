@@ -2,7 +2,7 @@
 
 namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
-    public class SetShipmentReturnStateUpdateAction : UpdateAction<Order>
+    public class SetReturnShipmentStateUpdateAction : UpdateAction<Order>
     {
         public string Action => "setReturnShipmentState";
         [Required]
