@@ -207,5 +207,33 @@ namespace commercetools.Sdk.HttpApi.Tests
             HttpRequestMessage httpRequestMessage = queryRequestMessageBuilder.GetRequestMessage(queryCommand);
             Assert.Equal("messages?sort=id%20asc&sort=createdAt%20desc&withTotal=false", httpRequestMessage.RequestUri.ToString());
         }
+        
+        [Fact]
+        public async void FilterProductsInChannelAndCategory()
+        {
+            var searchText = "searchTerm";
+            var searchByKeyword = !string.IsNullOrEmpty(searchText);
+            var channel = new Channel() { Id = "dbb5a6d0-2cbb-4855-bbe7-5cf58f434a82"};
+            var categoryId = "abc5a6d0-2cbb-4855-bbe7-5cf58f434c122";
+            var searchRequest = new SearchProductProjectionsCommand();
+            searchRequest.SetPriceChannel(channel.Id);
+            searchRequest.Filter(p => p.Categories.Any(c => c.Id == categoryId));
+            if (searchByKeyword)
+            {
+                if (searchRequest.SearchParameters is ProductProjectionSearchParameters searchParameters)
+                {
+                    searchParameters.Text = new TextSearch
+                    {
+                        Term = searchText,
+                        Language = "en"
+                    };
+                }
+            }
+
+            var httpApiCommandFactory = this.clientFixture.GetService<IHttpApiCommandFactory>();
+            var httpApiCommand = httpApiCommandFactory.Create(searchRequest);
+            var content = await httpApiCommand.HttpRequestMessage.Content.ReadAsStringAsync();
+            Assert.Equal($"text.en={searchText}&filter=categories.id%3A%22abc5a6d0-2cbb-4855-bbe7-5cf58f434c122%22&priceChannel=dbb5a6d0-2cbb-4855-bbe7-5cf58f434a82&withTotal=false", content);
+        }
     }
 }

@@ -53,6 +53,9 @@ namespace commercetools.Sdk.Domain.Types
         Review,
 
         [Description("order")]
-        Order
+        Order,
+        
+        [Description("order-edit")]
+        OrderEdit
     }
 }
