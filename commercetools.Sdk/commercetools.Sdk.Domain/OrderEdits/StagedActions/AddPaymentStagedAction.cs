@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using commercetools.Sdk.Domain.Common;
-using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.Payments;
 
 namespace commercetools.Sdk.Domain.OrderEdits.StagedActions

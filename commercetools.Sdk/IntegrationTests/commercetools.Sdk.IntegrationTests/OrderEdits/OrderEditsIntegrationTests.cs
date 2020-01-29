@@ -11,6 +11,8 @@ using static commercetools.Sdk.IntegrationTests.Orders.OrdersFixture;
 using static commercetools.Sdk.IntegrationTests.Types.TypesFixture;
 using static commercetools.Sdk.IntegrationTests.OrderEdits.OrderEditsFixture;
 using static commercetools.Sdk.IntegrationTests.Projects.ProjectFixture;
+using static commercetools.Sdk.IntegrationTests.Products.ProductsFixture;
+using static commercetools.Sdk.IntegrationTests.Payments.PaymentsFixture;
 
 namespace commercetools.Sdk.IntegrationTests.OrderEdits
 {
@@ -166,15 +168,15 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
                     });
             });
         }
-        
+
         [Fact]
-        public async void ApplyOrderEdit()
+        public async void ApplyOrderEditSetCustomerEmail()
         {
             var email = "john.doe@commercetools.de";
             await WithUpdateableSimpleOrder(client, async order =>
             {
                 Assert.Null(order.CustomerEmail);
-                
+
                 //create orderEdit with stagedAction SetCustomerEmailStagedAction
                 await WithUpdateableOrderEdit(client, draft =>
                     {
@@ -190,33 +192,154 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
                     {
                         var retrievedOrderEdit = await client
                             .ExecuteAsync(orderEdit.ToIdResourceIdentifier().GetById().Expand(oe => oe.Resource));
-                        
+
                         Assert.NotNull(retrievedOrderEdit);
                         Assert.NotNull(retrievedOrderEdit.Resource.Obj);
-                        
+
                         //Apply OrderEdit
                         var applyOrderEditCommand = new ApplyOrderEditCommand(retrievedOrderEdit,
                             retrievedOrderEdit.Resource.Obj.Version);
-                        
+
                         var appliedOrderEdit = await client.ExecuteAsync(applyOrderEditCommand);
 
                         Assert.NotNull(appliedOrderEdit.Result);
                         Assert.IsType<OrderEditApplied>(appliedOrderEdit.Result);
                         return appliedOrderEdit;
                     });
-                
+
                 //then retrieved updated order
                 var updatedOrder = await client
                     .ExecuteAsync(order.ToIdResourceIdentifier().GetById());
-                
+
                 Assert.NotNull(updatedOrder.CustomerEmail);
                 Assert.Equal(email, updatedOrder.CustomerEmail);
                 return updatedOrder;
             });
         }
 
+        [Fact]
+        public async void ApplyOrderEditAddLineItem()
+        {
+            string addedItemSku = "";
+            var addedItemQuantity = 5;
+
+            await WithUpdateableSimpleOrder(client, async order =>
+            {
+                Assert.Single(order.LineItems);
+                var taxCategoryRef = await GetProductTaxCategory(client, order.LineItems[0].ProductId);
+
+                await WithProduct(client,
+                    draft =>
+                    {
+                        var productDraft = DefaultProductDraft(draft);
+                        productDraft.TaxCategory = taxCategoryRef;
+                        return productDraft;
+                    },
+                    async product =>
+                    {
+                        Assert.NotNull(product);
+                        addedItemSku = product.MasterData.Staged.MasterVariant.Sku;
+                        //create orderEdit with stagedAction AddLineItemStagedAction
+                        await WithUpdateableOrderEdit(client, draft =>
+                            {
+                                var orderEditDraft = DefaultOrderEditDraft(draft, order);
+                                //Add a new lineItem
+                                var action = new AddLineItemStagedAction
+                                {
+                                    Sku = addedItemSku,
+                                    Quantity = addedItemQuantity
+                                };
+                                orderEditDraft.StagedActions.Add(action);
+                                return orderEditDraft;
+                            },
+                            async orderEdit =>
+                            {
+                                var retrievedOrderEdit = await client
+                                    .ExecuteAsync(
+                                        orderEdit.ToIdResourceIdentifier().GetById().Expand(oe => oe.Resource));
+
+                                Assert.NotNull(retrievedOrderEdit);
+                                Assert.NotNull(retrievedOrderEdit.Resource.Obj);
+
+                                //Apply OrderEdit
+                                var applyOrderEditCommand = new ApplyOrderEditCommand(retrievedOrderEdit,
+                                    retrievedOrderEdit.Resource.Obj.Version);
+
+                                var appliedOrderEdit = await client.ExecuteAsync(applyOrderEditCommand);
+
+                                Assert.NotNull(appliedOrderEdit.Result);
+                                Assert.IsType<OrderEditApplied>(appliedOrderEdit.Result);
+                                return appliedOrderEdit;
+                            });
+                    });
+                //then retrieved updated order
+                var updatedOrder = await client
+                    .ExecuteAsync(order.ToIdResourceIdentifier().GetById());
+
+                //assert that order now with 2 lineItems
+                Assert.Equal(2, updatedOrder.LineItems.Count);
+                Assert.Contains(updatedOrder.LineItems,
+                    item => item.Variant.Sku == addedItemSku
+                            && item.Quantity == addedItemQuantity);
+                return updatedOrder;
+            });
+        }
+
+        [Fact]
+        public async void ApplyOrderEditAddPayment()
+        {
+            await WithPayment(client, async payment =>
+            {
+                Assert.NotNull(payment);
+                await WithUpdateableSimpleOrder(client, async order =>
+                {
+                    Assert.Null(order.PaymentInfo);
+
+                    //create orderEdit with stagedAction AddPaymentStagedAction
+                    await WithUpdateableOrderEdit(client, draft =>
+                        {
+                            var orderEditDraft = DefaultOrderEditDraft(draft, order);
+                            var action = new AddPaymentStagedAction
+                            {
+                                Payment = payment.ToKeyResourceIdentifier()
+                            };
+                            orderEditDraft.StagedActions.Add(action);
+                            return orderEditDraft;
+                        },
+                        async orderEdit =>
+                        {
+                            var retrievedOrderEdit = await client
+                                .ExecuteAsync(orderEdit.ToIdResourceIdentifier().GetById().Expand(oe => oe.Resource));
+
+                            Assert.NotNull(retrievedOrderEdit);
+                            Assert.NotNull(retrievedOrderEdit.Resource.Obj);
+
+                            //Apply OrderEdit
+                            var applyOrderEditCommand = new ApplyOrderEditCommand(retrievedOrderEdit,
+                                retrievedOrderEdit.Resource.Obj.Version);
+
+                            var appliedOrderEdit = await client.ExecuteAsync(applyOrderEditCommand);
+
+                            Assert.NotNull(appliedOrderEdit.Result);
+                            Assert.IsType<OrderEditApplied>(appliedOrderEdit.Result);
+                            return appliedOrderEdit;
+                        });
+
+
+                    //then retrieved updated order
+                    var updatedOrder = await client
+                        .ExecuteAsync(order.ToIdResourceIdentifier().GetById());
+
+                    Assert.NotNull(updatedOrder.PaymentInfo);
+                    Assert.Single(updatedOrder.PaymentInfo.Payments);
+                    Assert.Equal(payment.Id, updatedOrder.PaymentInfo.Payments[0].Id);
+                    return updatedOrder;
+                });
+            });
+        }
+
         #region UpdateActions
-        
+
         [Fact]
         public async void UpdateOrderEditSetCommentByKey()
         {
@@ -309,7 +432,7 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
                     });
             });
         }
-        
+
         [Fact]
         public async void UpdateOrderEditAddStagedAction()
         {
@@ -340,7 +463,7 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
                             .ExecuteAsync(orderEdit.UpdateById(
                                 actions => actions.AddUpdate(action)));
 
-                        Assert.Equal(2,updatedOrderEdit.StagedActions.Count);
+                        Assert.Equal(2, updatedOrderEdit.StagedActions.Count);
                         Assert.Contains(updatedOrderEdit.StagedActions,
                             a => a.GetType() == typeof(SetLocaleStagedAction));
                         return updatedOrderEdit;
@@ -380,7 +503,7 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
                 });
             });
         }
-        
+
         [Fact]
         public async void UpdateOrderEditSetCustomField()
         {
@@ -409,7 +532,7 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
                                     actions => actions.AddUpdate(action)));
 
                             Assert.Equal(type.Id, updatedOrderEdit.Custom.Type.Id);
-                            
+
                             //then set the custom field
                             var setFieldAction = new SetCustomFieldUpdateAction()
                             {
@@ -418,16 +541,16 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
                             var updatedOrderEditWithUpdatedCustomField = await client
                                 .ExecuteAsync(updatedOrderEdit.UpdateById(
                                     actions => actions.AddUpdate(setFieldAction)));
-                            
-                            Assert.Equal(newValue, 
+
+                            Assert.Equal(newValue,
                                 updatedOrderEditWithUpdatedCustomField.Custom.Fields["string-field"]);
-                            
+
                             return updatedOrderEditWithUpdatedCustomField;
                         });
                 });
             });
         }
-        
+
         #endregion
     }
 }
