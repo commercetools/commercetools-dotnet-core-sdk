@@ -18,15 +18,22 @@
 
         public JsonSerializerSettings CreateDeserializationSettings(Type type)
         {
-            if (!mapping.ContainsKey(type))
+            try
             {
-                JsonSerializerSettings settings = new JsonSerializerSettings();
-                settings.ContractResolver = this.deserializationContractResolver;
+                if (!mapping.ContainsKey(type))
+                {
+                    JsonSerializerSettings settings = new JsonSerializerSettings();
+                    settings.ContractResolver = this.deserializationContractResolver;
 
-                mapping[type] = settings;
+                    mapping[type] = settings;
+                }
+
+                return mapping[type];
             }
-
-            return mapping[type];
+            catch (NullReferenceException)
+            {
+                return null;//default serialization settings will be used
+            }
         }
 
         public JsonSerializerSettings CreateSerializationSettings(Type type)
