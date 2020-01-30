@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
@@ -12,6 +13,8 @@ namespace commercetools.Sdk.IntegrationTests.Projects
 {
     public static class ProjectFixture
     {
+        public static SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1,1);
+        
         /// <summary>
         /// Get Current Project Languages
         /// </summary>
