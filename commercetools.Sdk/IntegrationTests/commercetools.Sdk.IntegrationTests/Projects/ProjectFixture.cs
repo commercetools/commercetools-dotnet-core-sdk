@@ -132,16 +132,27 @@ namespace commercetools.Sdk.IntegrationTests.Projects
             Func<IClient, Project, List<UpdateAction<Project>>, Task<Project>> setupFunc = null
         )
         {
-            setupFunc = setupFunc ?? SetupProject;
+            //Asynchronously wait to enter the Semaphore. If no-one has been granted access to the Semaphore, code execution will proceed, otherwise this thread waits here until the semaphore is released 
+            await SemaphoreSlim.WaitAsync();
 
-            var currentProject = await client.ExecuteAsync(new GetProjectCommand());
+            try
+            {
+                setupFunc = setupFunc ?? SetupProject;
 
-            var setupActions = setupUpdateActions.Invoke(currentProject);
+                var currentProject = await client.ExecuteAsync(new GetProjectCommand());
 
-            var updatedProject = setupActions.Count > 0 ?
-                await setupFunc(client, currentProject, setupActions) : currentProject;
+                var setupActions = setupUpdateActions.Invoke(currentProject);
 
-            await func(updatedProject);
+                var updatedProject = setupActions.Count > 0
+                    ? await setupFunc(client, currentProject, setupActions)
+                    : currentProject;
+
+                await func(updatedProject);
+            }
+            finally
+            {
+                SemaphoreSlim.Release();
+            }
         }
         
         public static async Task WithCurrentProject(
@@ -163,15 +174,25 @@ namespace commercetools.Sdk.IntegrationTests.Projects
             Func<IClient, Project, List<UpdateAction<Project>>, Task<Project>> setupFunc = null
         )
         {
-            setupFunc = setupFunc ?? SetupProject;
+            //Asynchronously wait to enter the Semaphore. If no-one has been granted access to the Semaphore, code execution will proceed, otherwise this thread waits here until the semaphore is released 
+            await SemaphoreSlim.WaitAsync();
+            try
+            {
+                setupFunc = setupFunc ?? SetupProject;
 
-            var currentProject = await client.ExecuteAsync(new GetProjectCommand());
+                var currentProject = await client.ExecuteAsync(new GetProjectCommand());
 
-            var setupActions = setupUpdateActions.Invoke(currentProject);
+                var setupActions = setupUpdateActions.Invoke(currentProject);
 
-            var updatedProject = setupActions.Count > 0 ?
-                await setupFunc(client, currentProject, setupActions) : currentProject;
-            func(updatedProject);
+                var updatedProject = setupActions.Count > 0
+                    ? await setupFunc(client, currentProject, setupActions)
+                    : currentProject;
+                func(updatedProject);
+            }
+            finally
+            {
+                SemaphoreSlim.Release();
+            }
         }
         #endregion
     }

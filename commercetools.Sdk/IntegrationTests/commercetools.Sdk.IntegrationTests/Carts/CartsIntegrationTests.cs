@@ -608,13 +608,8 @@ namespace commercetools.Sdk.IntegrationTests.Carts
         {
             var shippingRateInputType = new CartScoreShippingRateInputType();
             var shippingAddress = new Address {Country = "DE"};
-
-            //Asynchronously wait to enter the Semaphore. If no-one has been granted access to the Semaphore, code execution will proceed, otherwise this thread waits here until the semaphore is released 
-            await SemaphoreSlim.WaitAsync();
-
-            try
-            {
-                await WithCurrentProject(client,
+            
+             await WithCurrentProject(client,
                     project => SetShippingRateInputType(project, shippingRateInputType),
                     async project =>
                     {
@@ -673,12 +668,8 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                             TryToUpdateCurrentProject(client, project, undoProjectAction.ToList());
 
                         Assert.Null(projectWithNullShippingRateInputType.ShippingRateInputType);
+                        return projectWithNullShippingRateInputType;
                     });
-            }
-            finally
-            {
-                SemaphoreSlim.Release();
-            }
         }
 
         [Fact]
@@ -692,12 +683,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 Values = classificationValues
             };
 
-            //Asynchronously wait to enter the Semaphore. If no-one has been granted access to the Semaphore, code execution will proceed, otherwise this thread waits here until the semaphore is released 
-            await SemaphoreSlim.WaitAsync();
-
-            try
-            {
-                await WithCurrentProject(client,
+              await WithCurrentProject(client,
                     project => SetShippingRateInputType(project, shippingRateInputType),
                     async project =>
                     {
@@ -761,12 +747,8 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                             TryToUpdateCurrentProject(client, project, undoProjectAction.ToList());
 
                         Assert.Null(projectWithNullShippingRateInputType.ShippingRateInputType);
+                        return projectWithNullShippingRateInputType;
                     });
-            }
-            finally
-            {
-                SemaphoreSlim.Release();
-            }
         }
 
         [Fact]
