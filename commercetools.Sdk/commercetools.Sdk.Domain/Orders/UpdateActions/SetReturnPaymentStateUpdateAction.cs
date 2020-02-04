@@ -2,9 +2,9 @@
 
 namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
-    public class SetReturnPaymentStateUpdateAction : UpdateAction<Order>
+    public class SetReturnPaymentStateUpdateAction : OrderUpdateAction
     {
-        public string Action => "setReturnPaymentState";
+        public override string Action => "setReturnPaymentState";
         [Required]
         public string ReturnItemId { get; set; }
         [Required]

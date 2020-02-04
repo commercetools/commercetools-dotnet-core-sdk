@@ -1,11 +1,10 @@
-﻿namespace commercetools.Sdk.Domain.Carts.UpdateActions
-{
-    using System;
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-    public class RemoveCustomLineItemUpdateAction : UpdateAction<Cart>
+namespace commercetools.Sdk.Domain.Carts.UpdateActions
+{
+    public class RemoveCustomLineItemUpdateAction : CartUpdateAction
     {
-        public string Action => "removeCustomLineItem";
+        public override string Action => "removeCustomLineItem";
         [Required]
         public string CustomLineItemId { get; set; }
     }

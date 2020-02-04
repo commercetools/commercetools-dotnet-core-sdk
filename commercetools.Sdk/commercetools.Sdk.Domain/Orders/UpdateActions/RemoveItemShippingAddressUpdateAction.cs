@@ -1,12 +1,10 @@
-﻿using commercetools.Sdk.Domain.Carts;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
-    using System.ComponentModel.DataAnnotations;
-
-    public class RemoveItemShippingAddressUpdateAction : UpdateAction<Order>
+    public class RemoveItemShippingAddressUpdateAction : OrderUpdateAction
     {
-        public string Action => "removeItemShippingAddress";
+        public override string Action => "removeItemShippingAddress";
         [Required]
         public string AddressKey { get; set; }
     }

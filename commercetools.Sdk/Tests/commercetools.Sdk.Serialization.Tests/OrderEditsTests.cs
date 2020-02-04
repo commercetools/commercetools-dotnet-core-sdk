@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
+using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.OrderEdits;
 using commercetools.Sdk.Domain.OrderEdits.StagedActions;
+using commercetools.Sdk.Domain.Orders.UpdateActions;
 using Xunit;
 
 namespace commercetools.Sdk.Serialization.Tests
@@ -34,10 +36,10 @@ namespace commercetools.Sdk.Serialization.Tests
         {
             //Deserialize OrderEditResult (OrderEditPreviewSuccess)
             ISerializerService serializerService = this.serializationFixture.SerializerService;
-            var setCustomerEmailAction = new SetCustomerEmailStagedAction {
+            var setCustomerEmailAction = new SetCustomerEmailUpdateAction {
                 Email = "TestEmail"
             };
-            var stagedActions = new List<StagedOrderUpdateAction>
+            var stagedActions = new List<IStagedOrderUpdateAction>
             {
                 setCustomerEmailAction
             };
@@ -51,9 +53,8 @@ namespace commercetools.Sdk.Serialization.Tests
         {
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             var serialized = "{\"action\":\"setCustomerEmail\",\"email\":\"TestEmail\"}";
-            var result = serializerService.Deserialize<StagedOrderUpdateAction>(serialized);
-            Assert.IsType<SetCustomerEmailStagedAction>(result);
-            
+            var result = serializerService.Deserialize<IStagedOrderUpdateAction>(serialized);
+            Assert.IsType<SetCustomerEmailUpdateAction>(result);
         }
     }
 }

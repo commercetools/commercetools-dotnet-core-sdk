@@ -16,6 +16,6 @@ namespace commercetools.Sdk.Domain.OrderEdits
 
         public bool? DryRun { get; set; }
 
-        public List<StagedOrderUpdateAction> StagedActions { get; set; }
+        public List<IStagedOrderUpdateAction> StagedActions { get; set; }
     }
 }

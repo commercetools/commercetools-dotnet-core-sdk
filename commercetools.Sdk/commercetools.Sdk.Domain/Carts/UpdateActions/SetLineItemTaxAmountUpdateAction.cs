@@ -1,11 +1,10 @@
-﻿namespace commercetools.Sdk.Domain.Carts.UpdateActions
-{
-    using System;
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-    public class SetLineItemTaxAmountUpdateAction : UpdateAction<Cart>
+namespace commercetools.Sdk.Domain.Carts.UpdateActions
+{
+    public class SetLineItemTaxAmountUpdateAction : CartUpdateAction
     {
-        public string Action => "setLineItemTaxAmount";
+        public override string Action => "setLineItemTaxAmount";
         [Required]
         public string LineItemId { get; set; }
         public ExternalTaxAmountDraft ExternalTaxAmount { get; set; }

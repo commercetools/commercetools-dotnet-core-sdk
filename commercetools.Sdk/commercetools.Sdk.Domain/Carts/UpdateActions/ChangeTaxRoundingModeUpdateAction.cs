@@ -1,11 +1,10 @@
-﻿namespace commercetools.Sdk.Domain.Carts.UpdateActions
-{
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-    public class ChangeTaxRoundingModeUpdateAction : UpdateAction<Cart>
+namespace commercetools.Sdk.Domain.Carts.UpdateActions
+{
+    public class ChangeTaxRoundingModeUpdateAction : CartUpdateAction
     {
-        public string Action => "changeTaxRoundingMode";
+        public override string Action => "changeTaxRoundingMode";
         [Required]
         public RoundingMode TaxRoundingMode { get; set; }
     }

@@ -1,10 +1,10 @@
-﻿namespace commercetools.Sdk.Domain.Orders.UpdateActions
-{
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-    public class SetCustomLineItemCustomFieldUpdateAction : UpdateAction<Order>
+namespace commercetools.Sdk.Domain.Orders.UpdateActions
+{
+    public class SetCustomLineItemCustomFieldUpdateAction : OrderUpdateAction
     {
-        public string Action => "setCustomLineItemCustomField";
+        public override string Action => "setCustomLineItemCustomField";
         [Required]
         public string CustomLineItemId { get; set; }
         [Required]

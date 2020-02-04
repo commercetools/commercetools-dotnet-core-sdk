@@ -2,9 +2,9 @@
 
 namespace commercetools.Sdk.Domain.Carts.UpdateActions
 {
-    public class AddLineItemUpdateAction : UpdateAction<Cart>
+    public class AddLineItemUpdateAction : CartUpdateAction
     {
-        public string Action => "addLineItem";
+        public override string Action => "addLineItem";
 
         public int? VariantId { get; set; }
 

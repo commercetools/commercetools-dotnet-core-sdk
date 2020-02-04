@@ -4,9 +4,9 @@ using commercetools.Sdk.Domain.Payments;
 
 namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
-    public class AddPaymentUpdateAction : UpdateAction<Order>
+    public class AddPaymentUpdateAction : OrderUpdateAction
     {
-        public string Action => "addPayment";
+        public override string Action => "addPayment";
         [Required]
         public IReference<Payment> Payment { get; set; }
     }

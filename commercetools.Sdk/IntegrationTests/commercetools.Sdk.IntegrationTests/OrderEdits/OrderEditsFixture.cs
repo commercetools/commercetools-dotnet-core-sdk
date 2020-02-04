@@ -6,6 +6,7 @@ using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.OrderEdits;
 using commercetools.Sdk.Domain.OrderEdits.StagedActions;
 using commercetools.Sdk.Domain.Orders;
+using commercetools.Sdk.Domain.Orders.UpdateActions;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
 
 namespace commercetools.Sdk.IntegrationTests.OrderEdits
@@ -20,7 +21,7 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
             var randomInt = TestingUtility.RandomInt();
             orderEditDraft.Key = $"OrderEdit_{randomInt}";
             orderEditDraft.Resource = order.ToReference();
-            orderEditDraft.StagedActions = new List<StagedOrderUpdateAction>();
+            orderEditDraft.StagedActions = new List<IStagedOrderUpdateAction>();
             return orderEditDraft;
         }
 
@@ -29,7 +30,7 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
         {
             var orderEditDraft = DefaultOrderEditDraft(draft, order);
             orderEditDraft.StagedActions.Add(
-                new SetCustomerEmailStagedAction
+                new SetCustomerEmailUpdateAction
                 {
                     Email = "john.doe@commercetools.de"
                 });

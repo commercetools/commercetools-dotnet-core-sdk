@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace commercetools.Sdk.Domain.Orders.UpdateActions
+﻿namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
-    public class SetCustomerIdUpdateAction : UpdateAction<Order>
+    public class SetCustomerIdUpdateAction : OrderUpdateAction
     {
-        public string Action => "setCustomerId";
+        public override string Action => "setCustomerId";
         public string CustomerId { get; set; }
     }
 }

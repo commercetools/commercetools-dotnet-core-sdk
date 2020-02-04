@@ -2,9 +2,9 @@
 
 namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
-    public class ChangePaymentStateUpdateAction : UpdateAction<Order>
+    public class ChangePaymentStateUpdateAction : OrderUpdateAction
     {
-        public string Action => "changePaymentState";
+        public override string Action => "changePaymentState";
         [Required]
         public PaymentState PaymentState { get; set; }
     }

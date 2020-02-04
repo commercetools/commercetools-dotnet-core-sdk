@@ -1,11 +1,10 @@
-﻿namespace commercetools.Sdk.Domain.Carts.UpdateActions
-{
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-    public class ChangeCustomLineItemQuantityUpdateAction : UpdateAction<Cart>
+namespace commercetools.Sdk.Domain.Carts.UpdateActions
+{
+    public class ChangeCustomLineItemQuantityUpdateAction : CartUpdateAction
     {
-        public string Action => "changeCustomLineItemQuantity";
+        public override string Action => "changeCustomLineItemQuantity";
         [Required]
         public string CustomLineItemId { get; set; }
         [Required]

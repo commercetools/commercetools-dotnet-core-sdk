@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.OrderEdits;
 using commercetools.Sdk.Linq;
 using commercetools.Sdk.Registration;
@@ -15,12 +16,12 @@ namespace commercetools.Sdk.Serialization.JsonConverters
 
         public StagedOrderUpdateActionConverter(ITypeRetriever typeRetriever)
         {
-            this.derivedTypes = typeRetriever.GetTypes<StagedOrderUpdateAction>();
+            this.derivedTypes = typeRetriever.GetTypes<IStagedOrderUpdateAction>();
         }
         
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(StagedOrderUpdateAction);
+            return objectType == typeof(IStagedOrderUpdateAction);
         }
 
         public override List<SerializerType> SerializerTypes => new List<SerializerType>()

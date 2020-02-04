@@ -1,14 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace commercetools.Sdk.Domain.Carts.UpdateActions
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using commercetools.Sdk.Domain.Validation.Attributes;
-
-    public class SetCartTotalTaxUpdateAction : UpdateAction<Cart>
+    public class SetCartTotalTaxUpdateAction : CartUpdateAction
     {
-        public string Action => "setCartTotalTax";
+        public override string Action => "setCartTotalTax";
         [Required]
         public Money ExternalTotalGross { get; set; }
         public List<TaxPortion> ExternalTaxPortions { get; set; }

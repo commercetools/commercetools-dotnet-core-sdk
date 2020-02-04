@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Carts.UpdateActions;
 using commercetools.Sdk.Domain.OrderEdits;
-using commercetools.Sdk.Domain.OrderEdits.StagedActions;
 using commercetools.Sdk.Domain.OrderEdits.UpdateActions;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
@@ -13,6 +13,11 @@ using static commercetools.Sdk.IntegrationTests.OrderEdits.OrderEditsFixture;
 using static commercetools.Sdk.IntegrationTests.Projects.ProjectFixture;
 using static commercetools.Sdk.IntegrationTests.Products.ProductsFixture;
 using static commercetools.Sdk.IntegrationTests.Payments.PaymentsFixture;
+using AddPaymentUpdateAction = commercetools.Sdk.Domain.Orders.UpdateActions.AddPaymentUpdateAction;
+using SetCustomerEmailUpdateAction = commercetools.Sdk.Domain.Orders.UpdateActions.SetCustomerEmailUpdateAction;
+using SetCustomFieldUpdateAction = commercetools.Sdk.Domain.OrderEdits.UpdateActions.SetCustomFieldUpdateAction;
+using SetCustomTypeUpdateAction = commercetools.Sdk.Domain.OrderEdits.UpdateActions.SetCustomTypeUpdateAction;
+using SetLocaleUpdateAction = commercetools.Sdk.Domain.Orders.UpdateActions.SetLocaleUpdateAction;
 
 namespace commercetools.Sdk.IntegrationTests.OrderEdits
 {
@@ -35,7 +40,7 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
                 await WithOrderEdit(client, draft =>
                     {
                         var orderEditDraft = DefaultOrderEditDraft(draft, order);
-                        var action = new SetCustomerEmailStagedAction
+                        var action = new SetCustomerEmailUpdateAction
                         {
                             Email = email
                         };
@@ -181,7 +186,7 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
                 await WithUpdateableOrderEdit(client, draft =>
                     {
                         var orderEditDraft = DefaultOrderEditDraft(draft, order);
-                        var action = new SetCustomerEmailStagedAction
+                        var action = new SetCustomerEmailUpdateAction
                         {
                             Email = email
                         };
@@ -244,7 +249,7 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
                             {
                                 var orderEditDraft = DefaultOrderEditDraft(draft, order);
                                 //Add a new lineItem
-                                var action = new AddLineItemStagedAction
+                                var action = new AddLineItemUpdateAction
                                 {
                                     Sku = addedItemSku,
                                     Quantity = addedItemQuantity
@@ -299,7 +304,7 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
                     await WithUpdateableOrderEdit(client, draft =>
                         {
                             var orderEditDraft = DefaultOrderEditDraft(draft, order);
-                            var action = new AddPaymentStagedAction
+                            var action = new AddPaymentUpdateAction
                             {
                                 Payment = payment.ToKeyResourceIdentifier()
                             };
@@ -404,15 +409,15 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
                     {
                         Assert.NotNull(orderEdit);
                         Assert.Single(orderEdit.StagedActions);
-                        Assert.IsType<SetCustomerEmailStagedAction>(orderEdit.StagedActions[0]);
+                        Assert.IsType<SetCustomerEmailUpdateAction>(orderEdit.StagedActions[0]);
 
                         var projectLanguages = GetProjectLanguages(client);
                         Assert.True(projectLanguages.Count > 0); //make sure that project has at least one language
 
                         var locale = projectLanguages[0];
-                        var stagedActions = new List<StagedOrderUpdateAction>
+                        var stagedActions = new List<IStagedOrderUpdateAction>
                         {
-                            new SetLocaleStagedAction
+                            new SetLocaleUpdateAction
                             {
                                 Locale = locale
                             }
@@ -427,7 +432,7 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
                                 actions => actions.AddUpdate(action)));
 
                         Assert.Single(updatedOrderEdit.StagedActions);
-                        Assert.IsType<SetLocaleStagedAction>(updatedOrderEdit.StagedActions[0]);
+                        Assert.IsType<SetLocaleUpdateAction>(updatedOrderEdit.StagedActions[0]);
                         return updatedOrderEdit;
                     });
             });
@@ -444,13 +449,13 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
                     {
                         Assert.NotNull(orderEdit);
                         Assert.Single(orderEdit.StagedActions);
-                        Assert.IsType<SetCustomerEmailStagedAction>(orderEdit.StagedActions[0]);
+                        Assert.IsType<SetCustomerEmailUpdateAction>(orderEdit.StagedActions[0]);
 
                         var projectLanguages = GetProjectLanguages(client);
                         Assert.True(projectLanguages.Count > 0); //make sure that project has at least one language
 
                         var locale = projectLanguages[0];
-                        var stagedAction = new SetLocaleStagedAction
+                        var stagedAction = new SetLocaleUpdateAction
                         {
                             Locale = locale
                         };
@@ -465,7 +470,7 @@ namespace commercetools.Sdk.IntegrationTests.OrderEdits
 
                         Assert.Equal(2, updatedOrderEdit.StagedActions.Count);
                         Assert.Contains(updatedOrderEdit.StagedActions,
-                            a => a.GetType() == typeof(SetLocaleStagedAction));
+                            a => a.GetType() == typeof(SetLocaleUpdateAction));
                         return updatedOrderEdit;
                     });
             });

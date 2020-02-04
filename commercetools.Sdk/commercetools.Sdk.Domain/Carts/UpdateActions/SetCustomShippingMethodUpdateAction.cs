@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace commercetools.Sdk.Domain.Carts.UpdateActions
 {
-    public class SetCustomShippingMethodUpdateAction : UpdateAction<Cart>
+    public class SetCustomShippingMethodUpdateAction : CartUpdateAction
     {
-        public string Action => "setCustomShippingMethod";
+        public override string Action => "setCustomShippingMethod";
         [Required]
         public string ShippingMethodName { get; set; }
         public ShippingRateDraft ShippingRate { get; set; }

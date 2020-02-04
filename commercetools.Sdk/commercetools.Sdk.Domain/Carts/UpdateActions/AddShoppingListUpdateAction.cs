@@ -1,11 +1,10 @@
-﻿namespace commercetools.Sdk.Domain.Carts.UpdateActions
-{
-    using System;
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-    public class AddShoppingListUpdateAction : UpdateAction<Cart>
+namespace commercetools.Sdk.Domain.Carts.UpdateActions
+{
+    public class AddShoppingListUpdateAction : CartUpdateAction
     {
-        public string Action => "addShoppingList";
+        public override string Action => "addShoppingList";
         [Required]
         public ResourceIdentifier ShoppingList { get; set; }
         public ResourceIdentifier SupplyChannel { get; set; }

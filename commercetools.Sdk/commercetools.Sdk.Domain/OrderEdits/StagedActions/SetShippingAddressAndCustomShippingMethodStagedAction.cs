@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Common;
-using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.TaxCategories;
 
 namespace commercetools.Sdk.Domain.OrderEdits.StagedActions
 {
-    public class SetShippingAddressAndCustomShippingMethodStagedAction : StagedOrderUpdateAction
+    public class SetShippingAddressAndCustomShippingMethodStagedAction : IStagedOrderUpdateAction
     {
-        public override string Action => "setShippingAddressAndCustomShippingMethod";
+        public string Action => "setShippingAddressAndCustomShippingMethod";
         
         public Address Address { get; set; }
         

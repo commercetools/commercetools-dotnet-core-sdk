@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
-    public class SetOrderNumberUpdateAction : UpdateAction<Order>
+    public class SetOrderNumberUpdateAction : OrderUpdateAction
     {
-        public string Action => "setOrderNumber";
+        public override string Action => "setOrderNumber";
         public string OrderNumber { get; set; }
     }
 }

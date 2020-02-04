@@ -15,7 +15,7 @@ namespace commercetools.Sdk.Domain.OrderEdits
 
         public string Comment { get; set; }
         
-        public List<StagedOrderUpdateAction> StagedActions { get; set; }
+        public List<IStagedOrderUpdateAction> StagedActions { get; set; }
 
         public OrderEditResult Result { get; set; }
     }
