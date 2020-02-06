@@ -1,9 +1,9 @@
 ﻿using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
-using commercetools.Sdk.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Domain.Query;
@@ -16,6 +16,7 @@ using commercetools.Sdk.Serialization;
 using Xunit;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Channels;
+using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.Messages;
 using commercetools.Sdk.Domain.Predicates;
 
@@ -37,6 +38,50 @@ namespace commercetools.Sdk.HttpApi.Tests
             IHttpApiCommandFactory httpApiCommandFactory = this.clientFixture.GetService<IHttpApiCommandFactory>();
             IHttpApiCommand httpApiCommand = httpApiCommandFactory.Create(createCommand);
             Assert.Equal(typeof(CreateHttpApiCommand<Category>), httpApiCommand.GetType());
+        }
+        
+        [Fact]
+        public void InStoreCartByIdRequest()
+        {
+            var command = new GetByIdCommand<Cart>("2bafc816-4223-4ff0-ac8a-0f08a8f29fd6").InStore("storeKey");
+
+            IHttpApiCommandFactory httpApiCommandFactory = this.clientFixture.GetService<IHttpApiCommandFactory>();
+            IHttpApiCommand httpApiCommand = httpApiCommandFactory.Create(command);
+
+            HttpRequestMessage httpRequestMessage = httpApiCommand.HttpRequestMessage;
+            Assert.Equal(HttpMethod.Get, httpRequestMessage.Method);
+            Assert.Equal("in-store/key=storeKey/carts/2bafc816-4223-4ff0-ac8a-0f08a8f29fd6", httpRequestMessage.RequestUri.ToString());
+
+            Assert.Equal(typeof(InStoreHttpApiCommand<Cart>), httpApiCommand.GetType());
+        }
+        
+        [Fact]
+        public void InStoreCartQueryRequest()
+        {
+            var command = new QueryCommand<Cart>().InStore("storeKey");
+            IHttpApiCommandFactory httpApiCommandFactory = this.clientFixture.GetService<IHttpApiCommandFactory>();
+            IHttpApiCommand httpApiCommand = httpApiCommandFactory.Create(command);
+
+            HttpRequestMessage httpRequestMessage = httpApiCommand.HttpRequestMessage;
+            Assert.Equal(HttpMethod.Get, httpRequestMessage.Method);
+            Assert.Equal("in-store/key=storeKey/carts?withTotal=false", httpRequestMessage.RequestUri.ToString());
+
+            Assert.Equal(typeof(InStoreHttpApiCommand<PagedQueryResult<Cart>>), httpApiCommand.GetType());
+        }
+        
+        [Fact]
+        public void InStoreCustomerInStoreSignInRequest()
+        {
+            var command = new LoginCustomerCommand("test@email.com", "password").InStore("storeKey");
+
+            IHttpApiCommandFactory httpApiCommandFactory = this.clientFixture.GetService<IHttpApiCommandFactory>();
+            IHttpApiCommand httpApiCommand = httpApiCommandFactory.Create(command);
+
+            HttpRequestMessage httpRequestMessage = httpApiCommand.HttpRequestMessage;
+            Assert.Equal(HttpMethod.Post, httpRequestMessage.Method);
+            Assert.Equal("in-store/key=storeKey/login", httpRequestMessage.RequestUri.ToString());
+
+            Assert.Equal(typeof(InStoreHttpApiCommand<SignInResult<Customer>>), httpApiCommand.GetType());
         }
 
         [Fact]

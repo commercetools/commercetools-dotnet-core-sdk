@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.CustomerGroups;
+using commercetools.Sdk.Domain.Stores;
 using commercetools.Sdk.Domain.Validation.Attributes;
 
 namespace commercetools.Sdk.Domain.Customers
@@ -35,5 +36,7 @@ namespace commercetools.Sdk.Domain.Customers
         public CustomFieldsDraft Custom { get; set; }
         [Language]
         public string Locale { get; set; }
+        
+        public List<ResourceIdentifier<Store>> Stores { get; set; }
     }
 }
