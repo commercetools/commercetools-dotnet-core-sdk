@@ -331,7 +331,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                         Assert.NotNull(loginResult);
                         Assert.NotNull(loginResult.Customer);
                         Assert.Single(loginResult.Customer.Stores);
-                        Assert.Equal(store.Key,loginResult.Customer.Stores[0].Key);
+                        Assert.Equal(store.Key, loginResult.Customer.Stores[0].Key);
                         Assert.Equal(customer.Email, loginResult.Customer.Email);
                     });
             });
@@ -422,10 +422,62 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                             await client.ExecuteAsync(
                                 new GetCustomerByPasswordTokenCommand(tokenResult.Value)
                                     .InStore(store.Key));
-                        
+
                         Assert.NotNull(retrievedCustomer);
                         Assert.Single(retrievedCustomer.Stores);
-                        Assert.Equal(store.Key,retrievedCustomer.Stores[0].Key);
+                        Assert.Equal(store.Key, retrievedCustomer.Stores[0].Key);
+                        Assert.Equal(customer.Email, retrievedCustomer.Email);
+                    });
+            });
+        }
+
+        [Fact]
+        public async Task GetCustomerByEmailToken()
+        {
+            await WithCustomer(
+                client, async customer =>
+                {
+                    var result =
+                        await client.ExecuteAsync(
+                            new CreateTokenForCustomerEmailVerificationCommand(customer.Id, 10, customer.Version));
+                    var tokenResult = result as CustomerToken;
+                    Assert.NotNull(tokenResult);
+
+                    var retrievedCustomer =
+                        await client.ExecuteAsync(new GetCustomerByEmailTokenCommand(tokenResult.Value));
+                    Assert.NotNull(retrievedCustomer);
+                    Assert.Equal(customer.Email, retrievedCustomer.Email);
+                });
+        }
+
+        [Fact]
+        public async Task GetCustomerByEmailTokenInStore()
+        {
+            await WithStore(client, async store =>
+            {
+                var stores = new List<ResourceIdentifier<Store>>
+                {
+                    store.ToKeyResourceIdentifier()
+                };
+                await WithCustomer(
+                    client,
+                    draft => DefaultCustomerDraftInStores(draft, stores),
+                    async customer =>
+                    {
+                        Assert.NotNull(customer);
+                        Assert.Single(customer.Stores);
+
+                        var result =
+                            await client.ExecuteAsync(
+                                new CreateTokenForCustomerEmailVerificationCommand(customer.Id, 10, customer.Version)
+                                    .InStore(store.Key));
+                        var tokenResult = result as CustomerToken;
+                        Assert.NotNull(tokenResult);
+
+                        var retrievedCustomer =
+                            await client.ExecuteAsync(
+                                new GetCustomerByEmailTokenCommand(tokenResult.Value).InStore(store.Key));
+                        Assert.NotNull(retrievedCustomer);
                         Assert.Equal(customer.Email, retrievedCustomer.Email);
                     });
             });
