@@ -12,7 +12,7 @@ namespace commercetools.Sdk.Domain.Orders
 {
     [Endpoint("orders")]
     [ResourceType(ReferenceTypeId.Order)]
-    public class Order : Resource<Order>
+    public class Order : Resource<Order>, IInStoreUsable
     {
         public DateTime? CompletedAt { get; set; }
         public string OrderNumber { get; set; }
