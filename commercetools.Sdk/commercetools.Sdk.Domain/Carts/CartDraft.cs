@@ -23,7 +23,7 @@ namespace commercetools.Sdk.Domain.Carts
 
         public string AnonymousId { get; set; }
 
-        public IReference<Store> Store { get; set; }
+        public ResourceIdentifier<Store> Store { get; set; }
 
         [Country]
         public string Country { get; set; }

@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.ShippingMethods;
+using commercetools.Sdk.Domain.Stores;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
 using Type = commercetools.Sdk.Domain.Types.Type;
 using static commercetools.Sdk.IntegrationTests.Products.ProductsFixture;
@@ -38,6 +40,13 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             return cartDraft;
         }
 
+        public static CartDraft DefaultCartDraftInStore(CartDraft cartDraft, ResourceIdentifier<Store> store)
+        {
+            cartDraft.Currency = DefaultCurrency;
+            cartDraft.Store = store;
+            return cartDraft;
+        }
+        
         public static CartDraft DefaultCartDraftWithLineItem(CartDraft draft, LineItemDraft lineItemDraft)
         {
             var cartDraft = DefaultCartDraft(draft);
