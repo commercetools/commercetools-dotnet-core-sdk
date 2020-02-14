@@ -83,6 +83,19 @@ namespace commercetools.Sdk.HttpApi.Tests
 
             Assert.Equal(typeof(InStoreHttpApiCommand<SignInResult<Customer>>), httpApiCommand.GetType());
         }
+        
+        [Fact]
+        public void GetShippingMethodsForCart()
+        {
+            var command = new GetShippingMethodsForCartCommand("2bafc816-4223-4ff0-ac8a-0f08a8f29fd6");
+
+            IHttpApiCommandFactory httpApiCommandFactory = this.clientFixture.GetService<IHttpApiCommandFactory>();
+            IHttpApiCommand httpApiCommand = httpApiCommandFactory.Create(command);
+
+            HttpRequestMessage httpRequestMessage = httpApiCommand.HttpRequestMessage;
+            Assert.Equal(HttpMethod.Get, httpRequestMessage.Method);
+            Assert.Equal("shipping-methods/matching-cart?cartId=2bafc816-4223-4ff0-ac8a-0f08a8f29fd6", httpRequestMessage.RequestUri.ToString());
+        }
 
         [Fact]
         public void SearchHttpApiCommand()

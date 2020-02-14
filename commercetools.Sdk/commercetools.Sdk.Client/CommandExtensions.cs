@@ -1,5 +1,6 @@
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.Stores;
 
 namespace commercetools.Sdk.Client
@@ -52,6 +53,16 @@ namespace commercetools.Sdk.Client
             where T : IInStoreUsable
         {
             return new InStoreCommand<Token<T>>(storeRef.Key, command);
+        }
+
+        public static InStoreCommand<PagedQueryResult<ShippingMethod>> InStore(this GetShippingMethodsForCartCommand command, string key)
+        {
+            return new InStoreCommand<PagedQueryResult<ShippingMethod>>(key, command);
+        }
+
+        public static InStoreCommand<PagedQueryResult<ShippingMethod>> InStore(this GetShippingMethodsForCartCommand command, IKeyReferencable<Store> storeRef)
+        {
+            return new InStoreCommand<PagedQueryResult<ShippingMethod>>(storeRef.Key, command);
         }
     }
 }
