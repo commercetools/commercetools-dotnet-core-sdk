@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.Stores;
 using commercetools.Sdk.Domain.Validation.Attributes;
@@ -39,6 +40,6 @@ namespace commercetools.Sdk.Domain.Orders
         public CartOrigin Origin { get; set; }
         public List<Address> ItemShippingAddresses { get; set; }
         
-        public ResourceIdentifier<Store> Store { get; set; }
+        public IReferenceable<Store> Store { get; set; }
     }
 }

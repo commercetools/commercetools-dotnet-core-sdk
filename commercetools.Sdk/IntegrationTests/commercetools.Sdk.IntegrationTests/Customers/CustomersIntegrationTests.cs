@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.Customers.UpdateActions;
@@ -75,7 +76,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             {
                 await WithStore(client, async store2 =>
                 {
-                    var stores = new List<ResourceIdentifier<Store>>
+                    var stores = new List<IReferenceable<Store>>
                     {
                         store1.ToKeyResourceIdentifier(),
                         store2.ToKeyResourceIdentifier()
@@ -127,7 +128,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         {
             await WithStore(client, async store =>
             {
-                var stores = new List<ResourceIdentifier<Store>>
+                var stores = new List<IReferenceable<Store>>
                 {
                     store.ToKeyResourceIdentifier()
                 };
@@ -166,7 +167,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         {
             await WithStore(client, async store =>
             {
-                var stores = new List<ResourceIdentifier<Store>>
+                var stores = new List<IReferenceable<Store>>
                 {
                     store.ToKeyResourceIdentifier()
                 };
@@ -208,7 +209,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         {
             await WithStore(client, async store =>
             {
-                var stores = new List<ResourceIdentifier<Store>>
+                var stores = new List<IReferenceable<Store>>
                 {
                     store.ToKeyResourceIdentifier()
                 };
@@ -247,7 +248,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         {
             await WithStore(client, async store =>
             {
-                var stores = new List<ResourceIdentifier<Store>>
+                var stores = new List<IReferenceable<Store>>
                 {
                     store.ToKeyResourceIdentifier()
                 };
@@ -306,7 +307,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         {
             await WithStore(client, async store =>
             {
-                var stores = new List<ResourceIdentifier<Store>>
+                var stores = new List<IReferenceable<Store>>
                 {
                     store.ToKeyResourceIdentifier()
                 };
@@ -356,7 +357,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         {
             await WithStore(client, async store =>
             {
-                var stores = new List<ResourceIdentifier<Store>>
+                var stores = new List<IReferenceable<Store>>
                 {
                     store.ToKeyResourceIdentifier()
                 };
@@ -400,7 +401,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         {
             await WithStore(client, async store =>
             {
-                var stores = new List<ResourceIdentifier<Store>>
+                var stores = new List<IReferenceable<Store>>
                 {
                     store.ToKeyResourceIdentifier()
                 };
@@ -455,7 +456,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         {
             await WithStore(client, async store =>
             {
-                var stores = new List<ResourceIdentifier<Store>>
+                var stores = new List<IReferenceable<Store>>
                 {
                     store.ToKeyResourceIdentifier()
                 };
@@ -515,7 +516,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         {
             await WithStore(client, async store =>
             {
-                var stores = new List<ResourceIdentifier<Store>>
+                var stores = new List<IReferenceable<Store>>
                 {
                     store.ToKeyResourceIdentifier()
                 };
@@ -576,7 +577,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         {
             await WithStore(client, async store =>
             {
-                var stores = new List<ResourceIdentifier<Store>>
+                var stores = new List<IReferenceable<Store>>
                 {
                     store.ToKeyResourceIdentifier()
                 };
@@ -642,7 +643,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         {
             await WithStore(client, async store =>
             {
-                var stores = new List<ResourceIdentifier<Store>>
+                var stores = new List<IReferenceable<Store>>
                 {
                     store.ToKeyResourceIdentifier()
                 };
@@ -690,7 +691,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         {
             await WithStore(client, async store =>
             {
-                var stores = new List<ResourceIdentifier<Store>>
+                var stores = new List<IReferenceable<Store>>
                 {
                     store.ToKeyResourceIdentifier()
                 };
@@ -1137,7 +1138,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         {
             await WithStore(client, async store =>
             {
-                var stores = new List<ResourceIdentifier<Store>>
+                var stores = new List<IReferenceable<Store>>
                 {
                     store.ToKeyResourceIdentifier()
                 };
@@ -1187,7 +1188,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         {
             await WithStore(client, async store =>
             {
-                var stores = new List<ResourceIdentifier<Store>>
+                var stores = new List<IReferenceable<Store>>
                 {
                     store.ToKeyResourceIdentifier()
                 };

@@ -40,7 +40,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             return cartDraft;
         }
 
-        public static CartDraft DefaultCartDraftInStore(CartDraft cartDraft, ResourceIdentifier<Store> store)
+        public static CartDraft DefaultCartDraftInStore(CartDraft cartDraft, IReferenceable<Store> store)
         {
             cartDraft.Currency = DefaultCurrency;
             cartDraft.Store = store;

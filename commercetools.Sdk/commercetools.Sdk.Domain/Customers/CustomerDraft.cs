@@ -37,6 +37,6 @@ namespace commercetools.Sdk.Domain.Customers
         [Language]
         public string Locale { get; set; }
         
-        public List<ResourceIdentifier<Store>> Stores { get; set; }
+        public List<IReferenceable<Store>> Stores { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.Stores;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
@@ -28,7 +29,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             return customerDraft;
         }
         public static CustomerDraft DefaultCustomerDraftInStores(CustomerDraft draft, 
-            List<ResourceIdentifier<Store>> stores)
+            List<IReferenceable<Store>> stores)
         {
             var customerDraft = DefaultCustomerDraft(draft);
             customerDraft.Stores = stores;
