@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -79,16 +80,21 @@ namespace SimpleInjector
 
         }
 
-                /// <summary>
+        /// <summary>
         /// Adds concrete implementations necessary for running of the application to the service collection for a single client.
         /// </summary>
         /// <param name="services">The service collection.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="clientName">The name of the client.</param>
         /// <param name="tokenFlow">The token flow.</param>
-        public static IHttpClientBuilder UseCommercetools(this Container services, IConfiguration configuration, string clientName = DefaultClientNames.Api, TokenFlow tokenFlow = TokenFlow.ClientCredentials)
+        public static IHttpClientBuilder UseCommercetools(this Container services, IConfiguration configuration,
+            string clientName = DefaultClientNames.Api, TokenFlow tokenFlow = TokenFlow.ClientCredentials)
         {
-            return services.UseCommercetools(configuration, new Dictionary<string, TokenFlow>() { { clientName, tokenFlow } }).Single().Value;
+            var clients = new ConcurrentDictionary<string, TokenFlow>();
+            clients.TryAdd(clientName, tokenFlow);
+            return services
+                .UseCommercetools(configuration, clients).Single()
+                .Value;
         }
 
         /// <summary>
@@ -138,7 +144,7 @@ namespace SimpleInjector
             var collection = new ServiceCollection();
             services.UseHttpApiDefaults();
 
-            var builders = new Dictionary<string, IHttpClientBuilder>();
+            var builders = new ConcurrentDictionary<string, IHttpClientBuilder>();
             var clientBuilders = new List<Registration>();
             foreach (KeyValuePair<string, TokenFlow> client in clients)
             {
@@ -148,7 +154,7 @@ namespace SimpleInjector
                 IClientConfiguration clientConfiguration = configuration.GetSection(clientName).Get<ClientConfiguration>();
                 Validator.ValidateObject(clientConfiguration, new ValidationContext(clientConfiguration), true);
 
-                builders.Add(clientName, services.SetupClient(collection, clientName, clientConfiguration, tokenFlow));
+                builders.TryAdd(clientName, services.SetupClient(collection, clientName, clientConfiguration, tokenFlow));
 
                 clientBuilders.Add(Lifestyle.Singleton.CreateRegistration(() => new CtpClient(collection.BuildServiceProvider().GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName }, services));
             }
@@ -188,10 +194,9 @@ namespace SimpleInjector
             IClientConfiguration clientConfiguration = configurationSection.Get<ClientConfiguration>();
             Validator.ValidateObject(clientConfiguration, new ValidationContext(clientConfiguration), true);
 
-            var builders = new Dictionary<string, IHttpClientBuilder>
-            {
-                {clientName, services.SetupClient(collection, clientName, clientConfiguration, tokenFlow)}
-            };
+            var builders = new ConcurrentDictionary<string, IHttpClientBuilder>();
+            builders.TryAdd(clientName, services.SetupClient(collection, clientName, clientConfiguration, tokenFlow));
+            
             services.Register<IClient>(() => new CtpClient(collection.BuildServiceProvider().GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName }, Lifestyle.Singleton);
 
             collection.AddHttpClient(DefaultClientNames.Authorization);

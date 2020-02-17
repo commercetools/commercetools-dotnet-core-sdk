@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
@@ -34,7 +35,7 @@ namespace commercetools.Sdk.HttpApi
         private static IDictionary<string, IHttpClientBuilder> UseMultipleClients(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
             services.UseHttpApiDefaults();
-            var builders = new Dictionary<string, IHttpClientBuilder>();
+            var builders = new ConcurrentDictionary<string, IHttpClientBuilder>();
             foreach (KeyValuePair<string, TokenFlow> client in clients)
             {
                 string clientName = client.Key;
@@ -43,7 +44,7 @@ namespace commercetools.Sdk.HttpApi
                 IClientConfiguration clientConfiguration = configuration.GetSection(clientName).Get<ClientConfiguration>();
                 Validator.ValidateObject(clientConfiguration, new ValidationContext(clientConfiguration), true);
 
-                builders.Add(clientName, services.SetupClient(clientName, clientConfiguration, tokenFlow));
+                builders.TryAdd(clientName, services.SetupClient(clientName, clientConfiguration, tokenFlow));
                 services.AddSingleton<IClient>(c => new CtpClient(c.GetService<IHttpClientFactory>(), c.GetService<IHttpApiCommandFactory>(), c.GetService<ISerializerService>(), c.GetService<IUserAgentProvider>()) { Name = clientName });
             }
 
@@ -58,8 +59,8 @@ namespace commercetools.Sdk.HttpApi
             services.UseHttpApiDefaults();
             services.AddSingleton<IClient>(c => new CtpClient(c.GetService<IHttpClientFactory>(), c.GetService<IHttpApiCommandFactory>(), c.GetService<ISerializerService>(), c.GetService<IUserAgentProvider>()) { Name = clientName });
 
-            var builders = new Dictionary<string, IHttpClientBuilder>();
-            builders.Add(clientName, services.SetupClient(clientName, clientConfiguration, tokenFlow));
+            var builders = new ConcurrentDictionary<string, IHttpClientBuilder>();
+            builders.TryAdd(clientName, services.SetupClient(clientName, clientConfiguration, tokenFlow));
 
             return builders;
         }
