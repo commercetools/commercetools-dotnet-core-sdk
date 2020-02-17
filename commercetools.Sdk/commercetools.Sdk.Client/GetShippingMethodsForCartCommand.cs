@@ -25,6 +25,7 @@ namespace commercetools.Sdk.Client
 
         private void Init(string cartId, List<Expansion<ShippingMethod>> expandPredicates = null)
         {
+            this.UrlSuffix = "/matching-cart";
             this.AdditionalParameters = new GetShippingMethodsForCartAdditionalParameters
             {
                 CartId = cartId

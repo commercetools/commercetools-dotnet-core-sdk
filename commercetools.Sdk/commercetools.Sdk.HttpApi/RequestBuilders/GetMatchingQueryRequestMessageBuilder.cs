@@ -32,9 +32,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
 
         private Uri GetRequestUri<T>(GetMatchingQueryCommand<T> command)
         {
-            string requestUri = this.GetMessageBase<T>();
-            var suffix = GetMatchingUriSuffix(command);
-            requestUri += suffix;
+            string requestUri = this.GetMessageBase<T>() + command.UrlSuffix;
 
             List<KeyValuePair<string, string>> queryStringParameters = new List<KeyValuePair<string, string>>();
             if (command.Expand != null)
@@ -45,22 +43,6 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             queryStringParameters.AddRange(this.GetAdditionalParameters(command.AdditionalParameters));
             queryStringParameters.ForEach(x => { requestUri = QueryHelpers.AddQueryString(requestUri, x.Key, x.Value); });
             return new Uri(requestUri, UriKind.Relative);
-        }
-
-        private string GetMatchingUriSuffix<T>(GetMatchingQueryCommand<T> command)
-        {
-            string suffix;
-            switch (command)
-            {
-                case GetShippingMethodsForCartCommand shippingMethodsForCartCommand:
-                    suffix = "/matching-cart";
-                    break;
-                default:
-                    suffix = string.Empty;
-                    break;
-            }
-
-            return suffix;
         }
     }
 }
