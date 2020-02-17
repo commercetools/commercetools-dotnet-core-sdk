@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using commercetools.Sdk.Client;
-using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.HttpApi.RequestBuilders;
-
 
 namespace commercetools.Sdk.HttpApi.HttpApiCommands
 {

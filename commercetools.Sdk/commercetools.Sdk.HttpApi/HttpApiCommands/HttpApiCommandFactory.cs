@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.HttpApi.HttpApiCommands
+﻿using System.Collections.Concurrent;
+
+namespace commercetools.Sdk.HttpApi.HttpApiCommands
 {
     using System;
     using System.Collections.Generic;
@@ -11,7 +13,7 @@
 
     public class HttpApiCommandFactory : IHttpApiCommandFactory
     {
-        private readonly Dictionary<Type, ObjectActivator> activators;
+        private readonly IDictionary<Type, ObjectActivator> activators;
         private readonly IEnumerable<Type> registeredHttpApiCommandTypes;
         private readonly IRequestMessageBuilderFactory requestMessageBuilderFactory;
 
@@ -21,7 +23,7 @@
         {
             this.registeredHttpApiCommandTypes = typeRetriever.GetTypes<IHttpApiCommand>();
             this.requestMessageBuilderFactory = requestMessageBuilderFactory;
-            this.activators = new Dictionary<Type, ObjectActivator>();
+            this.activators = new ConcurrentDictionary<Type, ObjectActivator>();
         }
 
         private delegate object ObjectActivator(params object[] args);

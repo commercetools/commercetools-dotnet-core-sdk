@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +9,7 @@ namespace commercetools.Sdk.HttpApi.Tokens
     {
         public TokenFlowMapper()
         {
-            this.Clients = new Dictionary<string, ITokenFlowRegister>();
+            this.Clients = new ConcurrentDictionary<string, ITokenFlowRegister>();
         }
 
         public IDictionary<string, ITokenFlowRegister> Clients { get; private set; }

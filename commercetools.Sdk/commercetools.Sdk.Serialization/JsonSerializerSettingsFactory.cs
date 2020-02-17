@@ -1,14 +1,15 @@
-﻿namespace commercetools.Sdk.Serialization
-{
-    using Newtonsoft.Json;
-    using System;
-    using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
+namespace commercetools.Sdk.Serialization
+{
     public class JsonSerializerSettingsFactory
     {
         private readonly DeserializationContractResolver deserializationContractResolver;
         private readonly SerializationContractResolver serializationContractResolver;
-        private IDictionary<Type, JsonSerializerSettings> mapping = new Dictionary<Type, JsonSerializerSettings>();
+        private IDictionary<Type, JsonSerializerSettings> mapping = new ConcurrentDictionary<Type, JsonSerializerSettings>();
 
         public JsonSerializerSettingsFactory(DeserializationContractResolver deserializationContractResolver, SerializationContractResolver serializationContractResolver)
         {
