@@ -1,16 +1,15 @@
-﻿namespace commercetools.Sdk.Serialization
-{
-    using commercetools.Sdk.HttpApi.Domain;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Serialization;
-    using System;
-    using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
+namespace commercetools.Sdk.Serialization
+{
     public class JsonSerializerSettingsFactory
     {
         private readonly DeserializationContractResolver deserializationContractResolver;
         private readonly SerializationContractResolver serializationContractResolver;
-        private IDictionary<Type, JsonSerializerSettings> mapping = new Dictionary<Type, JsonSerializerSettings>();
+        private IDictionary<Type, JsonSerializerSettings> mapping = new ConcurrentDictionary<Type, JsonSerializerSettings>();
 
         public JsonSerializerSettingsFactory(DeserializationContractResolver deserializationContractResolver, SerializationContractResolver serializationContractResolver)
         {
@@ -20,26 +19,22 @@
 
         public JsonSerializerSettings CreateDeserializationSettings(Type type)
         {
-            if (!mapping.ContainsKey(type))
+            try
             {
-                JsonSerializerSettings settings = new JsonSerializerSettings();
-                if (type == typeof(Token))
+                if (!mapping.ContainsKey(type))
                 {
-                    DefaultContractResolver contractResolver = new DefaultContractResolver
-                    {
-                        NamingStrategy = new SnakeCaseNamingStrategy()
-                    };
-                    settings.ContractResolver = contractResolver;
-                }
-                else
-                {
+                    JsonSerializerSettings settings = new JsonSerializerSettings();
                     settings.ContractResolver = this.deserializationContractResolver;
+
+                    mapping[type] = settings;
                 }
 
-                mapping[type] = settings;
+                return mapping[type];
             }
-
-            return mapping[type];
+            catch (NullReferenceException)
+            {
+                return null;//default serialization settings will be used
+            }
         }
 
         public JsonSerializerSettings CreateSerializationSettings(Type type)

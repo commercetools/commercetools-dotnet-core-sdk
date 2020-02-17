@@ -1,11 +1,10 @@
-﻿namespace commercetools.Sdk.Domain.Carts.UpdateActions
-{
-    using System;
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-    public class AddDiscountCodeUpdateAction : UpdateAction<Cart>
+namespace commercetools.Sdk.Domain.Carts.UpdateActions
+{
+    public class AddDiscountCodeUpdateAction : CartUpdateAction
     {
-        public string Action => "addDiscountCode";
+        public override string Action => "addDiscountCode";
         [Required]
         public string Code { get; set; }
     }

@@ -1,18 +1,15 @@
-﻿
+﻿using System.Collections.Generic;
 using commercetools.Sdk.Domain.CartDiscounts;
+using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.CustomerGroups;
+using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.Stores;
 
 namespace commercetools.Sdk.Domain.Carts
 {
-    using Common;
-    using Orders;
-    using CustomerGroups;
-    using System;
-    using System.Collections.Generic;
-
     [Endpoint("carts")]
     [ResourceType(ReferenceTypeId.Cart)]
-    public class Cart : Resource<Cart>
+    public class Cart : Resource<Cart>, IInStoreUsable
     {
         public string CustomerId { get; set; }
         public string CustomerEmail { get; set; }

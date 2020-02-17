@@ -1,9 +1,10 @@
-﻿using commercetools.Sdk.Client;
+﻿using System;
+using commercetools.Sdk.Client;
 
 namespace commercetools.Sdk.HttpApi
 {
     public interface IHttpApiCommandFactory
     {
-        IHttpApiCommand Create<T>(Command<T> command);
+        IHttpApiCommand Create<T>(ICommand<T> command);
     }
 }

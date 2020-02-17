@@ -548,7 +548,7 @@ namespace commercetools.Sdk.IntegrationTests
         {
             var lineItemReturnItemDraft = new LineItemReturnItemDraft
             {
-                Quantity = 1,
+                Quantity = 100,
                 Comment = "comment",
                 LineItemId = lineItemId,
                 ShipmentState = ReturnShipmentState.Returned
@@ -562,7 +562,7 @@ namespace commercetools.Sdk.IntegrationTests
             {
                 Name = new LocalizedString() {{"en", RandomString()}},
                 Slug = RandomString(10),
-                Quantity = RandomInt(1,10),
+                Quantity = 100,
                 Money = Money.FromDecimal("EUR", RandomInt(100,10000)),
                 TaxCategory = taxCategory.ToReference()
             };

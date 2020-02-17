@@ -86,34 +86,43 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
 
         public static async Task WithShippingMethodInUsaZone(IClient client, Func<ShippingMethod, Task> func)
         {
-            await WithTaxCategory(client, async taxCategory =>
+            var usaLocation = new Location {Country = "US", State = "New York"};
+            var address = new Address
             {
-                var usaLocation = new Location {Country = "US", State = "New York"};
-                await WithZone(client, zoneDraft => DefaultZoneWithOneLocation(zoneDraft, usaLocation), async zone =>
+                Country = usaLocation.Country,
+                State = usaLocation.State
+            };
+            var taxRateDraft = TestingUtility.GetTaxRateDraft(address);
+            await WithTaxCategory(client,
+                draft => DefaultTaxCategoryDraftWithTaxRate(draft, taxRateDraft),
+                async taxCategory =>
                 {
-                    var zoneRates = new List<ZoneRateDraft>
-                    {
-                        new ZoneRateDraft
+                    await WithZone(client, zoneDraft => DefaultZoneWithOneLocation(zoneDraft, usaLocation),
+                        async zone =>
                         {
-                            Zone = zone.ToKeyResourceIdentifier(),
-                            ShippingRates = new List<ShippingRateDraft>
+                            var zoneRates = new List<ZoneRateDraft>
                             {
-                                new ShippingRateDraft
+                                new ZoneRateDraft
                                 {
-                                    Price = Money.FromDecimal("USD", 12),
-                                    FreeAbove = Money.FromDecimal("USD", 120)
+                                    Zone = zone.ToKeyResourceIdentifier(),
+                                    ShippingRates = new List<ShippingRateDraft>
+                                    {
+                                        new ShippingRateDraft
+                                        {
+                                            Price = Money.FromDecimal("USD", 12),
+                                            FreeAbove = Money.FromDecimal("USD", 120)
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    };
-                    var draftWithTaxCategory = new ShippingMethodDraft
-                    {
-                        TaxCategory = taxCategory.ToKeyResourceIdentifier(),
-                        ZoneRates = zoneRates
-                    };
-                    await WithAsync(client, draftWithTaxCategory, DefaultShippingMethodDraft, func);
+                            };
+                            var draftWithTaxCategory = new ShippingMethodDraft
+                            {
+                                TaxCategory = taxCategory.ToKeyResourceIdentifier(),
+                                ZoneRates = zoneRates
+                            };
+                            await WithAsync(client, draftWithTaxCategory, DefaultShippingMethodDraft, func);
+                        });
                 });
-            });
         }
 
         public static async Task WithShippingMethod(IClient client,

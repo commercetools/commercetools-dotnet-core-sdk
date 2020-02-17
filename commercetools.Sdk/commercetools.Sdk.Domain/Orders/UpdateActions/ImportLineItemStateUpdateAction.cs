@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
-    public class ImportLineItemStateUpdateAction : UpdateAction<Order>
+    public class ImportLineItemStateUpdateAction : OrderUpdateAction
     {
-        public string Action => "importLineItemState";
+        public override string Action => "importLineItemState";
         [Required]
         public string LineItemId { get; set; }
         [Required]

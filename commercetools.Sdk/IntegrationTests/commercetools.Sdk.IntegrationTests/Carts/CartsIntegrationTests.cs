@@ -11,6 +11,7 @@ using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.Domain.Projects;
 using commercetools.Sdk.Domain.Projects.UpdateActions;
 using commercetools.Sdk.Domain.ShippingMethods;
+using commercetools.Sdk.Domain.Stores;
 using commercetools.Sdk.Domain.TaxCategories;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using commercetools.Sdk.IntegrationTests.CustomObjects;
@@ -27,6 +28,8 @@ using static commercetools.Sdk.IntegrationTests.ShoppingLists.ShoppingListsFixtu
 using static commercetools.Sdk.IntegrationTests.Products.ProductsFixture;
 using static commercetools.Sdk.IntegrationTests.Payments.PaymentsFixture;
 using static commercetools.Sdk.IntegrationTests.Projects.ProjectFixture;
+using static commercetools.Sdk.IntegrationTests.Stores.StoresFixture;
+using static commercetools.Sdk.IntegrationTests.GenericFixture;
 
 namespace commercetools.Sdk.IntegrationTests.Carts
 {
@@ -53,6 +56,22 @@ namespace commercetools.Sdk.IntegrationTests.Carts
         }
 
         [Fact]
+        public async Task CreateCartInStore()
+        {
+            await WithStore(client, async store =>
+            {
+                var buildDraft = DefaultCartDraft(new CartDraft());
+                var cart = await client
+                    .ExecuteAsync(new CreateCommand<Cart>(buildDraft).InStore(store.Key));
+
+                Assert.NotNull(cart);
+                Assert.NotNull(cart.Store);
+                Assert.Equal(store.Key, cart.Store.Key);
+                await DeleteResource(client, cart);
+            });
+        }
+
+        [Fact]
         public async Task GetCartById()
         {
             await WithCart(
@@ -63,6 +82,26 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         .ExecuteAsync(cart.ToIdResourceIdentifier().GetById());
                     Assert.Equal(cart.Id, retrievedCart.Id);
                 });
+        }
+
+        [Fact]
+        public async Task GetCartInStoreById()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithCart(
+                    client,
+                    cartDraft => DefaultCartDraftInStore(cartDraft, store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.NotNull(cart.Store);
+                        var retrievedCart = await client
+                            .ExecuteAsync(cart.ToIdResourceIdentifier().GetById().InStore(store.Key));
+                        Assert.Equal(cart.Id, retrievedCart.Id);
+                        Assert.NotNull(retrievedCart.Store);
+                        Assert.Equal(store.Key, retrievedCart.Store.Key);
+                    });
+            });
         }
 
         [Fact]
@@ -85,7 +124,42 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                     });
             });
         }
-        
+
+        [Fact]
+        public async Task GetCartInStoreByCustomerId()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithCustomer(client, async customer =>
+                {
+                    await WithCart(
+                        client,
+                        draft =>
+                        {
+                            var cartDraft = DefaultCartDraftWithCustomer(draft, customer);
+                            cartDraft.Store = store.ToKeyResourceIdentifier();
+                            return cartDraft;
+                        },
+                        async cart =>
+                        {
+                            Assert.NotNull(cart.CustomerId);
+                            Assert.Equal(customer.Id, cart.CustomerId);
+                            Assert.NotNull(cart.Store);
+                            Assert.Equal(store.Key, cart.Store.Key);
+
+                            var retrievedCart = await client
+                                .ExecuteAsync(new GetCartByCustomerIdCommand(customer.Id)
+                                    .InStore(store.Key));
+
+                            Assert.Equal(cart.Id, retrievedCart.Id);
+                            Assert.NotNull(cart.Store);
+                            Assert.Equal(store.Key, cart.Store.Key);
+                        });
+                });
+            });
+        }
+
+
         [Fact]
         public async Task ReplicateCartFromCart()
         {
@@ -122,6 +196,31 @@ namespace commercetools.Sdk.IntegrationTests.Carts
         }
 
         [Fact]
+        public async Task QueryCartsInStore()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithCart(
+                    client,
+                    draft => DefaultCartDraftInStore(draft, store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.NotNull(cart.Store);
+
+                        var command = new QueryCommand<Cart>()
+                            .Where(c => c.Id == cart.Id.valueOf())
+                            .InStore(store.Key);
+
+                        var returnedSet = await client.ExecuteAsync(command);
+                        Assert.Single(returnedSet.Results);
+                        Assert.Equal(cart.Id, returnedSet.Results[0].Id);
+                        Assert.NotNull(returnedSet.Results[0].Store);
+                        Assert.Equal(store.Key, returnedSet.Results[0].Store.Key);
+                    });
+            });
+        }
+
+        [Fact]
         public async Task DeleteCartById()
         {
             await WithCart(
@@ -133,6 +232,26 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         () => client.ExecuteAsync(new GetByIdCommand<Cart>(cart))
                     );
                 });
+        }
+
+        [Fact]
+        public async Task DeleteCartInStoreById()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithCart(
+                    client,
+                    draft => DefaultCartDraftInStore(draft, store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.NotNull(cart.Store);
+                        await client.ExecuteAsync(cart.DeleteById().InStore(store.Key));
+                        await Assert.ThrowsAsync<NotFoundException>(
+                            () => client.ExecuteAsync(
+                                new GetByIdCommand<Cart>(cart).InStore(store.Key))
+                        );
+                    });
+            });
         }
 
         #region UpdateActions
@@ -154,6 +273,36 @@ namespace commercetools.Sdk.IntegrationTests.Carts
 
                 Assert.Equal(email, updatedCart.CustomerEmail);
                 return updatedCart;
+            });
+        }
+
+        [Fact]
+        public async void UpdateCartInStoreSetCustomerEmail()
+        {
+            var email = $"{TestingUtility.RandomString()}@email.com";
+
+            await WithStore(client, async store =>
+            {
+                await WithUpdateableCart(client,
+                    draft => DefaultCartDraftInStore(draft, store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.NotNull(cart.Store);
+                        Assert.Equal(store.Key, cart.Store.Key);
+                        var action = new SetCustomerEmailUpdateAction
+                        {
+                            Email = email
+                        };
+
+                        var updatedCart = await client
+                            .ExecuteAsync(cart.UpdateById(
+                                actions => actions.AddUpdate(action)).InStore(store.Key));
+
+                        Assert.NotNull(updatedCart.Store);
+                        Assert.Equal(store.Key, updatedCart.Store.Key);
+                        Assert.Equal(email, updatedCart.CustomerEmail);
+                        return updatedCart;
+                    });
             });
         }
 
@@ -628,7 +777,8 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         var externalTaxRateDraft = TestingUtility.GetExternalTaxRateDraft();
                         var shippingRateDraft = TestingUtility.GetShippingRateDraftWithPriceTiers();
                         var customShippingMethod = $"CustomShipping_{TestingUtility.RandomInt()}";
-                        var secondScorePrice = (shippingRateDraft.Tiers[1] as CartScoreShippingRatePriceTier)?.Price;
+                        var secondScorePrice =
+                            (shippingRateDraft.Tiers[1] as CartScoreShippingRatePriceTier)?.Price;
 
                         var setCustomShippingMethodAction = new SetCustomShippingMethodUpdateAction()
                         {
@@ -639,7 +789,8 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         };
 
                         var cartWithShippingMethod = await client
-                            .ExecuteAsync(cart.UpdateById(actions => actions.AddUpdate(setCustomShippingMethodAction)));
+                            .ExecuteAsync(cart.UpdateById(actions =>
+                                actions.AddUpdate(setCustomShippingMethodAction)));
                         Assert.NotNull(cartWithShippingMethod.ShippingInfo);
                         Assert.Equal(customShippingMethod, cartWithShippingMethod.ShippingInfo.ShippingMethodName);
 
@@ -666,6 +817,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         TryToUpdateCurrentProject(client, project, undoProjectAction.ToList());
 
                     Assert.Null(projectWithNullShippingRateInputType.ShippingRateInputType);
+                    return projectWithNullShippingRateInputType;
                 });
         }
 
@@ -715,7 +867,8 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                                 .ExecuteAsync(cart.UpdateById(actions =>
                                     actions.AddUpdate(setCustomShippingMethodAction)));
                             Assert.NotNull(cartWithShippingMethod.ShippingInfo);
-                            Assert.Equal(customShippingMethod, cartWithShippingMethod.ShippingInfo.ShippingMethodName);
+                            Assert.Equal(customShippingMethod,
+                                cartWithShippingMethod.ShippingInfo.ShippingMethodName);
 
                             var setShippingRateInputAction = new SetShippingRateInputUpdateAction
                             {
@@ -726,8 +879,9 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                                     actions.AddUpdate(setShippingRateInputAction)));
 
                             Assert.NotNull(cartWithShippingMethodWithSmallClassification.ShippingRateInput);
-                            Assert.IsType<ClassificationShippingRateInput>(cartWithShippingMethodWithSmallClassification
-                                .ShippingRateInput);
+                            Assert.IsType<ClassificationShippingRateInput>(
+                                cartWithShippingMethodWithSmallClassification
+                                    .ShippingRateInput);
                             Assert.Equal(smallClassificationPrice,
                                 cartWithShippingMethodWithSmallClassification.ShippingInfo.Price);
                             return cartWithShippingMethodWithSmallClassification;
@@ -742,6 +896,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         TryToUpdateCurrentProject(client, project, undoProjectAction.ToList());
 
                     Assert.Null(projectWithNullShippingRateInputType.ShippingRateInputType);
+                    return projectWithNullShippingRateInputType;
                 });
         }
 
@@ -1315,14 +1470,14 @@ namespace commercetools.Sdk.IntegrationTests.Carts
         public async Task UpdateCartRemoveLineItem()
         {
             var quantity = 5;
-            await WithUpdateableCartWithSingleLineItem(client,quantity,
+            await WithUpdateableCartWithSingleLineItem(client, quantity,
                 DefaultCartDraft,
                 async cart =>
                 {
                     Assert.Single(cart.LineItems);
                     var lineItem = cart.LineItems[0];
                     Assert.Equal(quantity, lineItem.Quantity);
-                    
+
                     var action = new RemoveLineItemUpdateAction
                     {
                         LineItemId = lineItem.Id,
@@ -1342,14 +1497,14 @@ namespace commercetools.Sdk.IntegrationTests.Carts
         public async Task UpdateCartRemoveLineItemDecreasesQuantity()
         {
             var quantity = 5;
-            await WithUpdateableCartWithSingleLineItem(client,quantity,
+            await WithUpdateableCartWithSingleLineItem(client, quantity,
                 DefaultCartDraft,
                 async cart =>
                 {
                     Assert.Single(cart.LineItems);
                     var lineItem = cart.LineItems[0];
                     Assert.Equal(quantity, lineItem.Quantity);
-                    
+
                     var decreasedQuantity = lineItem.Quantity - 1;
                     var action = new RemoveLineItemUpdateAction
                     {
@@ -1371,14 +1526,14 @@ namespace commercetools.Sdk.IntegrationTests.Carts
         public async Task UpdateCartChangeLineItemQuantity()
         {
             var quantity = 5;
-            await WithUpdateableCartWithSingleLineItem(client,quantity,
+            await WithUpdateableCartWithSingleLineItem(client, quantity,
                 DefaultCartDraft,
                 async cart =>
                 {
                     Assert.Single(cart.LineItems);
                     var lineItem = cart.LineItems[0];
                     Assert.Equal(quantity, lineItem.Quantity);
-                    
+
                     var newQuantity = lineItem.Quantity - 1;
 
                     var action = new ChangeLineItemQuantityUpdateAction
@@ -1392,16 +1547,16 @@ namespace commercetools.Sdk.IntegrationTests.Carts
 
                     Assert.Single(updatedCart.LineItems);
                     Assert.Equal(newQuantity, updatedCart.LineItems[0].Quantity);
-                    
+
                     return updatedCart;
                 });
         }
-        
+
         [Fact]
         public async Task UpdateCartSetLineItemTaxRate()
         {
             var quantity = 5;
-            await WithUpdateableCartWithSingleLineItem(client,quantity,
+            await WithUpdateableCartWithSingleLineItem(client, quantity,
                 cartDraft => DefaultCartDraftWithTaxMode(cartDraft, TaxMode.External),
                 async cart =>
                 {
@@ -1423,7 +1578,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                     Assert.Equal(externalTaxRateDraft.Name, updatedCart.LineItems[0].TaxRate.Name);
                     Assert.Equal(externalTaxRateDraft.Amount,
                         updatedCart.LineItems[0].TaxRate.Amount);
-                    
+
                     return updatedCart;
                 });
         }
@@ -1432,7 +1587,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
         public async Task UpdateCartSetLineItemTaxAmount()
         {
             var quantity = 5;
-            await WithUpdateableCartWithSingleLineItem(client,quantity,
+            await WithUpdateableCartWithSingleLineItem(client, quantity,
                 cartDraft => DefaultCartDraftWithTaxMode(cartDraft, TaxMode.ExternalAmount),
                 async cart =>
                 {
@@ -1462,7 +1617,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
         public async Task UpdateCartSetLineItemPrice()
         {
             var quantity = 5;
-            await WithUpdateableCartWithSingleLineItem(client,quantity,
+            await WithUpdateableCartWithSingleLineItem(client, quantity,
                 cartDraft => DefaultCartDraftWithTaxMode(cartDraft, TaxMode.ExternalAmount),
                 async cart =>
                 {
@@ -1494,7 +1649,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
         public async Task UpdateCartSetLineItemTotalPrice()
         {
             var quantity = 5;
-            await WithUpdateableCartWithSingleLineItem(client,quantity,
+            await WithUpdateableCartWithSingleLineItem(client, quantity,
                 cartDraft => DefaultCartDraftWithTaxMode(cartDraft, TaxMode.ExternalAmount),
                 async cart =>
                 {
@@ -1559,7 +1714,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                     });
             });
         }
-        
+
         [Fact]
         public async Task UpdateCartSetLineItemCustomField()
         {
@@ -1589,13 +1744,13 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                                 async cart =>
                                 {
                                     Assert.Single(cart.LineItems);
-                                    
+
                                     var lineItem = cart.LineItems[0];
                                     Assert.NotNull(lineItem.Custom);
-                                    Assert.Equal(type.Id ,lineItem.Custom.Type.Id);
-                                    
+                                    Assert.Equal(type.Id, lineItem.Custom.Type.Id);
+
                                     var stringFieldValue = TestingUtility.RandomString();
-                                    
+
                                     var action = new SetLineItemCustomFieldUpdateAction
                                     {
                                         Name = "string-field",
@@ -1616,25 +1771,25 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                     });
             });
         }
-        
+
         [Fact]
         public async Task UpdateCartSetLineItemShippingDetails()
         {
             var quantity = 5;
             var addresses = new List<Address> {TestingUtility.GetRandomAddress()};
             await WithUpdateableCartWithSingleLineItem(client, quantity,
-                cartDraft => DefaultCartDraftWithItemShippingAddresses(cartDraft,addresses),
+                cartDraft => DefaultCartDraftWithItemShippingAddresses(cartDraft, addresses),
                 async cart =>
                 {
                     Assert.Single(cart.LineItems);
                     Assert.Single(cart.ItemShippingAddresses);
-                                
+
                     var lineItemId = cart.LineItems[0].Id;
                     var addressKey = cart.ItemShippingAddresses[0].Key;
-                                
+
                     var itemShippingDetailsDraft =
-                        TestingUtility.GetItemShippingDetailsDraft(addressKey,cart.LineItems[0].Quantity);
-                                
+                        TestingUtility.GetItemShippingDetailsDraft(addressKey, cart.LineItems[0].Quantity);
+
                     var action = new SetLineItemShippingDetailsUpdateAction
                     {
                         LineItemId = lineItemId,
@@ -1651,28 +1806,28 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         updatedCart.LineItems[0].ShippingDetails.Targets[0].Quantity);
                     Assert.Equal(itemShippingDetailsDraft.Targets[0].AddressKey,
                         updatedCart.LineItems[0].ShippingDetails.Targets[0].AddressKey);
-                    
+
                     return updatedCart;
                 });
         }
-        
+
         [Fact]
         public async Task UpdateCartApplyDeltaToLineItemShippingDetailsTargets()
         {
             var quantity = 5;
             var addresses = new List<Address> {TestingUtility.GetRandomAddress()};
             await WithUpdateableCartWithSingleLineItem(client, quantity,
-                cartDraft => DefaultCartDraftWithItemShippingAddresses(cartDraft,addresses),
+                cartDraft => DefaultCartDraftWithItemShippingAddresses(cartDraft, addresses),
                 async cart =>
                 {
                     Assert.Single(cart.LineItems);
                     Assert.Single(cart.ItemShippingAddresses);
-                                
+
                     var lineItemId = cart.LineItems[0].Id;
                     var addressKey = cart.ItemShippingAddresses[0].Key;
-                                
-                    var targetsDelta = TestingUtility.GetTargetsDelta(addressKey,cart.LineItems[0].Quantity);
-                                
+
+                    var targetsDelta = TestingUtility.GetTargetsDelta(addressKey, cart.LineItems[0].Quantity);
+
                     var action = new ApplyDeltaToLineItemShippingDetailsTargetsUpdateAction
                     {
                         LineItemId = lineItemId,
@@ -1689,15 +1844,15 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         updatedCart.LineItems[0].ShippingDetails.Targets[0].Quantity);
                     Assert.Equal(targetsDelta[0].AddressKey,
                         updatedCart.LineItems[0].ShippingDetails.Targets[0].AddressKey);
-                    
+
                     return updatedCart;
                 });
         }
 
         #endregion
-        
+
         #region UpdateActionsOnCustomLineItem
-        
+
         [Fact]
         public async Task UpdateCartAddCustomLineItem()
         {
@@ -1706,9 +1861,9 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 await WithUpdateableCart(client, async cart =>
                 {
                     Assert.Empty(cart.CustomLineItems);
-                    
+
                     var customLineItem = TestingUtility.GetCustomLineItemDraft(taxCategory);
-                    
+
                     var action =
                         new AddCustomLineItemUpdateAction()
                         {
@@ -1729,7 +1884,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
             });
         }
-        
+
         [Fact]
         public async Task UpdateCartRemoveCustomLineItem()
         {
@@ -1752,7 +1907,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                     return updatedCart;
                 });
         }
-        
+
         [Fact]
         public async Task UpdateCartChangeCustomLineItemQuantity()
         {
@@ -1778,7 +1933,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                     return updatedCart;
                 });
         }
-        
+
         [Fact]
         public async Task UpdateCartChangeCustomLineItemMoney()
         {
@@ -1804,7 +1959,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                     return updatedCart;
                 });
         }
-        
+
         [Fact]
         public async Task UpdateCartSetCustomLineItemCustomType()
         {
@@ -1816,7 +1971,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         Assert.Single(cart.CustomLineItems);
                         var customLineItem = cart.CustomLineItems[0];
                         var fields = CreateNewFields();
-                        
+
                         var action = new SetCustomLineItemCustomTypeUpdateAction
                         {
                             CustomLineItemId = customLineItem.Id,
@@ -1833,9 +1988,8 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         return updatedCart;
                     });
             });
-
         }
-        
+
         [Fact]
         public async Task UpdateCartSetCustomLineItemCustomField()
         {
@@ -1851,16 +2005,17 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                     };
                     var customLineItemDraft = TestingUtility.GetCustomLineItemDraft(taxCategory);
                     customLineItemDraft.Custom = customFieldsDraft;
-                    
-                    await WithUpdateableCart(client, draft => DefaultCartDraftWithCustomLineItem(draft, customLineItemDraft),
+
+                    await WithUpdateableCart(client,
+                        draft => DefaultCartDraftWithCustomLineItem(draft, customLineItemDraft),
                         async cart =>
                         {
                             Assert.Single(cart.CustomLineItems);
                             var customLineItem = cart.CustomLineItems[0];
 
                             Assert.NotNull(customLineItem.Custom);
-                            Assert.Equal(type.Id ,customLineItem.Custom.Type.Id);
-                            
+                            Assert.Equal(type.Id, customLineItem.Custom.Type.Id);
+
                             var stringFieldValue = TestingUtility.RandomString();
                             var action = new SetCustomLineItemCustomFieldUpdateAction
                             {
@@ -1880,14 +2035,13 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                             return updatedCart;
                         });
                 });
-                
             });
         }
-        
+
         [Fact]
         public async Task UpdateCartSetCustomLineItemTaxRate()
         {
-            await WithUpdateableCartWithSingleCustomLineItem(client, 
+            await WithUpdateableCartWithSingleCustomLineItem(client,
                 cartDraft => DefaultCartDraftWithTaxMode(cartDraft, TaxMode.External),
                 async cart =>
                 {
@@ -1913,18 +2067,18 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                     return updatedCart;
                 });
         }
-        
+
         [Fact]
         public async Task UpdateCartSetCustomLineItemTaxAmount()
         {
-            await WithUpdateableCartWithSingleCustomLineItem(client, 
+            await WithUpdateableCartWithSingleCustomLineItem(client,
                 cartDraft => DefaultCartDraftWithTaxMode(cartDraft, TaxMode.ExternalAmount),
                 async cart =>
                 {
                     Assert.Equal(TaxMode.ExternalAmount, cart.TaxMode);
                     Assert.Single(cart.CustomLineItems);
                     var customLineItem = cart.CustomLineItems[0];
-                    
+
                     var externalTaxAmountDraft = TestingUtility.GetExternalTaxAmountDraft();
                     var action = new SetCustomLineItemTaxAmountUpdateAction
                     {
@@ -1941,24 +2095,24 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                     return updatedCart;
                 });
         }
-        
+
         [Fact]
         public async Task UpdateCartSetCustomLineItemShippingDetails()
         {
             var addresses = new List<Address> {TestingUtility.GetRandomAddress()};
             await WithUpdateableCartWithSingleCustomLineItem(client,
-                cartDraft => DefaultCartDraftWithItemShippingAddresses(cartDraft,addresses),
+                cartDraft => DefaultCartDraftWithItemShippingAddresses(cartDraft, addresses),
                 async cart =>
                 {
                     Assert.Single(cart.CustomLineItems);
                     Assert.Single(cart.ItemShippingAddresses);
-                                
+
                     var customLineItemId = cart.CustomLineItems[0].Id;
                     var addressKey = cart.ItemShippingAddresses[0].Key;
-                                
+
                     var itemShippingDetailsDraft =
-                        TestingUtility.GetItemShippingDetailsDraft(addressKey,cart.CustomLineItems[0].Quantity);
-                                
+                        TestingUtility.GetItemShippingDetailsDraft(addressKey, cart.CustomLineItems[0].Quantity);
+
                     var action = new SetCustomLineItemShippingDetailsUpdateAction
                     {
                         CustomLineItemId = customLineItemId,
@@ -1975,26 +2129,26 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         updatedCart.CustomLineItems[0].ShippingDetails.Targets[0].Quantity);
                     Assert.Equal(itemShippingDetailsDraft.Targets[0].AddressKey,
                         updatedCart.CustomLineItems[0].ShippingDetails.Targets[0].AddressKey);
-                    
+
                     return updatedCart;
                 });
         }
-        
+
         [Fact]
         public async Task UpdateCartApplyDeltaToCustomLineItemShippingDetailsTargets()
         {
             var addresses = new List<Address> {TestingUtility.GetRandomAddress()};
             await WithUpdateableCartWithSingleCustomLineItem(client,
-                cartDraft => DefaultCartDraftWithItemShippingAddresses(cartDraft,addresses),
+                cartDraft => DefaultCartDraftWithItemShippingAddresses(cartDraft, addresses),
                 async cart =>
                 {
                     Assert.Single(cart.CustomLineItems);
                     Assert.Single(cart.ItemShippingAddresses);
-                                
+
                     var customLineItemId = cart.CustomLineItems[0].Id;
                     var addressKey = cart.ItemShippingAddresses[0].Key;
-                                
-                    var targetsDelta = TestingUtility.GetTargetsDelta(addressKey,cart.CustomLineItems[0].Quantity);
+
+                    var targetsDelta = TestingUtility.GetTargetsDelta(addressKey, cart.CustomLineItems[0].Quantity);
                     var action =
                         new ApplyDeltaToCustomLineItemShippingDetailsTargetsUpdateAction
                         {
@@ -2012,11 +2166,11 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         updatedCart.CustomLineItems[0].ShippingDetails.Targets[0].Quantity);
                     Assert.Equal(targetsDelta[0].AddressKey,
                         updatedCart.CustomLineItems[0].ShippingDetails.Targets[0].AddressKey);
-                    
+
                     return updatedCart;
                 });
         }
-        
+
         #endregion
     }
 }

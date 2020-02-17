@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.HttpApi.Domain
+﻿namespace commercetools.Sdk.Domain.Errors
 {
     /// <remarks>
     /// This class is only needed because of circular reference problems in deserialization.

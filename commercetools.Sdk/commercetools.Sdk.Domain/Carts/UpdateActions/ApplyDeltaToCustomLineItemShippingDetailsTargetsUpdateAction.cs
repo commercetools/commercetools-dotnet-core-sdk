@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace commercetools.Sdk.Domain.Carts.UpdateActions
 {
-    using System.ComponentModel.DataAnnotations;
-
-    public class ApplyDeltaToCustomLineItemShippingDetailsTargetsUpdateAction : UpdateAction<Cart>
+    public class ApplyDeltaToCustomLineItemShippingDetailsTargetsUpdateAction : CartUpdateAction
     {
-        public string Action => "applyDeltaToCustomLineItemShippingDetailsTargets";
+        public override string Action => "applyDeltaToCustomLineItemShippingDetailsTargets";
         [Required]
         public string CustomLineItemId { get; set; }
         [Required]

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Customers;
-using commercetools.Sdk.HttpApi.Domain.Exceptions;
+using commercetools.Sdk.Domain.Stores;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
 using Type = commercetools.Sdk.Domain.Types.Type;
 
@@ -25,6 +26,13 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         {
             var customerDraft = DefaultCustomerDraft(draft);
             customerDraft.Key = key;
+            return customerDraft;
+        }
+        public static CustomerDraft DefaultCustomerDraftInStores(CustomerDraft draft, 
+            List<IReferenceable<Store>> stores)
+        {
+            var customerDraft = DefaultCustomerDraft(draft);
+            customerDraft.Stores = stores;
             return customerDraft;
         }
         public static CustomerDraft DefaultCustomerDraftWithEmail(CustomerDraft draft, string email)

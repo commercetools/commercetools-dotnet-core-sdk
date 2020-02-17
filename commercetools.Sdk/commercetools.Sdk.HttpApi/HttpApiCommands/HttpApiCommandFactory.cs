@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.HttpApi.HttpApiCommands
+﻿using System.Collections.Concurrent;
+
+namespace commercetools.Sdk.HttpApi.HttpApiCommands
 {
     using System;
     using System.Collections.Generic;
@@ -11,24 +13,26 @@
 
     public class HttpApiCommandFactory : IHttpApiCommandFactory
     {
-        private readonly Dictionary<Type, ObjectActivator> activators;
+        private readonly IDictionary<Type, ObjectActivator> activators;
         private readonly IEnumerable<Type> registeredHttpApiCommandTypes;
         private readonly IRequestMessageBuilderFactory requestMessageBuilderFactory;
 
-        public HttpApiCommandFactory(ITypeRetriever typeRetriever, IRequestMessageBuilderFactory requestMessageBuilderFactory)
+        public HttpApiCommandFactory(
+            ITypeRetriever typeRetriever,
+            IRequestMessageBuilderFactory requestMessageBuilderFactory)
         {
             this.registeredHttpApiCommandTypes = typeRetriever.GetTypes<IHttpApiCommand>();
             this.requestMessageBuilderFactory = requestMessageBuilderFactory;
-            this.activators = new Dictionary<Type, ObjectActivator>();
+            this.activators = new ConcurrentDictionary<Type, ObjectActivator>();
         }
 
         private delegate object ObjectActivator(params object[] args);
 
-        public IHttpApiCommand Create<T>(Command<T> command)
+        public IHttpApiCommand Create<T>(ICommand<T> command)
         {
             // Retrieve the type of T; for CreateCommand<Category>, Category is retrieved.
             // For QueryCommand<Category> it will also return Category.
-            Type typeOfGeneric = command.ResourceType;
+            Type typeOfGeneric = command is IDecoratorCommand ? command.ResultType : command.ResourceType;
             Type httApiCommandType = null;
 
             foreach (var type in this.registeredHttpApiCommandTypes)
@@ -55,7 +59,9 @@
 
             if (httApiCommandType == null)
             {
-                throw new ArgumentException($"Can't find registered httApiCommandType for command of type {command.GetType()}", nameof(command));
+                throw new ArgumentException(
+                    $"Can't find registered httApiCommandType for command of type {command.GetType()}",
+                    nameof(command));
             }
 
             // CreateHttpApiCommand<T> => CreateHttpApiCommand<Category>
@@ -87,7 +93,10 @@
                 }
             }
 
-            object instance = createdActivator(command, this.requestMessageBuilderFactory);
+            var instance = command is IDecoratorCommand
+                ? createdActivator(command, this)
+                : createdActivator(command, this.requestMessageBuilderFactory);
+
             return instance as IHttpApiCommand;
         }
 

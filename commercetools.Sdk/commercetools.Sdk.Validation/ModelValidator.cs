@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using commercetools.Sdk.Domain.Validation;
 using FluentValidation;
@@ -7,7 +8,7 @@ namespace commercetools.Sdk.Validation
 {
     public class ModelValidator : IModelValidator
     {
-        private IDictionary<Type, IResourceValidator> mapping = new Dictionary<Type, IResourceValidator>();
+        private IDictionary<Type, IResourceValidator> mapping = new ConcurrentDictionary<Type, IResourceValidator>();
 
         public ModelValidator(IEnumerable<IResourceValidator> validators)
         {

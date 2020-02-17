@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
-    public class AddReturnInfoUpdateAction : UpdateAction<Order>
+    public class AddReturnInfoUpdateAction : OrderUpdateAction
     {
-        public string Action => "addReturnInfo";
+        public override string Action => "addReturnInfo";
         public DateTime? ReturnDate { get; set; }
         public string ReturnTrackingId { get; set; }
         [Required]

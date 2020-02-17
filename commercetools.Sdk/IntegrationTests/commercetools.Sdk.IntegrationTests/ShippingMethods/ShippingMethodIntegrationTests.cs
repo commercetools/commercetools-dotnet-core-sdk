@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
@@ -13,6 +14,10 @@ using Xunit;
 using static commercetools.Sdk.IntegrationTests.ShippingMethods.ShippingMethodsFixture;
 using static commercetools.Sdk.IntegrationTests.TaxCategories.TaxCategoriesFixture;
 using static commercetools.Sdk.IntegrationTests.Zones.ZonesFixture;
+using static commercetools.Sdk.IntegrationTests.Carts.CartsFixture;
+using static commercetools.Sdk.IntegrationTests.Stores.StoresFixture;
+using static commercetools.Sdk.IntegrationTests.Orders.OrdersFixture;
+using static commercetools.Sdk.IntegrationTests.OrderEdits.OrderEditsFixture;
 using SetDescriptionUpdateAction = commercetools.Sdk.Domain.ShippingMethods.UpdateActions.SetDescriptionUpdateAction;
 
 namespace commercetools.Sdk.IntegrationTests.ShippingMethods
@@ -69,7 +74,154 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                     Assert.Equal(shippingMethod.Key, retrievedShippingMethod.Key);
                 });
         }
+        
+        [Fact]
+        public async Task GetShippingMethodsForLocation()
+        {
+            // get shippingMethods in USA and state New York 
+            var usaLocation = new Location {Country = "US", State = "New York"};
+            await WithShippingMethodInUsaZone(
+                client,
+                async shippingMethod =>
+                {
+                    Assert.NotNull(shippingMethod);
+                    Assert.Single(shippingMethod.ZoneRates);
+                    var expansions = new List<Expansion<ShippingMethod>>
+                    {
+                        new ReferenceExpansion<ShippingMethod>(sm => sm.ZoneRates.ExpandAll().Zone)
+                    };
 
+                    var command = new GetShippingMethodsForLocationCommand(usaLocation.Country, usaLocation.State, null, expansions);
+                    var returnedSet = await client.ExecuteAsync(command);
+                    Assert.Single(returnedSet.Results);
+                    var returnedShippingMethod = returnedSet.Results[0];
+                    Assert.Equal(shippingMethod.Key, returnedShippingMethod.Key);
+                    
+                    Assert.Single(returnedShippingMethod.ZoneRates);
+                    var returnedZoneRate = returnedShippingMethod.ZoneRates[0];
+                    
+                    Assert.NotNull(returnedZoneRate.Zone.Obj);
+                    Assert.Single(returnedZoneRate.Zone.Obj.Locations);
+                    
+                    var returnedLocation = returnedZoneRate.Zone.Obj.Locations[0];
+                    Assert.Equal(usaLocation.Country, returnedLocation.Country);
+                    Assert.Equal(usaLocation.State, returnedLocation.State);
+                    
+                });
+        }
+
+        [Fact]
+        public async Task GetShippingMethodsForCart()
+        {
+            var shippingAddress = TestingUtility.GetRandomAddress();
+            await WithShippingMethodWithZoneRateAndTaxCategory(client,
+                DefaultShippingMethodDraft, shippingAddress,
+                async shippingMethod =>
+                {
+                    await WithCart(client,
+                        draft =>
+                        {
+                            var cartDraft = DefaultCartDraftWithShippingAddress(draft, shippingAddress);
+                            cartDraft = DefaultCartDraftWithShippingMethod(cartDraft, shippingMethod);
+                            return cartDraft;
+                        },
+                        async cart =>
+                        {
+                            Assert.NotNull(cart.ShippingInfo.ShippingMethod);
+                            Assert.Equal(shippingMethod.Id,cart.ShippingInfo.ShippingMethod.Id);
+
+                            var expansions = new List<Expansion<ShippingMethod>>
+                            {
+                                new ReferenceExpansion<ShippingMethod>(sm => sm.ZoneRates.ExpandAll().Zone)
+                            };
+
+                            var command = new GetShippingMethodsForCartCommand(cart.Id, expansions);
+                            var returnedSet = await client.ExecuteAsync(command);
+                            Assert.Single(returnedSet.Results);
+                            var returnedShippingMethod = returnedSet.Results[0];
+                            Assert.Equal(shippingMethod.Key, returnedShippingMethod.Key);
+                    
+                            Assert.Single(returnedShippingMethod.ZoneRates);
+                            var returnedZoneRate = returnedShippingMethod.ZoneRates[0];
+                    
+                            Assert.True(returnedZoneRate.ShippingRates.Count(shippingRate => shippingRate.IsMatching) == 1);
+                        });
+                });
+        }
+        
+        
+        [Fact]
+        public async Task GetShippingMethodsForOrderEdit()
+        {
+            await WithSimpleOrder(client, async order =>
+            {
+                Assert.NotNull(order.ShippingInfo.ShippingMethod);
+                var shippingMethod =
+                    await client.ExecuteAsync(order.ShippingInfo.ShippingMethod.GetById()
+                        .Expand(sm => sm.ZoneRates.ExpandAll().Zone));
+                
+                Assert.NotNull(shippingMethod);
+                Assert.Single(shippingMethod.ZoneRates);
+                var zone = shippingMethod.ZoneRates[0].Zone;
+                Assert.NotNull(zone);
+                Assert.NotNull(zone.Obj);
+                Assert.Single(zone.Obj.Locations);
+                var location = zone.Obj.Locations[0];
+
+                Assert.NotNull(location);
+                
+                await WithOrderEdit(client,
+                    draft => DefaultOrderEditDraftWithStagedAction(draft, order),
+                    async orderEdit =>
+                    {
+                        var command = new GetShippingMethodsForOrderEditCommand(orderEdit.Id, location.Country, location.State);
+                        var returnedSet = await client.ExecuteAsync(command);
+                        Assert.Single(returnedSet.Results);
+                        var returnedShippingMethod = returnedSet.Results[0];
+                        Assert.Equal(shippingMethod.Key, returnedShippingMethod.Key);
+                    });
+            });
+        }
+        
+        
+        [Fact]
+        public async Task GetShippingMethodsForCartInStore()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithCartWithSingleLineItem(client,2,
+                    draft => DefaultCartDraftInStore(draft, store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.NotNull(cart.Store);
+                        Assert.Equal(store.Key, cart.Store.Key);
+                        Assert.NotNull(cart.ShippingInfo.ShippingMethod);
+                        
+                        var shippingMethod =
+                            await client.ExecuteAsync(cart.ShippingInfo.ShippingMethod.GetById());
+                        
+                        var expansions = new List<Expansion<ShippingMethod>>
+                        {
+                            new ReferenceExpansion<ShippingMethod>(sm => sm.ZoneRates.ExpandAll().Zone)
+                        };
+
+                        var command = new GetShippingMethodsForCartCommand(cart.Id, expansions).InStore(store);
+                        var returnedSet = await client.ExecuteAsync(command);
+                        Assert.Single(returnedSet.Results);
+                        var returnedShippingMethod = returnedSet.Results[0];
+                        Assert.Equal(shippingMethod.Key, returnedShippingMethod.Key);
+
+                        Assert.Single(returnedShippingMethod.ZoneRates);
+                        var returnedZoneRate = returnedShippingMethod.ZoneRates[0];
+
+                        Assert.True(
+                            returnedZoneRate.ShippingRates.Count(shippingRate => shippingRate.IsMatching) == 1);
+                    });
+            });
+        }
+        
+
+        
         [Fact]
         public async Task QueryShippingMethods()
         {

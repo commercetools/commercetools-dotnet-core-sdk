@@ -11,7 +11,7 @@ namespace commercetools.Sdk.HttpApi.Tokens
         public PasswordTokenProvider(
             IHttpClientFactory httpClientFactory,
             IUserCredentialsStoreManager userCredentialsStoreManager,
-            ISerializerService serializerService)
+            ITokenSerializerService serializerService)
             : base(httpClientFactory, userCredentialsStoreManager, serializerService)
         {
             this.userCredentialsManager = userCredentialsStoreManager;

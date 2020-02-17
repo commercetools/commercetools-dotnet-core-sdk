@@ -4,9 +4,9 @@ namespace commercetools.Sdk.Domain.Carts.UpdateActions
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class ApplyDeltaToLineItemShippingDetailsTargetsUpdateAction : UpdateAction<Cart>
+    public class ApplyDeltaToLineItemShippingDetailsTargetsUpdateAction : CartUpdateAction
     {
-        public string Action => "applyDeltaToLineItemShippingDetailsTargets";
+        public override string Action => "applyDeltaToLineItemShippingDetailsTargets";
         [Required]
         public string LineItemId { get; set; }
         [Required]

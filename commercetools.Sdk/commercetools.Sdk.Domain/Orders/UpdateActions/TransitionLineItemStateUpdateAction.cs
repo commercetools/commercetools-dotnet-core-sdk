@@ -4,9 +4,9 @@ using commercetools.Sdk.Domain.States;
 
 namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
-    public class TransitionLineItemStateUpdateAction : UpdateAction<Order>
+    public class TransitionLineItemStateUpdateAction : OrderUpdateAction
     {
-        public string Action => "transitionLineItemState";
+        public override string Action => "transitionLineItemState";
         [Required]
         public string LineItemId { get; set; }
         public long Quantity { get; set; }

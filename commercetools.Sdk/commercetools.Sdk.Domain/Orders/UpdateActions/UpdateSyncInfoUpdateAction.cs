@@ -5,9 +5,9 @@ using commercetools.Sdk.Domain.Common;
 
 namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
-    public class UpdateSyncInfoUpdateAction : UpdateAction<Order>
+    public class UpdateSyncInfoUpdateAction : OrderUpdateAction
     {
-        public string Action => "updateSyncInfo";
+        public override string Action => "updateSyncInfo";
         [Required]
         public IReference<Channel> Channel { get; set; }
         public string ExternalId { get; set; }

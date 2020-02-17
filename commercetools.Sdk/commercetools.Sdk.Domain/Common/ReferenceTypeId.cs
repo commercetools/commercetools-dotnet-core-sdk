@@ -85,6 +85,9 @@ namespace commercetools.Sdk.Domain
         Subscription,
 
         [Description("inventory-entry")]
-        InventoryEntry
+        InventoryEntry,
+        
+        [Description("order-edit")]
+        OrderEdit
     }
 }

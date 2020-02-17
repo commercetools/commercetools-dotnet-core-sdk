@@ -128,7 +128,7 @@ namespace commercetools.Sdk.IntegrationTests.OrdersImport
             {
                 Name = new LocalizedString() {{"en", TestingUtility.RandomString(10)}},
                 Slug = TestingUtility.RandomString(10),
-                Quantity = TestingUtility.RandomInt(1, 10),
+                Quantity = 100,
                 Money = Money.FromDecimal("EUR", TestingUtility.RandomInt(100, 10000)),
                 TaxCategory = taxCategory.ToKeyResourceIdentifier()
             };

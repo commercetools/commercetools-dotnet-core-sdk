@@ -1,8 +1,5 @@
-using System.Net.Http;
 using commercetools.Sdk.HttpApi.Domain;
 using commercetools.Sdk.HttpApi.Tokens;
-using commercetools.Sdk.Serialization;
-using Moq;
 using Xunit;
 
 namespace commercetools.Sdk.HttpApi.Tests
@@ -31,7 +28,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             var clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(
                 mockHttpClientFactory.Object,
                 tokenStoreManager,
-                this.clientFixture.GetService<ISerializerService>()
+                this.clientFixture.GetService<ITokenSerializerService>()
             );
             clientCredentialsTokenProvider.ClientConfiguration = this.clientFixture.GetClientConfiguration("Client");
 
@@ -71,7 +68,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             var clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(
                 mockHttpClientFactory.Object,
                 tokenStoreManager,
-                this.clientFixture.GetService<ISerializerService>()
+                this.clientFixture.GetService<ITokenSerializerService>()
             );
             clientCredentialsTokenProvider.ClientConfiguration = this.clientFixture.GetClientConfiguration("Client");
 
@@ -117,7 +114,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             var clientCredentialsTokenProvider = new ClientCredentialsTokenProvider(
                 mockHttpClientFactory.Object,
                 tokenStoreManager,
-                this.clientFixture.GetService<ISerializerService>()
+                this.clientFixture.GetService<ITokenSerializerService>()
             );
             clientCredentialsTokenProvider.ClientConfiguration = this.clientFixture.GetClientConfiguration("Client");
 

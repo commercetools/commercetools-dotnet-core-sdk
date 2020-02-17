@@ -3,6 +3,7 @@ using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Categories.UpdateActions;
+using commercetools.Sdk.Domain.Errors;
 using commercetools.Sdk.HttpApi.Domain;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;
