@@ -10,7 +10,6 @@ namespace commercetools.Sdk.Client
         protected GetMatchingQueryCommand()
         {
             this.Expand = new List<string>();
-            this.UrlSuffix = string.Empty;
         }
 
         protected GetMatchingQueryCommand(IAdditionalParameters<T> additionalParameters)
@@ -22,7 +21,7 @@ namespace commercetools.Sdk.Client
 
         public List<string> Expand { get; set; }
 
-        public string UrlSuffix { get; set; }
+        public virtual string UrlSuffix => string.Empty;
 
         public void SetExpand(IEnumerable<Expansion<T>> expandPredicates)
         {
