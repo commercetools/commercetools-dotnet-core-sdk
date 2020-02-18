@@ -1,3 +1,72 @@
+## [1.0.0-beta-3 - 2020-02-18](https://github.com/commercetools/commercetools-dotnet-core-sdk/compare/1.0.0-beta-2...1.0.0-beta-3)
+### Features
+
+- Add Domain Models, Commands, Request Builders and Integration Tests for OrderEdits Endpoint [`#97`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/97)
+- Add InStoreCommand as a decorator for other commands and applying it for Customers, Carts, Orders and OrdersImport Endpoints [`#97`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/97)
+- Add MvcExample Project to List Products as Example of how to use the SDK in MVC Application [`d1ea7a8`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/d1ea7a810575e375be638fee8f3d1f0bd48e6e54)
+- Add MatchingShippingMethodConverter to Deserialize `List<ShippingMethod>` as `PageQueryResult<ShippingMethod>` [`1137763`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/113776348dc44aaddb8b918de7a498e487d2dd6d)
+- Create `TokenSerializerService` with SnakeCaseNamingStrategy and update token providers to use this new service [`d6b8286`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/d6b828610ddebb083d7e93b09acba299330f0c6b)
+- Add a JsonConverter to Support Deserialization of IReference Types [`68e008e`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/68e008ed6eb3addb2608b4541cb14aceed254232)
+- Use Docker Build for Travis Linux [`9a1cc06`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/9a1cc06b7c8f2cf9cf49e52399aa5cd684e1d3a8)
+- Use ConcurrentDictionary Instead of Dictionary to be Thread Safe For Multiple Threads Access [`18926b1`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/18926b19ad3a01a36233fcde12cb872701167f38)
+- Add SetAdditionalParameters Extension Method for Commands [`243b47d`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/243b47dc116c17d3e2d661a000f91f3fc284c99e)
+- Add a new constructor for GetCartByCustomerIdCommand with customerId as string [`3065f1b`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/3065f1bc40ee9af0b6ed7bf76cca7c85fa5b1852)
+- Add SetKeyUpdateAction Model for ProductDiscount Endpoint [`44dd4e3`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/44dd4e30bebac9b639f50bd5a7ae1dfd473d99ff)
+- Update Packages Versions and Validate services Scope on build [`#87`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/87)
+- Add a new constructor in `ChangePasswordCommand` with IVersioned parameter [`e52a421`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/e52a421f7e22d18667901ca5ba08932d1339e419)
+- Add dockerfile to build container with SDK for Core 3.0 & 2.1 [`a17ca36`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/a17ca36308a09b1ec29d8cbd5393d3814d864ede)
+- Add these new commands : [`6bbac63`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/6bbac63ebbb7a2e98ccd4664f8c132308427ad67) 
+   * GetShippingMethodsForCartCommand 
+   * GetShippingMethodsForLocationCommand 
+   * GetShippingMethodsForOrderEditCommand
+
+### Bug Fixes
+- Add `Type` Property to State Model [`173ad9e`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/173ad9e4d924d08f14399a1a8cd3a76ed9ba6272)
+- Add `Key` Property to ProductDiscountDraft and ProductDiscount Models [`b7ebde2`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/b7ebde2cfb401ecc680f54ba33587335db37d7a2)
+- Adjust GetCartByCustomerIdCommand to adapt changes in the changed endpoint. [`62e596d`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/62e596ddf0ec3428bda94ed6f140791381f052eb)
+- Remove IHttpClientFactory registration from SimpleInjector DependencySetup [`c279fbb`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/c279fbbfd2315c934a30c08f5364cf41e832ac6c)
+- Register IHttpFactory only if not yet registered [`2c1c0f3`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/2c1c0f3ee2bb91ef8904617faadb0b784a075602)
+- Remove ApiExceptionFactory from DependencyInjection [`#86`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/86)
+- Add fixes in SimpleInjector project about IHttpClientFactory issues [`#81`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/81)
+- Fix deserialization of InventoryEntry references [`bb0a070`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/bb0a070ae5d4d84d9c560d3e1e569aaed3fb30df)
+- Use Default Serialization settings when failing to get settings based on Type [`93105a4`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/93105a4047671c5c80937c8bec406a285f0f2b19)
+- Add CustomFieldsPredicateVisitorConverter to solve case sensitive issue on custom fields predicate #89 [`393710e`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/393710e7b26b9824cbc06162000d35d1457b2940)
+- Fix the type of some properties in customer models [`b7c0248`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/b7c024877dc98173bb2a27db64b606c9baf3459b)
+- Solve type of property `Assets` to be `List<AssetDraft>` instead of `List<Asset>` in CategoryDraft Model [`f89a0ba`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/f89a0baf2f73de2ebedb709a0240981d3ffa11f2)
+
+### Breaking Changes
+- Change Type of `SupplyChannel` Property in SetSupplyChannelUpdateAction Model from `Reference<Channel>` 
+to `IReference<Channel>` [`6a6ad8c`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/6a6ad8c6fa04ebd1d600a8826a19d1f504be3a48)
+- Change Type of `Category` Property in AddToCategoryUpdateAction from `ResourceIdentifier` to `IReference<Category>` [`548a888`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/548a888c94f0eed5661bb3cac9776b6059f39c59)
+- Rename Order Update Action `SetShipmentReturnStateUpdateAction` to be `SetReturnShipmentStateUpdateAction` [`bfbcc99`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/bfbcc99fa0bc7b853ecf22a43755b26b45b286ee)
+- Change Type of `State` Property in TransitionStateUpdateAction from `Reference<State>` to `IReference<State>` [`a9920c1`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/a9920c130b720fe619b9193e1df0e0abab9a2a0b)
+- Change Properties with Type `Reference<>` to be of Type `IReference<>` in these models: [`4c92e4b`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/4c92e4b1d4424ecb121b561430b30617f33d6797)
+    * AddPaymentUpdateAction
+    * RemovePaymentUpdateAction
+    * TransitionStateUpdateAction
+    * SetCustomerUpdateAction
+- Make "Id" Property Nullable and adding constructors to RemoveProductVariantUpdateAction [`8de429c`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/8de429c4aac533457f1926a969dc8da38a6bac56)
+- Change Properties with Type `Reference<>` to be of Type `IReference<>` in these models: [`fde8546`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/fde85468c94f06e22f265f8fdb37cd9787de6450)
+    * RemoveDiscountCodeUpdateAction
+    * SetCustomShippingMethodUpdateAction
+    * SetShippingMethodUpdateAction
+- Rename `HttpApiErrorResponse` class to `ErrorResponse` [`8d85626`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/8d85626968a2e419a332042e29f45e4491846376)
+- Move these classes from `commercetools.Sdk.HttpApi.Domain` project to `commercetools.Sdk.Domain` project:[`8d85626`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/8d85626968a2e419a332042e29f45e4491846376)
+    * ErrorResponse
+    * Error
+    * GeneralError
+    * ConcurrentModificationError
+- Change Properties of type `ResourceIdentifier<Store>` to `IReferenceable<Store>` [`8f5d858`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/8f5d858e0726e2211a47d03e379f7a557a2b5f82)
+- Rename namespace of ApiClient from `commercetools.Sdk.Domain.ApiClient` to `commercetools.Sdk.Domain.ApiClients` [`c25bd36`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/c25bd36bc1c287ee5535bfe5714ed807f2df0b0b)
+- Rename folder of Registration Project from `commercetools.Sdk.Reflection` to `commercetools.Sdk.Registration` [`71babdd`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/71babdd4be595fc3e3f9cd65f386c92ddce4231d)
+- Move Project Models to `commercetools.Sdk.Domain.Projects` Namespace [`c24b2b7`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/c24b2b78734b2cea22b8a6d16312fec757c4539d)
+- Change Type of `TransactionId` Property to be string instead of Guid in these models: [`b8045f6`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/b8045f6397d01feb196fa0bd18007dbe3c89743d)
+    * ChangeTransactionInteractionIdUpdateAction
+    * ChangeTransactionStateUpdateAction
+    * ChangeTransactionTimestampUpdateAction
+
+- Rename namespace of types models from `commercetools.Sdk.Domain` to `commercetools.Sdk.Domain.Types` [`b815ccc`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/b815ccc473d878e7ec6e23e15f409b51b3c9e9b0)
+
 ## [1.0.0-beta-2 - 2019-10-22](https://github.com/commercetools/commercetools-dotnet-core-sdk/compare/1.0.0-beta-1...1.0.0-beta-2)
 ### Features
 - Improve exception message for attribute deserialization error [`#66`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/66)
