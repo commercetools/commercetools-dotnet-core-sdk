@@ -27,9 +27,9 @@ namespace commercetools.Sdk.Domain.Orders
         public string Country { get; set; }
         public OrderState OrderState { get; set; }
 
-        public ShipmentState ShipmentState { get; set; }
+        public ShipmentState? ShipmentState { get; set; }
 
-        public PaymentState PaymentState { get; set; }
+        public PaymentState? PaymentState { get; set; }
 
         public ShippingInfoImportDraft ShippingInfo { get; set; }
         public DateTime? CompletedAt { get; set; }
