@@ -9,6 +9,7 @@ using commercetools.Sdk.Domain.Messages.Categories;
 using commercetools.Sdk.Domain.Messages.Customers;
 using commercetools.Sdk.Domain.Messages.Orders;
 using commercetools.Sdk.Domain.Messages.Reviews;
+using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.Payments;
 using commercetools.Sdk.Domain.Reviews;
 using commercetools.Sdk.Domain.States;
@@ -265,6 +266,18 @@ namespace commercetools.Sdk.Serialization.Tests
             string serialized = File.ReadAllText("Resources/Types/ProductDraftWithReference.json");
             JToken serializedFormatted = JValue.Parse(serialized);
             serializedFormatted.Should().BeEquivalentTo(resultFormatted);
+        }
+        
+        [Fact]
+        public void DeserializeOrder()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string orderSerialized = File.ReadAllText("Resources/Orders/order.json");
+            
+            var order = serializerService.Deserialize<Order>(orderSerialized);
+            Assert.NotNull(order);
+            Assert.Equal(PaymentState.Pending,order.PaymentState);
+            Assert.Null(order.ShipmentState);
         }
     }
 }
