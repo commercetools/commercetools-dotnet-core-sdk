@@ -19,12 +19,23 @@ namespace System
 
         public static object GetEnum(this string value, Type enumType)
         {
-            string[] names = Enum.GetNames(enumType);
-            foreach (string name in names)
+            var typeofEnum = enumType;
+
+            if (!enumType.IsEnum && enumType.IsGenericType)
             {
-                if (GetDescription((Enum)Enum.Parse(enumType, name)).Equals(value))
+                typeofEnum = Nullable.GetUnderlyingType(enumType);
+            }
+
+            if (typeofEnum != null && typeofEnum.IsEnum)
+            {
+
+                string[] names = Enum.GetNames(typeofEnum);
+                foreach (string name in names)
                 {
-                    return Enum.Parse(enumType, name);
+                    if (GetDescription((Enum) Enum.Parse(typeofEnum, name)).Equals(value))
+                    {
+                        return Enum.Parse(typeofEnum, name);
+                    }
                 }
             }
 
