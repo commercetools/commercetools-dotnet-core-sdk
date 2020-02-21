@@ -7,30 +7,30 @@
 [![AppVeyor Build Status](https://img.shields.io/appveyor/ci/commercetools/commercetools-dotnet-core-sdk.svg)](https://ci.appveyor.com/project/commercetools/commercetools-dotnet-core-sdk)
 [![NuGet Version and Downloads count](https://buildstats.info/nuget/commercetools.Sdk.All?includePreReleases=true)](https://www.nuget.org/packages/commercetools.Sdk.All)
 
-The commercetools .NET Core SDK enables developers to easily communicate with the [commercetools HTTP API](https://docs.commercetools.com/http-api.html). The developers do not need to create plain HTTP requests, but they can instead use the domain specific classes and methods to formulate valid requests. 
+The commercetools .NET Core SDK enables developers to easily communicate with the [commercetools HTTP API](https://docs.commercetools.com/http-api.html). The developers do not need to create plain HTTP requests, but they can instead use the domain specific classes and methods to formulate valid requests.
 
 ## Installation
 
 - Download from [Nuget](https://www.nuget.org/profiles/commercetools)
 
   ```dotnet add package commercetools.Sdk.All --version 1.0.0-beta```
-  
+
 ## Technical Overview
 
 The SDK consists of the following projects:
-* `commercetools.Sdk.Client`: Contains abstract commands which are used to create instances of HTTP API commands. Some commands are implemented as generic types and you must specify a domain object when using them, whereas others are specific to a domain object. 
+* `commercetools.Sdk.Client`: Contains abstract commands which are used to create instances of HTTP API commands. Some commands are implemented as generic types and you must specify a domain object when using them, whereas others are specific to a domain object.
 * `commercetools.Sdk.DependencyInjection`: Default entry point to start using the SDK. Contains one class, `DependencyInjectionSetup`, which initializes all services the SDK uses and injects them into the service collection.
 * `commercetools.Sdk.Domain`: Models commercetools domain objects.
 * `commercetools.Sdk.HttpApi`: Communicates directly with the HTTP API.
 	* `Client`: Has one method, `ExecuteAsync()`, which executes commands. Executes commands which calls the HTTP API. Takes commands from classes in the `commercetools.Sdk.Client` project to construct implementations of the `IHttpApiCommand` interface.
-	* `IHttpApiCommand`: Classes implementing this interface are containers for a command from a `commercetools.Sdk.Client` class and a request builder which builds the request to the HTTP API endpoint. 
+	* `IHttpApiCommand`: Classes implementing this interface are containers for a command from a `commercetools.Sdk.Client` class and a request builder which builds the request to the HTTP API endpoint.
 * `commercetools.Sdk.HttpApi.Domain`: Handles exceptions and errors from the HTTP API.
-* `commercetools.Sdk.HttpApi.Linq`: Uses LINQ expressions to build queries for the `where` fields in the HTTP API. 
+* `commercetools.Sdk.HttpApi.Linq`: Uses LINQ expressions to build queries for the `where` fields in the HTTP API.
 * `commercetools.Sdk.HttpApi.Registration`: Helper classes for things like creating service locators.
 * `commercetools.Sdk.HttpApi.Serialization`: Serialization and deserialization services for responses and requests to the HTTP API.
 
 In addition, the SDK has the following directories:
-* [Examples](/commercetools.Sdk/Examples): Contains examples of common SDK use cases for MVC applications. 
+* [Examples](/commercetools.Sdk/Examples): Contains examples of common SDK use cases for MVC applications.
 * `/Tests`: Integration tests for the SDK. A good way for anyone using the .NET SDK to understand it futher.
 
 ## Getting Started with the .NET SDK
@@ -39,13 +39,13 @@ All operations (get, query, create, update, delete and others) are available as 
 
 ### Basic Workflow
 
-At a high level, to make a basic call to the API, do the following: 
+At a high level, to make a basic call to the API, do the following:
 
-1. Use the dependency injection class to set things up. 
+1. Use the dependency injection class to set things up.
 2. get a client object from the services responsible for calling requests to the API
 3. If needed – Create a draft object as a required for the command, as needed.
 4. Use executeAsync(Command<T>) (find commands in the Client project – specify the domain obj you're working on)
-5. Receive the response as a model. 
+5. Receive the response as a model.
 
 ### Dependency Injection Setup
 
@@ -77,7 +77,7 @@ The HttpClient is added by using the built-in AddHttpClient extension. In case t
  - CommercetoolsClient
  - CommercetoolsAuth
 
-This means that no other HttpClient can have these names.  
+This means that no other HttpClient can have these names.
 
 ### Multiple Clients
 
@@ -92,11 +92,11 @@ IDictionary<string, TokenFlow> clients = new Dictionary<string, TokenFlow>()
 services.UseCommercetools(this.configuration, clients);
 ```
 
-The appsettings.json then needs to contain the configuration sections named the same. 
+The appsettings.json then needs to contain the configuration sections named the same.
 The clients can then be injected by using IEnumerable.
 
     public MyController(IEnumerable<IClient> clients)
-     
+
 ### Attaching Delegating Handlers
 
 When wanting to attach further Handlers to the HttpClient this is possible by using the service collection.
@@ -133,21 +133,21 @@ The client configuration needs to be added to appsettings.json in order for the 
     "Client": {
         "ClientId": "", // replace with your client ID
         "ClientSecret": "", // replace with your client secret
-        "AuthorizationBaseAddress": "https://auth.sphere.io/", // replace if needed
+        "AuthorizationBaseAddress": "https://auth.europe-west1.gcp.commercetools.com/", // replace if needed
         "Scope": "", // replace with your scope
         "ProjectKey": "", // replace with your project key
-        "ApiBaseAddress": "https://api.sphere.io/"  // replace if needed
+        "ApiBaseAddress": "https://api.europe-west1.gcp.commercetools.com/"  // replace if needed
     }
 }
 ```
 
-> Note! The property name "Client" can be replaced with something more specified and it can be configured in the dependency injection setup. 
+> Note! The property name "Client" can be replaced with something more specified and it can be configured in the dependency injection setup.
 
 ### Using the Client
 
 The IClient interface can be used by injecting it and calling its ExecuteAsync method for different commands.
 
-> Note! Right now only the asynchronous client exists. 
+> Note! Right now only the asynchronous client exists.
 
 The following code show the constructor injection:
 
@@ -166,7 +166,7 @@ string id = "2b327437-702e-4ab2-96fc-a98afa860b36";
 Category category = this.client.ExecuteAsync(new GetByIdCommand<Category>(new Guid(id))).Result;
 ```
 
-> Note! Not all commands are available for all domain types. 
+> Note! Not all commands are available for all domain types.
 
 In case the injection of the client is not possible, the client should then be retrieved from the service provider:
 
@@ -174,7 +174,7 @@ In case the injection of the client is not possible, the client should then be r
 IClient client = serviceProvider.GetService<IClient>();
 ```
 
-> Note! Some working examples can be found in the Examples folder of the solution or in the integration tests project. 
+> Note! Some working examples can be found in the Examples folder of the solution or in the integration tests project.
 
 ## Token Flow
 
@@ -184,11 +184,11 @@ There are three different token flows available as enum:
  - TokenFlow.Password
  - TokenFlow.AnonymousSession
 
-The initial flow is set at the start of the application but it can be changed while the application is running (for example, from anonymous to password). The flow is changed per client (in case there are multiple clients). 
+The initial flow is set at the start of the application but it can be changed while the application is running (for example, from anonymous to password). The flow is changed per client (in case there are multiple clients).
 
 ### Changing the Flow
 
-The token flow can be changed by using the ITokenFlowRegister. This interface is used for the mapping of the clients to their token flows. It can be injected in the same way as the IClient interface. The following code changes the token flow in applications that use a single client only: 
+The token flow can be changed by using the ITokenFlowRegister. This interface is used for the mapping of the clients to their token flows. It can be injected in the same way as the IClient interface. The following code changes the token flow in applications that use a single client only:
 
 ```c#
 private readonly ITokenFlowRegister tokenFlowRegister;
@@ -197,7 +197,7 @@ private readonly IClient client;
 this.tokenFlowRegister.TokenFlow = TokenFlow.Password;
 ```
 
-In case there are more clients, the following code sets the TokenFlow for a specific client, by using the ITokenFlowRegister through ITokenFlowMapper. 
+In case there are more clients, the following code sets the TokenFlow for a specific client, by using the ITokenFlowRegister through ITokenFlowMapper.
 
 ```c#
 this.tokenFlowMapper.GetTokenFlowRegisterForClient(this.client.Name).TokenFlow = TokenFlow.Password;
@@ -205,7 +205,7 @@ this.tokenFlowMapper.GetTokenFlowRegisterForClient(this.client.Name).TokenFlow =
 
 ### Storing the Token
 
-By default all token related data is saved in memory (and also retrieved from it). It is possible to change this. More information about this can be found in this document about overriding the defaults. 
+By default all token related data is saved in memory (and also retrieved from it). It is possible to change this. More information about this can be found in this document about overriding the defaults.
 
 ## Overriding the Defaults
 There are a few interfaces that can have custom implementations:
@@ -233,7 +233,7 @@ services.AddHttpContextAccessor(); // custom class requires IHttpContextAccessor
 services.AddSingleton<IUserCredentialsStoreManager, CustomUserCredentialsStoreManager>();
 ```
 
-> Note! This interfaces only requires the getter, since the SDK does not need to store the username and password anywhere.  
+> Note! This interfaces only requires the getter, since the SDK does not need to store the username and password anywhere.
 
 ### Anonymous Session ID
 
@@ -266,10 +266,10 @@ Setting the "where" query string parameter as a string can be done in the follow
 ```c#
 queryCommand.Where = "key = \"c14\"";
 ```
-    
+
 > Note! For more examples of predicates using lambda expressions check [this](PredicateExpressions.md) or take a look at the unit tests.
 
-There are numerous extension methods created for domain specific operations. They can also be found by importing the commercetools.Sdk.Domain.Predicates namespace. The extension WithinCircle is one of them, for example: 
+There are numerous extension methods created for domain specific operations. They can also be found by importing the commercetools.Sdk.Domain.Predicates namespace. The extension WithinCircle is one of them, for example:
 
 ```c#
 c => c.GeoLocation.WithinCircle(13.37774, 52.51627, 1000)
@@ -289,7 +289,7 @@ foreach(Category c in query)
     var c = c.Key;
 }
 ```
-    
+
 Accessing the command built using LINQ
 
 ```c#
@@ -297,7 +297,7 @@ var command = ((ClientQueryProvider<Category>) query.Provider).Command;
 ```
 
 ## Custom Services
-To support services endpoints the SDK does not currently support, like the [Stores](https://docs.commercetools.com/http-api-projects-stores#stores ) endpoint, create the domain models as follows: 
+To support services endpoints the SDK does not currently support, like the [Stores](https://docs.commercetools.com/http-api-projects-stores#stores ) endpoint, create the domain models as follows:
 
 ```c#
     [Endpoint("stores")]
@@ -306,7 +306,7 @@ To support services endpoints the SDK does not currently support, like the [Stor
         public string Key { get; set; }
         public LocalizedString Name { get; set; }
     }
-    
+
     public class StoreDraft : IDraft<Store>
     {
         public string Key { get; set; }

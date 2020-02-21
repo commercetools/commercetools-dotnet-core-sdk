@@ -22,7 +22,7 @@ namespace commercetools.Sdk.IntegrationTests.GraphQL
         {
             await WithCategory(client, async category =>
             {
-                var query = @"query Sphere($cid: String!) {
+                var query = @"query Test($cid: String!) {
                     categories(where: $cid) {
                         results {
                             id

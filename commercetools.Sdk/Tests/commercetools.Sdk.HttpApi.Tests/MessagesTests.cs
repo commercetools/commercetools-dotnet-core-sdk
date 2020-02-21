@@ -30,7 +30,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             string serialized = File.ReadAllText("Resources/Responses/CategoryCreatedMessage.json");
             var mockHttpClientFactory = new Mock<IHttpClientFactory>();
             var mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            mockHttpClientFactory.Setup(x => x.CreateClient(DefaultClientNames.Api)).Returns(new HttpClient(mockHandler.Object){ BaseAddress = new Uri("https://api.sphere.io/test-project/") });
+            mockHttpClientFactory.Setup(x => x.CreateClient(DefaultClientNames.Api)).Returns(new HttpClient(mockHandler.Object){ BaseAddress = new Uri("https://api.europe-west1.gcp.commercetools.com/test-project/") });
             mockHandler
             .Protected()
             .Setup<Task<HttpResponseMessage>>(
