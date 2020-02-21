@@ -1,7 +1,5 @@
-﻿namespace commercetools.Sdk.HttpApi.Domain
+﻿namespace commercetools.Sdk.Domain.Errors
 {
-    using commercetools.Sdk.Domain;
-
     [TypeMarker("ConcurrentModification")]
     public class ConcurrentModificationError : Error
     {

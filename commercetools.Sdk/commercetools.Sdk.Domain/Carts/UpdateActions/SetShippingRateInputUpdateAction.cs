@@ -1,12 +1,8 @@
 ﻿namespace commercetools.Sdk.Domain.Carts.UpdateActions
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using commercetools.Sdk.Domain.Validation.Attributes;
-
-    public class SetShippingRateInputUpdateAction : UpdateAction<Cart>
+    public class SetShippingRateInputUpdateAction : CartUpdateAction
     {
-        public string Action => "setShippingRateInput";
+        public override string Action => "setShippingRateInput";
         public IShippingRateInputDraft ShippingRateInput { get; set; }
     }
 }

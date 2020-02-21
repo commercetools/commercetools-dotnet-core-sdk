@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.Stores;
 
 namespace commercetools.Sdk.Domain.Customers
 {
     [Endpoint("customers")]
     [ResourceType(ReferenceTypeId.Customer)]
-    public class Customer : Resource<Customer>, IKeyReferencable<Customer>
+    public class Customer : Resource<Customer>, IKeyReferencable<Customer>,IInStoreUsable
     {
         public string CustomerNumber { get; set; }
         public string Key { get; set; }
@@ -31,5 +32,7 @@ namespace commercetools.Sdk.Domain.Customers
         public Reference<CustomerGroup> CustomerGroup { get; set; }
         public CustomFields Custom { get; set; }
         public string Locale { get; set; }
+
+        public List<ResourceIdentifier<Store>> Stores { get; set; }
     }
 }

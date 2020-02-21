@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
-    public class ImportCustomLineItemStateUpdateAction : UpdateAction<Order>
+    public class ImportCustomLineItemStateUpdateAction : OrderUpdateAction
     {
-        public string Action => "importCustomLineItemState";
+        public override string Action => "importCustomLineItemState";
         [Required]
         public string CustomLineItemId { get; set; }
         [Required]

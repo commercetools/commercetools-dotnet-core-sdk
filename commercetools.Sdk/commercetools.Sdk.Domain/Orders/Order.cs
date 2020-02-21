@@ -12,7 +12,7 @@ namespace commercetools.Sdk.Domain.Orders
 {
     [Endpoint("orders")]
     [ResourceType(ReferenceTypeId.Order)]
-    public class Order : Resource<Order>
+    public class Order : Resource<Order>, IInStoreUsable
     {
         public DateTime? CompletedAt { get; set; }
         public string OrderNumber { get; set; }
@@ -35,8 +35,8 @@ namespace commercetools.Sdk.Domain.Orders
         public string Country { get; set; }
         public OrderState OrderState { get; set; }
         public Reference<State> State { get; set; }
-        public ShipmentState ShipmentState { get; set; }
-        public PaymentState PaymentState { get; set; }
+        public ShipmentState? ShipmentState { get; set; }
+        public PaymentState? PaymentState { get; set; }
         public ShippingInfo ShippingInfo { get; set; }
         public List<SyncInfo> SyncInfo { get; set; }
         public List<ReturnInfo> ReturnInfo { get; set; }

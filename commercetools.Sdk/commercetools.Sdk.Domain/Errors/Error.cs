@@ -1,4 +1,4 @@
-﻿namespace commercetools.Sdk.HttpApi.Domain
+﻿namespace commercetools.Sdk.Domain.Errors
 {
     public abstract class Error
     {

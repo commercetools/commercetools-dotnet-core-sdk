@@ -1,14 +1,12 @@
-﻿using commercetools.Sdk.Domain.Common;
+﻿using System.ComponentModel.DataAnnotations;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.TaxCategories;
 
 namespace commercetools.Sdk.Domain.Carts.UpdateActions
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-
-    public class AddCustomLineItemUpdateAction : UpdateAction<Cart>
+    public class AddCustomLineItemUpdateAction : CartUpdateAction
     {
-        public string Action => "addCustomLineItem";
+        public override string Action => "addCustomLineItem";
         [Required]
         public LocalizedString Name { get; set; }
         public long Quantity { get; set; }

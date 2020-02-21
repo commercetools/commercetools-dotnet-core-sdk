@@ -1,12 +1,8 @@
 ﻿namespace commercetools.Sdk.Domain.Carts.UpdateActions
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using commercetools.Sdk.Domain.Validation.Attributes;
-
-    public class SetCustomerGroupUpdateAction : UpdateAction<Cart>
+    public class SetCustomerGroupUpdateAction : CartUpdateAction
     {
-        public string Action => "setCustomerGroup";
+        public override string Action => "setCustomerGroup";
         public ResourceIdentifier CustomerGroup { get; set; }
     }
 }

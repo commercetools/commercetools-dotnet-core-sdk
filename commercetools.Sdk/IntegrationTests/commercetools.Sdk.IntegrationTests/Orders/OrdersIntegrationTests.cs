@@ -4,11 +4,11 @@ using System.Linq;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Channels;
-using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.Orders.UpdateActions;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.States;
+using commercetools.Sdk.Domain.Stores;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;
 using static commercetools.Sdk.IntegrationTests.Carts.CartsFixture;
@@ -19,6 +19,8 @@ using static commercetools.Sdk.IntegrationTests.States.StatesFixture;
 using static commercetools.Sdk.IntegrationTests.Types.TypesFixture;
 using static commercetools.Sdk.IntegrationTests.Payments.PaymentsFixture;
 using static commercetools.Sdk.IntegrationTests.Projects.ProjectFixture;
+using static commercetools.Sdk.IntegrationTests.Stores.StoresFixture;
+using static commercetools.Sdk.IntegrationTests.GenericFixture;
 
 namespace commercetools.Sdk.IntegrationTests.Orders
 {
@@ -51,6 +53,33 @@ namespace commercetools.Sdk.IntegrationTests.Orders
         }
 
         [Fact]
+        public async void CreateOrderFromCartInStore()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithCartWithSingleLineItem(client, 2,
+                    cartDraft => DefaultCartDraftInStore(cartDraft, store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.Single(cart.LineItems);
+                        Assert.Equal(2, cart.LineItems[0].Quantity);
+                        var buildDraft = DefaultOrderFromCartDraft(new OrderFromCartDraft(), cart);
+
+                        var order = await client
+                            .ExecuteAsync(new CreateCommand<Order>(buildDraft).InStore(store.Key));
+
+                        Assert.NotNull(order);
+                        Assert.NotNull(order.Cart);
+                        Assert.NotNull(order.Store);
+                        Assert.Equal(store.Key, order.Store.Key);
+                        Assert.Equal(cart.Id, order.Cart.Id);
+
+                        await DeleteResource(client, order);
+                    });
+            });
+        }
+
+        [Fact]
         public async void GetOrderById()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -66,6 +95,34 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                             Assert.Equal(order.Id, retrievedOrder.Id);
                         });
                 });
+        }
+
+        [Fact]
+        public async void GetOrderInStoreById()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithCartWithSingleLineItem(client, 2,
+                    cartDraft => DefaultCartDraftInStore(cartDraft, store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.Single(cart.LineItems);
+                        Assert.Equal(2, cart.LineItems[0].Quantity);
+                        await WithOrder(client,
+                            draft => DefaultOrderFromCartDraft(draft, cart),
+                            async order =>
+                            {
+                                Assert.NotNull(order.Store);
+                                Assert.Equal(store.Key, order.Store.Key);
+                                var retrievedOrder = await client
+                                    .ExecuteAsync(order.ToIdResourceIdentifier().GetById().InStore(store.Key));
+                                Assert.NotNull(retrievedOrder);
+                                Assert.NotNull(retrievedOrder.Store);
+                                Assert.Equal(store.Key, retrievedOrder.Store.Key);
+                                Assert.Equal(order.Id, retrievedOrder.Id);
+                            });
+                    });
+            });
         }
 
         [Fact]
@@ -92,6 +149,41 @@ namespace commercetools.Sdk.IntegrationTests.Orders
         }
 
         [Fact]
+        public async void GetOrderInStoreByOrderNumber()
+        {
+            var orderNumber = TestingUtility.RandomString();
+            await WithStore(client, async store =>
+            {
+                await WithCartWithSingleLineItem(client, 2,
+                    cartDraft => DefaultCartDraftInStore(cartDraft, store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.Single(cart.LineItems);
+                        Assert.Equal(2, cart.LineItems[0].Quantity);
+                        await WithOrder(client,
+                            draft => DefaultOrderFromCartDraftWithNumber(
+                                draft, cart, orderNumber),
+                            async order =>
+                            {
+                                Assert.NotNull(order.Store);
+                                Assert.Equal(store.Key, order.Store.Key);
+                                Assert.Equal(orderNumber, order.OrderNumber);
+
+                                var retrievedOrder = await client
+                                    .ExecuteAsync(new GetOrderByOrderNumberCommand(order.OrderNumber)
+                                        .InStore(store.ToKeyResourceIdentifier()));
+
+                                Assert.NotNull(retrievedOrder);
+                                Assert.NotNull(retrievedOrder.Store);
+                                Assert.Equal(store.Key, retrievedOrder.Store.Key);
+                                Assert.Equal(order.Id, retrievedOrder.Id);
+                                Assert.Equal(order.OrderNumber, retrievedOrder.OrderNumber);
+                            });
+                    });
+            });
+        }
+
+        [Fact]
         public async void QueryOrders()
         {
             var orderNumber = TestingUtility.RandomString();
@@ -112,6 +204,40 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                             Assert.Equal(order.OrderNumber, returnedSet.Results[0].OrderNumber);
                         });
                 });
+        }
+
+        [Fact]
+        public async void QueryOrdersInStore()
+        {
+            var orderNumber = TestingUtility.RandomString();
+            await WithStore(client, async store =>
+            {
+                await WithCartWithSingleLineItem(client, 2,
+                    cartDraft => DefaultCartDraftInStore(cartDraft, store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.Single(cart.LineItems);
+                        await WithOrder(client,
+                            draft => DefaultOrderFromCartDraftWithNumber(
+                                draft, cart, orderNumber),
+                            async order =>
+                            {
+                                Assert.NotNull(order);
+                                Assert.NotNull(order.Store);
+
+                                Assert.Equal(orderNumber, order.OrderNumber);
+                                var queryCommand = new QueryCommand<Order>();
+                                queryCommand.Where(o => o.OrderNumber == order.OrderNumber.valueOf())
+                                    .InStore(store);
+                                var returnedSet = await client.ExecuteAsync(queryCommand);
+                                Assert.Single(returnedSet.Results);
+                                var returnedOrder = returnedSet.Results[0];
+                                Assert.NotNull(returnedOrder.Store);
+                                Assert.Equal(store.Key, returnedOrder.Store.Key);
+                                Assert.Equal(order.OrderNumber, returnedOrder.OrderNumber);
+                            });
+                    });
+            });
         }
 
         [Fact]
@@ -249,6 +375,32 @@ namespace commercetools.Sdk.IntegrationTests.Orders
         }
 
         [Fact]
+        public async void DeleteOrderInStoreById()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithCartWithSingleLineItem(client, 2,
+                    cartDraft => DefaultCartDraftInStore(cartDraft, store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.Single(cart.LineItems);
+                        Assert.Equal(2, cart.LineItems[0].Quantity);
+                        await WithOrder(client, draft => DefaultOrderFromCartDraft(draft, cart),
+                            async order =>
+                            {
+                                Assert.NotNull(order);
+                                Assert.NotNull(order.Store);
+                                Assert.Equal(store.Key, order.Store.Key);
+                                await client.ExecuteAsync(order.DeleteById().InStore(store));
+                                await Assert.ThrowsAsync<NotFoundException>(
+                                    () => client.ExecuteAsync(
+                                        new GetByIdCommand<Order>(order).InStore(store)));
+                            });
+                    });
+            });
+        }
+
+        [Fact]
         public async void DeleteOrderByOrderNumber()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -264,6 +416,35 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                                 () => client.ExecuteAsync(new GetByIdCommand<Order>(order)));
                         });
                 });
+        }
+
+        [Fact]
+        public async void DeleteOrderInStoreByOrderNumber()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithCartWithSingleLineItem(client, 2,
+                    cartDraft => DefaultCartDraftInStore(cartDraft, store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.Single(cart.LineItems);
+                        Assert.Equal(2, cart.LineItems[0].Quantity);
+                        await WithOrder(client, draft => DefaultOrderFromCartDraft(draft, cart),
+                            async order =>
+                            {
+                                Assert.NotNull(order);
+                                Assert.NotNull(order.Store);
+                                Assert.Equal(store.Key, order.Store.Key);
+
+                                await client.ExecuteAsync(
+                                    new DeleteByOrderNumberCommand(order.OrderNumber, order.Version)
+                                        .InStore(store));
+                                await Assert.ThrowsAsync<NotFoundException>(
+                                    () => client.ExecuteAsync(
+                                        new GetByIdCommand<Order>(order).InStore(store)));
+                            });
+                    });
+            });
         }
 
         #region UpdateActions
@@ -297,6 +478,49 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                             return updatedOrder;
                         });
                 });
+        }
+        
+        [Fact]
+        public async void UpdateOrderInStoreByOrderNumberChangeOrderState()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithCartWithSingleLineItem(client, 2,
+                    cartDraft => DefaultCartDraftInStore(cartDraft, store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.Single(cart.LineItems);
+                        Assert.Equal(2, cart.LineItems[0].Quantity);
+                        await WithUpdateableOrder(client,
+                            draft => DefaultOrderFromCartDraftWithOrderState(
+                                draft, cart, OrderState.Open),
+                            async order =>
+                            {
+                                Assert.NotNull(order);
+                                Assert.NotNull(order.Store);
+                                Assert.Equal(store.Key, order.Store.Key);
+                                Assert.Equal(OrderState.Open, order.OrderState);
+
+                                var newOrderState = OrderState.Complete;
+                                var updateActions = new List<UpdateAction<Order>>();
+                                var action = new ChangeOrderStateUpdateAction
+                                {
+                                    OrderState = newOrderState
+                                };
+                                updateActions.Add(action);
+                                var updatedOrder = await client
+                                    .ExecuteAsync(new UpdateByOrderNumberCommand(order.OrderNumber, order.Version,
+                                        updateActions).InStore(store));
+
+                                Assert.NotNull(updatedOrder);
+                                Assert.NotNull(updatedOrder.Store);
+                                Assert.Equal(store.Key, updatedOrder.Store.Key);
+                                Assert.Equal(newOrderState, updatedOrder.OrderState);
+                                return updatedOrder;
+                            });
+                    });
+            });
+
         }
 
         [Fact]
@@ -356,6 +580,47 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                             return updatedOrder;
                         });
                 });
+        }
+        
+        [Fact]
+        public async void UpdateOrderInStoreByIdChangePaymentState()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithCartWithSingleLineItem(client, 2, 
+                    cartDraft => DefaultCartDraftInStore(cartDraft, store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.Single(cart.LineItems);
+                        Assert.Equal(2, cart.LineItems[0].Quantity);
+                        await WithUpdateableOrder(client,
+                            draft => DefaultOrderFromCartDraftWithPaymentState(
+                                draft, cart, PaymentState.Pending),
+                            async order =>
+                            {
+                                Assert.NotNull(order);
+                                Assert.NotNull(order.Store);
+                                Assert.Equal(store.Key, order.Store.Key);
+                                Assert.Equal(PaymentState.Pending, order.PaymentState);
+
+                                var newPaymentState = PaymentState.Paid;
+                                var action = new ChangePaymentStateUpdateAction
+                                {
+                                    PaymentState = newPaymentState
+                                };
+                                var updatedOrder = await client
+                                    .ExecuteAsync(order.
+                                        UpdateById(actions => actions.AddUpdate(action))
+                                        .InStore(store));
+                                
+                                Assert.NotNull(updatedOrder.Store);
+                                Assert.NotNull(updatedOrder.Store);
+                                Assert.Equal(store.Key, updatedOrder.Store.Key);
+                                Assert.Equal(newPaymentState, updatedOrder.PaymentState);
+                                return updatedOrder;
+                            });
+                    });
+            });
         }
 
         [Fact]
@@ -480,7 +745,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                             Assert.NotEqual(returnShipmentState,
                                 orderWithReturnInfo.ReturnInfo[0].Items[0].ShipmentState);
 
-                            var setReturnShipmentStateAction = new SetShipmentReturnStateUpdateAction
+                            var setReturnShipmentStateAction = new SetReturnShipmentStateUpdateAction
                             {
                                 ReturnItemId = returnItemId,
                                 ShipmentState = returnShipmentState

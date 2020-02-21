@@ -34,7 +34,7 @@ namespace commercetools.Sdk.IntegrationTests.Tokens
             ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(
                 this.provider.GetService<IHttpClientFactory>(),
                 tokenStoreManager,
-                this.serviceProviderFixture.GetService<ISerializerService>());
+                this.serviceProviderFixture.GetService<ITokenSerializerService>());
             tokenProvider.ClientConfiguration = clientConfiguration;
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
@@ -48,7 +48,7 @@ namespace commercetools.Sdk.IntegrationTests.Tokens
             ITokenProvider tokenProvider = new ClientCredentialsTokenProvider(
                 this.provider.GetService<IHttpClientFactory>(),
                 tokenStoreManager,
-                this.serviceProviderFixture.GetService<ISerializerService>());
+                this.serviceProviderFixture.GetService<ITokenSerializerService>());
             tokenProvider.ClientConfiguration = clientConfiguration;
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
@@ -64,7 +64,7 @@ namespace commercetools.Sdk.IntegrationTests.Tokens
             ITokenProvider tokenProvider = new PasswordTokenProvider(
                 this.provider.GetService<IHttpClientFactory>(),
                 userCredentialsStoreManager,
-                this.serviceProviderFixture.GetService<ISerializerService>());
+                this.serviceProviderFixture.GetService<ITokenSerializerService>());
             tokenProvider.ClientConfiguration = clientConfiguration;
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
@@ -78,7 +78,7 @@ namespace commercetools.Sdk.IntegrationTests.Tokens
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(
                 this.provider.GetService<IHttpClientFactory>(),
                 anonymousStoreManager,
-                this.serviceProviderFixture.GetService<ISerializerService>());
+                this.serviceProviderFixture.GetService<ITokenSerializerService>());
             tokenProvider.ClientConfiguration = clientConfiguration;
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
@@ -93,7 +93,7 @@ namespace commercetools.Sdk.IntegrationTests.Tokens
             ITokenProvider tokenProvider = new AnonymousSessionTokenProvider(
                 this.provider.GetService<IHttpClientFactory>(),
                 anonymousStoreManager,
-                this.serviceProviderFixture.GetService<ISerializerService>());
+                this.serviceProviderFixture.GetService<ITokenSerializerService>());
             tokenProvider.ClientConfiguration = clientConfiguration;
             Token token = tokenProvider.Token;
             Assert.NotNull(token.AccessToken);
@@ -109,7 +109,7 @@ namespace commercetools.Sdk.IntegrationTests.Tokens
             ITokenProvider tokenProvider = new PasswordTokenProvider(
                 this.provider.GetService<IHttpClientFactory>(),
                 userCredentialsStoreManager,
-                this.serviceProviderFixture.GetService<ISerializerService>());
+                this.serviceProviderFixture.GetService<ITokenSerializerService>());
             tokenProvider.ClientConfiguration = clientConfiguration;
             Token token = tokenProvider.Token;
             string initialAccessToken = token.AccessToken;

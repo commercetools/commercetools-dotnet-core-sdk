@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using commercetools.Sdk.Domain.Errors;
 
 namespace commercetools.Sdk.HttpApi.Domain.Exceptions
 {
@@ -20,7 +21,7 @@ namespace commercetools.Sdk.HttpApi.Domain.Exceptions
 
         public HttpResponseMessage Response { get; set; }
         
-        public HttpApiErrorResponse ErrorResponse { get; set; }
+        public ErrorResponse ErrorResponse { get; set; }
 
         public string ProjectKey { get; set; }
 

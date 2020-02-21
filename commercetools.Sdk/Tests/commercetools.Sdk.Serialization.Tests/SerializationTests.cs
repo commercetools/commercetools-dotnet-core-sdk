@@ -9,6 +9,8 @@ using commercetools.Sdk.Domain.Messages.Categories;
 using commercetools.Sdk.Domain.Messages.Customers;
 using commercetools.Sdk.Domain.Messages.Orders;
 using commercetools.Sdk.Domain.Messages.Reviews;
+using commercetools.Sdk.Domain.Orders;
+using commercetools.Sdk.Domain.Payments;
 using commercetools.Sdk.Domain.Reviews;
 using commercetools.Sdk.Domain.States;
 using commercetools.Sdk.Domain.TaxCategories;
@@ -102,6 +104,27 @@ namespace commercetools.Sdk.Serialization.Tests
 
             var res = new ResourceIdentifier<Product>();
             Assert.Equal(ReferenceTypeId.Product, res.TypeId);
+        }
+        
+        [Fact]
+        public void DeserializationAsIReference()
+        {
+            var serializerService = this.serializationFixture.SerializerService;
+            string categorySerialized = @"{
+                ""typeId"": ""category"",
+                ""id"": ""f40fcd15-b1c2-4279-9cfa-f6083e6a2988""
+            }";
+            var category = serializerService.Deserialize<IReference<Category>>(categorySerialized);
+            Assert.IsType<Reference<Category>>(category);
+            Assert.NotNull(category.Id);
+            
+            string paymentSerialized = @"{
+                ""typeId"": ""payment"",
+                ""key"": ""Key_1108769563""
+            }";
+            var payment = serializerService.Deserialize<IReference<Payment>>(paymentSerialized);
+            Assert.IsType<ResourceIdentifier<Payment>>(payment);
+            Assert.NotNull(payment.Key);
         }
 
         [Fact]
@@ -243,6 +266,18 @@ namespace commercetools.Sdk.Serialization.Tests
             string serialized = File.ReadAllText("Resources/Types/ProductDraftWithReference.json");
             JToken serializedFormatted = JValue.Parse(serialized);
             serializedFormatted.Should().BeEquivalentTo(resultFormatted);
+        }
+        
+        [Fact]
+        public void DeserializeOrder()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string orderSerialized = File.ReadAllText("Resources/Orders/order.json");
+            
+            var order = serializerService.Deserialize<Order>(orderSerialized);
+            Assert.NotNull(order);
+            Assert.Equal(PaymentState.Pending,order.PaymentState);
+            Assert.Null(order.ShipmentState);
         }
     }
 }

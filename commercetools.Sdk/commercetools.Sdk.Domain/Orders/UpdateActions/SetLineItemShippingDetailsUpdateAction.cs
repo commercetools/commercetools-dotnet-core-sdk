@@ -4,9 +4,9 @@ namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class SetLineItemShippingDetailsUpdateAction : UpdateAction<Order>
+    public class SetLineItemShippingDetailsUpdateAction : OrderUpdateAction
     {
-        public string Action => "setLineItemShippingDetails";
+        public override string Action => "setLineItemShippingDetails";
         [Required]
         public string LineItemId { get; set; }
         public ItemShippingDetailsDraft ShippingDetails { get; set; }

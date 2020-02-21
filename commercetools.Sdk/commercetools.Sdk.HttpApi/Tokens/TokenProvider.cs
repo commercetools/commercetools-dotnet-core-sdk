@@ -11,7 +11,7 @@ namespace commercetools.Sdk.HttpApi.Tokens
         private readonly ISerializerService serializerService;
         private readonly ITokenStoreManager tokenStoreManager;
 
-        protected TokenProvider(IHttpClientFactory httpClientFactory, ITokenStoreManager tokenStoreManager, ISerializerService serializerService)
+        protected TokenProvider(IHttpClientFactory httpClientFactory, ITokenStoreManager tokenStoreManager, ITokenSerializerService serializerService)
         {
             this.HttpClientFactory = httpClientFactory;
             this.tokenStoreManager = tokenStoreManager;

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 
-namespace commercetools.Sdk.HttpApi.Domain.Exceptions
+namespace commercetools.Sdk.Domain.Errors
 {
     /// <summary>
-    /// Http API Error Response
+    /// Error Response
     /// </summary>
-    public class HttpApiErrorResponse
+    public class ErrorResponse
     {
         public int StatusCode { get; set; }
         public string Message { get; set; }

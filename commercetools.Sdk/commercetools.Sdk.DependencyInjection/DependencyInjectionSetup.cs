@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.HttpApi;
 using commercetools.Sdk.HttpApi.Tokens;
@@ -25,7 +26,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tokenFlow">The token flow.</param>
         public static IHttpClientBuilder UseCommercetools(this IServiceCollection services, IConfiguration configuration, string clientName = DefaultClientNames.Api, TokenFlow tokenFlow = TokenFlow.ClientCredentials)
         {
-            return services.UseCommercetools(configuration, new Dictionary<string, TokenFlow>() { { clientName, tokenFlow } }).Single().Value;
+            var clients = new ConcurrentDictionary<string, TokenFlow>();
+            clients.TryAdd(clientName, tokenFlow);
+            return services.UseCommercetools(configuration, clients).Single().Value;
         }
 
         /// <summary>

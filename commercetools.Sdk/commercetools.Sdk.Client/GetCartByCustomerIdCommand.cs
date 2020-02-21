@@ -18,7 +18,7 @@ namespace commercetools.Sdk.Client
         }
 
         public GetCartByCustomerIdCommand(string customerId, List<Expansion<Cart>> expand)
-        : base(expand)
+            : base(expand)
         {
             this.Init(customerId);
         }
@@ -36,11 +36,8 @@ namespace commercetools.Sdk.Client
 
         private void Init(string customerId)
         {
-            this.ParameterKey = null;
-            this.AdditionalParameters = new GetCartByCustomerIdAdditionalParameters()
-            {
-                CustomerId = customerId
-            };
+            this.ParameterKey = Parameters.CustomerId;
+            this.ParameterValue = customerId;
         }
     }
 }

@@ -61,6 +61,15 @@ namespace commercetools.Sdk.IntegrationTests.Orders
         {
             await WithAsync(client, new OrderFromCartDraft(), draftAction, func);
         }
+        public static async Task WithSimpleOrder( IClient client, Func<Order, Task> func)
+        {
+            await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
+                async cart =>
+                {
+                    await WithAsync(client, new OrderFromCartDraft(), 
+                        draft => DefaultOrderFromCartDraft(draft, cart), func);
+                });
+        }
         public static async Task WithListOfOrders( IClient client, List<Func<OrderFromCartDraft, OrderFromCartDraft>> draftsActions, Func<List<Order>, Task> func)
         {
             await WithListAsync(client, new OrderFromCartDraft(), draftsActions, func);
@@ -72,6 +81,15 @@ namespace commercetools.Sdk.IntegrationTests.Orders
         public static async Task WithUpdateableOrder(IClient client, Func<OrderFromCartDraft, OrderFromCartDraft> draftAction, Func<Order, Task<Order>> func)
         {
             await WithUpdateableAsync(client, new OrderFromCartDraft(), draftAction, func);
+        }
+        public static async Task WithUpdateableSimpleOrder( IClient client, Func<Order, Task<Order>> func)
+        {
+            await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
+                async cart =>
+                {
+                    await WithUpdateableAsync(client, new OrderFromCartDraft(), 
+                        draft => DefaultOrderFromCartDraft(draft, cart), func);
+                });
         }
        
         #endregion

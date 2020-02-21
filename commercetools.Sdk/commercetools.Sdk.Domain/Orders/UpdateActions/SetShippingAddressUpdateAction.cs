@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace commercetools.Sdk.Domain.Orders.UpdateActions
+﻿namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
-    public class SetShippingAddressUpdateAction : UpdateAction<Order>
+    public class SetShippingAddressUpdateAction : OrderUpdateAction
     {
-        public string Action => "setShippingAddress";
+        public override string Action => "setShippingAddress";
         public Address Address { get; set; }
     }
 }

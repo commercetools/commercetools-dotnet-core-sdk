@@ -13,7 +13,7 @@ namespace commercetools.Sdk.Domain.Orders
         public string OrderNumber { get; set; }
         public OrderState OrderState { get; set; }
         public Reference<State> State { get; set; }
-        public ShipmentState ShipmentState { get; set; }
-        public PaymentState PaymentState { get; set; }
+        public ShipmentState? ShipmentState { get; set; }
+        public PaymentState? PaymentState { get; set; }
     }
 }

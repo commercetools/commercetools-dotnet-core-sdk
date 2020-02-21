@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using commercetools.Sdk.Domain.Carts;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.CustomerGroups;
+using commercetools.Sdk.Domain.Stores;
 using commercetools.Sdk.Domain.Validation.Attributes;
 
 namespace commercetools.Sdk.Domain.Orders
@@ -25,9 +27,9 @@ namespace commercetools.Sdk.Domain.Orders
         public string Country { get; set; }
         public OrderState OrderState { get; set; }
 
-        public ShipmentState ShipmentState { get; set; }
+        public ShipmentState? ShipmentState { get; set; }
 
-        public PaymentState PaymentState { get; set; }
+        public PaymentState? PaymentState { get; set; }
 
         public ShippingInfoImportDraft ShippingInfo { get; set; }
         public DateTime? CompletedAt { get; set; }
@@ -37,5 +39,7 @@ namespace commercetools.Sdk.Domain.Orders
         public TaxCalculationMode TaxCalculationMode { get; set; }
         public CartOrigin Origin { get; set; }
         public List<Address> ItemShippingAddresses { get; set; }
+        
+        public IReferenceable<Store> Store { get; set; }
     }
 }

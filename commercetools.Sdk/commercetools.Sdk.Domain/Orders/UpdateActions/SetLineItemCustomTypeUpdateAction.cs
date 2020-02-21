@@ -1,10 +1,10 @@
-﻿namespace commercetools.Sdk.Domain.Orders.UpdateActions
-{
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-    public class SetLineItemCustomTypeUpdateAction : UpdateAction<Order>
+namespace commercetools.Sdk.Domain.Orders.UpdateActions
+{
+    public class SetLineItemCustomTypeUpdateAction : OrderUpdateAction
     {
-        public string Action => "setLineItemCustomType";
+        public override string Action => "setLineItemCustomType";
         [Required]
         public string LineItemId { get; set; }
         public ResourceIdentifier Type { get; set; }

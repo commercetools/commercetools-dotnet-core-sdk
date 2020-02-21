@@ -255,5 +255,11 @@ namespace commercetools.Sdk.IntegrationTests.Products
             var retrievedProduct = await client.ExecuteAsync(new UpdateByIdCommand<Product>(product, updateActions));
             return retrievedProduct;
         }
+
+        public static async Task<Reference<TaxCategory>> GetProductTaxCategory(IClient client, string productId)
+        {
+            var product = await client.ExecuteAsync(new GetByIdCommand<Product>(productId));
+            return product.TaxCategory;
+        }
     }
 }

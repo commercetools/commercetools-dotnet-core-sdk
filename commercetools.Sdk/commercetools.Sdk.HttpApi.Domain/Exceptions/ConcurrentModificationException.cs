@@ -1,4 +1,5 @@
 using System;
+using commercetools.Sdk.Domain.Errors;
 
 namespace commercetools.Sdk.HttpApi.Domain.Exceptions
 {

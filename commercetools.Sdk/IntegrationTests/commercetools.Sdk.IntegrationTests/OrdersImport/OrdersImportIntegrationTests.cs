@@ -1,18 +1,14 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.Carts;
-using commercetools.Sdk.Domain.Orders;
-using commercetools.Sdk.Domain.ShippingMethods;
 using Xunit;
 using static commercetools.Sdk.IntegrationTests.Products.ProductsFixture;
 using static commercetools.Sdk.IntegrationTests.TaxCategories.TaxCategoriesFixture;
 using static commercetools.Sdk.IntegrationTests.Customers.CustomersFixture;
 using static commercetools.Sdk.IntegrationTests.OrdersImport.OrdersImportFixture;
 using static commercetools.Sdk.IntegrationTests.ShippingMethods.ShippingMethodsFixture;
-using static commercetools.Sdk.IntegrationTests.GenericFixture;
+using static commercetools.Sdk.IntegrationTests.Stores.StoresFixture;
 
 namespace commercetools.Sdk.IntegrationTests.OrdersImport
 {
@@ -127,10 +123,36 @@ namespace commercetools.Sdk.IntegrationTests.OrdersImport
                         (order, orderImportDraft) =>
                         {
                             //Assert
-                            //Assert
                             Assert.Null(order.Cart);
                             Assert.Equal(orderImportDraft.CustomerId, order.CustomerId);
                             Assert.Equal(orderImportDraft.CustomerEmail, order.CustomerEmail);
+                        }
+                    );
+                });
+            });
+        }
+        
+        [Fact]
+        public async Task TestImportOrderInStore()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithProduct(client, async product =>
+                {
+                    await WithImportOrder(
+                        client,
+                        draft =>
+                        {
+                            var orderImportDraft = DefaultOrderImportDraftWithLineItemByProductId(draft, product.Id);
+                            orderImportDraft.Store = store.ToKeyResourceIdentifier();
+                            return orderImportDraft;
+                        },
+                        (order, orderImportDraft) =>
+                        {
+                            //Assert
+                            Assert.Null(order.Cart);
+                            Assert.NotNull(order.Store);
+                            Assert.Equal(store.Key, order.Store.Key);
                         }
                     );
                 });

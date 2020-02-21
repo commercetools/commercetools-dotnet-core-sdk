@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using commercetools.Sdk.Domain.Payments;
-using commercetools.Sdk.Domain.Validation.Attributes;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
-    public class SetParcelTrackingDataUpdateAction : UpdateAction<Order>
+    public class SetParcelTrackingDataUpdateAction : OrderUpdateAction
     {
-        public string Action => "setParcelTrackingData";
+        public override string Action => "setParcelTrackingData";
         [Required]
         public string ParcelId { get; set; }
         public TrackingData TrackingData { get; set; }

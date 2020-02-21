@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.HttpApi.Domain.Exceptions;
+﻿using commercetools.Sdk.Domain.Errors;
+using commercetools.Sdk.HttpApi.Domain.Exceptions;
 
 namespace commercetools.Sdk.HttpApi.Domain
 {
@@ -24,7 +25,7 @@ namespace commercetools.Sdk.HttpApi.Domain
         /// Create Exception from the json response
         /// </summary>
         /// <param name="response"></param>
-        public HttpApiClientException(HttpApiErrorResponse response) :this(response.Message)
+        public HttpApiClientException(ErrorResponse response) :this(response.Message)
         {
             this.StatusCode = response.StatusCode;
             this.Errors = response.Errors;

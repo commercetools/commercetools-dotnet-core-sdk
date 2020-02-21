@@ -7,23 +7,22 @@ namespace commercetools.Sdk.Client
     /// <summary>
     /// Get Shipping Methods for Location Command
     /// </summary>
-    public class GetShippingMethodsForLocationCommand : GetCommand<ShippingMethod>
+    public class GetShippingMethodsForLocationCommand : GetMatchingQueryCommand<ShippingMethod>
     {
         public GetShippingMethodsForLocationCommand(string country, string state = null, string currency = null, List<Expansion<ShippingMethod>> expand = null)
-            : base(expand)
         {
-            this.Init(country, state, currency);
+            this.Init(country, state, currency, expand);
         }
 
-        private void Init(string country, string state = null, string currency = null)
+        private void Init(string country, string state = null, string currency = null, List<Expansion<ShippingMethod>> expand = null)
         {
-            this.ParameterKey = null;
             this.AdditionalParameters = new GetShippingMethodsForLocationAdditionalParameters
             {
                 Country = country,
                 State = state,
                 Currency = currency
             };
+            this.SetExpand(expand);
         }
     }
 }

@@ -6,9 +6,9 @@ using commercetools.Sdk.Domain.Validation.Attributes;
 
 namespace commercetools.Sdk.Domain.Orders.UpdateActions
 {
-    public class RemoveParcelFromDeliveryUpdateAction : UpdateAction<Order>
+    public class RemoveParcelFromDeliveryUpdateAction : OrderUpdateAction
     {
-        public string Action => "removeParcelFromDelivery";
+        public override string Action => "removeParcelFromDelivery";
         [Required]
         public string ParcelId { get; set; }
     }
