@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.HttpApi;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using commercetools.Sdk.HttpApi.Tokens;
 using Microsoft.Extensions.Configuration;
@@ -52,6 +53,33 @@ namespace commercetools.Sdk.IntegrationTests
         }
 
         [Fact]
+        public async Task MultipleClientsByNameSimpleInjector()
+        {
+            var services = new Container();
+            var configuration = new ConfigurationBuilder().
+                AddJsonFile("appsettings.test.json").
+                AddJsonFile("appsettings.test.Development.json", true).
+                // https://www.jerriepelser.com/blog/aspnet-core-no-more-worries-about-checking-in-secrets/
+                AddUserSecrets<ServiceProviderFixture>().
+                AddEnvironmentVariables("CTP_").
+                Build();
+
+            services.UseCommercetools(configuration,  new Dictionary<string, TokenFlow>()
+            {
+                { "Client", TokenFlow.ClientCredentials },
+                { "TokenClient", TokenFlow.ClientCredentials }
+            });
+            var clientFactory = services.GetService<ICtpClientFactory>();
+            var client1 = clientFactory.Create("Client");
+            var client2 = clientFactory.Create("TokenClient");
+
+            var t1 = await client1.ExecuteAsync(new GetProjectCommand());
+            Assert.IsType<Domain.Projects.Project>(t1);
+            var t2 = await client2.ExecuteAsync(new GetProjectCommand());
+            Assert.IsType<Domain.Projects.Project>(t2);
+        }
+
+        [Fact]
         public async Task MultipleClientsBuiltIn()
         {
             var services = new ServiceCollection();
@@ -74,6 +102,35 @@ namespace commercetools.Sdk.IntegrationTests
             var enumerable = clients.ToList();
             var client1 = enumerable.FirstOrDefault(client=> client.Name == "Client");
             var client2 = enumerable.FirstOrDefault(client => client.Name == "TokenClient");
+
+            var t1 = await client1.ExecuteAsync(new GetProjectCommand());
+            Assert.IsType<Domain.Projects.Project>(t1);
+            var t2 = await client2.ExecuteAsync(new GetProjectCommand());
+            Assert.IsType<Domain.Projects.Project>(t2);
+        }
+
+        [Fact]
+        public async Task MultipleClientsByNameBuiltIn()
+        {
+            var services = new ServiceCollection();
+            var configuration = new ConfigurationBuilder().
+                AddJsonFile("appsettings.test.json").
+                AddJsonFile("appsettings.test.Development.json", true).
+                // https://www.jerriepelser.com/blog/aspnet-core-no-more-worries-about-checking-in-secrets/
+                AddUserSecrets<ServiceProviderFixture>().
+                AddEnvironmentVariables("CTP_").
+                Build();
+
+            services.UseCommercetools(configuration,  new Dictionary<string, TokenFlow>()
+            {
+                { "Client", TokenFlow.ClientCredentials },
+                { "TokenClient", TokenFlow.ClientCredentials }
+            });
+            var serviceProvider = services.BuildServiceProvider();
+
+            var clientFactory = serviceProvider.GetService<ICtpClientFactory>();
+            var client1 = clientFactory.Create("Client");
+            var client2 = clientFactory.Create("TokenClient");
 
             var t1 = await client1.ExecuteAsync(new GetProjectCommand());
             Assert.IsType<Domain.Projects.Project>(t1);

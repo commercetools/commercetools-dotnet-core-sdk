@@ -211,11 +211,11 @@ namespace SimpleInjector
         private static IHttpClientBuilder SetupClient(this Container services, IServiceCollection collection, string clientName, IClientConfiguration clientConfiguration, TokenFlow tokenFlow)
         {
             var httpClientBuilder = collection.AddHttpClient(clientName)
-                .ConfigureHttpClient((c, client) =>
+                .ConfigureHttpClient(client =>
                 {
                     client.BaseAddress =
                         new Uri(clientConfiguration.ApiBaseAddress + clientConfiguration.ProjectKey + "/");
-                    client.DefaultRequestHeaders.UserAgent.ParseAdd(c.GetService<IUserAgentProvider>().UserAgent);
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd(services.GetService<IUserAgentProvider>().UserAgent);
                 })
                 .AddHttpMessageHandler(c =>
                 {
