@@ -42,7 +42,12 @@ namespace commercetools.Sdk.Serialization
             }
 
             Type attributeType = typeof(Attribute<>).MakeGenericType(genericType);
-            return jsonObject.ToObject(attributeType, serializer);
+            var attribute = jsonObject.ToObject(attributeType, serializer);
+            if (attribute is IAttribute attr)
+            {
+                attr.JsonValue = valueProperty;
+            }
+            return attribute;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

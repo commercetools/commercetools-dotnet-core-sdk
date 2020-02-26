@@ -1,8 +1,10 @@
 using commercetools.Sdk.Domain;
-using Newtonsoft.Json;
 using System;
 using System.IO;
 using commercetools.Sdk.Domain.Products.Attributes;
+using FluentAssertions.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace commercetools.Sdk.Serialization.Tests
@@ -23,6 +25,22 @@ namespace commercetools.Sdk.Serialization.Tests
             string serialized = File.ReadAllText("Resources/Attributes/Text.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
             Assert.IsType<Attribute<string>>(deserialized.Attributes[0]);
+            Assert.IsType<JValue>(deserialized.Attributes[0].ToIAttribute().JsonValue);
+        }
+
+        [Fact]
+        public void SerializeTextAttribute()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string serialized = File.ReadAllText("Resources/Attributes/Text.json");
+            ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
+
+            string result = serializerService.Serialize(deserialized.Attributes[0]);
+            JToken resultFormatted = JValue.Parse(result);
+
+            string expectedSerialized = File.ReadAllText("Resources/Attributes/Text.json");
+            JToken serializedFormatted = JObject.Parse(expectedSerialized).GetValue("attributes")[0];
+            serializedFormatted.Should().BeEquivalentTo(resultFormatted);
         }
 
         [Fact]
@@ -114,7 +132,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
             Assert.IsType<Attribute<AttributeSet<string>>>(deserialized.Attributes[0]);
         }
-        
+
         [Fact]
         public void DeserializeEmptySetAttribute()
         {
