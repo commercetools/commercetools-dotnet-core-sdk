@@ -3,7 +3,6 @@
     using System.Net.Http;
     using System.Threading.Tasks;
     using Client;
-    using DelegatingHandlers;
     using Domain.Exceptions;
     using Serialization;
 
@@ -12,36 +11,21 @@
         private readonly IHttpApiCommandFactory httpApiCommandFactory;
         private readonly IHttpClientFactory httpClientFactory;
         private readonly ISerializerService serializerService;
-        private readonly IUserAgentProvider userAgentProvider;
         private HttpClient httpClient;
 
         public CtpClient(
             IHttpClientFactory httpClientFactory,
             IHttpApiCommandFactory httpApiCommandFactory,
-            ISerializerService serializerService,
-            IUserAgentProvider userAgentProvider)
+            ISerializerService serializerService)
         {
             this.httpClientFactory = httpClientFactory;
             this.serializerService = serializerService;
             this.httpApiCommandFactory = httpApiCommandFactory;
-            this.userAgentProvider = userAgentProvider;
         }
 
         public string Name { get; set; } = DefaultClientNames.Api;
 
-        private HttpClient HttpClient
-        {
-            get
-            {
-                if (this.httpClient == null)
-                {
-                    this.httpClient = this.httpClientFactory.CreateClient(this.Name);
-                    this.httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(this.userAgentProvider.UserAgent);
-                }
-
-                return this.httpClient;
-            }
-        }
+        private HttpClient HttpClient => this.httpClient ?? (this.httpClient = this.httpClientFactory.CreateClient(this.Name));
 
         public async Task<T> ExecuteAsync<T>(Command<T> command)
         {

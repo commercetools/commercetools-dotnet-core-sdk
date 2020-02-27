@@ -46,8 +46,7 @@ namespace commercetools.Sdk.HttpApi.Tests
             IClient commerceToolsClient = new CtpClient(
                 mockHttpClientFactory.Object,
                 this.clientFixture.GetService<IHttpApiCommandFactory>(),
-                this.clientFixture.GetService<ISerializerService>(),
-                this.clientFixture.GetService<IUserAgentProvider>()
+                this.clientFixture.GetService<ISerializerService>()
                 );
             string categoryId = "2bafc816-4223-4ff0-ac8a-0f08a8f29fd6";
             Category category = commerceToolsClient.ExecuteAsync(new GetByIdCommand<Category>(new Guid(categoryId))).Result;

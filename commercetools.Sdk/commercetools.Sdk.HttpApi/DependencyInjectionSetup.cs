@@ -24,6 +24,8 @@ namespace commercetools.Sdk.HttpApi
     {
         public static IDictionary<string, IHttpClientBuilder> UseHttpApi(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
+            services.UseHttpApiDefaults();
+
             if (clients.Count() == 1)
             {
                 return services.UseSingleClient(configuration, clients.First().Key, clients.First().Value);
@@ -34,7 +36,7 @@ namespace commercetools.Sdk.HttpApi
 
         private static IDictionary<string, IHttpClientBuilder> UseMultipleClients(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
-            services.UseHttpApiDefaults();
+            services.AddSingleton<ICtpClientFactory, CtpClientFactory>();
             var builders = new ConcurrentDictionary<string, IHttpClientBuilder>();
             foreach (KeyValuePair<string, TokenFlow> client in clients)
             {
@@ -45,7 +47,7 @@ namespace commercetools.Sdk.HttpApi
                 Validator.ValidateObject(clientConfiguration, new ValidationContext(clientConfiguration), true);
 
                 builders.TryAdd(clientName, services.SetupClient(clientName, clientConfiguration, tokenFlow));
-                services.AddSingleton<IClient>(c => new CtpClient(c.GetService<IHttpClientFactory>(), c.GetService<IHttpApiCommandFactory>(), c.GetService<ISerializerService>(), c.GetService<IUserAgentProvider>()) { Name = clientName });
+                services.AddSingleton(c => c.GetService<ICtpClientFactory>().Create(clientName));
             }
 
             return builders;
@@ -53,11 +55,11 @@ namespace commercetools.Sdk.HttpApi
 
         private static IDictionary<string, IHttpClientBuilder> UseSingleClient(this IServiceCollection services, IConfiguration configuration, string clientName, TokenFlow tokenFlow)
         {
+            services.AddSingleton<ICtpClientFactory, CtpClientFactory>();
             IClientConfiguration clientConfiguration = configuration.GetSection(clientName).Get<ClientConfiguration>();
             Validator.ValidateObject(clientConfiguration, new ValidationContext(clientConfiguration), true);
 
-            services.UseHttpApiDefaults();
-            services.AddSingleton<IClient>(c => new CtpClient(c.GetService<IHttpClientFactory>(), c.GetService<IHttpApiCommandFactory>(), c.GetService<ISerializerService>(), c.GetService<IUserAgentProvider>()) { Name = clientName });
+            services.AddSingleton(c => c.GetService<ICtpClientFactory>().Create(clientName));
 
             var builders = new ConcurrentDictionary<string, IHttpClientBuilder>();
             builders.TryAdd(clientName, services.SetupClient(clientName, clientConfiguration, tokenFlow));
@@ -68,8 +70,12 @@ namespace commercetools.Sdk.HttpApi
         private static IHttpClientBuilder SetupClient(this IServiceCollection services, string clientName, IClientConfiguration clientConfiguration, TokenFlow tokenFlow)
         {
             var httpClientBuilder = services.AddHttpClient(clientName)
-                .ConfigureHttpClient(client =>
-                    client.BaseAddress = new Uri(clientConfiguration.ApiBaseAddress + clientConfiguration.ProjectKey + "/"))
+                .ConfigureHttpClient((c, client) =>
+                {
+                    client.BaseAddress =
+                        new Uri(clientConfiguration.ApiBaseAddress + clientConfiguration.ProjectKey + "/");
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd(c.GetService<IUserAgentProvider>().UserAgent);
+                })
                 .AddHttpMessageHandler(c =>
                 {
                     var providers = c.GetServices<ITokenProvider>();

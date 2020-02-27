@@ -143,6 +143,7 @@ namespace SimpleInjector
         {
             var collection = new ServiceCollection();
             services.UseHttpApiDefaults();
+            services.Register<ICtpClientFactory>(() => new CtpClientFactory(collection.BuildServiceProvider().GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>()), Lifestyle.Singleton);
 
             var builders = new ConcurrentDictionary<string, IHttpClientBuilder>();
             var clientBuilders = new List<Registration>();
@@ -156,7 +157,7 @@ namespace SimpleInjector
 
                 builders.TryAdd(clientName, services.SetupClient(collection, clientName, clientConfiguration, tokenFlow));
 
-                clientBuilders.Add(Lifestyle.Singleton.CreateRegistration(() => new CtpClient(collection.BuildServiceProvider().GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName }, services));
+                clientBuilders.Add(Lifestyle.Singleton.CreateRegistration(() => services.GetService<ICtpClientFactory>().Create(clientName), services));
             }
             services.RegisterCollection<IClient>(clientBuilders);
 
@@ -189,6 +190,7 @@ namespace SimpleInjector
         {
             var collection = new ServiceCollection();
             services.UseHttpApiDefaults();
+            services.Register<ICtpClientFactory>(() => new CtpClientFactory(collection.BuildServiceProvider().GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>()), Lifestyle.Singleton);
 
             var configurationSection = configuration.GetSection(clientName);
             IClientConfiguration clientConfiguration = configurationSection.Get<ClientConfiguration>();
@@ -196,8 +198,9 @@ namespace SimpleInjector
 
             var builders = new ConcurrentDictionary<string, IHttpClientBuilder>();
             builders.TryAdd(clientName, services.SetupClient(collection, clientName, clientConfiguration, tokenFlow));
-            
-            services.Register<IClient>(() => new CtpClient(collection.BuildServiceProvider().GetService<IHttpClientFactory>(), services.GetService<IHttpApiCommandFactory>(), services.GetService<ISerializerService>(), services.GetService<IUserAgentProvider>()) { Name = clientName }, Lifestyle.Singleton);
+
+
+            services.Register(() => services.GetService<ICtpClientFactory>().Create(clientName), Lifestyle.Singleton);
 
             collection.AddHttpClient(DefaultClientNames.Authorization);
             services.UseTokenProviders(collection.BuildServiceProvider().GetService<IHttpClientFactory>());
@@ -209,7 +212,11 @@ namespace SimpleInjector
         {
             var httpClientBuilder = collection.AddHttpClient(clientName)
                 .ConfigureHttpClient(client =>
-                    client.BaseAddress = new Uri(clientConfiguration.ApiBaseAddress + clientConfiguration.ProjectKey + "/"))
+                {
+                    client.BaseAddress =
+                        new Uri(clientConfiguration.ApiBaseAddress + clientConfiguration.ProjectKey + "/");
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd(services.GetService<IUserAgentProvider>().UserAgent);
+                })
                 .AddHttpMessageHandler(c =>
                 {
                     var providers = services.GetAllInstances<ITokenProvider>();
