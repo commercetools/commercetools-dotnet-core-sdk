@@ -4,6 +4,11 @@
     {
         public string Name { get; set; }
 
+        public IAttribute ToIAttribute()
+        {
+            return this as IAttribute;
+        }
+
         public EnumAttribute ToEnumAttribute()
         {
             return this as EnumAttribute;
