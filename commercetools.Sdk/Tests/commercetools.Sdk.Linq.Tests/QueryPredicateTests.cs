@@ -636,5 +636,15 @@ namespace commercetools.Sdk.Linq.Tests
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("masterData(published = false)", result);
         }
+
+        private static readonly string CustomerId = "59e22bf2-d5f5-4b8c-b78f-bb66cf28d4fe";
+        [Fact]
+        public void ExpressionEvaluationWithStaticFields()
+        {
+            Expression<Func<Customer, bool>> expression = x => x.Email == CustomerId;
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("email = \"59e22bf2-d5f5-4b8c-b78f-bb66cf28d4fe\"", result);
+        }
     }
 }
