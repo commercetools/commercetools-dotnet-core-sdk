@@ -641,10 +641,10 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void ExpressionEvaluationWithStaticFields()
         {
-            Expression<Func<Customer, bool>> expression = x => x.Email == CustomerId;
+            Expression<Func<Customer, bool>> expression = x => x.Id == CustomerId;
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
-            Assert.Equal("email = \"59e22bf2-d5f5-4b8c-b78f-bb66cf28d4fe\"", result);
+            Assert.Equal("id = \"59e22bf2-d5f5-4b8c-b78f-bb66cf28d4fe\"", result);
         }
     }
 }
