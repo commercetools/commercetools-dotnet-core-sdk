@@ -1,6 +1,7 @@
-﻿using System.Globalization;
+﻿using commercetools.Sdk.Linq.Query.Visitors;
+using System.Globalization;
 using System.Linq.Expressions;
-using commercetools.Sdk.Linq.Query.Visitors;
+using System.Reflection;
 
 namespace commercetools.Sdk.Linq.Query.Converters
 {
@@ -44,6 +45,13 @@ namespace commercetools.Sdk.Linq.Query.Converters
             }
 
             MemberExpression memberExpression = expression as MemberExpression;
+            FieldInfo fieldInfo = memberExpression.Member as FieldInfo;
+
+            if (fieldInfo != null && fieldInfo.IsStatic)
+            {
+                return true;
+            }
+
             if (memberExpression?.Expression.NodeType == ExpressionType.Constant)
             {
                 return true;
