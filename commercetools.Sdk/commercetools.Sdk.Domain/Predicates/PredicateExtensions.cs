@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using commercetools.Sdk.Linq;
 
 namespace commercetools.Sdk.Domain.Predicates
 {
     public static class PredicateExtensions
     {
         public static T valueOf<T>(this T source)
+        {
+            return source;
+        }
+        
+        public static T valueOfEnum<T>(this T source) where T : Enum
         {
             return source;
         }

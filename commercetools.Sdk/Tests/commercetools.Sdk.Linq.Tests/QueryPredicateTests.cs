@@ -11,6 +11,7 @@ using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Channels;
 using commercetools.Sdk.Domain.Messages;
+using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Linq.Query.Visitors;
 
@@ -635,6 +636,16 @@ namespace commercetools.Sdk.Linq.Tests
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("masterData(published = false)", result);
+        }
+        
+        [Fact]
+        public void ExpressionEvaluationWithEnums()
+        {
+            var orderState = OrderState.Open;
+            Expression<Func<Order, bool>> expression = o => o.OrderState == orderState.valueOfEnum();
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("orderState = \"Open\"", result);
         }
     }
 }
