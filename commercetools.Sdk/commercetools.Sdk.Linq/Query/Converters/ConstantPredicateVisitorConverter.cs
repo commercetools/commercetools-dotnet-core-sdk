@@ -45,14 +45,13 @@ namespace commercetools.Sdk.Linq.Query.Converters
             }
 
             MemberExpression memberExpression = expression as MemberExpression;
-            FieldInfo fieldInfo = memberExpression.Member as FieldInfo;
 
-            if (fieldInfo != null && fieldInfo.IsStatic)
+            if (memberExpression?.Expression.NodeType == ExpressionType.Constant)
             {
                 return true;
             }
 
-            if (memberExpression?.Expression.NodeType == ExpressionType.Constant)
+            if (memberExpression?.Member is FieldInfo info && info.IsStatic)
             {
                 return true;
             }
