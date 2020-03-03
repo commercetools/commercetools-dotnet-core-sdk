@@ -660,5 +660,17 @@ namespace commercetools.Sdk.Linq.Tests
             string result2 = queryPredicateExpressionVisitor.Render(expression2);
             Assert.Equal("orderState = \"Open\"", result2);
         }
+        
+        [Fact]
+        public void ExpressionWhereInString()
+        {
+            string[] orderNumbers = { "5", "10", "15" };
+            Expression<Func<Order, bool>> expression = x => x.OrderNumber.In(orderNumbers);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("orderNumber in (\"5\", \"10\", \"15\")", result);
+            
+            
+        }
     }
 }
