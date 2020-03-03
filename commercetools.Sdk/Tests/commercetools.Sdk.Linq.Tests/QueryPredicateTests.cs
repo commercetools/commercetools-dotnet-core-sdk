@@ -642,7 +642,7 @@ namespace commercetools.Sdk.Linq.Tests
         public void ExpressionEvaluationWithEnums()
         {
             var orderState = OrderState.Open;
-            Expression<Func<Order, bool>> expression = o => o.OrderState == orderState.valueOfEnum();
+            Expression<Func<Order, bool>> expression = o => o.OrderState == orderState.valueOf();
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("orderState = \"Open\"", result);
