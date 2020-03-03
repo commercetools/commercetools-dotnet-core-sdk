@@ -46,7 +46,7 @@ namespace commercetools.Sdk.Linq.Query.Converters
 
             MemberExpression memberExpression = expression as MemberExpression;
 
-            if (memberExpression?.Expression.NodeType == ExpressionType.Constant)
+            if (memberExpression?.Expression?.NodeType == ExpressionType.Constant)
             {
                 return true;
             }
