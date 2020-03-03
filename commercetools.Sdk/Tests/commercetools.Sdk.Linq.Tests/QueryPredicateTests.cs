@@ -1,5 +1,6 @@
 ﻿using commercetools.Sdk.Domain;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -662,7 +663,7 @@ namespace commercetools.Sdk.Linq.Tests
         }
         
         [Fact]
-        public void ExpressionWhereInString()
+        public void ExpressionWhereInArray()
         {
             string[] orderNumbers = { "5", "10", "15" };
             Expression<Func<Order, bool>> expression = x => x.OrderNumber.In(orderNumbers);
@@ -670,7 +671,25 @@ namespace commercetools.Sdk.Linq.Tests
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("orderNumber in (\"5\", \"10\", \"15\")", result);
             
+            var orderNumberList = new List<string>{ "5", "10", "15" };
+            Expression<Func<Order, bool>> expression2 = x => x.OrderNumber.In(orderNumberList);
+            string result2 = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("orderNumber in (\"5\", \"10\", \"15\")", result2);
+        }
+        
+        [Fact]
+        public void ExpressionWhereNotInArray()
+        {
+            string[] orderNumbers = { "5", "10", "15" };
+            Expression<Func<Order, bool>> expression = x => x.OrderNumber.NotIn(orderNumbers);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("orderNumber not in (\"5\", \"10\", \"15\")", result);
             
+            var orderNumberList = new List<string>{ "5", "10", "15" };
+            Expression<Func<Order, bool>> expression2 = x => x.OrderNumber.NotIn(orderNumberList);
+            string result2 = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("orderNumber not in (\"5\", \"10\", \"15\")", result2);
         }
     }
 }
