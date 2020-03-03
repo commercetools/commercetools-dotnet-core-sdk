@@ -59,6 +59,11 @@ namespace commercetools.Sdk.Linq.Query.Converters
                 return true;
             }
 
+            if (memberExpression?.Member is FieldInfo info && info.IsStatic)
+            {
+                return true;
+            }
+
             return false;
         }
 
