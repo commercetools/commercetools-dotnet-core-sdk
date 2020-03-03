@@ -13,7 +13,6 @@ using commercetools.Sdk.Domain.Channels;
 using commercetools.Sdk.Domain.Messages;
 using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.ProductProjections;
-using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Tests
 {
@@ -636,6 +635,16 @@ namespace commercetools.Sdk.Linq.Tests
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("masterData(published = false)", result);
+        }
+
+        private static readonly string CustomerId = "59e22bf2-d5f5-4b8c-b78f-bb66cf28d4fe";
+        [Fact]
+        public void ExpressionEvaluationWithStaticFields()
+        {
+            Expression<Func<Customer, bool>> expression = x => x.Id == CustomerId;
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("id = \"59e22bf2-d5f5-4b8c-b78f-bb66cf28d4fe\"", result);
         }
         
         [Fact]
