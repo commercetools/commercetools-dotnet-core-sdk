@@ -691,5 +691,17 @@ namespace commercetools.Sdk.Linq.Tests
             string result2 = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("orderNumber not in (\"5\", \"10\", \"15\")", result2);
         }
+
+        [Fact]
+        public void ExpressionWithDateTimeFilters()
+        {
+            DateTime startDate = new DateTime(2020, 11, 21);
+            DateTime endDate = startDate.AddMonths(1);
+
+            Expression<Func<Order, bool>> expression = x => x.CreatedAt >= startDate && x.CreatedAt <= endDate;
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("createdAt >= \"2020-11-21\" and createdAt <= \"2020-12-21\"", result);
+        }
     }
 }

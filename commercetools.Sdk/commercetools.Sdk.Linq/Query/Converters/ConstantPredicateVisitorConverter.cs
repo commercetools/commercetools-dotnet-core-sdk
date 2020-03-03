@@ -38,6 +38,11 @@ namespace commercetools.Sdk.Linq.Query.Converters
                 result = enumResult.GetDescription();
             }
 
+            if (compiledValue is DateTime dateTime)
+            {
+                return new ConstantPredicateVisitor(dateTime.ToUtcIso8601(true).WrapInQuotes());
+            }
+
             if (memberExpression?.Type == typeof(string) || typeof(Enum).IsAssignableFrom(memberExpression?.Type))
             {
                 result = result.WrapInQuotes();
