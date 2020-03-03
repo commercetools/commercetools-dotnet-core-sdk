@@ -13,8 +13,6 @@ namespace commercetools.Sdk.Client
     /// </summary>
     public class GetShippingMethodsForCartCommand : GetMatchingQueryCommand<ShippingMethod>
     {
-        public override string UrlSuffix => "/matching-cart";
-
         public GetShippingMethodsForCartCommand(string cartId)
         {
             this.Init(cartId);
@@ -24,6 +22,8 @@ namespace commercetools.Sdk.Client
         {
             this.Init(cartId, expand);
         }
+
+        public override string UrlSuffix => "/matching-cart";
 
         private void Init(string cartId, List<Expansion<ShippingMethod>> expandPredicates = null)
         {
