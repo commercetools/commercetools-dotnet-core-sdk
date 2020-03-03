@@ -639,13 +639,17 @@ namespace commercetools.Sdk.Linq.Tests
         }
         
         [Fact]
-        public void ExpressionEvaluationWithEnums()
+        public void ExpressionEnum()
         {
-            var orderState = OrderState.Open;
-            Expression<Func<Order, bool>> expression = o => o.OrderState == orderState.valueOf();
+            OrderState orderState = OrderState.Open;
+            Expression<Func<Order, bool>> expression = x => x.OrderState == orderState;
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("orderState = \"Open\"", result);
+            
+            Expression<Func<Order, bool>> expression2 = x => x.OrderState == OrderState.Open.valueOf();
+            string result2 = queryPredicateExpressionVisitor.Render(expression2);
+            Assert.Equal("orderState = \"Open\"", result2);
         }
     }
 }
