@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using commercetools.Sdk.Linq;
 
 namespace commercetools.Sdk.Domain.Predicates
 {
@@ -10,7 +11,7 @@ namespace commercetools.Sdk.Domain.Predicates
         {
             return source;
         }
-
+       
         public static T moneyString<T>(this T source)
         {
             return source;
@@ -20,8 +21,18 @@ namespace commercetools.Sdk.Domain.Predicates
         {
             throw new NotImplementedException();
         }
+        
+        public static bool In<T>(this T source, IEnumerable<T> values)
+        {
+            throw new NotImplementedException();
+        }
 
         public static bool NotIn<T>(this T source, params T[] values)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public static bool NotIn<T>(this T source, IEnumerable<T> values)
         {
             throw new NotImplementedException();
         }

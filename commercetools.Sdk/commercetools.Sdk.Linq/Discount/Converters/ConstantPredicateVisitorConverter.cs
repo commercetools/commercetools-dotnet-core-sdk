@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq.Expressions;
 using commercetools.Sdk.Linq.Discount.Visitors;
 
 namespace commercetools.Sdk.Linq.Discount.Converters
@@ -20,13 +21,20 @@ namespace commercetools.Sdk.Linq.Discount.Converters
             }
 
             MemberExpression memberExpression = expression as MemberExpression;
-            var compiledValue = Expression.Lambda(expression, null).Compile().DynamicInvoke(null).ToString();
-            if (memberExpression?.Type == typeof(string))
+            var compiledValue = Expression.Lambda(expression, null).Compile().DynamicInvoke(null);
+            var result = compiledValue.ToString();
+
+            if (compiledValue is Enum enumResult)
             {
-                compiledValue = compiledValue.WrapInQuotes();
+                result = enumResult.GetDescription();
             }
 
-            return new ConstantPredicateVisitor(compiledValue);
+            if (memberExpression?.Type == typeof(string) || typeof(Enum).IsAssignableFrom(memberExpression?.Type))
+            {
+                result = result.WrapInQuotes();
+            }
+
+            return new ConstantPredicateVisitor(result);
         }
 
         private static bool IsVariable(Expression expression)

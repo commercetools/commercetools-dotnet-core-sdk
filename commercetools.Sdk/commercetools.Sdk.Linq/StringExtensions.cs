@@ -42,7 +42,7 @@ namespace commercetools.Sdk.Linq
         public static string ToUtcIso8601(this DateTime dt, bool onlyDate = false)
         {
             string dateFormatted;
-            if (dt.IsOnlyDate() || onlyDate)
+            if (onlyDate)
             {
                 dateFormatted = dt.ToString("yyyy'-'MM'-'dd", CultureInfo.InvariantCulture);
             }
@@ -58,11 +58,6 @@ namespace commercetools.Sdk.Linq
         public static string ToIso8601(this TimeSpan time)
         {
             return time.ToString("hh':'mm':'ss'.'fff", CultureInfo.InvariantCulture);
-        }
-
-        public static bool IsOnlyDate(this DateTime dt)
-        {
-            return dt.Hour == 0 && dt.Minute == 0 && dt.Second == 0 && dt.Millisecond == 0;
         }
     }
 }
