@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -13,7 +14,7 @@ namespace commercetools.Sdk.Linq.Query.Converters
 
         public bool CanConvert(Expression expression)
         {
-            return expression.NodeType == ExpressionType.NewArrayInit || IsArray(expression);
+            return expression.NodeType == ExpressionType.NewArrayInit || IsArrayOrList(expression);
         }
 
         public IPredicateVisitor Convert(Expression expression, IPredicateVisitorFactory predicateVisitorFactory)
@@ -28,10 +29,10 @@ namespace commercetools.Sdk.Linq.Query.Converters
                     predicateVisitors.Add(innerPredicateVisitor);
                 }
             }
-            else if (IsArray(expression))
+            else if (IsArrayOrList(expression))
             {
                 var dynamicInvoke = Expression.Lambda(expression, null).Compile().DynamicInvoke(null);
-                if (dynamicInvoke is Array array)
+                if (dynamicInvoke is IEnumerable array)
                 {
                     foreach (var item in array)
                     {
@@ -44,7 +45,7 @@ namespace commercetools.Sdk.Linq.Query.Converters
             return new CollectionPredicateVisitor(predicateVisitors);
         }
 
-        private static bool IsArray(Expression expression)
+        private static bool IsArrayOrList(Expression expression)
         {
             if (expression.NodeType != ExpressionType.MemberAccess)
             {
@@ -55,7 +56,7 @@ namespace commercetools.Sdk.Linq.Query.Converters
 
             if (memberExpression?.Member is FieldInfo fieldInfo)
             {
-                return fieldInfo.FieldType.IsArray;
+                return fieldInfo.FieldType.IsListOrArray();
             }
 
             return false;

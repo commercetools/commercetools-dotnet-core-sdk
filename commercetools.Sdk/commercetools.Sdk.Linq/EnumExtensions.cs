@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 
 namespace commercetools.Sdk.Linq
@@ -16,6 +19,11 @@ namespace commercetools.Sdk.Linq
             }
 
             return value.ToString();
+        }
+
+        public static bool IsListOrArray(this Type t)
+        {
+            return t.IsArray || (t != typeof(string) && typeof(IEnumerable).IsAssignableFrom(t));
         }
     }
 }

@@ -33,9 +33,14 @@ namespace commercetools.Sdk.Linq.Query.Converters
             var compiledValue = Expression.Lambda(expression, null).Compile().DynamicInvoke(null);
             var result = compiledValue.ToString();
 
-            if (compiledValue is Enum enumResult)
+            switch (compiledValue)
             {
-                result = enumResult.GetDescription();
+                case DateTime dateTimeValue:
+
+                    return new ConstantPredicateVisitor(dateTimeValue.ToUtcIso8601().WrapInQuotes());
+                case Enum enumResult:
+                    result = enumResult.GetDescription();
+                    break;
             }
 
             if (memberExpression?.Type == typeof(string) || typeof(Enum).IsAssignableFrom(memberExpression?.Type))
