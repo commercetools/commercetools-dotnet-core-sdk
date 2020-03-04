@@ -663,6 +663,17 @@ namespace commercetools.Sdk.Linq.Tests
         }
         
         [Fact]
+        public void ExpressionWhereVersionInIEnumerable()
+        {
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            
+            int[] orderNumbers = { 1, 2, 3 };
+            Expression<Func<Order, bool>> expression = x => x.Version.In(orderNumbers);
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("version in (1, 2, 3)", result);
+        }
+        
+        [Fact]
         public void ExpressionWhereInIEnumerable()
         {
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();

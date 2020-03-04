@@ -36,8 +36,10 @@ namespace commercetools.Sdk.Linq.Query.Converters
                 {
                     foreach (var item in array)
                     {
-                        var constant = new ConstantPredicateVisitor(item.ToString().WrapInQuotes());
-                        predicateVisitors.Add(constant);
+                        var constant = item is string sItem
+                            ? sItem.WrapInQuotes()
+                            : item.ToString();
+                        predicateVisitors.Add(new ConstantPredicateVisitor(constant));
                     }
                 }
             }
