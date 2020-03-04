@@ -676,6 +676,14 @@ namespace commercetools.Sdk.Linq.Tests
             Expression<Func<Order, bool>> expression2 = x => x.OrderNumber.In(orderNumberList);
             string result2 = queryPredicateExpressionVisitor.Render(expression2);
             Assert.Equal("orderNumber in (\"5\", \"15\")", result2);
+
+            var linqQuery = from orderNumber in new List<string> {"5", "10", "15"}
+                where orderNumber != "5"
+                select orderNumber;
+            
+            Expression<Func<Order, bool>> expression3 = x => x.OrderNumber.In(linqQuery);
+            string result3 = queryPredicateExpressionVisitor.Render(expression3);
+            Assert.Equal("orderNumber in (\"10\", \"15\")", result3);
         }
         
         [Fact]
