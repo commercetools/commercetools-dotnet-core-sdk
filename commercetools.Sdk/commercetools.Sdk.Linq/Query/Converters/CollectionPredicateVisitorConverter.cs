@@ -56,7 +56,7 @@ namespace commercetools.Sdk.Linq.Query.Converters
                     result = stringValue.WrapInQuotes();
                     return true;
                 case Enum enumValue:
-                    result = enumValue.ToString().WrapInQuotes();
+                    result = enumValue.GetDescription().WrapInQuotes();
                     return true;
                 default:
                     result = string.Empty;
