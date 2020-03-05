@@ -661,7 +661,7 @@ namespace commercetools.Sdk.Linq.Tests
             string result2 = queryPredicateExpressionVisitor.Render(expression2);
             Assert.Equal("orderState = \"Open\"", result2);
         }
-        
+
         [Fact]
         public void ExpressionWhereVersionInIEnumerable()
         {
@@ -737,7 +737,6 @@ namespace commercetools.Sdk.Linq.Tests
             Expression<Func<Order, bool>> expression2 = x => x.CreatedAt >= DateTime.Parse("2020-11-21T15:27:55.123+02:00", CultureInfo.GetCultureInfo("de-DE"), DateTimeStyles.AdjustToUniversal);
             string result2 = queryPredicateExpressionVisitor.Render(expression2);
             Assert.Equal("createdAt >= \"2020-11-21T13:27:55.123Z\"", result2);
-
         }
         
         [Fact]
@@ -749,6 +748,44 @@ namespace commercetools.Sdk.Linq.Tests
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("dateOfBirth = \"1986-11-26\"", result);
+        }
+
+        [Fact]
+        public void ExpressionEnumWhereInList()
+        {
+            var orderStates = new List<OrderState> { OrderState.Open, OrderState.Complete, OrderState.Confirmed };
+            Expression<Func<Order, bool>> expression = x => x.OrderState.In(orderStates);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("orderState in (\"Open\", \"Complete\", \"Confirmed\")", result);
+        }
+
+        [Fact]
+        public void ExpressionEnumWhereInListInline()
+        {
+            Expression<Func<Order, bool>> expression = x => x.OrderState.In(new List<OrderState> { OrderState.Open, OrderState.Complete, OrderState.Confirmed }.valueOf());
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("orderState in (\"Open\", \"Complete\", \"Confirmed\")", result);
+        }
+
+        [Fact]
+        public void ExpressionEnumWhereInArray()
+        {
+            OrderState[] orderStates = { OrderState.Open, OrderState.Complete, OrderState.Confirmed };
+            Expression<Func<Order, bool>> expression = x => x.OrderState.In(orderStates);
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("orderState in (\"Open\", \"Complete\", \"Confirmed\")", result);
+        }
+
+        [Fact]
+        public void ExpressionEnumWhereInArrayInline()
+        {
+            Expression<Func<Order, bool>> expression = x => x.OrderState.In(new[] { OrderState.Open, OrderState.Complete, OrderState.Confirmed });
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("orderState in (\"Open\", \"Complete\", \"Confirmed\")", result);
         }
     }
 }
