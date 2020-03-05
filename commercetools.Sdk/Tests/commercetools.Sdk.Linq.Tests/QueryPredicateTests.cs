@@ -763,7 +763,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void ExpressionEnumWhereInListValueOf()
         {
-            List<OrderState> orderStates = new[] { OrderState.Open.valueOf(), OrderState.Complete.valueOf(), OrderState.Confirmed.valueOf() }.ToList();
+            List<OrderState> orderStates = new[] { OrderState.Open, OrderState.Complete, OrderState.Confirmed }.ToList().valueOf();
             Expression<Func<Order, bool>> expression = x => x.OrderState.In(orderStates);
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
@@ -783,7 +783,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void ExpressionEnumWhereInArrayValueOf()
         {
-            OrderState[] orderStates = new[] { OrderState.Open.valueOf(), OrderState.Complete.valueOf(), OrderState.Confirmed.valueOf() };
+            OrderState[] orderStates = new[] { OrderState.Open, OrderState.Complete, OrderState.Confirmed }.valueOf();
             Expression<Func<Order, bool>> expression = x => x.OrderState.In(orderStates);
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
