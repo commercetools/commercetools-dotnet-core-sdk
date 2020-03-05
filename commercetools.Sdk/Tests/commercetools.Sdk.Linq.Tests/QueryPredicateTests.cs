@@ -753,7 +753,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void ExpressionEnumWhereInList()
         {
-            List<OrderState> orderStates = new[] { OrderState.Open, OrderState.Complete, OrderState.Confirmed }.ToList();
+            var orderStates = new List<OrderState> { OrderState.Open, OrderState.Complete, OrderState.Confirmed };
             Expression<Func<Order, bool>> expression = x => x.OrderState.In(orderStates);
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
@@ -761,10 +761,9 @@ namespace commercetools.Sdk.Linq.Tests
         }
 
         [Fact]
-        public void ExpressionEnumWhereInListValueOf()
+        public void ExpressionEnumWhereInListInline()
         {
-            List<OrderState> orderStates = new[] { OrderState.Open, OrderState.Complete, OrderState.Confirmed }.ToList().valueOf();
-            Expression<Func<Order, bool>> expression = x => x.OrderState.In(orderStates);
+            Expression<Func<Order, bool>> expression = x => x.OrderState.In(new List<OrderState> { OrderState.Open, OrderState.Complete, OrderState.Confirmed }.valueOf());
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("orderState in (\"Open\", \"Complete\", \"Confirmed\")", result);
@@ -773,7 +772,7 @@ namespace commercetools.Sdk.Linq.Tests
         [Fact]
         public void ExpressionEnumWhereInArray()
         {
-            OrderState[] orderStates = new[] { OrderState.Open, OrderState.Complete, OrderState.Confirmed };
+            OrderState[] orderStates = { OrderState.Open, OrderState.Complete, OrderState.Confirmed };
             Expression<Func<Order, bool>> expression = x => x.OrderState.In(orderStates);
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
@@ -781,10 +780,9 @@ namespace commercetools.Sdk.Linq.Tests
         }
 
         [Fact]
-        public void ExpressionEnumWhereInArrayValueOf()
+        public void ExpressionEnumWhereInArrayInline()
         {
-            OrderState[] orderStates = new[] { OrderState.Open, OrderState.Complete, OrderState.Confirmed }.valueOf();
-            Expression<Func<Order, bool>> expression = x => x.OrderState.In(orderStates);
+            Expression<Func<Order, bool>> expression = x => x.OrderState.In(new[] { OrderState.Open, OrderState.Complete, OrderState.Confirmed });
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("orderState in (\"Open\", \"Complete\", \"Confirmed\")", result);
