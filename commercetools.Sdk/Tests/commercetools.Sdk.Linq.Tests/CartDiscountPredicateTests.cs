@@ -606,5 +606,19 @@ namespace commercetools.Sdk.Linq.Tests
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("custom.`reference-field` contains any (\"bac1a3a5-3807-4f5b-9d07-0611984ecae8\", \"f6a19a23-14e3-40d0-aee2-3e612fcb1bc7\")", result);
         }
+        
+        [Fact]
+        public void ExpressionEnum()
+        {
+            var lineItemPriceMode = LineItemPriceMode.ExternalPrice;
+            Expression<Func<LineItem, bool>> expression = l => l.PriceMode == lineItemPriceMode;
+            IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            string result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("priceMode = \"ExternalPrice\"", result);
+            
+            Expression<Func<LineItem, bool>> expression2 = l => l.PriceMode == LineItemPriceMode.ExternalTotal.valueOf();
+            string result2 = cartPredicateExpressionVisitor.Render(expression2);
+            Assert.Equal("priceMode = \"ExternalTotal\"", result2);
+        }
     }
 }

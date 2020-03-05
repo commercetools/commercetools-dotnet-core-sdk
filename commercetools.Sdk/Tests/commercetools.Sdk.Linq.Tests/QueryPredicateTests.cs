@@ -1,5 +1,6 @@
 ﻿using commercetools.Sdk.Domain;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,8 +12,8 @@ using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Channels;
 using commercetools.Sdk.Domain.Messages;
+using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.ProductProjections;
-using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Tests
 {
@@ -635,6 +636,119 @@ namespace commercetools.Sdk.Linq.Tests
             IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("masterData(published = false)", result);
+        }
+
+        private static readonly string CustomerId = "59e22bf2-d5f5-4b8c-b78f-bb66cf28d4fe";
+        [Fact]
+        public void ExpressionEvaluationWithStaticFields()
+        {
+            Expression<Func<Customer, bool>> expression = x => x.Id == CustomerId;
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("id = \"59e22bf2-d5f5-4b8c-b78f-bb66cf28d4fe\"", result);
+        }
+        
+        [Fact]
+        public void ExpressionEnum()
+        {
+            OrderState orderState = OrderState.Open;
+            Expression<Func<Order, bool>> expression = x => x.OrderState == orderState;
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("orderState = \"Open\"", result);
+            
+            Expression<Func<Order, bool>> expression2 = x => x.OrderState == OrderState.Open.valueOf();
+            string result2 = queryPredicateExpressionVisitor.Render(expression2);
+            Assert.Equal("orderState = \"Open\"", result2);
+        }
+        
+        [Fact]
+        public void ExpressionWhereVersionInIEnumerable()
+        {
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            
+            int[] orderNumbers = { 1, 2, 3 };
+            Expression<Func<Order, bool>> expression = x => x.Version.In(orderNumbers);
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("version in (1, 2, 3)", result);
+        }
+        
+        [Fact]
+        public void ExpressionWhereInIEnumerable()
+        {
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            
+            string[] orderNumbers = { "5", "10", "15" };
+            Expression<Func<Order, bool>> expression = x => x.OrderNumber.In(orderNumbers);
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("orderNumber in (\"5\", \"10\", \"15\")", result);
+            
+            var orderNumberList = new List<string>{ "5", "10", "15" }.Where(s => s != "10").Select(s => s);
+            Expression<Func<Order, bool>> expression2 = x => x.OrderNumber.In(orderNumberList);
+            string result2 = queryPredicateExpressionVisitor.Render(expression2);
+            Assert.Equal("orderNumber in (\"5\", \"15\")", result2);
+
+            var linqQuery = from orderNumber in new List<string> {"5", "10", "15"}
+                where orderNumber != "5"
+                select orderNumber;
+            
+            Expression<Func<Order, bool>> expression3 = x => x.OrderNumber.In(linqQuery);
+            string result3 = queryPredicateExpressionVisitor.Render(expression3);
+            Assert.Equal("orderNumber in (\"10\", \"15\")", result3);
+        }
+        
+        [Fact]
+        public void ExpressionWhereNotInIEnumerable()
+        {
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            
+            string[] orderNumbers = { "5", "10", "15" };
+            Expression<Func<Order, bool>> expression = x => x.OrderNumber.NotIn(orderNumbers);
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("orderNumber not in (\"5\", \"10\", \"15\")", result);
+            
+            var orderNumberList = new List<string>{ "5", "10", "15" }.Select(s => s);
+            Expression<Func<Order, bool>> expression2 = x => x.OrderNumber.NotIn(orderNumberList);
+            string result2 = queryPredicateExpressionVisitor.Render(expression2);
+            Assert.Equal("orderNumber not in (\"5\", \"10\", \"15\")", result2);
+        }
+        
+        [Fact]
+        public void ExpressionWhereInArrayValueOf()
+        {
+            Expression<Func<Order, bool>> expression = x => x.OrderNumber.In(new List<string>{ "5", "10", "15" }.valueOf());
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("orderNumber in (\"5\", \"10\", \"15\")", result);
+        }
+        
+        [Fact]
+        public void ExpressionWithDateTimeFilters()
+        {
+            
+            DateTime startDate = DateTime.Parse("2020-11-21T15:27:55.123+02:00", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal).ToLocalTime();
+            DateTime endDate = startDate.AddMonths(1);
+
+            Expression<Func<Order, bool>> expression = x => x.CreatedAt >= startDate && x.CreatedAt <= endDate;
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("createdAt >= \"2020-11-21T13:27:55.123Z\" and createdAt <= \"2020-12-21T13:27:55.123Z\"", result);
+            
+            Expression<Func<Order, bool>> expression2 = x => x.CreatedAt >= DateTime.Parse("2020-11-21T15:27:55.123+02:00", CultureInfo.GetCultureInfo("de-DE"), DateTimeStyles.AdjustToUniversal);
+            string result2 = queryPredicateExpressionVisitor.Render(expression2);
+            Assert.Equal("createdAt >= \"2020-11-21T13:27:55.123Z\"", result2);
+
+        }
+        
+        [Fact]
+        public void ExpressionWithBirthDateFilters()
+        {
+            var birthDate = new DateTime(1986,11,26);
+            
+            Expression<Func<Customer, bool>> expression = x => x.DateOfBirth == birthDate.AsDateAttribute();
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("dateOfBirth = \"1986-11-26\"", result);
         }
     }
 }

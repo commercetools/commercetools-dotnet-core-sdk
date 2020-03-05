@@ -1,5 +1,7 @@
-﻿using System.Globalization;
+using System;
+using System.Globalization;
 using System.Linq.Expressions;
+using System.Reflection;
 using commercetools.Sdk.Linq.Query.Visitors;
 
 namespace commercetools.Sdk.Linq.Query.Converters
@@ -27,13 +29,26 @@ namespace commercetools.Sdk.Linq.Query.Converters
             }
 
             MemberExpression memberExpression = expression as MemberExpression;
-            var compiledValue = Expression.Lambda(expression, null).Compile().DynamicInvoke(null).ToString();
-            if (memberExpression?.Type == typeof(string))
+
+            var compiledValue = Expression.Lambda(expression, null).Compile().DynamicInvoke(null);
+            var result = compiledValue.ToString();
+
+            switch (compiledValue)
             {
-                compiledValue = compiledValue.WrapInQuotes();
+                case DateTime dateTimeValue:
+
+                    return new ConstantPredicateVisitor(dateTimeValue.ToUtcIso8601().WrapInQuotes());
+                case Enum enumResult:
+                    result = enumResult.GetDescription();
+                    break;
             }
 
-            return new ConstantPredicateVisitor(compiledValue);
+            if (memberExpression?.Type == typeof(string) || typeof(Enum).IsAssignableFrom(memberExpression?.Type))
+            {
+                result = result.WrapInQuotes();
+            }
+
+            return new ConstantPredicateVisitor(result);
         }
 
         private static bool IsVariable(Expression expression)
@@ -44,7 +59,12 @@ namespace commercetools.Sdk.Linq.Query.Converters
             }
 
             MemberExpression memberExpression = expression as MemberExpression;
-            if (memberExpression?.Expression.NodeType == ExpressionType.Constant)
+            if (memberExpression?.Expression?.NodeType == ExpressionType.Constant)
+            {
+                return true;
+            }
+
+            if (memberExpression?.Member is FieldInfo info && info.IsStatic)
             {
                 return true;
             }

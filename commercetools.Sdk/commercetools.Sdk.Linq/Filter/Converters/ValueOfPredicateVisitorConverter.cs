@@ -31,6 +31,11 @@ namespace commercetools.Sdk.Linq.Filter.Converters
                 return new ConstantPredicateVisitor(dt.ToUtcIso8601().WrapInQuotes());
             }
 
+            if (dynamicInvoke is Enum enumResult)
+            {
+                return new ConstantPredicateVisitor(enumResult.GetDescription().WrapInQuotes());
+            }
+
             var compiledValue = dynamicInvoke.ToString();
             if ((expression as MethodCallExpression)?.Arguments[0].Type == typeof(string))
             {

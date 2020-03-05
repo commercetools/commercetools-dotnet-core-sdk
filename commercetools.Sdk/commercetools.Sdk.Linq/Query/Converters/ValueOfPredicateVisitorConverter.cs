@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq.Expressions;
-using commercetools.Sdk.Linq.Filter.Visitors;
+using commercetools.Sdk.Linq.Query.Visitors;
+
 
 namespace commercetools.Sdk.Linq.Query.Converters
 {
@@ -29,6 +32,27 @@ namespace commercetools.Sdk.Linq.Query.Converters
             if (dynamicInvoke is DateTime dt)
             {
                 return new ConstantPredicateVisitor(dt.ToUtcIso8601().WrapInQuotes());
+            }
+
+            if (dynamicInvoke is Enum enumResult)
+            {
+                return new ConstantPredicateVisitor(enumResult.GetDescription().WrapInQuotes());
+            }
+
+            if (dynamicInvoke.GetType().IsListOrArray())
+            {
+                var array = dynamicInvoke as IEnumerable;
+                var predicateVisitors = new List<IPredicateVisitor>();
+                if (array != null)
+                {
+                    foreach (var item in array)
+                    {
+                        var visitor = new ConstantPredicateVisitor(item.ToString().WrapInQuotes());
+                        predicateVisitors.Add(visitor);
+                    }
+                }
+
+                return new CollectionPredicateVisitor(predicateVisitors);
             }
 
             var compiledValue = dynamicInvoke.ToString();
