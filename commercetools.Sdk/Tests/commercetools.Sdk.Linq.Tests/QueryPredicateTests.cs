@@ -662,7 +662,6 @@ namespace commercetools.Sdk.Linq.Tests
             Assert.Equal("orderState = \"Open\"", result2);
         }
 
-
         [Fact]
         public void ExpressionWhereVersionInIEnumerable()
         {
