@@ -10,5 +10,12 @@
         {
             return false;
         }
+
+        protected void CloneProperties(Attribute<T> attribute)
+        {
+            this.Value = attribute.Value;
+            this.Name = attribute.Name;
+            this.JsonValue = attribute.JsonValue;
+        }
     }
 }

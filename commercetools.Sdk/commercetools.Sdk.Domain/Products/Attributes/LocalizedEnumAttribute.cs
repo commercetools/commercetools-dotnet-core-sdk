@@ -2,5 +2,12 @@
 {
     public class LocalizedEnumAttribute : Attribute<LocalizedEnumValue>
     {
+        public LocalizedEnumAttribute()
+        {
+        }
+        public LocalizedEnumAttribute(Attribute<LocalizedEnumValue> attribute)
+        {
+            CloneProperties(attribute);
+        }
     }
 }

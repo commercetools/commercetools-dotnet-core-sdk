@@ -2,5 +2,12 @@
 {
     public class EnumAttribute : Attribute<PlainEnumValue>
     {
+        public EnumAttribute()
+        {
+        }
+        public EnumAttribute(Attribute<PlainEnumValue> attribute)
+        {
+            CloneProperties(attribute);
+        }
     }
 }

@@ -2,5 +2,12 @@
 {
     public class SetLocalizedTextAttribute : SetAttribute<LocalizedString>
     {
+        public SetLocalizedTextAttribute()
+        {
+        }
+        public SetLocalizedTextAttribute(SetAttribute<LocalizedString> attribute)
+        {
+            CloneProperties(attribute);
+        }
     }
 }
