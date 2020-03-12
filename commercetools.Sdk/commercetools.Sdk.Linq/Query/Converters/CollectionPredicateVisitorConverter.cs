@@ -36,8 +36,9 @@ namespace commercetools.Sdk.Linq.Query.Converters
                 {
                     foreach (var item in array)
                     {
-                        var constant = item is string sItem
-                            ? sItem.WrapInQuotes()
+                        var constantOrEnum = IsStringOrEnum(item, out string sItem);
+                        var constant = constantOrEnum
+                            ? sItem
                             : item.ToString();
                         predicateVisitors.Add(new ConstantPredicateVisitor(constant));
                     }
@@ -45,6 +46,22 @@ namespace commercetools.Sdk.Linq.Query.Converters
             }
 
             return new CollectionPredicateVisitor(predicateVisitors);
+        }
+
+        private static bool IsStringOrEnum(object item, out string result)
+        {
+            switch (item)
+            {
+                case string stringValue:
+                    result = stringValue.WrapInQuotes();
+                    return true;
+                case Enum enumValue:
+                    result = enumValue.GetDescription().WrapInQuotes();
+                    return true;
+                default:
+                    result = string.Empty;
+                    return false;
+            }
         }
 
         private static bool IsArrayOrList(Expression expression)

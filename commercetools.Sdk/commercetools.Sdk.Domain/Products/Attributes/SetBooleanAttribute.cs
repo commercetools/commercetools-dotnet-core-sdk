@@ -2,5 +2,12 @@
 {
     public class SetBooleanAttribute : SetAttribute<bool>
     {
+        public SetBooleanAttribute()
+        {
+        }
+        public SetBooleanAttribute(SetAttribute<bool> attribute)
+        {
+            CloneProperties(attribute);
+        }
     }
 }

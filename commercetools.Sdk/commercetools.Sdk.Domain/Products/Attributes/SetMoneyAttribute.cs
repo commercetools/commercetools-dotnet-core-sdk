@@ -2,5 +2,12 @@
 {
     public class SetMoneyAttribute : SetAttribute<Money>
     {
+        public SetMoneyAttribute()
+        {
+        }
+        public SetMoneyAttribute(SetAttribute<Money> attribute)
+        {
+            CloneProperties(attribute);
+        }
     }
 }
