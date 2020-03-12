@@ -188,5 +188,29 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.IsType<Attribute<string>>(deserialized.Attributes[0]);
             Assert.IsType<Attribute<PlainEnumValue>>(deserialized.Attributes[1]);
         }
+        
+        [Fact]
+        public void DeserializeAttributeListAndGetAttributeValue()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string serialized = File.ReadAllText("Resources/Attributes/List.json");
+            ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
+            var attributes = deserialized.Attributes;
+            Assert.NotEmpty(attributes);
+            
+            Assert.True(attributes[0].IsTextAttribute());
+            var textAttribute = attributes[0].ToTextAttribute();
+            Assert.NotNull(textAttribute);
+            
+            Assert.True(attributes[1].IsEnumAttribute());
+            var enumAttribute = attributes[1].ToEnumAttribute();
+            Assert.NotNull(enumAttribute);
+            
+            Assert.True(attributes[2].IsBooleanAttribute());
+            var boolAttribute = attributes[2].ToBooleanAttribute();
+            Assert.NotNull(boolAttribute);
+            
+            
+        }
     }
 }

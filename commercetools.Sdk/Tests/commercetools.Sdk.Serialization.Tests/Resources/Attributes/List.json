@@ -12,6 +12,10 @@
         "key": "enum-key",
         "label": "enum-label"
       }
+    }, 
+    {
+      "name": "boolean-attribute",
+      "value": true
     }
   ]
 }

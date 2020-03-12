@@ -2,5 +2,12 @@
 {
     public class NumberAttribute : Attribute<double>
     {
+        public NumberAttribute()
+        {
+        }
+        public NumberAttribute(Attribute<double> attribute)
+        {
+            CloneProperties(attribute);
+        }
     }
 }

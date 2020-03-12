@@ -38,7 +38,7 @@ namespace commercetools.Sdk.HttpApi.HttpApiCommands
             foreach (var type in this.registeredHttpApiCommandTypes)
             {
                 // retrieving the command type from IHttpApiCommand, e.g. GetHttpApiCommand<T>: IHttpApiCommand<GetCommand<T>, T>
-                var httpApiCommandGenericType = type.GetInterfaces().First().GetGenericArguments().First();
+                var httpApiCommandGenericType = type.GetInterfaces().First(i => i.IsGenericType).GetGenericArguments().First();
 
                 try
                 {
