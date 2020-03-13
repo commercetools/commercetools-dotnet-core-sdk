@@ -21,6 +21,6 @@ namespace commercetools.Sdk.Client
         /// <typeparam name="T">The domain specific type.</typeparam>
         /// <param name="command">The command.</param>
         /// <returns>The object of the domain specific type.</returns>
-        Task<T> ExecuteAsync<T>(Command<T> command);
+        Task<T> ExecuteAsync<T>(ICommand<T> command);
     }
 }

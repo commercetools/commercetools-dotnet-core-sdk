@@ -4,12 +4,7 @@ namespace commercetools.Sdk.Client
 {
     public abstract class CreateTokenForPasswordResetCommand<T> : Command<Token<T>>
     {
-        public CreateTokenForPasswordResetCommand(string email)
-        {
-            this.Email = email;
-        }
-
-        public CreateTokenForPasswordResetCommand(string email, int timeToLiveMinutes)
+        public CreateTokenForPasswordResetCommand(string email, int? timeToLiveMinutes = null)
         {
             this.Email = email;
             this.TimeToLiveMinutes = timeToLiveMinutes;

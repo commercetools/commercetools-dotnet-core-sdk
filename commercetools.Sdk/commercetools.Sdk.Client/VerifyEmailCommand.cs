@@ -2,12 +2,7 @@
 {
     public abstract class VerifyEmailCommand<T> : Command<T>
     {
-        public VerifyEmailCommand(string tokenValue)
-        {
-            this.TokenValue = tokenValue;
-        }
-
-        public VerifyEmailCommand(string tokenValue, int version)
+        public VerifyEmailCommand(string tokenValue, int? version = null)
         {
             this.TokenValue = tokenValue;
             this.Version = version;

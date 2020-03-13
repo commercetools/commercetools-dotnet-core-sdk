@@ -1,5 +1,8 @@
+using System;
+using System.Linq.Expressions;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.Query;
 using commercetools.Sdk.Domain.ShippingMethods;
 using commercetools.Sdk.Domain.Stores;
 
@@ -29,6 +32,18 @@ namespace commercetools.Sdk.Client
             where T : IInStoreUsable
         {
             return new InStoreCommand<PagedQueryResult<T>>(storeRef.Key, command);
+        }
+
+        public static InStoreCommand<PagedQueryResult<T>> Where<T>(
+            this InStoreCommand<PagedQueryResult<T>> command,
+            Expression<Func<T, bool>> expression)
+        {
+            if (command.InnerCommand is QueryCommand<T> c && c.QueryParameters is IPredicateQueryable queryParameters)
+            {
+                queryParameters.Where.Add(new QueryPredicate<T>(expression).ToString());
+            }
+
+            return command;
         }
 
         public static InStoreCommand<SignInResult<T>> InStore<T>(this ICommand<SignInResult<T>> command, string key)

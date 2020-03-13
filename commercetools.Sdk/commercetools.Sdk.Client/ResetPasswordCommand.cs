@@ -2,12 +2,7 @@
 {
     public abstract class ResetPasswordCommand<T> : Command<T>
     {
-        public ResetPasswordCommand(string tokenValue, string newPassword)
-        {
-            this.Init(tokenValue, newPassword);
-        }
-
-        public ResetPasswordCommand(string tokenValue, string newPassword, int version)
+        public ResetPasswordCommand(string tokenValue, string newPassword, int? version = null)
         {
             this.Init(tokenValue, newPassword);
             this.Version = version;
