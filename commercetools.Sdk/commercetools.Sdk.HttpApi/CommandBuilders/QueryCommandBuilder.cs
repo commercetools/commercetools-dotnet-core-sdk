@@ -20,7 +20,8 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
 
         public override QueryCommand<T> Build()
         {
-            return CreateCommandFunc.Invoke(QueryParameters);
+            this.CommandToExecute = CreateCommandFunc.Invoke(QueryParameters);
+            return this.CommandToExecute;
         }
     }
 }

@@ -21,7 +21,8 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
 
         public override UpdateCommand<T> Build()
         {
-            return CreateCommandFunc.Invoke(Actions);
+            this.CommandToExecute = CreateCommandFunc.Invoke(Actions);
+            return this.CommandToExecute;
         }
     }
 }

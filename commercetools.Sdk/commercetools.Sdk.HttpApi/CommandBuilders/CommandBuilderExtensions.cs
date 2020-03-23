@@ -18,6 +18,7 @@ using commercetools.Sdk.Domain.Messages;
 using commercetools.Sdk.Domain.OrderEdits;
 using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.Domain.Payments;
+using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Domain.Query;
@@ -225,6 +226,17 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             return new CommandBuilder<DeleteCommand<T>, T>(builder.Client, () => new DeleteByIdCommand<T>(id, version, expand));
         }
 
+        public static CommandBuilder<DeleteCommand<T>, T> DeleteById<T>(
+            this DomainCommandBuilder<T> builder,
+            IVersioned<T> resource,
+            List<Expansion<T>> expand = null)
+            where T : Resource<T>
+        {
+            return new CommandBuilder<DeleteCommand<T>, T>(
+                builder.Client,
+                () => new DeleteByIdCommand<T>(resource.Id, resource.Version, expand));
+        }
+
         public static CommandBuilder<InStoreCommand<T>, T> DeleteById<T>(
             this CommandBuilder<InStoreCommand<T>, T> builder,
             string id,
@@ -236,6 +248,20 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             {
                 var inStoreCommand = builder.Build();
                 inStoreCommand.InnerCommand = new DeleteByIdCommand<T>(id, version, expand);
+                return inStoreCommand;
+            });
+        }
+
+        public static CommandBuilder<InStoreCommand<T>, T> DeleteById<T>(
+            this CommandBuilder<InStoreCommand<T>, T> builder,
+            IVersioned<T> resource,
+            List<Expansion<T>> expand = null)
+            where T : Resource<T>
+        {
+            return new CommandBuilder<InStoreCommand<T>, T>(builder.Client, () =>
+            {
+                var inStoreCommand = builder.Build();
+                inStoreCommand.InnerCommand = new DeleteByIdCommand<T>(resource.Id, resource.Version, expand);
                 return inStoreCommand;
             });
         }

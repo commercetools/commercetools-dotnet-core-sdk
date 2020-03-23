@@ -24,9 +24,9 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
 
         public IClient Client { get; }
 
-        private Func<TCommand> CreateCommandFunc { get; set; }
+        protected TCommand CommandToExecute { get; set; }
 
-        private TCommand CommandToExecute { get; set; }
+        private Func<TCommand> CreateCommandFunc { get; set; }
 
         public virtual TCommand Build()
         {
