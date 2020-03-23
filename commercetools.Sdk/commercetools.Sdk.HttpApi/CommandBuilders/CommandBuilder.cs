@@ -7,10 +7,15 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
     /// </summary>
     public class CommandBuilder
     {
-        public readonly IClient Client;
-
         public CommandBuilder()
         {
         }
+
+        public CommandBuilder(IClient client)
+        {
+            this.Client = client;
+        }
+
+        public IClient Client { get; }
     }
 }

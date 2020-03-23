@@ -1,4 +1,5 @@
 using commercetools.Sdk.Client;
+using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.Customers.UpdateActions;
@@ -38,11 +39,46 @@ namespace commercetools.Sdk.Domain.Tests
         }
         
         [Fact]
+        public void IsReplicateACartCommand()
+        {
+            var builder = new CommandBuilder();
+            var cartReplicationDraft = new ReplicaCartDraft()
+            {
+                Reference = new Reference<Cart>() {Id = "cartId"}
+            };
+            var command = builder
+                            .Carts()
+                            .Replicate(cartReplicationDraft)
+                            .Build();
+            Assert.IsType<ReplicateCartCommand>(command);
+            Assert.NotNull(command.Replica);
+        }
+        
+        [Fact]
         public void IsGetByCustomerIdInStoreCommand()
         {
             var builder = new CommandBuilder();
             var customerId = "customerId";
             var command = builder.Carts().GetByCustomerId(customerId).InStore("storeKey").Build();
+            
+            Assert.NotNull(command);
+            Assert.Equal("storeKey", command.StoreKey);
+            var innerCommand = command.InnerCommand;
+            var getByCustomerIdCommand = innerCommand as GetCartByCustomerIdCommand;
+            Assert.NotNull(getByCustomerIdCommand);
+            Assert.Equal("customerId", getByCustomerIdCommand.ParameterValue);
+        }
+        
+        [Fact]
+        public void IsGetByCustomerIdInStoreCommand2()
+        {
+            var builder = new CommandBuilder();
+            var customerId = "customerId";
+            var command = builder
+                            .Carts()
+                            .InStore("storeKey")
+                            .GetByCustomerId(customerId)
+                            .Build();
             
             Assert.NotNull(command);
             Assert.Equal("storeKey", command.StoreKey);
@@ -134,6 +170,23 @@ namespace commercetools.Sdk.Domain.Tests
             Assert.NotNull(deleteByIdCommand);
             Assert.Equal("customerId", deleteByIdCommand.ParameterValue);
         }
+        
+        [Fact]
+        public void IsDeleteByKeyInStoreCommand()
+        {
+            var builder = new CommandBuilder();
+            var command = builder.Customers()
+                .InStore("storeKey")
+                .DeleteByKey("customerKey", 2)
+                .Build();
+            
+            Assert.NotNull(command);
+            Assert.Equal("storeKey", command.StoreKey);
+            var innerCommand = command.InnerCommand;
+            var deleteByKeyCommand = innerCommand as DeleteByKeyCommand<Customer>;
+            Assert.NotNull(deleteByKeyCommand);
+            Assert.Equal("customerKey", deleteByKeyCommand.ParameterValue);
+        }
 
         [Fact]
         public void IsQueryCommand()
@@ -172,6 +225,13 @@ namespace commercetools.Sdk.Domain.Tests
             var command2 = builder.Customers()
                 .Query().InStore("storeKey")
                 .Build().Where(c => c.Key == "cusKey");
+
+//            var command3 = builder.Customers()
+//                .InStore("storeKey")
+//                .Query()
+//                .Where(c => c.Key == "cusKey")
+//                .Build();
+            
 
             Assert.IsType<InStoreCommand<PagedQueryResult<Customer>>>(command1);
             Assert.IsType<InStoreCommand<PagedQueryResult<Customer>>>(command2);
@@ -268,6 +328,28 @@ namespace commercetools.Sdk.Domain.Tests
             var command = builder.Categories().Create(categoryDraft).Build();
             Assert.IsType<CreateCommand<Category>>(command);
             Assert.NotNull(command.Entity);
+        }
+        
+        [Fact]
+        public void IsCreateCommandInStore()
+        {
+            var builder = new CommandBuilder();
+            var cartDraft = new CartDraft
+            {
+               Currency = "EUR"
+            };
+            var command = builder
+                            .Carts()
+                            .InStore("storeKey")
+                            .Create(cartDraft)
+                            .Build();
+            
+            Assert.NotNull(command);
+            Assert.Equal("storeKey", command.StoreKey);
+            var innerCommand = command.InnerCommand;
+            var createCartCommand = innerCommand as CreateCommand<Cart>;
+            Assert.NotNull(createCartCommand);
+            Assert.NotNull(createCartCommand.Entity);
         }
 
         [Fact]
@@ -578,6 +660,56 @@ namespace commercetools.Sdk.Domain.Tests
             var verifyCustomerEmailCommand = innerCommand as VerifyCustomerEmailCommand;
             Assert.NotNull(verifyCustomerEmailCommand);
             Assert.Equal(tokenValue, verifyCustomerEmailCommand.TokenValue);
+        }
+        
+        [Fact]
+        public void IsGetByOrderNumberCommand()
+        {
+            var builder = new CommandBuilder();
+            var orderNumber = "orderNumber";
+            var command = builder
+                            .Orders()
+                            .GetByOrderNumber(orderNumber)
+                            .Build();
+            Assert.IsType<GetOrderByOrderNumberCommand>(command);
+            Assert.Equal(orderNumber, command.ParameterValue);
+        }
+        
+        [Fact]
+        public void IsGetByOrderNumberInStoreCommand()
+        {
+            var builder = new CommandBuilder();
+            var orderNumber = "orderNumber";
+            var command = builder
+                .Orders()
+                .InStore("storeKey")
+                .GetByOrderNumber(orderNumber)
+                .Build();
+            
+            Assert.NotNull(command);
+            Assert.Equal("storeKey", command.StoreKey);
+            var innerCommand = command.InnerCommand;
+            var getByOrderNumberCommand = innerCommand as GetOrderByOrderNumberCommand;
+            Assert.NotNull(getByOrderNumberCommand);
+            Assert.Equal("orderNumber", getByOrderNumberCommand.ParameterValue);
+        }
+        
+        [Fact]
+        public void IsApplyOrderEditCommand()
+        {
+            var builder = new CommandBuilder();
+            var resourceId = "resourceId";
+            var resourceVersion = 2;
+            var editVersion = 3;
+            
+            var command = builder
+                .OrderEdits()
+                .ApplyOrderEdit(resourceId, editVersion, resourceVersion)
+                .Build();
+            Assert.IsType<ApplyOrderEditCommand>(command);
+            Assert.Equal(resourceId, command.Id);
+            Assert.Equal(resourceVersion, command.ResourceVersion);
+            Assert.Equal(editVersion, command.EditVersion);
         }
     }
 }

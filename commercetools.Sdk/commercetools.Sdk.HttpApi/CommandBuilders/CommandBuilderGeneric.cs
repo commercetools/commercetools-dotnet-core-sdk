@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Common;
@@ -25,10 +26,18 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
 
         private Func<TCommand> CreateCommandFunc { get; set; }
 
+        private TCommand CommandToExecute { get; set; }
+
         public virtual TCommand Build()
         {
-            var command = CreateCommandFunc.Invoke();
-            return command;
+            this.CommandToExecute = CreateCommandFunc.Invoke();
+            return this.CommandToExecute;
+        }
+
+        public async Task<TResult> ExecuteAsync()
+        {
+            this.Build();
+            return await this.Client.ExecuteAsync(CommandToExecute);
         }
     }
 }
