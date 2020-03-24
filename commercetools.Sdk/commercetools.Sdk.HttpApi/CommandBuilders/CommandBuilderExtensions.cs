@@ -176,7 +176,10 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
 
         #region Get
 
-        public static CommandBuilder<GetCommand<T>, T> GetById<T>(this DomainCommandBuilder<T> builder, string id, List<Expansion<T>> expand = null)
+        public static CommandBuilder<GetCommand<T>, T> GetById<T>(
+            this DomainCommandBuilder<T> builder,
+            string id,
+            List<Expansion<T>> expand = null)
             where T : Resource<T>
         {
             return new CommandBuilder<GetCommand<T>, T>(builder.Client, () => new GetByIdCommand<T>(id, expand));
@@ -196,7 +199,10 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             });
         }
 
-        public static CommandBuilder<GetCommand<T>, T> GetByKey<T>(this DomainCommandBuilder<T> builder, string key, List<Expansion<T>> expand = null)
+        public static CommandBuilder<GetCommand<T>, T> GetByKey<T>(
+            this DomainCommandBuilder<T> builder,
+            string key,
+            List<Expansion<T>> expand = null)
             where T : Resource<T>, IKeyReferencable<T>
         {
             return new CommandBuilder<GetCommand<T>, T>(builder.Client, () => new GetByKeyCommand<T>(key, expand));
@@ -220,10 +226,16 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
 
         #region Delete
 
-        public static CommandBuilder<DeleteCommand<T>, T> DeleteById<T>(this DomainCommandBuilder<T> builder, string id, int version, List<Expansion<T>> expand = null)
+        public static CommandBuilder<DeleteCommand<T>, T> DeleteById<T>(
+            this DomainCommandBuilder<T> builder,
+            string id,
+            int version,
+            List<Expansion<T>> expand = null)
             where T : Resource<T>
         {
-            return new CommandBuilder<DeleteCommand<T>, T>(builder.Client, () => new DeleteByIdCommand<T>(id, version, expand));
+            return new CommandBuilder<DeleteCommand<T>, T>(
+                builder.Client,
+                () => new DeleteByIdCommand<T>(id, version, expand));
         }
 
         public static CommandBuilder<DeleteCommand<T>, T> DeleteById<T>(
@@ -266,10 +278,25 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             });
         }
 
-        public static CommandBuilder<DeleteCommand<T>, T> DeleteByKey<T>(this DomainCommandBuilder<T> builder, string key, int version)
+        public static CommandBuilder<DeleteCommand<T>, T> DeleteByKey<T>(
+            this DomainCommandBuilder<T> builder,
+            string key,
+            int version)
             where T : Resource<T>, IKeyReferencable<T>
         {
-            return new CommandBuilder<DeleteCommand<T>, T>(builder.Client, () => new DeleteByKeyCommand<T>(key, version));
+            return new CommandBuilder<DeleteCommand<T>, T>(
+                builder.Client,
+                () => new DeleteByKeyCommand<T>(key, version));
+        }
+
+        public static CommandBuilder<DeleteCommand<T>, T> DeleteByKey<T>(
+            this DomainCommandBuilder<T> builder,
+            T resource)
+            where T : Resource<T>, IKeyReferencable<T>, IVersioned<T>
+        {
+            return new CommandBuilder<DeleteCommand<T>, T>(
+                builder.Client,
+                () => new DeleteByKeyCommand<T>(resource.Key, resource.Version));
         }
 
         public static CommandBuilder<InStoreCommand<T>, T> DeleteByKey<T>(
@@ -283,6 +310,20 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             {
                 var inStoreCommand = builder.Build();
                 inStoreCommand.InnerCommand = new DeleteByKeyCommand<T>(key, version, expand);
+                return inStoreCommand;
+            });
+        }
+
+        public static CommandBuilder<InStoreCommand<T>, T> DeleteByKey<T>(
+            this CommandBuilder<InStoreCommand<T>, T> builder,
+            T resource,
+            List<Expansion<T>> expand = null)
+            where T : Resource<T>, IKeyReferencable<T>, IVersioned<T>
+        {
+            return new CommandBuilder<InStoreCommand<T>, T>(builder.Client, () =>
+            {
+                var inStoreCommand = builder.Build();
+                inStoreCommand.InnerCommand = new DeleteByKeyCommand<T>(resource.Key, resource.Version, expand);
                 return inStoreCommand;
             });
         }
@@ -313,6 +354,7 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
                 return inStoreCommand;
             });
         }
+
         #endregion
 
         #region InStore
@@ -322,7 +364,9 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             string storeKey)
             where T : Resource<T>, IInStoreUsable
         {
-            return new CommandBuilder<InStoreCommand<T>, T>(builder.Client, () => new InStoreCommand<T>(storeKey, null));
+            return new CommandBuilder<InStoreCommand<T>, T>(
+                builder.Client,
+                () => new InStoreCommand<T>(storeKey, null));
         }
 
         public static CommandBuilder<InStoreCommand<T>, T> InStore<T>(
@@ -354,7 +398,9 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             string storeKey)
             where T : Resource<T>, IInStoreUsable
         {
-            return new CommandBuilder<InStoreCommand<SignInResult<T>>, SignInResult<T>>(builder.Client, () => builder.Build().InStore(storeKey));
+            return new CommandBuilder<InStoreCommand<SignInResult<T>>, SignInResult<T>>(
+                builder.Client,
+                () => builder.Build().InStore(storeKey));
         }
 
         public static CommandBuilder<InStoreCommand<SignInResult<T>>, SignInResult<T>> InStore<T>(
@@ -362,7 +408,9 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             string storeKey)
             where T : Resource<T>, IInStoreUsable
         {
-            return new CommandBuilder<InStoreCommand<SignInResult<T>>, SignInResult<T>>(builder.Client, () => builder.Build().InStore(storeKey));
+            return new CommandBuilder<InStoreCommand<SignInResult<T>>, SignInResult<T>>(
+                builder.Client,
+                () => builder.Build().InStore(storeKey));
         }
 
         public static CommandBuilder<InStoreCommand<T>, T> InStore<T>(
@@ -386,7 +434,9 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             string storeKey)
             where T : Resource<T>, IInStoreUsable
         {
-            return new CommandBuilder<InStoreCommand<Token<T>>, Token<T>>(builder.Client, () => builder.Build().InStore(storeKey));
+            return new CommandBuilder<InStoreCommand<Token<T>>, Token<T>>(
+                builder.Client,
+                () => builder.Build().InStore(storeKey));
         }
 
         public static CommandBuilder<InStoreCommand<Token<T>>, Token<T>> InStore<T>(
@@ -394,7 +444,9 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             string storeKey)
             where T : Resource<T>, IInStoreUsable
         {
-            return new CommandBuilder<InStoreCommand<Token<T>>, Token<T>>(builder.Client, () => builder.Build().InStore(storeKey));
+            return new CommandBuilder<InStoreCommand<Token<T>>, Token<T>>(
+                builder.Client,
+                () => builder.Build().InStore(storeKey));
         }
 
         public static CommandBuilder<InStoreCommand<T>, T> InStore<T>(
@@ -410,7 +462,9 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             string storeKey)
             where T : Resource<T>, IInStoreUsable
         {
-            return new CommandBuilder<InStoreCommand<PagedQueryResult<T>>, PagedQueryResult<T>>(builder.Client, () => builder.Build().InStore(storeKey));
+            return new CommandBuilder<InStoreCommand<PagedQueryResult<T>>, PagedQueryResult<T>>(
+                builder.Client,
+                () => builder.Build().InStore(storeKey));
         }
 
         #endregion
@@ -472,7 +526,9 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
         }
 
         public static QueryCommandBuilder<T> Sort<T>(
-            this QueryCommandBuilder<T> builder, Expression<Func<T, IComparable>> expression, SortDirection sortDirection = SortDirection.Ascending)
+            this QueryCommandBuilder<T> builder,
+            Expression<Func<T, IComparable>> expression,
+            SortDirection sortDirection = SortDirection.Ascending)
             where T : Resource<T>
         {
             if (builder.QueryParameters is ISortable queryParameters)
@@ -584,10 +640,6 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             return builder;
         }
 
-        // public static UpdateCommandBuilder<UpdateCommand<Customer>, Customer> AddAddress(this UpdateCommandBuilder<UpdateCommand<Customer>, Customer> builder, Func<AddAddressUpdateAction, UpdateAction<Customer>> action)
-        //        {
-        //            return builder.AddAction(action(new AddAddressUpdateAction()));
-        //        }
         #endregion
 
         #region Customers
@@ -597,7 +649,9 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             CustomerDraft draft)
             where T : Resource<T>, ISignupable
         {
-            return new CommandBuilder<SignUpCommand<T>, SignInResult<T>>(builder.Client, () => new SignUpCustomerCommand(draft) as SignUpCommand<T>);
+            return new CommandBuilder<SignUpCommand<T>, SignInResult<T>>(
+                builder.Client,
+                () => new SignUpCustomerCommand(draft) as SignUpCommand<T>);
         }
 
         public static CommandBuilder<LoginCommand<T>, SignInResult<T>> Login<T>(
@@ -606,7 +660,9 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             string password)
             where T : Resource<T>, ISignupable
         {
-            return new CommandBuilder<LoginCommand<T>, SignInResult<T>>(builder.Client, () => new LoginCustomerCommand(email, password) as LoginCommand<T>);
+            return new CommandBuilder<LoginCommand<T>, SignInResult<T>>(
+                builder.Client,
+                () => new LoginCustomerCommand(email, password) as LoginCommand<T>);
         }
 
         public static CommandBuilder<ChangePasswordCommand<T>, T> ChangePassword<T>(
@@ -617,28 +673,37 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             string newPassword)
             where T : Resource<T>, ISignupable
         {
-            return new CommandBuilder<ChangePasswordCommand<T>, T>(builder.Client, () => new ChangeCustomerPasswordCommand(id, version, currentPassword, newPassword) as ChangePasswordCommand<T>);
+            return new CommandBuilder<ChangePasswordCommand<T>, T>(
+                builder.Client,
+                () => new ChangeCustomerPasswordCommand(id, version, currentPassword, newPassword) as
+                    ChangePasswordCommand<T>);
         }
 
-        public static CommandBuilder<CreateTokenForPasswordResetCommand<T>, Token<T>> CreateTokenForPasswordResetting<T>(
-            this DomainCommandBuilder<T> builder,
-            string email,
-            int? timeToLiveMinutes = null)
+        public static CommandBuilder<CreateTokenForPasswordResetCommand<T>, Token<T>>
+            CreateTokenForPasswordResetting<T>(
+                this DomainCommandBuilder<T> builder,
+                string email,
+                int? timeToLiveMinutes = null)
             where T : Resource<T>, ISignupable
         {
-            return new CommandBuilder<CreateTokenForPasswordResetCommand<T>, Token<T>>(builder.Client, () => new CreateTokenForCustomerPasswordResetCommand(email, timeToLiveMinutes) as CreateTokenForPasswordResetCommand<T>);
+            return new CommandBuilder<CreateTokenForPasswordResetCommand<T>, Token<T>>(
+                builder.Client,
+                () => new CreateTokenForCustomerPasswordResetCommand(email, timeToLiveMinutes) as
+                    CreateTokenForPasswordResetCommand<T>);
         }
 
-        public static CommandBuilder<CreateTokenForEmailVerificationCommand<T>, Token<T>> CreateTokenForEmailVerification<T>(
-            this DomainCommandBuilder<T> builder,
-            string id,
-            int timeToLiveMinutes,
-            int? version = null)
+        public static CommandBuilder<CreateTokenForEmailVerificationCommand<T>, Token<T>>
+            CreateTokenForEmailVerification<T>(
+                this DomainCommandBuilder<T> builder,
+                string id,
+                int timeToLiveMinutes,
+                int? version = null)
             where T : Resource<T>, ISignupable
         {
             return new CommandBuilder<CreateTokenForEmailVerificationCommand<T>, Token<T>>(
                 builder.Client,
-                () => new CreateTokenForCustomerEmailVerificationCommand(id, timeToLiveMinutes, version) as CreateTokenForEmailVerificationCommand<T>);
+                () => new CreateTokenForCustomerEmailVerificationCommand(id, timeToLiveMinutes, version) as
+                    CreateTokenForEmailVerificationCommand<T>);
         }
 
         public static CommandBuilder<GetCommand<T>, T> GetByEmailToken<T>(
@@ -646,7 +711,9 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             string emailToken)
             where T : Resource<T>, ISignupable
         {
-            return new CommandBuilder<GetCommand<T>, T>(builder.Client, () => new GetCustomerByEmailTokenCommand(emailToken) as GetCommand<T>);
+            return new CommandBuilder<GetCommand<T>, T>(
+                builder.Client,
+                () => new GetCustomerByEmailTokenCommand(emailToken) as GetCommand<T>);
         }
 
         public static CommandBuilder<GetCommand<T>, T> GetByPasswordToken<T>(
@@ -654,7 +721,9 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             string passwordToken)
             where T : Resource<T>, ISignupable
         {
-            return new CommandBuilder<GetCommand<T>, T>(builder.Client, () => new GetCustomerByPasswordTokenCommand(passwordToken) as GetCommand<T>);
+            return new CommandBuilder<GetCommand<T>, T>(
+                builder.Client,
+                () => new GetCustomerByPasswordTokenCommand(passwordToken) as GetCommand<T>);
         }
 
         public static CommandBuilder<GetCommand<T>, T> GetByPasswordToken<T>(
@@ -676,7 +745,9 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             int? version = null)
             where T : Resource<T>, ISignupable
         {
-            return new CommandBuilder<ResetPasswordCommand<T>, T>(builder.Client, () => new ResetCustomerPasswordCommand(tokenValue, newPassword, version) as ResetPasswordCommand<T>);
+            return new CommandBuilder<ResetPasswordCommand<T>, T>(
+                builder.Client,
+                () => new ResetCustomerPasswordCommand(tokenValue, newPassword, version) as ResetPasswordCommand<T>);
         }
 
         public static CommandBuilder<VerifyEmailCommand<T>, T> VerifyEmail<T>(
@@ -684,7 +755,9 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             string tokenValue)
             where T : Resource<T>, ISignupable
         {
-            return new CommandBuilder<VerifyEmailCommand<T>, T>(builder.Client, () => new VerifyCustomerEmailCommand(tokenValue) as VerifyEmailCommand<T>);
+            return new CommandBuilder<VerifyEmailCommand<T>, T>(
+                builder.Client,
+                () => new VerifyCustomerEmailCommand(tokenValue) as VerifyEmailCommand<T>);
         }
 
         #endregion
@@ -722,20 +795,6 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
                 builder.Client,
                 () => new ReplicateCartCommand(replica) as ReplicateCommand<Cart>);
         }
-
-        /*
-        public static CommandBuilder<ReplicateCommand<Cart>, Cart> Replicate(
-            this CommandBuilder<GetCommand<Cart>, Cart> builder)
-        {
-            return new CommandBuilder<ReplicateCommand<Cart>, Cart>(
-                builder.Client,
-                () =>
-                {
-                    var cart = builder.Build().ex
-                    return new ReplicateCartCommand(replica) as ReplicateCommand<Cart>;
-                });
-        }
-        */
 
         #endregion
 
@@ -788,6 +847,7 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
                 return inStoreCommand;
             });
         }
+
         #endregion
 
         #region OrderEdits
@@ -800,7 +860,10 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
         {
             return new CommandBuilder<ApplyResourceEditCommand<OrderEdit>, OrderEdit>(
                 builder.Client,
-                () => new ApplyOrderEditCommand(id, editVersion, resourceVersion) as ApplyResourceEditCommand<OrderEdit>);
+                () => new ApplyOrderEditCommand(
+                    id,
+                    editVersion,
+                    resourceVersion) as ApplyResourceEditCommand<OrderEdit>);
         }
 
         #endregion
@@ -818,8 +881,6 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
                 () => new UploadProductImageCommand(id, image, contentType) as UploadImageCommand<Product>);
         }
 
-
         #endregion
-
     }
 }

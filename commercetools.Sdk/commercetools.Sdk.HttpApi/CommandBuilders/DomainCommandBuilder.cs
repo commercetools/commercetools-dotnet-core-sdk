@@ -10,11 +10,11 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
     public class DomainCommandBuilder<T>
         where T : Resource<T>
     {
-        public readonly IClient Client;
-
         public DomainCommandBuilder(IClient client)
         {
             this.Client = client;
         }
+
+        public IClient Client { get; }
     }
 }

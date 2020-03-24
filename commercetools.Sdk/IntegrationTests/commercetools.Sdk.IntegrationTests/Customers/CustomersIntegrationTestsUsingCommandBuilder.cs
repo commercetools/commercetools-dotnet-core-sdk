@@ -29,7 +29,6 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             this.client = serviceProviderFixture.GetService<IClient>();
         }
 
-
         [Fact]
         public async Task GetCustomerById()
         {
@@ -144,7 +143,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                         .Query()
                         .Where(c => c.Key == customer.Key.valueOf())
                         .ExecuteAsync();
-                    
+
                     Assert.Single(returnedSet.Results);
                     Assert.Equal(key, returnedSet.Results[0].Key);
                 });
@@ -174,7 +173,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                             .Where(c => c.Key == customer.Key.valueOf())
                             .InStore(store.Key)
                             .ExecuteAsync();
-                        
+
                         Assert.Single(returnedSet.Results);
                         Assert.Equal(customer.Key, returnedSet.Results[0].Key);
                     });
@@ -267,15 +266,134 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                         await client
                             .Builder()
                             .Customers()
-                            .DeleteByKey(customer.Key, customer.Version)
                             .InStore(store.Key)
+                            .DeleteByKey(customer)
                             .ExecuteAsync();
-                        
+
                         await Assert.ThrowsAsync<NotFoundException>(
                             () => client.ExecuteAsync(
                                 new GetByIdCommand<Customer>(customer).InStore(store.Key)));
                     });
             });
         }
+
+        #region UpdateActions
+
+        [Fact]
+        public async Task UpdateCustomerByKeyChangeEmailAndSetFirstName()
+        {
+            await WithUpdateableCustomer(client, async customer =>
+            {
+                var firstName = TestingUtility.RandomString();
+                var newEmail = $"joe{TestingUtility.RandomString()}@example.com";
+                var action1 = new ChangeEmailUpdateAction {Email = newEmail};
+                var action2 = new SetFirstNameUpdateAction {FirstName = firstName};
+
+                var updatedCustomer = await client
+                    .Builder()
+                    .Customers()
+                    .UpdateByKey(customer)
+                    .AddAction(action1)
+                    .AddAction(action2)
+                    .ExecuteAsync();
+
+                Assert.Equal(firstName, updatedCustomer.FirstName);
+                Assert.Equal(newEmail, updatedCustomer.Email);
+                return updatedCustomer;
+            });
+        }
+
+        [Fact]
+        public async Task UpdateCustomerInStoreByKeySetFirstName()
+        {
+            await WithStore(client, async store =>
+            {
+                var stores = new List<IReferenceable<Store>>
+                {
+                    store.ToKeyResourceIdentifier()
+                };
+                await WithUpdateableCustomer(client,
+                    draft => DefaultCustomerDraftInStores(draft, stores),
+                    async customer =>
+                    {
+                        Assert.NotNull(customer);
+                        Assert.Single(customer.Stores);
+
+                        var firstName = TestingUtility.RandomString();
+                        var action = new SetFirstNameUpdateAction {FirstName = firstName};
+
+                        var updatedCustomer = await client
+                            .Builder()
+                            .Customers()
+                            .UpdateByKey(customer.Key, customer.Version)
+                            .AddAction(action)
+                            .InStore(store.Key)
+                            .ExecuteAsync();
+
+
+                        Assert.Single(updatedCustomer.Stores);
+                        Assert.Equal(store.Key, updatedCustomer.Stores[0].Key);
+                        Assert.Equal(firstName, updatedCustomer.FirstName);
+                        return updatedCustomer;
+                    });
+            });
+        }
+
+        [Fact]
+        public async Task UpdateCustomerByIdSetLastName()
+        {
+            await WithUpdateableCustomer(client, async customer =>
+            {
+                var lastName = TestingUtility.RandomString();
+                var action = new SetLastNameUpdateAction() {LastName = lastName};
+
+                var updatedCustomer = await client
+                    .Builder()
+                    .Customers()
+                    .UpdateById(customer)
+                    .AddAction(action)
+                    .ExecuteAsync();
+
+                Assert.Equal(lastName, updatedCustomer.LastName);
+                return updatedCustomer;
+            });
+        }
+
+        [Fact]
+        public async Task UpdateCustomerInStoreByIdSetLastName()
+        {
+            await WithStore(client, async store =>
+            {
+                var stores = new List<IReferenceable<Store>>
+                {
+                    store.ToKeyResourceIdentifier()
+                };
+                await WithUpdateableCustomer(client,
+                    draft => DefaultCustomerDraftInStores(draft, stores),
+                    async customer =>
+                    {
+                        Assert.NotNull(customer);
+                        Assert.Single(customer.Stores);
+
+                        var lastName = TestingUtility.RandomString();
+                        var action = new SetLastNameUpdateAction() {LastName = lastName};
+
+                        var updatedCustomer = await client
+                            .Builder()
+                            .Customers()
+                            .UpdateById(customer)
+                            .AddAction(action)
+                            .InStore(store.Key)
+                            .ExecuteAsync();
+
+                        Assert.Single(updatedCustomer.Stores);
+                        Assert.Equal(store.Key, updatedCustomer.Stores[0].Key);
+                        Assert.Equal(lastName, updatedCustomer.LastName);
+                        return updatedCustomer;
+                    });
+            });
+        }
+
+        #endregion
     }
 }
