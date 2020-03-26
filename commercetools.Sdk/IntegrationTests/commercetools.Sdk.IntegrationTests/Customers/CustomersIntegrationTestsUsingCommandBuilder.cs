@@ -30,6 +30,28 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         }
 
         [Fact]
+        public async Task CreateCustomerInStore()
+        {
+            await WithStore(client, async store =>
+            {
+                var customerDraft = DefaultCustomerDraft(new CustomerDraft());
+
+                var signInResult = (CustomerSignInResult) await client
+                    .Builder()
+                    .Customers()
+                    .InStore(store.Key)
+                    .SignUp(customerDraft)
+                    .ExecuteAsync();
+
+                var customer = signInResult.Customer;
+                Assert.NotNull(customer);
+                Assert.NotEmpty(customer.Stores);
+                Assert.Equal(store.Key, customer.Stores[0].Key);
+                await DeleteResource(client, customer);
+            });
+        }
+
+        [Fact]
         public async Task GetCustomerById()
         {
             //Get Global Customer By Id
@@ -277,6 +299,365 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             });
         }
 
+        [Fact]
+        public async Task ChangeCustomerPassword()
+        {
+            var oldPassword = TestingUtility.RandomString();
+            await WithUpdateableCustomer(
+                client,
+                customerDraft => DefaultCustomerDraftWithPassword(customerDraft, oldPassword),
+                async customer =>
+                {
+                    var newPassword = TestingUtility.RandomString();
+                    var updatedCustomer = await client
+                        .Builder()
+                        .Customers()
+                        .ChangePassword(customer, oldPassword, newPassword)
+                        .ExecuteAsync();
+
+                    //login with the new password to make Sure that password changed
+                    var loginResult =
+                        await client.ExecuteAsync(new LoginCustomerCommand(updatedCustomer.Email, newPassword));
+                    Assert.NotNull(loginResult);
+                    return updatedCustomer;
+                });
+        }
+        
+        [Fact]
+        public async Task AuthenticateCustomerInStore()
+        {
+            await WithStore(client, async store =>
+            {
+                var stores = new List<IReferenceable<Store>>
+                {
+                    store.ToKeyResourceIdentifier()
+                };
+                var password = TestingUtility.RandomString();
+                await WithCustomer(
+                    client,
+                    draft =>
+                    {
+                        var customerDraft = DefaultCustomerDraftInStores(draft, stores);
+                        customerDraft.Password = password;
+                        return customerDraft;
+                    },
+                    async customer =>
+                    {
+                        Assert.Single(customer.Stores);
+                        Assert.Equal(store.Key, customer.Stores[0].Key);
+                        var result =
+                            await client
+                                .Builder()
+                                .Customers()
+                                .InStore(store.Key)
+                                .Login(customer.Email, password)
+                                .ExecuteAsync();
+                        
+                        var loginResult = result as CustomerSignInResult;
+                        Assert.NotNull(loginResult);
+                        Assert.NotNull(loginResult.Customer);
+                        Assert.Single(loginResult.Customer.Stores);
+                        Assert.Equal(store.Key, loginResult.Customer.Stores[0].Key);
+                        Assert.Equal(customer.Email, loginResult.Customer.Email);
+                    });
+            });
+        }
+        
+        [Fact]
+        public async Task CreateTokenForResettingCustomerPasswordInStore()
+        {
+            await WithStore(client, async store =>
+            {
+                var stores = new List<IReferenceable<Store>>
+                {
+                    store.ToKeyResourceIdentifier()
+                };
+                await WithCustomer(
+                    client,
+                    customerDraft => DefaultCustomerDraftInStores(customerDraft, stores),
+                    async customer =>
+                    {
+                        Assert.NotNull(customer);
+                        Assert.Single(customer.Stores);
+                        
+                        var result = await client
+                            .Builder()
+                            .Customers()
+                            .InStore(store.Key)
+                            .CreateTokenForPasswordResetting(customer.Email)
+                            .ExecuteAsync();
+                        
+                        var tokenResult = result as CustomerToken;
+                        Assert.NotNull(tokenResult);
+                        Assert.Equal(customer.Id, tokenResult.CustomerId);
+                    });
+            });
+        }
+        
+        [Fact]
+        public async Task GetCustomerByPasswordTokenInStore()
+        {
+            await WithStore(client, async store =>
+            {
+                var stores = new List<IReferenceable<Store>>
+                {
+                    store.ToKeyResourceIdentifier()
+                };
+                await WithCustomer(
+                    client,
+                    customerDraft => DefaultCustomerDraftInStores(customerDraft, stores),
+                    async customer =>
+                    {
+                        Assert.NotNull(customer);
+                        Assert.Single(customer.Stores);
+
+                        var result = await client
+                            .Builder()
+                            .Customers()
+                            .InStore(store.Key)
+                            .CreateTokenForPasswordResetting(customer.Email)
+                            .ExecuteAsync();
+                        
+                        var tokenResult = result as CustomerToken;
+                        Assert.NotNull(tokenResult);
+                        var retrievedCustomer =
+                            await client
+                                .Builder()
+                                .Customers()
+                                .GetByPasswordToken(tokenResult.Value)
+                                .InStore(store.Key)
+                                .ExecuteAsync();
+
+                        Assert.NotNull(retrievedCustomer);
+                        Assert.Single(retrievedCustomer.Stores);
+                        Assert.Equal(store.Key, retrievedCustomer.Stores[0].Key);
+                        Assert.Equal(customer.Email, retrievedCustomer.Email);
+                    });
+            });
+        }
+        
+        [Fact]
+        public async Task GetCustomerByPasswordTokenInStore2()
+        {
+            await WithStore(client, async store =>
+            {
+                var stores = new List<IReferenceable<Store>>
+                {
+                    store.ToKeyResourceIdentifier()
+                };
+                await WithCustomer(
+                    client,
+                    customerDraft => DefaultCustomerDraftInStores(customerDraft, stores),
+                    async customer =>
+                    {
+                        Assert.NotNull(customer);
+                        Assert.Single(customer.Stores);
+
+                      
+                        var retrievedCustomer =
+                            await client
+                                .Builder()
+                                .Customers()
+                                .CreateTokenForPasswordResetting(customer.Email)
+                                .GetByPasswordToken()
+                                .InStore(store.Key)
+                                .ExecuteAsync();
+
+                        Assert.NotNull(retrievedCustomer);
+                        Assert.Single(retrievedCustomer.Stores);
+                        Assert.Equal(store.Key, retrievedCustomer.Stores[0].Key);
+                        Assert.Equal(customer.Email, retrievedCustomer.Email);
+                    });
+            });
+        }
+        
+        [Fact]
+        public async Task GetCustomerByPasswordToken()
+        {
+            await WithCustomer(
+                client, async customer =>
+                {
+                    Assert.NotNull(customer);
+
+                    var retrievedCustomer =
+                        await client
+                            .Builder()
+                            .Customers()
+                            .CreateTokenForPasswordResetting(customer.Email)
+                            .GetByPasswordToken()
+                            .ExecuteAsync();
+
+                    Assert.NotNull(retrievedCustomer);
+                    Assert.Equal(customer.Email, retrievedCustomer.Email);
+                });
+        }
+        
+
+        [Fact]
+        public async Task GetCustomerByEmailToken()
+        {
+            await WithCustomer(
+                client, async customer =>
+                {
+                    Assert.NotNull(customer);
+                  
+                    var retrievedCustomer = await client
+                        .Builder()
+                        .Customers()
+                        .CreateTokenForEmailVerification(customer.Id, 10, customer.Version)
+                        .GetByEmailToken()
+                        .ExecuteAsync();
+                    Assert.NotNull(retrievedCustomer);
+                    Assert.Equal(customer.Email, retrievedCustomer.Email);
+                });
+        }
+        
+        [Fact]
+        public async Task GetCustomerByEmailTokenInStore()
+        {
+            await WithStore(client, async store =>
+            {
+                var stores = new List<IReferenceable<Store>>
+                {
+                    store.ToKeyResourceIdentifier()
+                };
+                await WithCustomer(
+                    client,
+                    draft => DefaultCustomerDraftInStores(draft, stores),
+                    async customer =>
+                    {
+                        Assert.NotNull(customer);
+                        Assert.Single(customer.Stores);
+
+                        var result = await client
+                            .Builder()
+                            .Customers()
+                            .InStore(store.Key)
+                            .CreateTokenForEmailVerification(customer.Id, 10, customer.Version)
+                            .ExecuteAsync();
+                        
+                        var tokenResult = result as CustomerToken;
+                        Assert.NotNull(tokenResult);
+                        
+
+                        var retrievedCustomer = await client
+                            .Builder()
+                            .Customers()
+                            .GetByEmailToken(tokenResult.Value)
+                            .InStore(store.Key)
+                            .ExecuteAsync();
+                        Assert.NotNull(retrievedCustomer);
+                        Assert.Equal(customer.Email, retrievedCustomer.Email);
+                    });
+            });
+        }
+        
+        [Fact]
+        public async Task GetCustomerByEmailTokenInStore2()
+        {
+            await WithStore(client, async store =>
+            {
+                var stores = new List<IReferenceable<Store>>
+                {
+                    store.ToKeyResourceIdentifier()
+                };
+                await WithCustomer(
+                    client,
+                    draft => DefaultCustomerDraftInStores(draft, stores),
+                    async customer =>
+                    {
+                        Assert.NotNull(customer);
+                        Assert.Single(customer.Stores);
+                        
+
+                        var retrievedCustomer = await client
+                            .Builder()
+                            .Customers()
+                            .CreateTokenForEmailVerification(customer.Id, 10, customer.Version)
+                            .GetByEmailToken()
+                            .InStore(store.Key)
+                            .ExecuteAsync();
+                        Assert.NotNull(retrievedCustomer);
+                        Assert.Equal(customer.Email, retrievedCustomer.Email);
+                    });
+            });
+        }
+        
+        [Fact]
+        public async Task ResetCustomerPasswordInStore()
+        {
+            await WithStore(client, async store =>
+            {
+                var stores = new List<IReferenceable<Store>>
+                {
+                    store.ToKeyResourceIdentifier()
+                };
+                await WithUpdateableCustomer(
+                    client,
+                    customerDraft => DefaultCustomerDraftInStores(customerDraft, stores),
+                    async customer =>
+                    {
+                        var newPassword = TestingUtility.RandomString();
+
+                        var customerWithNewPassword =
+                            await client
+                                .Builder()
+                                .Customers()
+                                .CreateTokenForPasswordResetting(customer.Email)
+                                .ResetPassword(newPassword, customer.Version)
+                                .InStore(store.Key)
+                                .ExecuteAsync();
+                        
+                        Assert.NotNull(customerWithNewPassword);
+                        Assert.Equal(customer.Email, customerWithNewPassword.Email);
+
+                       
+                        var signInResult =
+                            await client
+                                .Builder()
+                                .Customers()
+                                .Login(customer.Email, newPassword)
+                                .InStore(store.Key)
+                                .ExecuteAsync();
+                        
+                        var loginResult = signInResult as CustomerSignInResult;
+                        Assert.NotNull(loginResult);
+                        Assert.Equal(customer.Email, loginResult.Customer.Email);
+                        return customerWithNewPassword;
+                    });
+            });
+        }
+        
+        [Fact]
+        public async Task VerifyCustomerEmailInStore()
+        {
+            await WithStore(client, async store =>
+            {
+                var stores = new List<IReferenceable<Store>>
+                {
+                    store.ToKeyResourceIdentifier()
+                };
+                await WithCustomer(
+                    client,
+                    customerDraft => DefaultCustomerDraftInStores(customerDraft, stores),
+                    async customer =>
+                    {
+                        Assert.False(customer.IsEmailVerified);
+                       
+                        var retrievedCustomer = await client
+                            .Builder()
+                            .Customers()
+                            .CreateTokenForEmailVerification(customer.Id, 10, customer.Version)
+                            .VerifyEmail()
+                            .ExecuteAsync();
+                        
+                        Assert.NotNull(retrievedCustomer);
+                        Assert.Equal(customer.Email, retrievedCustomer.Email);
+                        Assert.True(retrievedCustomer.IsEmailVerified);
+                    });
+            });
+        }
+        
         #region UpdateActions
 
         [Fact]

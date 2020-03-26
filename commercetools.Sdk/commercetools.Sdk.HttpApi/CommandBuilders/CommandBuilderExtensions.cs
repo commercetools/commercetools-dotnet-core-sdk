@@ -654,6 +654,21 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
                 () => new SignUpCustomerCommand(draft) as SignUpCommand<T>);
         }
 
+        public static CommandBuilder<InStoreCommand<SignInResult<T>>, SignInResult<T>> SignUp<T>(
+            this CommandBuilder<InStoreCommand<T>, T> builder,
+            CustomerDraft draft)
+            where T : Resource<T>
+        {
+            return new CommandBuilder<InStoreCommand<SignInResult<T>>, SignInResult<T>>(
+                builder.Client, () =>
+                {
+                    var inStoreCommand = builder.Build();
+                    var innerCommand = new SignUpCustomerCommand(draft) as SignUpCommand<T>;
+                    var newInStoreCommand = new InStoreCommand<SignInResult<T>>(inStoreCommand.StoreKey, innerCommand);
+                    return newInStoreCommand;
+                });
+        }
+
         public static CommandBuilder<LoginCommand<T>, SignInResult<T>> Login<T>(
             this DomainCommandBuilder<T> builder,
             string email,
@@ -663,6 +678,22 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             return new CommandBuilder<LoginCommand<T>, SignInResult<T>>(
                 builder.Client,
                 () => new LoginCustomerCommand(email, password) as LoginCommand<T>);
+        }
+
+        public static CommandBuilder<InStoreCommand<SignInResult<T>>, SignInResult<T>> Login<T>(
+            this CommandBuilder<InStoreCommand<T>, T> builder,
+            string email,
+            string password)
+            where T : Resource<T>
+        {
+            return new CommandBuilder<InStoreCommand<SignInResult<T>>, SignInResult<T>>(
+                builder.Client, () =>
+                {
+                    var inStoreCommand = builder.Build();
+                    var innerCommand = new LoginCustomerCommand(email, password) as LoginCommand<T>;
+                    var newInStoreCommand = new InStoreCommand<SignInResult<T>>(inStoreCommand.StoreKey, innerCommand);
+                    return newInStoreCommand;
+                });
         }
 
         public static CommandBuilder<ChangePasswordCommand<T>, T> ChangePassword<T>(
@@ -679,6 +710,19 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
                     ChangePasswordCommand<T>);
         }
 
+        public static CommandBuilder<ChangePasswordCommand<T>, T> ChangePassword<T>(
+            this DomainCommandBuilder<T> builder,
+            IVersioned<T> resource,
+            string currentPassword,
+            string newPassword)
+            where T : Resource<T>, ISignupable, IVersioned<T>
+        {
+            return new CommandBuilder<ChangePasswordCommand<T>, T>(
+                builder.Client,
+                () => new ChangeCustomerPasswordCommand(resource.Id, resource.Version, currentPassword, newPassword) as
+                    ChangePasswordCommand<T>);
+        }
+
         public static CommandBuilder<CreateTokenForPasswordResetCommand<T>, Token<T>>
             CreateTokenForPasswordResetting<T>(
                 this DomainCommandBuilder<T> builder,
@@ -690,6 +734,25 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
                 builder.Client,
                 () => new CreateTokenForCustomerPasswordResetCommand(email, timeToLiveMinutes) as
                     CreateTokenForPasswordResetCommand<T>);
+        }
+
+        public static CommandBuilder<InStoreCommand<Token<T>>, Token<T>>
+            CreateTokenForPasswordResetting<T>(
+                this CommandBuilder<InStoreCommand<T>, T> builder,
+                string email,
+                int? timeToLiveMinutes = null)
+            where T : Resource<T>
+        {
+            return new CommandBuilder<InStoreCommand<Token<T>>, Token<T>>(
+                builder.Client, () =>
+                {
+                    var inStoreCommand = builder.Build();
+                    var innerCommand =
+                        new CreateTokenForCustomerPasswordResetCommand(email, timeToLiveMinutes) as
+                            CreateTokenForPasswordResetCommand<T>;
+                    var newInStoreCommand = new InStoreCommand<Token<T>>(inStoreCommand.StoreKey, innerCommand);
+                    return newInStoreCommand;
+                });
         }
 
         public static CommandBuilder<CreateTokenForEmailVerificationCommand<T>, Token<T>>
@@ -706,6 +769,26 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
                     CreateTokenForEmailVerificationCommand<T>);
         }
 
+        public static CommandBuilder<InStoreCommand<Token<T>>, Token<T>>
+            CreateTokenForEmailVerification<T>(
+                this CommandBuilder<InStoreCommand<T>, T> builder,
+                string id,
+                int timeToLiveMinutes,
+                int? version = null)
+            where T : Resource<T>
+        {
+            return new CommandBuilder<InStoreCommand<Token<T>>, Token<T>>(
+                builder.Client, () =>
+                {
+                    var inStoreCommand = builder.Build();
+                    var innerCommand =
+                        new CreateTokenForCustomerEmailVerificationCommand(id, timeToLiveMinutes, version) as
+                            CreateTokenForEmailVerificationCommand<T>;
+                    var newInStoreCommand = new InStoreCommand<Token<T>>(inStoreCommand.StoreKey, innerCommand);
+                    return newInStoreCommand;
+                });
+        }
+
         public static CommandBuilder<GetCommand<T>, T> GetByEmailToken<T>(
             this DomainCommandBuilder<T> builder,
             string emailToken)
@@ -714,6 +797,18 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             return new CommandBuilder<GetCommand<T>, T>(
                 builder.Client,
                 () => new GetCustomerByEmailTokenCommand(emailToken) as GetCommand<T>);
+        }
+
+        public static CommandBuilder<GetCommand<T>, T> GetByEmailToken<T>(
+            this CommandBuilder<CreateTokenForEmailVerificationCommand<T>, Token<T>> builder)
+            where T : Resource<T>, ISignupable
+        {
+            return new CommandBuilder<GetCommand<T>, T>(builder.Client, () =>
+            {
+                var result = builder.ExecuteAsync().Result as CustomerToken;
+                var emailToken = result?.Value;
+                return new GetCustomerByEmailTokenCommand(emailToken) as GetCommand<T>;
+            });
         }
 
         public static CommandBuilder<GetCommand<T>, T> GetByPasswordToken<T>(
@@ -732,8 +827,8 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
         {
             return new CommandBuilder<GetCommand<T>, T>(builder.Client, () =>
             {
-                // builder.Build().
-                var passwordToken = string.Empty;
+                var result = builder.ExecuteAsync().Result as CustomerToken;
+                var passwordToken = result?.Value;
                 return new GetCustomerByPasswordTokenCommand(passwordToken) as GetCommand<T>;
             });
         }
@@ -750,6 +845,20 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
                 () => new ResetCustomerPasswordCommand(tokenValue, newPassword, version) as ResetPasswordCommand<T>);
         }
 
+        public static CommandBuilder<ResetPasswordCommand<T>, T> ResetPassword<T>(
+            this CommandBuilder<CreateTokenForPasswordResetCommand<T>, Token<T>> builder,
+            string newPassword,
+            int? version = null)
+            where T : Resource<T>, ISignupable
+        {
+            return new CommandBuilder<ResetPasswordCommand<T>, T>(builder.Client, () =>
+            {
+                var result = builder.ExecuteAsync().Result as CustomerToken;
+                var passwordToken = result?.Value;
+                return new ResetCustomerPasswordCommand(passwordToken, newPassword, version) as ResetPasswordCommand<T>;
+            });
+        }
+
         public static CommandBuilder<VerifyEmailCommand<T>, T> VerifyEmail<T>(
             this DomainCommandBuilder<T> builder,
             string tokenValue)
@@ -758,6 +867,18 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             return new CommandBuilder<VerifyEmailCommand<T>, T>(
                 builder.Client,
                 () => new VerifyCustomerEmailCommand(tokenValue) as VerifyEmailCommand<T>);
+        }
+
+        public static CommandBuilder<VerifyEmailCommand<T>, T> VerifyEmail<T>(
+            this CommandBuilder<CreateTokenForEmailVerificationCommand<T>, Token<T>> builder)
+            where T : Resource<T>, ISignupable
+        {
+            return new CommandBuilder<VerifyEmailCommand<T>, T>(builder.Client, () =>
+            {
+                var result = builder.ExecuteAsync().Result as CustomerToken;
+                var emailToken = result?.Value;
+                return new VerifyCustomerEmailCommand(emailToken) as VerifyEmailCommand<T>;
+            });
         }
 
         #endregion
