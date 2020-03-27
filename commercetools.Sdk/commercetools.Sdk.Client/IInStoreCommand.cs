@@ -3,7 +3,7 @@ using commercetools.Sdk.Domain;
 
 namespace commercetools.Sdk.Client
 {
-    public interface IInStoreCommand<T>
+    public interface IInStoreCommand
     {
         string StoreKey { get; }
 

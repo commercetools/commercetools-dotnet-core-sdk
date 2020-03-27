@@ -7,6 +7,7 @@ using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Projects;
 using Type = System.Type;
+using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 
 namespace commercetools.Sdk.Core3Tests
 {
@@ -43,6 +44,7 @@ namespace commercetools.Sdk.Core3Tests
             options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             options.IgnoreNullValues = true;
             options.Converters.Add(new ReferenceConverterFactory());
+            options.Converters.Add(new AttributeConverter());
 
             var productsJson = JsonSerializer.Serialize(products, options);
             Assert.NotEmpty(productsJson);
@@ -88,6 +90,21 @@ namespace commercetools.Sdk.Core3Tests
             var converterType = typeof(ReferenceConverter<>).MakeGenericType(keyType);
 
             return (JsonConverter)Activator.CreateInstance(converterType);
+        }
+    }
+    
+    class AttributeConverter : JsonConverter<Attribute>
+    {
+        public override Attribute Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Write(Utf8JsonWriter writer, Attribute value, JsonSerializerOptions options)
+        {
+            writer.WriteStartObject();
+            writer.WriteString("name", value.Name);
+            writer.WriteEndObject();
         }
     }
 }

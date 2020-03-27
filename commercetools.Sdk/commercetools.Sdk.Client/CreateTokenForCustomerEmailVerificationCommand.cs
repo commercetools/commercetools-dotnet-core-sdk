@@ -4,12 +4,7 @@ namespace commercetools.Sdk.Client
 {
     public class CreateTokenForCustomerEmailVerificationCommand : CreateTokenForEmailVerificationCommand<Customer>
     {
-        public CreateTokenForCustomerEmailVerificationCommand(string id, int timeToLiveMinutes)
-            : base(id, timeToLiveMinutes)
-        {
-        }
-
-        public CreateTokenForCustomerEmailVerificationCommand(string id, int timeToLiveMinutes, int version)
+       public CreateTokenForCustomerEmailVerificationCommand(string id, int timeToLiveMinutes, int? version = null)
             : base(id, timeToLiveMinutes, version)
         {
         }

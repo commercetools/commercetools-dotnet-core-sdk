@@ -4,12 +4,7 @@ namespace commercetools.Sdk.Client
 {
     public class VerifyCustomerEmailCommand : VerifyEmailCommand<Customer>
     {
-        public VerifyCustomerEmailCommand(string tokenValue)
-            : base(tokenValue)
-        {
-        }
-
-        public VerifyCustomerEmailCommand(string tokenValue, int version)
+        public VerifyCustomerEmailCommand(string tokenValue, int? version = null)
             : base(tokenValue, version)
         {
         }

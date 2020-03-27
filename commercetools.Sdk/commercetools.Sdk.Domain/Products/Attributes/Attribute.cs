@@ -7,6 +7,11 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         public string Name { get; set; }
         
         public object JsonValue { get; set; }
+        
+        public bool ShouldSerializeJsonValue()
+        {
+            return false;
+        }
 
         public IAttribute ToIAttribute()
         {

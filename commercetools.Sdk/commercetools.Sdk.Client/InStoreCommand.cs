@@ -9,7 +9,7 @@ namespace commercetools.Sdk.Client
     /// It's a Wrapper for other command, to support in-Store
     /// </summary>
     /// <typeparam name="T">type of the result of inner command</typeparam>
-    public class InStoreCommand<T> : Command<T>, IInStoreCommand<T>, IDecoratorCommand
+    public class InStoreCommand<T> : Command<T>, IInStoreCommand, IDecoratorCommand
     {
         public InStoreCommand(string storeKey, ICommand<T> innerCommand)
         {
@@ -25,7 +25,7 @@ namespace commercetools.Sdk.Client
 
         public string StoreKey { get; }
 
-        public ICommand<T> InnerCommand { get; }
+        public ICommand<T> InnerCommand { get; set; }
 
         public override Type ResourceType => InnerCommand.ResourceType;
     }

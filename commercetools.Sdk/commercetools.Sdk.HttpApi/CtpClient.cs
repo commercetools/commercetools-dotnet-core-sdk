@@ -43,7 +43,7 @@
             }
         }
 
-        public async Task<T> ExecuteAsync<T>(Command<T> command)
+        public async Task<T> ExecuteAsync<T>(ICommand<T> command)
         {
             var httpApiCommand = this.httpApiCommandFactory.Create(command);
             return await this.SendRequest<T>(httpApiCommand.HttpRequestMessage).ConfigureAwait(false);
