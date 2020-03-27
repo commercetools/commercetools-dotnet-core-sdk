@@ -1,6 +1,6 @@
 ## [1.0.0-beta-3 - 2020-02-18](https://github.com/commercetools/commercetools-dotnet-core-sdk/compare/1.0.0-beta-2...1.0.0-beta-3)
 ### Features
-
+- Add Command Builders Feature [`#116`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/116)
 - Add Domain Models, Commands, Request Builders and Integration Tests for OrderEdits Endpoint [`#97`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/97)
 - Add InStoreCommand as a decorator for other commands and applying it for Customers, Carts, Orders and OrdersImport Endpoints [`#97`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/97)
 - Add MvcExample Project to List Products as Example of how to use the SDK in MVC Application [`d1ea7a8`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/d1ea7a810575e375be638fee8f3d1f0bd48e6e54)
@@ -21,6 +21,8 @@
    * GetShippingMethodsForOrderEditCommand
 
 ### Bug Fixes
+- Fix Attributes casting [`#115`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/115)
+- Solving an issue while creating httpApiCommands [`#115`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/115)
 - Add `Type` Property to State Model [`173ad9e`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/173ad9e4d924d08f14399a1a8cd3a76ed9ba6272)
 - Add `Key` Property to ProductDiscountDraft and ProductDiscount Models [`b7ebde2`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/b7ebde2cfb401ecc680f54ba33587335db37d7a2)
 - Adjust GetCartByCustomerIdCommand to adapt changes in the changed endpoint. [`62e596d`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/62e596ddf0ec3428bda94ed6f140791381f052eb)
@@ -33,6 +35,7 @@
 - Add CustomFieldsPredicateVisitorConverter to solve case sensitive issue on custom fields predicate #89 [`393710e`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/393710e7b26b9824cbc06162000d35d1457b2940)
 - Fix the type of some properties in customer models [`b7c0248`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/b7c024877dc98173bb2a27db64b606c9baf3459b)
 - Solve type of property `Assets` to be `List<AssetDraft>` instead of `List<Asset>` in CategoryDraft Model [`f89a0ba`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/f89a0baf2f73de2ebedb709a0240981d3ffa11f2)
+- Fix typo in PriceTier [`b8b4227`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/b8b42273424e610fcc31a3c30f6955740426a4d6)
 
 ### Breaking Changes
 - Change Type of `SupplyChannel` Property in SetSupplyChannelUpdateAction Model from `Reference<Channel>` 
