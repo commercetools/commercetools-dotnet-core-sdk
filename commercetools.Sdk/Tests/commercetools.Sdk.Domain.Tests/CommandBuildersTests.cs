@@ -523,19 +523,7 @@ namespace commercetools.Sdk.Domain.Tests
             Assert.IsType<GetCustomerByPasswordTokenCommand>(command);
             Assert.Equal(passwordToken, command.ParameterValue);
         }
-        
-        [Fact]
-        public void IsGetByPasswordTokenCommand2()
-        {
-            var builder = new CommandBuilder();
-            var email = "customer@email.com";
-            var command = builder.Customers()
-                .CreateTokenForPasswordResetting(email)
-                .GetByPasswordToken()
-                .Build();
-            Assert.IsType<GetCustomerByPasswordTokenCommand>(command);
-        }
-        
+
         [Fact]
         public void IsGetByPasswordTokenInStoreCommand()
         {
