@@ -3,11 +3,9 @@ using commercetools.Sdk.Domain.InventoryEntries;
 
 namespace commercetools.Sdk.Domain.Messages.InventoryEntries
 {
-    [TypeMarker("InventoryEntryDeleted")]
-    public class InventoryEntryDeletedMessage : Message<InventoryEntry>
+    [TypeMarker("InventoryEntryCreated")]
+    public class InventoryEntryCreatedMessage : Message<InventoryEntry>
     {
-        public string Sku { get; set;}
-
-        public Reference<Channel> SupplyChannel { get; set;}
+        public InventoryEntry InventoryEntry { get; set; }
     }
 }
