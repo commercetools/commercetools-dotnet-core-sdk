@@ -14,6 +14,8 @@ namespace commercetools.Sdk.Client
             this.Init(orderEditId, country, state);
         }
 
+        public override string UrlSuffix => "/matching-orderedit";
+
         private void Init(string orderEditId, string country, string state = null)
         {
             this.AdditionalParameters = new GetShippingMethodsForOrderEditAdditionalParameters

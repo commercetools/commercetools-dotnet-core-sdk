@@ -14,6 +14,8 @@ namespace commercetools.Sdk.Client
             this.Init(country, state, currency, expand);
         }
 
+        public override string UrlSuffix => "/matching-location";
+
         private void Init(string country, string state = null, string currency = null, List<Expansion<ShippingMethod>> expand = null)
         {
             this.AdditionalParameters = new GetShippingMethodsForLocationAdditionalParameters
