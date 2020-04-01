@@ -45,6 +45,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjections
                             Assert.True(stagedProductProjection.Published == false);
                             Assert.Equal(publishedProduct.Id, publishedProductProjection.Id);
                             Assert.True(publishedProductProjection.Published);
+                            Assert.True(stagedProductProjection.Name.Keys.Count > 1);
                         });
                 });
         }
@@ -74,6 +75,39 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjections
                             Assert.True(stagedProductProjection.Published == false);
                             Assert.Equal(publishedProduct.Id, publishedProductProjection.Id);
                             Assert.True(publishedProductProjection.Published);
+                        });
+                });
+        }
+        
+        [Fact]
+        public async Task GetProductProjectionByIdForSpecificLocale()
+        {
+            var localeProjection = "en";
+            await WithProduct(
+                client, productDraft => DefaultProductDraftWithPublish(productDraft, true),
+                async publishedProduct =>
+                {
+                    await WithProduct(
+                        client, productDraft => DefaultProductDraftWithPublish(productDraft, false),
+                        async stagedProduct =>
+                        {
+                            var stagedAdditionalParameters = new ProductProjectionAdditionalParameters
+                            {
+                                Staged = true,
+                                LocaleProjection = localeProjection
+                            };
+                            var stagedProductProjection = await client
+                                .ExecuteAsync(new GetByIdCommand<ProductProjection>(stagedProduct.Id,
+                                    stagedAdditionalParameters));
+                            var publishedProductProjection = await client
+                                .ExecuteAsync(new GetByIdCommand<ProductProjection>(publishedProduct.Id));
+
+                            Assert.Equal(stagedProduct.Id, stagedProductProjection.Id);
+                            Assert.True(stagedProductProjection.Published == false);
+                            Assert.Equal(publishedProduct.Id, publishedProductProjection.Id);
+                            Assert.True(publishedProductProjection.Published);
+                            Assert.Single(stagedProductProjection.Name.Keys);
+                            Assert.Equal(localeProjection,stagedProductProjection.Name.Keys.First());
                         });
                 });
         }

@@ -74,6 +74,16 @@ namespace commercetools.Sdk.HttpApi.SearchParameters
                 parameters.Add(new KeyValuePair<string, string>("priceChannel", productProjectionSearchParameters.PriceChannel));
             }
 
+            if (productProjectionSearchParameters.StoreProjection != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("storeProjection", productProjectionSearchParameters.StoreProjection));
+            }
+
+            if (productProjectionSearchParameters.LocaleProjection != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("localeProjection", productProjectionSearchParameters.LocaleProjection));
+            }
+
             var withTotal = productProjectionSearchParameters.WithTotal ? "true" : "false";
             parameters.Add(new KeyValuePair<string, string>("withTotal", withTotal));
 
