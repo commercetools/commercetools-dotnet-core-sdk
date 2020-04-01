@@ -13,10 +13,14 @@ namespace commercetools.Sdk.Domain.ShippingMethods
     {
         public string Key { get; set; }
         public string Name { get; set; }
+        
+        [Obsolete("Use LocalizedDescription instead")]
         public string Description { get; set; }
         public IReference<TaxCategory> TaxCategory { get; set; }
         public List<ZoneRateDraft> ZoneRates { get; set; }
         public bool IsDefault { get; set; }
         public string Predicate { get; set; }
+
+        public LocalizedString LocalizedDescription { get; set; }
     }
 }
