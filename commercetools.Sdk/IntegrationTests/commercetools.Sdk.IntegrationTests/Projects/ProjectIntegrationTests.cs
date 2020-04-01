@@ -270,5 +270,93 @@ namespace commercetools.Sdk.IntegrationTests.Projects
                     Assert.Null(projectWithNullExternalOAuth.ExternalOAuth);
                 });
         }
+        
+        [Fact]
+        public async Task UpdateProjectChangeCartsConfiguration()
+        {
+            var oldDeleteDaysAfterLastModification = 20;
+            var newDeleteDaysAfterLastModification = 80;
+            
+
+            await WithCurrentProject(client,
+                project => SetProjectCartConfiguration(project, new CartsConfiguration
+                {
+                    DeleteDaysAfterLastModification = oldDeleteDaysAfterLastModification
+                }),
+                async project =>
+                {
+                    Assert.NotNull(project);
+                    Assert.NotNull(project.Carts);
+                    Assert.Equal(oldDeleteDaysAfterLastModification, project.Carts.DeleteDaysAfterLastModification);
+
+                    var action = new ChangeCartsConfigurationUpdateAction
+                    {
+                        CartsConfiguration = new CartsConfiguration
+                        {
+                            DeleteDaysAfterLastModification = newDeleteDaysAfterLastModification
+                        }
+                    };
+
+                    var updatedProject = await 
+                        TryToUpdateCurrentProject(client, project, action.ToList());
+
+                    Assert.NotNull(updatedProject.Carts);
+                    Assert.Equal(newDeleteDaysAfterLastModification,updatedProject.Carts.DeleteDaysAfterLastModification);
+
+                    // then undo this change again
+                    action = new ChangeCartsConfigurationUpdateAction
+                    {
+                        CartsConfiguration = new CartsConfiguration()
+                    };
+                    var projectWithOriginalSettings = await 
+                        TryToUpdateCurrentProject(client, project, action.ToList());
+                    Assert.NotNull(projectWithOriginalSettings.Carts);
+                    Assert.Null(projectWithOriginalSettings.Carts.DeleteDaysAfterLastModification);
+                });
+        }
+        
+        [Fact]
+        public async Task UpdateProjectChangeShoppingListsConfiguration()
+        {
+            var oldDeleteDaysAfterLastModification = 20;
+            var newDeleteDaysAfterLastModification = 80;
+            
+
+            await WithCurrentProject(client,
+                project => SetProjectShoppingListsConfiguration(project, new ShoppingListsConfiguration
+                {
+                    DeleteDaysAfterLastModification = oldDeleteDaysAfterLastModification
+                }),
+                async project =>
+                {
+                    Assert.NotNull(project);
+                    Assert.NotNull(project.ShoppingLists);
+                    Assert.Equal(oldDeleteDaysAfterLastModification, project.ShoppingLists.DeleteDaysAfterLastModification);
+
+                    var action = new ChangeShoppingListsConfigurationUpdateAction
+                    {
+                        ShoppingListsConfiguration = new ShoppingListsConfiguration
+                        {
+                            DeleteDaysAfterLastModification = newDeleteDaysAfterLastModification
+                        }
+                    };
+
+                    var updatedProject = await 
+                        TryToUpdateCurrentProject(client, project, action.ToList());
+
+                    Assert.NotNull(updatedProject.ShoppingLists);
+                    Assert.Equal(newDeleteDaysAfterLastModification,updatedProject.ShoppingLists.DeleteDaysAfterLastModification);
+
+                    // then undo this change again
+                    action = new ChangeShoppingListsConfigurationUpdateAction
+                    {
+                        ShoppingListsConfiguration = new ShoppingListsConfiguration()
+                    };
+                    var projectWithOriginalSettings = await 
+                        TryToUpdateCurrentProject(client, project, action.ToList());
+                    Assert.NotNull(projectWithOriginalSettings.ShoppingLists);
+                    Assert.Null(projectWithOriginalSettings.ShoppingLists.DeleteDaysAfterLastModification);
+                });
+        }
     }
 }
