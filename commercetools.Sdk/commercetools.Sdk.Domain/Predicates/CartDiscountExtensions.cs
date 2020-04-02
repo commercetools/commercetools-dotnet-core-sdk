@@ -138,6 +138,11 @@ namespace commercetools.Sdk.Domain.Predicates
         {
             throw new NotImplementedException();
         }
+        
+        public static string CustomerKey(this Customer source)
+        {
+            throw new NotImplementedException();
+        }
 
         public static string CustomerGroupKey(this Price source)
         {

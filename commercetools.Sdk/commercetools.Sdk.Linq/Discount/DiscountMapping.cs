@@ -9,6 +9,7 @@ namespace commercetools.Sdk.Linq.Discount
             { "Currency", "currency" },
             { "Customer", "customer" },
             { "CustomerGroupKey", "customerGroup.key" },
+            { "CustomerKey", "key" },
             { "CustomTypeKey", "custom.type.key" },
             { "ProductKey", "product.key" },
             { "VariantId", "variant.id" },
