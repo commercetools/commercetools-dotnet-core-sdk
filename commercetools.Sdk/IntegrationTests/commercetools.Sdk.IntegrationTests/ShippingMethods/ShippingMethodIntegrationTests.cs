@@ -18,7 +18,7 @@ using static commercetools.Sdk.IntegrationTests.Carts.CartsFixture;
 using static commercetools.Sdk.IntegrationTests.Stores.StoresFixture;
 using static commercetools.Sdk.IntegrationTests.Orders.OrdersFixture;
 using static commercetools.Sdk.IntegrationTests.OrderEdits.OrderEditsFixture;
-using SetDescriptionUpdateAction = commercetools.Sdk.Domain.ShippingMethods.UpdateActions.SetLocalizedDescriptionUpdateAction;
+
 
 namespace commercetools.Sdk.IntegrationTests.ShippingMethods
 {
@@ -305,6 +305,27 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
             });
         }
 
+        [Fact]
+        public async Task UpdateShippingMethodSetDescription()
+        {
+            await WithUpdateableShippingMethod(client, async shippingMethod =>
+            {
+                var newDescription = TestingUtility.RandomString();
+                var updateActions = new List<UpdateAction<ShippingMethod>>();
+                var action = new SetDescriptionUpdateAction
+                {
+                    Description = newDescription
+                };
+                updateActions.Add(action);
+
+                var updatedShippingMethod = await client
+                    .ExecuteAsync(new UpdateByIdCommand<ShippingMethod>(shippingMethod, updateActions));
+
+                Assert.Equal(newDescription, updatedShippingMethod.Description);
+                return updatedShippingMethod;
+            });
+        }
+        
         [Fact]
         public async Task UpdateShippingMethodSetLocalizedDescription()
         {
