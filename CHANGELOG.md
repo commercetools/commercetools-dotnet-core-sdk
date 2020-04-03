@@ -1,4 +1,4 @@
-## [1.0.0-beta-4 - 2020-04-03](https://github.com/commercetools/commercetools-dotnet-core-sdk/compare/1.0.0-beta-2...1.0.0-beta-3)
+## [1.0.0-rc-1 - 2020-04-03](https://github.com/commercetools/commercetools-dotnet-core-sdk/compare/1.0.0-beta-3...1.0.0-rc-1)
 ### Features
 - Add KeyReference and Implement missing platform release updates [`#119`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/119)
 - Add Command Builders Feature [`#116`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/116)
@@ -16,9 +16,9 @@
 - Update Packages Versions and Validate services Scope on build [`#87`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/87)
 - Add a new constructor in `ChangePasswordCommand` with IVersioned parameter [`e52a421`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/e52a421f7e22d18667901ca5ba08932d1339e419)
 - Add dockerfile to build container with SDK for Core 3.0 & 2.1 [`a17ca36`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/a17ca36308a09b1ec29d8cbd5393d3814d864ede)
-- Add these new commands : [`6bbac63`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/6bbac63ebbb7a2e98ccd4664f8c132308427ad67) 
-   * GetShippingMethodsForCartCommand 
-   * GetShippingMethodsForLocationCommand 
+- Add these new commands : [`6bbac63`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/6bbac63ebbb7a2e98ccd4664f8c132308427ad67)
+   * GetShippingMethodsForCartCommand
+   * GetShippingMethodsForLocationCommand
    * GetShippingMethodsForOrderEditCommand
 
 ### Bug Fixes
@@ -39,8 +39,7 @@
 - Fix typo in PriceTier [`b8b4227`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/b8b42273424e610fcc31a3c30f6955740426a4d6)
 
 ### Breaking Changes
-- Change Type of `SupplyChannel` Property in SetSupplyChannelUpdateAction Model from `Reference<Channel>` 
-to `IReference<Channel>` [`6a6ad8c`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/6a6ad8c6fa04ebd1d600a8826a19d1f504be3a48)
+- Change Type of `SupplyChannel` Property in SetSupplyChannelUpdateAction Model from `Reference<Channel>` to `IReference<Channel>` [`6a6ad8c`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/6a6ad8c6fa04ebd1d600a8826a19d1f504be3a48)
 - Change Type of `Category` Property in AddToCategoryUpdateAction from `ResourceIdentifier` to `IReference<Category>` [`548a888`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/548a888c94f0eed5661bb3cac9776b6059f39c59)
 - Rename Order Update Action `SetShipmentReturnStateUpdateAction` to be `SetReturnShipmentStateUpdateAction` [`bfbcc99`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/bfbcc99fa0bc7b853ecf22a43755b26b45b286ee)
 - Change Type of `State` Property in TransitionStateUpdateAction from `Reference<State>` to `IReference<State>` [`a9920c1`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/a9920c130b720fe619b9193e1df0e0abab9a2a0b)
@@ -136,24 +135,24 @@ to `IReference<Channel>` [`6a6ad8c`](https://github.com/commercetools/commerceto
 ##### DiscountCodes:
 - Changing namespace of all models of DiscountCodes from commercetools.Sdk.Domain to commercetools.Sdk.Domain.DiscountCodes
 - Changing namespace of all update Actions of DiscountCodes from commercetools.Sdk.Domain.DiscountCodes to commercetools.Sdk.Domain.DiscountCodes.UpdateActions
-       
+
 ##### ShippingMethods
 - Changing Type of property `ShippingRates` to `List<ShippingRateDraft>` instead of `List<ShippingRate>` in ZoneRateDraft
 - Changing type of property `Name` in UpdateActions/ChangeNameUpdateAction from `LocalizedString` to `string`
 
 ##### CustomFields
-- Replace properties of type `CustomFields` with type `CustomFieldsDraft` in these Draft Models 
+- Replace properties of type `CustomFields` with type `CustomFieldsDraft` in these Draft Models
 - ShoppingLists/ShoppingListDraft
 - ShoppingLists/TextLineItemDraft
 - Carts/CartDraft
-- Carts/CustomLineItemDraft 
+- Carts/CustomLineItemDraft
 - Carts/LineItemDraft
 - Carts/UpdateActions/AddLineItemUpdateAction
 
 ##### Property type fixes
 - Solving type of properties in some domain models,[`3beb7eda`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/3beb7edaa8cfc938d48b12efcbc1f62bd56f1ddd)
 ##### Carts
-- Changing namespace of Delivery model from commercetools.Sdk.Domain to commercetools.Sdk.Domain.Carts 
+- Changing namespace of Delivery model from commercetools.Sdk.Domain to commercetools.Sdk.Domain.Carts
 ##### ProductDiscounts
 - Convert property `ProductId` in GetMatchingProductDiscountParameters model to be `string` instead of `Guid`
 
