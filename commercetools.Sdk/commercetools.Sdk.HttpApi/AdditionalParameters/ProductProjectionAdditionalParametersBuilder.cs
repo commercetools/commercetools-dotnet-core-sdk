@@ -46,6 +46,16 @@ namespace commercetools.Sdk.HttpApi.AdditionalParameters
                 parameters.Add(new KeyValuePair<string, string>("staged", productAdditionalParameters.Staged.ToString()));
             }
 
+            if (productAdditionalParameters.StoreProjection != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("storeProjection", productAdditionalParameters.StoreProjection));
+            }
+
+            if (productAdditionalParameters.LocaleProjection != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("localeProjection", productAdditionalParameters.LocaleProjection));
+            }
+
             return parameters;
         }
     }

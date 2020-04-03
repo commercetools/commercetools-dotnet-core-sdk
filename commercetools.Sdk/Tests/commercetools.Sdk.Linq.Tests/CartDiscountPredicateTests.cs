@@ -105,6 +105,15 @@ namespace commercetools.Sdk.Linq.Tests
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("customer.firstName = \"John\"", result);
         }
+        
+        [Fact]
+        public void CartPredicateCustomerKey()
+        {
+            Expression<Func<Cart, bool>> expression = c => c.Customer().CustomerKey() == "cusKey";
+            IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("customer.key = \"cusKey\"", result);
+        }
 
         [Fact]
         public void CartPredicateCustomerGroupKey()

@@ -18,5 +18,9 @@ namespace commercetools.Sdk.Domain.Projects
         public MessagesConfiguration Messages { get; set; }
         public ShippingRateInputType ShippingRateInputType { get; set; }
         public ExternalOAuth ExternalOAuth { get; set; }
+
+        public CartsConfiguration Carts { get; set; }
+        
+        public ShoppingListsConfiguration ShoppingLists { get; set; }
     }
 }

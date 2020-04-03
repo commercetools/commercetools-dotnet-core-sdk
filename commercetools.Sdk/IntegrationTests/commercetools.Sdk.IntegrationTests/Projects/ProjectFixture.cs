@@ -69,6 +69,26 @@ namespace commercetools.Sdk.IntegrationTests.Projects
             return actions;
         }
         
+        public static List<UpdateAction<Project>> SetProjectCartConfiguration(Project project, CartsConfiguration cartsConfiguration)
+        {
+            var actions = new List<UpdateAction<Project>>();
+            actions.AddUpdate(new ChangeCartsConfigurationUpdateAction
+            {
+                CartsConfiguration = cartsConfiguration
+            });
+            return actions;
+        }
+        
+        public static List<UpdateAction<Project>> SetProjectShoppingListsConfiguration(Project project, ShoppingListsConfiguration shoppingListsConfiguration)
+        {
+            var actions = new List<UpdateAction<Project>>();
+            actions.AddUpdate(new ChangeShoppingListsConfigurationUpdateAction
+            {
+                ShoppingListsConfiguration = shoppingListsConfiguration
+            });
+            return actions;
+        }
+        
         public static List<UpdateAction<Project>> SetProjectLanguages(Project project, List<string> languages)
         {
             var actions = new List<UpdateAction<Project>>();

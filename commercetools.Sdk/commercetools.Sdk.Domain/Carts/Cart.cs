@@ -15,7 +15,7 @@ namespace commercetools.Sdk.Domain.Carts
         public string CustomerEmail { get; set; }
         public string AnonymousId { get; set; }
 
-        public ResourceIdentifier<Store> Store { get; set; }
+        public KeyReference<Store> Store { get; set; }
         public List<LineItem> LineItems { get; set; }
         public List<CustomLineItem> CustomLineItems { get; set; }
         public Money TotalPrice { get; set; }

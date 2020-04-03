@@ -20,9 +20,24 @@ namespace commercetools.Sdk.IntegrationTests.Products
         public static ProductDraft DefaultProductDraft(ProductDraft productDraft)
         {
             var randomInt = TestingUtility.RandomInt();
-            productDraft.Name = new LocalizedString {{"en", $"Name_{randomInt}"}};
-            productDraft.Description = new LocalizedString {{"en", $"Description_{randomInt}"}};
-            productDraft.Slug = new LocalizedString {{"en", $"Slug_{randomInt}"}};
+            productDraft.Name = new LocalizedString
+            {
+                {"en", $"Name_{randomInt}"},
+                {"de", $"Name_de_{randomInt}"},
+                {"es", $"Name_es_{randomInt}"}
+            };
+            productDraft.Description = new LocalizedString
+            {
+                {"en", $"Description_{randomInt}"},
+                {"de", $"Description_de_{randomInt}"},
+                {"es", $"Description_es_{randomInt}"}
+            };
+            productDraft.Slug = new LocalizedString
+            {
+                {"en", $"Slug_{randomInt}"},
+                {"de", $"Slug_de_{randomInt}"},
+                {"es", $"Slug_es_{randomInt}"}
+            };
             productDraft.Key = $"Key_{randomInt}";
             productDraft.Publish = true;
             

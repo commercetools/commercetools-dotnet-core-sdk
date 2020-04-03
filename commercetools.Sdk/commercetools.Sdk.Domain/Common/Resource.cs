@@ -7,7 +7,9 @@ namespace commercetools.Sdk.Domain.Common
         public string Id { get; set; }
         public int Version { get; set; }
         public DateTime CreatedAt { get; set; }
+        public ClientLogging CreatedBy { get; set; }
         public DateTime LastModifiedAt { get; set; }
+        public ClientLogging LastModifiedBy { get; set; }
 
         public IReference<T> ToReference()
         {

@@ -40,6 +40,6 @@ namespace commercetools.Sdk.Domain.Orders
         public CartOrigin Origin { get; set; }
         public List<Address> ItemShippingAddresses { get; set; }
         
-        public IReferenceable<Store> Store { get; set; }
+        public ResourceIdentifier<Store> Store { get; set; }
     }
 }

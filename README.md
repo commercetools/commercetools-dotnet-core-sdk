@@ -168,6 +168,18 @@ Category category = this.client.ExecuteAsync(new GetByIdCommand<Category>(new Gu
 
 > Note! Not all commands are available for all domain types.
 
+The following line of code gets a category by ID using command builders:
+
+```c#
+string id = "2b327437-702e-4ab2-96fc-a98afa860b36";
+Category category = await this.client
+                                .Builder()
+                                .Categories()
+                                .GetById(id)
+                                .ExecuteAsync(); 
+```
+> Note! For more examples of command builders you can check integration tests in [CustomersIntegrationTestsUsingCommandBuilder](/commercetools.Sdk/IntegrationTests/commercetools.Sdk.IntegrationTests/Customers).
+
 In case the injection of the client is not possible, the client should then be retrieved from the service provider:
 
 ```c#

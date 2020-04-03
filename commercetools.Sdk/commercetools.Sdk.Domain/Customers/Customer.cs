@@ -33,6 +33,6 @@ namespace commercetools.Sdk.Domain.Customers
         public CustomFields Custom { get; set; }
         public string Locale { get; set; }
 
-        public List<ResourceIdentifier<Store>> Stores { get; set; }
+        public List<KeyReference<Store>> Stores { get; set; }
     }
 }
