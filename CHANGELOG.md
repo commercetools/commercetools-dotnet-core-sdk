@@ -1,5 +1,6 @@
-## [1.0.0-beta-3 - 2020-02-18](https://github.com/commercetools/commercetools-dotnet-core-sdk/compare/1.0.0-beta-2...1.0.0-beta-3)
+## [1.0.0-beta-4 - 2020-04-03](https://github.com/commercetools/commercetools-dotnet-core-sdk/compare/1.0.0-beta-2...1.0.0-beta-3)
 ### Features
+- Add KeyReference and Implement missing platform release updates [`#119`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/119)
 - Add Command Builders Feature [`#116`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/116)
 - Add Domain Models, Commands, Request Builders and Integration Tests for OrderEdits Endpoint [`#97`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/97)
 - Add InStoreCommand as a decorator for other commands and applying it for Customers, Carts, Orders and OrdersImport Endpoints [`#97`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/97)
@@ -69,6 +70,17 @@ to `IReference<Channel>` [`6a6ad8c`](https://github.com/commercetools/commerceto
     * ChangeTransactionTimestampUpdateAction
 
 - Rename namespace of types models from `commercetools.Sdk.Domain` to `commercetools.Sdk.Domain.Types` [`b815ccc`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/b815ccc473d878e7ec6e23e15f409b51b3c9e9b0)
+
+## [1.0.0-beta-3 - 2019-11-06](https://github.com/commercetools/commercetools-dotnet-core-sdk/compare/1.0.0-beta-2...1.0.0-beta-3)
+### Features
+- Add dockerfile to build container with SDK for Core 3.0 & 2.1
+
+### Bug Fixes
+- Fix tokenProvider tests
+- Fix IntegrationTest to use SimpleInjector container
+
+
+
 
 ## [1.0.0-beta-2 - 2019-10-22](https://github.com/commercetools/commercetools-dotnet-core-sdk/compare/1.0.0-beta-1...1.0.0-beta-2)
 ### Features
