@@ -33,7 +33,7 @@ namespace commercetools.Sdk.HttpApi.Tokens
                             return token;
                         }
 
-                        token = this.GetTokenAsync(this.GetRequestMessage()).Result;
+                        token = this.GetToken(this.GetRequestMessage());
                         this.tokenStoreManager.Token = token;
                     }
 
@@ -57,7 +57,7 @@ namespace commercetools.Sdk.HttpApi.Tokens
                         ? this.GetRequestMessage()
                         : this.GetRefreshTokenRequestMessage();
 
-                    token = this.GetTokenAsync(requestMessage).Result;
+                    token = this.GetToken(requestMessage);
                     this.tokenStoreManager.Token = token;
                     return token;
                 }
@@ -72,27 +72,32 @@ namespace commercetools.Sdk.HttpApi.Tokens
 
         private HttpRequestMessage GetRefreshTokenRequestMessage()
         {
-            HttpRequestMessage request = new HttpRequestMessage();
-            string requestUri = this.ClientConfiguration.AuthorizationBaseAddress + "oauth/token?grant_type=refresh_token";
+            var request = new HttpRequestMessage();
+            var requestUri = this.ClientConfiguration.AuthorizationBaseAddress + "oauth/token?grant_type=refresh_token";
             requestUri += $"&refresh_token={this.tokenStoreManager.Token.RefreshToken}";
             request.RequestUri = new Uri(requestUri);
-            string credentials = $"{this.ClientConfiguration.ClientId}:{this.ClientConfiguration.ClientSecret}";
+            var credentials = $"{this.ClientConfiguration.ClientId}:{this.ClientConfiguration.ClientSecret}";
             request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(credentials)));
             request.Method = HttpMethod.Post;
             return request;
         }
 
+        private Token GetToken(HttpRequestMessage requestMessage)
+        {
+            return AsyncUtil.RunSync(() => this.GetTokenAsync(requestMessage));
+        }
+
         private async Task<Token> GetTokenAsync(HttpRequestMessage requestMessage)
         {
-            HttpClient client = this.HttpClientFactory.CreateClient(DefaultClientNames.Authorization);
+            var client = this.HttpClientFactory.CreateClient(DefaultClientNames.Authorization);
             var result = await client.SendAsync(requestMessage).ConfigureAwait(false);
-            string content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
             if (result.IsSuccessStatusCode)
             {
                 return this.serializerService.Deserialize<Token>(content);
             }
 
-            HttpApiClientException generalClientException =
+            var generalClientException =
                 new HttpApiClientException(result.ReasonPhrase, (int)result.StatusCode);
             throw generalClientException;
         }
