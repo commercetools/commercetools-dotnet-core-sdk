@@ -19,13 +19,14 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '2.1.805' # SDK Version to use.
-      - run: cd commercetools.Sdk
       - run: dotnet restore --packages ../packages
+        working-directory: ./commercetools.Sdk
       - run: dotnet build --no-restore --source ../packages -c Release
-      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.Domain.Tests --no-build -c Release
-      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.HttpApi.Tests --no-build -c Release
-      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
-      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
+        working-directory: ./commercetools.Sdk
+      - run: dotnet test --verbosity=normal commercetools.Sdk/Tests/commercetools.Sdk.Domain.Tests --no-build -c Release
+      - run: dotnet test --verbosity=normal commercetools.Sdk/Tests/commercetools.Sdk.HttpApi.Tests --no-build -c Release
+      - run: dotnet test --verbosity=normal commercetools.Sdk/Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
+      - run: dotnet test --verbosity=normal commercetools.Sdk/Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
 
 #  integrationtests:
 #    name: Integration tests
