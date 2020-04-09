@@ -8,7 +8,6 @@ using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-//[assembly: CollectionBehavior(DisableTestParallelization = true)]
 namespace commercetools.Sdk.Core3Tests
 {
     public class ServiceProviderFixture
