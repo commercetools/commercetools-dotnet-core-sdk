@@ -1,0 +1,50 @@
+# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
+
+on:
+  - pull_request
+  - push
+
+name: CI
+
+jobs:
+  unittests:
+    name: Unit tests
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '2.1.805' # SDK Version to use.
+      - run: dotnet restore --packages ../packages
+      - run: dotnet build --no-restore --source ../packages -c Release
+      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.Domain.Tests --no-build -c Release
+      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.HttpApi.Tests --no-build -c Release
+      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
+      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
+
+#  integrationtests:
+#    name: Integration tests
+
+#    runs-on: ubuntu-latest
+
+#    strategy:
+#      matrix:
+#        container:
+#          - BuiltIn
+#          - SimpleInjector
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Setup
+#        uses: actions/setup-dotnet@v1
+#        with:
+#          dotnet-version: '2.1.805' # SDK Version to use.
+#      - run: dotnet restore --packages ../packages
+#      - run: dotnet build --no-restore --source ../packages -c Release
+#      - env:
+#          CTP_Container: ${{ matrix.container }}
+#        run: dotnet test IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
