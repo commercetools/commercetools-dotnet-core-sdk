@@ -12,13 +12,18 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        dotnet-version:
+          - '2.1.805'
+          - '3.0.100'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup dotnet 2.1
+      - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '2.1.805' # SDK Version to use.
+          dotnet-version: ${{ matrix.dotnet-version }}
       - run: dotnet restore --packages ../packages
         working-directory: ./commercetools.Sdk
       - run: dotnet build --no-restore --source ../packages -c Release
