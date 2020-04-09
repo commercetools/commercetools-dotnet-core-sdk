@@ -58,8 +58,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.NodaMoney
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.IntegrationTests", "IntegrationTests\commercetools.Sdk.IntegrationTests\commercetools.Sdk.IntegrationTests.csproj", "{2ADE2630-89A4-4F15-A855-7FA421D589FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.Core3Tests", "IntegrationTests\commercetools.Sdk.Core3Tests\commercetools.Sdk.Core3Tests.csproj", "{2205B1E4-8C1C-4209-BDCD-B557ADB76B98}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.MvcExample", "Examples\commercetools.Sdk.MvcExample\commercetools.Sdk.MvcExample.csproj", "{97E8CF4A-9B1B-418B-AA31-D93F43CDA6F3}"
 EndProject
 Global
