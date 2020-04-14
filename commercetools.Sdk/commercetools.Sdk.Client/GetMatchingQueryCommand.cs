@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Query;
 
 namespace commercetools.Sdk.Client
 {
+    [SuppressMessage("ReSharper", "CA2227", Justification = "library api")]
     public abstract class GetMatchingQueryCommand<T> : Command<PagedQueryResult<T>>, IExpandable
     {
         protected GetMatchingQueryCommand()
