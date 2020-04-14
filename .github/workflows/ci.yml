@@ -136,9 +136,8 @@ jobs:
       - run: dotnet build --no-restore --source ../packages -c Release
         working-directory: ./commercetools.Sdk
       - name: Create the package
-        run: dotnet pack -c Release  -o ../pack/
+        run: dotnet pack -c Release  -o ../../pack/
         working-directory: ./commercetools.Sdk
-      - run: pwd && ls -la && ls -la pack
       - uses: actions/upload-artifact@v1
         with:
           name: commercetools.Sdk
