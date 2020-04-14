@@ -7,119 +7,119 @@ on:
 name: CI
 
 jobs:
-  unittests:
-    name: Unit tests
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup dotnet 2.1
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '2.1.805' # SDK Version to use.
-      - run: dotnet restore --packages ../packages
-        working-directory: ./commercetools.Sdk
-      - run: dotnet build --no-restore --source ../packages -c Release
-        working-directory: ./commercetools.Sdk
-      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.Domain.Tests --no-build -c Release
-        working-directory: ./commercetools.Sdk
-      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.HttpApi.Tests --no-build -c Release
-        working-directory: ./commercetools.Sdk
-      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
-        working-directory: ./commercetools.Sdk
-      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
-        working-directory: ./commercetools.Sdk
-
-  integrationtests:
-    name: Integration tests
-
-    runs-on: ubuntu-latest
-
-    strategy:
-      max-parallel: 1
-      matrix:
-        container:
-          - BuiltIn
-          - SimpleInjector
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '2.1.805' # SDK Version to use.
-      - run: dotnet restore --packages ../packages
-        working-directory: ./commercetools.Sdk
-      - run: dotnet build --no-restore --source ../packages -c Release
-        working-directory: ./commercetools.Sdk
-      - env:
-          CTP_Container: ${{ matrix.container }}
-          CTP_Client__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_Client__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_Client__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_Client__Scope: ${{ secrets.CTP_SCOPE }}
-          CTP_TokenClient__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_TokenClient__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_TokenClient__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_TokenClient__Scope: ${{ secrets.CTP_SCOPE }}
-          CTP_TokenClientWithSmallerScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_TokenClientWithSmallerScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_TokenClientWithSmallerScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_TokenClientWithSmallerScope__Scope: ${{ secrets.CTP_SCOPE }}
-          CTP_TokenClientWithAnonymousScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_TokenClientWithAnonymousScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_TokenClientWithAnonymousScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_TokenClientWithAnonymousScope__Scope: ${{ secrets.CTP_SCOPE }}
-        run: dotnet test IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
-        working-directory: ./commercetools.Sdk
-
-  core3:
-    name: Core3 tests
-
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        container:
-          - BuiltIn
-          - SimpleInjector
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup dotnet 3.0
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '3.0.100' # SDK Version to use.
-      - run: dotnet restore IntegrationTests/commercetools.Sdk.Core3Tests/commercetools.Sdk.Core3Tests.csproj --packages ../packages
-        working-directory: ./commercetools.Sdk
-      - run: dotnet build IntegrationTests/commercetools.Sdk.Core3Tests/commercetools.Sdk.Core3Tests.csproj --no-restore --source ../packages -c Release
-        working-directory: ./commercetools.Sdk
-      - env:
-          CTP_Container: ${{ matrix.container }}
-          CTP_Client__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_Client__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_Client__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_Client__Scope: ${{ secrets.CTP_SCOPE }}
-          CTP_TokenClient__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_TokenClient__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_TokenClient__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_TokenClient__Scope: ${{ secrets.CTP_SCOPE }}
-          CTP_TokenClientWithSmallerScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_TokenClientWithSmallerScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_TokenClientWithSmallerScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_TokenClientWithSmallerScope__Scope: ${{ secrets.CTP_SCOPE }}
-          CTP_TokenClientWithAnonymousScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_TokenClientWithAnonymousScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_TokenClientWithAnonymousScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_TokenClientWithAnonymousScope__Scope: ${{ secrets.CTP_SCOPE }}
-        run: dotnet test IntegrationTests/commercetools.Sdk.Core3Tests/commercetools.Sdk.Core3Tests.csproj --no-build -c Release
-        working-directory: ./commercetools.Sdk
+#  unittests:
+#    name: Unit tests
+#
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Setup dotnet 2.1
+#        uses: actions/setup-dotnet@v1
+#        with:
+#          dotnet-version: '2.1.805' # SDK Version to use.
+#      - run: dotnet restore --packages ../packages
+#        working-directory: ./commercetools.Sdk
+#      - run: dotnet build --no-restore --source ../packages -c Release
+#        working-directory: ./commercetools.Sdk
+#      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.Domain.Tests --no-build -c Release
+#        working-directory: ./commercetools.Sdk
+#      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.HttpApi.Tests --no-build -c Release
+#        working-directory: ./commercetools.Sdk
+#      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
+#        working-directory: ./commercetools.Sdk
+#      - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
+#        working-directory: ./commercetools.Sdk
+#
+#  integrationtests:
+#    name: Integration tests
+#
+#    runs-on: ubuntu-latest
+#
+#    strategy:
+#      max-parallel: 1
+#      matrix:
+#        container:
+#          - BuiltIn
+#          - SimpleInjector
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Setup
+#        uses: actions/setup-dotnet@v1
+#        with:
+#          dotnet-version: '2.1.805' # SDK Version to use.
+#      - run: dotnet restore --packages ../packages
+#        working-directory: ./commercetools.Sdk
+#      - run: dotnet build --no-restore --source ../packages -c Release
+#        working-directory: ./commercetools.Sdk
+#      - env:
+#          CTP_Container: ${{ matrix.container }}
+#          CTP_Client__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+#          CTP_Client__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+#          CTP_Client__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+#          CTP_Client__Scope: ${{ secrets.CTP_SCOPE }}
+#          CTP_TokenClient__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+#          CTP_TokenClient__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+#          CTP_TokenClient__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+#          CTP_TokenClient__Scope: ${{ secrets.CTP_SCOPE }}
+#          CTP_TokenClientWithSmallerScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+#          CTP_TokenClientWithSmallerScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+#          CTP_TokenClientWithSmallerScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+#          CTP_TokenClientWithSmallerScope__Scope: ${{ secrets.CTP_SCOPE }}
+#          CTP_TokenClientWithAnonymousScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+#          CTP_TokenClientWithAnonymousScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+#          CTP_TokenClientWithAnonymousScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+#          CTP_TokenClientWithAnonymousScope__Scope: ${{ secrets.CTP_SCOPE }}
+#        run: dotnet test IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
+#        working-directory: ./commercetools.Sdk
+#
+#  core3:
+#    name: Core3 tests
+#
+#    runs-on: ubuntu-latest
+#
+#    strategy:
+#      matrix:
+#        container:
+#          - BuiltIn
+#          - SimpleInjector
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Setup dotnet 3.0
+#        uses: actions/setup-dotnet@v1
+#        with:
+#          dotnet-version: '3.0.100' # SDK Version to use.
+#      - run: dotnet restore IntegrationTests/commercetools.Sdk.Core3Tests/commercetools.Sdk.Core3Tests.csproj --packages ../packages
+#        working-directory: ./commercetools.Sdk
+#      - run: dotnet build IntegrationTests/commercetools.Sdk.Core3Tests/commercetools.Sdk.Core3Tests.csproj --no-restore --source ../packages -c Release
+#        working-directory: ./commercetools.Sdk
+#      - env:
+#          CTP_Container: ${{ matrix.container }}
+#          CTP_Client__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+#          CTP_Client__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+#          CTP_Client__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+#          CTP_Client__Scope: ${{ secrets.CTP_SCOPE }}
+#          CTP_TokenClient__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+#          CTP_TokenClient__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+#          CTP_TokenClient__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+#          CTP_TokenClient__Scope: ${{ secrets.CTP_SCOPE }}
+#          CTP_TokenClientWithSmallerScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+#          CTP_TokenClientWithSmallerScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+#          CTP_TokenClientWithSmallerScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+#          CTP_TokenClientWithSmallerScope__Scope: ${{ secrets.CTP_SCOPE }}
+#          CTP_TokenClientWithAnonymousScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+#          CTP_TokenClientWithAnonymousScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+#          CTP_TokenClientWithAnonymousScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+#          CTP_TokenClientWithAnonymousScope__Scope: ${{ secrets.CTP_SCOPE }}
+#        run: dotnet test IntegrationTests/commercetools.Sdk.Core3Tests/commercetools.Sdk.Core3Tests.csproj --no-build -c Release
+#        working-directory: ./commercetools.Sdk
   artifacts:
     name: Create artifacts
     runs-on: ubuntu-latest
-    needs: [unittests, integrationtests, core3]
+#    needs: [unittests, integrationtests, core3]
 
     steps:
       - uses: actions/checkout@master
@@ -138,6 +138,7 @@ jobs:
       - name: Create the package
         run: dotnet pack -c Release  -o ../pack/
         working-directory: ./commercetools.Sdk
+      - run: pwd && ls -la && ls -la pack
       - uses: actions/upload-artifact@v1
         with:
           name: commercetools.Sdk
