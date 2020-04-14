@@ -10,7 +10,13 @@ jobs:
   unittests:
     name: Unit tests
 
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        osversion:
+          - windows-latest
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{ matrix.osversion }}
 
     steps:
       - name: Checkout
