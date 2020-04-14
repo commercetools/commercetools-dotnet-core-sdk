@@ -49,6 +49,24 @@ jobs:
         container:
           - BuiltIn
           - SimpleInjector
+    env:
+      CTP_Container: ${{ matrix.container }}
+      CTP_Client__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+      CTP_Client__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+      CTP_Client__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+      CTP_Client__Scope: ${{ secrets.CTP_SCOPE }}
+      CTP_TokenClient__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+      CTP_TokenClient__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+      CTP_TokenClient__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+      CTP_TokenClient__Scope: ${{ secrets.CTP_SCOPE }}
+      CTP_TokenClientWithSmallerScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+      CTP_TokenClientWithSmallerScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+      CTP_TokenClientWithSmallerScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+      CTP_TokenClientWithSmallerScope__Scope: ${{ secrets.CTP_SCOPE }}
+      CTP_TokenClientWithAnonymousScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+      CTP_TokenClientWithAnonymousScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+      CTP_TokenClientWithAnonymousScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+      CTP_TokenClientWithAnonymousScope__Scope: ${{ secrets.CTP_SCOPE }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -60,27 +78,29 @@ jobs:
         working-directory: ./commercetools.Sdk
       - run: dotnet build --no-restore --source ../packages -c Release
         working-directory: ./commercetools.Sdk
-      - env:
-          CTP_Container: ${{ matrix.container }}
-          CTP_Client__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_Client__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_Client__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_Client__Scope: ${{ secrets.CTP_SCOPE }}
-          CTP_TokenClient__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_TokenClient__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_TokenClient__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_TokenClient__Scope: ${{ secrets.CTP_SCOPE }}
-          CTP_TokenClientWithSmallerScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_TokenClientWithSmallerScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_TokenClientWithSmallerScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_TokenClientWithSmallerScope__Scope: ${{ secrets.CTP_SCOPE }}
-          CTP_TokenClientWithAnonymousScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_TokenClientWithAnonymousScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_TokenClientWithAnonymousScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_TokenClientWithAnonymousScope__Scope: ${{ secrets.CTP_SCOPE }}
-        run: dotnet test IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
+      - run: dotnet test IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
+        if: github.event_name == 'push'
         working-directory: ./commercetools.Sdk
-
+      - run: dotnet test IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
+        if: github.event_name == 'pull_request'
+        working-directory: ./commercetools.Sdk
+        env:
+          CTP_Client__ClientId: ${{ secrets.CTP_CLIENT_ID_PR }}
+          CTP_Client__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET_PR }}
+          CTP_Client__ProjectKey: ${{ secrets.CTP_PROJECT_KEY_PR }}
+          CTP_Client__Scope: ${{ secrets.CTP_SCOPE_PR }}
+          CTP_TokenClient__ClientId: ${{ secrets.CTP_CLIENT_ID_PR }}
+          CTP_TokenClient__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET_PR }}
+          CTP_TokenClient__ProjectKey: ${{ secrets.CTP_PROJECT_KEY_PR }}
+          CTP_TokenClient__Scope: ${{ secrets.CTP_SCOPE_PR }}
+          CTP_TokenClientWithSmallerScope__ClientId: ${{ secrets.CTP_CLIENT_ID_PR }}
+          CTP_TokenClientWithSmallerScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET_PR }}
+          CTP_TokenClientWithSmallerScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY_PR }}
+          CTP_TokenClientWithSmallerScope__Scope: ${{ secrets.CTP_SCOPE_PR }}
+          CTP_TokenClientWithAnonymousScope__ClientId: ${{ secrets.CTP_CLIENT_ID_PR }}
+          CTP_TokenClientWithAnonymousScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET_PR }}
+          CTP_TokenClientWithAnonymousScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY_PR }}
+          CTP_TokenClientWithAnonymousScope__Scope: ${{ secrets.CTP_SCOPE_PR }}
   core3:
     name: Core3 tests
 
@@ -91,6 +111,24 @@ jobs:
         container:
           - BuiltIn
           - SimpleInjector
+    env:
+      CTP_Container: ${{ matrix.container }}
+      CTP_Client__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+      CTP_Client__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+      CTP_Client__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+      CTP_Client__Scope: ${{ secrets.CTP_SCOPE }}
+      CTP_TokenClient__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+      CTP_TokenClient__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+      CTP_TokenClient__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+      CTP_TokenClient__Scope: ${{ secrets.CTP_SCOPE }}
+      CTP_TokenClientWithSmallerScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+      CTP_TokenClientWithSmallerScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+      CTP_TokenClientWithSmallerScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+      CTP_TokenClientWithSmallerScope__Scope: ${{ secrets.CTP_SCOPE }}
+      CTP_TokenClientWithAnonymousScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
+      CTP_TokenClientWithAnonymousScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
+      CTP_TokenClientWithAnonymousScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
+      CTP_TokenClientWithAnonymousScope__Scope: ${{ secrets.CTP_SCOPE }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -102,26 +140,29 @@ jobs:
         working-directory: ./commercetools.Sdk
       - run: dotnet build IntegrationTests/commercetools.Sdk.Core3Tests/commercetools.Sdk.Core3Tests.csproj --no-restore --source ../packages -c Release
         working-directory: ./commercetools.Sdk
-      - env:
-          CTP_Container: ${{ matrix.container }}
-          CTP_Client__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_Client__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_Client__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_Client__Scope: ${{ secrets.CTP_SCOPE }}
-          CTP_TokenClient__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_TokenClient__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_TokenClient__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_TokenClient__Scope: ${{ secrets.CTP_SCOPE }}
-          CTP_TokenClientWithSmallerScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_TokenClientWithSmallerScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_TokenClientWithSmallerScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_TokenClientWithSmallerScope__Scope: ${{ secrets.CTP_SCOPE }}
-          CTP_TokenClientWithAnonymousScope__ClientId: ${{ secrets.CTP_CLIENT_ID }}
-          CTP_TokenClientWithAnonymousScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET }}
-          CTP_TokenClientWithAnonymousScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY }}
-          CTP_TokenClientWithAnonymousScope__Scope: ${{ secrets.CTP_SCOPE }}
-        run: dotnet test IntegrationTests/commercetools.Sdk.Core3Tests/commercetools.Sdk.Core3Tests.csproj --no-build -c Release
+      - run: dotnet test IntegrationTests/commercetools.Sdk.Core3Tests/commercetools.Sdk.Core3Tests.csproj --no-build -c Release
+        if: github.event_name == 'push'
         working-directory: ./commercetools.Sdk
+      - run: dotnet test IntegrationTests/commercetools.Sdk.Core3Tests/commercetools.Sdk.Core3Tests.csproj --no-build -c Release
+        if: github.event_name == 'pull_request'
+        working-directory: ./commercetools.Sdk
+        env:
+          CTP_Client__ClientId: ${{ secrets.CTP_CLIENT_ID_PR }}
+          CTP_Client__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET_PR }}
+          CTP_Client__ProjectKey: ${{ secrets.CTP_PROJECT_KEY_PR }}
+          CTP_Client__Scope: ${{ secrets.CTP_SCOPE_PR }}
+          CTP_TokenClient__ClientId: ${{ secrets.CTP_CLIENT_ID_PR }}
+          CTP_TokenClient__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET_PR }}
+          CTP_TokenClient__ProjectKey: ${{ secrets.CTP_PROJECT_KEY_PR }}
+          CTP_TokenClient__Scope: ${{ secrets.CTP_SCOPE_PR }}
+          CTP_TokenClientWithSmallerScope__ClientId: ${{ secrets.CTP_CLIENT_ID_PR }}
+          CTP_TokenClientWithSmallerScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET_PR }}
+          CTP_TokenClientWithSmallerScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY_PR }}
+          CTP_TokenClientWithSmallerScope__Scope: ${{ secrets.CTP_SCOPE_PR }}
+          CTP_TokenClientWithAnonymousScope__ClientId: ${{ secrets.CTP_CLIENT_ID_PR }}
+          CTP_TokenClientWithAnonymousScope__ClientSecret: ${{ secrets.CTP_CLIENT_SECRET_PR }}
+          CTP_TokenClientWithAnonymousScope__ProjectKey: ${{ secrets.CTP_PROJECT_KEY_PR }}
+          CTP_TokenClientWithAnonymousScope__Scope: ${{ secrets.CTP_SCOPE_PR }}
   artifacts:
     name: Create artifacts
     runs-on: ubuntu-latest
