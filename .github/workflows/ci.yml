@@ -130,7 +130,7 @@ jobs:
           source-url: https://nuget.pkg.github.com/commercetools/index.json
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: ./patch_csproj.rb --version 1.0.0.${GITHUB_RUN_NUMBER} --patch **/*.csproj
+      - run: ./patch_csproj.rb --version 1.0.0.${{ github.run_number }} --patch **/*.csproj
       - run: dotnet restore --packages ../packages
         working-directory: ./commercetools.Sdk
       - run: dotnet build --no-restore --source ../packages -c Release
@@ -140,7 +140,7 @@ jobs:
         working-directory: ./commercetools.Sdk
       - uses: actions/upload-artifact@v1
         with:
-          name: commercetools.Sdk.1.0.0.${GITHUB_RUN_NUMBER}
+          name: commercetools.Sdk.1.0.0.${{ github.run_number }}
           path: pack
 #      - name: Publish the package to GPR
 #        run: dotnet nuget push pack/*.nupkg
