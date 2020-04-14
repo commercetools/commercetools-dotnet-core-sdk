@@ -80,6 +80,11 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        container:
+          - BuiltIn
+          - SimpleInjector
     steps:
       - name: Checkout
         uses: actions/checkout@v2
