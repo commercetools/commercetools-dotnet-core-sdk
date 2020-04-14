@@ -119,10 +119,7 @@ jobs:
   artifacts:
     name: Create artifacts
     runs-on: ubuntu-latest
-    needs:
-      - unittests
-      - integrationtests
-      - core3
+    needs: [unittests, integrationtests, core3]
 
     steps:
       - uses: actions/checkout@master
@@ -133,7 +130,7 @@ jobs:
           source-url: https://nuget.pkg.github.com/commercetools/index.json
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: ./patch_csproj.rb --version 1.0.0.${GITHUB_RUN_NUMBER} --patch **/*.csproj
+      - run: ./patch_csproj.rb --version 1.0.0.${{ GITHUB_RUN_NUMBER }} --patch **/*.csproj
       - run: dotnet restore --packages ../packages
         working-directory: ./commercetools.Sdk
       - run: dotnet build --no-restore --source ../packages -c Release
