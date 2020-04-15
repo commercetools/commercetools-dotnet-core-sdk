@@ -5,12 +5,9 @@ cache:
   - packages -> **\*.csproj
 
 install:
-  - ps: cinst pandoc --no-progress --cache C:\ProgramData\chocolatey\cache
   - ps: .\set_appveyor_version.ps1
 
 before_build:
-  - pandoc -v
-  - pandoc README.md -f markdown -t plain --wrap=none -o readme.txt
   - ps: cd commercetools.Sdk
   - ps: dotnet restore --packages ..\packages
 build_script:
@@ -30,8 +27,6 @@ test_script:
   - ps: |
       $env:CTP_Container="SimpleInjector"
       dotnet test IntegrationTests/commercetools.Sdk.IntegrationTests --no-build -c Release
-#  - ps: |
-#      dotnet test IntegrationTests/commercetools.Sdk.Core3Tests --no-build -c Release
 
 artifacts:
 - path: pack/**.nupkg
