@@ -57,7 +57,7 @@ namespace commercetools.Sdk.IntegrationTests
         public static DateTime RandomDate()
         {
             var start = new DateTime(1987, 5, 5);
-            var range = (DateTime.Today - start).Days;           
+            var range = (DateTime.Today - start).Days;
             return start.AddDays(Random.Next(range));
         }
         public static int RandomInt(int? min = null, int? max = null)
@@ -81,28 +81,27 @@ namespace commercetools.Sdk.IntegrationTests
             return string.Format(CultureInfo.InvariantCulture, "{0:0.00}", ran);
         }
 
-        public static Double RandomDouble()
-        {
-            var ran = Random.NextDouble(0.1, 0.9);
-            return ran;
-        }
-
-        public static Double RandomDouble(double min, double max)
+        public static double RandomDouble(double min = 0.1, double max = 0.9)
         {
             var ran = Random.NextDouble(min, max);
             return ran;
         }
 
+        public static decimal RandomDecimal(double min = 0.1, double max = 0.9, int decimals = 3)
+        {
+            return decimal.Round(Convert.ToDecimal(Random.NextDouble(min, max)), decimals);
+        }
+
         public static string RandomSortOrder()
         {
-            int append = 5; //hack to not have a trailing 0 which is not accepted in sphere
+            const int append = 5; //hack to not have a trailing 0 which is not accepted in sphere
             return "0." + RandomInt() + append;
         }
 
         public static string GetRandomEuropeCountry()
         {
-            int ran = RandomInt(0, EuropeCountries.Count);
-            string country = EuropeCountries[ran];
+            var ran = RandomInt(0, EuropeCountries.Count);
+            var country = EuropeCountries[ran];
             return country;
         }
 
@@ -377,7 +376,7 @@ namespace commercetools.Sdk.IntegrationTests
             var streetName = $"street_{random}";
             var address = new Address
             {
-                Country = country, 
+                Country = country,
                 State = state,
                 StreetName = streetName,
                 Key = $"Key_{random}"
@@ -423,10 +422,10 @@ namespace commercetools.Sdk.IntegrationTests
             return cartDiscountValue;
         }
 
-        public static TaxedPrice GetTaxedPrice(Money totalNet, double rate)
+        public static TaxedPrice GetTaxedPrice(Money totalNet, decimal rate)
         {
             var currencyCode = totalNet.CurrencyCode;
-            var totalGross = Money.FromDecimal(currencyCode, totalNet.AmountToDecimal() * (decimal)rate);
+            var totalGross = Money.FromDecimal(currencyCode, totalNet.AmountToDecimal() * rate);
             var total = totalNet.AmountToDecimal() + totalGross.AmountToDecimal();
             var totalAmount = Money.FromDecimal(currencyCode, total);
             var taxedPrice = new TaxedPrice
@@ -468,21 +467,21 @@ namespace commercetools.Sdk.IntegrationTests
         {
             var externalTaxRateDraft = new ExternalTaxRateDraft
             {
-                Amount = TestingUtility.RandomDouble(),
+                Amount = RandomDecimal(),
                 Name = "Test tax",
                 Country = "DE"
 
             };
             return externalTaxRateDraft;
         }
-        
+
         public static ExternalTaxAmountDraft GetExternalTaxAmountDraft()
         {
             var externalTaxAmount = new ExternalTaxAmountDraft()
             {
                 TotalGross = Money.FromDecimal("EUR", 100),
                 TaxRate = GetExternalTaxRateDraft()
-                
+
             };
             return externalTaxAmount;
         }
@@ -528,7 +527,7 @@ namespace commercetools.Sdk.IntegrationTests
             List<ItemShippingTarget> targetsDelta = new List<ItemShippingTarget> {itemShippingTarget};
             return targetsDelta;
         }
-        
+
         private static List<ShippingRatePriceTier> GetShippingRatePriceTiersAsCartScore()
         {
             var shippingRatePriceTiers = new List<ShippingRatePriceTier>();
@@ -555,7 +554,7 @@ namespace commercetools.Sdk.IntegrationTests
             };
             return lineItemReturnItemDraft;
         }
-        
+
         public static CustomLineItemDraft GetCustomLineItemDraft(TaxCategory taxCategory)
         {
             var customLineItemDraft = new CustomLineItemDraft
@@ -576,11 +575,11 @@ namespace commercetools.Sdk.IntegrationTests
                 Country = address.Country,
                 State = address.State,
                 Name = RandomString(),
-                Amount = RandomDouble()
+                Amount = RandomDecimal()
             };
             return taxRateDraft;
         }
-        
+
         /// <summary>
         /// Return Absolute Product Discount Value
         /// </summary>
@@ -598,7 +597,7 @@ namespace commercetools.Sdk.IntegrationTests
             };
             return productDiscountValue;
         }
-        
+
         /// <summary>
         /// Return Relative Product Discount
         /// </summary>

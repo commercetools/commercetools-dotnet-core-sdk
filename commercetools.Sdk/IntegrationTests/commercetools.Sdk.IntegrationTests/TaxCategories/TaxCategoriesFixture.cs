@@ -36,7 +36,7 @@ namespace commercetools.Sdk.IntegrationTests.TaxCategories
             return taxCategoryDraft;
         }
 
-        public static TaxRateDraft GetTaxRateDraft(string name, string country, double amount, bool includeInPrice)
+        public static TaxRateDraft GetTaxRateDraft(string name, string country, decimal amount, bool includeInPrice)
         {
             var taxRateDraft = new TaxRateDraft
             {

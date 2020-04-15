@@ -10,7 +10,7 @@ namespace commercetools.Sdk.Domain.Carts
     {
         [Required]
         public string Name { get; set; }
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
         [Required]
         [Country]
         public string Country { get; set; }

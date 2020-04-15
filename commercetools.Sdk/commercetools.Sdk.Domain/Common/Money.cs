@@ -22,13 +22,13 @@ namespace commercetools.Sdk.Domain
             {
                 throw new ArgumentNullException();
             }
-            string[] splitInput = input.Split(' ');
+            var splitInput = input.Split(' ');
             if (splitInput.Length != 2)
             {
                 throw new ArgumentException();
             }
-            double amount = double.Parse(splitInput[0]);
-            string currencyCode = splitInput[1];
+            var amount = decimal.Parse(splitInput[0]);
+            var currencyCode = splitInput[1];
             return new Money() { CentAmount = (int)amount * 100, CurrencyCode = currencyCode };
         }
 

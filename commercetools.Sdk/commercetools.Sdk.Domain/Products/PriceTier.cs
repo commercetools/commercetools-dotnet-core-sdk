@@ -2,7 +2,7 @@
 {
     public class PriceTier
     {
-        public double MinimumQuantity { get; set; }
+        public long MinimumQuantity { get; set; }
         public BaseMoney Value { get; set; }
     }
 }

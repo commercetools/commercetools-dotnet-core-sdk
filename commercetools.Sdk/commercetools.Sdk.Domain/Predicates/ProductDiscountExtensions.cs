@@ -75,7 +75,7 @@ namespace commercetools.Sdk.Domain.Predicates
         {
             throw new NotImplementedException();
         }
-        
+
         public static bool IsNotIn(this IEnumerable<string> source, params string[] values)
         {
             throw new NotImplementedException();

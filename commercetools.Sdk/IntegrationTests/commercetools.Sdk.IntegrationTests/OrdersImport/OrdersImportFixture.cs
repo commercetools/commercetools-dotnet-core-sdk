@@ -21,7 +21,7 @@ namespace commercetools.Sdk.IntegrationTests.OrdersImport
         public static OrderImportDraft DefaultOrderImportDraft(OrderImportDraft orderImportDraft)
         {
             var amountEuro10 = Money.FromDecimal("EUR", 10);
-            var taxedPrice = TestingUtility.GetTaxedPrice(amountEuro10, 0.19);
+            var taxedPrice = TestingUtility.GetTaxedPrice(amountEuro10, 0.19m);
             var shippingAddress = TestingUtility.GetRandomAddress();
             var billingAddress = TestingUtility.GetRandomAddress();
             var itemShippingAddress = TestingUtility.GetRandomAddress();
@@ -59,7 +59,7 @@ namespace commercetools.Sdk.IntegrationTests.OrdersImport
             };
             return orderImportDraft;
         }
-        
+
         public static OrderImportDraft DefaultOrderImportDraftWithLineItemBySku(OrderImportDraft draft,string sku)
         {
             var orderImportDraft = DefaultOrderImportDraft(draft);
@@ -103,7 +103,7 @@ namespace commercetools.Sdk.IntegrationTests.OrdersImport
             };
             return lineItemImportDraft;
         }
-    
+
 
         public static OrderImportDraft DefaultOrderImportDraftWithLineItemWithShippingInfo(OrderImportDraft draft,string productId, TaxCategory taxCategory, ShippingMethod shippingMethod)
         {

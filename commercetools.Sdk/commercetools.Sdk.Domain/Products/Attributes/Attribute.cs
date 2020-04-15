@@ -5,9 +5,9 @@ namespace commercetools.Sdk.Domain.Products.Attributes
     public abstract class Attribute : IAttribute
     {
         public string Name { get; set; }
-        
+
         public object JsonValue { get; set; }
-        
+
         public bool ShouldSerializeJsonValue()
         {
             return false;
