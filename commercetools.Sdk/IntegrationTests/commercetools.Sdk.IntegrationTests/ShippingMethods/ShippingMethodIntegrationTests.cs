@@ -74,11 +74,11 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                     Assert.Equal(shippingMethod.Key, retrievedShippingMethod.Key);
                 });
         }
-        
+
         [Fact]
         public async Task GetShippingMethodsForLocation()
         {
-            // get shippingMethods in USA and state New York 
+            // get shippingMethods in USA and state New York
             var usaLocation = new Location {Country = "US", State = "New York"};
             await WithShippingMethodInUsaZone(
                 client,
@@ -96,17 +96,17 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                     Assert.Single(returnedSet.Results);
                     var returnedShippingMethod = returnedSet.Results[0];
                     Assert.Equal(shippingMethod.Key, returnedShippingMethod.Key);
-                    
+
                     Assert.Single(returnedShippingMethod.ZoneRates);
                     var returnedZoneRate = returnedShippingMethod.ZoneRates[0];
-                    
+
                     Assert.NotNull(returnedZoneRate.Zone.Obj);
                     Assert.Single(returnedZoneRate.Zone.Obj.Locations);
-                    
+
                     var returnedLocation = returnedZoneRate.Zone.Obj.Locations[0];
                     Assert.Equal(usaLocation.Country, returnedLocation.Country);
                     Assert.Equal(usaLocation.State, returnedLocation.State);
-                    
+
                 });
         }
 
@@ -140,16 +140,16 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                             Assert.Single(returnedSet.Results);
                             var returnedShippingMethod = returnedSet.Results[0];
                             Assert.Equal(shippingMethod.Key, returnedShippingMethod.Key);
-                    
+
                             Assert.Single(returnedShippingMethod.ZoneRates);
                             var returnedZoneRate = returnedShippingMethod.ZoneRates[0];
-                    
+
                             Assert.True(returnedZoneRate.ShippingRates.Count(shippingRate => shippingRate.IsMatching) == 1);
                         });
                 });
         }
-        
-        
+
+
         [Fact]
         public async Task GetShippingMethodsForOrderEdit()
         {
@@ -159,7 +159,7 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                 var shippingMethod =
                     await client.ExecuteAsync(order.ShippingInfo.ShippingMethod.GetById()
                         .Expand(sm => sm.ZoneRates.ExpandAll().Zone));
-                
+
                 Assert.NotNull(shippingMethod);
                 Assert.Single(shippingMethod.ZoneRates);
                 var zone = shippingMethod.ZoneRates[0].Zone;
@@ -169,7 +169,7 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                 var location = zone.Obj.Locations[0];
 
                 Assert.NotNull(location);
-                
+
                 await WithOrderEdit(client,
                     draft => DefaultOrderEditDraftWithStagedAction(draft, order),
                     async orderEdit =>
@@ -182,8 +182,8 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                     });
             });
         }
-        
-        
+
+
         [Fact]
         public async Task GetShippingMethodsForCartInStore()
         {
@@ -196,10 +196,10 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                         Assert.NotNull(cart.Store);
                         Assert.Equal(store.Key, cart.Store.Key);
                         Assert.NotNull(cart.ShippingInfo.ShippingMethod);
-                        
+
                         var shippingMethod =
                             await client.ExecuteAsync(cart.ShippingInfo.ShippingMethod.GetById());
-                        
+
                         var expansions = new List<Expansion<ShippingMethod>>
                         {
                             new ReferenceExpansion<ShippingMethod>(sm => sm.ZoneRates.ExpandAll().Zone)
@@ -219,9 +219,9 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                     });
             });
         }
-        
 
-        
+
+
         [Fact]
         public async Task QueryShippingMethods()
         {
@@ -312,7 +312,9 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
             {
                 var newDescription = TestingUtility.RandomString();
                 var updateActions = new List<UpdateAction<ShippingMethod>>();
+#pragma warning disable 618
                 var action = new SetDescriptionUpdateAction
+#pragma warning restore 618
                 {
                     Description = newDescription
                 };
@@ -321,11 +323,13 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                 var updatedShippingMethod = await client
                     .ExecuteAsync(new UpdateByIdCommand<ShippingMethod>(shippingMethod, updateActions));
 
+#pragma warning disable 618
                 Assert.Equal(newDescription, updatedShippingMethod.Description);
+#pragma warning restore 618
                 return updatedShippingMethod;
             });
         }
-        
+
         [Fact]
         public async Task UpdateShippingMethodSetLocalizedDescription()
         {

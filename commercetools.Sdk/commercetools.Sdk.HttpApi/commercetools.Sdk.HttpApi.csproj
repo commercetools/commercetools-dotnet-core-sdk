@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <CodeAnalysisRuleSet>$(SolutionDir)StyleCop\stylecop.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\StyleCop\stylecop.ruleset</CodeAnalysisRuleSet>
     <Version>1.0.0.0</Version>
     <authors>commercetools</authors>
     <owners>commercetools</owners>

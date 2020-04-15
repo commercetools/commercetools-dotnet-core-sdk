@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,9 +9,10 @@ namespace commercetools.Sdk.HttpApi
     /// <summary>
     /// Helper class to run async methods within a sync process.
     /// </summary>
+    [SuppressMessage("ReSharper", "CA2008", Justification = "library api")]
     public static class AsyncUtil
     {
-        private static readonly TaskFactory taskFactory = new
+        private static readonly TaskFactory TaskFactory = new
             TaskFactory(
                 CancellationToken.None,
                 TaskCreationOptions.None,
@@ -23,7 +25,7 @@ namespace commercetools.Sdk.HttpApi
         /// </summary>
         /// <param name="task">Task method to execute</param>
         public static void RunSync(Func<Task> task)
-            => taskFactory.StartNew(task)
+            => TaskFactory.StartNew(task)
                 .Unwrap()
                 .GetAwaiter()
                 .GetResult();
@@ -36,7 +38,7 @@ namespace commercetools.Sdk.HttpApi
         /// <param name="task">Task<T> method to execute</param>
         /// <returns>TResult</returns>
         public static TResult RunSync<TResult>(Func<Task<TResult>> task)
-            => taskFactory.StartNew(task)
+            => TaskFactory.StartNew(task)
                 .Unwrap()
                 .GetAwaiter()
                 .GetResult();

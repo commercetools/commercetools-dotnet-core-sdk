@@ -58,10 +58,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.NodaMoney
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.IntegrationTests", "IntegrationTests\commercetools.Sdk.IntegrationTests\commercetools.Sdk.IntegrationTests.csproj", "{2ADE2630-89A4-4F15-A855-7FA421D589FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.Core3Tests", "IntegrationTests\commercetools.Sdk.Core3Tests\commercetools.Sdk.Core3Tests.csproj", "{2205B1E4-8C1C-4209-BDCD-B557ADB76B98}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commercetools.Sdk.MvcExample", "Examples\commercetools.Sdk.MvcExample\commercetools.Sdk.MvcExample.csproj", "{97E8CF4A-9B1B-418B-AA31-D93F43CDA6F3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,14 +147,6 @@ Global
 		{2ADE2630-89A4-4F15-A855-7FA421D589FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2ADE2630-89A4-4F15-A855-7FA421D589FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2ADE2630-89A4-4F15-A855-7FA421D589FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2205B1E4-8C1C-4209-BDCD-B557ADB76B98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2205B1E4-8C1C-4209-BDCD-B557ADB76B98}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2205B1E4-8C1C-4209-BDCD-B557ADB76B98}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2205B1E4-8C1C-4209-BDCD-B557ADB76B98}.Release|Any CPU.Build.0 = Release|Any CPU
-		{97E8CF4A-9B1B-418B-AA31-D93F43CDA6F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{97E8CF4A-9B1B-418B-AA31-D93F43CDA6F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{97E8CF4A-9B1B-418B-AA31-D93F43CDA6F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{97E8CF4A-9B1B-418B-AA31-D93F43CDA6F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -174,8 +162,6 @@ Global
 		{A50C27D8-0126-4D02-A34C-18A1FD529912} = {246B3DBC-CE94-4B32-AEFB-8C42A0D8F502}
 		{1ED86710-A7A6-4E63-AAC6-A98A1EEB46D2} = {246B3DBC-CE94-4B32-AEFB-8C42A0D8F502}
 		{2ADE2630-89A4-4F15-A855-7FA421D589FE} = {199CAB4C-C38A-47B7-AB72-CCFCCA06C31D}
-		{2205B1E4-8C1C-4209-BDCD-B557ADB76B98} = {199CAB4C-C38A-47B7-AB72-CCFCCA06C31D}
-		{97E8CF4A-9B1B-418B-AA31-D93F43CDA6F3} = {246B3DBC-CE94-4B32-AEFB-8C42A0D8F502}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {38B2497B-A494-43A7-A44D-88131CE16D12}

@@ -1,16 +1,16 @@
-using System;
-using Xunit;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using commercetools.Sdk.Client;
-using commercetools.Sdk.Domain;
-using commercetools.Sdk.Domain.Projects;
-using Type = System.Type;
-using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
-
 namespace commercetools.Sdk.Core3Tests
 {
+    using System;
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
+    using System.Threading.Tasks;
+    using commercetools.Sdk.Client;
+    using commercetools.Sdk.Domain;
+    using commercetools.Sdk.Domain.Projects;
+    using Xunit;
+    using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
+    using Type = System.Type;
+
     [Collection("Integration Tests")]
     public class SystemTextJsonSerializeTest
     {
@@ -92,7 +92,7 @@ namespace commercetools.Sdk.Core3Tests
             return (JsonConverter)Activator.CreateInstance(converterType);
         }
     }
-    
+
     class AttributeConverter : JsonConverter<Attribute>
     {
         public override Attribute Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

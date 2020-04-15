@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
@@ -7,6 +8,7 @@ using commercetools.Sdk.Domain.Common;
 
 namespace commercetools.Sdk.HttpApi.CommandBuilders
 {
+    [SuppressMessage("ReSharper", "SA1649", Justification = "generic class")]
     public class CommandBuilder<TCommand, TResult>
         where TCommand : ICommand<TResult>
     {
