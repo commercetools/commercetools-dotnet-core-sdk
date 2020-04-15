@@ -2446,7 +2446,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             searchRequest.SetStaged(true);
             searchRequest.FilterQuery(p => p.Id.In(productIds));
             searchRequest.Sort(p => p.ReviewRatingStatistics.AverageRating, SortDirection.Descending);
-            
+
             //Assert
             AssertEventually(() =>
             {
@@ -2484,7 +2484,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             searchRequest.SetStaged(true);
             searchRequest.FilterQuery(p => p.Id.In(productIds));
             searchRequest.Sort(p => p.Variants.Select(v => v.Sku).FirstOrDefault(), SortDirection.Ascending);
-            
+
             //Assert
             AssertEventually(() =>
             {

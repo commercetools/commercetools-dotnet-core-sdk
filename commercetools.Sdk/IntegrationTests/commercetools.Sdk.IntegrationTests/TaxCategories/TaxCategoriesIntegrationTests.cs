@@ -167,7 +167,7 @@ namespace commercetools.Sdk.IntegrationTests.TaxCategories
         [Fact]
         public async Task UpdateTaxCategoryAddTaxRate()
         {
-            var taxRateDraft = GetTaxRateDraft("AG7", "AG", 0.07, true);
+            var taxRateDraft = GetTaxRateDraft("AG7", "AG", 0.07m, true);
 
             await WithUpdateableTaxCategory(client, async taxCategory =>
             {
@@ -190,7 +190,7 @@ namespace commercetools.Sdk.IntegrationTests.TaxCategories
         [Fact]
         public async Task UpdateTaxCategoryReplaceTaxRate()
         {
-            var taxRateDraft = GetTaxRateDraft("AG7", "AG", 0.07, true);
+            var taxRateDraft = GetTaxRateDraft("AG7", "AG", 0.07m, true);
 
             await WithUpdateableTaxCategory(client,
                 taxCategoryDraft => DefaultTaxCategoryDraftWithTaxRate(taxCategoryDraft, taxRateDraft),
@@ -221,7 +221,7 @@ namespace commercetools.Sdk.IntegrationTests.TaxCategories
         [Fact]
         public async Task UpdateTaxCategoryRemoveTaxRate()
         {
-            var taxRateDraft = GetTaxRateDraft("AG7", "AG", 0.07, true);
+            var taxRateDraft = GetTaxRateDraft("AG7", "AG", 0.07m, true);
 
             await WithUpdateableTaxCategory(client,
                 taxCategoryDraft => DefaultTaxCategoryDraftWithTaxRate(taxCategoryDraft, taxRateDraft),

@@ -422,10 +422,10 @@ namespace commercetools.Sdk.IntegrationTests
             return cartDiscountValue;
         }
 
-        public static TaxedPrice GetTaxedPrice(Money totalNet, double rate)
+        public static TaxedPrice GetTaxedPrice(Money totalNet, decimal rate)
         {
             var currencyCode = totalNet.CurrencyCode;
-            var totalGross = Money.FromDecimal(currencyCode, totalNet.AmountToDecimal() * (decimal)rate);
+            var totalGross = Money.FromDecimal(currencyCode, totalNet.AmountToDecimal() * rate);
             var total = totalNet.AmountToDecimal() + totalGross.AmountToDecimal();
             var totalAmount = Money.FromDecimal(currencyCode, total);
             var taxedPrice = new TaxedPrice
@@ -467,7 +467,7 @@ namespace commercetools.Sdk.IntegrationTests
         {
             var externalTaxRateDraft = new ExternalTaxRateDraft
             {
-                Amount = decimal.ToDouble(RandomDecimal()),
+                Amount = RandomDecimal(),
                 Name = "Test tax",
                 Country = "DE"
 
@@ -575,7 +575,7 @@ namespace commercetools.Sdk.IntegrationTests
                 Country = address.Country,
                 State = address.State,
                 Name = RandomString(),
-                Amount = RandomDouble()
+                Amount = RandomDecimal()
             };
             return taxRateDraft;
         }

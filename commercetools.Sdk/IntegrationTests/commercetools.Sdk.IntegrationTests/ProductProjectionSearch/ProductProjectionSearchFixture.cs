@@ -180,11 +180,11 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             var reviewsExists = CheckIfEntitiesExists<Review>(
                 r => r.AuthorName == AuthorReview.valueOf(),
                 ExpectedReviewsCount);
-            
+
             var productDiscountsExists = CheckIfEntitiesExists<ProductDiscount>(
                 d => d.Description["en"] == DescriptionProductDiscount.valueOf(),
                 ExpectedProductDiscounts);
-            
+
             if (productsExists && reviewsExists && productDiscountsExists)
                 return;
 
@@ -266,7 +266,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
                 CreateOrRetrieveProductDiscountOfAbsoluteValue(product90WithDiscount.Id,
                     TestingUtility.DiscountOf5Euro);
 
-            
+
             // Product Available without channel
             var product30WithoutChannel = CreateOrRetrievePricedProduct(KeyProductWithPrice30WithoutChannel, product30Prices);
             var product50WithoutChannel = CreateOrRetrievePricedProduct(KeyProductWithPrice50WithoutChannel, product50Prices);
@@ -290,15 +290,15 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             CreateOrRetrieveInventoryEntry(product50, product50Availability, channel1);
             CreateOrRetrieveInventoryEntry(product70, product70Availability, channel1);
 
-            CreateOrRetrieveInventoryEntry(product30InChannel2, 
+            CreateOrRetrieveInventoryEntry(product30InChannel2,
                 new ProductVariantAvailability { AvailableQuantity = 2}, channel2);
-            CreateOrRetrieveInventoryEntry(product30InChannel3, 
+            CreateOrRetrieveInventoryEntry(product30InChannel3,
                 new ProductVariantAvailability { AvailableQuantity = 4}, channel3);
-            CreateOrRetrieveInventoryEntry(product30WithoutChannel, 
+            CreateOrRetrieveInventoryEntry(product30WithoutChannel,
                 new ProductVariantAvailability { AvailableQuantity = 0}, null);
-            CreateOrRetrieveInventoryEntry(product50WithoutChannel, 
+            CreateOrRetrieveInventoryEntry(product50WithoutChannel,
                 new ProductVariantAvailability { AvailableQuantity = 3}, null);
-            CreateOrRetrieveInventoryEntry(product70WithoutChannel, 
+            CreateOrRetrieveInventoryEntry(product70WithoutChannel,
                 new ProductVariantAvailability { AvailableQuantity = 6}, null);
         }
 
@@ -365,7 +365,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
                 AvailableChannels = FillEntitiesList<Channel>(c => c.Description["en"] == DescriptionChannel.valueOf());
             }
         }
-        
+
         private List<T> FillEntitiesList<T>(Expression<Func<T, bool>> expression)
         {
             var queryCommand = new QueryCommand<T>();

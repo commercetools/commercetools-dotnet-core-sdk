@@ -75,7 +75,7 @@ namespace commercetools.Sdk.Linq.Tests
             var result = predicateExpressionVisitor.Render(expression);
             Assert.Equal("categories.id = (\"f6a19a23-14e3-40d0-aee2-3e612fcb1bc7\", \"abcd9a23-14e3-40d0-aee2-3e612fcbefgh\")", result);
         }
-        
+
         [Fact]
         public void CategoriesIdEqualsSingleId()
         {
@@ -84,7 +84,7 @@ namespace commercetools.Sdk.Linq.Tests
             var result = predicateExpressionVisitor.Render(expression);
             Assert.Equal("categories.id = \"f6a19a23-14e3-40d0-aee2-3e612fcb1bc7\"", result);
         }
-        
+
         [Fact]
         public void CategoriesNotEqualsMultipleIds()
         {
@@ -97,7 +97,7 @@ namespace commercetools.Sdk.Linq.Tests
             var result = predicateExpressionVisitor.Render(expression);
             Assert.Equal("categories.id != (\"f6a19a23-14e3-40d0-aee2-3e612fcb1bc7\", \"963cbb75-c604-4ad2-841c-890b792224ee\")", result);
         }
-        
+
         [Fact]
         public void CategoriesNotEqualsSingleId()
         {
@@ -137,7 +137,7 @@ namespace commercetools.Sdk.Linq.Tests
             var result = predicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes.size = \"L\" and attributes.colors contains all (\"black\", \"white\")", result);
         }
-        
+
         [Fact]
         public void AttributeNameWithDash()
         {
@@ -146,7 +146,7 @@ namespace commercetools.Sdk.Linq.Tests
             var result = predicateExpressionVisitor.Render(expression);
             Assert.Equal("attributes.`size-att` = \"L\" and attributes.`colors-attr` contains all (\"black\", \"white\")", result);
         }
-        
+
         [Fact]
         public void AttributeNameStartWithNumber()
         {
