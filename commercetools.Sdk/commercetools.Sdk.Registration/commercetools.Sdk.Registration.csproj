@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <CodeAnalysisRuleSet>$(SolutionDir)StyleCop\stylecop.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\StyleCop\stylecop.ruleset</CodeAnalysisRuleSet>
     <Version>1.0.0.0</Version>
     <authors>commercetools</authors>
     <owners>commercetools</owners>
@@ -15,10 +15,6 @@
     <RepositoryUrl>https://github.com/commercetools/commercetools-dotnet-core-sdk</RepositoryUrl>
     <PackageReleaseNotes>Information about latest changes can be found at https://github.com/commercetools/commercetools-dotnet-core-sdk/blob/master/CHANGELOG.md</PackageReleaseNotes>
     <PackageTags>commercetools;dotnet-core;sdk</PackageTags>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>$(SolutionDir)commercetools.Sdk.Reflection\commercetools.Sdk.Registration.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

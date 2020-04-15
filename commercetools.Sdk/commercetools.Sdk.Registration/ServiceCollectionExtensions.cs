@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Reflection;
 
+// ReSharper disable CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection
 {
+    // ReSharper restore CheckNamespace
+
     /// <summary>
     /// This class contains extensions methods for <see cref="IServiceCollection"/>.
     /// </summary>
