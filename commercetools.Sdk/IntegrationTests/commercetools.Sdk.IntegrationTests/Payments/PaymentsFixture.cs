@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.Payments;
 using Type = commercetools.Sdk.Domain.Types.Type;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
@@ -29,6 +30,12 @@ namespace commercetools.Sdk.IntegrationTests.Payments
         {
             var paymentDraft = DefaultPaymentDraft(draft);
             paymentDraft.Transactions = new List<TransactionDraft> { transactionDraft };
+            return paymentDraft;
+        }
+        public static PaymentDraft DefaultPaymentDraftWithCustomer(PaymentDraft draft, Customer customer)
+        {
+            var paymentDraft = DefaultPaymentDraft(draft);
+            paymentDraft.Customer = customer.ToReference() as Reference<Customer>;
             return paymentDraft;
         }
         public static PaymentDraft DefaultPaymentDraftWithCustomType(PaymentDraft draft, Type type, Fields fields)
