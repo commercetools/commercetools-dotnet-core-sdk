@@ -108,6 +108,22 @@ namespace commercetools.Sdk.IntegrationTests.Payments
                     );
                 });
         }
+        
+        [Fact]
+        public async Task CreatePaymentWithCustomer()
+        {
+            await WithCustomer(client, async customer =>
+            {
+                await WithPayment(
+                    client, 
+                    paymentDraft => DefaultPaymentDraftWithCustomer(paymentDraft, customer),
+                    payment =>
+                    {
+                        Assert.NotNull(payment);
+                        Assert.Equal(customer.Id, payment.Customer.Id);
+                    });
+            });
+        }
 
         #region UpdateActions
 

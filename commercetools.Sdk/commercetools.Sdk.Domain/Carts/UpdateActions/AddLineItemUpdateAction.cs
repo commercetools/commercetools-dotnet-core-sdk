@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.Domain.Channels;
+using commercetools.Sdk.Domain.Common;
 
 namespace commercetools.Sdk.Domain.Carts.UpdateActions
 {
@@ -14,9 +15,9 @@ namespace commercetools.Sdk.Domain.Carts.UpdateActions
 
         public long Quantity { get; set; }
 
-        public Reference<Channel> SupplyChannel { get; set; }
+        public IReference<Channel> SupplyChannel { get; set; }
 
-        public Reference<Channel> DistributionChannel { get; set; }
+        public IReference<Channel> DistributionChannel { get; set; }
 
         public ExternalTaxRateDraft ExternalTaxRate { get; set; }
 
