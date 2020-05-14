@@ -35,6 +35,7 @@ namespace commercetools.Sdk.IntegrationTests
                 case ContainerType.BuiltIn:
                     var services = new ServiceCollection();
                     services.UseCommercetools(Configuration, "Client", TokenFlow.ClientCredentials);
+                    services.AddLogging(c=> c.AddProvider(new InMemoryLoggerProvider()));
                     this.ServiceProvider = services.BuildServiceProvider();
                     break;
                 case ContainerType.SimpleInjector:

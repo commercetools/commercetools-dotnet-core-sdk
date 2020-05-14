@@ -20,7 +20,6 @@ namespace commercetools.Sdk.HttpApi.DelegatingHandlers
             HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            // TODO Which name should be set here?
             var logger = this.loggerFactory.CreateLogger("commercetoolsLoggerHandler");
 
             if (request == null)
