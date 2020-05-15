@@ -1,13 +1,17 @@
 using System;
+using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Categories.UpdateActions;
 using commercetools.Sdk.Domain.Errors;
-using commercetools.Sdk.HttpApi.Domain;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
+using Microsoft.Extensions.Configuration;
 using Xunit;
 using static commercetools.Sdk.IntegrationTests.Categories.CategoriesFixture;
+using static commercetools.Sdk.IntegrationTests.Customers.CustomersFixture;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
+
 
 namespace commercetools.Sdk.IntegrationTests.Errors
 {
@@ -15,10 +19,12 @@ namespace commercetools.Sdk.IntegrationTests.Errors
     public class ErrorsIntegrationTests
     {
         private readonly IClient client;
+        private readonly IConfiguration configuration;
 
         public ErrorsIntegrationTests(ServiceProviderFixture serviceProviderFixture)
         {
             this.client = serviceProviderFixture.GetService<IClient>();
+            this.configuration = serviceProviderFixture.Configuration;
         }
 
         [Fact]
@@ -74,6 +80,41 @@ namespace commercetools.Sdk.IntegrationTests.Errors
                     Assert.IsType<ConcurrentModificationError>(exception.ErrorResponse.Errors[0]);
                     Assert.Equal(exception.GetCurrentVersion(), updatedCategory.Version);
                     return updatedCategory;
+                });
+        }
+        
+        /// <summary>
+        /// Make sure not exposing customer's password in the exceptions nor logs
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task AuthenticateWithInvalidCustomerPassword()
+        {
+            var containerType = Enum.Parse<ContainerType>(configuration.GetValue<string>("Container"));
+            if(containerType != ContainerType.BuiltIn)
+                return;
+            var password = TestingUtility.RandomString();
+            var invalidPassword = "InvalidPassword";
+            await WithCustomer(
+                client,
+                customerDraft => DefaultCustomerDraftWithPassword(customerDraft, password),
+                async customer =>
+                {
+                    try
+                    {
+                        await client.ExecuteAsync(
+                            new LoginCustomerCommand(customer.Email, invalidPassword));
+                    }
+                    catch (Exception ex)
+                    {
+                        Assert.IsType<ErrorResponseException>(ex);
+                        Assert.DoesNotContain(ex.Message, invalidPassword);
+                        Assert.DoesNotContain(ex.StackTrace, invalidPassword);
+                    }
+                    
+                    var log = InMemoryLogger.GetLogMessages();
+                    Assert.NotEmpty(log);
+                    Assert.DoesNotContain(log, invalidPassword);
                 });
         }
     }

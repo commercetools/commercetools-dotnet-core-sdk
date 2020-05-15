@@ -35,7 +35,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
     {
         #region Keys
 
-        public const string KeyPrefix = "EntityForSearch";
+        public const string KeyPrefix = "EntityForSearch_New";
         public readonly string KeyLocalizedProduct = $"{KeyPrefix}_localizedProduct";
         public readonly string KeyProductWithInfo = $"{KeyPrefix}_ProductWithInfo";
         public readonly string KeyProductWithoutInfo = $"{KeyPrefix}_ProductWithoutInfo";
@@ -561,7 +561,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
 
                     productDiscountDraft.Value = productDiscountValue;
                     productDiscountDraft.ValidFrom = DateTime.Today;
-                    productDiscountDraft.ValidUntil = DateTime.Today.AddMonths(1);
+                    productDiscountDraft.ValidUntil = DateTime.Today.AddYears(2);
                     productDiscountDraft.IsActive = true;
                     productDiscountDraft.Description = new LocalizedString {{"en", DescriptionProductDiscount}};
                     productDiscountDraft.SetPredicate(product => product.ProductId() == productId);
