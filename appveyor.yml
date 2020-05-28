@@ -63,7 +63,7 @@ deploy:
   - provider: NuGet
     name: NuGet
     api_key:
-      secure: zpns6hWNaoiUBSIOV3VWC3ZUpBGOtEmKdFcEYAal/oFbhw5oXeqBIJRwt3qsb6MH
+      secure: ZbZZeFz4Znt2Xf+GPKdtP0FWrcOFBjJxjiy17jhXcUxHyYrs54Mb2R9hcZUlBJH6
     skip_symbols: true
     on:
       APPVEYOR_REPO_TAG: true
