@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.HttpApi.DelegatingHandlers;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using commercetools.Sdk.HttpApi.Tokens;
 using Microsoft.Extensions.Configuration;
@@ -198,6 +199,27 @@ namespace commercetools.Sdk.IntegrationTests
             }
 
             await Task.WhenAll(allTasks);
+        }
+        
+        [Fact]
+        public void TestCustomCorrelationIdProvider()
+        {
+            var services = new ServiceCollection();
+            var configuration = new ConfigurationBuilder().
+                AddJsonFile("appsettings.test.json").
+                AddJsonFile("appsettings.test.Development.json", true).
+                AddUserSecrets<ServiceProviderFixture>().
+                AddEnvironmentVariables("CTP_").
+                Build();
+
+            services.AddSingleton<ICorrelationIdProvider, CustomCorrelationIdProvider>();
+            services.UseCommercetools(configuration, "Client");
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var correlationIdProviders = serviceProvider.GetServices<ICorrelationIdProvider>();
+            Assert.NotNull(correlationIdProviders);
+            Assert.IsType<CustomCorrelationIdProvider>(correlationIdProviders.FirstOrDefault());
         }
     }
 }

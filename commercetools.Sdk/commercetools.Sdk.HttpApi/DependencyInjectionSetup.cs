@@ -78,7 +78,11 @@ namespace commercetools.Sdk.HttpApi
                     return new AuthorizationHandler(provider);
                 })
                 .AddHttpMessageHandler(c =>
-                    new CorrelationIdHandler(new DefaultCorrelationIdProvider(clientConfiguration)))
+                    {
+                        var correlationIdProvider = c.GetServices<ICorrelationIdProvider>().FirstOrDefault();
+                        correlationIdProvider.ClientConfiguration = clientConfiguration;
+                        return new CorrelationIdHandler(correlationIdProvider);
+                    })
                 .AddHttpMessageHandler(c =>
                     new ErrorHandler(new ApiExceptionFactory(clientConfiguration, c.GetService<ISerializerService>())))
                 .AddHttpMessageHandler<LoggerHandler>();
@@ -109,6 +113,7 @@ namespace commercetools.Sdk.HttpApi
             services.AddSingleton<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>();
             services.AddSingleton<IUserAgentProvider, UserAgentProvider>();
             services.AddSingleton<ITokenSerializerService, TokenSerializerService>();
+            services.AddSingleton<ICorrelationIdProvider, DefaultCorrelationIdProvider>();
         }
     }
 }

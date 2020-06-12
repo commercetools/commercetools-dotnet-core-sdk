@@ -152,6 +152,22 @@ namespace commercetools.Sdk.Serialization.Tests
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
             Assert.IsType<Attribute<AttributeSet<PlainEnumValue>>>(deserialized.Attributes[0]);
         }
+        
+        [Fact]
+        public void DeserializeNestedSetAttribute()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string serialized = File.ReadAllText("Resources/Attributes/NestedSet.json");
+            var attr = serializerService.Deserialize<AttributeDefinition>(serialized);
+            Assert.NotNull(attr);
+            var setAttrType = attr.Type as SetAttributeType;
+            Assert.NotNull(setAttrType);
+            Assert.NotNull(setAttrType.ElementType);
+            var nestedAttrType = setAttrType.ElementType as NestedAttributeType;
+            Assert.NotNull(nestedAttrType);
+            Assert.NotNull(nestedAttrType.TypeReference);
+
+        }
 
         [Fact]
         public void DeserializeAttributeNoValue()
