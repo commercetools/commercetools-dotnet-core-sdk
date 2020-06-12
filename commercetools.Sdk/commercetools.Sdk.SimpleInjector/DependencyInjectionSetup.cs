@@ -218,7 +218,11 @@ namespace SimpleInjector
                     return new AuthorizationHandler(provider);
                 })
                 .AddHttpMessageHandler(c =>
-                    new CorrelationIdHandler(new DefaultCorrelationIdProvider(clientConfiguration)))
+                {
+                    var correlationIdProvider = c.GetServices<ICorrelationIdProvider>().FirstOrDefault();
+                    correlationIdProvider.ClientConfiguration = clientConfiguration;
+                    return new CorrelationIdHandler(correlationIdProvider);
+                })
                 .AddHttpMessageHandler(c =>
                     new ErrorHandler(new ApiExceptionFactory(clientConfiguration, services.GetService<ISerializerService>())))
                 .AddHttpMessageHandler(c => new LoggerHandler(services.GetService<ILoggerFactory>()));
@@ -246,6 +250,7 @@ namespace SimpleInjector
             services.Register<IRequestMessageBuilderFactory, RequestMessageBuilderFactory>(Lifestyle.Singleton);
             services.Register<IUserAgentProvider, UserAgentProvider>(Lifestyle.Singleton);
             services.Register<ITokenSerializerService, TokenSerializerService>(Lifestyle.Singleton);
+            services.Register<ICorrelationIdProvider, DefaultCorrelationIdProvider>(Lifestyle.Singleton);
         }
     }
 }

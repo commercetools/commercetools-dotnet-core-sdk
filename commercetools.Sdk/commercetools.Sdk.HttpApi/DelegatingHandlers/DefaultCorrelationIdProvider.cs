@@ -4,13 +4,8 @@ namespace commercetools.Sdk.HttpApi.DelegatingHandlers
 {
     public class DefaultCorrelationIdProvider : ICorrelationIdProvider
     {
-        private readonly IClientConfiguration clientConfiguration;
+        public IClientConfiguration ClientConfiguration { get; set; }
 
-        public DefaultCorrelationIdProvider(IClientConfiguration clientConfiguration)
-        {
-            this.clientConfiguration = clientConfiguration;
-        }
-
-        public string CorrelationId => $"{this.clientConfiguration.ProjectKey}/{Guid.NewGuid()}";
+        public string CorrelationId => $"{this.ClientConfiguration.ProjectKey}/{Guid.NewGuid()}";
     }
 }
