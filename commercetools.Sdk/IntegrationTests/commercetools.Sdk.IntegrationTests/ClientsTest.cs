@@ -202,7 +202,7 @@ namespace commercetools.Sdk.IntegrationTests
         }
         
         [Fact]
-        public async void TestCustomCorrelationIdProvider()
+        public void TestCustomCorrelationIdProvider()
         {
             var services = new ServiceCollection();
             var configuration = new ConfigurationBuilder().

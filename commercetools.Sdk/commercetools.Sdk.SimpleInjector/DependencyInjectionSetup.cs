@@ -219,7 +219,8 @@ namespace SimpleInjector
                 })
                 .AddHttpMessageHandler(c =>
                 {
-                    var correlationIdProvider = c.GetServices<ICorrelationIdProvider>().FirstOrDefault();
+                    var correlationIdProvider = c.GetServices<ICorrelationIdProvider>().FirstOrDefault() 
+                                                ?? new DefaultCorrelationIdProvider();
                     correlationIdProvider.ClientConfiguration = clientConfiguration;
                     return new CorrelationIdHandler(correlationIdProvider);
                 })
