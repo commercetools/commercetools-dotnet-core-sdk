@@ -5,7 +5,7 @@
         public SetTextAttribute()
         {
         }
-        public SetTextAttribute(SetAttribute<string> attribute)
+        public SetTextAttribute(Attribute<AttributeSet<string>> attribute)
         {
             CloneProperties(attribute);
         }

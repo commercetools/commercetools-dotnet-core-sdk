@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace commercetools.Sdk.Domain.Products.Attributes
 {
@@ -127,12 +128,22 @@ namespace commercetools.Sdk.Domain.Products.Attributes
 
             return null;
         }
+        
+        public NestedAttribute ToNestedAttribute()
+        {
+            if (this.IsNestedAttribute())
+            {
+                return new NestedAttribute(this as Attribute<List<Attribute>>);
+            }
+
+            return null;
+        }
 
         public SetTextAttribute ToSetTextAttribute()
         {
             if (this.IsSetTextAttribute())
             {
-                return new SetTextAttribute(this as SetAttribute<string>);
+                return new SetTextAttribute(this as Attribute<AttributeSet<string>>);
             }
 
             return null;
@@ -142,7 +153,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         {
             if (this.IsSetLocalizedTextAttribute())
             {
-                return new SetLocalizedTextAttribute(this as SetAttribute<LocalizedString>);
+                return new SetLocalizedTextAttribute(this as Attribute<AttributeSet<LocalizedString>>);
             }
 
             return null;
@@ -152,7 +163,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         {
             if (this.IsSetEnumAttribute())
             {
-                return new SetEnumAttribute(this as SetAttribute<PlainEnumValue>);
+                return new SetEnumAttribute(this as Attribute<AttributeSet<PlainEnumValue>>);
             }
 
             return null;
@@ -162,7 +173,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         {
             if (this.IsSetLocalizedEnumAttribute())
             {
-                return new SetLocalizedEnumAttribute(this as SetAttribute<LocalizedEnumValue>);
+                return new SetLocalizedEnumAttribute(this as Attribute<AttributeSet<LocalizedEnumValue>>);
             }
 
             return null;
@@ -172,7 +183,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         {
             if (this.IsSetMoneyAttribute())
             {
-                return new SetMoneyAttribute(this as SetAttribute<Money>);
+                return new SetMoneyAttribute(this as Attribute<AttributeSet<Money>>);
             }
 
             return null;
@@ -182,7 +193,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         {
             if (this.IsSetDateAttribute())
             {
-                return new SetDateAttribute(this as SetAttribute<DateTime>);
+                return new SetDateAttribute(this as Attribute<AttributeSet<DateTime>>);
             }
 
             return null;
@@ -192,7 +203,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         {
             if (this.IsSetDateTimeAttribute())
             {
-                return new SetDateTimeAttribute(this as SetAttribute<DateTime>);
+                return new SetDateTimeAttribute(this as Attribute<AttributeSet<DateTime>>);
             }
 
             return null;
@@ -202,7 +213,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         {
             if (this.IsSetTimeAttribute())
             {
-                return new SetTimeAttribute(this as SetAttribute<TimeSpan>);
+                return new SetTimeAttribute(this as Attribute<AttributeSet<TimeSpan>>);
             }
 
             return null;
@@ -212,7 +223,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         {
             if (this.IsSetBooleanAttribute())
             {
-                return new SetBooleanAttribute(this as SetAttribute<bool>);
+                return new SetBooleanAttribute(this as Attribute<AttributeSet<bool>>);
             }
 
             return null;
@@ -222,7 +233,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         {
             if (this.IsSetNumberAttribute())
             {
-                return new SetNumberAttribute(this as SetAttribute<double>);
+                return new SetNumberAttribute(this as Attribute<AttributeSet<double>>);
             }
 
             return null;
@@ -232,7 +243,17 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         {
             if (this.IsSetReferenceAttribute())
             {
-                return new SetReferenceAttribute(this as SetAttribute<Reference>);
+                return new SetReferenceAttribute(this as Attribute<AttributeSet<Reference>>);
+            }
+
+            return null;
+        }
+        
+        public SetAttribute<NestedAttribute> ToSetOfNestedAttribute()
+        {
+            if (this.IsSetOfNestedAttribute())
+            {
+                return new SetNestedAttribute(this as Attribute<AttributeSet<NestedAttribute>>);
             }
 
             return null;

@@ -7,7 +7,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         public SetDateTimeAttribute()
         {
         }
-        public SetDateTimeAttribute(SetAttribute<DateTime> attribute)
+        public SetDateTimeAttribute(Attribute<AttributeSet<DateTime>> attribute)
         {
             CloneProperties(attribute);
         }

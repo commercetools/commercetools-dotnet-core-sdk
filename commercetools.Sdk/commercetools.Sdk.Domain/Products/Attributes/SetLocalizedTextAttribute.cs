@@ -5,7 +5,7 @@
         public SetLocalizedTextAttribute()
         {
         }
-        public SetLocalizedTextAttribute(SetAttribute<LocalizedString> attribute)
+        public SetLocalizedTextAttribute(Attribute<AttributeSet<LocalizedString>> attribute)
         {
             CloneProperties(attribute);
         }

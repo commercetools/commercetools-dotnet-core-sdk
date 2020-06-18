@@ -1,6 +1,7 @@
 using commercetools.Sdk.Domain;
 using System;
 using System.IO;
+using System.Linq;
 using commercetools.Sdk.Domain.Products.Attributes;
 using FluentAssertions.Json;
 using Newtonsoft.Json;
@@ -150,14 +151,16 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/SetEnum.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<AttributeSet<PlainEnumValue>>>(deserialized.Attributes[0]);
+            Assert.True(deserialized.Attributes[0].IsSetEnumAttribute());
+            var attr = deserialized.Attributes[0].ToSetEnumAttribute();
+            Assert.NotNull(attr);
         }
         
         [Fact]
-        public void DeserializeNestedSetAttribute()
+        public void DeserializeSetNestedAttributeDefinition()
         {
             ISerializerService serializerService = this.serializationFixture.SerializerService;
-            string serialized = File.ReadAllText("Resources/Attributes/NestedSet.json");
+            string serialized = File.ReadAllText("Resources/Attributes/SetNestedDefinition.json");
             var attr = serializerService.Deserialize<AttributeDefinition>(serialized);
             Assert.NotNull(attr);
             var setAttrType = attr.Type as SetAttributeType;
@@ -227,6 +230,43 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.NotNull(boolAttribute);
             
             
+        }
+        
+        [Fact]
+        public void DeserializeProductWithNestedAttribute()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string productSerialized = File.ReadAllText("Resources/Types/ProductWithNestedAttribute.json");
+            
+            var product = serializerService.Deserialize<Product>(productSerialized);
+            var attr = product.MasterData.Current.MasterVariant.Attributes[0];
+            
+            Assert.True(attr.IsNestedAttribute());
+            var nestedAttr = attr.ToNestedAttribute();
+            Assert.NotNull(nestedAttr);
+            Assert.True(nestedAttr.Value.Count == 2);
+            Assert.True(nestedAttr.Value[0].IsNumberAttribute());
+            Assert.True(nestedAttr.Value[1].IsTextAttribute());
+        }
+        
+        [Fact]
+        public void DeserializeProductWithSetNestedAttribute()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string productSerialized = File.ReadAllText("Resources/Types/ProductWithSetNestedAttribute.json");
+            
+            var product = serializerService.Deserialize<Product>(productSerialized);
+            var attr = product.MasterData.Current.MasterVariant.Attributes[0];
+            
+            Assert.True(attr.IsSetOfNestedAttribute());
+            var setOfNestedAttr = attr.ToSetOfNestedAttribute();
+            Assert.NotNull(setOfNestedAttr);
+            Assert.Equal(2,setOfNestedAttr.Value.Count);
+            var firstNestedAttr = setOfNestedAttr.Value.FirstOrDefault();
+            Assert.NotNull(firstNestedAttr);
+            Assert.Equal(2, firstNestedAttr.Value.Count);
+            Assert.True(firstNestedAttr.Value[0].IsNumberAttribute());
+            Assert.True(firstNestedAttr.Value[1].IsTextAttribute());
         }
     }
 }
