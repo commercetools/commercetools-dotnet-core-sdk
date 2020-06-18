@@ -5,7 +5,7 @@
         public SetNumberAttribute()
         {
         }
-        public SetNumberAttribute(SetAttribute<double> attribute)
+        public SetNumberAttribute(Attribute<AttributeSet<double>> attribute)
         {
             CloneProperties(attribute);
         }

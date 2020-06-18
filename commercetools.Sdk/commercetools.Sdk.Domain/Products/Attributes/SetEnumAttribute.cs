@@ -5,7 +5,7 @@
         public SetEnumAttribute()
         {
         }
-        public SetEnumAttribute(SetAttribute<PlainEnumValue> attribute)
+        public SetEnumAttribute(Attribute<AttributeSet<PlainEnumValue>> attribute)
         {
             CloneProperties(attribute);
         }

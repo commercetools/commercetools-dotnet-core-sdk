@@ -5,7 +5,7 @@
         public SetBooleanAttribute()
         {
         }
-        public SetBooleanAttribute(SetAttribute<bool> attribute)
+        public SetBooleanAttribute(Attribute<AttributeSet<bool>> attribute)
         {
             CloneProperties(attribute);
         }

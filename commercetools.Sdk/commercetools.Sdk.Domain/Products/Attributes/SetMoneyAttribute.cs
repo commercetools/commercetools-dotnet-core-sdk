@@ -5,7 +5,7 @@
         public SetMoneyAttribute()
         {
         }
-        public SetMoneyAttribute(SetAttribute<Money> attribute)
+        public SetMoneyAttribute(Attribute<AttributeSet<Money>> attribute)
         {
             CloneProperties(attribute);
         }

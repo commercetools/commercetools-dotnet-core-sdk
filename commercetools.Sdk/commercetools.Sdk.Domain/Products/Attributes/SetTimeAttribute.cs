@@ -7,7 +7,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         public SetTimeAttribute()
         {
         }
-        public SetTimeAttribute(SetAttribute<TimeSpan> attribute)
+        public SetTimeAttribute(Attribute<AttributeSet<TimeSpan>> attribute)
         {
             CloneProperties(attribute);
         }

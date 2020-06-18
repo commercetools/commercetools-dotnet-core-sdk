@@ -5,7 +5,7 @@
         public SetLocalizedEnumAttribute()
         {
         }
-        public SetLocalizedEnumAttribute(SetAttribute<LocalizedEnumValue> attribute)
+        public SetLocalizedEnumAttribute(Attribute<AttributeSet<LocalizedEnumValue>> attribute)
         {
             CloneProperties(attribute);
         }

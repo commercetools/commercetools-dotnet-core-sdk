@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using commercetools.Sdk.Domain.Products.Attributes;
 using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization
@@ -15,7 +16,7 @@ namespace commercetools.Sdk.Serialization
         public override Type GetTypeForToken(JToken token)
         {
             Type type;
-            if (IsSetAttribute(token))
+            if (token.IsSetAttribute())
             {
                 if (token.HasValues)
                 {
@@ -33,11 +34,6 @@ namespace commercetools.Sdk.Serialization
                 type = base.GetTypeForToken(token);
             }
             return type;
-        }
-
-        private bool IsSetAttribute(JToken valueProperty)
-        {
-            return valueProperty != null && valueProperty.Type == JTokenType.Array;
         }
     }
 }

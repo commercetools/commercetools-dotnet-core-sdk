@@ -5,7 +5,7 @@
         public SetReferenceAttribute()
         {
         }
-        public SetReferenceAttribute(SetAttribute<Reference> attribute)
+        public SetReferenceAttribute(Attribute<AttributeSet<Reference>> attribute)
         {
             CloneProperties(attribute);
         }
