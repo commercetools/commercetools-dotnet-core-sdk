@@ -13,7 +13,7 @@ namespace commercetools.Sdk.Serialization
         {
             var isArrayToken = valueProperty.IsArrayToken();
             var array = valueProperty as JArray;
-            if (array == null || !isArrayToken)
+            if (array == null || !isArrayToken || !array.Children().Any())
                 return false;
 
             var isFirstItemNestedAttribute = array.First.IsNestedAttribute();
