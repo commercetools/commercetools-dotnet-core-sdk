@@ -27,21 +27,10 @@ namespace commercetools.Sdk.Serialization
             if (array == null || !isArrayToken || !array.Children().Any())
                 return false;
             
-            var allElementsContainsNameValueProps = true;
-            
-            foreach(var item in array.Children())
-            {
-                var itemProperties = item.Children<JProperty>();
-                var nameProp = itemProperties.FirstOrDefault(p => p.Name == "name");
-                var valueProp = itemProperties.FirstOrDefault(p => p.Name == "value");
-                if (itemProperties.Count() != 2 
-                    || nameProp == null
-                    || valueProp == null)
-                {
-                    allElementsContainsNameValueProps = false;
-                }
-            }
-            return allElementsContainsNameValueProps;
+            var itemProperties = array.First.Children<JProperty>();
+            var nameProp = itemProperties.FirstOrDefault(p => p.Name == "name");
+            var valueProp = itemProperties.FirstOrDefault(p => p.Name == "value");
+            return itemProperties.Count() == 2 && nameProp != null && valueProp != null;
         }
         
         public static bool IsArrayToken(this JToken valueProperty)
