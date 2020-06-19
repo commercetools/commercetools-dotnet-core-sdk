@@ -1,3 +1,16 @@
+## [1.0.0-rc-2 - 2020-06-19](https://github.com/commercetools/commercetools-dotnet-core-sdk/compare/1.0.0-rc-2...1.0.0-rc-1)
+### Features
+- Adding Support to Nested Attribute and Set Of Nested Attribute [`#135`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/135)
+- Adding Support to GitHub Actions [`#121`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/121)
+### Bug Fixes
+- Fix correlation id handler [`#132`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/132)
+- Add Missing InventoryEntryQuantitySet Message [`#128`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/128)
+- Fix TaxRate epsilon error [`#122`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/122)
+- Fix Token deadlock [`#120`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/120)
+- Convert Reference props to be IReference [`eda6dcd`](https://github.com/commercetools/commercetools-dotnet-core-sdk/commit/eda6dcd163ae1b00db582528adef0b6629ba25ba)
+- Adjust shipping methods commands to adapt platform release updates [`#118`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/118)
+
+
 ## [1.0.0-rc-1 - 2020-04-03](https://github.com/commercetools/commercetools-dotnet-core-sdk/compare/1.0.0-beta-3...1.0.0-rc-1)
 ### Features
 - Add KeyReference and Implement missing platform release updates [`#119`](https://github.com/commercetools/commercetools-dotnet-core-sdk/pull/119)
