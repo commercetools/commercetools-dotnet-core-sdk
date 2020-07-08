@@ -81,6 +81,27 @@ namespace commercetools.Sdk.IntegrationTests.Products
                     Assert.Equal(key, returnedSet.Results[0].Key);
                 });
         }
+        
+        [Fact]
+        public async Task QueryProductsByMasterSKu()
+        {
+            var variantsCount = 2;
+            await WithProduct(client,
+                productDraft => DefaultProductDraftWithMultipleVariants(productDraft, variantsCount),
+                async product =>
+                {
+                    Assert.Equal(variantsCount, product.MasterData.Staged.Variants.Count);
+
+                    var skuOfMasterVariant = product.MasterData.Current.MasterVariant.Sku;
+                    var queryCommand = new QueryCommand<Product>();
+                    queryCommand.Where(p => p.MasterData.Current.MasterVariant.Sku == skuOfMasterVariant);
+                    var returnedSet = await client.ExecuteAsync(queryCommand);
+                    Assert.Single(returnedSet.Results);
+                    var returnedProduct = returnedSet.Results[0];
+                    Assert.Equal(skuOfMasterVariant, returnedProduct.MasterData.Current.MasterVariant.Sku);
+                    Assert.Equal(2, returnedProduct.MasterData.Current.Variants.Count);
+                });
+        }
 
         [Fact]
         public async Task DeleteProductById()

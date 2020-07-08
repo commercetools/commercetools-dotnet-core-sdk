@@ -482,6 +482,15 @@ namespace commercetools.Sdk.Linq.Tests
             string result = queryPredicateExpressionVisitor.Render(expression);
             Assert.Equal("masterData(current(masterVariant(key = \"test\")))", result);
         }
+        
+        [Fact]
+        public void QueryNestedSku()
+        {
+            Expression<Func<Product, bool>> expression = p => p.MasterData.Current.MasterVariant.Sku == "something";
+            IQueryPredicateExpressionVisitor queryPredicateExpressionVisitor = this.linqFixture.GetService<IQueryPredicateExpressionVisitor>();
+            string result = queryPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("masterData(current(masterVariant(sku = \"something\")))", result);
+        }
 
         [Fact]
         public void QueryNestedCombine()
