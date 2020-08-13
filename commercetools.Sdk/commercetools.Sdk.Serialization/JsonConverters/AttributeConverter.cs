@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Type = System.Type;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 using commercetools.Sdk.Domain.Products.Attributes;
@@ -81,11 +82,16 @@ namespace commercetools.Sdk.Serialization
             var setOfNestedAttributes = new AttributeSet<NestedAttribute>();
             foreach(var item in valueProperty.Children())
             {
-                var listOfAttrs = item.ToObject(typeof(List<Attribute>), serializer);
+                var attArr = item;
+                if (item.IsNestedAttributeObject())
+                {
+                    attArr = item.First.Children().First();
+                }
+                var listOfAttrs = attArr.ToObject(typeof(List<Attribute>), serializer);
                 var nestedAttr = new NestedAttribute(new Attribute<List<Attribute>>()
                 {
                     Value = listOfAttrs as List<Attribute>,
-                    JsonValue = item
+                    JsonValue = attArr
                 });
                 setOfNestedAttributes.Add(nestedAttr);
             }

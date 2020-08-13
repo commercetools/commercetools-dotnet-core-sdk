@@ -268,5 +268,27 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.True(firstNestedAttr.Value[0].IsNumberAttribute());
             Assert.True(firstNestedAttr.Value[1].IsTextAttribute());
         }
+        
+        [Fact]
+        public void DeserializeProductWithSetNestedAttribute2()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string productSerialized = File.ReadAllText("Resources/Types/ProductWithSetNestedAttribute2.json");
+            
+            var product = serializerService.Deserialize<Product>(productSerialized);
+            var attr = product.MasterData.Current.MasterVariant.Attributes[0];
+            
+            
+            Assert.True(attr.IsSetOfNestedAttribute());
+            var setOfNestedAttr = attr.ToSetOfNestedAttribute();
+            Assert.NotNull(setOfNestedAttr);
+            Assert.Equal("supplier-info",setOfNestedAttr.Name);
+            Assert.Single(setOfNestedAttr.Value);
+            var firstNestedAttr = setOfNestedAttr.Value.FirstOrDefault();
+            Assert.NotNull(firstNestedAttr);
+            Assert.Equal(4, firstNestedAttr.Value.Count);
+            Assert.True(firstNestedAttr.Value[0].IsTextAttribute());
+            Assert.True(firstNestedAttr.Value[3].IsMoneyAttribute());
+        }
     }
 }

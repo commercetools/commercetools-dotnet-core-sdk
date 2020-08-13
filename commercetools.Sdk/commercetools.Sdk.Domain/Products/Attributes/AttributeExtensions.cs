@@ -51,7 +51,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         public static bool IsMoneyAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(Attribute<Money>);
+                attribute.GetType() == typeof(Attribute<BaseMoney>);
         }
         public static bool IsNumberAttribute(this IAttribute attribute)
         {
@@ -93,8 +93,8 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         public static bool IsSetMoneyAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(SetAttribute<Money>)
-                || attribute.GetType() == typeof(Attribute<AttributeSet<Money>>);
+                attribute.GetType() == typeof(SetAttribute<BaseMoney>)
+                || attribute.GetType() == typeof(Attribute<AttributeSet<BaseMoney>>);
         }
         public static bool IsSetEnumAttribute(this IAttribute attribute)
         {

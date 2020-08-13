@@ -16,7 +16,7 @@ namespace commercetools.Sdk.Serialization
 
         public bool CanConvert(JToken property)
         {
-            return property != null && property.Type == JTokenType.Array;
+            return property != null && property.IsNestedAttribute();
         }
     }
 }
