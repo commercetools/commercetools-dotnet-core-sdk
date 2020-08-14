@@ -63,7 +63,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         {
             if (this.IsMoneyAttribute())
             {
-                return new MoneyAttribute(this as Attribute<Money>);
+                return new MoneyAttribute(this as Attribute<BaseMoney>);
             }
 
             return null;
@@ -183,7 +183,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         {
             if (this.IsSetMoneyAttribute())
             {
-                return new SetMoneyAttribute(this as Attribute<AttributeSet<Money>>);
+                return new SetMoneyAttribute(this as Attribute<AttributeSet<BaseMoney>>);
             }
 
             return null;
