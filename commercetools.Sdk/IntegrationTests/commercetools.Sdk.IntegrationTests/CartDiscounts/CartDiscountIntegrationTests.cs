@@ -60,7 +60,45 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                     Assert.Equal(key, retrievedCartDiscount.Key);
                 });
         }
+        
+        [Fact]
+        public async Task GetMultiBuyLineItemCartDiscount()
+        {
+            await WithCartDiscount(
+                client, cartDiscountDraft =>
+                {
+                    var draft = DefaultCartDiscountDraft(cartDiscountDraft);
+                    draft.Value = new RelativeCartDiscountValue { Permyriad = 10000 };
+                    draft.Target = new MultiBuyLineItemTarget { Predicate = "1 = 1", TriggerQuantity = 2, MaxOccurrence = 1, DiscountedQuantity = 1, SelectionMode = SelectionMode.Cheapest};
+                    return draft;
+                },
+                async cartDiscount =>
+                {
+                    var retrievedCartDiscount = await client
+                        .ExecuteAsync(cartDiscount.GetById());
+                    Assert.IsType<MultiBuyLineItemTarget>(retrievedCartDiscount.Target);
+                });
+        }
 
+        [Fact]
+        public async Task GetMultiBuyCustomLineItemCartDiscount()
+        {
+            await WithCartDiscount(
+                client, cartDiscountDraft =>
+                {
+                    var draft = DefaultCartDiscountDraft(cartDiscountDraft);
+                    draft.Value = new RelativeCartDiscountValue { Permyriad = 10000 };
+                    draft.Target = new MultiBuyCustomLineItemTarget { Predicate = "1 = 1", TriggerQuantity = 2, MaxOccurrence = 1, DiscountedQuantity = 1, SelectionMode = SelectionMode.Cheapest};
+                    return draft;
+                },
+                async cartDiscount =>
+                {
+                    var retrievedCartDiscount = await client
+                        .ExecuteAsync(cartDiscount.GetById());
+                    Assert.IsType<MultiBuyCustomLineItemTarget>(retrievedCartDiscount.Target);
+                });
+        }
+        
         [Fact]
         public async Task QueryCartDiscounts()
         {
