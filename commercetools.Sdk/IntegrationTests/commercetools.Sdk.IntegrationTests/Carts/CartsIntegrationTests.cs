@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
@@ -29,6 +30,7 @@ using static commercetools.Sdk.IntegrationTests.Products.ProductsFixture;
 using static commercetools.Sdk.IntegrationTests.Payments.PaymentsFixture;
 using static commercetools.Sdk.IntegrationTests.Projects.ProjectFixture;
 using static commercetools.Sdk.IntegrationTests.Stores.StoresFixture;
+using static commercetools.Sdk.IntegrationTests.CartDiscounts.CartDiscountsFixture;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
 
 namespace commercetools.Sdk.IntegrationTests.Carts
@@ -81,6 +83,51 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                     var retrievedCart = await client
                         .ExecuteAsync(cart.ToIdResourceIdentifier().GetById());
                     Assert.Equal(cart.Id, retrievedCart.Id);
+                });
+        }
+
+
+        [Fact]
+        public async Task GetCartByIdExpandLineItemDiscount()
+        {
+            var key = $"CreateCartDiscount-{TestingUtility.RandomString()}";
+
+            await WithCartDiscount(
+                client, draft => DefaultCartDiscountDraftWithKey(draft, key),
+                async cartDiscount =>
+                {
+                    Assert.NotNull(cartDiscount);
+                    await WithCartWithSingleLineItem(client, 1, DefaultCartDraft,
+                        async cart =>
+                        {
+                            Assert.NotNull(cart);
+                            var retrievedCart = await client
+                                .ExecuteAsync(cart
+                                    .ToIdResourceIdentifier()
+                                    .GetById()
+                                    .Expand("lineItems[*].discountedPricePerQuantity[*].discountedPrice.includedDiscounts[*].discount")
+                                );
+
+                            Assert.Equal(cart.Id, retrievedCart.Id);
+                            var lineItem = retrievedCart.LineItems.FirstOrDefault();
+                            Assert.NotNull(lineItem);
+                            Assert.NotNull(lineItem.DiscountedPricePerQuantity);
+                            
+                            var discountedPricePerQuantity = lineItem.DiscountedPricePerQuantity.FirstOrDefault();
+                            Assert.NotNull(discountedPricePerQuantity);
+                            
+                            var discountedPrice = discountedPricePerQuantity.DiscountedPrice;
+                            Assert.NotNull(discountedPrice);
+                            Assert.NotEmpty(discountedPrice.IncludedDiscounts);
+                            
+                            var discountedLineItemPortion = discountedPrice.IncludedDiscounts.FirstOrDefault();
+                            Assert.NotNull(discountedLineItemPortion);
+                            Assert.NotNull(discountedLineItemPortion.Discount);
+                            
+                            var discount = discountedLineItemPortion.Discount;
+                            Assert.NotNull(discount.Obj);
+                            Assert.Equal(cartDiscount.Key, discount.Obj.Key);
+                        });
                 });
         }
 
