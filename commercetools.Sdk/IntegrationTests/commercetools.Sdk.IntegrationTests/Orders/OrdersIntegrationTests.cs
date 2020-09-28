@@ -144,6 +144,9 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                                     var discount = discountedLineItemPortion.Discount;
                                     Assert.NotNull(discount.Obj);
                                     Assert.Equal(cartDiscount.Key, discount.Obj.Key);
+
+                                    var lineItemDiscountedPrice = lineItem.GetDiscountedPrice();
+                                    Assert.NotNull(lineItemDiscountedPrice);
                                 });
                         });
                 });
