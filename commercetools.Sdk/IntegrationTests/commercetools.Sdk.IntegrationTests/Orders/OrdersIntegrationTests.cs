@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Channels;
@@ -20,6 +21,7 @@ using static commercetools.Sdk.IntegrationTests.Types.TypesFixture;
 using static commercetools.Sdk.IntegrationTests.Payments.PaymentsFixture;
 using static commercetools.Sdk.IntegrationTests.Projects.ProjectFixture;
 using static commercetools.Sdk.IntegrationTests.Stores.StoresFixture;
+using static commercetools.Sdk.IntegrationTests.CartDiscounts.CartDiscountsFixture;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
 
 namespace commercetools.Sdk.IntegrationTests.Orders
@@ -93,6 +95,59 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                             var retrievedOrder = await client
                                 .ExecuteAsync(order.ToIdResourceIdentifier().GetById());
                             Assert.Equal(order.Id, retrievedOrder.Id);
+                        });
+                });
+        }
+        
+        [Fact]
+        public async Task GetOrderByIdExpandLineItemDiscount()
+        {
+            var key = $"CreateCartDiscount-{TestingUtility.RandomString()}";
+
+            await WithCartDiscount(
+                client, draft => DefaultCartDiscountDraftWithKey(draft, key),
+                async cartDiscount =>
+                {
+                    Assert.NotNull(cartDiscount);
+                    await WithCartWithSingleLineItem(client, 1, DefaultCartDraft,
+                        async cart =>
+                        {
+                            Assert.NotNull(cart);
+                            await WithOrder(client, draft => DefaultOrderFromCartDraft(draft, cart),
+                                async order =>
+                                {
+                                    Assert.NotNull(order);
+                                    
+                                    var retrievedOrder = await client
+                                        .ExecuteAsync(order
+                                            .ToIdResourceIdentifier()
+                                            .GetById()
+                                            .Expand("lineItems[*].discountedPricePerQuantity[*].discountedPrice.includedDiscounts[*].discount")
+                                        );
+
+                                    Assert.Equal(order.Id, retrievedOrder.Id);
+                                    var lineItem = retrievedOrder.LineItems.FirstOrDefault();
+                                    Assert.NotNull(lineItem);
+                                    Assert.NotNull(lineItem.DiscountedPricePerQuantity);
+                            
+                                    var discountedPricePerQuantity = lineItem.DiscountedPricePerQuantity.FirstOrDefault();
+                                    Assert.NotNull(discountedPricePerQuantity);
+                            
+                                    var discountedPrice = discountedPricePerQuantity.DiscountedPrice;
+                                    Assert.NotNull(discountedPrice);
+                                    Assert.NotEmpty(discountedPrice.IncludedDiscounts);
+                            
+                                    var discountedLineItemPortion = discountedPrice.IncludedDiscounts.FirstOrDefault();
+                                    Assert.NotNull(discountedLineItemPortion);
+                                    Assert.NotNull(discountedLineItemPortion.Discount);
+                            
+                                    var discount = discountedLineItemPortion.Discount;
+                                    Assert.NotNull(discount.Obj);
+                                    Assert.Equal(cartDiscount.Key, discount.Obj.Key);
+
+                                    var lineItemDiscountedPrice = lineItem.GetDiscountedPrice();
+                                    Assert.NotNull(lineItemDiscountedPrice);
+                                });
                         });
                 });
         }

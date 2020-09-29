@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using commercetools.Sdk.Domain;
 using Type = System.Type;
 
 namespace commercetools.Sdk.Serialization

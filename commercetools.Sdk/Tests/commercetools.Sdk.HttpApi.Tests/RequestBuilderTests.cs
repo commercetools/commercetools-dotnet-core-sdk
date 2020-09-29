@@ -293,5 +293,21 @@ namespace commercetools.Sdk.HttpApi.Tests
             var content = await httpApiCommand.HttpRequestMessage.Content.ReadAsStringAsync();
             Assert.Equal($"text.en={searchText}&filter=categories.id%3A%22abc5a6d0-2cbb-4855-bbe7-5cf58f434c122%22&priceChannel=dbb5a6d0-2cbb-4855-bbe7-5cf58f434a82&withTotal=false", content);
         }
+        
+        [Fact]
+        public void GetCartWithDiscountExpand()
+        {
+            var getCommand = new GetByIdCommand<Cart>("986f4791-bc47-4a56-8a3c-f35016be0638");
+            
+            getCommand.Expand(
+                "lineItems[*].discountedPricePerQuantity[*].discountedPrice.includedDiscounts[*].discount");
+
+            var getRequestMessageBuilder = new GetRequestMessageBuilder(
+                this.clientFixture.GetService<IEndpointRetriever>(),
+                this.clientFixture.GetService<IParametersBuilderFactory<IAdditionalParametersBuilder>>()
+            );
+            var httpRequestMessage = getRequestMessageBuilder.GetRequestMessage(getCommand);
+            Assert.Equal("carts/986f4791-bc47-4a56-8a3c-f35016be0638?expand=lineItems%5B*%5D.discountedPricePerQuantity%5B*%5D.discountedPrice.includedDiscounts%5B*%5D.discount", httpRequestMessage.RequestUri.ToString());
+        }
     }
 }
