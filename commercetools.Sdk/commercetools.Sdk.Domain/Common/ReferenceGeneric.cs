@@ -6,7 +6,7 @@ namespace commercetools.Sdk.Domain
 {
     public class Reference<T> : Reference, IReference<T>
     {
-        public T Obj { get; set; }
+        public virtual T Obj { get; set; }
         public new ReferenceTypeId TypeId => this.GetResourceType();
 
         public IReference<T> ToReference()
