@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using commercetools.Sdk.Domain;
 using Newtonsoft.Json.Linq;
@@ -10,7 +11,7 @@ namespace commercetools.Sdk.Serialization
     internal class ReferenceConverter : JsonConverterBase
     {
         private IDecoratorTypeRetriever<ResourceTypeAttribute> typeRetriever;
-
+        private ConcurrentDictionary<string, Type> referenceTypes = new ConcurrentDictionary<string, Type>();
         public ReferenceConverter(IDecoratorTypeRetriever<ResourceTypeAttribute> typeRetriever)
         {
             this.typeRetriever = typeRetriever;

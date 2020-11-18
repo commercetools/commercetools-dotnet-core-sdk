@@ -9,7 +9,7 @@ namespace commercetools.Sdk.Serialization
     {
         private readonly DeserializationContractResolver deserializationContractResolver;
         private readonly SerializationContractResolver serializationContractResolver;
-        private IDictionary<Type, JsonSerializerSettings> mapping = new ConcurrentDictionary<Type, JsonSerializerSettings>();
+        private ConcurrentDictionary<Type, JsonSerializerSettings> mapping = new ConcurrentDictionary<Type, JsonSerializerSettings>();
 
         public JsonSerializerSettingsFactory(DeserializationContractResolver deserializationContractResolver, SerializationContractResolver serializationContractResolver)
         {
@@ -21,15 +21,11 @@ namespace commercetools.Sdk.Serialization
         {
             try
             {
-                if (!mapping.ContainsKey(type))
-                {
+                return mapping.GetOrAdd(type, obj => {
                     JsonSerializerSettings settings = new JsonSerializerSettings();
                     settings.ContractResolver = this.deserializationContractResolver;
-
-                    mapping[type] = settings;
-                }
-
-                return mapping[type];
+                    return settings;
+                });
             }
             catch (NullReferenceException)
             {

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Common;
@@ -10,8 +11,7 @@ namespace commercetools.Sdk.Serialization
 {
     internal class IReferenceConverter : JsonConverterBase
     {
-        private IDecoratorTypeRetriever<ResourceTypeAttribute> typeRetriever;
-
+        private readonly IDecoratorTypeRetriever<ResourceTypeAttribute> typeRetriever;
         public IReferenceConverter(IDecoratorTypeRetriever<ResourceTypeAttribute> typeRetriever)
         {
             this.typeRetriever = typeRetriever;
