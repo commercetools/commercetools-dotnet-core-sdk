@@ -21,6 +21,7 @@ using commercetools.Sdk.Linq.Query;
 using commercetools.Sdk.Linq.Sort;
 using commercetools.Sdk.Registration;
 using commercetools.Sdk.Serialization;
+using commercetools.Sdk.Serialization.JsonConverters;
 using commercetools.Sdk.Validation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +33,7 @@ namespace SimpleInjector
 {
     public static class DependencyInjectionSetup
     {
-        public static void UseSerialization(this Container services)
+        public static void UseSerialization(this Container services, AttributeReaderMode mode = AttributeReaderMode.Standard)
         {
             services.RegisterCollection(typeof(ICustomJsonMapper<>), typeof(ICustomJsonMapper<>).Assembly);
             services.Register(typeof(IMapperTypeRetriever<>), new [] {typeof(IMapperTypeRetriever<>).Assembly});
@@ -40,6 +41,21 @@ namespace SimpleInjector
             services.RegisterCollection(typeof(JsonConverterBase), typeof(JsonConverterBase).Assembly);
 
             services.Register(typeof(IDecoratorTypeRetriever<>), new [] {typeof(IMapperTypeRetriever<>).Assembly});
+            switch (mode)
+            {
+                case AttributeReaderMode.Cached: 
+                    services.Register<IAttributeConverterReader, CachedAttributeConverterReader>();
+                    services.Register<IFieldConverterReader, CachedFieldConverterReader>();
+                    break;
+                case AttributeReaderMode.Simple:
+                    services.Register<IAttributeConverterReader, SimpleAttributeConverterReader>();
+                    services.Register<IFieldConverterReader, SimpleFieldConverterReader>();
+                    break;
+                default:
+                    services.Register<IAttributeConverterReader, StandardAttributeConverterReader>();
+                    services.Register<IFieldConverterReader, StandardFieldConverterReader>();
+                    break;
+            }
 
             services.Register<DeserializationContractResolver>(Lifestyle.Singleton);
             services.Register<SerializationContractResolver>(Lifestyle.Singleton);
@@ -87,13 +103,14 @@ namespace SimpleInjector
         /// <param name="configuration">The configuration.</param>
         /// <param name="clientName">The name of the client.</param>
         /// <param name="tokenFlow">The token flow.</param>
+        /// <param name="readerMode"></param>
         public static IHttpClientBuilder UseCommercetools(this Container services, IConfiguration configuration,
-            string clientName = DefaultClientNames.Api, TokenFlow tokenFlow = TokenFlow.ClientCredentials)
+            string clientName = DefaultClientNames.Api, TokenFlow tokenFlow = TokenFlow.ClientCredentials, AttributeReaderMode readerMode = AttributeReaderMode.Standard)
         {
             var clients = new ConcurrentDictionary<string, TokenFlow>();
             clients.TryAdd(clientName, tokenFlow);
             return services
-                .UseCommercetools(configuration, clients).Single()
+                .UseCommercetools(configuration, clients, readerMode).Single()
                 .Value;
         }
 
@@ -103,12 +120,13 @@ namespace SimpleInjector
         /// <param name="services">The service collection.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="clients">The clients with the client name as the key and the token flow as they value.</param>
-        public static IDictionary<string, IHttpClientBuilder> UseCommercetools(this Container services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
+        /// <param name="readerMode"></param>
+        public static IDictionary<string, IHttpClientBuilder> UseCommercetools(this Container services, IConfiguration configuration, IDictionary<string, TokenFlow> clients, AttributeReaderMode readerMode = AttributeReaderMode.Standard)
         {
             services.UseRegistration();
             services.UseLinq();
             services.UseDomain();
-            services.UseSerialization();
+            services.UseSerialization(readerMode);
             return services.UseHttpApi(configuration, clients);
         }
 
