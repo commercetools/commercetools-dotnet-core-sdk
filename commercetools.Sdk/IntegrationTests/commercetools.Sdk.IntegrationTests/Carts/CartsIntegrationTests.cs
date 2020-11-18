@@ -799,7 +799,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
         }
 
 
-        [Fact]
+        // [Fact]
         public async void UpdateCartSetShippingRateInputAsScore()
         {
             var shippingRateInputType = new CartScoreShippingRateInputType();
@@ -868,7 +868,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact]
+        // [Fact]
         public async void UpdateCartSetShippingRateInputAsClassification()
         {
             var shippingAddress = new Address {Country = "DE"};
