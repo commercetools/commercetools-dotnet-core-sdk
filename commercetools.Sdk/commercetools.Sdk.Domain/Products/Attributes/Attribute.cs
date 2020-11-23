@@ -7,6 +7,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
     {
         public string Name { get; set; }
 
+        [Obsolete]
         public object JsonValue { get; set; }
 
         public bool ShouldSerializeJsonValue()

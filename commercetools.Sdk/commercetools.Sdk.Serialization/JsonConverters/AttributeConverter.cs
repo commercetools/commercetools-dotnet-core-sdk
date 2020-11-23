@@ -60,10 +60,6 @@ namespace commercetools.Sdk.Serialization
                 attrObject = jsonObject.ToObject(attributeType, serializer);    
             }
             
-            if (attrObject is IAttribute attr)
-            {
-                attr.JsonValue = valueProperty;
-            }
             return attrObject;
         }
 
@@ -90,8 +86,7 @@ namespace commercetools.Sdk.Serialization
                 var listOfAttrs = attArr.ToObject(typeof(List<Attribute>), serializer);
                 var nestedAttr = new NestedAttribute(new Attribute<List<Attribute>>()
                 {
-                    Value = listOfAttrs as List<Attribute>,
-                    JsonValue = attArr
+                    Value = listOfAttrs as List<Attribute>
                 });
                 setOfNestedAttributes.Add(nestedAttr);
             }
