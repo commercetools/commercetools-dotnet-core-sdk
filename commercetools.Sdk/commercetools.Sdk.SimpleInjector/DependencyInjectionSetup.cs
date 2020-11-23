@@ -33,7 +33,7 @@ namespace SimpleInjector
 {
     public static class DependencyInjectionSetup
     {
-        public static void UseSerialization(this Container services, AttributeReaderMode mode = AttributeReaderMode.Standard)
+        public static void UseSerialization(this Container services)
         {
             services.RegisterCollection(typeof(ICustomJsonMapper<>), typeof(ICustomJsonMapper<>).Assembly);
             services.Register(typeof(IMapperTypeRetriever<>), new [] {typeof(IMapperTypeRetriever<>).Assembly});
@@ -88,14 +88,13 @@ namespace SimpleInjector
         /// <param name="configuration">The configuration.</param>
         /// <param name="clientName">The name of the client.</param>
         /// <param name="tokenFlow">The token flow.</param>
-        /// <param name="readerMode"></param>
         public static IHttpClientBuilder UseCommercetools(this Container services, IConfiguration configuration,
-            string clientName = DefaultClientNames.Api, TokenFlow tokenFlow = TokenFlow.ClientCredentials, AttributeReaderMode readerMode = AttributeReaderMode.Standard)
+            string clientName = DefaultClientNames.Api, TokenFlow tokenFlow = TokenFlow.ClientCredentials)
         {
             var clients = new ConcurrentDictionary<string, TokenFlow>();
             clients.TryAdd(clientName, tokenFlow);
             return services
-                .UseCommercetools(configuration, clients, readerMode).Single()
+                .UseCommercetools(configuration, clients).Single()
                 .Value;
         }
 
@@ -105,13 +104,12 @@ namespace SimpleInjector
         /// <param name="services">The service collection.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="clients">The clients with the client name as the key and the token flow as they value.</param>
-        /// <param name="readerMode"></param>
-        public static IDictionary<string, IHttpClientBuilder> UseCommercetools(this Container services, IConfiguration configuration, IDictionary<string, TokenFlow> clients, AttributeReaderMode readerMode = AttributeReaderMode.Standard)
+        public static IDictionary<string, IHttpClientBuilder> UseCommercetools(this Container services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
             services.UseRegistration();
             services.UseLinq();
             services.UseDomain();
-            services.UseSerialization(readerMode);
+            services.UseSerialization();
             return services.UseHttpApi(configuration, clients);
         }
 

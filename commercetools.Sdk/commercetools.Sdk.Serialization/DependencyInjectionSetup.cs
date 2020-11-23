@@ -7,7 +7,7 @@ namespace commercetools.Sdk.Serialization
 
     public static class DependencyInjectionSetup
     {
-        public static void UseSerialization(this IServiceCollection services, AttributeReaderMode mode = AttributeReaderMode.Standard)
+        public static void UseSerialization(this IServiceCollection services)
         {
             services.RegisterAllTypes(typeof(ICustomJsonMapper<>), ServiceLifetime.Singleton);
             services.RegisterAllTypes(typeof(IMapperTypeRetriever<>), ServiceLifetime.Singleton);

@@ -27,7 +27,7 @@ namespace commercetools.Sdk.HttpApi
         {
             return JsonConvert.DeserializeObject<T>(input, jsonSerializerSettings);
         }
-        
+
         public T Deserialize<T>(Stream input)
         {
             T result;
