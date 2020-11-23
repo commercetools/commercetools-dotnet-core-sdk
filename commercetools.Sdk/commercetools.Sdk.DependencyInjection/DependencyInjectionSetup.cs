@@ -9,7 +9,6 @@ using commercetools.Sdk.Serialization;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
-using commercetools.Sdk.Serialization.JsonConverters;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
