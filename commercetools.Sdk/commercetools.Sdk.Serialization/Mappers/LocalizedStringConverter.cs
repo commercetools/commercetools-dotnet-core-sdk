@@ -10,7 +10,6 @@ namespace commercetools.Sdk.Serialization
     {
         private readonly ICultureValidator cultureValidator;
         
-        private static ConcurrentDictionary<string, bool> checkedCultures = new ConcurrentDictionary<string, bool>();
 
         protected LocalizedStringConverter(ICultureValidator cultureValidator)
         {
@@ -30,7 +29,7 @@ namespace commercetools.Sdk.Serialization
                 var name = firstValue?.Name;
                 if (name != null)
                 {
-                    return checkedCultures.GetOrAdd(name, IsValid(name));
+                    return IsValid(name);
                 }
             }
             return false;

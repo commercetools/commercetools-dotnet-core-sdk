@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System;
 using System.Collections.Generic;
+using commercetools.Sdk.Domain;
 using Newtonsoft.Json;
 
 namespace commercetools.Sdk.Serialization
@@ -17,15 +18,21 @@ namespace commercetools.Sdk.Serialization
             this.serializationContractResolver = serializationContractResolver;
         }
 
+        public JsonSerializerSettings CreateDeserializationSettings()
+        {
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.ContractResolver = this.deserializationContractResolver;
+            settings.DateParseHandling = DateParseHandling.None;
+            settings.ObjectCreationHandling = ObjectCreationHandling.Replace;
+            settings.MetadataPropertyHandling = MetadataPropertyHandling.Ignore;
+            return settings;
+        }
+        
         public JsonSerializerSettings CreateDeserializationSettings(Type type)
         {
             try
             {
-                return mapping.GetOrAdd(type, obj => {
-                    JsonSerializerSettings settings = new JsonSerializerSettings();
-                    settings.ContractResolver = this.deserializationContractResolver;
-                    return settings;
-                });
+                return mapping.GetOrAdd(type, obj => CreateDeserializationSettings());
             }
             catch (NullReferenceException)
             {
@@ -34,6 +41,11 @@ namespace commercetools.Sdk.Serialization
         }
 
         public JsonSerializerSettings CreateSerializationSettings(Type type)
+        {
+            return CreateDeserializationSettings();
+        }
+
+        public JsonSerializerSettings CreateSerializationSettings()
         {
             JsonSerializerSettings settings = new JsonSerializerSettings()
             {

@@ -12,6 +12,9 @@ namespace commercetools.Sdk.Serialization
     internal class IReferenceConverter : JsonConverterBase
     {
         private readonly IDecoratorTypeRetriever<ResourceTypeAttribute> typeRetriever;
+        private readonly ConcurrentDictionary<Type, Type> referenceTypes = new ConcurrentDictionary<Type, Type>();
+        private readonly ConcurrentDictionary<Type, Type> resourceTypes = new ConcurrentDictionary<Type, Type>();
+        
         public IReferenceConverter(IDecoratorTypeRetriever<ResourceTypeAttribute> typeRetriever)
         {
             this.typeRetriever = typeRetriever;
@@ -48,11 +51,10 @@ namespace commercetools.Sdk.Serialization
                 throw new JsonSerializationException($"Unknown reference typeId '{typeId}'");
             }
 
-            var deserializedType = isKeyReferencable
-                ? typeof(ResourceIdentifier<>)
-                : typeof(Reference<>);
+            var genericReferenceType = isKeyReferencable
+                ? resourceTypes.GetOrAdd(type, (t) => { return typeof(ResourceIdentifier<>).MakeGenericType(t); })
+                :  referenceTypes.GetOrAdd(type, (t) => { return typeof(Reference<>).MakeGenericType(t); });
 
-            var genericReferenceType = deserializedType.MakeGenericType(type);
             var deserialized = jsonObject.ToObject(genericReferenceType, serializer);
             return deserialized;
         }

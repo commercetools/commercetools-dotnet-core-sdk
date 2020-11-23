@@ -41,21 +41,6 @@ namespace SimpleInjector
             services.RegisterCollection(typeof(JsonConverterBase), typeof(JsonConverterBase).Assembly);
 
             services.Register(typeof(IDecoratorTypeRetriever<>), new [] {typeof(IMapperTypeRetriever<>).Assembly});
-            switch (mode)
-            {
-                case AttributeReaderMode.Cached: 
-                    services.Register<IAttributeConverterReader, CachedAttributeConverterReader>();
-                    services.Register<IFieldConverterReader, CachedFieldConverterReader>();
-                    break;
-                case AttributeReaderMode.Simple:
-                    services.Register<IAttributeConverterReader, SimpleAttributeConverterReader>();
-                    services.Register<IFieldConverterReader, SimpleFieldConverterReader>();
-                    break;
-                default:
-                    services.Register<IAttributeConverterReader, StandardAttributeConverterReader>();
-                    services.Register<IFieldConverterReader, StandardFieldConverterReader>();
-                    break;
-            }
 
             services.Register<DeserializationContractResolver>(Lifestyle.Singleton);
             services.Register<SerializationContractResolver>(Lifestyle.Singleton);

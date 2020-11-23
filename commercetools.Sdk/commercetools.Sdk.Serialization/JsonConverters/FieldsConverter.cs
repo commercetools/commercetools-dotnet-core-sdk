@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Type = System.Type;
 
@@ -11,7 +10,6 @@ namespace commercetools.Sdk.Serialization
     internal class FieldsConverter : JsonConverterBase
     {
         private readonly IMapperTypeRetriever<Fields> mapperTypeRetriever;
-        private ConcurrentDictionary<string, Type> fieldsType = new ConcurrentDictionary<string, Type>();
         
         public FieldsConverter(IMapperTypeRetriever<Fields> mapperTypeRetriever)
         {
