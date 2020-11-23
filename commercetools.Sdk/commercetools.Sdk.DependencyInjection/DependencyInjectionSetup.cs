@@ -25,7 +25,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="configuration">The configuration.</param>
         /// <param name="clientName">The name of the client.</param>
         /// <param name="tokenFlow">The token flow.</param>
-        /// <param name="readerMode"></param>
         public static IHttpClientBuilder UseCommercetools(this IServiceCollection services, IConfiguration configuration, string clientName = DefaultClientNames.Api, TokenFlow tokenFlow = TokenFlow.ClientCredentials)
         {
             var clients = new ConcurrentDictionary<string, TokenFlow>();
@@ -39,7 +38,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The service collection.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="clients">The clients with the client name as the key and the token flow as they value.</param>
-        /// <param name="readerMode"></param>
         public static IDictionary<string, IHttpClientBuilder> UseCommercetools(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
         {
             services.UseRegistration();
