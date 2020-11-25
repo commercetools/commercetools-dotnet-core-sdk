@@ -28,6 +28,16 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.IsType<Attribute<string>>(deserialized.Attributes[0]);
             Assert.IsType<JValue>(deserialized.Attributes[0].ToIAttribute().JsonValue);
         }
+        
+        [Fact]
+        public void DeserializeTextAttributeNotDate()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerServiceWithDifferentConfig;
+            var serialized = File.ReadAllText("Resources/Attributes/Text2.json");
+            var deserialized = serializerService.Deserialize<ProductVariant>(serialized);
+            Assert.IsType<Attribute<string>>(deserialized.Attributes[0]);
+            Assert.IsType<JValue>(deserialized.Attributes[0].ToIAttribute().JsonValue);
+        }
 
         [Fact]
         public void SerializeTextAttribute()

@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.Domain.Validation;
+﻿using System.Linq;
+using commercetools.Sdk.Domain.Validation;
 
 namespace commercetools.Sdk.Serialization
 {
@@ -20,6 +21,22 @@ namespace commercetools.Sdk.Serialization
             services.AddSingleton<IModelValidator, NullModelValidator>();
             services.AddSingleton<JsonSerializerSettingsFactory>();
             services.AddSingleton<ISerializerService, SerializerService>();
+        }
+
+        public static void ConfigureSerializationServices(
+            this IServiceCollection serviceCollection,
+            SerializationConfiguration serializationConfiguration)
+        {
+            if (serializationConfiguration.DeserializeDateAttributesAsString)
+            {
+                var serviceDescriptor = serviceCollection.FirstOrDefault(descriptor => descriptor.ImplementationType == typeof(DateAttributeMapper));
+                serviceCollection.Remove(serviceDescriptor);
+            }
+            if (serializationConfiguration.DeserializeDateTimeAttributesAsString)
+            {
+                var serviceDescriptor = serviceCollection.FirstOrDefault(descriptor => descriptor.ImplementationType == typeof(DateTimeAttributeMapper));
+                serviceCollection.Remove(serviceDescriptor);
+            }
         }
     }
 }
