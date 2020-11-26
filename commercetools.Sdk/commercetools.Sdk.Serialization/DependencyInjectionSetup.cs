@@ -28,9 +28,9 @@ namespace commercetools.Sdk.Serialization
             this IServiceCollection services,
             ISerializationConfiguration serializationConfiguration)
         {
-            var serviceDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(ISerializationConfiguration));
-            if (serviceDescriptor != null)
-                services.Remove(serviceDescriptor);
+            // var serviceDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(ISerializationConfiguration));
+            // if (serviceDescriptor != null)
+            //     services.Remove(serviceDescriptor);
             services.AddSingleton(serializationConfiguration);
         }
     }
