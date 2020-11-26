@@ -46,6 +46,7 @@ namespace SimpleInjector
             services.Register<IModelValidator, NullModelValidator>(Lifestyle.Singleton);
             services.Register<JsonSerializerSettingsFactory>(Lifestyle.Singleton);
             services.Register<ISerializerService, SerializerService>(Lifestyle.Singleton);
+            services.Register<ISerializationConfiguration, SerializationConfiguration>(Lifestyle.Singleton);
         }
 
         /// <summary>
@@ -252,6 +253,14 @@ namespace SimpleInjector
             services.Register<IUserAgentProvider, UserAgentProvider>(Lifestyle.Singleton);
             services.Register<ITokenSerializerService, TokenSerializerService>(Lifestyle.Singleton);
             services.Register<ICorrelationIdProvider, DefaultCorrelationIdProvider>(Lifestyle.Singleton);
+        }
+        
+        public static void ConfigureSerializationServices(
+            this Container services,
+            ISerializationConfiguration serializationConfiguration)
+        {
+            services.Options.AllowOverridingRegistrations = true;
+            services.Register(()=> serializationConfiguration, Lifestyle.Singleton);
         }
     }
 }
