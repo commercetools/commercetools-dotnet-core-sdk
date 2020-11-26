@@ -5,15 +5,21 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace commercetools.Sdk.Serialization.Tests
 {
-    public class SerializationFixture
+    public class SerializationFixtureWithConfig
     {
-        public SerializationFixture()
+        public SerializationFixtureWithConfig()
         {
+            var config = new SerializationConfiguration
+            {
+                DeserializeDateAttributesAsString = true,
+                DeserializeDateTimeAttributesAsString = true
+            };
             var services = new ServiceCollection();
             services.UseRegistration();
             services.UseDomain();
             services.UseSerialization();
             services.UseValidation();
+            services.ConfigureSerializationServices(config);
             var serviceProvider = services.BuildServiceProvider();
             this.SerializerService = serviceProvider.GetService<ISerializerService>();
         }
