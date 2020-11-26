@@ -14,7 +14,7 @@ namespace commercetools.Sdk.Serialization
         }
         public override bool CanConvert(JToken property)
         {
-            return !_configuration.DeserializeDateAttributesAsString
+            return !_configuration.DeserializeDateTimeAttributesAsString
                    && base.CanConvert(property);
         }
     }

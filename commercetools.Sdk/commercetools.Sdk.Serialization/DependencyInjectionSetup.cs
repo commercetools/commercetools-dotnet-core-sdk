@@ -7,7 +7,7 @@ namespace commercetools.Sdk.Serialization
 
     public static class DependencyInjectionSetup
     {
-        public static void UseSerialization(this IServiceCollection services)
+        public static void UseSerialization(this IServiceCollection services, SerializationConfiguration serializationConfiguration = null)
         {
             services.RegisterAllTypes(typeof(ICustomJsonMapper<>), ServiceLifetime.Singleton);
             services.RegisterAllTypes(typeof(IMapperTypeRetriever<>), ServiceLifetime.Singleton);
@@ -21,17 +21,10 @@ namespace commercetools.Sdk.Serialization
             services.AddSingleton<IModelValidator, NullModelValidator>();
             services.AddSingleton<JsonSerializerSettingsFactory>();
             services.AddSingleton<ISerializerService, SerializerService>();
-            services.AddSingleton<ISerializationConfiguration, SerializationConfiguration>();
-        }
-
-        public static void ConfigureSerializationServices(
-            this IServiceCollection services,
-            ISerializationConfiguration serializationConfiguration)
-        {
+            
             var serviceDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(ISerializationConfiguration));
-            if (serviceDescriptor != null)
-                services.Remove(serviceDescriptor);
-            services.AddSingleton(serializationConfiguration);
+            services.Remove(serviceDescriptor);
+            services.AddSingleton<ISerializationConfiguration>(serializationConfiguration ?? SerializationConfiguration.DefaultConfig);
         }
     }
 }

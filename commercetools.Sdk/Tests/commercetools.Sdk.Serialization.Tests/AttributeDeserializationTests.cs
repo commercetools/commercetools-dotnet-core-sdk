@@ -74,7 +74,7 @@ namespace commercetools.Sdk.Serialization.Tests
         [Fact]
         public void DeserializeDateAttribute()
         {
-            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            var serializerService = serializationFixture.BuildSerializerServiceWithConfig();
             string serialized = File.ReadAllText("Resources/Attributes/Date.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
             Assert.IsType<Attribute<DateTime>>(deserialized.Attributes[0]);
@@ -289,6 +289,58 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.Equal(4, firstNestedAttr.Value.Count);
             Assert.True(firstNestedAttr.Value[0].IsTextAttribute());
             Assert.True(firstNestedAttr.Value[3].IsMoneyAttribute());
+        }
+        
+         [Fact]
+        public void DeserializeDateAsTextAttribute()
+        {
+            var config = new SerializationConfiguration
+            {
+                DeserializeDateAttributesAsString = true
+            };
+            var serializerService = serializationFixture.BuildSerializerServiceWithConfig(config);
+            
+            var serialized = @"
+                {
+                    ""id"": 1,
+                    ""key"": ""newKey"",
+                    ""attributes"": [
+                                        {
+                                            ""name"": ""text-attribute"",
+                                            ""value"": ""2021-10-12""
+                                        }
+                                    ]
+                }
+            ";
+            var deserialized = serializerService.Deserialize<ProductVariant>(serialized);
+            Assert.IsType<Attribute<string>>(deserialized.Attributes[0]);
+            Assert.IsType<JValue>(deserialized.Attributes[0].ToIAttribute().JsonValue);
+        }
+        
+        [Fact]
+        public void DeserializeDateTimeAsTextAttribute()
+        {
+            var config = new SerializationConfiguration
+            {
+                DeserializeDateTimeAttributesAsString = true
+            };
+            var serializerService = serializationFixture.BuildSerializerServiceWithConfig(config);
+
+            var serialized = @"
+                {
+                    ""id"": 1,
+                    ""key"": ""newKey"",
+                    ""attributes"": [
+                                        {
+                                            ""name"": ""text-attribute"",
+                                            ""value"": ""2021-10-12 05:50:06""
+                                        }
+                                    ]
+                }
+            ";
+            var deserialized = serializerService.Deserialize<ProductVariant>(serialized);
+            Assert.IsType<Attribute<string>>(deserialized.Attributes[0]);
+            Assert.IsType<JValue>(deserialized.Attributes[0].ToIAttribute().JsonValue);
         }
     }
 }
