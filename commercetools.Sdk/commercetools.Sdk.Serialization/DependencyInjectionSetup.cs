@@ -21,22 +21,17 @@ namespace commercetools.Sdk.Serialization
             services.AddSingleton<IModelValidator, NullModelValidator>();
             services.AddSingleton<JsonSerializerSettingsFactory>();
             services.AddSingleton<ISerializerService, SerializerService>();
+            services.AddSingleton<ISerializationConfiguration, SerializationConfiguration>();
         }
 
         public static void ConfigureSerializationServices(
-            this IServiceCollection serviceCollection,
-            SerializationConfiguration serializationConfiguration)
+            this IServiceCollection services,
+            ISerializationConfiguration serializationConfiguration)
         {
-            if (serializationConfiguration.DeserializeDateAttributesAsString)
-            {
-                var serviceDescriptor = serviceCollection.FirstOrDefault(descriptor => descriptor.ImplementationType == typeof(DateAttributeMapper));
-                serviceCollection.Remove(serviceDescriptor);
-            }
-            if (serializationConfiguration.DeserializeDateTimeAttributesAsString)
-            {
-                var serviceDescriptor = serviceCollection.FirstOrDefault(descriptor => descriptor.ImplementationType == typeof(DateTimeAttributeMapper));
-                serviceCollection.Remove(serviceDescriptor);
-            }
+            var serviceDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(ISerializationConfiguration));
+            if (serviceDescriptor != null)
+                services.Remove(serviceDescriptor);
+            services.AddSingleton(serializationConfiguration);
         }
     }
 }

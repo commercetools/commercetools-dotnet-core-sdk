@@ -9,7 +9,7 @@ namespace commercetools.Sdk.Serialization
 
         public Type Type => typeof(S);
 
-        public bool CanConvert(JToken property)
+        public virtual bool CanConvert(JToken property)
         {
             if (property?.Type == JTokenType.Date)
             {
