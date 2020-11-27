@@ -21,6 +21,7 @@ using commercetools.Sdk.Linq.Query;
 using commercetools.Sdk.Linq.Sort;
 using commercetools.Sdk.Registration;
 using commercetools.Sdk.Serialization;
+using commercetools.Sdk.Serialization.JsonConverters;
 using commercetools.Sdk.Validation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

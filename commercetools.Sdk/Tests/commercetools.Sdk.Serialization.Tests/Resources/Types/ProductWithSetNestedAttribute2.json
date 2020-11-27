@@ -264,8 +264,7 @@
           {
             "name": "supplier-info",
             "value": [
-              {
-                "value": [
+              [
                   {
                     "value": "Default",
                     "name": "supplier-name"
@@ -287,8 +286,7 @@
                     },
                     "name": "purchase-price"
                   }
-                ]
-              }
+              ]
             ]
           }
         ],

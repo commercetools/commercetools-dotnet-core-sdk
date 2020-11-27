@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -15,7 +16,7 @@ namespace commercetools.Sdk.Serialization
     internal class ResourceTypeAttributeMarkedTypeRetriever : IDecoratorTypeRetriever<ResourceTypeAttribute>
     {
         private readonly IEnumerable<Type> markedTypes;
-
+        private ConcurrentDictionary<string, Type> propertyTypes = new ConcurrentDictionary<string, Type>();
         public ResourceTypeAttributeMarkedTypeRetriever(ITypeRetriever typeRetriever)
         {
             this.markedTypes = typeof(ResourceTypeAttribute).GetMarkedTypes();
@@ -28,17 +29,21 @@ namespace commercetools.Sdk.Serialization
         /// <returns></returns>
         public Type GetTypeForToken(JToken token)
         {
-            var referenceTypeId = (ReferenceTypeId)token.ToString().GetEnum(typeof(ReferenceTypeId));
-            foreach (Type type in this.markedTypes)
-            {
-                var attribute = type.GetCustomAttributes(typeof(ResourceTypeAttribute)).FirstOrDefault();
-                if (attribute is ResourceTypeAttribute typeAttribute && typeAttribute.Value.Equals(referenceTypeId))
+            return propertyTypes.GetOrAdd(token.Value<string>(), typeId => {
+                var referenceTypeId = (ReferenceTypeId)typeId.GetEnum(typeof(ReferenceTypeId));
+                        
+                foreach (Type type in this.markedTypes)
                 {
-                    return type;
+                    var attribute = type.GetCustomAttributes(typeof(ResourceTypeAttribute)).FirstOrDefault();
+                    if (attribute is ResourceTypeAttribute typeAttribute && typeAttribute.Value.Equals(referenceTypeId))
+                    {
+                        return type;
+                    }
                 }
-            }
-
-            return null;
+    
+                return null;
+            });
+            
         }
     }
 }

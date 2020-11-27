@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using commercetools.Sdk.Domain;
 using Type = System.Type;
@@ -8,6 +9,8 @@ namespace commercetools.Sdk.Serialization
 {
     internal class EnumConverter : JsonConverterBase
     {
+        private readonly ConcurrentDictionary<string, object> enumTypes = new ConcurrentDictionary<string, object>();
+        
         public override bool CanConvert(Type objectType)
         {
             if (typeof(Enum).IsAssignableFrom(objectType))
@@ -31,7 +34,11 @@ namespace commercetools.Sdk.Serialization
             JsonSerializer serializer)
         {
             var enumString = (string) reader.Value;
-            return enumString.GetEnum(objectType);
+            var enumKey = enumString + objectType.FullName;
+            return enumTypes.GetOrAdd(enumKey, enumValue =>
+            {
+                return enumString.GetEnum(objectType);
+            });
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

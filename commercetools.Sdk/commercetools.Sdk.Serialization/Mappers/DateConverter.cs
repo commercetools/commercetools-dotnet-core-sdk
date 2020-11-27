@@ -1,11 +1,13 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace commercetools.Sdk.Serialization
 {
     internal abstract class DateConverter<T, S> : ICustomJsonMapper<T>
     {
+        private Regex regEx = new Regex("^[0-9]{4}-[0-9]{2}-[0-9]{2}$");
         public int Priority => 2;
 
         public Type Type => typeof(S);
@@ -14,13 +16,7 @@ namespace commercetools.Sdk.Serialization
         {
             if (property?.Type == JTokenType.String)
             {
-                if (DateTime.TryParseExact(property.Value<string>(), "yyyy-MM-dd", null, DateTimeStyles.None, out DateTime date))
-                {
-                    if (date.TimeOfDay.Ticks == 0)
-                    {
-                        return true;
-                    }
-                }
+                return regEx.IsMatch(property.Value<string>()); 
             }
             return false;
         }

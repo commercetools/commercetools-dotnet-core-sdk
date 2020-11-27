@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.Domain.Validation;
+using commercetools.Sdk.Serialization.JsonConverters;
 
 namespace commercetools.Sdk.Serialization
 {

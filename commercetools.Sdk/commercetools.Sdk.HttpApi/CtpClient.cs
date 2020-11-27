@@ -52,7 +52,7 @@
         private async Task<T> SendRequest<T>(HttpRequestMessage requestMessage)
         {
             var result = await this.HttpClient.SendAsync(requestMessage).ConfigureAwait(false);
-            var content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var content = await result.Content.ReadAsStreamAsync().ConfigureAwait(false);
             if (result.IsSuccessStatusCode)
             {
                 return this.serializerService.Deserialize<T>(content);
