@@ -24,12 +24,12 @@ namespace commercetools.Sdk.Serialization
                 if (token.HasValues)
                 {
                     Type firstAttributeType = base.GetTypeForToken(token[0]);
-                    type = attributeTypes.GetOrAdd(firstAttributeType, this.SetType.MakeGenericType(firstAttributeType));
+                    type = attributeTypes.GetOrAdd(firstAttributeType, t => this.SetType.MakeGenericType(firstAttributeType));
                 }
                 else
                 {
                     // If the array contains no elements
-                    type = attributeTypes.GetOrAdd(typeof(object), this.SetType.MakeGenericType(typeof(object)));
+                    type = attributeTypes.GetOrAdd(typeof(object), t => this.SetType.MakeGenericType(typeof(object)));
                 }
             }
             else

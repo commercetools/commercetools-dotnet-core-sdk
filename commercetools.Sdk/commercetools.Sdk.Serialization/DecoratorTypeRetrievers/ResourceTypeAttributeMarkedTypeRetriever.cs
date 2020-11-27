@@ -29,7 +29,7 @@ namespace commercetools.Sdk.Serialization
         /// <returns></returns>
         public Type GetTypeForToken(JToken token)
         {
-            return propertyTypes.GetOrAdd(token.Value<string>(), (typeId) => {
+            return propertyTypes.GetOrAdd(token.Value<string>(), typeId => {
                 var referenceTypeId = (ReferenceTypeId)typeId.GetEnum(typeof(ReferenceTypeId));
                         
                 foreach (Type type in this.markedTypes)
