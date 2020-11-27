@@ -16,14 +16,12 @@ namespace commercetools.Sdk.Serialization.JsonConverters
             private DateAttributeMapper dateAttributeMapper;
             private TimeAttributeMapper timeAttributeMapper;
             private DateTimeAttributeMapper dateTimeAttributeMapper;
-            private ICultureValidator cultureValidator;
 
-            public AttributesConverter(ICultureValidator cultureValidator)
+            public AttributesConverter()
             {
                 this.dateAttributeMapper = new DateAttributeMapper();
                 this.timeAttributeMapper = new TimeAttributeMapper();
                 this.dateTimeAttributeMapper = new DateTimeAttributeMapper();
-                this.cultureValidator = cultureValidator;
             }
 
             public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization };
@@ -40,7 +38,6 @@ namespace commercetools.Sdk.Serialization.JsonConverters
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
             {
                 JArray values = JArray.Load(reader);
-                // return new List<Attribute>();
                 return values.Select(token => token as JObject).Select(token =>
                 {
                     if (token == null)
