@@ -47,7 +47,7 @@ namespace commercetools.Sdk.Serialization
             {
                 throw new JsonSerializationException($"Unknown money type: {jsonObject.ToString(Formatting.None)}");
             }
-            
+
             return jsonObject.ToObject(moneyType, serializer);
         }
 

@@ -15,7 +15,7 @@ namespace commercetools.Sdk.Serialization
             services.RegisterAllTypes<JsonConverterBase>(ServiceLifetime.Singleton);
 
             services.RegisterAllTypes(typeof(IDecoratorTypeRetriever<>), ServiceLifetime.Singleton);
-            
+
             services.AddSingleton<DeserializationContractResolver>();
             services.AddSingleton<SerializationContractResolver>();
             services.AddSingleton<IModelValidator, NullModelValidator>();

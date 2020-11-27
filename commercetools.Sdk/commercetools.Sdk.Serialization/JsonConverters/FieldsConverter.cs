@@ -10,7 +10,7 @@ namespace commercetools.Sdk.Serialization
     internal class FieldsConverter : JsonConverterBase
     {
         private readonly IMapperTypeRetriever<Fields> mapperTypeRetriever;
-        
+
         public FieldsConverter(IMapperTypeRetriever<Fields> mapperTypeRetriever)
         {
             this.mapperTypeRetriever = mapperTypeRetriever;
