@@ -21,9 +21,7 @@ namespace commercetools.Sdk.Serialization
             services.AddSingleton<IModelValidator, NullModelValidator>();
             services.AddSingleton<JsonSerializerSettingsFactory>();
             services.AddSingleton<ISerializerService, SerializerService>();
-
-            var serviceDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(ISerializationConfiguration));
-            services.Remove(serviceDescriptor);
+            
             services.AddSingleton<ISerializationConfiguration>(serializationConfiguration ?? SerializationConfiguration.DefaultConfig);
         }
     }
