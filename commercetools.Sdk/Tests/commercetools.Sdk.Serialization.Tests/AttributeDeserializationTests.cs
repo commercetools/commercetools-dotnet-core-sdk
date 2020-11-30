@@ -71,19 +71,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
             Assert.IsAssignableFrom<Attribute<TimeSpan>>(deserialized.Attributes[0]);
         }
-
-       // [Fact]
-        public void DeserializeDateAttribute()
-        {
-            var serializerService = serializationFixture.BuildSerializerServiceWithConfig(new SerializationConfiguration
-            {
-                DeserializeDateAttributesAsString = false
-            });
-            string serialized = File.ReadAllText("Resources/Attributes/Date.json");
-            ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsAssignableFrom<Attribute<DateTime>>(deserialized.Attributes[0]);
-        }
-
+        
         [Fact]
         public void DeserializeNumberAttribute()
         {
