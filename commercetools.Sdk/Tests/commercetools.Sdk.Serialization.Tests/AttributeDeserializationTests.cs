@@ -7,6 +7,7 @@ using FluentAssertions.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
+using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 
 namespace commercetools.Sdk.Serialization.Tests
 {
@@ -25,8 +26,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/Text.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<string>>(deserialized.Attributes[0]);
-            Assert.IsType<JValue>(deserialized.Attributes[0].ToIAttribute().JsonValue);
+            Assert.IsAssignableFrom<Attribute<string>>(deserialized.Attributes[0]);
         }
         
         [Fact]
@@ -50,7 +50,8 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/LocalizedText.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<LocalizedString>>(deserialized.Attributes[0]);
+            Assert.IsAssignableFrom<Attribute<LocalizedString>>(deserialized.Attributes[0]);
+            // Assert.IsAssignableFrom<JObject>(deserialized.Attributes[0].ToIAttribute().JsonValue);
         }
 
         [Fact]
@@ -59,7 +60,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/DateTime.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<DateTime>>(deserialized.Attributes[0]);
+            Assert.IsAssignableFrom<Attribute<DateTime>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -68,7 +69,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/Time.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<TimeSpan>>(deserialized.Attributes[0]);
+            Assert.IsAssignableFrom<Attribute<TimeSpan>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -77,7 +78,7 @@ namespace commercetools.Sdk.Serialization.Tests
             var serializerService = serializationFixture.BuildSerializerServiceWithConfig();
             string serialized = File.ReadAllText("Resources/Attributes/Date.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<DateTime>>(deserialized.Attributes[0]);
+            Assert.IsAssignableFrom<Attribute<DateTime>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -86,7 +87,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/Number.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<double>>(deserialized.Attributes[0]);
+            Assert.IsAssignableFrom<Attribute<double>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -95,7 +96,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/Boolean.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<bool>>(deserialized.Attributes[0]);
+            Assert.IsAssignableFrom<Attribute<bool>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -104,7 +105,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/Enum.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<PlainEnumValue>>(deserialized.Attributes[0]);
+            Assert.IsAssignableFrom<Attribute<PlainEnumValue>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -113,7 +114,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/LocalizedEnum.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<LocalizedEnumValue>>(deserialized.Attributes[0]);
+            Assert.IsAssignableFrom<Attribute<LocalizedEnumValue>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -122,7 +123,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/Money.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<BaseMoney>>(deserialized.Attributes[0]);
+            Assert.IsAssignableFrom<Attribute<BaseMoney>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -131,7 +132,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/SetText.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<AttributeSet<string>>>(deserialized.Attributes[0]);
+            Assert.IsAssignableFrom<Attribute<AttributeSet<string>>>(deserialized.Attributes[0]);
         }
 
         [Fact]
@@ -194,8 +195,9 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/InvalidLocalizedText.json");
 
-            var exception = Assert.Throws<JsonSerializationException>(() => serializerService.Deserialize<ProductVariant>(serialized));
-            Assert.Equal("Couldn't deserialize attribute 'loc-string-attribute' value: '{\"_\":\"invalid-loc-string-de\"}'", exception.Message);
+            var deserialized = serializerService.Deserialize<ProductVariant>(serialized);
+            Assert.IsAssignableFrom<Attribute<LocalizedString>>(deserialized.Attributes[0]);
+            Assert.Equal("invalid-loc-string-de",deserialized.Attributes[0].ToLocalizedTextAttribute().Value["_"]);
         }
 
         [Fact]
@@ -204,8 +206,8 @@ namespace commercetools.Sdk.Serialization.Tests
             ISerializerService serializerService = this.serializationFixture.SerializerService;
             string serialized = File.ReadAllText("Resources/Attributes/List.json");
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<string>>(deserialized.Attributes[0]);
-            Assert.IsType<Attribute<PlainEnumValue>>(deserialized.Attributes[1]);
+            Assert.IsAssignableFrom<Attribute<string>>(deserialized.Attributes[0]);
+            Assert.IsAssignableFrom<Attribute<PlainEnumValue>>(deserialized.Attributes[1]);
         }
         
         [Fact]
@@ -313,8 +315,7 @@ namespace commercetools.Sdk.Serialization.Tests
                 }
             ";
             var deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<string>>(deserialized.Attributes[0]);
-            Assert.IsType<JValue>(deserialized.Attributes[0].ToIAttribute().JsonValue);
+            Assert.IsAssignableFrom<Attribute<string>>(deserialized.Attributes[0]);
         }
         
         [Fact]
@@ -339,8 +340,7 @@ namespace commercetools.Sdk.Serialization.Tests
                 }
             ";
             var deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsType<Attribute<string>>(deserialized.Attributes[0]);
-            Assert.IsType<JValue>(deserialized.Attributes[0].ToIAttribute().JsonValue);
+            Assert.IsAssignableFrom<Attribute<string>>(deserialized.Attributes[0]);
         }
     }
 }

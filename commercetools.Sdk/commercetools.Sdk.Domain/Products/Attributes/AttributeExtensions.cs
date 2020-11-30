@@ -8,7 +8,7 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         public static bool IsTextAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(Attribute<string>);
+                attribute is Attribute<string>;
         }
 
         public static bool IsTimeAttribute(this IAttribute attribute)
@@ -20,134 +20,121 @@ namespace commercetools.Sdk.Domain.Products.Attributes
         public static bool IsBooleanAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(Attribute<bool>);
+                attribute is Attribute<bool>;
         }
 
         public static bool IsDateAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(Attribute<DateTime>);
+                attribute is Attribute<DateTime>;
         }
         public static bool IsDateTimeAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(Attribute<DateTime>);
+                attribute is Attribute<DateTime>;
         }
         public static bool IsEnumAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(Attribute<PlainEnumValue>);
+                attribute is Attribute<PlainEnumValue>;
         }
         public static bool IsLocalizedEnumAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(Attribute<LocalizedEnumValue>);
+                attribute is Attribute<LocalizedEnumValue>;
         }
         public static bool IsLocalizedTextAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(Attribute<LocalizedTextAttribute>);
+                attribute is Attribute<LocalizedTextAttribute>;
         }
         public static bool IsMoneyAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(Attribute<BaseMoney>);
+                attribute is Attribute<BaseMoney>;
         }
         public static bool IsNumberAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(Attribute<double>);
+                attribute is Attribute<double>;
         }
         public static bool IsReferenceAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(Attribute<Reference>);
+                attribute is Attribute<Reference>;
         }
         
         public static bool IsNestedAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(NestedAttribute) || 
-                attribute.GetType() == typeof(Attribute<List<Attribute>>);
+                attribute is NestedAttribute ||
+                attribute is Attribute<List<Attribute>>;
         }
       
         public static bool IsSetBooleanAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(SetAttribute<bool>)
-                || attribute.GetType() == typeof(Attribute<AttributeSet<bool>>);
+                attribute is Attribute<AttributeSet<bool>>;
         }
         public static bool IsSetDateAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(SetAttribute<DateTime>)
-                || attribute.GetType() == typeof(Attribute<AttributeSet<DateTime>>);
+                attribute is Attribute<AttributeSet<DateTime>>;
         }
         public static bool IsSetDateTimeAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(SetAttribute<DateTime>)
-                || attribute.GetType() == typeof(Attribute<AttributeSet<DateTime>>);
+                attribute is Attribute<AttributeSet<DateTime>>;
         }
 
         public static bool IsSetMoneyAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(SetAttribute<BaseMoney>)
-                || attribute.GetType() == typeof(Attribute<AttributeSet<BaseMoney>>);
+                attribute is Attribute<AttributeSet<BaseMoney>>;
         }
         public static bool IsSetEnumAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(SetAttribute<PlainEnumValue>)
-                || attribute.GetType() == typeof(Attribute<AttributeSet<PlainEnumValue>>);
+                attribute is Attribute<AttributeSet<PlainEnumValue>>;
         }
         public static bool IsSetLocalizedEnumAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(SetAttribute<LocalizedEnumValue>)
-                || attribute.GetType() == typeof(Attribute<AttributeSet<LocalizedEnumValue>>);
+                attribute is Attribute<AttributeSet<LocalizedEnumValue>>;
         }
         public static bool IsSetLocalizedTextAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(SetAttribute<LocalizedString>)
-                || attribute.GetType() == typeof(Attribute<AttributeSet<LocalizedString>>);
+                attribute is Attribute<AttributeSet<LocalizedString>>;
         }
 
         public static bool IsSetNumberAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(SetAttribute<double>)
-                || attribute.GetType() == typeof(Attribute<AttributeSet<double>>);
+                attribute is Attribute<AttributeSet<double>>;
         }
 
         public static bool IsSetReferenceAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(SetAttribute<Reference>)
-                || attribute.GetType() == typeof(Attribute<AttributeSet<Reference>>);
+                attribute is Attribute<AttributeSet<Reference>>;
         }
         public static bool IsSetTextAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(SetAttribute<string>)
-                || attribute.GetType() == typeof(Attribute<AttributeSet<string>>);
+                attribute is Attribute<AttributeSet<string>>;
         }
         public static bool IsSetTimeAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(SetAttribute<TimeSpan>)
-                || attribute.GetType() == typeof(Attribute<AttributeSet<TimeSpan>>);
+                attribute is Attribute<AttributeSet<TimeSpan>>;
         }
         public static bool IsSetOfNestedAttribute(this IAttribute attribute)
         {
             return
-                attribute.GetType() == typeof(SetAttribute<NestedAttribute>)
-                ||
-                attribute.GetType() == typeof(Attribute<AttributeSet<NestedAttribute>>)
-                ||
-                attribute.GetType() == typeof(Attribute<AttributeSet<List<Attribute>>>);
+                attribute is SetAttribute<NestedAttribute> ||
+                attribute is Attribute<AttributeSet<NestedAttribute>> ||
+                attribute is Attribute<AttributeSet<List<Attribute>>>;
         }
     }
 }

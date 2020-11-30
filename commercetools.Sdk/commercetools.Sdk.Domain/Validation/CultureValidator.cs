@@ -1,10 +1,14 @@
-﻿namespace commercetools.Sdk.Domain.Validation
+﻿using System.Collections.Concurrent;
+
+namespace commercetools.Sdk.Domain.Validation
 {
     using System.Globalization;
     using System.Linq;
 
     public class CultureValidator : ICultureValidator
     {
+        private static readonly ConcurrentDictionary<string, bool> checkedCultures = new ConcurrentDictionary<string, bool>();
+
         private readonly CultureInfo[] cultures;
 
         public CultureValidator()
@@ -21,8 +25,11 @@
 
             // Both two letter language name and full culture name can be accepted.
             // For example, zh-Hant and zh are both valid.
-            return this.cultures.Select(c => c.TwoLetterISOLanguageName).Contains(culture) ||
-                this.cultures.Select(c => c.Name).Contains(culture);
+            return checkedCultures.GetOrAdd(culture, cul =>
+            {
+                return this.cultures.Select(c => c.TwoLetterISOLanguageName).Contains(cul) ||
+                       this.cultures.Select(c => c.Name).Contains(cul);
+            });
         }
     }
 }

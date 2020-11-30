@@ -43,11 +43,7 @@ namespace commercetools.Sdk.IntegrationTests.APIExtensions
         {
             var destination = new HttpDestination
             {
-                Url = "http://www.commercetools.com/",
-                Authentication = new AuthorizationHeader
-                {
-                    HeaderValue = "QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
-                }
+                Url = "https://1i4axkp5vh.execute-api.eu-west-1.amazonaws.com/dev"
             };
             return destination;
         }

@@ -1,4 +1,5 @@
-﻿using commercetools.Sdk.Domain;
+﻿using System.Collections.Concurrent;
+using commercetools.Sdk.Domain;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace commercetools.Sdk.Serialization
     internal abstract class DecoratorTypeRetriever<T> : IDecoratorTypeRetriever<T>
     {
         private readonly IEnumerable<Type> derivedTypes;
+        private readonly ConcurrentDictionary<string, Type> cachedTypes = new ConcurrentDictionary<string, Type>();
 
         public DecoratorTypeRetriever(ITypeRetriever typeRetriever)
         {
@@ -18,19 +20,18 @@ namespace commercetools.Sdk.Serialization
 
         public Type GetTypeForToken(JToken token)
         {
-            foreach (Type type in this.derivedTypes)
-            {
-                var attribute = type.CustomAttributes.Where(a => a.AttributeType == typeof(TypeMarkerAttribute)).FirstOrDefault();
-                if (attribute != null)
+            return cachedTypes.GetOrAdd(token.Value<string>(), tokenValue => {
+                foreach (var type in this.derivedTypes)
                 {
-                    if (attribute.ConstructorArguments[0].Value.ToString() == token.Value<string>())
+                    var attribute = type.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof(TypeMarkerAttribute));
+                    if (attribute == null) continue;
+                    if (attribute.ConstructorArguments[0].Value.ToString() == tokenValue)
                     {
                         return type;
                     }
                 }
-            }
-
-            return null;
+                return null;            
+            });
         }
     }
 }

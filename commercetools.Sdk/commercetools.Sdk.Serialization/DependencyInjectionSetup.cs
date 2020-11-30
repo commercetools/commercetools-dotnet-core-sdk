@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using commercetools.Sdk.Domain.Validation;
 
 namespace commercetools.Sdk.Serialization

@@ -30,7 +30,18 @@ namespace commercetools.Sdk.Serialization
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JObject jsonObject = JObject.Load(reader);
-            Type moneyType = this.mapperTypeRetriever.GetTypeForToken(jsonObject);
+
+            Type moneyType;
+            if (jsonObject.ContainsKey("type")) {
+                switch (jsonObject.GetValue("type").Value<string>())
+                {
+                    case "highPrecision": moneyType = typeof(HighPrecisionMoney); break;  
+                    case "centPrecision": moneyType = typeof(Money); break;
+                    default: moneyType = this.mapperTypeRetriever.GetTypeForToken(jsonObject); break;
+                }
+            } else {
+                moneyType = this.mapperTypeRetriever.GetTypeForToken(jsonObject);
+            }
 
             if (moneyType == null)
             {
