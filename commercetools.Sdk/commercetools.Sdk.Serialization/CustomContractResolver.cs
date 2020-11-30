@@ -6,7 +6,7 @@
     using System.Linq;
     using Type = System.Type;
 
-    public abstract class CustomContractResolver : CamelCasePropertyNamesContractResolver
+    public abstract class CustomContractResolver : DefaultContractResolver
     {
         private readonly IEnumerable<JsonConverterBase> registeredConverters;
 
@@ -15,6 +15,11 @@
         public CustomContractResolver(IEnumerable<JsonConverterBase> registeredConverters)
         {
             this.registeredConverters = registeredConverters;
+            this.NamingStrategy = new CamelCaseNamingStrategy
+            {
+                ProcessDictionaryKeys = true, 
+                OverrideSpecifiedNames = true
+            };
         }
 
         protected override JsonContract CreateContract(Type objectType)

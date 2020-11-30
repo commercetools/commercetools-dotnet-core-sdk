@@ -1,4 +1,6 @@
-﻿namespace commercetools.Sdk.Serialization
+﻿using Newtonsoft.Json.Serialization;
+
+namespace commercetools.Sdk.Serialization
 {
     using System.Collections.Generic;
 
