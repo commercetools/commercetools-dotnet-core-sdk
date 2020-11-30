@@ -8,6 +8,7 @@ using Xunit;
 
 namespace commercetools.Sdk.Serialization.Tests
 {
+    [Collection("DefaultConfig")]
     public class AttributeDeserializationWithDefaultConfigTests
     {
         [Fact]
