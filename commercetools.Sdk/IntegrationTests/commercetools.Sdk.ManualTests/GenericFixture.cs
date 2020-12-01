@@ -41,7 +41,7 @@ namespace commercetools.Sdk.ManualTests
                     await DeleteResource(client, resource);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignored
             }
@@ -63,7 +63,7 @@ namespace commercetools.Sdk.ManualTests
                     await DeleteResource(client, toBeDeleted);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignored
             }

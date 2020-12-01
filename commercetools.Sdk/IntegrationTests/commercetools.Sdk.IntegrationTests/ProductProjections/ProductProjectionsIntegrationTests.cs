@@ -182,9 +182,9 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjections
                         queryCommand.SetWithTotal(true);
 
                         //Assert
-                        AssertEventually(() =>
+                        await AssertEventuallyAsync(async () =>
                         {
-                            var returnedSet = client.ExecuteAsync(queryCommand).Result;
+                            var returnedSet = await client.ExecuteAsync(queryCommand);
                             Assert.Equal(2,returnedSet.Results.Count);
                             Assert.Equal(3, returnedSet.Total);
                         });
