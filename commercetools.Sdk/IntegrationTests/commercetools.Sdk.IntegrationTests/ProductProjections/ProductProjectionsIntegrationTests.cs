@@ -7,6 +7,7 @@ using Xunit;
 using static commercetools.Sdk.IntegrationTests.Products.ProductsFixture;
 using static commercetools.Sdk.IntegrationTests.Categories.CategoriesFixture;
 using static commercetools.Sdk.IntegrationTests.ProductTypes.ProductTypesFixture;
+using static commercetools.Sdk.IntegrationTests.GenericFixture;
 
 namespace commercetools.Sdk.IntegrationTests.ProductProjections
 {
@@ -180,9 +181,13 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjections
                         queryCommand.SetLimit(2);
                         queryCommand.SetWithTotal(true);
 
-                        var returnedSet = await client.ExecuteAsync(queryCommand);
-                        Assert.Equal(2,returnedSet.Results.Count);
-                        Assert.Equal(3, returnedSet.Total);
+                        //Assert
+                        AssertEventually(() =>
+                        {
+                            var returnedSet = client.ExecuteAsync(queryCommand).Result;
+                            Assert.Equal(2,returnedSet.Results.Count);
+                            Assert.Equal(3, returnedSet.Total);
+                        });
                     });
             });
         }
