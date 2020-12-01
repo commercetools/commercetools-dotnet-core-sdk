@@ -14,6 +14,7 @@ using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;
 using static commercetools.Sdk.IntegrationTests.Categories.CategoriesFixture;
 using static commercetools.Sdk.IntegrationTests.Types.TypesFixture;
+using static commercetools.Sdk.IntegrationTests.GenericFixture;
 using SetDescriptionUpdateAction = commercetools.Sdk.Domain.Categories.UpdateActions.SetDescriptionUpdateAction;
 
 namespace commercetools.Sdk.IntegrationTests.Categories
@@ -178,14 +179,17 @@ namespace commercetools.Sdk.IntegrationTests.Categories
                         queryCommand.SetLimit(limit);
                         queryCommand.SetWithTotal(true);
 
-                        var returnedSet = await client.ExecuteAsync(queryCommand);
-                        Assert.Equal(limit, returnedSet.Count);
-                        Assert.Equal(limit, returnedSet.Limit);
-                        Assert.Equal(count, returnedSet.Total);
+                        await AssertEventuallyAsync(async () =>
+                        {
+                            var returnedSet = await client.ExecuteAsync(queryCommand);
+                            Assert.Equal(limit, returnedSet.Count);
+                            Assert.Equal(limit, returnedSet.Limit);
+                            Assert.Equal(count, returnedSet.Total);
 
-                        var categoriesResult = returnedSet.Results;
-                        Assert.NotNull(categoriesList[0].Parent);
-                        Assert.Equal(parentCategory.Id, categoriesResult[0].Parent.Id);
+                            var categoriesResult = returnedSet.Results;
+                            Assert.NotNull(categoriesList[0].Parent);
+                            Assert.Equal(parentCategory.Id, categoriesResult[0].Parent.Id);
+                        });
                     });
             });
         }
@@ -207,11 +211,14 @@ namespace commercetools.Sdk.IntegrationTests.Categories
                         queryCommand.SetOffset(offset);
                         queryCommand.SetWithTotal(true);
 
-                        var returnedSet = await client.ExecuteAsync(queryCommand);
-                        Assert.Equal(count - offset, returnedSet.Results.Count);
-                        Assert.Equal(count - offset, returnedSet.Count);
-                        Assert.Equal(offset, returnedSet.Offset);
-                        Assert.Equal(count, returnedSet.Total);
+                        await AssertEventuallyAsync(async () =>
+                        {
+                            var returnedSet = await client.ExecuteAsync(queryCommand);
+                            Assert.Equal(count - offset, returnedSet.Results.Count);
+                            Assert.Equal(count - offset, returnedSet.Count);
+                            Assert.Equal(offset, returnedSet.Offset);
+                            Assert.Equal(count, returnedSet.Total);
+                        });
                     });
             });
         }

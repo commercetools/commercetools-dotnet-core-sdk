@@ -98,7 +98,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                         });
                 });
         }
-        
+
         [Fact]
         public async Task GetOrderByIdExpandLineItemDiscount()
         {
@@ -117,30 +117,32 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                                 async order =>
                                 {
                                     Assert.NotNull(order);
-                                    
+
                                     var retrievedOrder = await client
                                         .ExecuteAsync(order
                                             .ToIdResourceIdentifier()
                                             .GetById()
-                                            .Expand("lineItems[*].discountedPricePerQuantity[*].discountedPrice.includedDiscounts[*].discount")
+                                            .Expand(
+                                                "lineItems[*].discountedPricePerQuantity[*].discountedPrice.includedDiscounts[*].discount")
                                         );
 
                                     Assert.Equal(order.Id, retrievedOrder.Id);
                                     var lineItem = retrievedOrder.LineItems.FirstOrDefault();
                                     Assert.NotNull(lineItem);
                                     Assert.NotNull(lineItem.DiscountedPricePerQuantity);
-                            
-                                    var discountedPricePerQuantity = lineItem.DiscountedPricePerQuantity.FirstOrDefault();
+
+                                    var discountedPricePerQuantity =
+                                        lineItem.DiscountedPricePerQuantity.FirstOrDefault();
                                     Assert.NotNull(discountedPricePerQuantity);
-                            
+
                                     var discountedPrice = discountedPricePerQuantity.DiscountedPrice;
                                     Assert.NotNull(discountedPrice);
                                     Assert.NotEmpty(discountedPrice.IncludedDiscounts);
-                            
+
                                     var discountedLineItemPortion = discountedPrice.IncludedDiscounts.FirstOrDefault();
                                     Assert.NotNull(discountedLineItemPortion);
                                     Assert.NotNull(discountedLineItemPortion.Discount);
-                            
+
                                     var discount = discountedLineItemPortion.Discount;
                                     Assert.NotNull(discount.Obj);
                                     Assert.Equal(cartDiscount.Key, discount.Obj.Key);
@@ -404,8 +406,11 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                                     queryCommand.Where(order => order.CustomerEmail == email);
                                     var returnedSet = await client.ExecuteAsync(queryCommand);
 
-                                    Assert.Equal(2, returnedSet.Results.Count);
-                                    Assert.Equal(3, returnedSet.Total);
+                                    AssertEventually(() =>
+                                    {
+                                        Assert.Equal(2, returnedSet.Results.Count);
+                                        Assert.Equal(3, returnedSet.Total);
+                                    });
                                 });
                         });
                 });
@@ -534,7 +539,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                         });
                 });
         }
-        
+
         [Fact]
         public async void UpdateOrderInStoreByOrderNumberChangeOrderState()
         {
@@ -575,7 +580,6 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                             });
                     });
             });
-
         }
 
         [Fact]
@@ -636,13 +640,13 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                         });
                 });
         }
-        
+
         [Fact]
         public async void UpdateOrderInStoreByIdChangePaymentState()
         {
             await WithStore(client, async store =>
             {
-                await WithCartWithSingleLineItem(client, 2, 
+                await WithCartWithSingleLineItem(client, 2,
                     cartDraft => DefaultCartDraftInStore(cartDraft, store.ToKeyResourceIdentifier()),
                     async cart =>
                     {
@@ -664,10 +668,9 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                                     PaymentState = newPaymentState
                                 };
                                 var updatedOrder = await client
-                                    .ExecuteAsync(order.
-                                        UpdateById(actions => actions.AddUpdate(action))
+                                    .ExecuteAsync(order.UpdateById(actions => actions.AddUpdate(action))
                                         .InStore(store));
-                                
+
                                 Assert.NotNull(updatedOrder.Store);
                                 Assert.NotNull(updatedOrder.Store);
                                 Assert.Equal(store.Key, updatedOrder.Store.Key);
