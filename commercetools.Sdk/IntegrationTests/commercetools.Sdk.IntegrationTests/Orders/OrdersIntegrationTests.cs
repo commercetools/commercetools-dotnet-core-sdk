@@ -404,10 +404,10 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                                     queryCommand.SetLimit(2);
                                     queryCommand.SetWithTotal(true);
                                     queryCommand.Where(order => order.CustomerEmail == email);
-                                    var returnedSet = await client.ExecuteAsync(queryCommand);
 
-                                    AssertEventually(() =>
+                                    await AssertEventuallyAsync(async () =>
                                     {
+                                        var returnedSet = await client.ExecuteAsync(queryCommand);
                                         Assert.Equal(2, returnedSet.Results.Count);
                                         Assert.Equal(3, returnedSet.Total);
                                     });
