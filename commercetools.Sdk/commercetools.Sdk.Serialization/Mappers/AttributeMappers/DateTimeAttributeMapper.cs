@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json.Linq;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 
 namespace commercetools.Sdk.Serialization

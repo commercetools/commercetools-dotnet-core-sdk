@@ -24,11 +24,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="configuration">The configuration.</param>
         /// <param name="clientName">The name of the client.</param>
         /// <param name="tokenFlow">The token flow.</param>
-        public static IHttpClientBuilder UseCommercetools(this IServiceCollection services, IConfiguration configuration, string clientName = DefaultClientNames.Api, TokenFlow tokenFlow = TokenFlow.ClientCredentials)
+        /// <param name="serializationConfiguration">The configuration of serialization services</param>
+        public static IHttpClientBuilder UseCommercetools(this IServiceCollection services, IConfiguration configuration, string clientName = DefaultClientNames.Api, TokenFlow tokenFlow = TokenFlow.ClientCredentials, SerializationConfiguration serializationConfiguration = null)
         {
             var clients = new ConcurrentDictionary<string, TokenFlow>();
             clients.TryAdd(clientName, tokenFlow);
-            return services.UseCommercetools(configuration, clients).Single().Value;
+            return services.UseCommercetools(configuration, clients, serializationConfiguration).Single().Value;
         }
 
         /// <summary>
@@ -37,12 +38,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The service collection.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="clients">The clients with the client name as the key and the token flow as they value.</param>
-        public static IDictionary<string, IHttpClientBuilder> UseCommercetools(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients)
+        /// <param name="serializationConfiguration">The configuration of serialization services</param>
+        public static IDictionary<string, IHttpClientBuilder> UseCommercetools(this IServiceCollection services, IConfiguration configuration, IDictionary<string, TokenFlow> clients, SerializationConfiguration serializationConfiguration = null)
         {
             services.UseRegistration();
             services.UseLinq();
             services.UseDomain();
-            services.UseSerialization();
+            services.UseSerialization(serializationConfiguration);
             return services.UseHttpApi(configuration, clients);
         }
 

@@ -28,7 +28,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
             Assert.IsAssignableFrom<Attribute<string>>(deserialized.Attributes[0]);
         }
-
+        
         [Fact]
         public void SerializeTextAttribute()
         {
@@ -55,6 +55,15 @@ namespace commercetools.Sdk.Serialization.Tests
         }
 
         [Fact]
+        public void DeserializeDateAttribute()
+        {
+            var serializerService = this.serializationFixture.SerializerService;
+            string serialized = File.ReadAllText("Resources/Attributes/Date.json");
+            ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
+            Assert.IsAssignableFrom<Attribute<DateTime>>(deserialized.Attributes[0]);
+        }
+        
+        [Fact]
         public void DeserializeDateTimeAttribute()
         {
             ISerializerService serializerService = this.serializationFixture.SerializerService;
@@ -71,16 +80,7 @@ namespace commercetools.Sdk.Serialization.Tests
             ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
             Assert.IsAssignableFrom<Attribute<TimeSpan>>(deserialized.Attributes[0]);
         }
-
-        [Fact]
-        public void DeserializeDateAttribute()
-        {
-            ISerializerService serializerService = this.serializationFixture.SerializerService;
-            string serialized = File.ReadAllText("Resources/Attributes/Date.json");
-            ProductVariant deserialized = serializerService.Deserialize<ProductVariant>(serialized);
-            Assert.IsAssignableFrom<Attribute<DateTime>>(deserialized.Attributes[0]);
-        }
-
+        
         [Fact]
         public void DeserializeNumberAttribute()
         {
@@ -292,5 +292,56 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.True(firstNestedAttr.Value[0].IsTextAttribute());
             Assert.True(firstNestedAttr.Value[3].IsMoneyAttribute());
         }
+        
+        [Fact]
+        public void DeserializeDateAsTextAttribute()
+        {
+            var config = new SerializationConfiguration
+            {
+                DeserializeDateAttributesAsString = true
+            };
+            var serializerService = this.serializationFixture.BuildSerializerServiceWithConfig(config);
+            
+            var serialized = @"
+                {
+                    ""id"": 1,
+                    ""key"": ""newKey"",
+                    ""attributes"": [
+                                        {
+                                            ""name"": ""text-attribute"",
+                                            ""value"": ""2021-10-12""
+                                        }
+                                    ]
+                }
+            ";
+            var deserialized = serializerService.Deserialize<ProductVariant>(serialized);
+            Assert.IsAssignableFrom<Attribute<string>>(deserialized.Attributes[0]);
+        }
+        
+        [Fact]
+        public void DeserializeDateTimeAsTextAttribute()
+        {
+            var config = new SerializationConfiguration
+            {
+                DeserializeDateTimeAttributesAsString = true
+            };
+            var serializerService = this.serializationFixture.BuildSerializerServiceWithConfig(config);
+
+            var serialized = @"
+                {
+                    ""id"": 1,
+                    ""key"": ""newKey"",
+                    ""attributes"": [
+                                        {
+                                            ""name"": ""text-attribute"",
+                                            ""value"": ""2021-10-12 05:50:06""
+                                        }
+                                    ]
+                }
+            ";
+            var deserialized = serializerService.Deserialize<ProductVariant>(serialized);
+            Assert.IsAssignableFrom<Attribute<string>>(deserialized.Attributes[0]);
+        }
+
     }
 }

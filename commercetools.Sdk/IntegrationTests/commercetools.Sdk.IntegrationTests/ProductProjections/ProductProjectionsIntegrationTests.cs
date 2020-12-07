@@ -7,6 +7,7 @@ using Xunit;
 using static commercetools.Sdk.IntegrationTests.Products.ProductsFixture;
 using static commercetools.Sdk.IntegrationTests.Categories.CategoriesFixture;
 using static commercetools.Sdk.IntegrationTests.ProductTypes.ProductTypesFixture;
+using static commercetools.Sdk.IntegrationTests.GenericFixture;
 
 namespace commercetools.Sdk.IntegrationTests.ProductProjections
 {
@@ -78,7 +79,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjections
                         });
                 });
         }
-        
+
         [Fact]
         public async Task GetProductProjectionByIdForSpecificLocale()
         {
@@ -107,7 +108,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjections
                             Assert.Equal(publishedProduct.Id, publishedProductProjection.Id);
                             Assert.True(publishedProductProjection.Published);
                             Assert.Single(stagedProductProjection.Name.Keys);
-                            Assert.Equal(localeProjection,stagedProductProjection.Name.Keys.First());
+                            Assert.Equal(localeProjection, stagedProductProjection.Name.Keys.First());
                         });
                 });
         }
@@ -150,13 +151,16 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjections
                         queryCommand.SetOffset(2);
                         queryCommand.SetWithTotal(true);
 
-                        var returnedSet = await client.ExecuteAsync(queryCommand);
-                        Assert.Single(returnedSet.Results);
-                        Assert.Equal(3, returnedSet.Total);
+                        await AssertEventuallyAsync(async () =>
+                        {
+                            var returnedSet = await client.ExecuteAsync(queryCommand);
+                            Assert.Single(returnedSet.Results);
+                            Assert.Equal(3, returnedSet.Total);
+                        });
                     });
             });
         }
-        
+
         [Fact]
         public async void QueryAndLimitStagedProductProjections()
         {
@@ -180,13 +184,17 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjections
                         queryCommand.SetLimit(2);
                         queryCommand.SetWithTotal(true);
 
-                        var returnedSet = await client.ExecuteAsync(queryCommand);
-                        Assert.Equal(2,returnedSet.Results.Count);
-                        Assert.Equal(3, returnedSet.Total);
+                        //Assert
+                        await AssertEventuallyAsync(async () =>
+                        {
+                            var returnedSet = await client.ExecuteAsync(queryCommand);
+                            Assert.Equal(2, returnedSet.Results.Count);
+                            Assert.Equal(3, returnedSet.Total);
+                        });
                     });
             });
         }
-        
+
         [Fact]
         public async void QueryAndSortStagedProductProjections()
         {
@@ -207,16 +215,16 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjections
                         var queryCommand = new QueryCommand<ProductProjection>(stagedAdditionalParameters);
                         queryCommand.Where(productProjection =>
                             productProjection.ProductType.Id == productType.Id.valueOf());
-                        queryCommand.Sort(p=>p.Name["en"]);
+                        queryCommand.Sort(p => p.Name["en"]);
 
                         var returnedSet = await client.ExecuteAsync(queryCommand);
                         var sortedList = returnedSet.Results.OrderBy(p => p.Name["en"]);
-                        
+
                         Assert.True(sortedList.SequenceEqual(returnedSet.Results));
                     });
             });
         }
-        
+
         [Fact]
         public async void QueryAndExpandParents()
         {
@@ -237,7 +245,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjections
                             Assert.True(publishedProduct.MasterData.Published);
                             Assert.NotNull(publishedProduct.ProductType);
                             Assert.NotEmpty(publishedProduct.MasterData.Current.Categories);
-                            
+
                             var queryCommand = new QueryCommand<ProductProjection>();
                             queryCommand.Where(productProjection =>
                                 productProjection.ProductType.Id == productType.Id.valueOf());
@@ -253,7 +261,6 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjections
                         });
                 });
             });
-
         }
     }
 }

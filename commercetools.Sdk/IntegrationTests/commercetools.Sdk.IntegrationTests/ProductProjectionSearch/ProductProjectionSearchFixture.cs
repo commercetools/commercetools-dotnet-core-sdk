@@ -35,7 +35,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
     {
         #region Keys
 
-        public const string KeyPrefix = "EntityForSearch_New";
+        public const string KeyPrefix = "EntityForSearch_Neu";
         public readonly string KeyLocalizedProduct = $"{KeyPrefix}_localizedProduct";
         public readonly string KeyProductWithInfo = $"{KeyPrefix}_ProductWithInfo";
         public readonly string KeyProductWithoutInfo = $"{KeyPrefix}_ProductWithoutInfo";

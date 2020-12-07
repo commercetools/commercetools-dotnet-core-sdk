@@ -1,5 +1,5 @@
-﻿using commercetools.Sdk.Domain.Validation;
-using commercetools.Sdk.Serialization.JsonConverters;
+using System.Linq;
+using commercetools.Sdk.Domain.Validation;
 
 namespace commercetools.Sdk.Serialization
 {
@@ -7,7 +7,7 @@ namespace commercetools.Sdk.Serialization
 
     public static class DependencyInjectionSetup
     {
-        public static void UseSerialization(this IServiceCollection services)
+        public static void UseSerialization(this IServiceCollection services, SerializationConfiguration serializationConfiguration = null)
         {
             services.RegisterAllTypes(typeof(ICustomJsonMapper<>), ServiceLifetime.Singleton);
             services.RegisterAllTypes(typeof(IMapperTypeRetriever<>), ServiceLifetime.Singleton);
@@ -21,6 +21,8 @@ namespace commercetools.Sdk.Serialization
             services.AddSingleton<IModelValidator, NullModelValidator>();
             services.AddSingleton<JsonSerializerSettingsFactory>();
             services.AddSingleton<ISerializerService, SerializerService>();
+            
+            services.AddSingleton<ISerializationConfiguration>(serializationConfiguration ?? SerializationConfiguration.DefaultConfig);
         }
     }
 }

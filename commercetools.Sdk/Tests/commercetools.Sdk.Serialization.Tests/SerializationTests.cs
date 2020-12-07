@@ -271,7 +271,7 @@ namespace commercetools.Sdk.Serialization.Tests
         [Fact]
         public void DeserializeOrder()
         {
-            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            var serializerService = serializationFixture.BuildSerializerServiceWithConfig();
             string orderSerialized = File.ReadAllText("Resources/Orders/order.json");
             
             var order = serializerService.Deserialize<Order>(orderSerialized);

@@ -16,12 +16,14 @@ namespace commercetools.Sdk.Serialization.JsonConverters
             private DateAttributeMapper dateAttributeMapper;
             private TimeAttributeMapper timeAttributeMapper;
             private DateTimeAttributeMapper dateTimeAttributeMapper;
+            private ISerializationConfiguration serializationConfig;
 
-            public AttributesConverter()
+            public AttributesConverter(ISerializationConfiguration serializationConfiguration)
             {
+                this.serializationConfig = serializationConfiguration;
+                this.dateTimeAttributeMapper = new DateTimeAttributeMapper();
                 this.dateAttributeMapper = new DateAttributeMapper();
                 this.timeAttributeMapper = new TimeAttributeMapper();
-                this.dateTimeAttributeMapper = new DateTimeAttributeMapper();
             }
 
             public override List<SerializerType> SerializerTypes => new List<SerializerType>() { SerializerType.Deserialization };
@@ -70,13 +72,11 @@ namespace commercetools.Sdk.Serialization.JsonConverters
                             return typeof(TimeAttribute);
                         case JTokenType.String:
                         {
-                            if (dateTimeAttributeMapper.CanConvert(value))
+                            if (!serializationConfig.DeserializeDateTimeAttributesAsString && dateTimeAttributeMapper.CanConvert(value))
                                 return typeof(DateTimeAttribute);
-                            if (dateAttributeMapper.CanConvert(value))
+                            if (!serializationConfig.DeserializeDateAttributesAsString && dateAttributeMapper.CanConvert(value))
                                 return typeof(DateAttribute);
-                            if (timeAttributeMapper.CanConvert(value))
-                                return typeof(TimeAttribute);
-                            return typeof(TextAttribute);
+                            return timeAttributeMapper.CanConvert(value) ? typeof(TimeAttribute) : typeof(TextAttribute);
                         }
                         case JTokenType.Object:
                             if (!(value is JObject obj))
@@ -101,9 +101,6 @@ namespace commercetools.Sdk.Serialization.JsonConverters
                             }
 
                             return typeof(LocalizedTextAttribute);
-                            // cultureValidator.IsCultureValid((obj.First as JProperty)?.Name) ?
-                            //     typeof(LocalizedTextAttribute) :
-                            //     typeof(Attribute);
                         case JTokenType.Array:
                             switch (value.First)
                             {
