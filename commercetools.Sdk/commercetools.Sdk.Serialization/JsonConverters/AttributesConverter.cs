@@ -72,13 +72,11 @@ namespace commercetools.Sdk.Serialization.JsonConverters
                             return typeof(TimeAttribute);
                         case JTokenType.String:
                         {
-                            if (dateTimeAttributeMapper.CanConvert(value) && !serializationConfig.DeserializeDateTimeAttributesAsString)
+                            if (!serializationConfig.DeserializeDateTimeAttributesAsString && dateTimeAttributeMapper.CanConvert(value))
                                 return typeof(DateTimeAttribute);
-                            if (dateAttributeMapper.CanConvert(value) && !serializationConfig.DeserializeDateAttributesAsString)
+                            if (!serializationConfig.DeserializeDateAttributesAsString && dateAttributeMapper.CanConvert(value))
                                 return typeof(DateAttribute);
-                            if (timeAttributeMapper.CanConvert(value))
-                                return typeof(TimeAttribute);
-                            return typeof(TextAttribute);
+                            return timeAttributeMapper.CanConvert(value) ? typeof(TimeAttribute) : typeof(TextAttribute);
                         }
                         case JTokenType.Object:
                             if (!(value is JObject obj))
