@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.ProductProjections;
 using commercetools.Sdk.Domain.ShippingMethods;
@@ -70,5 +72,34 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.Equal("Bars", customFields.Fields["Foos"]);
         }
 
+        [Fact]
+        public void DeserializeExponentialRangeFacet()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            
+            string serialized = @"
+                {
+                     ""type"":""range"",
+                     ""dataType"": ""number"",
+                     ""ranges"": [{
+                        ""type"":""double"",
+                        ""from"":0.0,
+                        ""fromStr"":""0.0"",
+                        ""to"":0.0,
+                        ""toStr"":""0.0"",
+                        ""count"":119104,
+                        ""totalCount"":119104,
+                        ""total"":3.715960759E9,
+                        ""min"":0.0,
+                        ""max"":2301000.0,
+                        ""mean"":31199.294389777002
+                    }]
+                }
+            ";
+
+            var facetResult = serializerService.Deserialize<FacetResult>(serialized);
+
+            Assert.Equal(3715960759, (facetResult as RangeFacetResult).Ranges.First().Total);
+        }
     }
 }

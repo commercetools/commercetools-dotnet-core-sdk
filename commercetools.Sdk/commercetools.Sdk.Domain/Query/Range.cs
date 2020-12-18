@@ -6,9 +6,9 @@
         public string FromStr { get; set; }
         public double To { get; set; }
         public string ToStr { get; set; }
-        public int Count { get; set; }
-        public int ProductCount { get; set; }
-        public int Total { get; set; }
+        public long Count { get; set; }
+        public long ProductCount { get; set; }
+        public double Total { get; set; }
         public double Min { get; set; }
         public double Max { get; set; }
         public double Mean { get; set; }
