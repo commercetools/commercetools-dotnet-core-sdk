@@ -10,6 +10,6 @@ namespace commercetools.Sdk.Domain.OrderEdits
     {
         public Order Preview { get; set; }
         
-        public List<Message<Order>> MessagePayloads { get; set; }
+        public List<Message> MessagePayloads { get; set; }
     }
 }
