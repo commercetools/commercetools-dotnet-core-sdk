@@ -172,8 +172,7 @@ namespace commercetools.Sdk.IntegrationTests.CustomObjects
                         {
                             Assert.Equal(3, fooList.Count);
                             //Query FooBar Custom Objects using Container name
-                            var queryCommand = new QueryCommand<CustomObject>();
-                            queryCommand.Where(customObject => customObject.Container == fooBarContainer);
+                            var queryCommand = new QueryByContainerCommand<CustomObject>(fooBarContainer);
                             var returnedSet = await client.ExecuteAsync(queryCommand);
 
                             Assert.NotNull(returnedSet);
