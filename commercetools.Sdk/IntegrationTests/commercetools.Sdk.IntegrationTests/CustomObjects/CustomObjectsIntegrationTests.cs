@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.CustomObjects;
+using commercetools.Sdk.HttpApi.CommandBuilders;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using commercetools.Sdk.HttpApi.Extensions;
 using Xunit;
@@ -172,9 +173,40 @@ namespace commercetools.Sdk.IntegrationTests.CustomObjects
                         {
                             Assert.Equal(3, fooList.Count);
                             //Query FooBar Custom Objects using Container name
-                            var queryCommand = new QueryCommand<CustomObject>();
-                            queryCommand.Where(customObject => customObject.Container == fooBarContainer);
+                            var queryCommand = new QueryByContainerCommand<CustomObject>(fooBarContainer);
                             var returnedSet = await client.ExecuteAsync(queryCommand);
+
+                            Assert.NotNull(returnedSet);
+                            Assert.Equal(5, returnedSet.Results.Count);
+                            Assert.Equal(fooBarContainer, returnedSet.Results[0].Container);
+                        });
+                });
+        }
+        
+        [Fact]
+        public async Task QueryCustomObjectsByContainerUsingCommandBuilder()
+        {
+            //Create container with 5 Custom FooBar Objects and container with 3 Foo Objects
+            string fooBarContainer = $"FooBarContainer{TestingUtility.RandomInt()}";
+            string fooContainer = $"FooContainer{TestingUtility.RandomInt()}";
+
+            await WithListOfCustomObject<FooBar>(client,
+                customObjectDraft => DefaultCustomObjectDraftWithContainerName(customObjectDraft, fooBarContainer),
+                5, async fooBarList =>
+                {
+                    Assert.Equal(5, fooBarList.Count);
+                    await WithListOfCustomObject<Foo>(client,
+                        customObjectDraft => DefaultCustomObjectDraftWithContainerName(customObjectDraft, fooContainer),
+                        3, async fooList =>
+                        {
+                            Assert.Equal(3, fooList.Count);
+                            //Query FooBar Custom Objects using Container name
+                            
+                            var returnedSet = await client
+                                .Builder()
+                                .CustomObjects()
+                                .QueryByContainer(fooBarContainer)
+                                .ExecuteAsync();
 
                             Assert.NotNull(returnedSet);
                             Assert.Equal(5, returnedSet.Results.Count);
