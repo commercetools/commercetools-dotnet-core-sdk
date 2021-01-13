@@ -172,6 +172,11 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             return new DomainCommandBuilder<Zone>(builder.Client);
         }
 
+        public static DomainCommandBuilder<CustomObjectBase> CustomObjects(this CommandBuilder builder)
+        {
+            return new DomainCommandBuilder<CustomObjectBase>(builder.Client);
+        }
+
         #endregion
 
         #region Get
@@ -1000,6 +1005,15 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             return new CommandBuilder<UploadImageCommand<Product>, Product>(
                 builder.Client,
                 () => new UploadProductImageCommand(id, image, contentType) as UploadImageCommand<Product>);
+        }
+
+        #endregion
+
+        #region CustomObjects
+
+        public static QueryCommandBuilder<CustomObject> QueryByContainer(this DomainCommandBuilder<CustomObjectBase> builder, string container)
+        {
+            return new QueryCommandBuilder<CustomObject>(builder.Client, (queryParams) => new QueryByContainerCommand<CustomObject>(container, queryParams));
         }
 
         #endregion

@@ -7,7 +7,7 @@ namespace commercetools.Sdk.Client
     using System.Collections.Generic;
     using Domain;
 
-    public class QueryByContainerCommand<T> : Command<PagedQueryResult<T>>
+    public class QueryByContainerCommand<T> : QueryCommand<T>
     {
         public QueryByContainerCommand(string container)
         {
