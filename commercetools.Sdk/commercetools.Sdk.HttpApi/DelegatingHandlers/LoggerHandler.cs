@@ -10,17 +10,18 @@ namespace commercetools.Sdk.HttpApi.DelegatingHandlers
     public class LoggerHandler : DelegatingHandler
     {
         private readonly ILoggerFactory loggerFactory;
+        private readonly ILogger logger;
 
         public LoggerHandler(ILoggerFactory loggerFactory)
         {
             this.loggerFactory = loggerFactory;
+            this.logger = loggerFactory.CreateLogger("commercetoolsLoggerHandler");
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            var logger = this.loggerFactory.CreateLogger("commercetoolsLoggerHandler");
 
             if (request == null)
             {
