@@ -18,7 +18,7 @@ namespace commercetools.Sdk.Domain.ShippingMethods
         public List<ZoneRate> ZoneRates { get; set; }
         public bool IsDefault { get; set; }
         public string Predicate { get; set; }
-        
         public LocalizedString LocalizedDescription { get; set; }
+        public CustomFields Custom { get; set; }
     }
 }
