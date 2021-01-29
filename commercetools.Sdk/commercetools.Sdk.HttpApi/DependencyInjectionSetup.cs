@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.HttpApi.AdditionalParameters;
@@ -68,8 +69,14 @@ namespace commercetools.Sdk.HttpApi
         private static IHttpClientBuilder SetupClient(this IServiceCollection services, string clientName, IClientConfiguration clientConfiguration, TokenFlow tokenFlow)
         {
             var httpClientBuilder = services.AddHttpClient(clientName)
-                .ConfigureHttpClient(client =>
-                    client.BaseAddress = new Uri(clientConfiguration.ApiBaseAddress + clientConfiguration.ProjectKey + "/"))
+                .ConfigureHttpClient(client => client.BaseAddress = new Uri(clientConfiguration.ApiBaseAddress + clientConfiguration.ProjectKey + "/"))
+                .ConfigureHttpMessageHandlerBuilder(builder =>
+                {
+                    builder.PrimaryHandler = new HttpClientHandler()
+                    {
+                        AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip
+                    };
+                })
                 .AddHttpMessageHandler(c =>
                 {
                     var providers = c.GetServices<ITokenProvider>();
@@ -86,7 +93,6 @@ namespace commercetools.Sdk.HttpApi
                 .AddHttpMessageHandler(c =>
                     new ErrorHandler(new ApiExceptionFactory(clientConfiguration, c.GetService<ISerializerService>())))
                 .AddHttpMessageHandler<LoggerHandler>();
-
             return httpClientBuilder;
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain.Validation;
@@ -212,6 +213,13 @@ namespace SimpleInjector
             var httpClientBuilder = collection.AddHttpClient(clientName)
                 .ConfigureHttpClient(client =>
                     client.BaseAddress = new Uri(clientConfiguration.ApiBaseAddress + clientConfiguration.ProjectKey + "/"))
+                .ConfigureHttpMessageHandlerBuilder(builder =>
+                {
+                    builder.PrimaryHandler = new HttpClientHandler
+                    {
+                        AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip
+                    };
+                })
                 .AddHttpMessageHandler(c =>
                 {
                     var providers = services.GetAllInstances<ITokenProvider>();

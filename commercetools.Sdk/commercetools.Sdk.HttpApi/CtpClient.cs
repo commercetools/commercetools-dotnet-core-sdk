@@ -37,6 +37,9 @@
                 {
                     this.httpClient = this.httpClientFactory.CreateClient(this.Name);
                     this.httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(this.userAgentProvider.UserAgent);
+                    this.httpClient.DefaultRequestHeaders.AcceptEncoding.ParseAdd("gzip");
+                    this.httpClient.DefaultRequestHeaders.AcceptEncoding.ParseAdd("deflate");
+
                 }
 
                 return this.httpClient;
