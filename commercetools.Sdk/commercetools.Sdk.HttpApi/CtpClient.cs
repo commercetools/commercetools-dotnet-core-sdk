@@ -35,11 +35,13 @@
             {
                 if (this.httpClient == null)
                 {
-                    this.httpClient = this.httpClientFactory.CreateClient(this.Name);
-                    this.httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(this.userAgentProvider.UserAgent);
-                    this.httpClient.DefaultRequestHeaders.AcceptEncoding.ParseAdd("gzip");
-                    this.httpClient.DefaultRequestHeaders.AcceptEncoding.ParseAdd("deflate");
-
+                    lock (this.httpClientFactory)
+                    {
+                        this.httpClient = this.httpClientFactory.CreateClient(this.Name);
+                        this.httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(this.userAgentProvider.UserAgent);
+                        this.httpClient.DefaultRequestHeaders.AcceptEncoding.TryParseAdd("gzip");
+                        this.httpClient.DefaultRequestHeaders.AcceptEncoding.TryParseAdd("deflate");
+                    }
                 }
 
                 return this.httpClient;
