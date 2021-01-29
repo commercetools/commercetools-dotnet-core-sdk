@@ -69,7 +69,13 @@ namespace commercetools.Sdk.HttpApi
         private static IHttpClientBuilder SetupClient(this IServiceCollection services, string clientName, IClientConfiguration clientConfiguration, TokenFlow tokenFlow)
         {
             var httpClientBuilder = services.AddHttpClient(clientName)
-                .ConfigureHttpClient(client => client.BaseAddress = new Uri(clientConfiguration.ApiBaseAddress + clientConfiguration.ProjectKey + "/"))
+                .ConfigureHttpClient((provider, client) =>
+                {
+                    client.BaseAddress = new Uri(clientConfiguration.ApiBaseAddress + clientConfiguration.ProjectKey + "/");
+                    client.DefaultRequestHeaders.AcceptEncoding.ParseAdd("gzip");
+                    client.DefaultRequestHeaders.AcceptEncoding.ParseAdd("deflate");
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd(provider.GetService<IUserAgentProvider>().UserAgent);
+                })
                 .ConfigureHttpMessageHandlerBuilder(builder =>
                 {
                     builder.PrimaryHandler = new HttpClientHandler()
