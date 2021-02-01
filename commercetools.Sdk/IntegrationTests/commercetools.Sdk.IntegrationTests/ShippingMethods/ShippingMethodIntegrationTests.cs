@@ -18,6 +18,7 @@ using static commercetools.Sdk.IntegrationTests.Carts.CartsFixture;
 using static commercetools.Sdk.IntegrationTests.Stores.StoresFixture;
 using static commercetools.Sdk.IntegrationTests.Orders.OrdersFixture;
 using static commercetools.Sdk.IntegrationTests.OrderEdits.OrderEditsFixture;
+using static commercetools.Sdk.IntegrationTests.Types.TypesFixture;
 
 
 namespace commercetools.Sdk.IntegrationTests.ShippingMethods
@@ -519,6 +520,57 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
 
                 Assert.Equal(predicate, updatedShippingMethod.Predicate);
                 return updatedShippingMethod;
+            });
+        }
+        
+        [Fact]
+        public async Task UpdateShippingMethodSetCustomType()
+        {
+            var fields = CreateNewFields();
+
+            await WithType(client, async type =>
+            {
+                await WithUpdateableShippingMethod(client,
+                    async shippingMethod =>
+                    {
+                        var action = new SetCustomTypeUpdateAction
+                        {
+                            Type = type.ToKeyResourceIdentifier(),
+                            Fields = fields
+                        };
+
+                        var updatedShippingMethod = await client
+                            .ExecuteAsync(shippingMethod.UpdateByKey(actions => actions.AddUpdate(action)));
+
+                        Assert.Equal(type.Id, updatedShippingMethod.Custom.Type.Id);
+                        return updatedShippingMethod;
+                    });
+            });
+        }
+        
+        [Fact]
+        public async Task UpdateShippingMethodSetCustomField()
+        {
+            var fields = CreateNewFields();
+            var newValue = TestingUtility.RandomString(10);
+
+            await WithType(client, async type =>
+            {
+                await WithUpdateableShippingMethod(client,
+                    shippingMethodDraft => DefaultShippingMethodDraftWithCustomType(shippingMethodDraft, type, fields),
+                    async customer =>
+                    {
+                        var action = new SetCustomFieldUpdateAction()
+                        {
+                            Name = "string-field", Value = newValue
+                        };
+
+                        var updatedShippingMethod = await client
+                            .ExecuteAsync(customer.UpdateByKey(actions => actions.AddUpdate(action)));
+
+                        Assert.Equal(newValue, updatedShippingMethod.Custom.Fields["string-field"]);
+                        return updatedShippingMethod;
+                    });
             });
         }
 

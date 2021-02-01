@@ -56,6 +56,9 @@ namespace commercetools.Sdk.Domain.Types
         Order,
         
         [Description("order-edit")]
-        OrderEdit
+        OrderEdit,
+        
+        [Description("shipping-method")]
+        ShippingMethod
     }
 }

@@ -20,7 +20,7 @@ namespace commercetools.Sdk.Domain.ShippingMethods
         public List<ZoneRateDraft> ZoneRates { get; set; }
         public bool IsDefault { get; set; }
         public string Predicate { get; set; }
-
         public LocalizedString LocalizedDescription { get; set; }
+        public CustomFieldsDraft Custom { get; set; }
     }
 }

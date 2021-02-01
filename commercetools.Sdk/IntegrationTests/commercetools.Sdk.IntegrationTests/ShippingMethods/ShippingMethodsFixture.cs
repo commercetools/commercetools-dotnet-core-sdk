@@ -10,6 +10,7 @@ using commercetools.Sdk.Domain.Zones;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
 using static commercetools.Sdk.IntegrationTests.TaxCategories.TaxCategoriesFixture;
 using static commercetools.Sdk.IntegrationTests.Zones.ZonesFixture;
+using Type = commercetools.Sdk.Domain.Types.Type;
 
 namespace commercetools.Sdk.IntegrationTests.ShippingMethods
 {
@@ -47,6 +48,20 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
             var shippingMethodDraft = DefaultShippingMethodDraft(draft);
             shippingMethodDraft.Key = key;
             shippingMethodDraft.TaxCategory = taxCategoryReference;
+            return shippingMethodDraft;
+        }
+        
+        public static ShippingMethodDraft DefaultShippingMethodDraftWithCustomType(ShippingMethodDraft draft, Type type, Fields fields)
+        {
+            var customFieldsDraft = new CustomFieldsDraft
+            {
+                Type = type.ToKeyResourceIdentifier(),
+                Fields = fields
+            };
+
+            var shippingMethodDraft = DefaultShippingMethodDraft(draft);
+            shippingMethodDraft.Custom = customFieldsDraft;
+
             return shippingMethodDraft;
         }
 
@@ -254,7 +269,13 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
         public static async Task WithUpdateableShippingMethod(IClient client,
             Func<ShippingMethodDraft, ShippingMethodDraft> draftAction, Func<ShippingMethod, Task<ShippingMethod>> func)
         {
-            await WithUpdateableAsync(client, new ShippingMethodDraft(), draftAction, func);
+            await WithTaxCategory(client, async taxCategory =>
+            {
+                var draftWithTaxCategory = new ShippingMethodDraft
+                    {TaxCategory = taxCategory.ToKeyResourceIdentifier()};
+                var finalDraft = draftAction.Invoke(draftWithTaxCategory);
+                await WithUpdateableAsync(client, finalDraft, DefaultShippingMethodDraft, func);
+            });
         }
 
         #endregion
