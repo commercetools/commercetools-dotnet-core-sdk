@@ -212,7 +212,12 @@ namespace SimpleInjector
         {
             var httpClientBuilder = collection.AddHttpClient(clientName)
                 .ConfigureHttpClient(client =>
-                    client.BaseAddress = new Uri(clientConfiguration.ApiBaseAddress + clientConfiguration.ProjectKey + "/"))
+                {
+                    client.BaseAddress = new Uri(clientConfiguration.ApiBaseAddress + clientConfiguration.ProjectKey + "/");
+                    client.DefaultRequestHeaders.AcceptEncoding.ParseAdd("gzip");
+                    client.DefaultRequestHeaders.AcceptEncoding.ParseAdd("deflate");
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd(services.GetService<IUserAgentProvider>().UserAgent);
+                })
                 .ConfigureHttpMessageHandlerBuilder(builder =>
                 {
                     builder.PrimaryHandler = new HttpClientHandler

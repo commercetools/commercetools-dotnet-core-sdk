@@ -29,24 +29,7 @@
 
         public string Name { get; set; } = DefaultClientNames.Api;
 
-        private HttpClient HttpClient
-        {
-            get
-            {
-                if (this.httpClient == null)
-                {
-                    lock (this.httpClientFactory)
-                    {
-                        this.httpClient = this.httpClientFactory.CreateClient(this.Name);
-                        this.httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(this.userAgentProvider.UserAgent);
-                        this.httpClient.DefaultRequestHeaders.AcceptEncoding.TryParseAdd("gzip");
-                        this.httpClient.DefaultRequestHeaders.AcceptEncoding.TryParseAdd("deflate");
-                    }
-                }
-
-                return this.httpClient;
-            }
-        }
+        private HttpClient HttpClient => this.httpClient ?? (this.httpClient = this.httpClientFactory.CreateClient(this.Name));
 
         public async Task<T> ExecuteAsync<T>(ICommand<T> command)
         {
