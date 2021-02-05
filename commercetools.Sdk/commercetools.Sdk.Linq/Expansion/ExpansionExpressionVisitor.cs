@@ -11,7 +11,8 @@ namespace commercetools.Sdk.Linq
             { "ExpandAll", "[*]" },
             { "ExpandProductSlugs", "[*].productSlug" },
             { "ExpandVariants", "[*].variant" },
-            { "ExpandValues", "[*].value" }
+            { "ExpandValues", "[*].value" },
+            { "ExpandDiscountCodes", "[*].discountCode" }
         };
 
         public string GetPath(Expression expression)
