@@ -7,6 +7,7 @@ using commercetools.Sdk.Domain.Predicates;
 using Xunit;
 using Attribute = commercetools.Sdk.Domain.Products.Attributes.Attribute;
 using commercetools.Sdk.Domain.Categories;
+using commercetools.Sdk.Domain.Orders;
 using LineItem = commercetools.Sdk.Domain.ShoppingLists.LineItem;
 
 namespace commercetools.Sdk.Linq.Tests
@@ -110,6 +111,15 @@ namespace commercetools.Sdk.Linq.Tests
             ExpansionExpressionVisitor expansionVisitor = new ExpansionExpressionVisitor();
             string result = expansionVisitor.GetPath(expression);
             Assert.Equal("custom.fields.customobjectfield", result);
+        }
+
+        [Fact]
+        public void ExpandOrderDiscountCodes()
+        {
+            Expression<Func<Order, Reference>> expression = order => order.DiscountCodes.ExpandDiscountCodes(); 
+            ExpansionExpressionVisitor expansionVisitor = new ExpansionExpressionVisitor(); 
+            string result = expansionVisitor.GetPath(expression); 
+            Assert.Equal("discountCodes[*].discountCode", result);
         }
     }
 }
