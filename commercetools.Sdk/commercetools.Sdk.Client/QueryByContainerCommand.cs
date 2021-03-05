@@ -30,7 +30,5 @@ namespace commercetools.Sdk.Client
         public string Container { get; set; }
 
         public override System.Type ResourceType => typeof(T);
-
-        public IQueryParameters QueryParameters { get; set; }
     }
 }
