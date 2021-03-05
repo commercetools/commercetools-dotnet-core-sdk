@@ -799,8 +799,8 @@ namespace commercetools.Sdk.IntegrationTests.Carts
         }
 
 
-        [Fact]
-        public async void UpdateCartSetShippingRateInputAsScore()
+        //[Fact]
+        private async void UpdateCartSetShippingRateInputAsScore()
         {
             var shippingRateInputType = new CartScoreShippingRateInputType();
             var shippingAddress = new Address {Country = "DE"};
