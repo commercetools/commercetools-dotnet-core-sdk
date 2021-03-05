@@ -4,6 +4,7 @@ using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain.GraphQL;
 using commercetools.Sdk.Domain.Orders;
 using commercetools.Sdk.HttpApi.CommandBuilders;
+using Newtonsoft.Json.Linq;
 using Xunit;
 using static commercetools.Sdk.IntegrationTests.Categories.CategoriesFixture;
 using static commercetools.Sdk.IntegrationTests.Carts.CartsFixture;
@@ -65,7 +66,10 @@ namespace commercetools.Sdk.IntegrationTests.GraphQL
                                                         }
                                                       ]
                                             ) {
-                                                id
+                                                id,
+                                                orderNumber,
+                                                orderState,
+                                                version
                                               } 
                                     }";
             
@@ -76,7 +80,7 @@ namespace commercetools.Sdk.IntegrationTests.GraphQL
                     Assert.Single(cart.LineItems);
                     
                     //create order with null orderNumber
-                    await WithOrder(client, 
+                    await WithUpdateableOrder(client, 
                         draft => DefaultOrderFromCartDraftWithNumber(draft, cart, orderNumber: null),
                         async order =>
                         {
@@ -90,15 +94,13 @@ namespace commercetools.Sdk.IntegrationTests.GraphQL
                             });
                             var graphQlCommand = new GraphQLCommand<dynamic>(queryParameters);
                             var result = await client.ExecuteAsync(graphQlCommand);
-                            Assert.NotNull(result);
-
-                            //retrieve updated order
-                            var updatedOrder = await client.Builder().Orders().GetById(order.Id).ExecuteAsync();
-
-                            //assert
-                            Assert.NotNull(updatedOrder);
+                            var updatedOrderJObject = result.data.updateOrder as JObject;
+                            Assert.NotNull(updatedOrderJObject);
+                            var updatedOrder = updatedOrderJObject.ToObject<Order>();
+                            Assert.Equal(order.Id, updatedOrder.Id);
                             Assert.Equal(OrderState.Confirmed, updatedOrder.OrderState);
                             Assert.Equal(orderNumber, updatedOrder.OrderNumber);
+                            return updatedOrder;
                         });
                 });
         }
