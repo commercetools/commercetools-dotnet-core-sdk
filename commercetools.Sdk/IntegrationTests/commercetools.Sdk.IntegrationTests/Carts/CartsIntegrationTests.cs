@@ -798,155 +798,6 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-
-        // [Fact]
-        public async void UpdateCartSetShippingRateInputAsScore()
-        {
-            var shippingRateInputType = new CartScoreShippingRateInputType();
-            var shippingAddress = new Address {Country = "DE"};
-
-            await WithCurrentProject(client,
-                project => SetShippingRateInputType(project, shippingRateInputType),
-                async project =>
-                {
-                    Assert.NotNull(project);
-                    Assert.NotNull(project.ShippingRateInputType);
-                    Assert.IsType<CartScoreShippingRateInputType>(project.ShippingRateInputType);
-
-                    await WithUpdateableCart(client, draft =>
-                    {
-                        var cartDraft = DefaultCartDraftWithTaxMode(draft, TaxMode.External);
-                        var cartWithShippingAddress =
-                            DefaultCartDraftWithShippingAddress(cartDraft, shippingAddress);
-                        return cartWithShippingAddress;
-                    }, async cart =>
-                    {
-                        var externalTaxRateDraft = TestingUtility.GetExternalTaxRateDraft();
-                        var shippingRateDraft = TestingUtility.GetShippingRateDraftWithPriceTiers();
-                        var customShippingMethod = $"CustomShipping_{TestingUtility.RandomInt()}";
-                        var secondScorePrice =
-                            (shippingRateDraft.Tiers[1] as CartScoreShippingRatePriceTier)?.Price;
-
-                        var setCustomShippingMethodAction = new SetCustomShippingMethodUpdateAction()
-                        {
-                            ShippingMethodName = customShippingMethod,
-                            ShippingRate = shippingRateDraft, //with shipping rate price tiers
-                            ExternalTaxRate = externalTaxRateDraft,
-                            TaxCategory = null
-                        };
-
-                        var cartWithShippingMethod = await client
-                            .ExecuteAsync(cart.UpdateById(actions =>
-                                actions.AddUpdate(setCustomShippingMethodAction)));
-                        Assert.NotNull(cartWithShippingMethod.ShippingInfo);
-                        Assert.Equal(customShippingMethod, cartWithShippingMethod.ShippingInfo.ShippingMethodName);
-
-                        var setShippingRateInputAction = new SetShippingRateInputUpdateAction
-                        {
-                            ShippingRateInput = new ScoreShippingRateInputDraft {Score = 1}
-                        };
-                        var cartWithShippingMethodWithScore1 = await client
-                            .ExecuteAsync(cartWithShippingMethod.UpdateById(actions =>
-                                actions.AddUpdate(setShippingRateInputAction)));
-
-                        Assert.NotNull(cartWithShippingMethodWithScore1.ShippingRateInput);
-                        Assert.IsType<ScoreShippingRateInput>(cartWithShippingMethodWithScore1.ShippingRateInput);
-                        Assert.Equal(secondScorePrice, cartWithShippingMethodWithScore1.ShippingInfo.Price);
-                        return cartWithShippingMethodWithScore1;
-                    });
-
-                    // then reset current project shippingRateInputType
-                    var undoProjectAction = new SetShippingRateInputTypeUpdateAction
-                    {
-                        ShippingRateInputType = null
-                    };
-                    var projectWithNullShippingRateInputType = await
-                        TryToUpdateCurrentProject(client, project, undoProjectAction.ToList());
-
-                    Assert.Null(projectWithNullShippingRateInputType.ShippingRateInputType);
-                    return projectWithNullShippingRateInputType;
-                });
-        }
-
-        // [Fact]
-        public async void UpdateCartSetShippingRateInputAsClassification()
-        {
-            var shippingAddress = new Address {Country = "DE"};
-            var classificationValues =
-                TestingUtility.GetCartClassificationTestValues(); //Small, Medium and Heavy classifications
-            var shippingRateInputType = new CartClassificationShippingRateInputType
-            {
-                Values = classificationValues
-            };
-
-            await WithCurrentProject(client,
-                project => SetShippingRateInputType(project, shippingRateInputType),
-                async project =>
-                {
-                    Assert.NotNull(project);
-                    Assert.NotNull(project.ShippingRateInputType);
-                    Assert.IsType<CartClassificationShippingRateInputType>(project.ShippingRateInputType);
-
-                    await WithUpdateableCart(client, draft =>
-                        {
-                            var cartDraft = DefaultCartDraftWithTaxMode(draft, TaxMode.External);
-                            var cartWithShippingAddress =
-                                DefaultCartDraftWithShippingAddress(cartDraft, shippingAddress);
-                            return cartWithShippingAddress;
-                        },
-                        async cart =>
-                        {
-                            var externalTaxRateDraft = TestingUtility.GetExternalTaxRateDraft();
-                            var shippingRateDraft = TestingUtility.GetShippingRateDraftWithCartClassifications();
-                            string customShippingMethod = $"CustomShipping_{TestingUtility.RandomInt()}";
-                            var smallClassificationPrice =
-                                (shippingRateDraft.Tiers[0] as CartClassificationShippingRatePriceTier)?.Price;
-
-                            var setCustomShippingMethodAction = new SetCustomShippingMethodUpdateAction()
-                            {
-                                ShippingMethodName = customShippingMethod,
-                                ShippingRate = shippingRateDraft, //with shipping rate price tiers
-                                ExternalTaxRate = externalTaxRateDraft,
-                                TaxCategory = null
-                            };
-
-                            var cartWithShippingMethod = await client
-                                .ExecuteAsync(cart.UpdateById(actions =>
-                                    actions.AddUpdate(setCustomShippingMethodAction)));
-                            Assert.NotNull(cartWithShippingMethod.ShippingInfo);
-                            Assert.Equal(customShippingMethod,
-                                cartWithShippingMethod.ShippingInfo.ShippingMethodName);
-
-                            var setShippingRateInputAction = new SetShippingRateInputUpdateAction
-                            {
-                                ShippingRateInput = new ClassificationShippingRateInputDraft {Key = "Small"}
-                            };
-                            var cartWithShippingMethodWithSmallClassification = await client
-                                .ExecuteAsync(cartWithShippingMethod.UpdateById(actions =>
-                                    actions.AddUpdate(setShippingRateInputAction)));
-
-                            Assert.NotNull(cartWithShippingMethodWithSmallClassification.ShippingRateInput);
-                            Assert.IsType<ClassificationShippingRateInput>(
-                                cartWithShippingMethodWithSmallClassification
-                                    .ShippingRateInput);
-                            Assert.Equal(smallClassificationPrice,
-                                cartWithShippingMethodWithSmallClassification.ShippingInfo.Price);
-                            return cartWithShippingMethodWithSmallClassification;
-                        });
-
-                    // then reset current project shippingRateInputType
-                    var undoProjectAction = new SetShippingRateInputTypeUpdateAction
-                    {
-                        ShippingRateInputType = null
-                    };
-                    var projectWithNullShippingRateInputType = await
-                        TryToUpdateCurrentProject(client, project, undoProjectAction.ToList());
-
-                    Assert.Null(projectWithNullShippingRateInputType.ShippingRateInputType);
-                    return projectWithNullShippingRateInputType;
-                });
-        }
-
         [Fact]
         public async void UpdateCartChangeTaxCalculationMode()
         {
@@ -1432,6 +1283,154 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                     Assert.Single(updatedCart.ItemShippingAddresses);
                     Assert.Equal(newAddress.ToString(), updatedCart.ItemShippingAddresses[0].ToString());
                     return updatedCart;
+                });
+        }
+        
+        //[Fact]
+        private async void UpdateCartSetShippingRateInputAsScore()
+        {
+            var shippingRateInputType = new CartScoreShippingRateInputType();
+            var shippingAddress = new Address {Country = "DE"};
+
+            await WithCurrentProject(client,
+                project => SetShippingRateInputType(project, shippingRateInputType),
+                async project =>
+                {
+                    Assert.NotNull(project);
+                    Assert.NotNull(project.ShippingRateInputType);
+                    Assert.IsType<CartScoreShippingRateInputType>(project.ShippingRateInputType);
+
+                    await WithUpdateableCart(client, draft =>
+                    {
+                        var cartDraft = DefaultCartDraftWithTaxMode(draft, TaxMode.External);
+                        var cartWithShippingAddress =
+                            DefaultCartDraftWithShippingAddress(cartDraft, shippingAddress);
+                        return cartWithShippingAddress;
+                    }, async cart =>
+                    {
+                        var externalTaxRateDraft = TestingUtility.GetExternalTaxRateDraft();
+                        var shippingRateDraft = TestingUtility.GetShippingRateDraftWithPriceTiers();
+                        var customShippingMethod = $"CustomShipping_{TestingUtility.RandomInt()}";
+                        var secondScorePrice =
+                            (shippingRateDraft.Tiers[1] as CartScoreShippingRatePriceTier)?.Price;
+
+                        var setCustomShippingMethodAction = new SetCustomShippingMethodUpdateAction()
+                        {
+                            ShippingMethodName = customShippingMethod,
+                            ShippingRate = shippingRateDraft, //with shipping rate price tiers
+                            ExternalTaxRate = externalTaxRateDraft,
+                            TaxCategory = null
+                        };
+
+                        var cartWithShippingMethod = await client
+                            .ExecuteAsync(cart.UpdateById(actions =>
+                                actions.AddUpdate(setCustomShippingMethodAction)));
+                        Assert.NotNull(cartWithShippingMethod.ShippingInfo);
+                        Assert.Equal(customShippingMethod, cartWithShippingMethod.ShippingInfo.ShippingMethodName);
+
+                        var setShippingRateInputAction = new SetShippingRateInputUpdateAction
+                        {
+                            ShippingRateInput = new ScoreShippingRateInputDraft {Score = 1}
+                        };
+                        var cartWithShippingMethodWithScore1 = await client
+                            .ExecuteAsync(cartWithShippingMethod.UpdateById(actions =>
+                                actions.AddUpdate(setShippingRateInputAction)));
+
+                        Assert.NotNull(cartWithShippingMethodWithScore1.ShippingRateInput);
+                        Assert.IsType<ScoreShippingRateInput>(cartWithShippingMethodWithScore1.ShippingRateInput);
+                        Assert.Equal(secondScorePrice, cartWithShippingMethodWithScore1.ShippingInfo.Price);
+                        return cartWithShippingMethodWithScore1;
+                    });
+
+                    // then reset current project shippingRateInputType
+                    var undoProjectAction = new SetShippingRateInputTypeUpdateAction
+                    {
+                        ShippingRateInputType = null
+                    };
+                    var projectWithNullShippingRateInputType = await
+                        TryToUpdateCurrentProject(client, project, undoProjectAction.ToList());
+
+                    Assert.Null(projectWithNullShippingRateInputType.ShippingRateInputType);
+                    return projectWithNullShippingRateInputType;
+                });
+        }
+
+        //[Fact]
+        private async void UpdateCartSetShippingRateInputAsClassification()
+        {
+            var shippingAddress = new Address {Country = "DE"};
+            var classificationValues =
+                TestingUtility.GetCartClassificationTestValues(); //Small, Medium and Heavy classifications
+            var shippingRateInputType = new CartClassificationShippingRateInputType
+            {
+                Values = classificationValues
+            };
+
+            await WithCurrentProject(client,
+                project => SetShippingRateInputType(project, shippingRateInputType),
+                async project =>
+                {
+                    Assert.NotNull(project);
+                    Assert.NotNull(project.ShippingRateInputType);
+                    Assert.IsType<CartClassificationShippingRateInputType>(project.ShippingRateInputType);
+
+                    await WithUpdateableCart(client, draft =>
+                        {
+                            var cartDraft = DefaultCartDraftWithTaxMode(draft, TaxMode.External);
+                            var cartWithShippingAddress =
+                                DefaultCartDraftWithShippingAddress(cartDraft, shippingAddress);
+                            return cartWithShippingAddress;
+                        },
+                        async cart =>
+                        {
+                            var externalTaxRateDraft = TestingUtility.GetExternalTaxRateDraft();
+                            var shippingRateDraft = TestingUtility.GetShippingRateDraftWithCartClassifications();
+                            string customShippingMethod = $"CustomShipping_{TestingUtility.RandomInt()}";
+                            var smallClassificationPrice =
+                                (shippingRateDraft.Tiers[0] as CartClassificationShippingRatePriceTier)?.Price;
+
+                            var setCustomShippingMethodAction = new SetCustomShippingMethodUpdateAction()
+                            {
+                                ShippingMethodName = customShippingMethod,
+                                ShippingRate = shippingRateDraft, //with shipping rate price tiers
+                                ExternalTaxRate = externalTaxRateDraft,
+                                TaxCategory = null
+                            };
+
+                            var cartWithShippingMethod = await client
+                                .ExecuteAsync(cart.UpdateById(actions =>
+                                    actions.AddUpdate(setCustomShippingMethodAction)));
+                            Assert.NotNull(cartWithShippingMethod.ShippingInfo);
+                            Assert.Equal(customShippingMethod,
+                                cartWithShippingMethod.ShippingInfo.ShippingMethodName);
+
+                            var setShippingRateInputAction = new SetShippingRateInputUpdateAction
+                            {
+                                ShippingRateInput = new ClassificationShippingRateInputDraft {Key = "Small"}
+                            };
+                            var cartWithShippingMethodWithSmallClassification = await client
+                                .ExecuteAsync(cartWithShippingMethod.UpdateById(actions =>
+                                    actions.AddUpdate(setShippingRateInputAction)));
+
+                            Assert.NotNull(cartWithShippingMethodWithSmallClassification.ShippingRateInput);
+                            Assert.IsType<ClassificationShippingRateInput>(
+                                cartWithShippingMethodWithSmallClassification
+                                    .ShippingRateInput);
+                            Assert.Equal(smallClassificationPrice,
+                                cartWithShippingMethodWithSmallClassification.ShippingInfo.Price);
+                            return cartWithShippingMethodWithSmallClassification;
+                        });
+
+                    // then reset current project shippingRateInputType
+                    var undoProjectAction = new SetShippingRateInputTypeUpdateAction
+                    {
+                        ShippingRateInputType = null
+                    };
+                    var projectWithNullShippingRateInputType = await
+                        TryToUpdateCurrentProject(client, project, undoProjectAction.ToList());
+
+                    Assert.Null(projectWithNullShippingRateInputType.ShippingRateInputType);
+                    return projectWithNullShippingRateInputType;
                 });
         }
 

@@ -22,7 +22,6 @@ namespace commercetools.Sdk.HttpApi.DelegatingHandlers
             HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));
