@@ -166,7 +166,13 @@ namespace commercetools.Sdk.IntegrationTests.Inventory
 
 
                     Assert.Equal(restockableInDays, updatedInventoryEntry.RestockableInDays);
-                    return updatedInventoryEntry;
+
+                    SetRestockableInDaysUpdateAction action2 = new SetRestockableInDaysUpdateAction();
+                    var updatedInventoryEntry2 = await client
+                        .ExecuteAsync(updatedInventoryEntry.UpdateById(actions => actions.AddUpdate(action2)));
+                    Assert.Null(updatedInventoryEntry2.RestockableInDays);
+
+                    return updatedInventoryEntry2;
                 });
         }
 
