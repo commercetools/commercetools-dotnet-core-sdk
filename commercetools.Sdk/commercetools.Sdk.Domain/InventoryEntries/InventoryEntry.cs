@@ -12,7 +12,7 @@ namespace commercetools.Sdk.Domain.InventoryEntries
         public Reference<Channel> SupplyChannel { get; set; }
         public long QuantityOnStock { get; set; }
         public long AvailableQuantity { get; set; }
-        public int RestockableInDays { get; set; }
+        public int? RestockableInDays { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
         public CustomFields Custom { get; set; }
     }
