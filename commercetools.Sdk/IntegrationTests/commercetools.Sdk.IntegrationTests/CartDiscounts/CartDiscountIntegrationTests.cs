@@ -32,6 +32,31 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                 cartDiscount => { Assert.Equal(key, (string) cartDiscount.Key); });
         }
 
+        [Fact]
+        public async Task CreateCartDiscountWithFixedValue()
+        {
+            var key = $"CreateCartDiscount-{TestingUtility.RandomString()}";
+            await WithCartDiscount(
+                client,
+                cartDiscountDraft =>
+                {
+                    var draft = DefaultCartDiscountDraftWithKey(cartDiscountDraft, key);
+                    draft.Value = new FixedCartDiscountValue
+                    {
+                        Money = new List<Money>
+                        {
+                            new Money {CurrencyCode = "EUR", CentAmount = TestingUtility.RandomInt(100, 1000)} 
+                        }
+                    };
+                    return draft;
+                },
+                cartDiscount =>
+                {
+                    Assert.Equal(key, (string) cartDiscount.Key);
+                    Assert.Equal("fixed", cartDiscount.Value.Type);
+                });
+        }
+
 
         [Fact]
         public async Task GetCartDiscountById()
@@ -60,7 +85,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                     Assert.Equal(key, retrievedCartDiscount.Key);
                 });
         }
-        
+
         [Fact]
         public async Task GetMultiBuyLineItemCartDiscount()
         {
@@ -68,8 +93,12 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                 client, cartDiscountDraft =>
                 {
                     var draft = DefaultCartDiscountDraft(cartDiscountDraft);
-                    draft.Value = new RelativeCartDiscountValue { Permyriad = 10000 };
-                    draft.Target = new MultiBuyLineItemTarget { Predicate = "1 = 1", TriggerQuantity = 2, MaxOccurrence = 1, DiscountedQuantity = 1, SelectionMode = SelectionMode.Cheapest};
+                    draft.Value = new RelativeCartDiscountValue {Permyriad = 10000};
+                    draft.Target = new MultiBuyLineItemTarget
+                    {
+                        Predicate = "1 = 1", TriggerQuantity = 2, MaxOccurrence = 1, DiscountedQuantity = 1,
+                        SelectionMode = SelectionMode.Cheapest
+                    };
                     return draft;
                 },
                 async cartDiscount =>
@@ -87,8 +116,12 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                 client, cartDiscountDraft =>
                 {
                     var draft = DefaultCartDiscountDraft(cartDiscountDraft);
-                    draft.Value = new RelativeCartDiscountValue { Permyriad = 10000 };
-                    draft.Target = new MultiBuyCustomLineItemTarget { Predicate = "1 = 1", TriggerQuantity = 2, MaxOccurrence = 1, DiscountedQuantity = 1, SelectionMode = SelectionMode.Cheapest};
+                    draft.Value = new RelativeCartDiscountValue {Permyriad = 10000};
+                    draft.Target = new MultiBuyCustomLineItemTarget
+                    {
+                        Predicate = "1 = 1", TriggerQuantity = 2, MaxOccurrence = 1, DiscountedQuantity = 1,
+                        SelectionMode = SelectionMode.Cheapest
+                    };
                     return draft;
                 },
                 async cartDiscount =>
@@ -98,7 +131,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                     Assert.IsType<MultiBuyCustomLineItemTarget>(retrievedCartDiscount.Target);
                 });
         }
-        
+
         [Fact]
         public async Task QueryCartDiscounts()
         {
@@ -155,7 +188,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             {
                 var updatedCartDiscount = await client
                     .ExecuteAsync(cartDiscount.UpdateById(
-                            actions => actions.AddUpdate(new SetKeyUpdateAction() { Key = newKey })
+                            actions => actions.AddUpdate(new SetKeyUpdateAction() {Key = newKey})
                         )
                     );
 
@@ -174,7 +207,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             {
                 var updatedCartDiscount = await client
                     .ExecuteAsync(cartDiscount.UpdateByKey(actions =>
-                            actions.AddUpdate(new ChangeValueUpdateAction { Value = newAbsoluteValue })
+                            actions.AddUpdate(new ChangeValueUpdateAction {Value = newAbsoluteValue})
                         )
                     );
 
@@ -213,7 +246,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
         [Fact]
         public async Task UpdateCartDiscountChangeTarget()
         {
-            var newCartDiscountTarget = new LineItemsCartDiscountTarget() { Predicate = " 1 <> 1" };
+            var newCartDiscountTarget = new LineItemsCartDiscountTarget() {Predicate = " 1 <> 1"};
             await WithUpdateableCartDiscount(client, async cartDiscount =>
             {
                 var updateActions = new List<UpdateAction<CartDiscount>>();
@@ -241,7 +274,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             {
                 var newIsActive = !cartDiscount.IsActive;
                 var updateActions = new List<UpdateAction<CartDiscount>>();
-                var changeIsActiveAction = new ChangeIsActiveUpdateAction { IsActive = newIsActive };
+                var changeIsActiveAction = new ChangeIsActiveUpdateAction {IsActive = newIsActive};
                 updateActions.Add(changeIsActiveAction);
 
                 var updatedCartDiscount = await client
@@ -259,7 +292,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             {
                 var newName = new LocalizedString {{"en", TestingUtility.RandomString()}};
                 var updateActions = new List<UpdateAction<CartDiscount>>();
-                var action = new ChangeNameUpdateAction { Name = newName};
+                var action = new ChangeNameUpdateAction {Name = newName};
                 updateActions.Add(action);
 
                 var updatedCartDiscount = await client
@@ -277,7 +310,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             {
                 var newDescription = new LocalizedString {{"en", TestingUtility.RandomString()}};
                 var updateActions = new List<UpdateAction<CartDiscount>>();
-                var action = new SetDescriptionUpdateAction { Description = newDescription };
+                var action = new SetDescriptionUpdateAction {Description = newDescription};
                 updateActions.Add(action);
 
                 var updatedCartDiscount = await client
@@ -295,7 +328,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             {
                 var newSortOrder = TestingUtility.RandomSortOrder();
                 var updateActions = new List<UpdateAction<CartDiscount>>();
-                var action = new ChangeSortOrderUpdateAction { SortOrder = newSortOrder};
+                var action = new ChangeSortOrderUpdateAction {SortOrder = newSortOrder};
                 updateActions.Add(action);
 
                 var updatedCartDiscount = await client
@@ -313,7 +346,8 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             {
                 var newRequiresDiscountCode = !cartDiscount.RequiresDiscountCode;
                 var updateActions = new List<UpdateAction<CartDiscount>>();
-                var action = new ChangeRequiresDiscountCodeUpdateAction { RequiresDiscountCode = newRequiresDiscountCode};
+                var action = new ChangeRequiresDiscountCodeUpdateAction
+                    {RequiresDiscountCode = newRequiresDiscountCode};
                 updateActions.Add(action);
 
                 var updatedCartDiscount = await client
@@ -331,7 +365,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             {
                 var newValidFrom = cartDiscount.ValidFrom.AddDays(1);
                 var updateActions = new List<UpdateAction<CartDiscount>>();
-                var action = new SetValidFromUpdateAction { ValidFrom = newValidFrom };
+                var action = new SetValidFromUpdateAction {ValidFrom = newValidFrom};
                 updateActions.Add(action);
 
                 var updatedCartDiscount = await client
@@ -348,7 +382,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             {
                 var newValidUntil = cartDiscount.ValidUntil.AddDays(1);
                 var updateActions = new List<UpdateAction<CartDiscount>>();
-                var action = new SetValidUntilUpdateAction { ValidUntil = newValidUntil };
+                var action = new SetValidUntilUpdateAction {ValidUntil = newValidUntil};
                 updateActions.Add(action);
 
                 var updatedCartDiscount = await client
@@ -390,7 +424,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             {
                 var newStackingMode = StackingMode.StopAfterThisDiscount;
                 var updateActions = new List<UpdateAction<CartDiscount>>();
-                var action = new ChangeStackingModeUpdateAction { StackingMode = newStackingMode};
+                var action = new ChangeStackingModeUpdateAction {StackingMode = newStackingMode};
                 updateActions.Add(action);
 
                 var updatedCartDiscount = await client
@@ -419,7 +453,8 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                         };
                         updateActions.Add(setTypeAction);
 
-                        var updatedCartDiscount = await client.ExecuteAsync(new UpdateByIdCommand<CartDiscount>(cartDiscount, updateActions));
+                        var updatedCartDiscount =
+                            await client.ExecuteAsync(new UpdateByIdCommand<CartDiscount>(cartDiscount, updateActions));
 
                         Assert.Equal(type.Id, updatedCartDiscount.Custom.Type.Id);
                         return updatedCartDiscount;
@@ -446,7 +481,8 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                         };
                         updateActions.Add(setCustomFieldUpdateAction);
 
-                        var updatedCartDiscount = await client.ExecuteAsync(new UpdateByIdCommand<CartDiscount>(cartDiscount, updateActions));
+                        var updatedCartDiscount =
+                            await client.ExecuteAsync(new UpdateByIdCommand<CartDiscount>(cartDiscount, updateActions));
 
                         Assert.Equal(newValue, updatedCartDiscount.Custom.Fields["string-field"]);
                         return updatedCartDiscount;
