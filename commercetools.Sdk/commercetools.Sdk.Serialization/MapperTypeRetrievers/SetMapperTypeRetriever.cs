@@ -23,7 +23,10 @@ namespace commercetools.Sdk.Serialization
             {
                 if (token.HasValues)
                 {
-                    Type firstAttributeType = base.GetTypeForToken(token[0]);
+                    var firstToken = token.First;
+                    var firstAttributeType = firstToken.IsSetAttribute()? 
+                        this.GetTypeForToken(firstToken) 
+                        : base.GetTypeForToken(firstToken);
                     type = attributeTypes.GetOrAdd(firstAttributeType, t => this.SetType.MakeGenericType(firstAttributeType));
                 }
                 else

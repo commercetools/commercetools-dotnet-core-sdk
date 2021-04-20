@@ -136,5 +136,10 @@ namespace commercetools.Sdk.Domain.Products.Attributes
                 attribute is Attribute<AttributeSet<NestedAttribute>> ||
                 attribute is Attribute<AttributeSet<List<Attribute>>>;
         }
+        public static bool IsSetAttribute<T>(this IAttribute attribute)
+        {
+            return
+                attribute is Attribute<AttributeSet<T>>;
+        }
     }
 }

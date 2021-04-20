@@ -342,6 +342,24 @@ namespace commercetools.Sdk.Serialization.Tests
             var deserialized = serializerService.Deserialize<ProductVariant>(serialized);
             Assert.IsAssignableFrom<Attribute<string>>(deserialized.Attributes[0]);
         }
+        
+        [Fact]
+        public void DeserializeProductWithSetOfSetAttribute()
+        {
+            var serializerService = this.serializationFixture.SerializerService;
+            var productSerialized = File.ReadAllText("Resources/Attributes/SetOfSetAttribute.json");
+            
+            var product = serializerService.Deserialize<Product>(productSerialized);
+            var attr = product.MasterData.Current.MasterVariant.Attributes[0];
+            Assert.NotNull(attr);
+            Assert.True(attr.IsSetAttribute<AttributeSet<string>>());
+            var setOfSetAttr = attr as Attribute<AttributeSet<AttributeSet<string>>>;
+            Assert.NotNull(setOfSetAttr);
+            var firstSet = setOfSetAttr.Value.First();
+            var secondSet = setOfSetAttr.Value.ElementAt(1);
+            Assert.Equal("firstSet-1",firstSet.FirstOrDefault());
+            Assert.Equal("secondSet-1",secondSet.FirstOrDefault());
+        }
 
     }
 }
