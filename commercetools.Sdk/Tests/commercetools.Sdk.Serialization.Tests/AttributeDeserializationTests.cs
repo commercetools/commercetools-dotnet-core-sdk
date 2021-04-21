@@ -360,6 +360,23 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.Equal("firstSet-1",firstSet.FirstOrDefault());
             Assert.Equal("secondSet-1",secondSet.FirstOrDefault());
         }
+        [Fact]
+        public void DeserializeProductWithSetOfSetOfSetAttribute()
+        {
+            var serializerService = this.serializationFixture.SerializerService;
+            var productSerialized = File.ReadAllText("Resources/Attributes/SetOfSetAttribute.json");
+    
+            var product = serializerService.Deserialize<Product>(productSerialized);
+            var attr = product.MasterData.Current.MasterVariant.Attributes[1];
+            Assert.NotNull(attr);
+            Assert.True(attr.IsSetAttribute<AttributeSet<AttributeSet<string>>>());
+            var setOfSetAttr = attr as Attribute<AttributeSet<AttributeSet<AttributeSet<string>>>>;
+            Assert.NotNull(setOfSetAttr);
+            var set111 = setOfSetAttr.Value.First().First();
+            var set121 = setOfSetAttr.Value.ElementAt(1).First();
+            Assert.Equal("set111-1",set111.FirstOrDefault());
+            Assert.Equal("set121-1",set121.FirstOrDefault());
+        }
 
     }
 }
