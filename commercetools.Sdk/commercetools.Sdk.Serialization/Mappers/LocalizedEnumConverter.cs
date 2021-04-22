@@ -16,7 +16,7 @@ namespace commercetools.Sdk.Serialization
 
         public bool CanConvert(JToken property)
         {
-            if (property != null && property.HasValues)
+            if (property != null && property.HasValues && !property.IsArrayToken())
             {
                 var keyProperty = property["key"];
                 if (keyProperty != null)

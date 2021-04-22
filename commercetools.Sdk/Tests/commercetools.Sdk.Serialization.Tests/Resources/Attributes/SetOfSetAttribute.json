@@ -1,0 +1,123 @@
+{
+  "id": "830d727f-3c15-42d4-887f-1b14e28395ae",
+  "version": 1,
+  "lastMessageSequenceNumber": 1,
+  "createdAt": "2020-02-28T10:57:23.638Z",
+  "lastModifiedAt": "2020-02-28T10:57:23.638Z",
+  "lastModifiedBy": {
+    "clientId": "",
+    "isPlatformClient": false
+  },
+  "createdBy": {
+    "clientId": "",
+    "isPlatformClient": false
+  },
+  "productType": {
+    "typeId": "product-type",
+    "id": "3a0b9586-8ace-4d73-93e0-e8a5085da1f4"
+  },
+  "catalogs": [],
+  "masterData": {
+    "current": {
+      "name": {
+        "en": "Bag “Sofia“ large Gabs"
+      },
+      "categories": [],
+      "categoryOrderHints": {},
+      "slug": {
+        "en": "gabs-bag-sofia-large-green"
+      },
+      "masterVariant": {
+        "id": 1,
+        "sku": "A0E200000001WG3",
+        "prices": [],
+        "images": [],
+        "attributes": [
+          {
+            "name": "setOfSet",
+            "value": [
+              [
+                "firstSet-1",
+                "firstSet-2"
+              ],
+              [
+                "secondSet-1",
+                "secondSet-2"
+              ]
+            ]
+          },
+          {
+            "name": "setOfSetOfSet",
+            "value": [
+              [
+                [
+                  "set111-1",
+                  "set111-2"
+                ],
+                [
+                  "set112-1",
+                  "set112-2"
+                ]
+              ],
+              [
+                [
+                  "set121-1",
+                  "set121-2"
+                ],
+                [
+                  "set122-1",
+                  "set122-2"
+                ]
+              ]
+            ]
+          }
+        ],
+        "assets": []
+      },
+      "variants": [],
+      "searchKeywords": {}
+    },
+    "staged": {
+      "name": {
+        "en": "Bag “Sofia“ large Gabs"
+      },
+      "categories": [],
+      "categoryOrderHints": {},
+      "slug": {
+        "en": "gabs-bag-sofia-large-green"
+      },
+      "masterVariant": {
+        "id": 1,
+        "sku": "A0E200000001WG3",
+        "prices": [],
+        "images": [],
+        "attributes": [
+          {
+            "name": "setOfSet",
+            "value": [
+              [
+                "firstSet-1",
+                "firstSet-2"
+              ],
+              [
+                "secondSet-1",
+                "secondSet-2"
+              ]
+            ]
+          }
+        ],
+        "assets": []
+      },
+      "variants": [],
+      "searchKeywords": {}
+    },
+    "published": true,
+    "hasStagedChanges": false
+  },
+  "catalogData": {},
+  "taxCategory": {
+    "typeId": "tax-category",
+    "id": "6cb35c8a-ec1c-470f-951c-af36649cb0af"
+  },
+  "lastVariantId": 1
+}
