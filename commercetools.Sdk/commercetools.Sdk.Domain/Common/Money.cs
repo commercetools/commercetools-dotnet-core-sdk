@@ -12,7 +12,7 @@ namespace commercetools.Sdk.Domain
 
         public override decimal AmountToDecimal()
         {
-            return (decimal)CentAmount / 100M;
+            return CentAmount / (decimal) Math.Pow(10, FractionDigits ?? 2);
         }
 
         [Obsolete("will be replaced by more resilient implementation")]
