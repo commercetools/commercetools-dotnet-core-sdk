@@ -8,6 +8,11 @@
   "separateMajorMinor": true,
   "packageRules": [
     {
+      "matchPackagePatterns": ["^Microsoft"],
+      "groupName": ".NET Core Dependencies",
+      "enabled": false
+    },
+    {
       "packagePatterns": [
         "*"
       ],
