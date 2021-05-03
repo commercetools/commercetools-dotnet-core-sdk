@@ -8,7 +8,7 @@ namespace commercetools.Sdk.Domain.Tests
         [Fact]
         public void MoneyToDecimal()
         {
-            var m = new Money() { CurrencyCode = "EUR", CentAmount = 123456 };
+            var m = new Money() { CurrencyCode = "EUR", CentAmount = 123456, FractionDigits = 2};
             decimal expect = 1234.56M;
             Assert.Equal(expect, m.AmountToDecimal());
         }

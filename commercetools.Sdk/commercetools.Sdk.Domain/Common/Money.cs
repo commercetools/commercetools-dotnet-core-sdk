@@ -38,7 +38,18 @@ namespace commercetools.Sdk.Domain
             return new Money
             {
                 CurrencyCode = currencyCode,
-                CentAmount = (long)amount
+                CentAmount = (long)amount,
+                FractionDigits = 2
+            };
+        }
+        public static Money FromDecimal(string currencyCode, decimal value,int fractionDigits, MidpointRounding midpointRounding = MidpointRounding.ToEven)
+        {
+            var amount = Math.Round(value * (decimal)Math.Pow(10, fractionDigits), 0, midpointRounding);
+            return new Money
+            {
+                CurrencyCode = currencyCode,
+                CentAmount = (long)amount,
+                FractionDigits = fractionDigits
             };
         }
     }
