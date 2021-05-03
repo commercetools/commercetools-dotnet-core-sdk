@@ -86,7 +86,7 @@ namespace commercetools.Sdk.Serialization.Tests
 
             var serialize = serializerService.Serialize(m);
             JToken resultFormatted = JValue.Parse(serialize);
-            JToken serializedFormatted = JValue.Parse(@"{""type"":""centPrecision"",""currencyCode"":""EUR"",""centAmount"":123457,""fractionDigits"":2}");
+            JToken serializedFormatted = JValue.Parse(@"{""type"":""centPrecision"",""currencyCode"":""EUR"",""centAmount"":123457}");
             serializedFormatted.Should().BeEquivalentTo(resultFormatted);
         }
 

@@ -12,7 +12,7 @@ namespace commercetools.Sdk.Domain
 
         public override decimal AmountToDecimal()
         {
-            return CentAmount / (decimal) Math.Pow(10, FractionDigits.GetValueOrDefault());
+            return CentAmount / (decimal) Math.Pow(10, FractionDigits ?? 2);
         }
 
         [Obsolete("will be replaced by more resilient implementation")]
@@ -38,18 +38,7 @@ namespace commercetools.Sdk.Domain
             return new Money
             {
                 CurrencyCode = currencyCode,
-                CentAmount = (long)amount,
-                FractionDigits = 2
-            };
-        }
-        public static Money FromDecimal(string currencyCode, decimal value,int fractionDigits, MidpointRounding midpointRounding = MidpointRounding.ToEven)
-        {
-            var amount = Math.Round(value * (decimal)Math.Pow(10, fractionDigits), 0, midpointRounding);
-            return new Money
-            {
-                CurrencyCode = currencyCode,
-                CentAmount = (long)amount,
-                FractionDigits = fractionDigits
+                CentAmount = (long)amount
             };
         }
     }
