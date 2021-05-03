@@ -102,5 +102,23 @@ namespace commercetools.Sdk.Serialization.Tests
             var exception = Assert.Throws<JsonSerializationException>(() => serializerService.Deserialize<BaseMoney>(serialized));
             Assert.Equal("Unknown money type: {\"type\":\"unknown\",\"centAmount\":123456}", exception.Message);
         }
+        
+        [Fact]
+        public void MoneyDeserializationWithZeroFractionDigits()
+        {
+            ISerializerService serializerService = this.serializationFixture.SerializerService;
+            string serialized = @"{
+                ""type"": ""centPrecision"",
+                ""currencyCode"": ""KRW"",
+                ""centAmount"": 60500,
+                ""fractionDigits"": 0
+            }";
+            var deserialized = serializerService.Deserialize<BaseMoney>(serialized);
+            Assert.IsType<Money>(deserialized);
+            Assert.Equal("KRW", deserialized.CurrencyCode);
+            Assert.Equal(MoneyType.CentPrecision, deserialized.Type);
+            Assert.Equal(0, deserialized.FractionDigits);
+            Assert.Equal(60500M, deserialized.AmountToDecimal());
+        }
     }
 }
