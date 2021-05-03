@@ -184,7 +184,7 @@ jobs:
       - name: Create the package
         run: dotnet pack -c Release  -o ../../pack/
         working-directory: ./commercetools.Sdk
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
         with:
           name: commercetools.Sdk.1.0.0-alpha-${{ github.run_number }}
           path: pack
