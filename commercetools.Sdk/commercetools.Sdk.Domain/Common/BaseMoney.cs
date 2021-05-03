@@ -32,41 +32,93 @@ namespace commercetools.Sdk.Domain
 
         public static bool operator <(BaseMoney moneyLeft, BaseMoney moneyRight)
         {
+            if (ReferenceEquals(moneyLeft, moneyRight))
+            {
+                return false;
+            }
+            if (ReferenceEquals(moneyLeft,null) || ReferenceEquals(moneyRight,null))
+            {
+                return false;
+            }
             return moneyLeft.CompareTo(moneyRight) < 0;
         }
 
         public static bool operator >(BaseMoney moneyLeft, BaseMoney moneyRight)
         {
+            if (ReferenceEquals(moneyLeft, moneyRight))
+            {
+                return false;
+            }
+            if (ReferenceEquals(moneyLeft,null) || ReferenceEquals(moneyRight,null))
+            {
+                return false;
+            }
             return moneyLeft.CompareTo(moneyRight) > 0;
         }
 
         public static bool operator <=(BaseMoney moneyLeft, BaseMoney moneyRight)
         {
+            if (ReferenceEquals(moneyLeft, moneyRight))
+            {
+                return false;
+            }
+            if (ReferenceEquals(moneyLeft,null) || ReferenceEquals(moneyRight,null))
+            {
+                return false;
+            }
             return moneyLeft.CompareTo(moneyRight) <= 0;
         }
 
         public static bool operator >=(BaseMoney moneyLeft, BaseMoney moneyRight)
         {
+            if (ReferenceEquals(moneyLeft, moneyRight))
+            {
+                return false;
+            }
+            if (ReferenceEquals(moneyLeft,null) || ReferenceEquals(moneyRight,null))
+            {
+                return false;
+            }
             return moneyLeft.CompareTo(moneyRight) >= 0;
         }
 
         public static bool operator ==(BaseMoney moneyLeft, BaseMoney moneyRight)
         {
+            if (ReferenceEquals(moneyLeft, moneyRight))
+            {
+                return true;
+            }
+            if (ReferenceEquals(moneyLeft,null) || ReferenceEquals(moneyRight,null))
+            {
+                return false;
+            }
             return moneyLeft.CompareTo(moneyRight) == 0;
         }
 
         public static bool operator !=(BaseMoney moneyLeft, BaseMoney moneyRight)
         {
+            if (ReferenceEquals(moneyLeft, moneyRight))
+            {
+                return false;
+            }
+            if (ReferenceEquals(moneyLeft,null) || ReferenceEquals(moneyRight,null))
+            {
+                return true;
+            }
             return moneyLeft.CompareTo(moneyRight) != 0;
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is BaseMoney money))
+            if (ReferenceEquals(this, obj))
             {
-                throw new ArgumentException();
+                return true;
             }
-            if (this.CurrencyCode != money.CurrencyCode)
+            if (ReferenceEquals(obj,null) || ReferenceEquals(this,null))
+            {
+                return false;
+            }
+            if (!(obj is BaseMoney money))
             {
                 throw new ArgumentException();
             }
