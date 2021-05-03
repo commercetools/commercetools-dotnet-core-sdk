@@ -1,3 +1,4 @@
+using System;
 using NodaMoney;
 using Xunit;
 
@@ -65,6 +66,19 @@ namespace commercetools.Sdk.Domain.Tests
             Assert.IsType<Money>(m);
             Assert.Equal(123457, m.CentAmount);
             Assert.Equal("EUR", m.CurrencyCode);
+        }
+        
+        [Fact]
+        public void MoneyComparison()
+        {
+            var m1 = new Money() { CurrencyCode = "EUR", CentAmount = 1234, FractionDigits = 2 };
+            Money m2 = null;
+            
+            Assert.False(m1 == m2);
+            Assert.True(m1 != m2);
+            Assert.False(m1 > m2);
+            Assert.False(m1 < m2);
+            Assert.False(m1.Equals(m2));
         }
     }
 }
