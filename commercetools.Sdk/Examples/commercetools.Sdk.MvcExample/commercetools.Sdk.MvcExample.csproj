@@ -6,7 +6,7 @@
 
 
     <ItemGroup>
-      <PackageReference Include="commercetools.Sdk.All" Version="1.0.0-beta-3-630" />
+      <PackageReference Include="commercetools.Sdk.All" Version="1.1.4" />
     </ItemGroup>
 
 </Project>
