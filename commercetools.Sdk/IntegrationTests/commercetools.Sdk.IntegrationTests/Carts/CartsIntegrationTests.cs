@@ -12,8 +12,6 @@ using commercetools.Sdk.Domain.Products.UpdateActions;
 using commercetools.Sdk.Domain.Projects;
 using commercetools.Sdk.Domain.Projects.UpdateActions;
 using commercetools.Sdk.Domain.ShippingMethods;
-using commercetools.Sdk.Domain.Stores;
-using commercetools.Sdk.Domain.TaxCategories;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using commercetools.Sdk.IntegrationTests.CustomObjects;
 using Xunit;
@@ -32,6 +30,7 @@ using static commercetools.Sdk.IntegrationTests.Projects.ProjectFixture;
 using static commercetools.Sdk.IntegrationTests.Stores.StoresFixture;
 using static commercetools.Sdk.IntegrationTests.CartDiscounts.CartDiscountsFixture;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
+using SetKeyUpdateAction = commercetools.Sdk.Domain.Carts.UpdateActions.SetKeyUpdateAction;
 
 namespace commercetools.Sdk.IntegrationTests.Carts
 {
@@ -86,6 +85,20 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
+        [Fact]
+        public async Task GetCartByKey()
+        {
+            var key = $"GetCartByKey-{TestingUtility.RandomString()}";
+            await WithCart(
+                client, cartDraft => DefaultCartDraftWithKey(cartDraft, key),
+                async cart =>
+                {
+                    Assert.Equal(key, cart.Key);
+                    var retrievedCart = await client
+                        .ExecuteAsync(cart.ToKeyResourceIdentifier().GetByKey());
+                    Assert.Equal(key, retrievedCart.Key);
+                });
+        }
 
         [Fact]
         public async Task GetCartByIdExpandLineItemDiscount()
@@ -105,25 +118,26 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                                 .ExecuteAsync(cart
                                     .ToIdResourceIdentifier()
                                     .GetById()
-                                    .Expand("lineItems[*].discountedPricePerQuantity[*].discountedPrice.includedDiscounts[*].discount")
+                                    .Expand(
+                                        "lineItems[*].discountedPricePerQuantity[*].discountedPrice.includedDiscounts[*].discount")
                                 );
 
                             Assert.Equal(cart.Id, retrievedCart.Id);
                             var lineItem = retrievedCart.LineItems.FirstOrDefault();
                             Assert.NotNull(lineItem);
                             Assert.NotNull(lineItem.DiscountedPricePerQuantity);
-                            
+
                             var discountedPricePerQuantity = lineItem.DiscountedPricePerQuantity.FirstOrDefault();
                             Assert.NotNull(discountedPricePerQuantity);
-                            
+
                             var discountedPrice = discountedPricePerQuantity.DiscountedPrice;
                             Assert.NotNull(discountedPrice);
                             Assert.NotEmpty(discountedPrice.IncludedDiscounts);
-                            
+
                             var discountedLineItemPortion = discountedPrice.IncludedDiscounts.FirstOrDefault();
                             Assert.NotNull(discountedLineItemPortion);
                             Assert.NotNull(discountedLineItemPortion.Discount);
-                            
+
                             var discount = discountedLineItemPortion.Discount;
                             Assert.NotNull(discount.Obj);
                             Assert.Equal(cartDiscount.Key, discount.Obj.Key);
@@ -145,6 +159,28 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         var retrievedCart = await client
                             .ExecuteAsync(cart.ToIdResourceIdentifier().GetById().InStore(store.Key));
                         Assert.Equal(cart.Id, retrievedCart.Id);
+                        Assert.NotNull(retrievedCart.Store);
+                        Assert.Equal(store.Key, retrievedCart.Store.Key);
+                    });
+            });
+        }
+        
+        [Fact]
+        public async Task GetCartInStoreByKey()
+        {
+            var key = $"GetCartInStoreByKey-{TestingUtility.RandomString()}";
+            await WithStore(client, async store =>
+            {
+                await WithCart(
+                    client,
+                    cartDraft => DefaultCartDraftInStore(DefaultCartDraftWithKey(cartDraft, key), store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.NotNull(cart.Store);
+                        Assert.Equal(key, cart.Key);
+                        var retrievedCart = await client
+                            .ExecuteAsync(cart.ToKeyResourceIdentifier().GetByKey().InStore(store.Key));
+                        Assert.Equal(cart.Key, retrievedCart.Key);
                         Assert.NotNull(retrievedCart.Store);
                         Assert.Equal(store.Key, retrievedCart.Store.Key);
                     });
@@ -226,6 +262,30 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                     Assert.Equal(CartState.Active, replicatedCart.CartState);
                 });
         }
+        
+        [Fact]
+        public async Task ReplicateCartFromCartByKey()
+        {
+            var key = $"ReplicateCartFromCartByKey-{TestingUtility.RandomString()}";
+            await WithCart(
+                client, draft => DefaultCartDraftWithKey(draft, key),
+                async cart =>
+                {
+                    Assert.Equal(key, cart.Key);
+                    var cartReplicationDraft = new ReplicaCartDraft()
+                    {
+                        Reference = new Reference<Cart>() {Id = cart.Id},
+                        Key = cart.Key + "-replicated"
+                    };
+
+                    var replicatedCart = await client
+                        .ExecuteAsync(new ReplicateCartCommand(cartReplicationDraft));
+
+                    Assert.NotNull(replicatedCart);
+                    Assert.Equal(cart.Key+ "-replicated",replicatedCart.Key);
+                    Assert.Equal(CartState.Active, replicatedCart.CartState);
+                });
+        }
 
         [Fact]
         public async Task QueryCarts()
@@ -282,6 +342,22 @@ namespace commercetools.Sdk.IntegrationTests.Carts
         }
 
         [Fact]
+        public async Task DeleteCartByKey()
+        {
+            var key = $"DeleteCartByKey-{TestingUtility.RandomString()}";
+            await WithCart(
+                client, cartDraft => DefaultCartDraftWithKey(cartDraft, key),
+                async cart =>
+                {
+                    Assert.Equal(key, cart.Key);
+                    await client.ExecuteAsync(cart.DeleteByKey());
+                    await Assert.ThrowsAsync<NotFoundException>(
+                        () => client.ExecuteAsync(new GetByIdCommand<Cart>(cart))
+                    );
+                });
+        }
+
+        [Fact]
         public async Task DeleteCartInStoreById()
         {
             await WithStore(client, async store =>
@@ -293,6 +369,28 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                     {
                         Assert.NotNull(cart.Store);
                         await client.ExecuteAsync(cart.DeleteById().InStore(store.Key));
+                        await Assert.ThrowsAsync<NotFoundException>(
+                            () => client.ExecuteAsync(
+                                new GetByIdCommand<Cart>(cart).InStore(store.Key))
+                        );
+                    });
+            });
+        }
+        
+        [Fact]
+        public async Task DeleteCartInStoreByKey()
+        {
+            var key = $"DeleteCartInStoreByKey-{TestingUtility.RandomString()}";
+            await WithStore(client, async store =>
+            {
+                await WithCart(
+                    client,
+                    draft => DefaultCartDraftInStore(DefaultCartDraftWithKey(draft, key), store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.Equal(key, cart.Key);
+                        Assert.NotNull(cart.Store);
+                        await client.ExecuteAsync(cart.DeleteByKey().InStore(store.Key));
                         await Assert.ThrowsAsync<NotFoundException>(
                             () => client.ExecuteAsync(
                                 new GetByIdCommand<Cart>(cart).InStore(store.Key))
@@ -324,6 +422,49 @@ namespace commercetools.Sdk.IntegrationTests.Carts
         }
 
         [Fact]
+        public async void UpdateCartByKeySetCustomerEmail()
+        {
+            var email = $"{TestingUtility.RandomString()}@email.com";
+            var key = $"UpdateCartByKeySetCustomerEmail-{TestingUtility.RandomString()}";
+
+            await WithUpdateableCart(client, cartDraft => DefaultCartDraftWithKey(cartDraft, key),
+                async cart =>
+                {
+                    Assert.Equal(key,cart.Key);
+                    var action = new SetCustomerEmailUpdateAction
+                    {
+                        Email = email
+                    };
+
+                    var updatedCart = await client
+                        .ExecuteAsync(cart.UpdateByKey(actions => actions.AddUpdate(action)));
+
+                    Assert.Equal(email, updatedCart.CustomerEmail);
+                    return updatedCart;
+                });
+        }
+        
+        [Fact]
+        public async void UpdateCartSetKey()
+        {
+            var key = $"UpdateCartSetKey-{TestingUtility.RandomString()}";
+
+            await WithUpdateableCart(client, async cart =>
+            {
+                var action = new SetKeyUpdateAction
+                {
+                    Key= key
+                };
+
+                var updatedCart = await client
+                    .ExecuteAsync(cart.UpdateById(actions => actions.AddUpdate(action)));
+
+                Assert.Equal(key, updatedCart.Key);
+                return updatedCart;
+            });
+        }
+
+        [Fact]
         public async void UpdateCartInStoreSetCustomerEmail()
         {
             var email = $"{TestingUtility.RandomString()}@email.com";
@@ -346,6 +487,39 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                                 actions => actions.AddUpdate(action)).InStore(store.Key));
 
                         Assert.NotNull(updatedCart.Store);
+                        Assert.Equal(store.Key, updatedCart.Store.Key);
+                        Assert.Equal(email, updatedCart.CustomerEmail);
+                        return updatedCart;
+                    });
+            });
+        }
+        
+        [Fact]
+        public async void UpdateCartInStoreByKeySetCustomerEmail()
+        {
+            var key = $"UpdateCartInStoreByKeySetCustomerEmail-{TestingUtility.RandomString()}";
+            var email = $"{TestingUtility.RandomString()}@email.com";
+
+            await WithStore(client, async store =>
+            {
+                await WithUpdateableCart(client,
+                    draft => DefaultCartDraftInStore(DefaultCartDraftWithKey(draft, key), store.ToKeyResourceIdentifier()),
+                    async cart =>
+                    {
+                        Assert.Equal(key, cart.Key);
+                        Assert.NotNull(cart.Store);
+                        Assert.Equal(store.Key, cart.Store.Key);
+                        var action = new SetCustomerEmailUpdateAction
+                        {
+                            Email = email
+                        };
+
+                        var updatedCart = await client
+                            .ExecuteAsync(cart.UpdateByKey(
+                                actions => actions.AddUpdate(action)).InStore(store.Key));
+
+                        Assert.NotNull(updatedCart.Store);
+                        Assert.Equal(cart.Key,updatedCart.Key);
                         Assert.Equal(store.Key, updatedCart.Store.Key);
                         Assert.Equal(email, updatedCart.CustomerEmail);
                         return updatedCart;
@@ -1285,7 +1459,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                     return updatedCart;
                 });
         }
-        
+
         //[Fact]
         private async void UpdateCartSetShippingRateInputAsScore()
         {

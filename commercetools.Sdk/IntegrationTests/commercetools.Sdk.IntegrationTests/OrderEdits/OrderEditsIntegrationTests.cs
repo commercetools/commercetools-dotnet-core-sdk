@@ -17,6 +17,7 @@ using AddPaymentUpdateAction = commercetools.Sdk.Domain.Orders.UpdateActions.Add
 using SetCustomerEmailUpdateAction = commercetools.Sdk.Domain.Orders.UpdateActions.SetCustomerEmailUpdateAction;
 using SetCustomFieldUpdateAction = commercetools.Sdk.Domain.OrderEdits.UpdateActions.SetCustomFieldUpdateAction;
 using SetCustomTypeUpdateAction = commercetools.Sdk.Domain.OrderEdits.UpdateActions.SetCustomTypeUpdateAction;
+using SetKeyUpdateAction = commercetools.Sdk.Domain.OrderEdits.UpdateActions.SetKeyUpdateAction;
 using SetLocaleUpdateAction = commercetools.Sdk.Domain.Orders.UpdateActions.SetLocaleUpdateAction;
 
 namespace commercetools.Sdk.IntegrationTests.OrderEdits
