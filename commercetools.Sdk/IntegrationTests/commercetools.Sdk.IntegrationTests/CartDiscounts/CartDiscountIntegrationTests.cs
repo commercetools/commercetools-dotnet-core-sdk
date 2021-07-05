@@ -16,7 +16,6 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
     [Collection("Integration Tests")]
     public class CartDiscountIntegrationTests
     {
-        const string skip = "skipped now to solve ci build";
         private readonly IClient client;
 
         public CartDiscountIntegrationTests(ServiceProviderFixture serviceProviderFixture)
@@ -24,7 +23,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             this.client = serviceProviderFixture.GetService<IClient>();
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task CreateCartDiscount()
         {
             var key = $"CreateCartDiscount-{TestingUtility.RandomString()}";
@@ -33,7 +32,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                 cartDiscount => { Assert.Equal(key, (string) cartDiscount.Key); });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task CreateCartDiscountWithFixedValue()
         {
             var key = $"CreateCartDiscount-{TestingUtility.RandomString()}";
@@ -59,7 +58,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
         }
 
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetCartDiscountById()
         {
             var key = $"GetCartDiscountById-{TestingUtility.RandomString()}";
@@ -73,7 +72,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetCartDiscountByKey()
         {
             var key = $"GetCartDiscountByKey-{TestingUtility.RandomString()}";
@@ -87,7 +86,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetMultiBuyLineItemCartDiscount()
         {
             await WithCartDiscount(
@@ -110,7 +109,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetMultiBuyCustomLineItemCartDiscount()
         {
             await WithCartDiscount(
@@ -133,7 +132,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task QueryCartDiscounts()
         {
             var key = $"QueryCartDiscounts-{TestingUtility.RandomString()}";
@@ -149,7 +148,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task DeleteCartDiscountById()
         {
             var key = $"DeleteCartDiscountById-{TestingUtility.RandomString()}";
@@ -164,7 +163,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task DeleteCartDiscountByKey()
         {
             var key = $"DeleteCartDiscountByKey-{TestingUtility.RandomString()}";
@@ -181,7 +180,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
 
         #region UpdateActions
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartDiscountSetKey()
         {
             var newKey = $"UpdateCartDiscountSetKey-{TestingUtility.RandomString()}";
@@ -199,7 +198,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartDiscountChangeValue()
         {
             var newAbsoluteValue = TestingUtility.GetRandomAbsoluteCartDiscountValue();
@@ -221,7 +220,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartDiscountChangeCartPredicate()
         {
             var newCartPredicate = "1 <> 1";
@@ -244,7 +243,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartDiscountChangeTarget()
         {
             var newCartDiscountTarget = new LineItemsCartDiscountTarget() {Predicate = " 1 <> 1"};
@@ -268,7 +267,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartDiscountChangeIsActive()
         {
             await WithUpdateableCartDiscount(client, async cartDiscount =>
@@ -286,7 +285,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartDiscountChangeName()
         {
             await WithUpdateableCartDiscount(client, async cartDiscount =>
@@ -304,7 +303,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartDiscountSetDescription()
         {
             await WithUpdateableCartDiscount(client, async cartDiscount =>
@@ -322,7 +321,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartDiscountChangeSortOrder()
         {
             await WithUpdateableCartDiscount(client, async cartDiscount =>
@@ -340,7 +339,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartDiscountChangeRequiresDiscountCode()
         {
             await WithUpdateableCartDiscount(client, async cartDiscount =>
@@ -359,7 +358,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartDiscountSetValidFrom()
         {
             await WithUpdateableCartDiscount(client, async cartDiscount =>
@@ -376,7 +375,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartDiscountSetValidUntil()
         {
             await WithUpdateableCartDiscount(client, async cartDiscount =>
@@ -393,7 +392,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartDiscountSetValidFromAndUntil()
         {
             await WithUpdateableCartDiscount(client, async cartDiscount =>
@@ -418,7 +417,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartDiscountChangeStackingMode()
         {
             await WithUpdateableCartDiscount(client, async cartDiscount =>
@@ -436,7 +435,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartDiscountSetCustomType()
         {
             var fields = CreateNewFields();
@@ -463,7 +462,7 @@ namespace commercetools.Sdk.IntegrationTests.CartDiscounts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartDiscountSetCustomField()
         {
             var fields = CreateNewFields();

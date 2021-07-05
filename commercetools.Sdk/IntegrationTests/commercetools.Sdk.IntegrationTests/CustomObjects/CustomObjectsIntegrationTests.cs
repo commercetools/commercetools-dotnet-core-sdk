@@ -14,7 +14,6 @@ namespace commercetools.Sdk.IntegrationTests.CustomObjects
     [Collection("Integration Tests")]
     public class CustomObjectsIntegrationTests
     {
-        const string skip = "skipped now to solve ci build";
         private readonly IClient client;
 
         public CustomObjectsIntegrationTests(ServiceProviderFixture serviceProviderFixture)
@@ -22,7 +21,7 @@ namespace commercetools.Sdk.IntegrationTests.CustomObjects
             this.client = serviceProviderFixture.GetService<IClient>();
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task CreateCustomObjectAsFooBar()
         {
             var key = $"FooBar-{TestingUtility.RandomString()}";
@@ -37,7 +36,7 @@ namespace commercetools.Sdk.IntegrationTests.CustomObjects
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task CreateCustomObjectAsString()
         {
             var key = $"FooBar-{TestingUtility.RandomString()}";
@@ -52,7 +51,7 @@ namespace commercetools.Sdk.IntegrationTests.CustomObjects
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetCustomObjectById()
         {
             var key = $"FooBar-{TestingUtility.RandomString()}";
@@ -72,7 +71,7 @@ namespace commercetools.Sdk.IntegrationTests.CustomObjects
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetCustomObjectByContainerAndKey()
         {
             var fooBar = new FooBar();
@@ -94,7 +93,7 @@ namespace commercetools.Sdk.IntegrationTests.CustomObjects
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCustomObject()
         {
             var key = $"FooBar-{TestingUtility.RandomString()}";
@@ -118,7 +117,7 @@ namespace commercetools.Sdk.IntegrationTests.CustomObjects
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task DeleteCustomObjectById()
         {
             var key = $"FooBar-{TestingUtility.RandomString()}";
@@ -137,7 +136,7 @@ namespace commercetools.Sdk.IntegrationTests.CustomObjects
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task DeleteCustomObjectByContainerAndKey()
         {
             var key = $"FooBar-{TestingUtility.RandomString()}";
@@ -156,7 +155,7 @@ namespace commercetools.Sdk.IntegrationTests.CustomObjects
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task QueryCustomObjectsByContainer()
         {
             //Create container with 5 Custom FooBar Objects and container with 3 Foo Objects
@@ -184,7 +183,7 @@ namespace commercetools.Sdk.IntegrationTests.CustomObjects
                 });
         }
         
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task QueryCustomObjectsByContainerUsingCommandBuilder()
         {
             //Create container with 5 Custom FooBar Objects and container with 3 Foo Objects
@@ -216,7 +215,7 @@ namespace commercetools.Sdk.IntegrationTests.CustomObjects
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task QueryAllCustomObjects()
         {
             //Create container with 5 Custom FooBar Objects and container with 3 Foo Objects
@@ -256,7 +255,7 @@ namespace commercetools.Sdk.IntegrationTests.CustomObjects
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task QueryDifferentTypesOfCustomObjectsInTheSameContainer()
         {
             string containerName = $"MixedContainer{TestingUtility.RandomInt()}";

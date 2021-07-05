@@ -16,7 +16,6 @@ namespace commercetools.Sdk.IntegrationTests.APIExtensions
     [Collection("Integration Tests")]
     public class ApiExtensionsIntegrationTests
     {
-        const string skip = "skipped now to solve ci build";
         private readonly IClient client;
 
         public ApiExtensionsIntegrationTests(ServiceProviderFixture serviceProviderFixture)
@@ -24,7 +23,7 @@ namespace commercetools.Sdk.IntegrationTests.APIExtensions
             this.client = serviceProviderFixture.GetService<IClient>();
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task CreateExtension()
         {
             await WithExtension(
@@ -38,7 +37,7 @@ namespace commercetools.Sdk.IntegrationTests.APIExtensions
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task CreateExtensionForCart()
         {
             await WithExtension(
@@ -54,7 +53,7 @@ namespace commercetools.Sdk.IntegrationTests.APIExtensions
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetExtensionById()
         {
             await WithExtension(
@@ -68,7 +67,7 @@ namespace commercetools.Sdk.IntegrationTests.APIExtensions
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetExtensionByKey()
         {
             await WithExtension(
@@ -82,7 +81,7 @@ namespace commercetools.Sdk.IntegrationTests.APIExtensions
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task QueryExtensions()
         {
             await WithExtension(
@@ -97,7 +96,7 @@ namespace commercetools.Sdk.IntegrationTests.APIExtensions
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task DeleteExtensionById()
         {
             await WithExtension(
@@ -111,7 +110,7 @@ namespace commercetools.Sdk.IntegrationTests.APIExtensions
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task DeleteExtensionByKey()
         {
             await WithExtension(
@@ -127,7 +126,7 @@ namespace commercetools.Sdk.IntegrationTests.APIExtensions
 
         #region UpdateActions
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateExtensionSetKey()
         {
             var newKey = $"UpdateExtensionSetKey-{TestingUtility.RandomString()}";
@@ -145,7 +144,7 @@ namespace commercetools.Sdk.IntegrationTests.APIExtensions
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateExtensionByKeySetTimeoutInMs()
         {
             await WithUpdateableExtension(client, async extension =>
@@ -164,7 +163,7 @@ namespace commercetools.Sdk.IntegrationTests.APIExtensions
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateExtensionChangeTriggers()
         {
             await WithUpdateableExtension(client,
@@ -202,7 +201,7 @@ namespace commercetools.Sdk.IntegrationTests.APIExtensions
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateExtensionChangeDestination()
         {
             await WithUpdateableExtension(client, async extension =>
@@ -235,7 +234,7 @@ namespace commercetools.Sdk.IntegrationTests.APIExtensions
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateExtensionChangeDestinationWithAzureFunction()
         {
             await WithUpdateableExtension(client, async extension =>
