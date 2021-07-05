@@ -29,7 +29,6 @@ namespace commercetools.Sdk.IntegrationTests.Orders
     [Collection("Integration Tests")]
     public class OrdersIntegrationTests
     {
-        const string skip = "skipped now to solve ci build";
         private readonly IClient client;
 
         public OrdersIntegrationTests(ServiceProviderFixture serviceProviderFixture)
@@ -37,7 +36,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             this.client = serviceProviderFixture.GetService<IClient>();
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void CreateOrderFromCart()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -55,7 +54,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void CreateOrderFromCartInStore()
         {
             await WithStore(client, async store =>
@@ -82,7 +81,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void GetOrderById()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -100,7 +99,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetOrderByIdExpandLineItemDiscount()
         {
             var key = $"CreateCartDiscount-{TestingUtility.RandomString()}";
@@ -155,7 +154,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void GetOrderInStoreById()
         {
             await WithStore(client, async store =>
@@ -183,7 +182,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void GetOrderByOrderNumber()
         {
             var orderNumber = TestingUtility.RandomString();
@@ -206,7 +205,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void GetOrderInStoreByOrderNumber()
         {
             var orderNumber = TestingUtility.RandomString();
@@ -241,7 +240,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void QueryOrders()
         {
             var orderNumber = TestingUtility.RandomString();
@@ -264,7 +263,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void QueryOrdersInStore()
         {
             var orderNumber = TestingUtility.RandomString();
@@ -298,7 +297,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void QueryOrdersAndExpandCart()
         {
             var orderNumber = TestingUtility.RandomString();
@@ -324,7 +323,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void QueryAndSortOrders()
         {
             var email = $"joe{TestingUtility.RandomString()}@example.com";
@@ -371,7 +370,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void QueryAndLimitOrders()
         {
             var email = $"joe{TestingUtility.RandomString()}@example.com";
@@ -417,7 +416,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void DeleteOrderById()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -435,7 +434,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void DeleteOrderInStoreById()
         {
             await WithStore(client, async store =>
@@ -461,7 +460,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void DeleteOrderByOrderNumber()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -479,7 +478,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void DeleteOrderInStoreByOrderNumber()
         {
             await WithStore(client, async store =>
@@ -510,7 +509,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
 
         #region UpdateActions
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderByOrderNumberChangeOrderState()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -541,7 +540,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderInStoreByOrderNumberChangeOrderState()
         {
             await WithStore(client, async store =>
@@ -583,7 +582,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderByOrderNumberChangeShipmentState()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -614,7 +613,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderByIdChangePaymentState()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -642,7 +641,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderInStoreByIdChangePaymentState()
         {
             await WithStore(client, async store =>
@@ -682,7 +681,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderUpdateSyncInfo()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -726,7 +725,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderByIdAddReturnInfo()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -768,7 +767,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetReturnShipmentState()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -823,7 +822,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetReturnPaymentState()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -879,7 +878,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderChangeStateOfLineItem()
         {
             var quantity = 2;
@@ -925,7 +924,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderChangeStateOfCustomLineItem()
         {
             var quantity = 2;
@@ -970,7 +969,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderImportStateForLineItems()
         {
             var states = GetStandardStates(client);
@@ -1020,7 +1019,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderImportStateForCustomLineItems()
         {
             var states = GetStandardStates(client);
@@ -1070,7 +1069,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderAddDelivery()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -1131,7 +1130,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetDeliveryAddress()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -1204,7 +1203,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderAddParcel()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -1272,7 +1271,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetOrderNumber()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -1299,7 +1298,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderTransitionToNewState()
         {
             await WithState(client,
@@ -1330,7 +1329,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetCustomerEmail()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -1356,7 +1355,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetCustomerId()
         {
             await WithCustomer(client, async customer =>
@@ -1384,7 +1383,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetShippingAddress()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -1417,7 +1416,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetBillingAddress()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -1450,7 +1449,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderByIdSetCustomType()
         {
             var fields = CreateNewFields();
@@ -1480,7 +1479,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderByIdSetCustomField()
         {
             var fields = CreateNewFields();
@@ -1521,7 +1520,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetLineItemCustomType()
         {
             var fields = CreateNewFields();
@@ -1555,7 +1554,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetLineItemCustomField()
         {
             var fields = CreateNewFields();
@@ -1607,7 +1606,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetCustomLineItemCustomType()
         {
             var fields = CreateNewFields();
@@ -1641,7 +1640,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetCustomLineItemCustomField()
         {
             var fields = CreateNewFields();
@@ -1694,7 +1693,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderAddPayment()
         {
             await WithPayment(client, async payment =>
@@ -1725,7 +1724,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderRemovePayment()
         {
             await WithPayment(client, async payment =>
@@ -1767,7 +1766,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetLocale()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -1797,7 +1796,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetDeliveryItems()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -1868,7 +1867,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderRemoveParcelFromDelivery()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -1936,7 +1935,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderRemoveDelivery()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -1992,7 +1991,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetParcelMeasurements()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -2066,7 +2065,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetParcelTrackingData()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -2146,7 +2145,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetParcelItems()
         {
             await WithCartWithSingleLineItem(client, 2, DefaultCartDraft,
@@ -2228,7 +2227,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetLineItemShippingDetails()
         {
             var addresses = new List<Address> {TestingUtility.GetRandomAddress()};
@@ -2270,7 +2269,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderSetCustomLineItemShippingDetails()
         {
             var addresses = new List<Address> {TestingUtility.GetRandomAddress()};
@@ -2312,7 +2311,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderAddItemShippingAddress()
         {
             var address = TestingUtility.GetRandomAddress();
@@ -2342,7 +2341,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderRemoveItemShippingAddress()
         {
             var addresses = new List<Address> {TestingUtility.GetRandomAddress()};
@@ -2370,7 +2369,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateOrderUpdateItemShippingAddress()
         {
             var addresses = new List<Address> {TestingUtility.GetRandomAddress()};

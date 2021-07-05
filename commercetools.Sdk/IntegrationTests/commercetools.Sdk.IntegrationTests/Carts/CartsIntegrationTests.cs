@@ -37,8 +37,6 @@ namespace commercetools.Sdk.IntegrationTests.Carts
     [Collection("Integration Tests")]
     public class CartsIntegrationTests
     {
-        const string skip = "skipped now to solve ci build";
-        
         private readonly IClient client;
 
         public CartsIntegrationTests(ServiceProviderFixture serviceProviderFixture)
@@ -46,7 +44,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             this.client = serviceProviderFixture.GetService<IClient>();
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task CreateCart()
         {
             await WithCart(
@@ -58,7 +56,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task CreateCartInStore()
         {
             await WithStore(client, async store =>
@@ -74,7 +72,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetCartById()
         {
             await WithCart(
@@ -87,7 +85,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetCartByKey()
         {
             var key = $"GetCartByKey-{TestingUtility.RandomString()}";
@@ -102,7 +100,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetCartByIdExpandLineItemDiscount()
         {
             var key = $"CreateCartDiscount-{TestingUtility.RandomString()}";
@@ -147,7 +145,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetCartInStoreById()
         {
             await WithStore(client, async store =>
@@ -167,7 +165,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
         
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetCartInStoreByKey()
         {
             var key = $"GetCartInStoreByKey-{TestingUtility.RandomString()}";
@@ -189,7 +187,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetCartByCustomerId()
         {
             await WithCustomer(client, async customer =>
@@ -210,7 +208,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task GetCartInStoreByCustomerId()
         {
             await WithStore(client, async store =>
@@ -245,7 +243,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
         }
 
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task ReplicateCartFromCart()
         {
             await WithCart(
@@ -265,7 +263,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
         
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task ReplicateCartFromCartByKey()
         {
             var key = $"ReplicateCartFromCartByKey-{TestingUtility.RandomString()}";
@@ -289,7 +287,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task QueryCarts()
         {
             await WithCart(
@@ -304,7 +302,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task QueryCartsInStore()
         {
             await WithStore(client, async store =>
@@ -329,7 +327,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task DeleteCartById()
         {
             await WithCart(
@@ -343,7 +341,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task DeleteCartByKey()
         {
             var key = $"DeleteCartByKey-{TestingUtility.RandomString()}";
@@ -359,7 +357,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task DeleteCartInStoreById()
         {
             await WithStore(client, async store =>
@@ -379,7 +377,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
         
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task DeleteCartInStoreByKey()
         {
             var key = $"DeleteCartInStoreByKey-{TestingUtility.RandomString()}";
@@ -403,7 +401,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
 
         #region UpdateActions
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartSetCustomerEmail()
         {
             var email = $"{TestingUtility.RandomString()}@email.com";
@@ -423,7 +421,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartByKeySetCustomerEmail()
         {
             var email = $"{TestingUtility.RandomString()}@email.com";
@@ -446,7 +444,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
         
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartSetKey()
         {
             var key = $"UpdateCartSetKey-{TestingUtility.RandomString()}";
@@ -466,7 +464,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartInStoreSetCustomerEmail()
         {
             var email = $"{TestingUtility.RandomString()}@email.com";
@@ -496,7 +494,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
         
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartInStoreByKeySetCustomerEmail()
         {
             var key = $"UpdateCartInStoreByKeySetCustomerEmail-{TestingUtility.RandomString()}";
@@ -529,7 +527,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartSetShippingAddress()
         {
             await WithUpdateableCart(client, async cart =>
@@ -549,7 +547,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartSetBillingAddress()
         {
             await WithUpdateableCart(client, async cart =>
@@ -569,7 +567,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartSetCountry()
         {
             await WithUpdateableCart(client, async cart =>
@@ -589,7 +587,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartSetShippingMethod()
         {
             var shippingAddress = TestingUtility.GetRandomAddress();
@@ -618,7 +616,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartSetCustomShippingMethod()
         {
             var shippingAddress = TestingUtility.GetRandomAddress();
@@ -653,7 +651,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartAddDiscountCode()
         {
             var code = TestingUtility.RandomString();
@@ -680,7 +678,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartRemoveDiscountCode()
         {
             var code = TestingUtility.RandomString();
@@ -719,7 +717,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartSetCustomerGroup()
         {
             await WithCustomerGroup(client, async customerGroup =>
@@ -742,7 +740,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetCustomType()
         {
             var fields = CreateNewFields();
@@ -767,7 +765,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetCustomField()
         {
             var fields = CreateNewFields();
@@ -793,7 +791,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartCustomFieldAsCustomObject()
         {
             var fooBar = new FooBar();
@@ -840,7 +838,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartChangeTaxMode()
         {
             await WithUpdateableCart(client, cartDraft =>
@@ -862,7 +860,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartSetShippingMethodTaxAmount()
         {
             //A shipping method tax amount can be set if the cart has the ExternalAmount TaxMode.
@@ -907,7 +905,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartSetShippingMethodTaxRate()
         {
             //A shipping method tax rate can be set if the cart has the External TaxMode.
@@ -952,7 +950,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartChangeTaxRoundingMode()
         {
             await WithUpdateableCart(client, cartDraft =>
@@ -974,7 +972,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async void UpdateCartChangeTaxCalculationMode()
         {
             await WithUpdateableCart(client, cartDraft =>
@@ -997,7 +995,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartAddShoppingList()
         {
             await WithTaxCategory(client, async taxCategory =>
@@ -1036,7 +1034,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetCustomerId()
         {
             await WithCustomer(client, async customer =>
@@ -1060,7 +1058,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetAnonymousId()
         {
             await WithUpdateableCart(client,
@@ -1081,7 +1079,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartRecalculate()
         {
             await WithTaxCategory(client, async taxCategory =>
@@ -1164,7 +1162,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartRecalculateProductData()
         {
             await WithTaxCategory(client, async taxCategory =>
@@ -1255,7 +1253,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartAddPayment()
         {
             await WithPayment(client, async payment =>
@@ -1279,7 +1277,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartRemovePayment()
         {
             await WithPayment(client, async payment =>
@@ -1316,7 +1314,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetTotalTax()
         {
             await WithUpdateableCart(client,
@@ -1344,7 +1342,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetLocale()
         {
             await WithUpdateableCart(client, async cart =>
@@ -1369,7 +1367,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetDeleteDaysAfterLastModification()
         {
             await WithUpdateableCart(client, async cart =>
@@ -1388,7 +1386,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartAddItemShippingAddress()
         {
             await WithUpdateableCart(client, async cart =>
@@ -1410,7 +1408,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartRemoveItemShippingAddress()
         {
             var addresses = new List<Address> {TestingUtility.GetRandomAddress()};
@@ -1433,7 +1431,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartUpdateItemShippingAddress()
         {
             var oldAddress = TestingUtility.GetRandomAddress();
@@ -1462,7 +1460,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        //[Fact(Skip = skip)]
+        //[Fact]
         private async void UpdateCartSetShippingRateInputAsScore()
         {
             var shippingRateInputType = new CartScoreShippingRateInputType();
@@ -1531,7 +1529,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        //[Fact(Skip = skip)]
+        //[Fact]
         private async void UpdateCartSetShippingRateInputAsClassification()
         {
             var shippingAddress = new Address {Country = "DE"};
@@ -1614,7 +1612,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
 
         #region UpdateActionsOnLineItems
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartAddLineItemByProductId()
         {
             await WithTaxCategory(client, async taxCategory =>
@@ -1652,7 +1650,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartAddLineItemBySku()
         {
             await WithTaxCategory(client, async taxCategory =>
@@ -1688,7 +1686,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartRemoveLineItem()
         {
             var quantity = 5;
@@ -1715,7 +1713,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartRemoveLineItemDecreasesQuantity()
         {
             var quantity = 5;
@@ -1744,7 +1742,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartChangeLineItemQuantity()
         {
             var quantity = 5;
@@ -1774,7 +1772,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetLineItemTaxRate()
         {
             var quantity = 5;
@@ -1805,7 +1803,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetLineItemTaxAmount()
         {
             var quantity = 5;
@@ -1835,7 +1833,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetLineItemPrice()
         {
             var quantity = 5;
@@ -1867,7 +1865,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetLineItemTotalPrice()
         {
             var quantity = 5;
@@ -1905,7 +1903,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetLineItemCustomType()
         {
             var quantity = 5;
@@ -1937,7 +1935,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetLineItemCustomField()
         {
             await WithTaxCategory(client, async taxCategory =>
@@ -1994,7 +1992,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetLineItemShippingDetails()
         {
             var quantity = 5;
@@ -2033,7 +2031,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartApplyDeltaToLineItemShippingDetailsTargets()
         {
             var quantity = 5;
@@ -2075,7 +2073,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
 
         #region UpdateActionsOnCustomLineItem
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartAddCustomLineItem()
         {
             await WithTaxCategory(client, async taxCategory =>
@@ -2107,7 +2105,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartRemoveCustomLineItem()
         {
             await WithUpdateableCartWithSingleCustomLineItem(client, DefaultCartDraft,
@@ -2130,7 +2128,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartChangeCustomLineItemQuantity()
         {
             await WithUpdateableCartWithSingleCustomLineItem(client, DefaultCartDraft,
@@ -2156,7 +2154,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartChangeCustomLineItemMoney()
         {
             await WithUpdateableCartWithSingleCustomLineItem(client, DefaultCartDraft,
@@ -2182,7 +2180,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetCustomLineItemCustomType()
         {
             await WithType(client, async type =>
@@ -2212,7 +2210,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetCustomLineItemCustomField()
         {
             await WithTaxCategory(client, async taxCategory =>
@@ -2260,7 +2258,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetCustomLineItemTaxRate()
         {
             await WithUpdateableCartWithSingleCustomLineItem(client,
@@ -2290,7 +2288,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetCustomLineItemTaxAmount()
         {
             await WithUpdateableCartWithSingleCustomLineItem(client,
@@ -2318,7 +2316,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartSetCustomLineItemShippingDetails()
         {
             var addresses = new List<Address> {TestingUtility.GetRandomAddress()};
@@ -2356,7 +2354,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                 });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public async Task UpdateCartApplyDeltaToCustomLineItemShippingDetailsTargets()
         {
             var addresses = new List<Address> {TestingUtility.GetRandomAddress()};
