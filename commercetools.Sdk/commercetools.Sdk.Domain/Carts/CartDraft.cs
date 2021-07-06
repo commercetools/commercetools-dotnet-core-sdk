@@ -11,6 +11,8 @@ namespace commercetools.Sdk.Domain.Carts
 
     public class CartDraft : IDraft<Cart>
     {
+        public string Key { get; set; }
+        
         [Required]
         [Currency]
         public string Currency { get; set; }

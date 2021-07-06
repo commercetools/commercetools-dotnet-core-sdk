@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
@@ -12,13 +11,13 @@ using static commercetools.Sdk.IntegrationTests.GenericFixture;
 namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
 {
     [Collection("Integration Tests")]
-    public class ProductProjectionsIntegrationTests : IClassFixture<ProductProjectionSearchFixture>
+    public class ProductProjectionsSearchIntegrationTests : IClassFixture<ProductProjectionSearchFixture>
     {
         private readonly string NotReadyForSearchMessage = "Products still not indexed yet and not ready for search";
         private readonly IClient client;
         private readonly ProductProjectionSearchFixture fixture;
 
-        public ProductProjectionsIntegrationTests(ProductProjectionSearchFixture fixture)
+        public ProductProjectionsSearchIntegrationTests(ProductProjectionSearchFixture fixture)
         {
             this.fixture = fixture;
             this.client = this.fixture.ServiceProviderFixture.GetService<IClient>();

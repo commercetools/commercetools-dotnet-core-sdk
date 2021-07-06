@@ -28,7 +28,15 @@ namespace commercetools.Sdk.IntegrationTests.Carts
 
         public static CartDraft DefaultCartDraft(CartDraft cartDraft)
         {
+            var randomInt = TestingUtility.RandomInt();
             cartDraft.Currency = DefaultCurrency;
+            cartDraft.Key = $"Key{randomInt}";
+            return cartDraft;
+        }
+        public static CartDraft DefaultCartDraftWithKey(CartDraft draft, string key)
+        {
+            var cartDraft = DefaultCartDraft(draft);
+            cartDraft.Key = key;
             return cartDraft;
         }
 

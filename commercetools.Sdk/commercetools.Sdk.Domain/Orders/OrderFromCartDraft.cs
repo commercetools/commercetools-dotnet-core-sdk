@@ -8,7 +8,10 @@ namespace commercetools.Sdk.Domain.Orders
 {
     public class OrderFromCartDraft : IDraft<Order>
     {
+        [Obsolete("Deprecated the id field in favor of the cart field")]
         public string Id { get; set; }
+        
+        public ResourceIdentifier<Cart> Cart { get; set; }
         public int Version { get; set; }
         public string OrderNumber { get; set; }
         public OrderState OrderState { get; set; }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
+using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.Orders;
@@ -17,7 +18,7 @@ namespace commercetools.Sdk.IntegrationTests.Orders
         public static OrderFromCartDraft DefaultOrderFromCartDraft(OrderFromCartDraft orderFromCartDraft, Cart cart)
         {
             var rand = TestingUtility.RandomInt();
-            orderFromCartDraft.Id = cart.Id;
+            orderFromCartDraft.Cart = cart.ToKeyResourceIdentifier();
             orderFromCartDraft.Version = cart.Version;
             orderFromCartDraft.OrderNumber = $"Order_{rand}";
             return orderFromCartDraft;
