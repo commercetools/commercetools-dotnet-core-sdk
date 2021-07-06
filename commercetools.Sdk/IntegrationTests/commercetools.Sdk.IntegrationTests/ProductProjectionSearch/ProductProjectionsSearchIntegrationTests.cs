@@ -13,7 +13,6 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
     [Collection("Integration Tests")]
     public class ProductProjectionsSearchIntegrationTests : IClassFixture<ProductProjectionSearchFixture>
     {
-        const string skip = "skipped now to solve ci build";
         private readonly string NotReadyForSearchMessage = "Products still not indexed yet and not ready for search";
         private readonly IClient client;
         private readonly ProductProjectionSearchFixture fixture;
@@ -24,7 +23,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             this.client = this.fixture.ServiceProviderFixture.GetService<IClient>();
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void SearchByFullLocale()
         {
             //check if products are indexed
@@ -61,7 +60,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void SearchWithFuzzyLevel()
         {
             //check if products are indexed
@@ -99,7 +98,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
 
         #region Filters
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterBySpecificCategoriesWithReferenceExpansion()
         {
             //check if products are indexed
@@ -133,7 +132,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByCategoriesExists()
         {
             //check if products are indexed
@@ -167,7 +166,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByCategoriesMissing()
         {
             //check if products are indexed
@@ -201,7 +200,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterBySpecificCategorySubtree()
         {
             //check if products are indexed
@@ -245,7 +244,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByMoreThanOneCategorySubtree()
         {
             //check if products are indexed
@@ -292,7 +291,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByOneCategorySubtreeAndTwoIds()
         {
             //check if products are indexed
@@ -340,7 +339,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
         }
 
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByPrice()
         {
             //check if products are indexed
@@ -406,7 +405,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByPricesMissing()
         {
             //check if products are indexed
@@ -444,7 +443,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByPricesExists()
         {
             //check if products are indexed
@@ -483,7 +482,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
         }
 
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByScopedPriceValue()
         {
             //check if products are indexed
@@ -523,7 +522,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByScopedPriceCurrentValue()
         {
             //check if products are indexed
@@ -567,7 +566,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByScopedPriceDiscountedValue()
         {
             //check if products are indexed
@@ -611,7 +610,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByScopedPriceDiscounted()
         {
             //check if products are indexed
@@ -655,7 +654,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
         }
 
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterBySpecificSku()
         {
             //check if products are indexed
@@ -684,7 +683,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterBySkuMissing()
         {
             //check if products are indexed
@@ -720,7 +719,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterBySkuExists()
         {
             //check if products are indexed
@@ -757,7 +756,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
         }
 
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterBySpecificProductKey()
         {
             //check if products are indexed
@@ -785,7 +784,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByProductKeyMissing()
         {
             //check if products are indexed
@@ -821,7 +820,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByProductKeyExists()
         {
             //check if products are indexed
@@ -858,7 +857,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
         }
 
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByProductVariantKey()
         {
             //check if products are indexed
@@ -887,7 +886,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByProductVariantKeyMissing()
         {
             //check if products are indexed
@@ -922,7 +921,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByProductVariantKeyExists()
         {
             //check if products are indexed
@@ -958,7 +957,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
         }
 
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByProductTypeWithReferenceExpansion()
         {
             //check if products are indexed
@@ -995,7 +994,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterBySpecificTaxCategory()
         {
             //check if products are indexed
@@ -1030,7 +1029,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByTaxCategoryMissing()
         {
             //check if products are indexed
@@ -1068,7 +1067,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByTaxCategoryExists()
         {
             //check if products are indexed
@@ -1107,7 +1106,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
         }
 
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterBySpecificState()
         {
             //check if products are indexed
@@ -1140,7 +1139,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             Assert.Contains(searchResultsUsingFilter.Results, p => p.Id == productWithState.Id);
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByStateMissing()
         {
             //check if products are indexed
@@ -1177,7 +1176,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByStateExists()
         {
             //check if products are indexed
@@ -1214,7 +1213,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByReviewRatingStatistics()
         {
             //check if products are indexed
@@ -1246,7 +1245,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByCustomAttributeValue()
         {
             //check if products are indexed
@@ -1307,7 +1306,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
         }
 
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByCustomAttributeMissing()
         {
             //check if products are indexed
@@ -1345,7 +1344,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByCustomAttributeExists()
         {
             //check if products are indexed
@@ -1383,7 +1382,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByEnumCustomAttribute()
         {
             //check if products are indexed
@@ -1420,7 +1419,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
         }
 
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByMoneyCustomAttributeValue()
         {
             //check if products are indexed
@@ -1480,7 +1479,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
         }
 
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByReferenceCustomAttribute()
         {
             //check if products are indexed
@@ -1524,7 +1523,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
         }
 
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByProductAvailability()
         {
             //check if products are indexed
@@ -1589,7 +1588,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterProductsOnStockWithChannel()
         {
             //check if products are indexed
@@ -1640,7 +1639,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterProductsByAvailabilityRangeWithChannel()
         {
             //check if products are indexed
@@ -1680,7 +1679,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterProductsOnStockWithSpecificChannels()
         {
             //check if products are indexed
@@ -1727,7 +1726,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
         }
 
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void FilterByProductSearchKeywords()
         {
             //check if products are indexed
@@ -1762,7 +1761,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
 
         #region Facets
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void TestTermFacetWithProductCategories()
         {
             //check if products are indexed
@@ -1805,7 +1804,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void TestTermFacetNumberAttribute()
         {
             //check if products are indexed
@@ -1856,7 +1855,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void TestTermFacetCustomMoneyAttributeValue()
         {
             //check if products are indexed
@@ -1909,7 +1908,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void TestTermFacetAvailableQuantityInChannels()
         {
             //check if products are indexed
@@ -1978,7 +1977,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void TestRangeFacetByProductAvailabilityInChannel()
         {
             //check if products are indexed
@@ -2041,7 +2040,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void TestRangeFacetByPriceCentAmount()
         {
             //check if products are indexed
@@ -2101,7 +2100,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
         }
 
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void TestFilteredFacetWithProductCategories()
         {
             //check if products are indexed
@@ -2155,7 +2154,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void TestFilteredFacetByPriceCentAmount()
         {
             //check if products are indexed
@@ -2212,7 +2211,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void TestFilteredFacetNumberAttribute()
         {
             //check if products are indexed
@@ -2264,7 +2263,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
 
         #region Sort
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void SortByName()
         {
             //check if products are indexed
@@ -2301,7 +2300,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void SortByProductAvailability()
         {
             //check if products are indexed
@@ -2338,7 +2337,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void SortByProductAvailabilityWithSupplyChannel()
         {
             //check if products are indexed
@@ -2379,7 +2378,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void SortByProductRestockableInDaysInChannel()
         {
             //check if products are indexed
@@ -2417,7 +2416,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void SortByReviewAverageRating()
         {
             //check if products are indexed
@@ -2464,7 +2463,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void SortBySku()
         {
             //check if products are indexed
@@ -2497,7 +2496,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void SortByCustomMoneyAttributeValue()
         {
             //check if products are indexed
@@ -2539,7 +2538,7 @@ namespace commercetools.Sdk.IntegrationTests.ProductProjectionSearch
             });
         }
 
-        [Fact(Skip = skip)]
+        [Fact]
         public void SortByEnumCustomAttributeLabel()
         {
             //check if products are indexed
