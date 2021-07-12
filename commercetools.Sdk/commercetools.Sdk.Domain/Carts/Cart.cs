@@ -9,7 +9,7 @@ namespace commercetools.Sdk.Domain.Carts
 {
     [Endpoint("carts")]
     [ResourceType(ReferenceTypeId.Cart)]
-    public class Cart : Resource<Cart>, IKeyReferencable<Cart>, IShopping, IInStoreUsable
+    public class Cart : Resource<Cart>, IKeyReferencable<Cart>, IShopping, ICartLike, IInStoreUsable
     {
         public string Key { get; set; }
         public string CustomerId { get; set; }
