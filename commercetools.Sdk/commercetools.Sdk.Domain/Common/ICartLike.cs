@@ -8,8 +8,7 @@ using commercetools.Sdk.Domain.Stores;
 
 namespace commercetools.Sdk.Domain.Common
 {
-    [Obsolete("Deprecated in favor of ICartLike interface")]
-    public interface IShopping
+    public interface ICartLike
     {
         string CustomerId { get; set; }
         string CustomerEmail { get; set; }
