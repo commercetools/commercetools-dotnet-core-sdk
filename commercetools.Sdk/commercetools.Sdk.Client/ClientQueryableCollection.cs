@@ -11,9 +11,9 @@ namespace commercetools.Sdk.Client
 
     public class ClientQueryableCollection<T> : IOrderedQueryable<T>
     {
-        public ClientQueryableCollection(IClient client, QueryCommand<T> command)
+        public ClientQueryableCollection(IClient client, QueryCommand<T> command, bool queryAll = false)
         {
-            this.Provider = new ClientQueryProvider<T>(client, command);
+            this.Provider = new ClientQueryProvider<T>(client, command, queryAll);
             this.Expression = Expression.Constant(this);
         }
 
