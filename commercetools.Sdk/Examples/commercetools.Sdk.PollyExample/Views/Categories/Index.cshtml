@@ -1,0 +1,27 @@
+@using commercetools.Sdk.Domain
+@using commercetools.Sdk.Domain.Categories
+@model PagedQueryResult<Category>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Categories</title>
+</head>
+<body>
+    <h1>There are @Model.Count categories</h1>
+<div>
+    <ul>
+        @foreach (var category in Model.Results)
+        {
+            <li>
+                @category.Name["en"]
+            </li>
+        }
+    </ul>
+</div>
+</body>
+</html>
