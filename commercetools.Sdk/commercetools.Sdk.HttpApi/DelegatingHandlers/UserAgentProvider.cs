@@ -46,7 +46,7 @@ namespace commercetools.Sdk.HttpApi.DelegatingHandlers
                 osPlatform = " (FreeBSD/" + Environment.OSVersion.Version + ")";
             }
 
-            this.UserAgent = $"commercetools-dotnet-core-sdk/{assemblyVersion} {frameworkName}/{attr.Version}{osPlatform}";
+            this.UserAgent = $"commercetools-sdk-dotnet-v1/{assemblyVersion} {frameworkName}/{attr.Version}{osPlatform}";
         }
 
         public string UserAgent { get; set; }
