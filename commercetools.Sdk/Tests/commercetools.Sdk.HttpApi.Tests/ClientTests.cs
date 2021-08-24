@@ -58,7 +58,7 @@ namespace commercetools.Sdk.HttpApi.Tests
         public void TestUserAgent()
         {
             var userAgent = this.clientFixture.GetService<IUserAgentProvider>().UserAgent;
-            Assert.Matches(@"commercetools-dotnet-core-sdk/[1-9]{1,4}(\.[0-9]{1,6}){2}[0-9a-zA-Z-.]* dotnetCore/[1-9]{1,3}(\.[0-9]{1,6}){3}( \((WINDOWS|OSX|LINUX|FreeBSD)/[1-9]{1,3}(\.[0-9]{1,6}){3}\))?", userAgent);
+            Assert.Matches(@"commercetools-sdk-dotnet-v1/[1-9]{1,4}(\.[0-9]{1,6}){2}[0-9a-zA-Z-.]* dotnetCore/[1-9]{1,3}(\.[0-9]{1,6}){3}( \((WINDOWS|OSX|LINUX|FreeBSD)/[1-9]{1,3}(\.[0-9]{1,6}){3}\))?", userAgent);
 
             var c = new HttpRequestMessage(HttpMethod.Get, "/");
             c.Headers.UserAgent.ParseAdd(userAgent);
