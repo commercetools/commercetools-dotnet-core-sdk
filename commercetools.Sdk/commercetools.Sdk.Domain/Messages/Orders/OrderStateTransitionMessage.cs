@@ -8,6 +8,7 @@ namespace commercetools.Sdk.Domain.Messages.Orders
     public class OrderStateTransitionMessage : Message<Order>
     {
         public Reference<State> State { get; set; }
+        public Reference<State> OldState { get; set; }
         public bool Force { get; set; }
     }
 }
