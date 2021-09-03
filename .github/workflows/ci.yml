@@ -1,6 +1,7 @@
 # https://help.github.com/en/categories/automating-your-workflow-with-github-actions
 
 on:
+  - workflow_dispatch
   - pull_request
   - push
 
@@ -36,8 +37,7 @@ jobs:
       - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.Linq.Tests --no-build -c Release
         working-directory: ./commercetools.Sdk
       - run: dotnet test --verbosity=normal Tests/commercetools.Sdk.Serialization.Tests --no-build -c Release
-        working-directory: ./commercetools.Sdk
-
+        working-directory: ./commercetools.Sdk     
   integrationtests:
     name: Integration tests
 
@@ -184,9 +184,14 @@ jobs:
       - name: Create the package
         run: dotnet pack -c Release  -o ../../pack/
         working-directory: ./commercetools.Sdk
+      - name: List packages
+        run: ls -la pack
+      - name: Publish packages to GitHub registry
+        if: github.ref == 'refs/heads/master'
+        run: dotnet nuget push "pack/*.nupkg" -k ${GITHUB_TOKEN} -s https://nuget.pkg.github.com/commercetools/index.json --skip-duplicate --no-symbols true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v2
         with:
           name: commercetools.Sdk.1.0.0-alpha-${{ github.run_number }}
           path: pack
-#      - name: Publish the package to GPR
-#        run: dotnet nuget push pack/*.nupkg
