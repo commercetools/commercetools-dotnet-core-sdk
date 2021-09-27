@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.Customers;
 using commercetools.Sdk.Domain.Messages;
 using commercetools.Sdk.Domain.Messages.Categories;
 using commercetools.Sdk.Domain.Messages.Customers;
@@ -278,6 +280,45 @@ namespace commercetools.Sdk.Serialization.Tests
             Assert.NotNull(order);
             Assert.Equal(PaymentState.Pending,order.PaymentState);
             Assert.Null(order.ShipmentState);
+        }
+        
+        [Fact]
+        public void SerializeMessageWithDateTime()
+        {
+            var serializerService = this.serializationFixture.SerializerService;
+            
+            //use date format first
+            var customerCreatedMessage = new CustomerCreatedMessage
+            {
+                CreatedAt = DateTime.Parse("2021-09-09")
+            };
+            var customerJson = serializerService.Serialize(customerCreatedMessage);
+            Assert.NotNull(customerJson);
+
+            // use datetime format
+            var message = new OrderCreatedMessage
+            {
+                CreatedAt = DateTime.Parse("2021-09-09T09:50:25")
+            };
+            var orderJson = serializerService.Serialize(message);
+            Assert.NotNull(orderJson);
+            Assert.Equal(
+                "{\"sequenceNumber\":0,\"resourceVersion\":0," +
+                "\"type\":\"OrderCreated\",\"version\":0," +
+                "\"createdAt\":\"2021-09-09T09:50:25\"," +
+                "\"lastModifiedAt\":\"0001-01-01\"}", orderJson);
+        }
+
+        [Fact]
+        public void SerializeDateOnlyFormat()
+        {
+            var serializerService = this.serializationFixture.SerializerService;
+            var customer = new Customer
+            {
+                DateOfBirth = DateTime.Parse("1987-02-12T09:50:25")
+            };
+            var customerAsJson = serializerService.Serialize(customer);
+            Assert.NotNull(customerAsJson);
         }
     }
 }

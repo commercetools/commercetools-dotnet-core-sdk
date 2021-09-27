@@ -19,6 +19,8 @@ namespace commercetools.Sdk.Domain.Customers
         public string MiddleName { get; set; }
         public string Title { get; set; }
         public string Salutation { get; set; }
+        
+        [SerializeDateTimeFormat("yyyy-MM-dd")]
         public DateTime? DateOfBirth { get; set; }
         public string CompanyName { get; set; }
         public string VatId { get; set; }
