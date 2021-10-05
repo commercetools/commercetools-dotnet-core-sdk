@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 
@@ -56,6 +57,13 @@ namespace commercetools.Sdk.Serialization
         public static bool IsArrayToken(this JToken valueProperty)
         {
             return valueProperty != null && valueProperty.Type == JTokenType.Array;
+        }
+        
+        public static string ToCamelCase(this string stringValue)
+        {
+            var result = Char.ToLowerInvariant(stringValue[0])
+                         + stringValue.Substring(1);
+            return result;
         }
     }
 }

@@ -313,12 +313,30 @@ namespace commercetools.Sdk.Serialization.Tests
         public void SerializeDateOnlyFormat()
         {
             var serializerService = this.serializationFixture.SerializerService;
-            var customer = new Customer
+            var customer = new Customer()
             {
                 DateOfBirth = DateTime.Parse("1987-02-12T09:50:25")
             };
             var customerAsJson = serializerService.Serialize(customer);
             Assert.NotNull(customerAsJson);
+            
+            //Deserialize again
+            var customerFromJson = serializerService.Deserialize<Customer>(customerAsJson);
+            Assert.Equal(DateTime.Parse("1987-02-12"), customerFromJson.DateOfBirth);
+        }
+        
+        [Fact]
+        public void SerializeCustomer()
+        {
+            var serializerService = this.serializationFixture.SerializerService;
+            var serializedJson = File.ReadAllText("Resources/Customers/customer.json");
+            var serializedFormatted = JValue.Parse(serializedJson);
+            
+            var customer = serializerService.Deserialize<Customer>(serializedJson);
+            var result = serializerService.Serialize(customer);
+            var resultFormatted = JValue.Parse(result);
+            
+            serializedFormatted.Should().BeEquivalentTo(resultFormatted);
         }
     }
 }

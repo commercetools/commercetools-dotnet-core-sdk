@@ -7,6 +7,7 @@ using commercetools.Sdk.Domain.Validation.Attributes;
 
 namespace commercetools.Sdk.Domain.Customers
 {
+    [SerializeAsDateOnly(nameof(DateOfBirth))]
     public class CustomerDraft : IDraft<Customer>
     {
         public string CustomerNumber { get; set; }
