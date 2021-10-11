@@ -2,10 +2,11 @@ using System;
 
 namespace commercetools.Sdk.Domain
 {
+    [Obsolete("Experimental")]
     [AttributeUsage(AttributeTargets.Class)]
-    public class SerializeAsDateOnlyAttribute : Attribute
+    public class SerializeAsTimeOnlyAttribute : Attribute
     {
-        public SerializeAsDateOnlyAttribute(params string[] properties)
+        public SerializeAsTimeOnlyAttribute(params string[] properties)
         {
             Properties = properties;
         }

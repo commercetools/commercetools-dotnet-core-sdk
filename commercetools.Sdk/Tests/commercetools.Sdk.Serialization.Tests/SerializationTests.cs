@@ -315,7 +315,8 @@ namespace commercetools.Sdk.Serialization.Tests
             var serializerService = this.serializationFixture.SerializerService;
             var customer = new Customer()
             {
-                DateOfBirth = DateTime.Parse("1987-02-12T09:50:25")
+                DateOfBirth = DateTime.Parse("1987-02-12T09:50:25"),
+                CreatedAt = DateTime.Now
             };
             var customerAsJson = serializerService.Serialize(customer);
             Assert.NotNull(customerAsJson);

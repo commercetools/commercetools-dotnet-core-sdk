@@ -8,25 +8,26 @@ using commercetools.Sdk.Domain;
 
 namespace commercetools.Sdk.Serialization
 {
-    internal class SerializeAsDateConverter : JsonConverterBase
+    [Obsolete("Experimental")]
+    internal class SerializeAsTimeConverter : JsonConverterBase
     {
-        private readonly IsoDateTimeConverter dateOnlyConverter = new IsoDateTimeConverter
+        private readonly IsoDateTimeConverter timeOnlyConverter = new IsoDateTimeConverter
         {
-            DateTimeFormat = "yyyy-MM-dd"
+            DateTimeFormat = "HH:mm:ss"
         };
 
-        private string[] DateOnlyProps { get; set; }
+        private string[] TimeOnlyProps { get; set; }
 
         public override List<SerializerType> SerializerTypes =>
             new List<SerializerType>() {SerializerType.Serialization};
 
         public override bool CanConvert(Type objectType)
         {
-            var hasDateOnlyProps = objectType.IsDefined(typeof(SerializeAsDateOnlyAttribute));
+            var hasDateOnlyProps = objectType.IsDefined(typeof(SerializeAsTimeOnlyAttribute));
             if (hasDateOnlyProps)
             {
-                var attribute = objectType.GetCustomAttribute<SerializeAsDateOnlyAttribute>();
-                DateOnlyProps = attribute.Properties;
+                var attribute = objectType.GetCustomAttribute<SerializeAsTimeOnlyAttribute>();
+                TimeOnlyProps = attribute.Properties;
             }
 
             return hasDateOnlyProps;
@@ -47,11 +48,11 @@ namespace commercetools.Sdk.Serialization
                 if (propValue != null)
                 {
                     writer.WritePropertyName(prop.Name.ToCamelCase());
-                    if (DateOnlyProps.Contains(prop.Name, StringComparer.CurrentCultureIgnoreCase)
+                    if (TimeOnlyProps.Contains(prop.Name, StringComparer.CurrentCultureIgnoreCase)
                         &&
                         propValue is DateTime valueDate)
                     {
-                        dateOnlyConverter.WriteJson(writer, valueDate, serializer);
+                        timeOnlyConverter.WriteJson(writer, valueDate, serializer);
                     }
                     else
                     {
