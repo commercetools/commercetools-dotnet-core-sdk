@@ -2,10 +2,11 @@
 
 namespace commercetools.Sdk.Domain.Customers.UpdateActions
 {
-    [SerializeAsDateOnly(nameof(DateOfBirth))]
+    [CustomizeSerializationMarker]
     public class SetDateOfBirthUpdateAction : UpdateAction<Customer>
     {
         public string Action => "setDateOfBirth";
+        [AsDateOnly]
         public DateTime DateOfBirth { get; set; }
     }
 }

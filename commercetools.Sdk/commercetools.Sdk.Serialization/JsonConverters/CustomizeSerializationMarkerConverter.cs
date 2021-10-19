@@ -8,29 +8,18 @@ using commercetools.Sdk.Domain;
 
 namespace commercetools.Sdk.Serialization
 {
-    [Obsolete("Experimental")]
-    internal class SerializeAsTimeConverter : JsonConverterBase
+    internal class CustomizeSerializationMarkerConverter : JsonConverterBase
     {
-        private readonly IsoDateTimeConverter timeOnlyConverter = new IsoDateTimeConverter
+        private readonly IsoDateTimeConverter dateOnlyConverter = new IsoDateTimeConverter
         {
-            DateTimeFormat = "HH:mm:ss"
+            DateTimeFormat = "yyyy-MM-dd"
         };
-
-        private string[] TimeOnlyProps { get; set; }
-
         public override List<SerializerType> SerializerTypes =>
             new List<SerializerType>() {SerializerType.Serialization};
 
         public override bool CanConvert(Type objectType)
         {
-            var hasDateOnlyProps = objectType.IsDefined(typeof(SerializeAsTimeOnlyAttribute));
-            if (hasDateOnlyProps)
-            {
-                var attribute = objectType.GetCustomAttribute<SerializeAsTimeOnlyAttribute>();
-                TimeOnlyProps = attribute.Properties;
-            }
-
-            return hasDateOnlyProps;
+            return objectType.IsDefined(typeof(CustomizeSerializationMarkerAttribute));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
@@ -48,11 +37,11 @@ namespace commercetools.Sdk.Serialization
                 if (propValue != null)
                 {
                     writer.WritePropertyName(prop.Name.ToCamelCase());
-                    if (TimeOnlyProps.Contains(prop.Name, StringComparer.CurrentCultureIgnoreCase)
+                    if (prop.GetCustomAttribute<AsDateOnlyAttribute>()!= null
                         &&
                         propValue is DateTime valueDate)
                     {
-                        timeOnlyConverter.WriteJson(writer, valueDate, serializer);
+                        dateOnlyConverter.WriteJson(writer, valueDate, serializer);
                     }
                     else
                     {

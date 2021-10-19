@@ -7,7 +7,7 @@ using commercetools.Sdk.Domain.Validation.Attributes;
 
 namespace commercetools.Sdk.Domain.Customers
 {
-    [SerializeAsDateOnly(nameof(DateOfBirth))]
+    [CustomizeSerializationMarker]
     public class CustomerDraft : IDraft<Customer>
     {
         public string CustomerNumber { get; set; }
@@ -23,6 +23,7 @@ namespace commercetools.Sdk.Domain.Customers
         public string Salutation { get; set; }
         public string AnonymousId { get; set; }
         public string AnonymousCartId { get; set; }
+        [AsDateOnly]
         public string DateOfBirth { get; set; }
         public string CompanyName { get; set; }
         public string VatId { get; set; }
