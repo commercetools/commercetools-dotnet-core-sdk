@@ -108,17 +108,25 @@ The clients can then be injected by using IEnumerable.
 ### Attaching Delegating Handlers
 
 When wanting to attach further Handlers to the HttpClient this is possible by using the service collection.
-E.g. adding a [Polly](http://www.thepollyproject.org/) Retry policy using [Microsoft.Extensions.Http.Polly](https://www.nuget.org/packages/Microsoft.Extensions.Http.Polly/):
-
+E.g. adding a [Polly](http://www.thepollyproject.org/) Retry policy and Timeout policy using [Microsoft.Extensions.Http.Polly](https://www.nuget.org/packages/Microsoft.Extensions.Http.Polly/):
 ```c#
 var registry = services.AddPolicyRegistry();
-var policy = HttpPolicyExtensions
+var retryPolicy = HttpPolicyExtensions
     .HandleTransientHttpError()
-    .RetryAsync(3);
-registry.Add("retry", policy);
+    .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+    .Or<TimeoutRejectedException>()
+    .RetryAsync(3, onRetry: (exception, retryCount, context) =>
+                    {
+                        // logging here
+                    });
+registry.Add("retryPolicy", retryPolicy);
+
+var timeOutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(60));
+registry.Add("timeoutPolicy", timeOutPolicy);
 
 services.UseCommercetools(configuration, "Client", TokenFlow.ClientCredentials)
-    .AddPolicyHandlerFromRegistry("retry");
+    .AddPolicyHandlerFromRegistry("retryPolicy")
+    .AddPolicyHandlerFromRegistry("timeoutPolicy");
 
 // for multiple clients
 services.UseCommercetools(configuration, new Dictionary<string, TokenFlow>()
@@ -127,12 +135,20 @@ services.UseCommercetools(configuration, new Dictionary<string, TokenFlow>()
         {"client2", TokenFlow.ClientCredentials}
     })
     // configure single client
-    .ConfigureClient("client1", builder => builder.AddPolicyHandlerFromRegistry("retry"))
+    .ConfigureClient("client1", builder => builder
+                                            .AddPolicyHandlerFromRegistry("retryPolicy")
+                                            .AddPolicyHandlerFromRegistry("timeoutPolicy"));
     // configure all clients
-    .ConfigureAllClients(builder => builder.AddPolicyHandlerFromRegistry("retry"));
+    .ConfigureAllClients(builder => builder
+                                            .AddPolicyHandlerFromRegistry("retryPolicy")
+                                            .AddPolicyHandlerFromRegistry("timeoutPolicy"));
 
 ```
-
+Please notice that default timeout of [HttpClient](https://docs.microsoft.com/en-us/dotnet/api/system.net.http.httpclient.timeout) is 100 seconds and you can change it like:
+ ```c#
+services.UseCommercetools(configuration, "Client")
+                .ConfigureHttpClient(c => c.Timeout = TimeSpan.FromSeconds(60));
+```
 ### Configuration
 The client configuration needs to be added to appsettings.json in order for the client to work. The structure is as follows:
 
