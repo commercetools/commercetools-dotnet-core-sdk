@@ -1,0 +1,44 @@
+{
+  "id": "a68e0030-7771-4aeb-ada9-62cdcf2cacd0",
+  "version": 8,
+  "createdAt": "2020-02-28T10:57:19.057Z",
+  "lastModifiedAt": "2021-02-18T14:46:23.275Z",
+  "lastModifiedBy": {
+  },
+  "createdBy": {
+    "clientId": "Py7j5PA9p_nWbBSmAM_d28_x"
+  },
+  "customerNumber": "4",
+  "email": "ronnie.wood@test.com",
+  "firstName": "Ronnie",
+  "lastName": "Wood",
+  "middleName": "",
+  "title": "Mr.",
+  "salutation": "",
+  "dateOfBirth": "1947-06-01",
+  "companyName": "Rolling Stnones",
+  "password": "pass",
+  "addresses": [
+    {
+      "id": "uq1cMyP8",
+      "country": "DE"
+    }
+  ],
+  "defaultShippingAddressId": "uq1cMyP8",
+  "shippingAddressIds": [
+    "uq1cMyP8"
+  ],
+  "billingAddressIds": [],
+  "isEmailVerified": true,
+  "customerGroup": {
+    "typeId": "customer-group",
+    "id": "8a41c947-5a92-4604-bbbb-e82457f0f2c0"
+  },
+  "key": "ronnieWood",
+  "stores": [
+    {
+      "typeId": "store",
+      "key": "Berlin-Store"
+    }
+  ]
+}
