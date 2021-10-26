@@ -25,5 +25,17 @@ namespace commercetools.Sdk.Domain
                 FractionDigits = fractionDigits
             };
         }
+        public static HighPrecisionMoney FromDecimal(string currencyCode, decimal value, int fractionDigits, int centFractionDigits, MidpointRounding midpointRounding = MidpointRounding.ToEven)
+        {
+            var amount = Math.Round(value * (decimal) Math.Pow(10, fractionDigits), 0, midpointRounding);
+            var centAmount = Math.Round(value * (decimal) Math.Pow(10, centFractionDigits), midpointRounding);
+            return new HighPrecisionMoney
+            {
+                CurrencyCode = currencyCode,
+                PreciseAmount = (long)amount,
+                CentAmount = (long)centAmount,
+                FractionDigits = fractionDigits
+            };
+        }
     }
 }
