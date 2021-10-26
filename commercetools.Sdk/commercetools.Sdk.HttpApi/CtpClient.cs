@@ -37,6 +37,12 @@
             return await this.SendRequest<T>(httpApiCommand.HttpRequestMessage).ConfigureAwait(false);
         }
 
+        public async Task<HttpResponseMessage> ExecuteAsyncWithResponse<T>(ICommand<T> command)
+        {
+            var httpApiCommand = this.httpApiCommandFactory.Create(command);
+            return await this.HttpClient.SendAsync(httpApiCommand.HttpRequestMessage).ConfigureAwait(false);
+        }
+
         private async Task<T> SendRequest<T>(HttpRequestMessage requestMessage)
         {
             var result = await this.HttpClient.SendAsync(requestMessage).ConfigureAwait(false);

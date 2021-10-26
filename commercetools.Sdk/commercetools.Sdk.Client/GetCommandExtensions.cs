@@ -35,10 +35,22 @@ namespace commercetools.Sdk.Client
             return new GetByIdCommand<T>(resource);
         }
 
+        public static CheckByIdCommand<T> CheckById<T>(this IIdentifiable<T> resource)
+            where T : Resource<T>, ICheckable<T>
+        {
+            return new CheckByIdCommand<T>(resource);
+        }
+
         public static GetByKeyCommand<T> GetByKey<T>(this IKeyReferencable<T> resource)
             where T : Resource<T>
         {
             return new GetByKeyCommand<T>(resource.Key);
+        }
+
+        public static CheckByKeyCommand<T> CheckByKey<T>(this IKeyReferencable<T> resource)
+            where T : Resource<T>, ICheckable<T>
+        {
+            return new CheckByKeyCommand<T>(resource.Key);
         }
     }
 }
