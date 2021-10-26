@@ -11,6 +11,6 @@ namespace commercetools.Sdk.Client
             Where = new List<string>();
         }
 
-        public List<string> Where { get; set; }
+        public List<string> Where { get; private set; }
     }
 }
