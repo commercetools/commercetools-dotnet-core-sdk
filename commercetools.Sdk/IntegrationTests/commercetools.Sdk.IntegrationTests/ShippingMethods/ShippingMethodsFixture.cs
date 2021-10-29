@@ -23,6 +23,8 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
             var random = TestingUtility.RandomInt();
             shippingMethodDraft.Key = $"Key_{random}";
             shippingMethodDraft.Name = $"ShippingMethod_{random}";
+            shippingMethodDraft.LocalizedName = new LocalizedString {{"en", $"ShippingMethod_{random}"}};
+            shippingMethodDraft.LocalizedDescription = new LocalizedString {{"en", $"ShippingMethodDes_{random}"}};
             return shippingMethodDraft;
         }
 
@@ -84,7 +86,12 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
         public static async Task WithShippingMethod(IClient client,
             Func<ShippingMethodDraft, ShippingMethodDraft> draftAction, Action<ShippingMethod> func)
         {
-            await With(client, new ShippingMethodDraft(), draftAction, func);
+            await With(client, DefaultShippingMethodDraft(new ShippingMethodDraft()), draftAction, func);
+        }
+        public static async Task WithShippingMethod(IClient client,
+            Func<ShippingMethodDraft, ShippingMethodDraft> draftAction, Action<ShippingMethod,ShippingMethodDraft> func)
+        {
+            await With(client, DefaultShippingMethodDraft(new ShippingMethodDraft()), draftAction, func);
         }
 
         public static async Task WithShippingMethod(IClient client, Func<ShippingMethod, Task> func)

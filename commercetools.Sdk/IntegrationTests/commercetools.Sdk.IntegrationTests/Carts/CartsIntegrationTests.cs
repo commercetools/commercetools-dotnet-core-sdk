@@ -610,7 +610,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                             var updatedCart = await client
                                 .ExecuteAsync(cart.UpdateById(actions => actions.AddUpdate(action)));
 
-                            Assert.Equal(shippingMethod.Name, updatedCart.ShippingInfo.ShippingMethodName);
+                            Assert.Equal(shippingMethod.LocalizedName["en"], updatedCart.ShippingInfo.ShippingMethodName);
                             return updatedCart;
                         });
                 });
@@ -886,7 +886,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         {
                             Assert.Equal(TaxMode.ExternalAmount, cart.TaxMode);
                             Assert.Equal(shippingAddress.ToString(), cart.ShippingAddress.ToString());
-                            Assert.Equal(shippingMethod.Name, cart.ShippingInfo.ShippingMethodName);
+                            Assert.Equal(shippingMethod.LocalizedName["en"], cart.ShippingInfo.ShippingMethodName);
 
                             var externalTaxAmountDraft = TestingUtility.GetExternalTaxAmountDraft();
 
@@ -931,7 +931,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                         {
                             Assert.Equal(TaxMode.External, cart.TaxMode);
                             Assert.Equal(shippingAddress.ToString(), cart.ShippingAddress.ToString());
-                            Assert.Equal(shippingMethod.Name, cart.ShippingInfo.ShippingMethodName);
+                            Assert.Equal(shippingMethod.LocalizedName["en"], cart.ShippingInfo.ShippingMethodName);
 
                             var externalTaxRateDraft = TestingUtility.GetExternalTaxRateDraft();
 

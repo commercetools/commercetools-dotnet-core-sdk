@@ -190,6 +190,14 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             return new CommandBuilder<GetCommand<T>, T>(builder.Client, () => new GetByIdCommand<T>(id, expand));
         }
 
+        public static CommandBuilder<CheckCommand<T>, T> CheckById<T>(
+            this DomainCommandBuilder<T> builder,
+            string id)
+            where T : Resource<T>, ICheckable<T>
+        {
+            return new CommandBuilder<CheckCommand<T>, T>(builder.Client, () => new CheckByIdCommand<T>(id));
+        }
+
         public static CommandBuilder<InStoreCommand<T>, T> GetById<T>(
             this CommandBuilder<InStoreCommand<T>, T> builder,
             string id,
@@ -211,6 +219,14 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             where T : Resource<T>, IKeyReferencable<T>
         {
             return new CommandBuilder<GetCommand<T>, T>(builder.Client, () => new GetByKeyCommand<T>(key, expand));
+        }
+
+        public static CommandBuilder<CheckCommand<T>, T> CheckByKey<T>(
+            this DomainCommandBuilder<T> builder,
+            string key)
+            where T : Resource<T>, ICheckable<T>, IKeyReferencable<T>
+        {
+            return new CommandBuilder<CheckCommand<T>, T>(builder.Client, () => new CheckByKeyCommand<T>(key));
         }
 
         public static CommandBuilder<InStoreCommand<T>, T> GetByKey<T>(

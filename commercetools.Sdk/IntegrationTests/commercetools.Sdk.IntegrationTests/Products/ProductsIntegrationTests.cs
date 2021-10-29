@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Categories;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.ProductDiscounts;
 using commercetools.Sdk.Domain.Products.UpdateActions;
@@ -51,6 +53,40 @@ namespace commercetools.Sdk.IntegrationTests.Products
                     Assert.Equal(key, retrievedProduct.Key);
                 });
         }
+        
+        [Fact]
+        public async Task CheckProductById()
+        {
+            var key = $"CheckProductById-{TestingUtility.RandomString()}";
+            await WithProduct(
+                client, productDraft => DefaultProductDraftWithKey(productDraft, key),
+                async product =>
+                {
+                    var response = await client
+                        .ExecuteAsyncWithResponse(product.ToIdResourceIdentifier().CheckById());
+                    
+                    Assert.NotNull(response);
+                    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                });
+        }
+        
+        [Fact]
+        public async Task CheckProductNotExistsById()
+        {
+            var id = Guid.NewGuid().ToString();
+            Exception expectedException = null;
+            try
+            {
+                await client
+                    .ExecuteAsyncWithResponse(new CheckByIdCommand<Product>(id));
+            }
+            catch (Exception e)
+            {
+                expectedException = e;
+            }
+            Assert.NotNull(expectedException);
+            Assert.IsType<NotFoundException>(expectedException);
+        }
 
         [Fact]
         public async Task GetProductByKey()
@@ -63,6 +99,22 @@ namespace commercetools.Sdk.IntegrationTests.Products
                     var retrievedProduct = await client
                         .ExecuteAsync(product.ToKeyResourceIdentifier().GetByKey());
                     Assert.Equal(key, retrievedProduct.Key);
+                });
+        }
+        
+        [Fact]
+        public async Task CheckProductByKey()
+        {
+            var key = $"CheckProductById-{TestingUtility.RandomString()}";
+            await WithProduct(
+                client, productDraft => DefaultProductDraftWithKey(productDraft, key),
+                async product =>
+                {
+                    var response = await client
+                        .ExecuteAsyncWithResponse(product.ToKeyResourceIdentifier().CheckByKey());
+                    
+                    Assert.NotNull(response);
+                    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
                 });
         }
 
@@ -79,6 +131,22 @@ namespace commercetools.Sdk.IntegrationTests.Products
                     var returnedSet = await client.ExecuteAsync(queryCommand);
                     Assert.Single(returnedSet.Results);
                     Assert.Equal(key, returnedSet.Results[0].Key);
+                });
+        }
+        
+        [Fact]
+        public async Task CheckProductByQueryPredicate()
+        {
+            var key = $"QueryProducts-{TestingUtility.RandomString()}";
+            await WithProduct(
+                client, productDraft => DefaultProductDraftWithKey(productDraft, key),
+                async product =>
+                {
+                    var checkByQueryCommand = new CheckByQueryCommand<Product>();
+                    checkByQueryCommand.Where(p => p.Key == product.Key.valueOf());
+                    var response = await client.ExecuteAsyncWithResponse(checkByQueryCommand);
+                    Assert.NotNull(response);
+                    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
                 });
         }
 

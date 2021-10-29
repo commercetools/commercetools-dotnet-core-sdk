@@ -43,9 +43,11 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
                     client,
                     shippingMethodDraft =>
                         DefaultShippingMethodDraftWithKeyWithTaxCategory(shippingMethodDraft, taxCategory.ToKeyResourceIdentifier(), key),
-                    shippingMethod =>
+                    (shippingMethod, draft) =>
                     {
                         Assert.Equal(key, shippingMethod.Key);
+                        Assert.Equal(draft.LocalizedName["en"], shippingMethod.LocalizedName["en"]);
+                        Assert.Equal(draft.LocalizedDescription["en"], shippingMethod.LocalizedDescription["en"]);
                     });
             });
         }
@@ -295,13 +297,16 @@ namespace commercetools.Sdk.IntegrationTests.ShippingMethods
             {
                 var newName = TestingUtility.RandomString();
                 var updateActions = new List<UpdateAction<ShippingMethod>>();
-                var action = new ChangeNameUpdateAction { Name = newName };
+                var action = new SetLocalizedNameUpdateAction
+                {
+                    LocalizedName= new LocalizedString {{"en", newName}}
+                };
                 updateActions.Add(action);
 
                 var updatedShippingMethod = await client
                     .ExecuteAsync(new UpdateByIdCommand<ShippingMethod>(shippingMethod, updateActions));
 
-                Assert.Equal(newName, updatedShippingMethod.Name);
+                Assert.Equal(newName, updatedShippingMethod.LocalizedName["en"]);
                 return updatedShippingMethod;
             });
         }

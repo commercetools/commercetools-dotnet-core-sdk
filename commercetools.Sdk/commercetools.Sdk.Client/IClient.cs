@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace commercetools.Sdk.Client
 {
@@ -22,5 +24,7 @@ namespace commercetools.Sdk.Client
         /// <param name="command">The command.</param>
         /// <returns>The object of the domain specific type.</returns>
         Task<T> ExecuteAsync<T>(ICommand<T> command);
+
+        Task<HttpResponseMessage> ExecuteAsyncWithResponse<T>(ICommand<T> command);
     }
 }

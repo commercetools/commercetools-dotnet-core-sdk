@@ -114,7 +114,7 @@ namespace commercetools.Sdk.IntegrationTests.OrdersImport
             {
                 Price = amountEuro10,
                 ShippingRate = shippingRate,
-                ShippingMethodName = shippingMethod.Name,
+                ShippingMethodName = shippingMethod.LocalizedName["en"],
                 ShippingMethod = shippingMethod.ToKeyResourceIdentifier(),
                 TaxCategory = taxCategory.ToKeyResourceIdentifier()
             };
