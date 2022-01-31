@@ -1,4 +1,5 @@
 ﻿using commercetools.Sdk.Domain.Common;
+using commercetools.Sdk.Domain.Stores;
 
 namespace commercetools.Sdk.Domain.ShoppingLists
 {
@@ -17,6 +18,7 @@ namespace commercetools.Sdk.Domain.ShoppingLists
         public LocalizedString Name { get; set; }
         public LocalizedString Description { get; set; }
         public IReference<Customer> Customer { get; set; }
+        public IReferenceable<Store> Store { get; set; }
         public string AnonymousId { get; set; }
         public List<LineItemDraft> LineItems { get; set; }
         public List<TextLineItemDraft> TextLineItems { get; set; }
