@@ -1,0 +1,39 @@
+{
+  "key": "proj-test-key",
+  "name": "proj-test-name",
+  "countries": [
+    "DE",
+    "US"
+  ],
+  "currencies": [
+    "EUR",
+    "USD"
+  ],
+  "languages": [
+    "de",
+    "en"
+  ],
+  "createdAt": "2020-02-28T10:36:46.307Z",
+  "messages": {
+    "enabled": false,
+    "deleteDaysAfterCreation": 15
+  },
+  "carts": {
+    "deleteDaysAfterLastModification": 90,
+    "allowAddingUnpublishedProducts": false,
+    "countryTaxRateFallbackEnabled": false
+  },
+  "shoppingLists": {
+    "deleteDaysAfterLastModification": 360
+  },
+  "version": 24,
+  "searchIndexing": {
+    "products": {
+      "status": "Deactivated",
+      "lastModifiedAt": "2021-04-26T15:00:35.914Z",
+      "lastModifiedBy": {
+        "isPlatformClient": true
+      }
+    }
+  }
+}

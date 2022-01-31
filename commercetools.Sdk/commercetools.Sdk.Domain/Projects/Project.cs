@@ -22,5 +22,7 @@ namespace commercetools.Sdk.Domain.Projects
         public CartsConfiguration Carts { get; set; }
         
         public ShoppingListsConfiguration ShoppingLists { get; set; }
+
+        public SearchIndexingConfiguration SearchIndexing { get; set; }
     }
 }

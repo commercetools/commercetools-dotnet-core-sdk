@@ -359,5 +359,25 @@ namespace commercetools.Sdk.IntegrationTests.Projects
                     Assert.Null(projectWithOriginalSettings.ShoppingLists.DeleteDaysAfterLastModification);
                 });
         }
+        
+        [Fact(Skip = Skip)]
+        public async Task UpdateProjectChangeProductSearchIndexing()
+        {
+            await WithCurrentProject(client,
+                async project =>
+                {
+                    Assert.NotNull(project);
+                    var action = new ChangeProductSearchIndexingEnabledUpdateAction()
+                    {
+                        Enabled = true
+                    };
+
+                    var updatedProject = await 
+                        TryToUpdateCurrentProject(client, project, action.ToList());
+                    Assert.NotNull(updatedProject.SearchIndexing.Products.Status);
+                    Assert.NotEqual(SearchIndexingConfigurationStatus.Deactivated, 
+                        updatedProject.SearchIndexing.Products.Status);
+                });
+        }
     }
 }
