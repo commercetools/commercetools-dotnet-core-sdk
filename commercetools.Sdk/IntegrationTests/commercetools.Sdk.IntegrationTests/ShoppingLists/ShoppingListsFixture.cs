@@ -40,8 +40,9 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
             return shoppingListDraft;
         }
         
-        public static ShoppingListDraft DefaultShoppingListDraftInStore(ShoppingListDraft shoppingListDraft, IReferenceable<Store> store)
+        public static ShoppingListDraft DefaultShoppingListDraftInStore(ShoppingListDraft draft, IReferenceable<Store> store)
         {
+            var shoppingListDraft = DefaultShoppingListDraft(draft);
             shoppingListDraft.Store = store;
             return shoppingListDraft;
         }
