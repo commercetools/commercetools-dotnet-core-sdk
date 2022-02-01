@@ -2,11 +2,11 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class SetItemShippingAddressCustomTypeUpdateAction : UpdateAction<Cart>
+    public class SetDeliveryAddressCustomTypeUpdateAction : UpdateAction<Cart>
     {
-        public string Action => "setItemShippingAddressCustomType";
+        public string Action => "setDeliveryAddressCustomType";
         [Required]
-        public string AddressKey { get; set; }
+        public string DeliveryId { get; set; }
         public ResourceIdentifier Type { get; set; }
         public Fields Fields { get; set; }
     }
