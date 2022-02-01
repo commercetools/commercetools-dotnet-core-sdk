@@ -360,7 +360,7 @@ namespace commercetools.Sdk.IntegrationTests.Projects
                 });
         }
         
-        [Fact]
+        [Fact(Skip = Skip)]
         public async Task UpdateProjectChangeProductSearchIndexing()
         {
             await WithCurrentProject(client,

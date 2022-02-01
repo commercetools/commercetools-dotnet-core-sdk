@@ -547,7 +547,7 @@ namespace commercetools.Sdk.IntegrationTests
         {
             var lineItemReturnItemDraft = new LineItemReturnItemDraft
             {
-                Quantity = 100,
+                Quantity = 1,
                 Comment = "comment",
                 LineItemId = lineItemId,
                 ShipmentState = ReturnShipmentState.Returned
