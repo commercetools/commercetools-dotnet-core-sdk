@@ -982,6 +982,13 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
                 () => new ReplicateCartCommand(replica) as ReplicateCommand<Cart>);
         }
 
+        public static CommandBuilder<InStoreCommand<Cart>, Cart> InStore(
+            this CommandBuilder<ReplicateCommand<Cart>, Cart> builder,
+            string storeKey)
+        {
+            return new CommandBuilder<InStoreCommand<Cart>, Cart>(builder.Client, () => builder.Build().InStore(storeKey));
+        }
+
         #endregion
 
         #region Orders
