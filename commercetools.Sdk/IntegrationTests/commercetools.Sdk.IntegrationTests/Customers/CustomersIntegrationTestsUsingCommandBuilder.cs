@@ -324,6 +324,90 @@ namespace commercetools.Sdk.IntegrationTests.Customers
         }
         
         [Fact]
+        public async Task ChangeCustomerPasswordInStore()
+        {
+            var oldPassword = TestingUtility.RandomString();
+            await WithStore(client, async store =>
+            {
+                var stores = new List<IReferenceable<Store>>
+                {
+                    store.ToKeyResourceIdentifier()
+                };
+                
+                await WithUpdateableCustomer(
+                    client,
+                    customerDraft => DefaultCustomerDraftWithPassword(
+                        DefaultCustomerDraftInStores(customerDraft, stores), oldPassword),
+                    async customer =>
+                    {
+                        Assert.NotNull(customer);
+                        Assert.Single(customer.Stores);
+                        Assert.Equal(store.Key, customer.Stores[0].Key);
+                        var newPassword = TestingUtility.RandomString();
+                        var updatedCustomer = await client
+                            .Builder()
+                            .Customers()
+                            .InStore(store.Key)
+                            .ChangePassword(customer, oldPassword, newPassword)
+                            .ExecuteAsync();
+
+                        Assert.NotNull(updatedCustomer);
+                        //login with the new password to make Sure that password changed
+                        var loginResult = await client
+                            .Builder()
+                            .Customers()
+                            .InStore(store.Key)
+                            .Login(updatedCustomer.Email, newPassword)
+                            .ExecuteAsync();
+                        Assert.NotNull(loginResult);
+                        return updatedCustomer;
+                    });
+            });
+        }
+
+        [Fact]
+        public async Task ChangeCustomerPasswordInStore2()
+        {
+            var oldPassword = TestingUtility.RandomString();
+            await WithStore(client, async store =>
+            {
+                var stores = new List<IReferenceable<Store>>
+                {
+                    store.ToKeyResourceIdentifier()
+                };
+                
+                await WithUpdateableCustomer(
+                    client,
+                    customerDraft => DefaultCustomerDraftWithPassword(
+                        DefaultCustomerDraftInStores(customerDraft, stores), oldPassword),
+                    async customer =>
+                    {
+                        Assert.NotNull(customer);
+                        Assert.Single(customer.Stores);
+                        Assert.Equal(store.Key, customer.Stores[0].Key);
+                        var newPassword = TestingUtility.RandomString();
+                        var updatedCustomer = await client
+                            .Builder()
+                            .Customers()
+                            .ChangePassword(customer, oldPassword, newPassword)
+                            .InStore(store.Key)
+                            .ExecuteAsync();
+
+                        Assert.NotNull(updatedCustomer);
+                        //login with the new password to make Sure that password changed
+                        var loginResult = await client
+                            .Builder()
+                            .Customers()
+                            .Login(updatedCustomer.Email, newPassword)
+                            .InStore(store.Key)
+                            .ExecuteAsync();
+                        Assert.NotNull(loginResult);
+                        return updatedCustomer;
+                    });
+            });
+        }
+        
+        [Fact]
         public async Task AuthenticateCustomerInStore()
         {
             await WithStore(client, async store =>
