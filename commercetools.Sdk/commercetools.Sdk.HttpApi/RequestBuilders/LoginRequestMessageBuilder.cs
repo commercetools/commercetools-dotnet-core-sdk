@@ -30,7 +30,7 @@ namespace commercetools.Sdk.HttpApi.RequestBuilders
             {
                 Email = command.Email,
                 Password = command.Password,
-                AnonymousCartId = command.AnonymousCartId,
+                AnonymousCart = command.AnonymousCart,
                 AnonymousCartSignInMode = command.AnonymousCartSignInMode,
                 AnonymousId = command.AnonymousId,
                 UpdateProductData = command.UpdateProductData

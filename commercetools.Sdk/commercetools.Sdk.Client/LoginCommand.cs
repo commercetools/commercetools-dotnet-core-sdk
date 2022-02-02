@@ -1,4 +1,6 @@
-﻿using commercetools.Sdk.Domain;
+﻿using System;
+using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Customers;
 
 namespace commercetools.Sdk.Client
@@ -11,7 +13,7 @@ namespace commercetools.Sdk.Client
             this.Password = password;
         }
 
-        public string AnonymousCartId { get; set; }
+        public ResourceIdentifier<Cart> AnonymousCart { get; set; }
 
         public string AnonymousId { get; set; }
 
@@ -24,5 +26,8 @@ namespace commercetools.Sdk.Client
         public string Password { get; private set; }
 
         public override System.Type ResourceType => typeof(T);
+
+        [Obsolete("Deprecated in favor of AnonymousCart ResourceIdentifier")]
+        public string AnonymousCartId { get; set; }
     }
 }
