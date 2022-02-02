@@ -311,6 +311,14 @@ namespace commercetools.Sdk.Linq.Tests
             var result = cartPredicateExpressionVisitor.Render(expression);
             Assert.Equal("variant.id = 123", result);
         }
+        [Fact]
+        public void LineItemPredicateVariantKey()
+        {
+            Expression<Func<LineItem, bool>> expression = l => l.VariantKey() == "blue_shirt";
+            IDiscountPredicateExpressionVisitor cartPredicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = cartPredicateExpressionVisitor.Render(expression);
+            Assert.Equal("variant.key = \"blue_shirt\"", result);
+        }
 
         [Fact]
         public void LineItemPredicateCatalogId()

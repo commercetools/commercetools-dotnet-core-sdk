@@ -80,6 +80,7 @@ namespace commercetools.Sdk.Domain.Predicates
         {
             throw new NotImplementedException();
         }
+
         public static bool IsNotIn(this string source, params string[] values)
         {
             throw new NotImplementedException();
@@ -91,6 +92,11 @@ namespace commercetools.Sdk.Domain.Predicates
         }
 
         public static int VariantId(this Product source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static string VariantKey(this Product source)
         {
             throw new NotImplementedException();
         }
