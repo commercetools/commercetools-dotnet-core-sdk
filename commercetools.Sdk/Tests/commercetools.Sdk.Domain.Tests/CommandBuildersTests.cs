@@ -53,6 +53,25 @@ namespace commercetools.Sdk.Domain.Tests
             Assert.IsType<ReplicateCartCommand>(command);
             Assert.NotNull(command.Replica);
         }
+        [Fact]
+        public void IsReplicateACartCommandInStore()
+        {
+            var builder = new CommandBuilder();
+            var cartReplicationDraft = new ReplicaCartDraft()
+            {
+                Reference = new Reference<Cart>() {Id = "cartId"}
+            };
+            var command = builder
+                .Carts()
+                .Replicate(cartReplicationDraft)
+                .InStore("store-key")
+                .Build();
+            Assert.IsType<InStoreCommand<Cart>>(command);
+            Assert.IsType<ReplicateCartCommand>(command.InnerCommand);
+            var replicaCmd = command.InnerCommand as ReplicateCommand<Cart>;
+            Assert.NotNull(replicaCmd);
+            Assert.NotNull(replicaCmd.Replica);
+        }
         
         [Fact]
         public void IsGetByCustomerIdInStoreCommand()
