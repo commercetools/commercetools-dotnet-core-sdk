@@ -1644,6 +1644,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                             Assert.Single(updatedCart.LineItems);
                             Assert.Equal(lineItemDraft.ProductId, updatedCart.LineItems[0].ProductId);
                             Assert.Equal(lineItemDraft.Quantity, updatedCart.LineItems[0].Quantity);
+                            Assert.NotNull(updatedCart.LineItems[0].ProductKey);
                             return updatedCart;
                         });
                     });
