@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using commercetools.Sdk.Domain.Carts;
 using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.CustomerGroups;
 using commercetools.Sdk.Domain.Stores;
@@ -22,7 +24,9 @@ namespace commercetools.Sdk.Domain.Customers
         public string Title { get; set; }
         public string Salutation { get; set; }
         public string AnonymousId { get; set; }
+        [Obsolete("Deprecated in favor of AnonymousCart ResourceIdentifier")]
         public string AnonymousCartId { get; set; }
+        public ResourceIdentifier<Cart> AnonymousCart { get; set; }
         [AsDateOnly]
         public string DateOfBirth { get; set; }
         public string CompanyName { get; set; }

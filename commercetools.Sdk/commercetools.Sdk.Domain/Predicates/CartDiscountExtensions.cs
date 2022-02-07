@@ -173,6 +173,10 @@ namespace commercetools.Sdk.Domain.Predicates
         {
             throw new NotImplementedException();
         }
+        public static string VariantKey(this LineItem source)
+        {
+            throw new NotImplementedException();
+        }
 
         public static string Sku(this LineItem source)
         {

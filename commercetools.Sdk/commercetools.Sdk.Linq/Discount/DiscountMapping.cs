@@ -13,6 +13,7 @@ namespace commercetools.Sdk.Linq.Discount
             { "CustomTypeKey", "custom.type.key" },
             { "ProductKey", "product.key" },
             { "VariantId", "variant.id" },
+            { "VariantKey", "variant.key" },
             { "CatalogId", "catalog.id" },
             { "DiscountId", "discount.id" },
             { "Sku", "sku" },

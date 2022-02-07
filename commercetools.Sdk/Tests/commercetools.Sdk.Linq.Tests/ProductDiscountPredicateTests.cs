@@ -30,6 +30,15 @@ namespace commercetools.Sdk.Linq.Tests
             var result = predicateExpressionVisitor.Render(expression);
             Assert.Equal("product.id = \"f6a19a23-14e3-40d0-aee2-3e612fcb1bc7\" and variant.id = 1", result);
         }
+        
+        [Fact]
+        public void VariantKey()
+        {
+            Expression<Func<Product, bool>> expression = p => p.VariantKey() == "blue_shirt";
+            IDiscountPredicateExpressionVisitor predicateExpressionVisitor = this.linqFixture.GetService<IDiscountPredicateExpressionVisitor>();
+            var result = predicateExpressionVisitor.Render(expression);
+            Assert.Equal("variant.key = \"blue_shirt\"", result);
+        }
 
         [Fact]
         public void CategoriesIdEqual()

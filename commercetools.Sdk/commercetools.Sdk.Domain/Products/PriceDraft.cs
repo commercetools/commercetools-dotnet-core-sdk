@@ -14,8 +14,8 @@ namespace commercetools.Sdk.Domain
         public BaseMoney Value { get; set; }
         [Country]
         public string Country { get; set; }
-        public Reference<CustomerGroup> CustomerGroup { get; set; }
-        public Reference<Channel> Channel { get; set; }
+        public ResourceIdentifier<CustomerGroup> CustomerGroup { get; set; }
+        public ResourceIdentifier<Channel> Channel { get; set; }
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
         public List<PriceTier> Tiers { get; set; }

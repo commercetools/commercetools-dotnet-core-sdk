@@ -33,6 +33,8 @@
         public string Fax { get; set; }
         public string AdditionalAddressInfo { get; set; }
         public string ExternalId { get; set; }
+        
+        public CustomFields Custom { get; set; }
 
         public override string ToString()
         {

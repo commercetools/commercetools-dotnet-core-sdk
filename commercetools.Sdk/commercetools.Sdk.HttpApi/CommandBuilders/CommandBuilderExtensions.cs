@@ -731,6 +731,33 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
                     ChangePasswordCommand<T>);
         }
 
+
+        public static CommandBuilder<InStoreCommand<T>, T> InStore<T>(
+            this CommandBuilder<ChangePasswordCommand<T>, T> builder,
+            string storeKey)
+            where T : Resource<T>, IInStoreUsable
+        {
+            return new CommandBuilder<InStoreCommand<T>, T>(builder.Client, () => builder.Build().InStore(storeKey));
+        }
+
+        public static CommandBuilder<InStoreCommand<T>, T> ChangePassword<T>(
+            this CommandBuilder<InStoreCommand<T>, T> builder,
+            string id,
+            int version,
+            string currentPassword,
+            string newPassword)
+            where T : Resource<T>
+        {
+            return new CommandBuilder<InStoreCommand<T>, T>(
+                builder.Client, () =>
+                {
+                    var inStoreCommand = builder.Build();
+                    var innerCommand = new ChangeCustomerPasswordCommand(id, version, currentPassword, newPassword) as ChangePasswordCommand<T>;
+                    var newInStoreCommand = new InStoreCommand<T>(inStoreCommand.StoreKey, innerCommand);
+                    return newInStoreCommand;
+                });
+        }
+
         public static CommandBuilder<ChangePasswordCommand<T>, T> ChangePassword<T>(
             this DomainCommandBuilder<T> builder,
             IVersioned<T> resource,
@@ -742,6 +769,23 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
                 builder.Client,
                 () => new ChangeCustomerPasswordCommand(resource.Id, resource.Version, currentPassword, newPassword) as
                     ChangePasswordCommand<T>);
+        }
+
+        public static CommandBuilder<InStoreCommand<T>, T> ChangePassword<T>(
+            this CommandBuilder<InStoreCommand<T>, T> builder,
+            IVersioned<T> resource,
+            string currentPassword,
+            string newPassword)
+            where T : Resource<T>
+        {
+            return new CommandBuilder<InStoreCommand<T>, T>(
+                builder.Client, () =>
+                {
+                    var inStoreCommand = builder.Build();
+                    var innerCommand = new ChangeCustomerPasswordCommand(resource.Id, resource.Version, currentPassword, newPassword) as ChangePasswordCommand<T>;
+                    var newInStoreCommand = new InStoreCommand<T>(inStoreCommand.StoreKey, innerCommand);
+                    return newInStoreCommand;
+                });
         }
 
         public static CommandBuilder<CreateTokenForPasswordResetCommand<T>, Token<T>>
@@ -936,6 +980,13 @@ namespace commercetools.Sdk.HttpApi.CommandBuilders
             return new CommandBuilder<ReplicateCommand<Cart>, Cart>(
                 builder.Client,
                 () => new ReplicateCartCommand(replica) as ReplicateCommand<Cart>);
+        }
+
+        public static CommandBuilder<InStoreCommand<Cart>, Cart> InStore(
+            this CommandBuilder<ReplicateCommand<Cart>, Cart> builder,
+            string storeKey)
+        {
+            return new CommandBuilder<InStoreCommand<Cart>, Cart>(builder.Client, () => builder.Build().InStore(storeKey));
         }
 
         #endregion

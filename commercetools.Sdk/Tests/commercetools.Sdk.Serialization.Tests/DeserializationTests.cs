@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using commercetools.Sdk.Domain;
 using commercetools.Sdk.Domain.ProductProjections;
+using commercetools.Sdk.Domain.Projects;
 using commercetools.Sdk.Domain.ShippingMethods;
 using Xunit;
 
@@ -100,6 +101,20 @@ namespace commercetools.Sdk.Serialization.Tests
             var facetResult = serializerService.Deserialize<FacetResult>(serialized);
 
             Assert.Equal(3715960759, (facetResult as RangeFacetResult).Ranges.First().Total);
+        }
+        
+        [Fact]
+        public void DeserializeProject()
+        {
+            var serializerService = this.serializationFixture.SerializerService;
+
+            var serialized = File.ReadAllText("Resources/Projects/project.json");
+            var project = serializerService.Deserialize<Project>(serialized);
+            
+            Assert.NotNull(project);
+            Assert.NotNull(project.SearchIndexing);
+            Assert.Equal(SearchIndexingConfigurationStatus.Deactivated, project.SearchIndexing.Products.Status);
+            Assert.Null(project.SearchIndexing.Orders);
         }
     }
 }

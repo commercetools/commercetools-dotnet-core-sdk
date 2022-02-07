@@ -3,15 +3,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.Predicates;
 using commercetools.Sdk.Domain.ShoppingLists;
 using commercetools.Sdk.Domain.ShoppingLists.UpdateActions;
+using commercetools.Sdk.Domain.Stores;
 using commercetools.Sdk.HttpApi.Domain.Exceptions;
 using Xunit;
 using static commercetools.Sdk.IntegrationTests.ShoppingLists.ShoppingListsFixture;
 using static commercetools.Sdk.IntegrationTests.Customers.CustomersFixture;
 using static commercetools.Sdk.IntegrationTests.Types.TypesFixture;
 using static commercetools.Sdk.IntegrationTests.Products.ProductsFixture;
+using static commercetools.Sdk.IntegrationTests.Stores.StoresFixture;
+using static commercetools.Sdk.IntegrationTests.GenericFixture;
 using SetDescriptionUpdateAction = commercetools.Sdk.Domain.ShoppingLists.UpdateActions.SetDescriptionUpdateAction;
 
 
@@ -34,6 +38,22 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
             await WithShoppingList(
                 client, shoppingListDraft => DefaultShoppingListDraftWithKey(shoppingListDraft, key),
                 shoppingList => { Assert.Equal(key, shoppingList.Key); });
+        }
+
+        [Fact]
+        public async Task CreateShoppingListInStore()
+        {
+            await WithStore(client, async store =>
+            {
+                var buildDraft = DefaultShoppingListDraft(new ShoppingListDraft());
+                var shoppingList = await client
+                    .ExecuteAsync(new CreateCommand<ShoppingList>(buildDraft).InStore(store.Key));
+
+                Assert.NotNull(shoppingList);
+                Assert.NotNull(shoppingList.Store);
+                Assert.Equal(store.Key, shoppingList.Store.Key);
+                await DeleteResource(client, shoppingList);
+            });
         }
 
         [Fact]
@@ -64,6 +84,51 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                 });
         }
 
+        [Fact]
+        public async Task GetShoppingListInStoreById()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithShoppingList(
+                    client,
+                    shoppingListDraft =>
+                        DefaultShoppingListDraftInStore(DefaultShoppingListDraft(shoppingListDraft),
+                            store.ToKeyResourceIdentifier()),
+                    async shoppingList =>
+                    {
+                        Assert.NotNull(shoppingList.Store);
+                        var retrievedShoppingList = await client
+                            .ExecuteAsync(shoppingList.ToIdResourceIdentifier().GetById().InStore(store.Key));
+                        Assert.Equal(shoppingList.Id, retrievedShoppingList.Id);
+                        Assert.NotNull(retrievedShoppingList.Store);
+                        Assert.Equal(store.Key, retrievedShoppingList.Store.Key);
+                    });
+            });
+        }
+
+        [Fact]
+        public async Task GetShoppingListInStoreByKey()
+        {
+            var key = $"GetShoppingListInStoreByKey-{TestingUtility.RandomString()}";
+            await WithStore(client, async store =>
+            {
+                await WithShoppingList(
+                    client,
+                    shoppingListDraft => DefaultShoppingListDraftInStore(
+                        DefaultShoppingListDraftWithKey(shoppingListDraft, key), store.ToKeyResourceIdentifier()),
+                    async shoppingList =>
+                    {
+                        Assert.NotNull(shoppingList.Store);
+                        Assert.Equal(key, shoppingList.Key);
+                        var retrievedShoppingList = await client
+                            .ExecuteAsync(shoppingList.ToKeyResourceIdentifier().GetByKey().InStore(store.Key));
+                        Assert.Equal(shoppingList.Key, retrievedShoppingList.Key);
+                        Assert.NotNull(retrievedShoppingList.Store);
+                        Assert.Equal(store.Key, retrievedShoppingList.Store.Key);
+                    });
+            });
+        }
+
 
         [Fact]
         public async Task QueryShoppingLists()
@@ -79,6 +144,32 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                     Assert.Single(returnedSet.Results);
                     Assert.Equal(key, returnedSet.Results[0].Key);
                 });
+        }
+
+        [Fact]
+        public async Task QueryShoppingListsInStore()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithShoppingList(
+                    client,
+                    draft => DefaultShoppingListDraftInStore(DefaultShoppingListDraft(draft),
+                        store.ToKeyResourceIdentifier()),
+                    async shoppingList =>
+                    {
+                        Assert.NotNull(shoppingList.Store);
+
+                        var command = new QueryCommand<ShoppingList>()
+                            .Where(c => c.Id == shoppingList.Id.valueOf())
+                            .InStore(store.Key);
+
+                        var returnedSet = await client.ExecuteAsync(command);
+                        Assert.Single(returnedSet.Results);
+                        Assert.Equal(shoppingList.Id, returnedSet.Results[0].Id);
+                        Assert.NotNull(returnedSet.Results[0].Store);
+                        Assert.Equal(store.Key, returnedSet.Results[0].Store.Key);
+                    });
+            });
         }
 
         [Fact]
@@ -104,11 +195,56 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                 client, shoppingListDraft => DefaultShoppingListDraftWithKey(shoppingListDraft, key),
                 async shoppingList =>
                 {
-                    await client.ExecuteAsync(new DeleteByKeyCommand<ShoppingList>(shoppingList.Key, shoppingList.Version));
+                    await client.ExecuteAsync(
+                        new DeleteByKeyCommand<ShoppingList>(shoppingList.Key, shoppingList.Version));
                     await Assert.ThrowsAsync<NotFoundException>(
                         () => client.ExecuteAsync(new GetByIdCommand<ShoppingList>(shoppingList))
                     );
                 });
+        }
+
+        [Fact]
+        public async Task DeleteShoppingListInStoreById()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithShoppingList(
+                    client,
+                    draft => DefaultShoppingListDraftInStore(DefaultShoppingListDraft(draft),
+                        store.ToKeyResourceIdentifier()),
+                    async shoppingList =>
+                    {
+                        Assert.NotNull(shoppingList.Store);
+                        await client.ExecuteAsync(shoppingList.DeleteById().InStore(store.Key));
+                        await Assert.ThrowsAsync<NotFoundException>(
+                            () => client.ExecuteAsync(
+                                new GetByIdCommand<ShoppingList>(shoppingList).InStore(store.Key))
+                        );
+                    });
+            });
+        }
+
+        [Fact]
+        public async Task DeleteShoppingListInStoreByKey()
+        {
+            var key = $"DeleteShoppingListInStoreByKey-{TestingUtility.RandomString()}";
+            await WithStore(client, async store =>
+            {
+                await WithShoppingList(
+                    client,
+                    draft => DefaultShoppingListDraftInStore(DefaultShoppingListDraftWithKey(draft, key),
+                        store.ToKeyResourceIdentifier()),
+                    async shoppingList =>
+                    {
+                        Assert.Equal(key, shoppingList.Key);
+                        Assert.NotNull(shoppingList.Store);
+                        await client.ExecuteAsync(shoppingList.DeleteByKey().InStore(store.Key));
+                        await Assert.ThrowsAsync<NotFoundException>(
+                            () => client.ExecuteAsync(
+                                new GetByIdCommand<ShoppingList>(shoppingList).InStore(store.Key))
+                        );
+                    });
+            });
         }
 
         #region UpdateActions
@@ -135,11 +271,42 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
         }
 
         [Fact]
+        public async void UpdateShoppingListInStoreSetChangeKey()
+        {
+            var newKey = $"UpdateShoppingListSetKey-{TestingUtility.RandomString()}";
+
+            await WithStore(client, async store =>
+            {
+                await WithUpdateableShoppingList(client,
+                    draft => DefaultShoppingListDraftInStore(DefaultShoppingListDraft(draft),
+                        store.ToKeyResourceIdentifier()),
+                    async shoppingList =>
+                    {
+                        Assert.NotNull(shoppingList.Store);
+                        Assert.Equal(store.Key, shoppingList.Store.Key);
+                        var action = new SetKeyUpdateAction
+                        {
+                            Key = newKey
+                        };
+
+                        var updatedShoppingList = await client
+                            .ExecuteAsync(shoppingList.UpdateById(
+                                actions => actions.AddUpdate(action)).InStore(store.Key));
+
+                        Assert.NotNull(updatedShoppingList.Store);
+                        Assert.Equal(store.Key, updatedShoppingList.Store.Key);
+                        Assert.Equal(newKey, updatedShoppingList.Key);
+                        return updatedShoppingList;
+                    });
+            });
+        }
+
+        [Fact]
         public async Task UpdateShoppingListByKeySetSlug()
         {
             await WithUpdateableShoppingList(client, async shoppingList =>
             {
-                var newSlug = new LocalizedString {{"en", TestingUtility.RandomString()}};
+                var newSlug = new LocalizedString { { "en", TestingUtility.RandomString() } };
                 var updateActions = new List<UpdateAction<ShoppingList>>();
                 var action = new SetSlugUpdateAction
                 {
@@ -148,7 +315,8 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                 updateActions.Add(action);
 
                 var updatedShoppingList = await client
-                    .ExecuteAsync(new UpdateByKeyCommand<ShoppingList>(shoppingList.Key, shoppingList.Version, updateActions));
+                    .ExecuteAsync(new UpdateByKeyCommand<ShoppingList>(shoppingList.Key, shoppingList.Version,
+                        updateActions));
 
                 Assert.Equal(newSlug["en"], updatedShoppingList.Slug["en"]);
                 return updatedShoppingList;
@@ -160,7 +328,7 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
         {
             await WithUpdateableShoppingList(client, async shoppingList =>
             {
-                var newName = new LocalizedString {{"en", TestingUtility.RandomString()}};
+                var newName = new LocalizedString { { "en", TestingUtility.RandomString() } };
                 var updateActions = new List<UpdateAction<ShoppingList>>();
                 var action = new ChangeNameUpdateAction
                 {
@@ -169,10 +337,42 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                 updateActions.Add(action);
 
                 var updatedShoppingList = await client
-                    .ExecuteAsync(new UpdateByKeyCommand<ShoppingList>(shoppingList.Key, shoppingList.Version, updateActions));
+                    .ExecuteAsync(new UpdateByKeyCommand<ShoppingList>(shoppingList.Key, shoppingList.Version,
+                        updateActions));
 
                 Assert.Equal(newName["en"], updatedShoppingList.Name["en"]);
                 return updatedShoppingList;
+            });
+        }
+
+        [Fact]
+        public async Task UpdateShoppingListInStoreByKeyChangeName()
+        {
+            var newName = new LocalizedString { { "en", TestingUtility.RandomString() } };
+            await WithStore(client, async store =>
+            {
+                await WithUpdateableShoppingList(client,
+                    draft =>
+                        DefaultShoppingListDraftInStore(DefaultShoppingListDraft(draft),
+                            store.ToKeyResourceIdentifier()),
+                    async shoppingList =>
+                    {
+                        Assert.NotNull(shoppingList.Store);
+                        Assert.Equal(store.Key, shoppingList.Store.Key);
+                        var action = new ChangeNameUpdateAction
+                        {
+                            Name = newName
+                        };
+
+                        var updatedShoppingList = await client
+                            .ExecuteAsync(shoppingList.UpdateByKey(
+                                actions => actions.AddUpdate(action)).InStore(store.Key));
+
+                        Assert.NotNull(updatedShoppingList.Store);
+                        Assert.Equal(store.Key, updatedShoppingList.Store.Key);
+                        Assert.Equal(newName["en"], updatedShoppingList.Name["en"]);
+                        return updatedShoppingList;
+                    });
             });
         }
 
@@ -181,7 +381,7 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
         {
             await WithUpdateableShoppingList(client, async shoppingList =>
             {
-                var newDescription = new LocalizedString {{"en", TestingUtility.RandomString()}};
+                var newDescription = new LocalizedString { { "en", TestingUtility.RandomString() } };
                 var updateActions = new List<UpdateAction<ShoppingList>>();
                 var action = new SetDescriptionUpdateAction
                 {
@@ -262,7 +462,8 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                         };
                         updateActions.Add(setTypeAction);
 
-                        var updatedShoppingList = await client.ExecuteAsync(new UpdateByIdCommand<ShoppingList>(shoppingList, updateActions));
+                        var updatedShoppingList =
+                            await client.ExecuteAsync(new UpdateByIdCommand<ShoppingList>(shoppingList, updateActions));
 
                         Assert.Equal(type.Id, updatedShoppingList.Custom.Type.Id);
                         return updatedShoppingList;
@@ -289,7 +490,8 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                         };
                         updateActions.Add(action);
 
-                        var updatedShoppingList = await client.ExecuteAsync(new UpdateByIdCommand<ShoppingList>(shoppingList, updateActions));
+                        var updatedShoppingList =
+                            await client.ExecuteAsync(new UpdateByIdCommand<ShoppingList>(shoppingList, updateActions));
 
                         Assert.Equal(newValue, updatedShoppingList.Custom.Fields["string-field"]);
                         return updatedShoppingList;
@@ -317,7 +519,6 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                 return updatedShoppingList;
             });
         }
-
 
 
         [Fact]
@@ -348,7 +549,6 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                     Assert.Equal(quantity, addedLineItem.Quantity);
                     return updatedShoppingList;
                 });
-
             });
         }
 
@@ -380,7 +580,8 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                 updateActions.Clear();
                 updateActions.Add(action);
                 var shoppingListWithoutLineItems = await client
-                    .ExecuteAsync(new UpdateByIdCommand<ShoppingList>(updatedShoppingListWithRemovedLineItem, updateActions));
+                    .ExecuteAsync(new UpdateByIdCommand<ShoppingList>(updatedShoppingListWithRemovedLineItem,
+                        updateActions));
 
                 Assert.Empty(shoppingListWithoutLineItems.LineItems);
                 return updatedShoppingListWithRemovedLineItem;
@@ -415,7 +616,8 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                 updateActions.Clear();
                 updateActions.Add(action);
                 var shoppingListWithoutLineItems = await client
-                    .ExecuteAsync(new UpdateByIdCommand<ShoppingList>(updatedShoppingListWithMoreQuantity, updateActions));
+                    .ExecuteAsync(
+                        new UpdateByIdCommand<ShoppingList>(updatedShoppingListWithMoreQuantity, updateActions));
 
                 Assert.Empty(shoppingListWithoutLineItems.LineItems);
                 return shoppingListWithoutLineItems;
@@ -512,14 +714,13 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
         }
 
 
-
         [Fact]
         public async Task UpdateShoppingListAddTextLineItem()
         {
             await WithUpdateableShoppingList(client, async shoppingList =>
             {
                 Assert.Empty(shoppingList.TextLineItems);
-                var name = new LocalizedString {{"en", TestingUtility.RandomString()}};
+                var name = new LocalizedString { { "en", TestingUtility.RandomString() } };
                 var quantity = 2;
                 var updateActions = new List<UpdateAction<ShoppingList>>();
                 var action = new AddTextLineItemUpdateAction
@@ -568,7 +769,8 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                 updateActions.Clear();
                 updateActions.Add(action);
                 var shoppingListWithoutLineItems = await client
-                    .ExecuteAsync(new UpdateByIdCommand<ShoppingList>(updatedShoppingListWithRemovedTextLineItem, updateActions));
+                    .ExecuteAsync(new UpdateByIdCommand<ShoppingList>(updatedShoppingListWithRemovedTextLineItem,
+                        updateActions));
 
                 Assert.Empty(shoppingListWithoutLineItems.TextLineItems);
                 return updatedShoppingListWithRemovedTextLineItem;
@@ -582,7 +784,7 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
             {
                 Assert.Single(shoppingList.TextLineItems);
                 var textLineItem = shoppingList.TextLineItems[0];
-                Assert.Equal(1,textLineItem.Quantity);
+                Assert.Equal(1, textLineItem.Quantity);
 
                 var updateActions = new List<UpdateAction<ShoppingList>>();
                 var action = new ChangeTextLineItemQuantityUpdateAction
@@ -603,7 +805,8 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                 updateActions.Clear();
                 updateActions.Add(action);
                 var shoppingListWithoutTextLineItems = await client
-                    .ExecuteAsync(new UpdateByIdCommand<ShoppingList>(updatedShoppingListWithMoreQuantity, updateActions));
+                    .ExecuteAsync(
+                        new UpdateByIdCommand<ShoppingList>(updatedShoppingListWithMoreQuantity, updateActions));
 
                 Assert.Empty(shoppingListWithoutTextLineItems.TextLineItems);
                 return shoppingListWithoutTextLineItems;
@@ -618,7 +821,7 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                 Assert.Single(shoppingList.TextLineItems);
                 var textLineItem = shoppingList.TextLineItems[0];
 
-                var newName = new LocalizedString {{"en", TestingUtility.RandomString()}};
+                var newName = new LocalizedString { { "en", TestingUtility.RandomString() } };
                 var updateActions = new List<UpdateAction<ShoppingList>>();
                 var action = new ChangeTextLineItemNameUpdateAction
                 {
@@ -646,7 +849,7 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                 Assert.Single(shoppingList.TextLineItems);
                 var textLineItem = shoppingList.TextLineItems[0];
 
-                var newDescription = new LocalizedString {{"en", TestingUtility.RandomString()}};
+                var newDescription = new LocalizedString { { "en", TestingUtility.RandomString() } };
                 var updateActions = new List<UpdateAction<ShoppingList>>();
                 var action = new SetTextLineItemDescriptionUpdateAction
                 {
@@ -752,6 +955,29 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                 Assert.NotNull(textLineItem.Custom);
                 Assert.Equal(newValue, textLineItem.Custom.Fields["string-field"]);
                 return updatedShoppingList;
+            });
+        }
+
+        [Fact]
+        public async Task UpdateShoppingListSetStore()
+        {
+            await WithStore(client, async store =>
+            {
+                await WithUpdateableShoppingList(client, async shoppingList =>
+                {
+                    Assert.Null(shoppingList.Store);
+                    var action = new SetStoreUpdateAction()
+                    {
+                        Store = store.ToKeyResourceIdentifier()
+                    };
+
+                    var updatedShoppingList = await client
+                        .ExecuteAsync(shoppingList.UpdateById(actions => actions.AddUpdate(action)));
+
+                    Assert.NotNull(updatedShoppingList.Store);
+                    Assert.Equal(updatedShoppingList.Store.Key, store.Key);
+                    return updatedShoppingList;
+                });
             });
         }
 

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using commercetools.Sdk.Client;
 using commercetools.Sdk.Domain;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.ShoppingLists;
+using commercetools.Sdk.Domain.Stores;
 using Type = commercetools.Sdk.Domain.Types.Type;
 using static commercetools.Sdk.IntegrationTests.GenericFixture;
 using static commercetools.Sdk.IntegrationTests.Products.ProductsFixture;
@@ -36,6 +38,12 @@ namespace commercetools.Sdk.IntegrationTests.ShoppingLists
                 lineItemDraft1
             };
             return shoppingListDraft;
+        }
+        
+        public static ShoppingListDraft DefaultShoppingListDraftInStore(ShoppingListDraft draft, IReferenceable<Store> store)
+        {
+            draft.Store = store;
+            return draft;
         }
         
         public static ShoppingListDraft DefaultShoppingListDraftWithLineItems(ShoppingListDraft draft, Product product)
