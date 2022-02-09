@@ -9,6 +9,7 @@ namespace commercetools.Sdk.Domain.Carts
     {
         public string Id { get; set; }
         public string ProductId { get; set; }
+        public string ProductKey { get; set; }
         public LocalizedString Name { get; set; }
         public LocalizedString ProductSlug { get; set; }
         public Reference<ProductType> ProductType { get; set; }

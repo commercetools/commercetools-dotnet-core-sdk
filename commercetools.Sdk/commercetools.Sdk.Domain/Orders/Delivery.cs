@@ -10,5 +10,6 @@ namespace commercetools.Sdk.Domain.Orders
         public List<DeliveryItem> Items { get; set; }
         public List<Parcel> Parcels { get; set; }
         public Address Address { get; set; }
+        public CustomFields Custom { get; set; }
     }
 }

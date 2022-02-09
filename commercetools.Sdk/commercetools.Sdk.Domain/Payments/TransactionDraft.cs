@@ -9,5 +9,6 @@ namespace commercetools.Sdk.Domain.Payments
         public Money Amount { get; set; }
         public string InteractionId { get; set; }
         public TransactionState State { get; set; }
+        public CustomFields Custom { get; set; }
     }
 }

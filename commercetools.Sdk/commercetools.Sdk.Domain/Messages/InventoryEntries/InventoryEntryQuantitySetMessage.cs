@@ -1,3 +1,5 @@
+using commercetools.Sdk.Domain.Channels;
+using commercetools.Sdk.Domain.Common;
 using commercetools.Sdk.Domain.InventoryEntries;
 
 namespace commercetools.Sdk.Domain.Messages.InventoryEntries
@@ -9,5 +11,6 @@ namespace commercetools.Sdk.Domain.Messages.InventoryEntries
         public long NewQuantityOnStock { get; set; }
         public long OldAvailableQuantity { get; set; }
         public long NewAvailableQuantity { get; set; }
+        public IReference<Channel> SupplyChannel { get; set; }
     }
 }
