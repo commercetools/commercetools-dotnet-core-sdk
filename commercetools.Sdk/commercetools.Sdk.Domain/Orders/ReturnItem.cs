@@ -12,5 +12,6 @@ namespace commercetools.Sdk.Domain.Orders
         public ReturnPaymentState PaymentState { get; set; }
         public DateTime LastModifiedAt { get; set; }
         public DateTime CreatedAt { get; set; }
+        public CustomFields Custom { get; set; }
     }
 }
