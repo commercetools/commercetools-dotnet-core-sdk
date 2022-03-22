@@ -41,5 +41,6 @@ namespace commercetools.Sdk.Domain.Carts
         public CartOrigin Origin { get; set; }
         public List<Address> ItemShippingAddresses { get; set; }
         public ItemShippingDetails ShippingDetails { get; set; }
+        public long TotalLineItemQuantity { get; set; }
     }
 }
