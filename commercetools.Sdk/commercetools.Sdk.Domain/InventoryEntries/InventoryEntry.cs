@@ -6,8 +6,9 @@ namespace commercetools.Sdk.Domain.InventoryEntries
 {
     [Endpoint("inventory")]
     [ResourceType(ReferenceTypeId.InventoryEntry)]
-    public class InventoryEntry : Resource<InventoryEntry>
+    public class InventoryEntry : Resource<InventoryEntry>,IKeyReferencable<InventoryEntry>
     {
+        public string Key { get; set; }
         public string Sku { get; set; }
         public Reference<Channel> SupplyChannel { get; set; }
         public long QuantityOnStock { get; set; }

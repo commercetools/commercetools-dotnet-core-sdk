@@ -21,6 +21,12 @@ namespace commercetools.Sdk.IntegrationTests.Inventory
             inventoryEntryDraft.RestockableInDays = TestingUtility.RandomInt(1, 100);
             return inventoryEntryDraft;
         }
+        public static InventoryEntryDraft DefaultInventoryEntryDraftWithKey(InventoryEntryDraft draft, string key)
+        {
+            var inventoryEntryDraft = DefaultInventoryEntryDraft(draft);
+            inventoryEntryDraft.Key = key;
+            return inventoryEntryDraft;
+        }
         
         public static InventoryEntryDraft DefaultInventoryEntryDraftWithSku(InventoryEntryDraft draft, string sku)
         {
