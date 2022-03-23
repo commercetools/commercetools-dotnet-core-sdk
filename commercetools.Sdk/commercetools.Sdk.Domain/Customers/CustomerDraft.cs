@@ -16,7 +16,7 @@ namespace commercetools.Sdk.Domain.Customers
         public string Key { get; set; }
         [Required]
         public string Email { get; set; }
-        [Required]
+        [RequiredIf(nameof(AuthenticationMode), AuthenticationMode.Password,"The 'password' field is required as AuthenticationMode is 'Password'")]
         public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -44,5 +44,6 @@ namespace commercetools.Sdk.Domain.Customers
         public string Locale { get; set; }
         
         public List<IReferenceable<Store>> Stores { get; set; }
+        public AuthenticationMode AuthenticationMode { get; set; }
     }
 }

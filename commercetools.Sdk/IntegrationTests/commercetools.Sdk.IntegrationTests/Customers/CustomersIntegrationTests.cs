@@ -36,6 +36,17 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                 client, customerDraft => DefaultCustomerDraftWithKey(customerDraft, key),
                 customer => { Assert.Equal(key, customer.Key); });
         }
+        [Fact]
+        public async Task CreateCustomerWithExternalAuth()
+        {
+            await WithCustomer(
+                client, 
+                DefaultCustomerDraftWithExternalAuth,
+                customer =>
+                {
+                    Assert.Equal(AuthenticationMode.ExternalAuth, customer.AuthenticationMode);
+                });
+        }
 
         [Fact]
         public async Task CreateCustomerInStore()

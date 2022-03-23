@@ -22,6 +22,14 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             customerDraft.Key = $"Key_{rand}";
             return customerDraft;
         }
+        public static CustomerDraft DefaultCustomerDraftWithExternalAuth(CustomerDraft customerDraft)
+        {
+            var rand = TestingUtility.RandomString(10);
+            customerDraft.Email = $"{rand}@email.com";
+            customerDraft.Key = $"Key_{rand}";
+            customerDraft.AuthenticationMode = AuthenticationMode.ExternalAuth;
+            return customerDraft;
+        }
         public static CustomerDraft DefaultCustomerDraftWithKey(CustomerDraft draft, string key)
         {
             var customerDraft = DefaultCustomerDraft(draft);
