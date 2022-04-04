@@ -5,5 +5,6 @@
         public long Quantity { get; set; }
         public string Comment { get; set; }
         public ReturnShipmentState ShipmentState { get; set; }
+        public CustomFields Custom { get; set; }
     }
 }

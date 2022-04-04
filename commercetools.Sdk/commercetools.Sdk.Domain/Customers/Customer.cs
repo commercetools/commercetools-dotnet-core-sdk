@@ -36,5 +36,6 @@ namespace commercetools.Sdk.Domain.Customers
         public string Locale { get; set; }
 
         public List<KeyReference<Store>> Stores { get; set; }
+        public AuthenticationMode AuthenticationMode { get; set; }
     }
 }

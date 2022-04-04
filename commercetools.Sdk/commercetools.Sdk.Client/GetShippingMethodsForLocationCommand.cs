@@ -9,14 +9,12 @@ namespace commercetools.Sdk.Client
     /// </summary>
     public class GetShippingMethodsForLocationCommand : GetMatchingQueryCommand<ShippingMethod>
     {
-        public GetShippingMethodsForLocationCommand(string country, string state = null, string currency = null, List<Expansion<ShippingMethod>> expand = null)
-        {
-            this.Init(country, state, currency, expand);
-        }
-
-        public override string UrlSuffix => "/matching-location";
-
-        private void Init(string country, string state = null, string currency = null, List<Expansion<ShippingMethod>> expand = null)
+        public GetShippingMethodsForLocationCommand(
+            string country,
+            string state = null,
+            string currency = null,
+            IEnumerable<Expansion<ShippingMethod>> expand = null,
+            IEnumerable<Sort<ShippingMethod>> sort = null)
         {
             this.AdditionalParameters = new GetShippingMethodsForLocationAdditionalParameters
             {
@@ -25,6 +23,9 @@ namespace commercetools.Sdk.Client
                 Currency = currency
             };
             this.SetExpand(expand);
+            this.SetSort(sort);
         }
+
+        public override string UrlSuffix => "/matching-location";
     }
 }

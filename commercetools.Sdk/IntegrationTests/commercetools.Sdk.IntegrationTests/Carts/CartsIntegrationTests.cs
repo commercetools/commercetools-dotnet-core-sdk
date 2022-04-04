@@ -123,6 +123,7 @@ namespace commercetools.Sdk.IntegrationTests.Carts
                                 );
 
                             Assert.Equal(cart.Id, retrievedCart.Id);
+                            Assert.Equal(1, cart.TotalLineItemQuantity);
                             var lineItem = retrievedCart.LineItems.FirstOrDefault();
                             Assert.NotNull(lineItem);
                             Assert.NotNull(lineItem.DiscountedPricePerQuantity);

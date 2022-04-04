@@ -7,6 +7,7 @@ namespace commercetools.Sdk.Domain.InventoryEntries
 {
     public class InventoryEntryDraft : IDraft<InventoryEntry>
     {
+        public string Key { get; set; }
         [Required]
         public string Sku { get; set; }
         public IReference<Channel> SupplyChannel { get; set; }

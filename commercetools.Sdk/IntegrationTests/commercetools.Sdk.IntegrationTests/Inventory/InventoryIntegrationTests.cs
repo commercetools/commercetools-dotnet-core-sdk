@@ -45,6 +45,20 @@ namespace commercetools.Sdk.IntegrationTests.Inventory
                     Assert.Equal(sku, retrievedInventoryEntry.Sku);
                 });
         }
+        
+        [Fact]
+        public async Task GetInventoryEntryByKey()
+        {
+            var key = $"CreateInventoryEntry-{TestingUtility.RandomString()}";
+            await WithInventoryEntry(
+                client, inventoryEntryDraft => DefaultInventoryEntryDraftWithKey(inventoryEntryDraft, key),
+                async inventoryEntry =>
+                {
+                    var retrievedInventoryEntry = await client
+                        .ExecuteAsync(inventoryEntry.ToKeyResourceIdentifier().GetByKey());
+                    Assert.Equal(key, retrievedInventoryEntry.Key);
+                });
+        }
 
         [Fact]
         public async Task QueryInventoryEntries()
@@ -65,12 +79,27 @@ namespace commercetools.Sdk.IntegrationTests.Inventory
         [Fact]
         public async Task DeleteInventoryEntryById()
         {
-            var key = $"DeleteInventoryEntryById-{TestingUtility.RandomString()}";
+            var sku = $"DeleteInventoryEntryById-{TestingUtility.RandomString()}";
             await WithInventoryEntry(
-                client, inventoryEntryDraft => DefaultInventoryEntryDraftWithSku(inventoryEntryDraft, key),
+                client, inventoryEntryDraft => DefaultInventoryEntryDraftWithSku(inventoryEntryDraft, sku),
                 async inventoryEntry =>
                 {
                     await client.ExecuteAsync(inventoryEntry.DeleteById());
+                    await Assert.ThrowsAsync<NotFoundException>(
+                        () => client.ExecuteAsync(new GetByIdCommand<InventoryEntry>(inventoryEntry))
+                    );
+                });
+        }
+        
+        [Fact]
+        public async Task DeleteInventoryEntryByKey()
+        {
+            var key = $"DeleteInventoryEntryByKey-{TestingUtility.RandomString()}";
+            await WithInventoryEntry(
+                client, inventoryEntryDraft => DefaultInventoryEntryDraftWithKey(inventoryEntryDraft, key),
+                async inventoryEntry =>
+                {
+                    await client.ExecuteAsync(inventoryEntry.DeleteByKey());
                     await Assert.ThrowsAsync<NotFoundException>(
                         () => client.ExecuteAsync(new GetByIdCommand<InventoryEntry>(inventoryEntry))
                     );
@@ -99,6 +128,26 @@ namespace commercetools.Sdk.IntegrationTests.Inventory
                         updatedInventoryEntry.QuantityOnStock);
                     Assert.Equal(inventoryEntry.AvailableQuantity + newAddedQuantity,
                         updatedInventoryEntry.AvailableQuantity);
+                    return updatedInventoryEntry;
+                });
+        }
+        
+        [Fact]
+        public async void UpdateInventoryEntrySetKey()
+        {
+            await WithUpdateableInventoryEntry(client, DefaultInventoryEntryDraft,
+                async inventoryEntry =>
+                {
+                    var newKey = TestingUtility.RandomString();
+                    var action = new SetKeyUpdateAction
+                    {
+                        Key = newKey
+                    };
+
+                    var updatedInventoryEntry = await client
+                        .ExecuteAsync(inventoryEntry.UpdateById(actions => actions.AddUpdate(action)));
+
+                    Assert.Equal(newKey, updatedInventoryEntry.Key);
                     return updatedInventoryEntry;
                 });
         }
@@ -149,6 +198,30 @@ namespace commercetools.Sdk.IntegrationTests.Inventory
                 });
         }
 
+        [Fact]
+        public async void UpdateInventoryEntryChangeQuantityByKey()
+        {
+            var key = TestingUtility.RandomString();
+            await WithUpdateableInventoryEntry(client, 
+                draft => DefaultInventoryEntryDraftWithKey(draft, key),
+                async inventoryEntry =>
+                {
+                    Assert.Equal(key, inventoryEntry.Key);
+                    var newQuantity = TestingUtility.RandomInt(100, 1000);
+                    var action = new ChangeQuantityUpdateAction
+                    {
+                        Quantity = newQuantity
+                    };
+
+                    var updatedInventoryEntry = await client
+                        .ExecuteAsync(inventoryEntry.UpdateByKey(actions => actions.AddUpdate(action)));
+
+                    Assert.Equal(key, updatedInventoryEntry.Key);
+                    Assert.Equal(newQuantity, updatedInventoryEntry.QuantityOnStock);
+                    Assert.Equal(newQuantity, updatedInventoryEntry.AvailableQuantity);
+                    return updatedInventoryEntry;
+                });
+        }
         [Fact]
         public async void UpdateInventoryEntrySetRestockableInDays()
         {

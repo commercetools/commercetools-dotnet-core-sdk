@@ -35,6 +35,7 @@
     "id": "8a41c947-5a92-4604-bbbb-e82457f0f2c0"
   },
   "key": "ronnieWood",
+  "authenticationMode": "Password",
   "stores": [
     {
       "typeId": "store",
