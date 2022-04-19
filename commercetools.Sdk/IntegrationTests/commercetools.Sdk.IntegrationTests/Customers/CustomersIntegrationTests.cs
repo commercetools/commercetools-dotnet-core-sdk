@@ -36,16 +36,14 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                 client, customerDraft => DefaultCustomerDraftWithKey(customerDraft, key),
                 customer => { Assert.Equal(key, customer.Key); });
         }
+
         [Fact]
         public async Task CreateCustomerWithExternalAuth()
         {
             await WithCustomer(
-                client, 
+                client,
                 DefaultCustomerDraftWithExternalAuth,
-                customer =>
-                {
-                    Assert.Equal(AuthenticationMode.ExternalAuth, customer.AuthenticationMode);
-                });
+                customer => { Assert.Equal(AuthenticationMode.ExternalAuth, customer.AuthenticationMode); });
         }
 
         [Fact]
@@ -54,7 +52,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             await WithStore(client, async store =>
             {
                 var buildDraft = DefaultCustomerDraft(new CustomerDraft());
-                var signInResult = (CustomerSignInResult) await client
+                var signInResult = (CustomerSignInResult)await client
                     .ExecuteAsync(new SignUpCustomerCommand(buildDraft).InStore(store.Key));
                 var customer = signInResult.Customer;
                 Assert.NotNull(customer);
@@ -623,7 +621,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             await WithUpdateableCustomer(client, async customer =>
             {
                 var newEmail = $"joe{TestingUtility.RandomString()}@example.com";
-                var action = new ChangeEmailUpdateAction {Email = newEmail};
+                var action = new ChangeEmailUpdateAction { Email = newEmail };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateByKey(actions => actions.AddUpdate(action)));
@@ -639,7 +637,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             await WithUpdateableCustomer(client, async customer =>
             {
                 var firstName = TestingUtility.RandomString();
-                var action = new SetFirstNameUpdateAction {FirstName = firstName};
+                var action = new SetFirstNameUpdateAction { FirstName = firstName };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateByKey(actions => actions.AddUpdate(action)));
@@ -666,7 +664,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                         Assert.Single(customer.Stores);
 
                         var firstName = TestingUtility.RandomString();
-                        var action = new SetFirstNameUpdateAction {FirstName = firstName};
+                        var action = new SetFirstNameUpdateAction { FirstName = firstName };
 
                         var updatedCustomer = await client
                             .ExecuteAsync(customer.UpdateByKey(
@@ -687,7 +685,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             await WithUpdateableCustomer(client, async customer =>
             {
                 var lastName = TestingUtility.RandomString();
-                var action = new SetLastNameUpdateAction() {LastName = lastName};
+                var action = new SetLastNameUpdateAction() { LastName = lastName };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
@@ -695,6 +693,49 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                 Assert.Equal(lastName, updatedCustomer.LastName);
                 return updatedCustomer;
             });
+        }
+
+        [Fact]
+        public async Task UpdateCustomerByIdSetAuthenticationMode()
+        {
+            await WithUpdateableCustomer(client,
+                DefaultCustomerDraftWithExternalAuth,
+                async customer =>
+                {
+                    Assert.Equal(AuthenticationMode.ExternalAuth, customer.AuthenticationMode);
+                    Assert.Null(customer.Password);
+                    var action = new SetAuthenticationModeUpdateAction
+                    {
+                        AuthMode = AuthenticationMode.Password,
+                        Password = "1234"
+                    };
+                    var updatedCustomer = await client
+                        .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
+                    Assert.NotNull(updatedCustomer.Password);
+                    Assert.Equal(AuthenticationMode.Password, updatedCustomer.AuthenticationMode);
+                    return updatedCustomer;
+                });
+        }
+        
+        [Fact]
+        public async Task UpdateCustomerByIdSetAuthenticationModeToExternal()
+        {
+            await WithUpdateableCustomer(client,
+                DefaultCustomerDraft,
+                async customer =>
+                {
+                    Assert.Equal(AuthenticationMode.Password, customer.AuthenticationMode);
+                    Assert.NotNull(customer.Password);
+                    var action = new SetAuthenticationModeUpdateAction
+                    {
+                        AuthMode = AuthenticationMode.ExternalAuth,
+                    };
+                    var updatedCustomer = await client
+                        .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
+                    Assert.Null(updatedCustomer.Password);
+                    Assert.Equal(AuthenticationMode.ExternalAuth, updatedCustomer.AuthenticationMode);
+                    return updatedCustomer;
+                });
         }
 
         [Fact]
@@ -714,7 +755,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                         Assert.Single(customer.Stores);
 
                         var lastName = TestingUtility.RandomString();
-                        var action = new SetLastNameUpdateAction() {LastName = lastName};
+                        var action = new SetLastNameUpdateAction() { LastName = lastName };
 
                         var updatedCustomer = await client
                             .ExecuteAsync(customer.UpdateById(
@@ -735,7 +776,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             await WithUpdateableCustomer(client, async customer =>
             {
                 var middleName = TestingUtility.RandomString();
-                var action = new SetMiddleNameUpdateAction {MiddleName = middleName};
+                var action = new SetMiddleNameUpdateAction { MiddleName = middleName };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
@@ -751,7 +792,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             await WithUpdateableCustomer(client, async customer =>
             {
                 var title = TestingUtility.RandomString();
-                var action = new SetTitleUpdateAction {Title = title};
+                var action = new SetTitleUpdateAction { Title = title };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
@@ -767,7 +808,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             await WithUpdateableCustomer(client, async customer =>
             {
                 var salutation = TestingUtility.RandomString();
-                var action = new SetSalutationUpdateAction {Salutation = salutation};
+                var action = new SetSalutationUpdateAction { Salutation = salutation };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
@@ -784,7 +825,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             {
                 Assert.Empty(customer.Addresses);
                 var address = TestingUtility.GetRandomAddress();
-                var action = new AddAddressUpdateAction {Address = address};
+                var action = new AddAddressUpdateAction { Address = address };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
@@ -802,7 +843,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             {
                 Assert.Single(customer.Addresses);
                 var address = TestingUtility.GetRandomAddress();
-                var action = new ChangeAddressUpdateAction {Address = address, AddressId = customer.Addresses[0].Id};
+                var action = new ChangeAddressUpdateAction { Address = address, AddressId = customer.Addresses[0].Id };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
@@ -819,7 +860,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             await WithUpdateableCustomer(client, DefaultCustomerDraftWithAddress, async customer =>
             {
                 Assert.Single(customer.Addresses);
-                var action = new RemoveAddressUpdateAction {AddressId = customer.Addresses[0].Id};
+                var action = new RemoveAddressUpdateAction { AddressId = customer.Addresses[0].Id };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
@@ -839,7 +880,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                 Assert.Null(customer.DefaultShippingAddressId);
 
                 var shippingAddressId = customer.Addresses[0].Id;
-                var action = new SetDefaultShippingAddressUpdateAction {AddressId = shippingAddressId};
+                var action = new SetDefaultShippingAddressUpdateAction { AddressId = shippingAddressId };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
@@ -859,7 +900,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                 Assert.Empty(customer.ShippingAddressIds);
 
                 var shippingAddressId = customer.Addresses[0].Id;
-                var action = new AddShippingAddressIdUpdateAction {AddressId = shippingAddressId};
+                var action = new AddShippingAddressIdUpdateAction { AddressId = shippingAddressId };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
@@ -879,7 +920,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                 Assert.Single(customer.ShippingAddressIds);
 
                 var shippingAddressId = customer.ShippingAddressIds[0];
-                var action = new RemoveShippingAddressIdUpdateAction {AddressId = shippingAddressId};
+                var action = new RemoveShippingAddressIdUpdateAction { AddressId = shippingAddressId };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
@@ -899,7 +940,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                 Assert.Null(customer.DefaultBillingAddressId);
 
                 var billingAddressId = customer.Addresses[0].Id;
-                var action = new SetDefaultBillingAddressUpdateAction {AddressId = billingAddressId};
+                var action = new SetDefaultBillingAddressUpdateAction { AddressId = billingAddressId };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
@@ -919,7 +960,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                 Assert.Empty(customer.BillingAddressIds);
 
                 var billingAddressId = customer.Addresses[0].Id;
-                var action = new AddBillingAddressIdUpdateAction {AddressId = billingAddressId};
+                var action = new AddBillingAddressIdUpdateAction { AddressId = billingAddressId };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
@@ -939,7 +980,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                 Assert.Single(customer.BillingAddressIds);
 
                 var billingAddressId = customer.BillingAddressIds[0];
-                var action = new RemoveBillingAddressIdUpdateAction {AddressId = billingAddressId};
+                var action = new RemoveBillingAddressIdUpdateAction { AddressId = billingAddressId };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
@@ -981,7 +1022,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             await WithUpdateableCustomer(client, async customer =>
             {
                 var customerNumber = TestingUtility.RandomString();
-                var action = new SetCustomerNumberUpdateAction {CustomerNumber = customerNumber};
+                var action = new SetCustomerNumberUpdateAction { CustomerNumber = customerNumber };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateByKey(actions => actions.AddUpdate(action)));
@@ -997,7 +1038,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             await WithUpdateableCustomer(client, async customer =>
             {
                 var externalId = TestingUtility.RandomString();
-                var action = new SetExternalIdUpdateAction {ExternalId = externalId};
+                var action = new SetExternalIdUpdateAction { ExternalId = externalId };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateByKey(actions => actions.AddUpdate(action)));
@@ -1013,7 +1054,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             await WithUpdateableCustomer(client, async customer =>
             {
                 var companyName = TestingUtility.RandomString();
-                var action = new SetCompanyNameUpdateAction {CompanyName = companyName};
+                var action = new SetCompanyNameUpdateAction { CompanyName = companyName };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateByKey(actions => actions.AddUpdate(action)));
@@ -1030,7 +1071,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             {
                 Assert.Null(customer.DateOfBirth);
                 var dateOfBirth = TestingUtility.RandomDate();
-                var action = new SetDateOfBirthUpdateAction {DateOfBirth = dateOfBirth};
+                var action = new SetDateOfBirthUpdateAction { DateOfBirth = dateOfBirth };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateByKey(actions => actions.AddUpdate(action)));
@@ -1048,7 +1089,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             {
                 Assert.Null(customer.VatId);
                 var vatId = TestingUtility.RandomString();
-                var action = new SetVatIdUpdateAction {VatId = vatId};
+                var action = new SetVatIdUpdateAction { VatId = vatId };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateByKey(actions => actions.AddUpdate(action)));
@@ -1120,7 +1161,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
                 async customer =>
                 {
                     Assert.Null(customer.Locale);
-                    var action = new SetLocaleUpdateAction {Locale = locale};
+                    var action = new SetLocaleUpdateAction { Locale = locale };
                     var updatedCustomer = await client
                         .ExecuteAsync(customer.UpdateByKey(actions => actions.AddUpdate(action)));
                     Assert.Equal(locale, updatedCustomer.Locale);
@@ -1134,7 +1175,7 @@ namespace commercetools.Sdk.IntegrationTests.Customers
             await WithUpdateableCustomer(client, async customer =>
             {
                 var key = TestingUtility.RandomString();
-                var action = new SetKeyUpdateAction {Key = key};
+                var action = new SetKeyUpdateAction { Key = key };
 
                 var updatedCustomer = await client
                     .ExecuteAsync(customer.UpdateById(actions => actions.AddUpdate(action)));
