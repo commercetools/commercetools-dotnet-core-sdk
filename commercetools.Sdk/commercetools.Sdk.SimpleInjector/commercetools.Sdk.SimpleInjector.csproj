@@ -6,14 +6,14 @@
         <authors>commercetools</authors>
         <owners>commercetools</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>The commercetools SDK allows developers to work effectively with the commercetools platform in their .NET applications by providing typesafe access to the commercetools HTTP API.</description>
+        <description>The Composable Commerce SDK allows developers to work effectively by providing typesafe access to commercetools Composable Commerce in their .NET applications.</description>
         <copyright>Copyright commercetools 2019</copyright>
         <PackageProjectUrl>https://github.com/commercetools/commercetools-dotnet-core-sdk</PackageProjectUrl>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageIconUrl>https://raw.githubusercontent.com/commercetools/commercetools-dotnet-core-sdk/master/ct-logo.png</PackageIconUrl>
         <RepositoryUrl>https://github.com/commercetools/commercetools-dotnet-core-sdk</RepositoryUrl>
         <PackageReleaseNotes>Information about latest changes can be found at https://github.com/commercetools/commercetools-dotnet-core-sdk/blob/master/CHANGELOG.md</PackageReleaseNotes>
-        <PackageTags>commercetools;dotnet-core;sdk</PackageTags>
+        <PackageTags>commercetools;composable-commerce;dotnet-core;sdk</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>

@@ -13,7 +13,7 @@ using System.Linq;
 namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
-    /// Contains extensions methods to use when setting up commercetools dependencies.
+    /// Contains extensions methods to use when setting up Composable Commerce dependencies.
     /// </summary>
     public static class DependencyInjectionSetup
     {
