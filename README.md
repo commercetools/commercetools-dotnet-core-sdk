@@ -1,7 +1,7 @@
 
-# commercetools .NET Core SDK
+# Composable Commerce .NET Core SDK
 
-:warning: **This commercetools .NET Core SDK is in its Active Support mode currently, and is planned to be deprecated, please note the following dates.
+:warning: **This Composable Commerce .NET Core SDK is in its Active Support mode currently, and is planned to be deprecated, please note the following dates.
 
 | Active Support        | Maintenance Support   | End of Life           |
 | --------------------- | --------------------- | --------------------- |
@@ -15,7 +15,7 @@ We recommend to use our [.NET Core SDK V2](https://docs.commercetools.com/sdk/do
 [![AppVeyor Build Status](https://img.shields.io/appveyor/ci/commercetools/commercetools-dotnet-core-sdk.svg)](https://ci.appveyor.com/project/commercetools/commercetools-dotnet-core-sdk)
 [![NuGet Version and Downloads count](https://buildstats.info/nuget/commercetools.Sdk.All?includePreReleases=true)](https://www.nuget.org/packages/commercetools.Sdk.All)
 
-The commercetools .NET Core SDK enables developers to easily communicate with the [commercetools HTTP API](https://docs.commercetools.com/http-api.html). The developers do not need to create plain HTTP requests, but they can instead use the domain specific classes and methods to formulate valid requests.
+The Composable Commerce .NET Core SDK enables developers to easily communicate with the [HTTP API](https://docs.commercetools.com/http-api.html). The developers do not need to create plain HTTP requests, but they can instead use the domain specific classes and methods to formulate valid requests.
 
 ## Installation
 
@@ -28,7 +28,7 @@ The commercetools .NET Core SDK enables developers to easily communicate with th
 The SDK consists of the following projects:
 * `commercetools.Sdk.Client`: Contains abstract commands which are used to create instances of HTTP API commands. Some commands are implemented as generic types and you must specify a domain object when using them, whereas others are specific to a domain object.
 * `commercetools.Sdk.DependencyInjection`: Default entry point to start using the SDK. Contains one class, `DependencyInjectionSetup`, which initializes all services the SDK uses and injects them into the service collection.
-* `commercetools.Sdk.Domain`: Models commercetools domain objects.
+* `commercetools.Sdk.Domain`: Models Composable Commerce domain objects.
 * `commercetools.Sdk.HttpApi`: Communicates directly with the HTTP API.
 	* `Client`: Has one method, `ExecuteAsync()`, which executes commands. Executes commands which calls the HTTP API. Takes commands from classes in the `commercetools.Sdk.Client` project to construct implementations of the `IHttpApiCommand` interface.
 	* `IHttpApiCommand`: Classes implementing this interface are containers for a command from a `commercetools.Sdk.Client` class and a request builder which builds the request to the HTTP API endpoint.
@@ -70,7 +70,7 @@ If other values should be set, the following method overload can be used:
 ```c#
 services.UseCommercetools(
     this.configuration, // replace with your instance of IConfiguration
-    "Client", // replace with your name of the commercetools configuration section
+    "Client", // replace with your name of the Composable Commerce configuration section
     TokenFlow.AnonymousSession); // replace with your initial token flow
 ```
 
@@ -200,7 +200,7 @@ Category category = await this.client
                                 .Builder()
                                 .Categories()
                                 .GetById(id)
-                                .ExecuteAsync(); 
+                                .ExecuteAsync();
 ```
 > Note! For more examples of command builders you can check integration tests in [CustomersIntegrationTestsUsingCommandBuilder](/commercetools.Sdk/IntegrationTests/commercetools.Sdk.IntegrationTests/Customers).
 
