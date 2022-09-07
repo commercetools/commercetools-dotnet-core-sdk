@@ -1,13 +1,7 @@
 
 # Composable Commerce .NET Core SDK
 
-:warning: **This Composable Commerce .NET Core SDK is in its Active Support mode currently, and is planned to be deprecated, please note the following dates.
-
-| Active Support        | Maintenance Support   | End of Life           |
-| --------------------- | --------------------- | --------------------- |
-| `28th February, 2022` | `31st August 2022.`   | `1st September 2022.` |
-
-We recommend to use our [.NET Core SDK V2](https://docs.commercetools.com/sdk/dotnet-sdk#net-core-sdk-v2).
+:warning: **This Composable Commerce .NET Core SDK is deprecated effective `1st September 2022.`, We recommend to use our [.NET Core SDK V2](https://docs.commercetools.com/sdk/dotnet-sdk#net-core-sdk-v2).
 
 <img src="http://dev.commercetools.com/assets/img/CT-logo.svg" width="550px" alt="CT-logo"></img>
 
