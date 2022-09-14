@@ -6,7 +6,7 @@
         <authors>commercetools</authors>
         <owners>commercetools</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>The Composable Commerce SDK allows developers to work effectively by providing typesafe access to commercetools Composable Commerce in their .NET applications.</description>
+        <description>This Composable Commerce .NET Core SDK is deprecated effective 1st September 2022. We recommend you to use our new SDK here https://docs.commercetools.com/sdk/dotnet-sdk#net-core-sdk-v2</description>
         <copyright>Copyright commercetools 2019</copyright>
         <PackageProjectUrl>https://github.com/commercetools/commercetools-dotnet-core-sdk</PackageProjectUrl>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
